@@ -29,6 +29,7 @@ from pkdb.preparation import (
 )
 from pkdb.progress import ProgressCallback, emit
 from pkdb.querying import export_from_filters, query_from_filters
+from pkdb.schemas.curators import Curator, CuratorList
 from pkdb.schemas.data import DataPage
 from pkdb.schemas.replacement import ReplacementResult
 from pkdb.schemas.responses import (
@@ -391,6 +392,16 @@ class Client:
                 code="user_mismatch",
             )
         return value
+
+    def curators(self) -> list[Curator]:
+        """Administrators, curators and reviewers of the server with their GitHub logins."""
+        value = self._model(
+            CuratorList,
+            self._request(
+                "GET", "/api/v2/curators", headers=self._headers(required=True)
+            ),
+        )
+        return value.curators
 
     def vocabulary(self, *, refresh: bool = True) -> Vocabulary:
         if refresh:

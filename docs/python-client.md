@@ -166,7 +166,7 @@ with Client() as client:
     client.download("dataset.zip", studies__sid=study.sid)
 ```
 
-Catch `pkdb.schemas.validation.StudyValidationError` to inspect `error.report` for local validation failures. The API checks account permissions and study ownership again during upload.
+Catch `pkdb.schemas.validation.StudyValidationError` to inspect `error.report` for local validation failures. The API checks account permissions and study ownership again during upload. `client.curators()` lists the administrators, curators and reviewers of the server with their GitHub logins; it needs an API key.
 
 Use the client version compatible with the API deployment. If compatibility checks reject a request, follow the reported instructions before retrying.
 
