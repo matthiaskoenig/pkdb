@@ -126,6 +126,12 @@ def test_the_header_says_how_many_studies_were_written(
     assert markdown(report).startswith(f"# Study format 2 migration\n\n{status}\n")
 
 
+def test_a_deleted_registry_is_named():
+    report = MigrationReport(dry_run=False, registry=RegistryFindings(deleted=True))
+    assert "### Identifier registry\n\nRegistry file deleted.\n" in markdown(report)
+    assert "Registry file deleted." not in markdown(REPORT)
+
+
 def test_an_interrupted_run_says_so_first():
     report = MigrationReport(dry_run=True, interrupted=True, warnings=["Look."])
     assert markdown(report).startswith(

@@ -154,6 +154,8 @@ def _decisions(
 
 def _registry(report: MigrationReport) -> list[str]:
     lines: list[str] = []
+    if report.registry.deleted:
+        lines += ["### Identifier registry", "", "Registry file deleted.", ""]
     doubles = report.registry.double_identifiers
     if doubles:
         rows = [

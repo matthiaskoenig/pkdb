@@ -490,6 +490,7 @@ def test_the_registry_is_deleted_once_every_study_is_released(tmp_path, sf_vocab
     report = go(tmp_path, sf_vocabulary, registry=registry, approver="mkoenig")
     assert report.registry.deleted
     assert not registry.exists()
+    assert "Registry file deleted." in (tmp_path / "migration.md").read_text()
 
 
 def test_the_registry_stays_while_a_study_is_unreleased(tmp_path, sf_vocabulary):
