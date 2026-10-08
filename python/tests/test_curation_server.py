@@ -419,9 +419,15 @@ def test_a_refused_resume_reports_its_reason(local_server):
     assert json.loads(body)["error"] == reason
 
 
-def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
+def test_curate_cli_explains_missing_workspace(tmp_path, capsys, monkeypatch):
     from pkdb.cli import main
 
+    # A built app, so that the check of the workspace runs whether or not
+    # `npm run build:curation` has run in this checkout.
+    assets = tmp_path / "static"
+    assets.mkdir()
+    (assets / "index.html").write_text("<h1>Local curation</h1>")
+    monkeypatch.setattr(transport, "ASSETS", assets)
     missing = tmp_path / "missing"
     assert (
         main(
