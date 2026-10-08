@@ -200,13 +200,13 @@ The curation commands read and edit a study folder with checked, atomic writes; 
 | `pkdb study patch FOLDER --json TEXT` or `--file FILE` | Apply a JSON merge patch to `study.json`; a changed PubMed ID or DOI refreshes `reference.json` (`--offline`, `--cache-dir`) |
 | `pkdb study reference FOLDER --pmid ID` or `--doi DOI` | Set the PubMed ID or DOI and refresh `reference.json`, also when the identifiers are unchanged (`--offline`, `--cache-dir`) |
 | `pkdb review show FOLDER` | Print the review items with the revision and the number of rows each target matches (`--state open\|resolved\|dismissed`) |
-| `pkdb review add FOLDER --kind question\|uncertainty\|issue --text TEXT` | Add an item, optionally for `--file`, `--rows COL=VALUE ...`, `--column` or a warning `--acknowledges CODE` |
+| `pkdb review add FOLDER --kind question\|uncertainty\|issue --text TEXT` | Add an item, optionally for `--file`, `--rows COL=VALUE ...`, `--column`, `--key` or a warning `--acknowledges CODE` |
 | `pkdb review reply FOLDER ID --text TEXT` | Add a reply to the thread of an item |
 | `pkdb review resolve FOLDER ID` | Resolve an open item |
 | `pkdb review dismiss FOLDER ID` | Dismiss an open or resolved item; a dismissed item no longer acknowledges a warning |
 | `pkdb review reopen FOLDER ID` | Reopen a resolved or dismissed item |
 | `pkdb review status FOLDER draft\|in_review\|approved` | Set the review status; `approved` records `approved_by` and `approved`, and needs zero open items and zero validation errors |
-| `pkdb review acknowledge FOLDER CODE --file FILE --text TEXT` | Acknowledge a validation warning with a resolved item (`--line`, `--column`); one item covers the warnings of one location, such as several `unknown_dataset` warnings of a `.wpd.json` file |
+| `pkdb review acknowledge FOLDER CODE --file FILE --text TEXT` | Acknowledge one validation warning with a resolved item, told apart by `--line`, `--column` and `--key`; a warning of a whole file, such as `unknown_dataset` of a `.wpd.json` file, has the dataset name as its key |
 | `pkdb digitize import FOLDER SOURCE FILE` | Write `<study>_<source>.wpd.json` from a WebPlotDigitizer 4 `.json` or `.tar` project, after checking it against the figure image |
 | `pkdb plot FOLDER` | Render the figure image with its digitized points and mapped rows, and the series and a key of the marks below it, to `<out>/<study>_<source>.plot.png` (`--source`, `--out` outside the study folder); by default every figure with a digitization, timecourses or scatters, and lists the series without dataset |
 | `pkdb tables add FOLDER --raw Tab2` | Add the empty sheet of the raw table of a paper table |
