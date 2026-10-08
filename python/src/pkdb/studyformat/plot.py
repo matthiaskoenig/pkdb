@@ -20,8 +20,9 @@ from pkdb.studyformat.sources import SourceView, source_view
 class PlotResult:
     """The written PNG and its mode, with what the plot draws.
 
-    `points` are the pixels of the mapped points drawn in overlay mode, `legend` the series of the
-    legend, `colors` the color of each drawn series once, and `unmatched` the series without a dataset.
+    `points` are the mapped points drawn in overlay mode, in image pixels; the image starts at the top of the
+    PNG, centered when the legends are wider. `legend` holds the series of the legend, `colors` the color of each
+    drawn series once, and `unmatched` the series without a dataset.
     """
 
     path: Path
