@@ -298,6 +298,18 @@ describe("conflicts", () => {
     ]);
   });
 
+  it("explains the conflicts of two files in sentences", async () => {
+    await mountSection(
+      detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT, ROWS_REMOVED_CONFLICT] }),
+      CONFLICT_TABLES,
+    );
+    expect(page().get(".conflict-text").text()).toBe(
+      "The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit " +
+        "the rows in the workbook, save it, and then keep the workbook. The columns that differ come first and are " +
+        "marked. Keep workbook and Keep tables resolve all conflicts.",
+    );
+  });
+
   it("syncs during a conflict without a second alert: the panel explains the conflict", async () => {
     await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
       ...CONFLICT_TABLES,

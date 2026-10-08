@@ -75,7 +75,8 @@ const many = computed(() => files.value.length > 1);
         The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit
         the rows in the workbook, save it, and then keep the workbook.
         <template v-if="unresolved.length">The columns that differ come first and are marked.</template>
-        <template v-if="many">Keep workbook and Keep tables resolve all conflicts.</template>
+        <!-- The space between the sentences, which the template compiler drops between elements. -->
+        <template v-if="many">{{ " " }}Keep workbook and Keep tables resolve all conflicts.</template>
       </p>
       <p v-if="!unresolved.length" class="conflict-text">
         The conflicting rows could not be read. Open the workbook to see them, or keep one side.
