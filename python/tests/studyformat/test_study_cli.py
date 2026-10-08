@@ -245,8 +245,9 @@ def test_review_acknowledge_one_row(valid_study, reviewer, capsys):
     command += ["--file", "timecourses_Fig1.tsv", "--text", "As printed."]
     command += ["--vocabulary", str(reviewer)]
     assert main([*command, "--format", "json"]) == 1
-    message = json.loads(capsys.readouterr().out)["message"]
-    assert message == (
+    output = json.loads(capsys.readouterr().out)
+    assert output["error"] == "ambiguous_warning"
+    assert output["message"] == (
         "2 warnings [outside_range] match in timecourses_Fig1.tsv; "
         "narrow them with --line (3, 4)"
     )
@@ -284,6 +285,8 @@ def test_review_acknowledge_file_warnings_that_share_a_code(
         "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json; "
         "narrow them with --key (axis labels, legend)\n"
     )
+    assert main([*command, "--format", "json"]) == 1
+    assert json.loads(capsys.readouterr().out)["error"] == "ambiguous_warning"
     assert read_review(folder).review.items == []
     assert main([*command, "--key", "legend"]) == 0
     [item] = read_review(folder).review.items

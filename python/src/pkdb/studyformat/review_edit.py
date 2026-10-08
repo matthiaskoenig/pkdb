@@ -54,6 +54,15 @@ class NoSuchWarning(ReviewError):
     code = "no_such_warning"
 
 
+class AmbiguousWarning(ReviewError):
+    """Warnings at several locations have the code, file, line, column and key to acknowledge.
+
+    One item acknowledges the warnings of one location: the same row, column and key.
+    """
+
+    code = "ambiguous_warning"
+
+
 class NoExactTarget(ReviewError):
     """A warning without a row of a data table and without a key.
 

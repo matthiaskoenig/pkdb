@@ -559,6 +559,8 @@ def _review_status(args, folder: Path, author) -> int:
 def _review_acknowledge(args, folder: Path, author) -> int:
     from pkdb.studyformat.review_edit import (
         ANY,
+        AmbiguousWarning,
+        NoSuchWarning,
         acknowledge,
         matching_warnings,
         warning_locations,
@@ -592,7 +594,7 @@ def _review_acknowledge(args, folder: Path, author) -> int:
             {
                 "path": str(folder),
                 "ok": False,
-                "error": "no_such_warning",
+                "error": (AmbiguousWarning if matches else NoSuchWarning).code,
                 "message": message,
             },
             lambda: say(message, file=sys.stderr),

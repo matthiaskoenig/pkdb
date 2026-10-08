@@ -949,6 +949,7 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
         "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
         "column mean, line 4 column mean; give the line, column and key of one",
         "issues": [],
+        "code": "ambiguous_warning",
     }
     missing = {**body, "code": "missing_image"}
     status, _, data = request(server, "POST", "/local/studies/review", missing, headers)
@@ -999,10 +1000,12 @@ def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
     }
     status, _, data = request(server, "POST", "/local/studies/review", body, headers)
     assert status == 422
-    assert json.loads(data)["error"] == (
-        "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json at key axis labels, "
-        "key legend; give the line, column and key of one"
-    )
+    assert json.loads(data) == {
+        "error": "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json at key "
+        "axis labels, key legend; give the line, column and key of one",
+        "issues": [],
+        "code": "ambiguous_warning",
+    }
     # A null key matches only warnings without one.
     status, _, data = request(
         server, "POST", "/local/studies/review", {**body, "key": None}, headers

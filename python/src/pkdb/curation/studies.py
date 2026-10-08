@@ -38,6 +38,7 @@ from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import (
     ANY,
+    AmbiguousWarning,
     NoSuchWarning,
     ReviewDocument,
     ReviewError,
@@ -737,7 +738,7 @@ class StudiesMixin(EngineState):
                     locations, key=lambda at: (at[0] or 0, at[1] or "", at[2] or "")
                 )
             )
-            raise ReviewError(
+            raise AmbiguousWarning(
                 f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
                 "the line, column and key of one"
             )
