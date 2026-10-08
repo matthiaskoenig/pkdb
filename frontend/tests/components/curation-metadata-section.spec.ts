@@ -255,7 +255,7 @@ describe("access and provenance card", () => {
     expect(radio("Open").checked).toBe(true);
     expect(radio("Private").checked).toBe(true);
     expect(radio("Public").disabled).toBe(true);
-    expect(messagesOf(radio("Public"))).toBe("Public needs a release (pkdb release)");
+    expect(messagesOf(radio("Public"))).toBe("Public needs a release.");
   });
 
   it("allows public access with a release", async () => {
@@ -333,7 +333,7 @@ describe("issue and release card", () => {
     const issueCard = card("Issue and release");
     expect(issueCard.text()).toContain("#2158");
     expect(issueCard.text()).toContain("PKDB00198 · released 2026-09-28");
-    expect(issueCard.text()).toContain("Set by pkdb release");
+    expect(issueCard.text()).toContain("Set when the study is released.");
     expect(issueCard.findAll("input")).toHaveLength(0);
   });
 });

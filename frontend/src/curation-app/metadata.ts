@@ -80,9 +80,9 @@ export interface MetadataForm {
   licence: StudyMetadata["licence"];
   access: StudyMetadata["access"];
   provenance: ProvenanceForm;
-  /** Read only: set by pkdb release. */
+  /** Read only: set when the study is released. */
   issue: number | null;
-  /** Read only: set by pkdb release. */
+  /** Read only: set when the study is released. */
   release: Release | null;
   descriptions: string[];
   comments: Comment[];

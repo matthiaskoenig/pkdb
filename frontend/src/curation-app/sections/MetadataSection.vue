@@ -271,7 +271,7 @@ function blockClass(key: string): Record<string, boolean> {
 }
 
 const accessMessages = computed(() => [
-  ...(form.value?.release ? [] : ["Public needs a release (pkdb release)"]),
+  ...(form.value?.release ? [] : ["Public needs a release."]),
   ...markAt("access"),
 ]);
 
@@ -802,7 +802,7 @@ onBeforeUnmount(() => {
               <span v-if="marks.has('release')" class="field-mark-inline">{{ markAt("release")[0] }}</span>
             </dd>
           </dl>
-          <p class="field-note">Set by pkdb release</p>
+          <p class="field-note">Set when the study is released.</p>
           <p v-if="errorsAt('issue').length || errorsAt('release').length" class="field-error">
             {{ [...errorsAt("issue"), ...errorsAt("release")].join(" ") }}
           </p>
