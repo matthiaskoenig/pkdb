@@ -3,6 +3,8 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach } from "vitest";
 import type { SourceView } from "../../src/curation-app/api/types";
 import type SourceOverlayComponent from "../../src/curation-app/components/SourceOverlay.vue";
+import type { OverlayTrace } from "../../src/curation-app/overlay";
+import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 
 enableAutoUnmount(afterEach);
 
@@ -141,6 +143,26 @@ describe("SourceOverlay", () => {
       ["caf_plasma_D150", "Digitized", "0.5", "2.42", "Example_Fig1.wpd.json", "-"],
       ["caf_plasma_D150", "Mapped", "0.5", "2.419", "timecourses_Fig1.tsv", "2"],
     ]);
+  });
+
+  it("names and keys the digitized error bar ends of a real source view, and selects their rows", async () => {
+    // The source view of Fig1 of the e2e fixture, a contract fixture of the local API.
+    const real = sourceFixture as unknown as SourceView;
+    const wrapper = mount(SourceOverlay, { props: { view: real } });
+    await flushPromises();
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
+      "Figure Fig1 with 17 digitized points, 18 digitized error bar ends and 18 mapped rows " +
+        "of the series caf_plasma_100mg, caf_plasma_200mg",
+    );
+    expect(wrapper.get(".overlay-key").text()).toContain("Digitized error bar");
+    const kinds = wrapper.findAll("details tbody tr").map((row) => row.findAll("td")[0]?.text());
+    expect(kinds.filter((kind) => kind === "Digitized error bar")).toHaveLength(18);
+
+    // A click on the end of the error bar of line 6 selects line 6.
+    const traces = engine.react.mock.calls[0]![1] as OverlayTrace[];
+    const bars = traces.find((trace) => trace.meta === "raw-bar caf_plasma_100mg")!;
+    handlers.get("plotly_click")?.({ points: [{ customdata: bars.customdata?.[4], x: bars.x[4], y: bars.y[4] }] });
+    expect(wrapper.emitted("select-row")).toEqual([[{ file: "timecourses_Fig1.tsv", line: 6 }]]);
   });
 
   it("reserves the size of the image before Plotly draws, and shows the legend after", async () => {

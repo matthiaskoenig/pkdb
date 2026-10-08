@@ -40,8 +40,11 @@ export function pageFont(): string {
   return getComputedStyle(document.documentElement).fontFamily || "sans-serif";
 }
 
-/** What the hover label and a click read of a point: file, TSV line (null for a digitized point), series, x and y. */
-export type Customdata = [file: string, line: number | null, series: string, x: string, y: string];
+/**
+ * What the hover label and a click read of a point: file, TSV line (null for a digitized point),
+ * series, x, y, and whether it is a digitized end of an error bar.
+ */
+export type Customdata = [file: string, line: number | null, series: string, x: string, y: string, errorBarEnd: boolean];
 
 interface HoverLabel {
   bgcolor: string;
@@ -158,15 +161,31 @@ function escapeMarkup(text: string): string {
   return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
-function customdata(point: { file: string; line: number | null; series: string; x_text: string; y_text: string }): Customdata {
-  return [escapeMarkup(point.file), point.line, escapeMarkup(point.series), escapeMarkup(point.x_text), escapeMarkup(point.y_text)];
+function customdata(point: {
+  file: string;
+  line: number | null;
+  series: string;
+  x_text: string;
+  y_text: string;
+  error_bar_end?: boolean;
+}): Customdata {
+  return [
+    escapeMarkup(point.file),
+    point.line,
+    escapeMarkup(point.series),
+    escapeMarkup(point.x_text),
+    escapeMarkup(point.y_text),
+    point.error_bar_end === true,
+  ];
 }
 
-const VALUES = "<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>";
+const VALUES = "<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>";
 /** The hover text of a mapped row: `<file> line <line>`, the series, x and y. */
-const MAPPED_HOVER = `%{customdata[0]} line %{customdata[1]}${VALUES}`;
+const MAPPED_HOVER = `%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}${VALUES}`;
 /** The hover text of a digitized point, which has no line. */
-const RAW_HOVER = `%{customdata[0]}${VALUES}`;
+const RAW_HOVER = `%{customdata[0]}<br>%{customdata[2]}${VALUES}`;
+/** The hover text of a digitized end of an error bar. */
+const RAW_BAR_HOVER = `%{customdata[0]}<br>%{customdata[2]} (error bar)${VALUES}`;
 
 function hoverLabel(theme: PlotTheme, border: string): HoverLabel {
   const { colors } = theme;
@@ -212,10 +231,10 @@ const MARKS: readonly (readonly [role: OverlayPoint["role"], errorBarEnd: boolea
 
 /**
  * The overlay of a digitized figure in the pixels of its image: the image below, a trace per
- * series and kind of mark (small dots for digitized points and digitized error bar ends, thin
- * crosses for mapped rows), and the error bars of mapped rows as segments to their digitized
- * end. With `highlight`, the other series fade. `scale` is the size at which the image is
- * shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not hide the
+ * series and kind of mark (small dots for digitized points, short bars for digitized error bar
+ * ends, thin crosses for mapped rows), and the error bars of mapped rows as segments to their
+ * digitized end. With `highlight`, the other series fade. `scale` is the size at which the image
+ * is shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not hide the
  * printed symbols of a small image.
  */
 export function overlayTraces(
@@ -258,11 +277,15 @@ export function overlayTraces(
         (point) => point.series === name && point.role === role && point.error_bar_end === end,
       );
       if (!points.length) continue;
+      const line = { width: stroke, color: color(name) };
       const marker =
-        role === "raw"
-          ? // A dark ring keeps a dot apart from the paper and from a mark of another color below it.
-            { symbol: "circle", size: 7 * marks, color: color(name), line: { width: 1, color: POINT_RING } }
-          : { symbol: "x-thin-open", size: 11 * marks, color: color(name), line: { width: stroke, color: color(name) } };
+        role === "mapped"
+          ? { symbol: "x-thin-open", size: 11 * marks, color: color(name), line }
+          : end
+            ? // A short bar, as `pkdb plot` draws the end of an error bar.
+              { symbol: "line-ew-open", size: 9 * marks, color: color(name), line }
+            : // A dark ring keeps a dot apart from the paper and from a mark of another color below it.
+              { symbol: "circle", size: 7 * marks, color: color(name), line: { width: 1, color: POINT_RING } };
       traces.push({
         type: "scatter",
         meta: `${prefix} ${name}`,
@@ -273,9 +296,8 @@ export function overlayTraces(
         opacity: opacity(name),
         showlegend: false,
         marker,
-        // The hover text names a digitized error bar end with its series.
-        customdata: points.map((point) => customdata(end ? { ...point, series: `${point.series} (error bar)` } : point)),
-        hovertemplate: role === "raw" ? RAW_HOVER : MAPPED_HOVER,
+        customdata: points.map(customdata),
+        hovertemplate: role === "mapped" ? MAPPED_HOVER : end ? RAW_BAR_HOVER : RAW_HOVER,
         hoverlabel: hoverLabel(theme, color(name)),
       });
     }
@@ -414,8 +436,9 @@ function unescapeMarkup(text: string): string {
 }
 
 /**
- * How close, in image pixels, a mapped row must lie to a clicked digitized point for the click
- * to select it: within the radius of the dot at the size of the image.
+ * How close, in image pixels, a mapped row, or the end of its error bar, must lie to a clicked
+ * digitized point, or digitized error bar end, for the click to select it: within the radius of
+ * the dot at the size of the image.
  */
 const CLICK_PIXELS = 3;
 
@@ -427,13 +450,14 @@ export interface EventPoint {
 }
 
 /**
- * The row that a click on a point selects: the row of a mapped point, or the mapped row of its
- * series under a digitized point (`CLICK_PIXELS`). Plotly prefers the small dot of a digitized
- * point to the cross of the mapped row below it, so the dot stands for its row.
+ * The row that a click on a point selects: the row of a mapped point; the mapped row of its
+ * series under a digitized point (`CLICK_PIXELS`), as Plotly prefers the small dot of a digitized
+ * point to the cross of the mapped row below it, so the dot stands for its row; and the mapped
+ * row of its series whose error bar ends at a digitized error bar end. Else nothing.
  */
 export function rowAt(view: SourceView, point: EventPoint): { file: string; line: number } | null {
   if (!Array.isArray(point.customdata)) return null;
-  const [file, line, series]: unknown[] = point.customdata;
+  const [file, line, series, , , errorBarEnd]: unknown[] = point.customdata;
   if (typeof file === "string" && typeof line === "number") return { file: unescapeMarkup(file), line };
   const { x, y } = point;
   if (typeof series !== "string" || typeof x !== "number" || typeof y !== "number") return null;
@@ -441,7 +465,9 @@ export function rowAt(view: SourceView, point: EventPoint): { file: string; line
   let best: { file: string; line: number; distance: number } | null = null;
   for (const mapped of view.overlay) {
     if (mapped.role !== "mapped" || mapped.series !== name || mapped.line === null) continue;
-    const distance = Math.hypot(mapped.px - x, mapped.py - y);
+    const at: [number, number] | null = errorBarEnd === true ? mapped.error_px : [mapped.px, mapped.py];
+    if (at === null) continue;
+    const distance = Math.hypot(at[0] - x, at[1] - y);
     if (distance <= CLICK_PIXELS && (best === null || distance < best.distance))
       best = { file: mapped.file, line: mapped.line, distance };
   }

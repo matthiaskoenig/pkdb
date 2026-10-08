@@ -163,6 +163,19 @@ describe("overlayTraces", () => {
     expect(trace(half, "error drug_plasma").line?.width).toBe(1.5);
   });
 
+  it("draws digitized error bar ends as short horizontal bars, as pkdb plot does", () => {
+    const full = overlayTraces(figure()).traces;
+    expect(trace(full, "raw-bar drug_plasma").marker).toEqual({
+      symbol: "line-ew-open",
+      size: 9,
+      color: "#1a2b3c",
+      line: { width: 2, color: "#1a2b3c" },
+    });
+    const half = trace(overlayTraces(figure(), null, undefined, 0.5).traces, "raw-bar drug_plasma");
+    expect(half.marker?.size).toBeCloseTo(5.4);
+    expect(half.marker?.line).toEqual({ width: 1.5, color: "#1a2b3c" });
+  });
+
   it("draws the error bars of mapped rows as segments that end at error_px", () => {
     const { traces } = overlayTraces(figure());
     const bars = trace(traces, "error drug_plasma");
@@ -209,21 +222,24 @@ describe("overlayTraces", () => {
   it("names the file, line, series and values as printed on hover", () => {
     const { traces } = overlayTraces(figure());
     const crosses = trace(traces, "mapped drug_plasma");
-    expect(crosses.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5.00"]]);
+    expect(crosses.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5.00", false]]);
     expect(crosses.hovertemplate).toBe(
       "%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
     );
     const raw = trace(traces, "raw drug_plasma");
     expect(raw.customdata).toEqual([
-      [PROJECT, null, "drug_plasma", "0", "0.1"],
-      [PROJECT, null, "drug_plasma", "1", "5"],
+      [PROJECT, null, "drug_plasma", "0", "0.1", false],
+      [PROJECT, null, "drug_plasma", "1", "5", false],
     ]);
     expect(raw.hovertemplate).toBe(
       "%{customdata[0]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
     );
+    // A digitized error bar end says so, and its customdata says so to a click.
     const bar = trace(traces, "raw-bar drug_plasma");
-    expect(bar.customdata).toEqual([[PROJECT, null, "drug_plasma (error bar)", "1", "6"]]);
-    expect(bar.hovertemplate).toBe(raw.hovertemplate);
+    expect(bar.customdata).toEqual([[PROJECT, null, "drug_plasma", "1", "6", true]]);
+    expect(bar.hovertemplate).toBe(
+      "%{customdata[0]}<br>%{customdata[2]} (error bar)<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
+    );
   });
 
   it("escapes markup in names, which Plotly would read as tags", () => {
@@ -248,8 +264,8 @@ describe("plotTraces", () => {
     expect(feces.error_y).toEqual(expect.objectContaining({ type: "data", array: [0.5, 0.75], visible: true }));
     expect(trace(traces, "plot drug_urine").error_y).toBeUndefined();
     expect(feces.customdata).toEqual([
-      [TIMECOURSES, 4, "drug_feces", "0", "1"],
-      [TIMECOURSES, 6, "drug_feces", "1", "3.25"],
+      [TIMECOURSES, 4, "drug_feces", "0", "1", false],
+      [TIMECOURSES, 6, "drug_feces", "1", "3.25", false],
     ]);
     expect(trace(traces, "plot drug_plasma").customdata?.[0]?.[4]).toBe("5.00");
     expect(feces.marker?.color).toBe("#3c4d5e");
@@ -325,6 +341,22 @@ describe("rowAt", () => {
     expect(rowAt(figure(), { customdata: [PROJECT, null, "drug_urine", "1", "5"], x: 20, y: 50 })).toBeNull();
     expect(rowAt(figure(), { customdata: "other", x: 20, y: 50 })).toBeNull();
     expect(rowAt(figure(), {})).toBeNull();
+  });
+
+  it("selects the mapped row whose error bar ends at a clicked digitized error bar end", () => {
+    const bar = trace(overlayTraces(figure()).traces, "raw-bar drug_plasma").customdata?.[0];
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 40 })).toEqual({ file: TIMECOURSES, line: 2 });
+    // Within the radius of a digitized point of the end of the error bar.
+    expect(rowAt(figure(), { customdata: bar, x: 22, y: 41 })).toEqual({ file: TIMECOURSES, line: 2 });
+  });
+
+  it("selects nothing for a digitized error bar end without a mapped error bar at it", () => {
+    const bar = trace(overlayTraces(figure()).traces, "raw-bar drug_plasma").customdata?.[0];
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 30 })).toBeNull();
+    // The cross of the row does not count: the end of its error bar is 10 pixels away.
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 50 })).toBeNull();
+    // drug_urine has no error bar.
+    expect(rowAt(figure(), { customdata: [PROJECT, null, "drug_urine", "2", "7", true], x: 60, y: 30 })).toBeNull();
   });
 
   it("reads names back from the escaped customdata", () => {

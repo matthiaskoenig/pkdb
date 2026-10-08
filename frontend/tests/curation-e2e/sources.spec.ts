@@ -28,7 +28,9 @@ test.beforeEach(async ({ app }) => {
 
 test("the Fig1 overlay shows the row of a mapped point and opens it in the Tables section", async ({ page }) => {
   await page.getByRole("tab", { name: "Fig1" }).click();
-  const figure = page.getByRole("img", { name: /^Figure Fig1 with \d+ digitized points and \d+ mapped rows/ });
+  const figure = page.getByRole("img", {
+    name: /^Figure Fig1 with \d+ digitized points, \d+ digitized error bar ends and \d+ mapped rows/,
+  });
   await expect(figure).toBeVisible();
   // Plotly keeps the traces that it drew on its element.
   await expect
