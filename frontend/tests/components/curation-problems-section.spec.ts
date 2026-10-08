@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
+import { defineComponent, h, type Component, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
 import type {
   AcknowledgedWarning,
@@ -191,10 +192,18 @@ function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
 }
 
 /** The problems section inside the app's router view, with `routes` besides the defaults. */
+/** A problem as a bare list item with its code, for tests of the list rather than its items. */
+const ProblemItemStub = defineComponent({
+  name: "ProblemItem",
+  props: { issue: { type: Object as PropType<ValidationIssue>, required: true } },
+  setup: (props) => () => h("li", { class: "problem" }, [h("code", { class: "problem-code" }, props.issue.code)]),
+});
+
 async function mountSection(
   detail: StudyDetail = withProblems(),
   routes: Record<string, unknown> = {},
   state: Snapshot = snapshot(),
+  stubs: Record<string, Component> = {},
 ) {
   served = detail;
   requests = serveApi({
@@ -210,7 +219,7 @@ async function mountSection(
   router = makeRouter();
   await router.push(SECTION);
   await router.isReady();
-  const wrapper = mount(RouterView, { attachTo: document.body, global: { plugins: [pinia, router] } });
+  const wrapper = mount(RouterView, { attachTo: document.body, global: { plugins: [pinia, router], stubs } });
   await flushPromises();
   return wrapper;
 }
@@ -392,19 +401,24 @@ describe("issues", () => {
       for (const callback of due) callback(performance.now());
       await flushPromises();
     }
-    const many: ValidationIssue[] = Array.from({ length: 120 }, (_, index) => ({
+    const many: ValidationIssue[] = Array.from({ length: 250 }, (_, index) => ({
       ...outsideRange,
       message: `mean ${index} lies outside [min, max]`,
       source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
     }));
-    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 120 } }));
-    // The first step of 100 issues shows at once, and the next frame adds the rest.
+    // Only the steps count here: the items are bare list items.
+    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }), {}, snapshot(), {
+      ProblemItem: ProblemItemStub,
+    });
+    // The first step of 100 issues shows at once, and each frame adds the next step.
     expect(codes()).toHaveLength(100);
-    expect(section().get(".problem-group-counts").text()).toBe("120 warnings");
+    expect(section().get(".problem-group-counts").text()).toBe("250 warnings");
     await nextFrame();
-    expect(codes()).toHaveLength(120);
+    expect(codes()).toHaveLength(200);
     await nextFrame();
-    expect(codes()).toHaveLength(120);
+    expect(codes()).toHaveLength(250);
+    await nextFrame();
+    expect(codes()).toHaveLength(250);
   });
 
   it("says how many problems the last validation left out", async () => {
