@@ -152,7 +152,8 @@ const draft = computed<ReviewTarget | null>(() =>
 const preview = usePreview(
   () => {
     const detail = study.detail;
-    if (!detail || draft.value === null) return null;
+    // A closed dialog asks nothing; its fields stay, and their count is asked again when it opens.
+    if (!open.value || !detail || draft.value === null) return null;
     // A preview that failed while the local server did not answer is asked again once it answers.
     return { study: detail.id, version: version.value, answering: study.error === null, target: draft.value };
   },

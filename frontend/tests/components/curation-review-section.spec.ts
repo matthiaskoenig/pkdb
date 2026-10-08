@@ -860,6 +860,24 @@ describe("new item count", () => {
     expect(count().classes()).not.toContain("field-error");
   });
 
+  it("asks for nothing while the dialog is closed and the local server stops and answers again", async () => {
+    let stopped = false;
+    const wrapper = await mountSection(withReview(), {
+      [`GET ${EXAMPLE}`]: () => (stopped ? Promise.reject(new TypeError("Failed to fetch")) : json(served)),
+    });
+    const previews = () => requests.filter((request) => request.path === "/local/studies/review/preview").length;
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(previews()).toBe(1);
+    await click("Cancel");
+    stopped = true;
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = false;
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(previews()).toBe(1);
+  });
+
   it("asks for nothing while the dialog is closed, and asks again when it opens", async () => {
     let lines = [2, 3];
     const wrapper = await mountSection(withReview(), {

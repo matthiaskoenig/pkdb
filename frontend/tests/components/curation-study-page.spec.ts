@@ -847,6 +847,41 @@ describe("StudyPage", () => {
     expect(posted("/local/studies/tables/preview")).toHaveLength(3);
   });
 
+  it("asks for no preview while Add table is closed, when the folder or the local server changes", async () => {
+    let files = [...harder.files];
+    let stopped = false;
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: () => (stopped ? Promise.reject(new TypeError("Failed to fetch")) : json({ ...harder, files })),
+      "POST /local/studies/tables/preview": harderPreview,
+      "POST /local/studies/tables": tablesResult({ table: "outputs_Tab3", workbook_action: "regenerated" }),
+    });
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    await click("Add");
+    expect(posted("/local/studies/tables/preview")).toHaveLength(1);
+
+    // The added table reaches the folder, and the local server stops and answers again.
+    files = [...files, "outputs_Tab3.tsv"];
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = true;
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = false;
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(posted("/local/studies/tables/preview")).toHaveLength(1);
+
+    // The dialog opens again with an empty source and asks for nothing until a source is typed.
+    await click("More actions");
+    await click("Add table");
+    await flushPromises();
+    expect(field("Source").element.value).toBe("");
+    expect(posted("/local/studies/tables/preview")).toHaveLength(1);
+  });
+
   it("asks for a failed preview again once the local server answers again", async () => {
     let stopped = false;
     const stop = () => Promise.reject(new TypeError("Failed to fetch"));

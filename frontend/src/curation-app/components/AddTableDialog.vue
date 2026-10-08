@@ -45,7 +45,8 @@ const preview = usePreview(
   () => {
     const detail = study.detail;
     const name = source.value.trim();
-    if (!detail || !name) return null;
+    // A closed dialog asks nothing.
+    if (!open.value || !detail || !name) return null;
     // The files of the study stand for the folder, so an added image or table file asks again; a
     // preview that failed while the local server did not answer is asked again once it answers.
     return { study: detail.id, files: detail.files, answering: study.error === null, kind: kind.value, source: name };
@@ -74,13 +75,18 @@ const hint = computed(() =>
     : "A paper table such as Tab3, a figure such as Fig2A, or Text.",
 );
 
-watch(open, (value) => {
-  if (!value) return;
-  kind.value = "outputs";
-  source.value = "";
-  failure.value = null;
-  userText.value = null;
-});
+// At once, so that the preview never asks for the source of the last time the dialog was open.
+watch(
+  open,
+  (value) => {
+    if (!value) return;
+    kind.value = "outputs";
+    source.value = "";
+    failure.value = null;
+    userText.value = null;
+  },
+  { flush: "sync" },
+);
 
 // A failure belongs to the table that it was about.
 watch([kind, source], () => {
