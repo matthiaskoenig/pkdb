@@ -1,0 +1,345 @@
+import json
+
+from migration_fixtures import (
+    DATASET,
+    IMAGES,
+    SCATTER_OUTPUTS,
+    SCATTER_SHEET,
+    SHEETS,
+    STUDY,
+    Formula,
+    v1_full_example,
+    v1_study,
+)
+from PIL import Image
+
+from pkdb.migration.convert import convert_study
+from pkdb.migration.gate import MAX_DIFFERENCES, compare, judge
+from pkdb.migration.registry import Registry
+from pkdb.preparation import prepare
+from pkdb.references import ReferenceResolver
+
+OUTPUT, TIMECOURSE = STUDY["outputset"]["outputs"]
+X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
+
+
+def converted(tmp_path, v1):
+    target = tmp_path / "v2" / v1.parent.name / v1.name
+    convert_study(
+        v1,
+        target,
+        registry=Registry(),
+        approver=None,
+        resolver=ReferenceResolver(offline=True),
+    )
+    return target
+
+
+def with_outputs(*outputs, **changes):
+    return {**STUDY, "outputset": {"outputs": list(outputs)}, **changes}
+
+
+def rewrite(table, column, value, row=0):
+    """Set one cell of a converted table."""
+    header, *rows = table.read_text().splitlines()
+    names = header.split("\t")
+    cells = rows[row].split("\t")
+    cells[names.index(column)] = value
+    rows[row] = "\t".join(cells)
+    table.write_text("\n".join([header, *rows]) + "\n")
+
+
+def test_an_exact_conversion_is_identical(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert (result.study, result.outcome, result.differences) == (
+        "caffeine/Example",
+        "identical",
+        [],
+    )
+    assert result.changes == []
+
+
+def test_a_conversion_from_hidden_tables_is_identical(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1", workbook=False)
+    assert judge(v1, converted(tmp_path, v1), sf_vocabulary).outcome == "identical"
+
+
+def test_the_gate_changes_neither_folder(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+
+    def files():
+        return {p: p.read_bytes() for p in sorted(tmp_path.rglob("*")) if p.is_file()}
+
+    before = files()
+    judge(v1, v2, sf_vocabulary)
+    assert files() == before
+
+
+def test_a_group_with_count_one_is_an_intended_change(tmp_path, sf_vocabulary):
+    # A single subject has no sd in format 2, so the output reports a mean only.
+    output = {key: value for key, value in OUTPUT.items() if key != "sd"}
+    group = {**STUDY["groupset"]["groups"][0], "count": 1}
+    study = with_outputs(
+        output, TIMECOURSE, groupset={"groups": [group]}, individualset={}
+    )
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count, c.examples) for c in result.changes] == [
+        ("group_count_1", 1, ["all"])
+    ]
+
+
+def test_a_changed_value_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    table = v2 / "outputs_Tab2.tsv"
+    table.write_text(table.read_text().replace("\t0.5\t", "\t0.6\t"))
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    [difference] = result.differences
+    assert difference.path.endswith(".sd") and (difference.a, difference.b) == (
+        "0.5",
+        "0.6",
+    )
+    assert difference.path.startswith("measurements[Example_Tab2.png output all D1")
+
+
+def test_a_difference_within_the_tolerance_is_identical(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    table = v2 / "outputs_Tab2.tsv"
+    table.write_text(table.read_text().replace("\t0.5\t", "\t0.5000000000001\t"))
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
+
+
+def test_a_difference_beyond_the_tolerance_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    table = v2 / "outputs_Tab2.tsv"
+    table.write_text(table.read_text().replace("\t0.5\t", "\t0.500000001\t"))
+    assert judge(v1, v2, sf_vocabulary).outcome == "mismatch"
+
+
+def test_a_missing_record_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    table = v2 / "characteristica.tsv"
+    lines = table.read_text().splitlines()
+    table.write_text("\n".join(line for line in lines if "\tS2\t" not in line) + "\n")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    [difference] = result.differences
+    assert difference.path == "characteristica[Example_TabA.png S2 age yr]"
+    assert (difference.a, difference.b) == ("mean 40, count 1", "missing")
+
+
+def test_a_changed_key_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    rewrite(v2 / "timecourses_Fig1.tsv", "time", "0.5")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    paths = [d.path for d in result.differences]
+    assert any(" time 0 h " in path for path in paths)
+    assert any(" time 0.5 h " in path for path in paths)
+    assert "timecourses[drug_plasma]" in paths
+
+
+def test_a_changed_subject_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    subjects = v2 / "subjects.tsv"
+    subjects.write_text(subjects.read_text().replace("\tall\t\t2\t", "\tall\t\t3\t"))
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert [(d.a, d.b) for d in result.differences if d.path == "subjects[all]"] == [
+        ("group, count 2", "group, count 3")
+    ]
+
+
+def test_a_changed_scatter_pairing_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    a = prepare(v1, vocabulary=sf_vocabulary).study
+    b = prepare(converted(tmp_path, v1), vocabulary=sf_vocabulary).study
+    # The same records, with x of S1 paired to y of S2 and x of S2 to y of S1.
+    [subset] = b.scatters[0].subsets
+    (x1, y1), (x2, y2) = subset.points
+    subset.points = [[x1, y2], [x2, y1]]
+    changes, differences = compare(a, b)
+    assert changes == []
+    assert [(d.path, d.a, d.b) for d in differences] == [
+        ("scatters[age_vs_cmax]", "scatter of 2 points", "scatter of 2 points")
+    ]
+
+
+def test_an_unformatted_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    (v2 / "subjects.tsv").write_text((v2 / "subjects.tsv").read_text() + "\n")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.differences[0].path == "format"
+
+
+def test_an_invalid_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    rewrite(v2 / "outputs_Tab2.tsv", "measurement", "unknown")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert [(d.path, d.a, d.b) for d in result.differences] == [
+        ("validation", "valid", "unknown_measurement")
+    ]
+
+
+def test_a_v1_study_that_cannot_be_prepared_is_invalid_v1(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    study = json.loads((v1 / "study.json").read_text())
+    study["outputset"]["outputs"][0]["group"] = "nobody"
+    (v1 / "study.json").write_text(json.dumps(study))
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "invalid_v1"
+    assert result.issues
+
+
+def test_an_error_bar_formula_is_an_intended_change(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    table = v2 / "outputs_Tab2.tsv"
+    header, row = table.read_text().splitlines()
+    names, cells = header.split("\t"), row.split("\t")
+    cells[names.index("sd")] = ""
+    cells[names.index("error_bar")] = "3"
+    cells[names.index("error_type")] = "sd"
+    table.write_text("\t".join(names) + "\n" + "\t".join(cells) + "\n")
+    result = judge(v1, v2, sf_vocabulary)
+    assert (result.outcome, [c.kind for c in result.changes]) == (
+        "intended",
+        ["error_bar"],
+    )
+
+
+def test_a_converted_abs_formula_is_an_intended_change(tmp_path, sf_vocabulary):
+    sheets = {
+        **SHEETS,
+        "Tab2": [["mean", "sd", "upper"], [2.5, Formula("=ABS(C3-A3)", 0.75), 3.25]],
+    }
+    v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert "\t3.25\tsd\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    result = judge(v1, v2, sf_vocabulary)
+    assert (result.outcome, [c.kind for c in result.changes]) == (
+        "intended",
+        ["error_bar"],
+    )
+
+
+def test_an_error_bar_that_does_not_give_the_spread_is_a_mismatch(
+    tmp_path, sf_vocabulary
+):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    rewrite(v2 / "outputs_Tab2.tsv", "sd", "")
+    rewrite(v2 / "outputs_Tab2.tsv", "error_bar", "3.1")
+    rewrite(v2 / "outputs_Tab2.tsv", "error_type", "sd")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.changes == []
+    assert {d.path.rpartition(".")[2] for d in result.differences} == {
+        "sd",
+        "error_bar",
+        "error_type",
+    }
+
+
+def test_array_outputs_are_an_intended_change(tmp_path, sf_vocabulary):
+    study = with_outputs(
+        {**OUTPUT, "output_type": "array"}, {**TIMECOURSE, "output_type": "array"}
+    )
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("array_output", 4)]
+
+
+def test_array_points_of_a_scatter_are_an_intended_change(tmp_path, sf_vocabulary):
+    study = with_outputs(
+        OUTPUT,
+        TIMECOURSE,
+        {**X_OUTPUT, "output_type": "array"},
+        {**Y_OUTPUT, "output_type": "array"},
+        dataset=DATASET,
+    )
+    sheets = {**SHEETS, **SCATTER_SHEET}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("array_output", 4)]
+
+
+def test_scatter_labels_are_an_intended_change(tmp_path, sf_vocabulary):
+    subset = {"name": "age_vs_cmax", "dimensions": ["x_age", "y_cmax"]}
+    dataset = {
+        "data": [
+            {**DATASET["data"][0], "subsets": [{**subset, "shared": ["individual"]}]}
+        ]
+    }
+    study = with_outputs(
+        OUTPUT,
+        TIMECOURSE,
+        {**X_OUTPUT, "label": "x_age"},
+        {**Y_OUTPUT, "label": "y_cmax"},
+        dataset=dataset,
+    )
+    sheets = {**SHEETS, **SCATTER_SHEET}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.examples) for c in result.changes] == [
+        ("scatter_label", ["x_age to age_vs_cmax_x", "y_cmax to age_vs_cmax_y"])
+    ]
+
+
+def test_a_jpg_image_is_an_intended_change(tmp_path, sf_vocabulary):
+    study = with_outputs({**OUTPUT, "image": "Example_Tab2.jpg"}, TIMECOURSE)
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, ("Tab1", "TabA", "Fig1"))
+    Image.new("RGB", (4, 3), "red").save(v1 / "Example_Tab2.jpg")
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.examples) for c in result.changes] == [
+        ("image_converted", ["Example_Tab2.jpg to Example_Tab2.png"])
+    ]
+
+
+def test_a_geometric_mean_moved_to_gmean_is_an_intended_change(tmp_path, sf_vocabulary):
+    output = {key: value for key, value in OUTPUT.items() if key != "sd"}
+    geometric = {**output, "calculation_type": "geometric mean"}
+    v1 = v1_study(tmp_path / "v1", with_outputs(geometric, TIMECOURSE), SHEETS, IMAGES)
+    a = prepare(v1, vocabulary=sf_vocabulary).study
+    # Format 2 refuses calculation `geometric mean`, so B is the converted
+    # arithmetic twin with the record as the converter writes a geometric mean.
+    twin = v1_study(tmp_path / "twin", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
+    b = prepare(converted(tmp_path, twin), vocabulary=sf_vocabulary).study
+    [record] = [m for m in b.measurements if m.key == "outputs_Tab2.tsv:2"]
+    record.calculation_type = "geometric mean"
+    record.statistics.gmean, record.statistics.mean = record.statistics.mean, None
+    changes, differences = compare(a, b)
+    assert differences == []
+    assert [(c.kind, c.count) for c in changes] == [("gmean", 1)]
+
+
+def test_differences_are_listed_up_to_the_maximum(tmp_path, sf_vocabulary):
+    rows = [[float(mean), 0.5] for mean in range(1, 61)]
+    v1 = v1_study(
+        tmp_path / "v1", STUDY, {**SHEETS, "Tab2": [["mean", "sd"], *rows]}, IMAGES
+    )
+    v2 = converted(tmp_path, v1)
+    table = v2 / "outputs_Tab2.tsv"
+    table.write_text(table.read_text().replace("\t0.5\t", "\t0.6\t"))
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert len(result.differences) == MAX_DIFFERENCES
