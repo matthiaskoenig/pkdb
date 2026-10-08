@@ -238,6 +238,9 @@ def test_a_reference_json_that_misses_the_pubmed_id_is_resolved(tmp_path):
     conversion = convert(v1, tmp_path, resolver=Resolved(offline=True))
     reference = json.loads((conversion.folder / "reference.json").read_text())
     assert (reference["pmid"], reference["title"]) == ("123", "Resolved")
+    assert [(d.kind, d.detail) for d in conversion.decisions] == [
+        ("reference_replaced", "Replaced reference.json (SID 123) with PubMed 123")
+    ]
 
 
 def test_a_reference_that_cannot_be_resolved_is_not_converted(tmp_path):

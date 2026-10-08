@@ -192,9 +192,11 @@ def convert_study(
         dump_json(_reference(bundle.reference)), encoding="utf-8", newline=""
     )
     try:
-        sync_reference(target, resolver)
+        change = sync_reference(target, resolver)
     except ReferenceError as error:
         raise NotConverted("reference", str(error)) from error
+    if change is not None:
+        decisions.append(Decision(kind="reference_replaced", detail=change))
     sources = used_sources(tables) - {TEXT_SOURCE}
     decisions += copy_images(v1, target, name, sources)
     images = {f"{name}_{source}" for source in sources}
