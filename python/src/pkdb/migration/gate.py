@@ -39,6 +39,19 @@ GENERATED_DATASET = "dataset:auto"
 # Fields of a key that are shown with their name, such as `time 1`.
 NAMED = frozenset({"time", "time_end", "interval", "doses"})
 NO_COMMENT = "no comment"
+# Cells that identify a row of a converted table, shown with a validation issue.
+IDENTIFYING = (
+    "subjects",
+    "name",
+    "interventions",
+    "measurement",
+    "substance",
+    "tissue",
+    "time",
+    "label",
+    "x_measurement",
+    "y_measurement",
+)
 
 
 class Key(NamedTuple):
@@ -738,16 +751,57 @@ def _where(issue: ValidationIssue) -> str:
     return source.file
 
 
-def _invalid(study: str, check: str, issues: Iterable[ValidationIssue]) -> StudyResult:
+class _Rows:
+    """The identifying cells of rows of the converted tables, each file read once.
+
+    The converted folder is deleted after the run, so the curator learns from
+    these cells which format 1 row to fix.
+    """
+
+    def __init__(self, folder: Path):
+        self.folder = folder
+        self.tables: dict[str, list[list[str]]] = {}
+
+    def cells(self, issue: ValidationIssue) -> str:
+        """Such as `[subjects=S2 measurement=age]`; empty for an issue without row."""
+        source = issue.source
+        if (
+            source is None
+            or source.row is None
+            or source.row < 2
+            or Path(source.file).name != source.file
+            or not source.file.endswith(".tsv")
+        ):
+            return ""
+        if source.file not in self.tables:
+            try:
+                text = (self.folder / source.file).read_text(encoding="utf-8")
+            except OSError, ValueError:
+                text = ""
+            self.tables[source.file] = [line.split("\t") for line in text.split("\n")]
+        lines = self.tables[source.file]
+        if source.row > len(lines):
+            return ""
+        row = dict(zip(lines[0], lines[source.row - 1], strict=False))
+        shown = [f"{name}={row[name]}" for name in IDENTIFYING if row.get(name)]
+        return f"[{' '.join(shown)}]" if shown else ""
+
+
+def _invalid(
+    study: str, check: str, issues: Iterable[ValidationIssue], folder: Path
+) -> StudyResult:
     """A converted study that format 2 refuses, with the errors a curator fixes."""
     errors = [issue for issue in issues if issue.severity == "error"]
+    rows = _Rows(folder)
     return StudyResult(
         study=study,
         outcome="mismatch",
         issues=sorted({issue.code for issue in errors}),
         differences=[
             Difference(
-                path=" ".join(part for part in (check, _where(i), i.code) if part),
+                path=" ".join(
+                    part for part in (check, _where(i), i.code, rows.cells(i)) if part
+                ),
                 a="valid",
                 b=i.message,
             )
@@ -768,7 +822,7 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return StudyResult(study=study, outcome="invalid_v1", issues=errors)
     formatted = format_folder(converted, check=True)
     if not formatted.ok:
-        return _invalid(study, "format", formatted.issues)
+        return _invalid(study, "format", formatted.issues, converted)
     if formatted.changes:
         return StudyResult(
             study=study,
@@ -780,9 +834,9 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
     try:
         b = prepare(converted, vocabulary=vocabulary)
     except StudyValidationError as error:
-        return _invalid(study, "validation", error.report.issues)
+        return _invalid(study, "validation", error.report.issues, converted)
     if _errors(b):
-        return _invalid(study, "validation", b.report.issues)
+        return _invalid(study, "validation", b.report.issues, converted)
     changes, differences = compare(a.study, b.study, _series_arrays(v1, a.study))
     if differences:
         return StudyResult(

@@ -196,10 +196,29 @@ def test_an_invalid_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
     assert result.issues == ["unknown_measurement"]
     assert [(d.path, d.a, d.b) for d in result.differences] == [
         (
-            "validation outputs_Tab2.tsv:E2 unknown_measurement",
+            "validation outputs_Tab2.tsv:E2 unknown_measurement [subjects=all "
+            "interventions=D1 measurement=unknown substance=drug tissue=plasma]",
             "valid",
             "Unknown measurement: unknown",
         )
+    ]
+
+
+def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocabulary):
+    individuals = STUDY["individualset"]["individuals"]
+    without_age = {
+        **individuals[1],
+        "characteristica": [{"measurement_type": "age", "unit": "yr", "image": "TabA"}],
+    }
+    study = {**STUDY, "individualset": {"individuals": [individuals[0], without_age]}}
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    v2 = converted(tmp_path, v1)
+    lines = (v2 / "characteristica.tsv").read_text().splitlines()
+    [row] = [n for n, line in enumerate(lines, 1) if "\tS2\t" in line]
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert [d.path for d in result.differences] == [
+        f"validation characteristica.tsv:{row} missing_value [subjects=S2 measurement=age]"
     ]
 
 
