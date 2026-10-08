@@ -410,6 +410,7 @@ describe("issues", () => {
         problems: [rowLimit, unitDimension],
         counts: { errors: 2, warnings: 0 },
         files: [],
+        tables: [],
         sources: [],
       }),
     );

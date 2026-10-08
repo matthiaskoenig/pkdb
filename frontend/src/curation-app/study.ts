@@ -5,12 +5,7 @@
 import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
 import type { IssueState, People, Profile, Release, StudyDetail, StudySummary, TablesResult } from "./api/types";
-import {
-  DATA_TABLE_KINDS,
-  SOURCE_TABLE_KINDS,
-  TABLE_KIND_LABELS,
-  type SourceTableKind,
-} from "./tableKinds";
+import { SOURCE_TABLE_KINDS, TABLE_KIND_LABELS, type SourceTableKind } from "./tableKinds";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -58,29 +53,20 @@ export function sectionRoute(id: string, section: Section, query: Record<string,
 const SOURCE = /^(?:Text|(?:Tab|Fig)[A-Za-z0-9_-]+)$/;
 /** A paper table, the only source of a raw table. */
 const RAW_SOURCE = /^Tab[A-Za-z0-9_-]+$/;
-const DATA_TABLE = new RegExp(`^(?:${DATA_TABLE_KINDS.join("|")})\\.tsv$`);
-const SOURCE_TABLE = new RegExp(`^(?:${SOURCE_TABLE_KINDS.join("|")})_(.+)\\.tsv$`);
 
-/** The files of the data tables and the raw tables of a study, in the order of its files. */
-export function tableFiles(detail: Pick<StudyDetail, "id" | "files">): string[] {
-  const prefix = `${studyName(detail)}_`;
-  return detail.files.filter((file) => {
-    if (DATA_TABLE.test(file)) return true;
-    const source = SOURCE_TABLE.exec(file)?.[1];
-    if (source !== undefined) return SOURCE.test(source);
-    // A raw table `<name>_<source>.tsv` of a paper table.
-    return file.startsWith(prefix) && file.endsWith(".tsv") && RAW_SOURCE.test(file.slice(prefix.length, -4));
-  });
+/** The table files of a study, data tables and raw tables, in the order of the workbook sheets, as the server lists them. */
+export function tableFiles(detail: Pick<StudyDetail, "tables">): string[] {
+  return detail.tables.map((table) => table.file);
 }
 
-/** Whether a file of `tableFiles` is a raw table: neither a data table nor a table of a source. */
-export function isRawTable(file: string): boolean {
-  return !DATA_TABLE.test(file) && !SOURCE_TABLE.test(file);
+/** Whether a table file of the study is a raw table, the paper table as printed. */
+export function isRawTable(detail: Pick<StudyDetail, "tables">, file: string): boolean {
+  return detail.tables.some((table) => table.file === file && table.kind === "raw");
 }
 
-/** The data tables of a study, which the library loads as tables: `tableFiles` without the raw tables. */
-export function dataTableFiles(detail: Pick<StudyDetail, "id" | "files">): Set<string> {
-  return new Set(tableFiles(detail).filter((file) => !isRawTable(file)));
+/** The data tables of a study, which the library loads as tables: the table files without the raw tables. */
+export function dataTableFiles(detail: Pick<StudyDetail, "tables">): Set<string> {
+  return new Set(detail.tables.filter((table) => table.kind !== "raw").map((table) => table.file));
 }
 
 /** The counts of the rail: open items, errors plus warnings, sources, and table and raw table files. */
@@ -89,7 +75,7 @@ export function railCounts(detail: StudyDetail): Partial<Record<Section, number>
     review: openItems(detail),
     problems: detail.counts.errors + detail.counts.warnings,
     sources: detail.sources.length,
-    tables: tableFiles(detail).length,
+    tables: detail.tables.length,
   };
 }
 

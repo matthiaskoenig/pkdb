@@ -1,31 +1,11 @@
 /**
- * The parts of the Tables section: the order of the tables, what the sync status means and what a
- * sync did, and the rows of a sync conflict in one grid.
+ * The parts of the Tables section: what the sync status means and what a sync did, and the rows of
+ * a sync conflict in one grid.
  */
 import type { ConflictData, SyncState, TableResponse, TableRow, TablesResult } from "./api/types";
 import { columnName } from "./grid";
 import { plural, SYNC_LABELS, SYNC_TONES, type Tone } from "./overview";
-import { actionFailure, isRawTable, type ActionFailure } from "./study";
-import { DATA_TABLE_KINDS, SOURCE_TABLE_KINDS } from "./tableKinds";
-
-// Tables
-
-/** The rank of a table file in the workbook: data tables, per-source tables, then raw tables. */
-function rank(file: string): number {
-  const name = file.replace(/\.tsv$/, "");
-  const data = DATA_TABLE_KINDS.findIndex((kind) => kind === name);
-  if (data >= 0) return data;
-  const prefix = file.slice(0, file.indexOf("_"));
-  const source = SOURCE_TABLE_KINDS.findIndex((kind) => kind === prefix);
-  return DATA_TABLE_KINDS.length + (source >= 0 ? source : SOURCE_TABLE_KINDS.length);
-}
-
-/** The table files (`tableFiles`) in the order of the sheets of the workbook. */
-export function tableOrder(files: readonly string[]): string[] {
-  return [...files].sort(
-    (a, b) => rank(a) - rank(b) || a.localeCompare(b, "en", { numeric: true, sensitivity: "base" }),
-  );
-}
+import { actionFailure, type ActionFailure } from "./study";
 
 // Sync
 
@@ -162,19 +142,19 @@ function values(rows: readonly TableRow[], index: number): string {
  * The rows of a conflict, split into the cells of `header`, the header of the table, in one grid
  * with a row per version.
  *
- * A side that removed a whole table that the other changed lists the table from its header,
- * which is line 1 and row 1 (`_removal_conflict` of the library): the header is no row here, and
- * it names the columns when the table is gone. Elsewhere a side without lines removed the rows
- * that the other changed. A raw table or a table whose header is unknown names its columns by
+ * The server says which side removed the whole table that the other changed (`removed`); the
+ * other side then lists the table from its header, which is line 1 and row 1: the header is no row
+ * here, and it names the columns when the table is gone. Elsewhere a side without lines removed the
+ * rows that the other changed. A raw table or a table whose header is unknown names its columns by
  * letter.
  */
 export function conflictView(conflict: ConflictData, header: readonly string[] | null): ConflictView {
   const split = (text: string) => text.split("\t");
-  const raw = isRawTable(conflict.file);
-  const first = conflict.table_lines[0]?.line === 1 ? conflict.table_lines[0] : undefined;
-  const firstRow = conflict.workbook_rows[0]?.row === 1 ? conflict.workbook_rows[0] : undefined;
-  const removal = !raw && (first !== undefined || firstRow !== undefined);
-  const columns = header ?? (removal ? split((first ?? firstRow)!.text) : null);
+  // A side that removed the whole table leaves the other side listing it from its header, line
+  // 1 and row 1; a raw table has no header.
+  const removal = conflict.removed !== null && conflict.kind !== "raw";
+  const first = removal ? (conflict.table_lines[0] ?? conflict.workbook_rows[0]) : undefined;
+  const columns = header ?? (first ? split(first.text) : null);
   const base = (removal ? conflict.base_lines.slice(1) : conflict.base_lines).map(split);
   const workbook = conflict.workbook_rows.filter(({ row }) => !(removal && row === 1));
   const tables = conflict.table_lines.filter(({ line }) => !(removal && line === 1));
@@ -208,9 +188,9 @@ export function conflictView(conflict: ConflictData, header: readonly string[] |
       : [];
 
   let note: string | null = null;
-  if (removal && !workbook.length)
+  if (conflict.removed === "workbook")
     note = "The sheet has no rows in the workbook, but the table changed since the last sync.";
-  else if (removal && !tables.length) note = `${conflict.file} was deleted, but its sheet changed since the last sync.`;
+  else if (conflict.removed === "tables") note = `${conflict.file} was deleted, but its sheet changed since the last sync.`;
   else if (!workbook.length) note = "The workbook removed these rows, and the tables changed them.";
   else if (!tables.length) note = "The tables removed these lines, and the workbook changed them.";
   else if (!base.length) note = "Both sides added these rows.";

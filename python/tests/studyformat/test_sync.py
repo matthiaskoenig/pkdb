@@ -15,7 +15,7 @@ from openpyxl.utils import get_column_letter
 
 from pkdb.studyformat import SyncResult, add_table, sync, sync_study, workbook_check
 from pkdb.studyformat.formatter import FileChange, format_folder
-from pkdb.studyformat.sync import SyncConflict
+from pkdb.studyformat.sync import SyncConflict, conflict_data
 from pkdb.studyformat.tables import parse_table_file
 from pkdb.studyformat.workbook.base import (
     read_state,
@@ -567,8 +567,11 @@ def test_a_removed_sheet_whose_table_changed_conflicts(study, workbook, sf_vocab
             workbook_rows=(),
             table_lines=tuple(enumerate(changed, start=1)),
             base_lines=tuple(base),
+            removed="workbook",
         ),
     )
+    data = conflict_data(result.conflicts[0])
+    assert (data["kind"], data["removed"]) == ("outputs", "workbook")
     [issue] = result.issues
     assert issue.code == "sync_conflict"
     assert issue.source is not None
@@ -717,6 +720,7 @@ def test_a_table_deleted_while_its_sheet_changed_conflicts(
             workbook_rows=((1, base[0]), (2, replaced(base[1], OUTPUTS, mean="3.5"))),
             table_lines=(),
             base_lines=tuple(base),
+            removed="tables",
         ),
     )
     [issue] = result.issues

@@ -65,6 +65,15 @@ def test_study_detail(api):
     assert (tab2["kind"], tab2["missing_image"]) == ("table", None)
     assert "missing_raw" in tab2
     assert "Example_Fig1.wpd.json" in detail["files"]
+    assert detail["tables"] == [
+        {"file": "subjects.tsv", "kind": "subjects"},
+        {"file": "interventions.tsv", "kind": "interventions"},
+        {"file": "characteristica.tsv", "kind": "characteristica"},
+        {"file": "outputs_Tab2.tsv", "kind": "outputs"},
+        {"file": "timecourses_Fig1.tsv", "kind": "timecourses"},
+        {"file": "scatters_Fig2.tsv", "kind": "scatters"},
+        {"file": "Example_Tab2.tsv", "kind": "raw"},
+    ]
     etag = response_headers["ETag"]
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
     assert again[0] == 304 and again[2] == b"" and again[1]["ETag"] == etag
@@ -154,7 +163,7 @@ def test_upload_limits_bound_the_read_routes(api, monkeypatch, limit, value, cod
     assert detail["metadata"]["value"]["licence"] == "open"
     assert detail["review"]["value"]["status"] == "draft"
     assert detail["problems"][0]["code"] == code
-    assert detail["sources"] == [] and detail["files"] == []
+    assert detail["sources"] == [] and detail["files"] == [] and detail["tables"] == []
     for path in (f"{DETAIL}/tables/timecourses_Fig1.tsv", f"{DETAIL}/sources/Fig1"):
         status, _, data = request(server, "GET", path, headers=headers)
         assert status == 413 and "more than" in json.loads(data)["error"]

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { ConflictData, ReviewItem, StudyDetail, TablesResult } from "../../src/curation-app/api/types";
+import type { ConflictData, ReviewItem, StudyDetail, TableEntry, TablesResult } from "../../src/curation-app/api/types";
 import {
   actionFailure,
   approvalRefusal,
@@ -10,6 +10,7 @@ import {
   duplicateHeading,
   findProfile,
   folderPath,
+  isRawTable,
   isSection,
   issueLabel,
   knownProfiles,
@@ -97,7 +98,7 @@ describe("railCounts", () => {
   });
 
   it("counts zeros for an empty study", () => {
-    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"] }))).toEqual({
+    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"], tables: [] }))).toEqual({
       review: 0,
       problems: 0,
       sources: 0,
@@ -107,36 +108,44 @@ describe("railCounts", () => {
 });
 
 describe("tableFiles", () => {
-  it("keeps the data tables and the raw tables of the study in the order of the files", () => {
-    const files = [
-      "characteristica.tsv",
-      "Example_Fig1.wpd.json",
-      "Example_Tab2.tsv",
-      "Example_TabA.tsv",
-      "notes.tsv",
-      "Other_Tab2.tsv",
-      "outputs_Text.tsv",
-      "scatters_Fig2.tsv",
-      "study.json",
+  const tables: TableEntry[] = [
+    { file: "subjects.tsv", kind: "subjects" },
+    { file: "characteristica.tsv", kind: "characteristica" },
+    { file: "outputs_Tab2.tsv", kind: "outputs" },
+    { file: "outputs_Tab10.tsv", kind: "outputs" },
+    { file: "scatters_Fig2.tsv", kind: "scatters" },
+    { file: "Example_Tab2.tsv", kind: "raw" },
+    { file: "Example_Tab10.tsv", kind: "raw" },
+  ];
+
+  it("keeps the tables in the order of the workbook sheets, as the server lists them", () => {
+    expect(tableFiles({ tables })).toEqual([
       "subjects.tsv",
-      "timecourses_Fig1.tsv",
-    ];
-    expect(tableFiles(studyDetail({ files }))).toEqual([
       "characteristica.tsv",
-      "Example_Tab2.tsv",
-      "Example_TabA.tsv",
-      "outputs_Text.tsv",
+      "outputs_Tab2.tsv",
+      "outputs_Tab10.tsv",
       "scatters_Fig2.tsv",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
+      "Example_Tab2.tsv",
+      "Example_Tab10.tsv",
     ]);
-    // The library loads only the data tables as tables.
-    expect([...dataTableFiles(studyDetail({ files }))]).toEqual([
-      "characteristica.tsv",
-      "outputs_Text.tsv",
-      "scatters_Fig2.tsv",
+    expect(tableFiles({ tables: [] })).toEqual([]);
+  });
+
+  it("finds the raw tables by their kind", () => {
+    expect(isRawTable({ tables }, "Example_Tab10.tsv")).toBe(true);
+    expect(isRawTable({ tables }, "outputs_Tab10.tsv")).toBe(false);
+    // A file that is no table of the study is no raw table.
+    expect(isRawTable({ tables }, "Example_Tab3.tsv")).toBe(false);
+    expect(isRawTable({ tables }, "study.json")).toBe(false);
+  });
+
+  it("keeps the data tables, which the library loads as tables, without the raw tables", () => {
+    expect([...dataTableFiles({ tables })]).toEqual([
       "subjects.tsv",
-      "timecourses_Fig1.tsv",
+      "characteristica.tsv",
+      "outputs_Tab2.tsv",
+      "outputs_Tab10.tsv",
+      "scatters_Fig2.tsv",
     ]);
   });
 });
@@ -313,11 +322,13 @@ describe("failures", () => {
     expect(tablesOutcome({ ...result, opened: false })).toEqual(actionFailure("The workbook could not be opened."));
     const conflict: ConflictData = {
       file: "outputs_Tab2.tsv",
+      kind: "outputs",
       sheet: "outputs_Tab2",
       workbook_rows: [],
       table_lines: [],
       base_lines: [],
       kept: null,
+      removed: null,
     };
     const conflicts = [conflict, conflict, { ...conflict, kept: "tables" as const }];
     expect(tablesOutcome({ ...result, ok: false, conflicts })).toEqual(

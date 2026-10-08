@@ -181,6 +181,15 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
       sourceSummary({ source: "Tab3", missing_image: "Example_Tab3.png", missing_raw: "Example_Tab3.tsv" }),
     ],
     files: [...base.files, "Example_Fig1.wpd.json", "Example_Fig2.png", "timecourses_Fig2.tsv"].sort(),
+    tables: [
+      { file: "subjects.tsv", kind: "subjects" },
+      { file: "interventions.tsv", kind: "interventions" },
+      { file: "characteristica.tsv", kind: "characteristica" },
+      { file: "outputs_Tab2.tsv", kind: "outputs" },
+      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
+      { file: "timecourses_Fig2.tsv", kind: "timecourses" },
+      { file: "Example_Tab2.tsv", kind: "raw" },
+    ],
     ...changes,
   });
 }

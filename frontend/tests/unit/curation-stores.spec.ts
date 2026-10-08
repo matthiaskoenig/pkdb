@@ -25,6 +25,7 @@ function detail(revision: string, id = "caffeine/Example"): StudyDetail {
     review: { revision: "absent", value: null, issues: [] },
     sources: [],
     files: ["study.json"],
+    tables: [],
   });
 }
 

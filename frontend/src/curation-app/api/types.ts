@@ -65,6 +65,15 @@ export interface ValidationIssue {
 
 export type TableKind = "subjects" | "interventions" | "characteristica" | "outputs" | "timecourses" | "scatters";
 
+/** The kind of a table file: a table kind, or `raw` for the raw table of a paper table. */
+export type TableFileKind = TableKind | "raw";
+
+/** A table file of the study with its kind; the study detail lists them in the order of the workbook sheets. */
+export interface TableEntry {
+  file: string;
+  kind: TableFileKind;
+}
+
 export interface StudyReference {
   pmid?: string;
   doi?: string;
@@ -481,11 +490,14 @@ export interface AcknowledgedWarning {
 
 export interface ConflictData {
   file: string;
+  kind: TableFileKind;
   sheet: string;
   workbook_rows: { row: number; text: string }[];
   table_lines: { line: number; text: string }[];
   base_lines: string[];
   kept: "workbook" | "tables" | null;
+  /** The side that removed the whole table, which the other side lists from its header; null for rows that both sides changed. */
+  removed: "workbook" | "tables" | null;
 }
 
 export interface SourceSummary {
@@ -527,6 +539,8 @@ export interface StudyDetail {
   conflicts: ConflictData[];
   sources: SourceSummary[];
   files: string[];
+  /** The table files and raw tables in the order of the workbook sheets; empty beyond the upload limits. */
+  tables: TableEntry[];
 }
 
 export interface TableRow {
@@ -714,6 +728,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "conflicts",
   "sources",
   "files",
+  "tables",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");

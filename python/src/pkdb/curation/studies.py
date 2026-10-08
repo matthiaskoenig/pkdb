@@ -31,7 +31,7 @@ from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat import metadata as study_metadata
 from pkdb.studyformat import review_edit
 from pkdb.studyformat.jsonio import JsonFileError, load_json
-from pkdb.studyformat.layout import Layout, scan_folder
+from pkdb.studyformat.layout import Layout, scan_folder, workbook_tables
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
@@ -407,11 +407,14 @@ class StudiesMixin(EngineState):
                 *limits,
                 *(problem for problem in detail["problems"] if problem not in limits),
             ]
-            sources, files = [], []
+            sources, files, tables = [], [], []
         else:
             layout = study.layout
             sources = [dataclasses.asdict(source) for source in study_sources(study)]
             files = sorted(layout.files, key=natural_key)
+            tables = [
+                {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
+            ]
         review = _document(folder, layout, REVIEW_JSON, read_review)
         metadata = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
@@ -427,6 +430,7 @@ class StudiesMixin(EngineState):
             "conflicts": self._conflicts(folder) if conflicted else [],
             "sources": sources,
             "files": files,
+            "tables": tables,
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:

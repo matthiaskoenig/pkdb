@@ -234,7 +234,7 @@ Agents may add, answer, resolve and dismiss items, but a person approves a study
 This section is for developers. The front end talks to the local server through `/local/` routes. Every route except `POST /local/session`, which takes the launch token, needs the session cookie. Writes also need the CSRF header and a JSON body of at most 1 MiB. GET responses carry an `ETag` and answer `304` to `If-None-Match`, so the app polls cheaply.
 
 - `GET /local/state`: the workspace, the connection, the author of writes, the study rows and the jobs.
-- `GET /local/studies/{substance}/{name}`: the study page with metadata, review, problems, acknowledged warnings, sync status and conflicts, sources, files and jobs. Below it, `.../tables/{file}`, `.../sources/{source}` and `.../files/{file}` (registered images only) serve one table, one source view and one image.
+- `GET /local/studies/{substance}/{name}`: the study page with metadata, review, problems, acknowledged warnings, sync status and conflicts, sources, files, the table files with their kinds in the order of the workbook sheets, and jobs. Below it, `.../tables/{file}`, `.../sources/{source}` and `.../files/{file}` (registered images only) serve one table, one source view and one image.
 - `POST /local/studies/metadata`, `POST /local/studies/review` and `POST /local/studies/tables` write `study.json`, change `review.json` (add, reply, resolve, dismiss, reopen, status, acknowledge), and open, sync, resolve or add to the workbook.
 - The other routes cover the session, the workspace and the folder browser, the settings, the On save action, the jobs, pause and resume, uploads with an unknown outcome, references, opening files, the history and the reports.
 

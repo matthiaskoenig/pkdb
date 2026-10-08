@@ -45,6 +45,7 @@ from pkdb.studyformat.merge import Conflict, Preference, merge_lines
 from pkdb.studyformat.raw import load_raw, parse_raw_file, render_raw
 from pkdb.studyformat.tables import (
     KIND_ORDER,
+    RAW_KIND,
     TABLES,
     TEXT_SOURCE,
     TableSpec,
@@ -92,7 +93,9 @@ class SyncConflict:
     TSV line numbers, each with its canonical text, and `base_lines` the lines
     both sides changed. When one side removed the whole table, its rows are
     empty and the other side lists all of its lines. `kept` is the side that
-    resolved the conflict, or None while it is unresolved.
+    resolved the conflict, or None while it is unresolved. `removed` is the
+    side that removed the whole table, which the other side then lists from its
+    header, or None for rows that both sides changed.
     """
 
     file: str
@@ -101,12 +104,20 @@ class SyncConflict:
     table_lines: tuple[tuple[int, str], ...]
     base_lines: tuple[str, ...]
     kept: Side | None = None
+    removed: Side | None = None
+
+
+def _conflict_kind(file: str) -> str:
+    """The table kind of a conflicting file, or `raw`: conflicts are about table files and raw tables."""
+    parsed = parse_table_file(file)
+    return RAW_KIND if parsed is None else parsed[0].kind
 
 
 def conflict_data(conflict: SyncConflict) -> dict:
     """A conflict as JSON, as pkdb tables sync and the curation app report it."""
     return {
         "file": conflict.file,
+        "kind": _conflict_kind(conflict.file),
         "sheet": conflict.sheet,
         "workbook_rows": [
             {"row": row, "text": text} for row, text in conflict.workbook_rows
@@ -116,6 +127,7 @@ def conflict_data(conflict: SyncConflict) -> dict:
         ],
         "base_lines": list(conflict.base_lines),
         "kept": conflict.kept,
+        "removed": conflict.removed,
     }
 
 
@@ -324,6 +336,7 @@ def _removal_conflict(
         tuple(enumerate(_lines(tables), start=1)),
         tuple(_lines(base)),
         kept=keep,
+        removed="workbook" if workbook is None else "tables",
     )
     if keep is not None:
         return found, None

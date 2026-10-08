@@ -12,6 +12,8 @@ STUDY_JSON = "study.json"
 REFERENCE_JSON = "reference.json"
 REVIEW_JSON = "review.json"
 JSON_FILES = (STUDY_JSON, REFERENCE_JSON, REVIEW_JSON)
+# The kind of a raw table, the paper table as printed, beside the table kinds.
+RAW_KIND = "raw"
 
 
 @dataclass(frozen=True)

@@ -106,6 +106,13 @@ const harder: StudyDetail = studyDetail({
     "subjects.tsv",
     "timecourses_Fig1.tsv",
   ],
+  tables: [
+    { file: "subjects.tsv", kind: "subjects" },
+    { file: "interventions.tsv", kind: "interventions" },
+    { file: "characteristica.tsv", kind: "characteristica" },
+    { file: "outputs_Tab2.tsv", kind: "outputs" },
+    { file: "timecourses_Fig1.tsv", kind: "timecourses" },
+  ],
 });
 
 /** The last upload of a study, without its URL. */

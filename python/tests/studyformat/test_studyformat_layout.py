@@ -3,7 +3,8 @@ from pathlib import Path
 import pytest
 
 from pkdb.studyformat.issues import column_letter, make_issue
-from pkdb.studyformat.layout import scan_folder
+from pkdb.studyformat.layout import scan_folder, workbook_tables
+from pkdb.studyformat.sync import _sheet_order
 
 
 def codes(issues):
@@ -188,3 +189,27 @@ def test_table_names_equal_ignoring_case_are_duplicates(make_study, valid_files)
 def test_distinct_table_names_are_not_duplicates(make_study, valid_files):
     folder = make_study(valid_files)
     assert table_issues(scan_folder(folder), "duplicate_table_name") == []
+
+
+def test_workbook_tables_follow_the_sheets_of_the_workbook(make_study, valid_files):
+    folder = make_study(
+        {
+            **valid_files,
+            "outputs_Tab10.tsv": valid_files["outputs_Tab2.tsv"],
+            "Example_Tab2.tsv": "cmax\t2.5\n",
+        }
+    )
+    tables = workbook_tables(scan_folder(folder))
+    assert tables == [
+        ("subjects.tsv", "subjects"),
+        ("interventions.tsv", "interventions"),
+        ("characteristica.tsv", "characteristica"),
+        ("outputs_Tab2.tsv", "outputs"),
+        ("outputs_Tab10.tsv", "outputs"),
+        ("timecourses_Fig1.tsv", "timecourses"),
+        ("scatters_Fig2.tsv", "scatters"),
+        ("Example_Tab2.tsv", "raw"),
+    ]
+    # The order is the sheet order of the sync.
+    files = [file for file, _ in tables]
+    assert files == sorted(files, key=lambda file: _sheet_order(file, "Example"))

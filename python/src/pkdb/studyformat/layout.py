@@ -12,6 +12,7 @@ from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.tables import (
     JSON_FILES,
     KIND_ORDER,
+    RAW_KIND,
     REFERENCE_JSON,
     REVIEW_JSON,
     STUDY_JSON,
@@ -73,6 +74,17 @@ class Layout:
     digitizations: list[RawFile] = field(default_factory=list)
     attachments: list[str] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
+
+
+def workbook_tables(layout: Layout) -> list[tuple[str, str]]:
+    """The table files and raw tables of a study with their kinds, in the order of the workbook sheets.
+
+    The data tables come by kind and source, then the raw tables with the kind `raw`.
+    """
+    return [
+        *((table.name, table.spec.kind) for table in layout.tables),
+        *((raw.name, RAW_KIND) for raw in layout.raw_tables),
+    ]
 
 
 def table_name_issues(tables: Sequence[TableFile | RawFile]) -> list[ValidationIssue]:

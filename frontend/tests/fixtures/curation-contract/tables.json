@@ -1,0 +1,159 @@
+{
+  "tables": [
+    {
+      "file": "subjects.tsv",
+      "kind": "subjects"
+    },
+    {
+      "file": "interventions.tsv",
+      "kind": "interventions"
+    },
+    {
+      "file": "characteristica.tsv",
+      "kind": "characteristica"
+    },
+    {
+      "file": "outputs_Tab2.tsv",
+      "kind": "outputs"
+    },
+    {
+      "file": "timecourses_Fig1.tsv",
+      "kind": "timecourses"
+    },
+    {
+      "file": "Demo2020_Tab2.tsv",
+      "kind": "raw"
+    }
+  ],
+  "table_kinds": [
+    "subjects",
+    "interventions",
+    "characteristica",
+    "outputs",
+    "timecourses",
+    "scatters"
+  ],
+  "conflicts": [
+    {
+      "file": "subjects.tsv",
+      "kind": "subjects",
+      "sheet": "subjects",
+      "workbook_rows": [
+        {
+          "row": 2,
+          "text": "Demo2020\tall\t\t14\tText\t"
+        }
+      ],
+      "table_lines": [
+        {
+          "line": 2,
+          "text": "Demo2020\tall\t\t13\tText\t"
+        }
+      ],
+      "base_lines": [
+        "Demo2020\tall\t\t12\tText\t"
+      ],
+      "kept": null,
+      "removed": null
+    },
+    {
+      "file": "outputs_Tab2.tsv",
+      "kind": "outputs",
+      "sheet": "outputs_Tab2",
+      "workbook_rows": [],
+      "table_lines": [
+        {
+          "line": 1,
+          "text": "study\tsource\tsubjects\tinterventions\tmeasurement\tcalculation\tsubstance\ttissue\tmethod\tchoice\ttime\ttime_unit\tcount\tmean\tsd\tse\tcv\tgmean\tgsd\tgcv\tmedian\tmin\tmax\tunit\terror_bar\terror_type\tcomment"
+        },
+        {
+          "line": 2,
+          "text": "Demo2020\tTab2\tall\tD100\tauc_inf\t\tcaffeine\tplasma\t\t\t\t\t12\t17.8\t4.2\t\t\t\t\t\t\t\t\tmg/l*hr\t\t\t"
+        },
+        {
+          "line": 3,
+          "text": "Demo2020\tTab2\tall\tD100\tcmax\t\tcaffeine\tplasma\t\t\t\t\t12\t2.1\t0.4\t\t\t\t\t\t\t\t\tmg/l\t\t\t"
+        },
+        {
+          "line": 4,
+          "text": "Demo2020\tTab2\tall\tD100\tthalf\t\tcaffeine\tplasma\t\t\t\t\t12\t5\t1.1\t\t\t\t\t\t\t\t\thr\t\t\t"
+        },
+        {
+          "line": 5,
+          "text": "Demo2020\tTab2\tall\tD100\ttmax\t\tcaffeine\tplasma\t\t\t\t\t12\t0.8\t0.3\t\t\t\t\t\t\t\t\thr\t\t\t"
+        },
+        {
+          "line": 6,
+          "text": "Demo2020\tTab2\tall\tD200\tauc_inf\t\tcaffeine\tplasma\t\t\t\t\t12\t36.1\t8.5\t\t\t\t\t\t\t\t\tmg/l*hr\t\t\t"
+        },
+        {
+          "line": 7,
+          "text": "Demo2020\tTab2\tall\tD200\tcmax\t\tcaffeine\tplasma\t\t\t\t\t12\t4.2\t0.8\t\t\t\t\t\t\t\t\tmg/l\t\t\t"
+        },
+        {
+          "line": 8,
+          "text": "Demo2020\tTab2\tall\tD200\tthalf\t\tcaffeine\tplasma\t\t\t\t\t12\t5.2\t1.2\t\t\t\t\t\t\t\t\thr\t\t\t"
+        },
+        {
+          "line": 9,
+          "text": "Demo2020\tTab2\tall\tD200\ttmax\t\tcaffeine\tplasma\t\t\t\t\t12\t0.9\t0.3\t\t\t\t\t\t\t\t\thr\t\t\t"
+        }
+      ],
+      "base_lines": [
+        "study\tsource\tsubjects\tinterventions\tmeasurement\tcalculation\tsubstance\ttissue\tmethod\tchoice\ttime\ttime_unit\tcount\tmean\tsd\tse\tcv\tgmean\tgsd\tgcv\tmedian\tmin\tmax\tunit\terror_bar\terror_type\tcomment",
+        "Demo2020\tTab2\tall\tD100\tauc_inf\t\tcaffeine\tplasma\t\t\t\t\t12\t17.6\t4.2\t\t\t\t\t\t\t\t\tmg/l*hr\t\t\t",
+        "Demo2020\tTab2\tall\tD100\tcmax\t\tcaffeine\tplasma\t\t\t\t\t12\t2.1\t0.4\t\t\t\t\t\t\t\t\tmg/l\t\t\t",
+        "Demo2020\tTab2\tall\tD100\tthalf\t\tcaffeine\tplasma\t\t\t\t\t12\t5\t1.1\t\t\t\t\t\t\t\t\thr\t\t\t",
+        "Demo2020\tTab2\tall\tD100\ttmax\t\tcaffeine\tplasma\t\t\t\t\t12\t0.8\t0.3\t\t\t\t\t\t\t\t\thr\t\t\t",
+        "Demo2020\tTab2\tall\tD200\tauc_inf\t\tcaffeine\tplasma\t\t\t\t\t12\t36.1\t8.5\t\t\t\t\t\t\t\t\tmg/l*hr\t\t\t",
+        "Demo2020\tTab2\tall\tD200\tcmax\t\tcaffeine\tplasma\t\t\t\t\t12\t4.2\t0.8\t\t\t\t\t\t\t\t\tmg/l\t\t\t",
+        "Demo2020\tTab2\tall\tD200\tthalf\t\tcaffeine\tplasma\t\t\t\t\t12\t5.2\t1.2\t\t\t\t\t\t\t\t\thr\t\t\t",
+        "Demo2020\tTab2\tall\tD200\ttmax\t\tcaffeine\tplasma\t\t\t\t\t12\t0.9\t0.3\t\t\t\t\t\t\t\t\thr\t\t\t"
+      ],
+      "kept": null,
+      "removed": "workbook"
+    },
+    {
+      "file": "Demo2020_Tab2.tsv",
+      "kind": "raw",
+      "sheet": "Demo2020_Tab2",
+      "workbook_rows": [],
+      "table_lines": [
+        {
+          "line": 1,
+          "text": "Parameter\t100 mg\t200 mg"
+        },
+        {
+          "line": 2,
+          "text": "Cmax (mg/l)\t2.1 ± 0.4\t4.2 ± 0.8"
+        },
+        {
+          "line": 3,
+          "text": "tmax (h)\t0.8 ± 0.3\t0.9 ± 0.3"
+        },
+        {
+          "line": 4,
+          "text": "t1/2 (h)\t5.0 ± 1.1\t5.2 ± 1.2"
+        },
+        {
+          "line": 5,
+          "text": "AUC0-inf (mg·h/l)\t17.8 ± 4.2\t36.1 ± 8.5"
+        },
+        {
+          "line": 6,
+          "text": "Mean ± SD of 12 subjects.\t\t"
+        }
+      ],
+      "base_lines": [
+        "Parameter\t100 mg\t200 mg",
+        "Cmax (mg/l)\t2.1 ± 0.4\t4.2 ± 0.8",
+        "tmax (h)\t0.8 ± 0.3\t0.9 ± 0.3",
+        "t1/2 (h)\t5.0 ± 1.1\t5.2 ± 1.2",
+        "AUC0-inf (mg·h/l)\t17.6 ± 4.2\t36.1 ± 8.5",
+        "Mean ± SD of 12 subjects.\t\t"
+      ],
+      "kept": null,
+      "removed": "workbook"
+    }
+  ]
+}
