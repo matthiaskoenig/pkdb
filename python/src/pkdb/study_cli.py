@@ -373,7 +373,7 @@ def _invalid(args, folder: Path, error) -> int:
 def _review(args, folder: Path) -> int:
     """Run a `review` action; errors are reported as `pkdb study` does."""
     from pkdb.identity import IdentityError
-    from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
+    from pkdb.studyformat.review_edit import ReviewError
     from pkdb.studyformat.revision import RevisionConflict
 
     def failure(error: str, message: str, **extra) -> int:
@@ -391,10 +391,8 @@ def _review(args, folder: Path) -> int:
         return _REVIEW_ACTIONS[args.action](args, folder, author)
     except IdentityError as error:
         return _identity_failure(args, folder, error)
-    except ApprovalRefused as error:
-        return _review_error(args, folder, "approval_refused", error)
     except ReviewError as error:
-        return _review_error(args, folder, "invalid", error)
+        return _review_error(args, folder, error.code or "invalid", error)
     except RevisionConflict as conflict:
         message = (
             f"{conflict.file} changed on disk since revision {conflict.expected}; "

@@ -1,14 +1,17 @@
 import json
 import re
+from types import SimpleNamespace
 
 import pytest
 from digitize_fixtures import GOOD, png, project
 
 import pkdb.studyformat.metadata as metadata
+import pkdb.studyformat.validation as validation
 from pkdb.cli import main
 from pkdb.errors import ClientError
 from pkdb.schemas.review import ReviewTarget
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.validation import validate_folder
 
@@ -300,6 +303,28 @@ def test_review_acknowledge_file_warnings_that_share_a_code(
         if issue.code == "unknown_dataset" and issue.source
     ]
     assert keys == ["axis labels"]
+
+
+def test_review_acknowledge_reports_the_code_of_its_refusal(
+    valid_study, reviewer, capsys, monkeypatch
+):
+    unkeyed = make_issue("unknown_dataset", "Old.", file="Example_Fig1.wpd.json")
+    monkeypatch.setattr(
+        validation,
+        "validate_folder",
+        lambda folder, vocabulary: SimpleNamespace(issues=[unkeyed]),
+    )
+    command = ["review", "acknowledge", str(valid_study), "unknown_dataset"]
+    command += ["--file", "Example_Fig1.wpd.json", "--text", "Not data."]
+    command += ["--vocabulary", str(reviewer), "--format", "json"]
+    assert main(command) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["error"] == "no_exact_target"
+    assert output["message"].startswith(
+        "The warning [unknown_dataset] in Example_Fig1.wpd.json has no row of a data "
+        "table and no key, so it cannot be acknowledged alone."
+    )
+    assert read_review(valid_study).review.items == []
 
 
 def test_review_add_with_a_key(valid_study, reviewer, capsys):
