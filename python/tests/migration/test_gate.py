@@ -496,3 +496,59 @@ def test_differences_are_listed_up_to_the_maximum(tmp_path, sf_vocabulary):
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert len(result.differences) == MAX_DIFFERENCES
+
+
+def commented(record, *comments):
+    return {**record, "comments": [["curator", text] for text in comments]}
+
+
+def test_a_comment_with_a_line_break_is_identical(tmp_path, sf_vocabulary):
+    output = {**commented(OUTPUT, "From\nTab2"), "descriptions": ["Fasted.\tMen."]}
+    group = commented(STUDY["groupset"]["groups"][0], "All\nsubjects")
+    x = commented(X_OUTPUT, "Age at\nscreening")
+    study = with_outputs(
+        output,
+        TIMECOURSE,
+        x,
+        commented(Y_OUTPUT, "Cmax"),
+        groupset={"groups": [group]},
+        dataset=DATASET,
+    )
+    sheets = {**SHEETS, **SCATTER_SHEET}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    v2 = converted(tmp_path, v1)
+    assert (
+        "\tFasted. Men. / curator: From Tab2\n" in (v2 / "outputs_Tab2.tsv").read_text()
+    )
+    scatters = (v2 / "scatters_Fig2.tsv").read_text()
+    assert "\tcurator: Age at screening / curator: Cmax\n" in scatters
+    result = judge(v1, v2, sf_vocabulary)
+    assert (result.outcome, result.differences) == ("identical", [])
+
+
+@pytest.mark.parametrize(
+    ("table", "path"),
+    [
+        ("outputs_Tab2.tsv", "measurements[Example_Tab2.png output all D1"),
+        ("subjects.tsv", "subjects[all]"),
+        ("scatters_Fig2.tsv", "measurements[Example_Fig2.png output age_vs_cmax_x"),
+    ],
+)
+def test_a_dropped_comment_is_a_mismatch(tmp_path, sf_vocabulary, table, path):
+    study = with_outputs(
+        commented(OUTPUT, "Check"),
+        TIMECOURSE,
+        commented(X_OUTPUT, "Check"),
+        Y_OUTPUT,
+        groupset={"groups": [commented(STUDY["groupset"]["groups"][0], "Check")]},
+        dataset=DATASET,
+    )
+    sheets = {**SHEETS, **SCATTER_SHEET}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    v2 = converted(tmp_path, v1)
+    rewrite(v2 / table, "comment", "")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    differences = [(d.a, d.b) for d in result.differences if d.path.startswith(path)]
+    assert differences and set(differences) == {("curator: Check", "no comment")}
+    assert all(d.path.endswith(".comment") for d in result.differences)

@@ -15,9 +15,9 @@ from typing import NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.model import Change, Difference, StudyResult
-from pkdb.migration.rows import label_name
+from pkdb.migration.rows import comment, label_name, scatter_comment
 from pkdb.preparation import PreparedBundle, prepare
-from pkdb.schemas.study import CanonicalStudy, Observation, Statistics
+from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.text import format_number
@@ -36,6 +36,7 @@ JPG_SUFFIXES = (".jpg", ".jpeg")
 GENERATED_DATASET = "dataset:auto"
 # Fields of a key that are shown with their name, such as `time 1`.
 NAMED = frozenset({"time", "time_end", "interval", "doses"})
+NO_COMMENT = "no comment"
 
 
 class Key(NamedTuple):
@@ -86,6 +87,17 @@ OBSERVATION = (
 INTERVENTION = ("name", "subject", "route", "form", "application")
 INTERVENTION += ("time_end", "interval", "doses")
 MEASUREMENT = ("output_type", "label", "group", "individual")
+
+
+class Reported(NamedTuple):
+    """The statistics of a reported record and its one-line comment.
+
+    The comment of a record of A is the comment that the converter writes for
+    it, so the comments of paired records must be equal.
+    """
+
+    statistics: Statistics
+    comment: str
 
 
 @dataclass
@@ -172,6 +184,18 @@ def _subjects(
     for individual in study.individuals:
         subjects[individual.name].append(("individual", 1, individual.group))
     return {name: sorted(found, key=str) for name, found in subjects.items()}
+
+
+def _subject_comments(study: CanonicalStudy) -> dict[str, tuple[str, ...]]:
+    """The one-line comment of each subject by name, as the converter writes it."""
+    comments: dict[str, list[str]] = defaultdict(list)
+    for subject in [*study.groups, *study.individuals]:
+        comments[subject.name].append(comment(subject))
+    return {name: tuple(sorted(found)) for name, found in comments.items()}
+
+
+def _comment_text(comments: tuple[str, ...]) -> str:
+    return "; ".join(text or NO_COMMENT for text in comments)
 
 
 def _subject_text(subjects: list[tuple] | None) -> str:
@@ -305,21 +329,52 @@ class _Normalizer:
             self.changes.add("label_renamed", f"{old!r} to {new}")
 
 
+def _origin(by_key: Mapping[str, Measurement], record_key: str) -> Measurement | None:
+    """The reported record that a measurement derives from."""
+    record = by_key.get(record_key)
+    while record is not None and record.origin != "reported":
+        record = by_key.get(record.derived_from) if record.derived_from else None
+    return record
+
+
+def _scatter_comments(study: CanonicalStudy) -> dict[str, str]:
+    """The comment of each scatter point: the converter joins those of x and y."""
+    by_key = {record.key: record for record in study.measurements}
+    comments = {}
+    for dataset in study.scatters:
+        if dataset.key == GENERATED_DATASET:
+            continue
+        for subset in dataset.subsets:
+            for pair in subset.points:
+                points = [_origin(by_key, key) for key in pair]
+                if len(points) != 2 or None in points:
+                    continue
+                x, y = points
+                assert x is not None and y is not None
+                comments[x.key] = comments[y.key] = scatter_comment(x, y)
+    return comments
+
+
 def _records(
     study: CanonicalStudy, as_individuals: set[str], changes: Changes | None
-) -> tuple[dict[Key, list[Statistics]], dict[str, Key]]:
-    """The statistics of the reported records by key, and the key of each measurement.
+) -> tuple[dict[Key, list[Reported]], dict[str, Key]]:
+    """The reported records by key, and the key of each measurement.
 
-    With `changes`, the records are A's, rewritten by the intended changes.
+    With `changes`, the records are A's, rewritten by the intended changes,
+    with the comment that the converter writes for them.
     """
     normalize = None if changes is None else _Normalizer(study, as_individuals, changes)
-    records: dict[Key, list[Statistics]] = defaultdict(list)
+    scatter_comments = {} if changes is None else _scatter_comments(study)
+    records: dict[Key, list[Reported]] = defaultdict(list)
 
     def add(key: Key, record: Observation) -> Key:
         statistics = record.statistics
         if normalize is not None:
             key, statistics = normalize(key, statistics)
-        records[key].append(statistics)
+        text = scatter_comments.get(record.key)
+        records[key].append(
+            Reported(statistics, comment(record) if text is None else text)
+        )
         return key
 
     for subject in [*study.groups, *study.individuals]:
@@ -355,9 +410,7 @@ def _reported(
     by_key = {record.key: record for record in study.measurements}
 
     def reported(record_key: str) -> object:
-        record = by_key.get(record_key)
-        while record is not None and record.origin != "reported":
-            record = by_key.get(record.derived_from) if record.derived_from else None
+        record = _origin(by_key, record_key)
         if record is None or record.key not in keys:
             return f"unknown record {record_key}"
         return keys[record.key]
@@ -444,54 +497,72 @@ def _error_bars(a: Statistics, b: Statistics) -> Statistics | None:
 
 
 class _Paired(NamedTuple):
-    """Records left unpaired, the number of pairs and of those paired by an error bar."""
+    """Records left unpaired, the number of pairs and of those paired by an error bar.
 
-    a: list[Statistics]
-    b: list[Statistics]
+    `comments` holds the expected and the found comment of each pair whose
+    comments differ.
+    """
+
+    a: list[Reported]
+    b: list[Reported]
     pairs: int
     bars: int
+    comments: list[tuple[str, str]]
 
 
-def _pair(a: list[Statistics], b: list[Statistics]) -> _Paired:
-    """Pair records that are equal, directly or through B's error bar."""
-    left = sorted(a, key=_order)
-    right = sorted(b, key=_order)
-    if len(left) == len(right) and all(map(_same_statistics, left, right)):
-        return _Paired([], [], len(left), 0)
-    unmatched = []
-    for statistics in left:
-        found = next(
-            (i for i, other in enumerate(right) if _same_statistics(statistics, other)),
-            None,
-        )
-        if found is None:
-            unmatched.append(statistics)
-        else:
-            del right[found]
-    pairs = len(left) - len(unmatched)
-    left, unmatched, bars = unmatched, [], 0
-    for statistics in left:
-        found = None
-        for index, other in enumerate(right):
-            bar = _error_bars(statistics, other)
-            if bar is not None and _same_statistics(statistics, bar):
-                found = index
-                break
-        if found is None:
-            unmatched.append(statistics)
-        else:
-            bars += 1
-            del right[found]
-    return _Paired(unmatched, right, pairs + bars, bars)
+def _same_record(a: Reported, b: Reported) -> bool:
+    return a.comment == b.comment and _same_statistics(a.statistics, b.statistics)
 
 
-def _unpaired(key: Key, a: list[Statistics], b: list[Statistics]) -> list[Difference]:
+def _same_values(a: Reported, b: Reported) -> bool:
+    return _same_statistics(a.statistics, b.statistics)
+
+
+def _by_error_bar(a: Reported, b: Reported) -> bool:
+    bar = _error_bars(a.statistics, b.statistics)
+    return bar is not None and _same_statistics(a.statistics, bar)
+
+
+def _pair(a: list[Reported], b: list[Reported]) -> _Paired:
+    """Pair records that are equal, directly or through B's error bar.
+
+    Records with equal comments pair first, so that a differing comment is
+    reported only where no record with the expected comment is left.
+    """
+
+    def order(record: Reported) -> tuple:
+        return _order(record.statistics), record.comment
+
+    left = sorted(a, key=order)
+    right = sorted(b, key=order)
+    if len(left) == len(right) and all(map(_same_record, left, right)):
+        return _Paired([], [], len(left), 0, [])
+    pairs, bars, comments = 0, 0, []
+    for same in (_same_record, _same_values, _by_error_bar):
+        unmatched = []
+        for record in left:
+            found = next(
+                (i for i, other in enumerate(right) if same(record, other)), None
+            )
+            if found is None:
+                unmatched.append(record)
+                continue
+            other = right.pop(found)
+            pairs += 1
+            bars += same is _by_error_bar
+            if record.comment != other.comment:
+                comments.append((record.comment, other.comment))
+        left = unmatched
+    return _Paired(left, right, pairs, bars, comments)
+
+
+def _unpaired(key: Key, a: list[Reported], b: list[Reported]) -> list[Difference]:
     """Differences of the records of one key that found no equal record."""
     differences = []
     path = described(key)
     for index in range(max(len(a), len(b))):
-        old = a[index] if index < len(a) else None
-        new = b[index] if index < len(b) else None
+        old = a[index].statistics if index < len(a) else None
+        new = b[index].statistics if index < len(b) else None
         if old is None or new is None:
             differences.append(Difference(path=path, a=_summary(old), b=_summary(new)))
             continue
@@ -509,24 +580,34 @@ def _unpaired(key: Key, a: list[Statistics], b: list[Statistics]) -> list[Differ
 
 
 def _match(
-    a: Mapping[Key, list[Statistics]],
-    b: Mapping[Key, list[Statistics]],
+    a: Mapping[Key, list[Reported]],
+    b: Mapping[Key, list[Reported]],
     changes: Changes,
 ) -> list[Difference]:
     """Pair A's records with B's records of the same key, then list the rest.
 
     Images are provenance: an A record without image pairs with a B record
     that differs only by having one, an intended change `image_added`. An A
-    image that differs from B's stays a difference.
+    image that differs from B's stays a difference. Paired records whose
+    comments differ are a difference of their comment.
     """
-    left_a: dict[Key, list[Statistics]] = {}
+    left_a: dict[Key, list[Reported]] = {}
     left_b = {key: list(records) for key, records in b.items()}
+    differences = []
 
     def pair(key: Key, other: Key) -> int:
         paired = _pair(left_a[key], left_b.get(other, []))
         left_a[key], left_b[other] = paired.a, paired.b
         for _ in range(paired.bars):
             changes.add("error_bar", described(other))
+        differences.extend(
+            Difference(
+                path=f"{described(key)}.comment",
+                a=expected or NO_COMMENT,
+                b=found or NO_COMMENT,
+            )
+            for expected, found in paired.comments
+        )
         return paired.pairs
 
     for key, records in a.items():
@@ -541,7 +622,6 @@ def _match(
             for other in with_image.get(key, []):
                 for _ in range(pair(key, other)):
                     changes.add("image_added", described(other))
-    differences = []
     for key in dict.fromkeys([*a, *b]):
         differences += _unpaired(key, left_a.get(key, []), left_b.get(key, []))
     return differences
@@ -591,6 +671,16 @@ def compare(
         _subjects(b, set()),
         _subject_text,
     )
+    a_comments, b_comments = _subject_comments(a), _subject_comments(b)
+    differences += [
+        Difference(
+            path=f"subjects[{name}].comment",
+            a=_comment_text(a_comments[name]),
+            b=_comment_text(b_comments[name]),
+        )
+        for name in a_comments
+        if name in b_comments and a_comments[name] != b_comments[name]
+    ]
     differences += _differences(
         "timecourses", _timecourses(a, a_keys), _timecourses(b, b_keys), _points
     )

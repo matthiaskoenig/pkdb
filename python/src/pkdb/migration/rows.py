@@ -55,6 +55,12 @@ def comment(record: Notes) -> str:
     return single_line(" / ".join(part for part in parts if part.strip()))
 
 
+def scatter_comment(x: Notes, y: Notes) -> str:
+    """The comment of a scatter row: the comments of its x and y outputs, each once."""
+    notes = dict.fromkeys(note for note in (comment(x), comment(y)) if note)
+    return " / ".join(notes)
+
+
 def text(value: object) -> str:
     return "" if value is None else single_line(value)
 
@@ -411,7 +417,6 @@ def _scatter_rows(
                     )
                 used[record.key] = file
             for subject, x, y in pairs:
-                notes = dict.fromkeys(note for note in (comment(x), comment(y)) if note)
                 tables.setdefault(file, []).append(
                     {
                         "name": scatter,
@@ -419,7 +424,7 @@ def _scatter_rows(
                         "source": source,
                         **_point(scatter, "x", x),
                         **_point(scatter, "y", y),
-                        "comment": " / ".join(notes),
+                        "comment": scatter_comment(x, y),
                     }
                 )
             if labels != [f"{scatter}_x", f"{scatter}_y"]:
