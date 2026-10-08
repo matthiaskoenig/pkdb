@@ -501,6 +501,8 @@ def _review_add(args, folder: Path, author) -> int:
         if not separator or not key:
             raise ReviewError(f"--rows needs COL=VALUE, not {pair!r}")
         rows[key] = value
+    if args.key == "":
+        raise ReviewError("--key needs a value")
     if args.file or rows or args.column or args.key is not None:
         try:
             target = ReviewTarget(

@@ -311,6 +311,10 @@ def test_review_add_with_a_key(valid_study, reviewer, capsys):
         .out.splitlines()[3]
         .endswith(" open issue Example_Fig1.png key legend: Blurry.")
     )
+    empty = ["review", "add", str(valid_study), "--kind", "issue", "--text", "No."]
+    empty += ["--file", "Example_Fig1.png", "--key", "", "--format", "human"]
+    assert main(empty) == 1
+    assert capsys.readouterr().err == "--key needs a value\n"
     for options in (
         ["--key", "legend"],
         ["--file", "Example_Fig1.png", "--key", "legend", "--column", "x"],
