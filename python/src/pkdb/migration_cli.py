@@ -63,7 +63,8 @@ def register(commands) -> None:
 
 def run(args) -> int:
     """Run the `migrate` command and return the exit code."""
-    from pkdb.migration.run import RunRefused, SwapError, migrate, repository_root
+    from pkdb.migration.run import RunRefused, SwapError, migrate
+    from pkdb.repository import repository_root
     from pkdb.terminal import safe_text
 
     try:
