@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from "vitest";
 import type {
+  AcknowledgedWarning,
   ConflictData,
   Job,
   ReviewItem,
@@ -19,11 +20,12 @@ import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
-import { suggestionView } from "../../src/curation-app/problems";
-import { matchText } from "../../src/curation-app/review";
+import { acknowledgement, locationKey, scopeText, suggestionView } from "../../src/curation-app/problems";
+import { matchText, targetText } from "../../src/curation-app/review";
 import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
+import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
@@ -180,5 +182,24 @@ describe("messages contract", () => {
       expect(text.startsWith(`${issue.field}:`)).toBe(false);
       expect(text.startsWith("Value error")).toBe(false);
     }
+  });
+});
+
+describe("acknowledgements contract", () => {
+  const warnings = contract<ValidationIssue[]>(acknowledgementsFixture.warnings);
+  const entries = contract<AcknowledgedWarning[]>(acknowledgementsFixture.acknowledged);
+
+  it("acknowledges each dataset of a WebPlotDigitizer project by its key", () => {
+    expect(warnings.map(acknowledgement)).toEqual(acknowledgementsFixture.payloads);
+    expect(new Set(warnings.map(locationKey)).size).toBe(warnings.length);
+  });
+
+  it("says which acknowledgements cover a whole file", () => {
+    const legacy = entries.find((entry) => entry.scope === "file")!;
+    expect(scopeText(legacy)).toBe("Covers every digitized_mismatch warning in timecourses_Fig1.tsv, also later ones.");
+    expect(targetText(legacy.target)).toBe("timecourses_Fig1.tsv");
+    const exact = entries.find((entry) => entry.scope === "key")!;
+    expect(scopeText(exact)).toBeNull();
+    expect(targetText(exact.target)).toBe("Demo2020_Fig1.wpd.json · legend");
   });
 });

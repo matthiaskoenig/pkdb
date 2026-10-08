@@ -11,6 +11,7 @@ from curation_contract import check_contract
 import pkdb.studyformat.review_edit as review_edit
 from pkdb.cache import bundled_vocabulary
 from pkdb.curation.engine import CurationEngine
+from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
@@ -257,5 +258,94 @@ def test_messages_contract(workspace, engine_on, monkeypatch):
             "metadata_issues": [
                 issue.model_dump(mode="json") for issue in refused.value.issues
             ],
+        },
+    )
+
+
+ACKNOWLEDGED = "01M3B00000000000000000000Z"
+LEGACY = "01M2S000000000000000000000"
+
+
+def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
+    """Two datasets of a WebPlotDigitizer project without mapped rows, one acknowledged by its
+    key, and a file-wide acknowledgement as review.json files written before keys hold it."""
+    folder = workspace / DEMO
+    path = folder / "Demo2020_Fig1.wpd.json"
+    wpd = json.loads(path.read_text(encoding="utf-8"))
+    axes = wpd["datasetColl"][0]["axesName"]
+    wpd["datasetColl"] += [
+        {"name": name, "axesName": axes, "data": []}
+        for name in ("legend", "axis_labels")
+    ]
+    path.write_text(json.dumps(wpd), encoding="utf-8")
+    review = json.loads((folder / "review.json").read_text(encoding="utf-8"))
+    created = "2026-09-18T09:00:00+02:00"
+    review["items"].append(
+        {
+            "id": LEGACY,
+            "kind": "issue",
+            "state": "resolved",
+            "target": {"file": "timecourses_Fig1.tsv"},
+            "acknowledges": "digitized_mismatch",
+            "text": "Written before acknowledgements were exact.",
+            "author": "curator",
+            "created": created,
+            "resolved_by": "curator",
+            "resolved": created,
+        }
+    )
+    (folder / "review.json").write_text(json.dumps(review), encoding="utf-8")
+    assert format_folder(folder).ok
+    vocabulary = bundled_vocabulary()
+    warnings = [
+        issue
+        for issue in validate_folder(folder, vocabulary).issues
+        if issue.code == "unknown_dataset"
+    ]
+    payloads = [
+        {
+            "code": "unknown_dataset",
+            "file": "Demo2020_Fig1.wpd.json",
+            "line": None,
+            "column": None,
+            "key": key,
+        }
+        for key in ("legend", "axis_labels")
+    ]
+    engine = engine_on(workspace)
+    monkeypatch.setattr(review_edit, "new_ulid", lambda: ACKNOWLEDGED)
+    revision = engine.study_detail(DEMO)["review"]["revision"]
+    engine.review_action(
+        DEMO,
+        {
+            "action": "acknowledge",
+            "revision": revision,
+            "text": "The legend is no series.",
+            **payloads[0],
+        },
+    )
+    remaining = [
+        issue.source.key
+        for issue in validate_folder(folder, vocabulary).issues
+        if issue.code == "unknown_dataset" and issue.source
+    ]
+    assert remaining == ["axis_labels"]
+    # The legacy acknowledgement keeps hiding every digitized_mismatch of its file.
+    assert not any(
+        issue.code == "digitized_mismatch"
+        and issue.source
+        and issue.source.file == "timecourses_Fig1.tsv"
+        for issue in validate_folder(folder, vocabulary).issues
+    )
+    acknowledged = [
+        {key: value for key, value in entry.items() if key != "resolved"}
+        for entry in engine.study_detail(DEMO)["acknowledged"]
+    ]
+    check_contract(
+        "acknowledgements",
+        {
+            "warnings": [issue.model_dump(mode="json") for issue in warnings],
+            "payloads": payloads,
+            "acknowledged": acknowledged,
         },
     )

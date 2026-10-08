@@ -4,7 +4,6 @@ import type { ConflictData, ReviewItem, StudyDetail, TableEntry, TablesResult } 
 import {
   actionFailure,
   approvalRefusal,
-  dataTableFiles,
   defaultSection,
   duplicateFolders,
   duplicateHeading,
@@ -138,16 +137,6 @@ describe("tableFiles", () => {
     expect(isRawTable({ tables }, "Example_Tab3.tsv")).toBe(false);
     expect(isRawTable({ tables }, "study.json")).toBe(false);
     expect([...rawTableFiles({ tables })]).toEqual(["Example_Tab2.tsv", "Example_Tab10.tsv"]);
-  });
-
-  it("keeps the data tables, which the library loads as tables, without the raw tables", () => {
-    expect([...dataTableFiles({ tables })]).toEqual([
-      "subjects.tsv",
-      "characteristica.tsv",
-      "outputs_Tab2.tsv",
-      "outputs_Tab10.tsv",
-      "scatters_Fig2.tsv",
-    ]);
   });
 });
 

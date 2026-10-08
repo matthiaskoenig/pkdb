@@ -31,6 +31,8 @@ export interface SourceLocation {
   path?: (string | number)[];
   cell?: string;
   header?: string;
+  /** Names the place of an issue in a file without rows: a dataset of a WebPlotDigitizer project, a review item. */
+  key?: string;
 }
 
 export interface Suggestion {
@@ -193,6 +195,8 @@ export interface ReviewTarget {
   file?: string;
   rows?: Record<string, string>;
   column?: string;
+  /** A part of a file without rows, such as a dataset of a WebPlotDigitizer project; excludes rows and column. */
+  key?: string;
 }
 
 export interface ThreadEntry {
@@ -493,6 +497,12 @@ export interface AcknowledgedWarning {
   author: string;
   resolved_by: string | null;
   resolved: string | null;
+  /**
+   * What the acknowledgement covers (`acknowledgement_scope` in `studyformat/validation.py`):
+   * every warning of its code in the study, in its file or in a column of the file, also later
+   * ones; or just the warnings at its rows or with its key.
+   */
+  scope: "study" | "file" | "column" | "rows" | "key";
 }
 
 export interface ConflictData {

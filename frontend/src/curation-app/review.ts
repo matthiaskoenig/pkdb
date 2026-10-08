@@ -87,13 +87,18 @@ export function emptyText(state: StateFilter, kind: KindFilter): string {
   return state === "all" ? `No ${noun}.` : `No ${STATE_LABELS[state].toLowerCase()} ${noun}.`;
 }
 
-/** `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, or `Whole study` without a file. */
+/**
+ * `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, `Demo2020_Fig1.wpd.json ·
+ * legend` with a key, or `Whole study` without a file.
+ */
 export function targetText(target: ReviewTarget | null | undefined): string {
   if (!target?.file) return "Whole study";
   const rows = Object.entries(target.rows ?? {})
     .map(([column, value]) => `${column} = ${value}`)
     .join(", ");
-  return [target.file, rows, target.column ? `column ${target.column}` : ""].filter(Boolean).join(" · ");
+  return [target.file, rows, target.column ? `column ${target.column}` : "", target.key ?? ""]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 /** The rows at `lines`, in their order in the table. */

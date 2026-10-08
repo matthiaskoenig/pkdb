@@ -12,13 +12,13 @@ import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import {
   acknowledgement,
-  fileWideScope,
   filterIssues,
   groupByFile,
   groupCounts,
   isLimitIssue,
   locationKey,
   noIssuesText,
+  scopeText,
   SEVERITY_CHIPS,
   severityCounts,
   validatesAfterWrite,
@@ -27,14 +27,7 @@ import {
 import { targetText } from "../review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import {
-  dataTableFiles,
-  knownProfiles,
-  profileOf,
-  sectionRoute,
-  tableFiles,
-  tablesOutcome,
-} from "../study";
+import { knownProfiles, profileOf, sectionRoute, tableFiles, tablesOutcome } from "../study";
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the
@@ -179,16 +172,10 @@ function acknowledge(issue: ValidationIssue): void {
 }
 
 function acknowledgedWarning(issue: ValidationIssue): void {
-  // An acknowledgement of the whole file covers every warning of the code in the file.
-  const covered = (detail.value && fileWideScope(issue, problems.value, dataTableFiles(detail.value))) || [issue];
-  // A validation that left the warning out already needs no mark.
-  for (const key of new Set(covered.map(locationKey)))
-    if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
-  announce(
-    covered.length > 1
-      ? `${plural(covered.length, "warning")} ${issue.code} acknowledged.`
-      : `Warning ${issue.code} acknowledged.`,
-  );
+  // The acknowledgement covers exactly this warning. A validation that left it out already needs no mark.
+  const key = locationKey(issue);
+  if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
+  announce(`Warning ${issue.code} acknowledged.`);
 }
 
 /**
@@ -371,6 +358,11 @@ function openFile(file: string): Promise<void> {
           <p class="problem-fact">
             <i class="fas fa-crosshairs problem-icon" aria-hidden="true"></i>
             <span>{{ targetText(entry.target) }}</span>
+          </p>
+          <!-- A target of a whole file, a column or the study covers more than one warning, also later ones. -->
+          <p v-if="scopeText(entry)" class="problem-fact acknowledged-scope">
+            <i class="fas fa-layer-group problem-icon" aria-hidden="true"></i>
+            <span>{{ scopeText(entry) }}</span>
           </p>
           <p class="problem-message">{{ entry.text }}</p>
           <p class="acknowledged-meta">

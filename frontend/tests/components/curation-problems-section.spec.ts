@@ -6,6 +6,7 @@ import { RouterView, type Router } from "vue-router";
 import type {
   AcknowledgedWarning,
   Job,
+  ReviewTarget,
   Snapshot,
   StudyDetail,
   Suggestion,
@@ -17,6 +18,7 @@ import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
+import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
 import {
@@ -83,7 +85,7 @@ const digitizedMismatch: ValidationIssue = {
   code: "digitized_mismatch",
   severity: "warning",
   message: "1 point of dataset 'caf_plasma_D150' has no mapped row within 2 pixels",
-  source: { file: "Example_Fig1.wpd.json", path: [] },
+  source: { file: "Example_Fig1.wpd.json", path: [], key: "caf_plasma_D150" },
 };
 const studyJson: ValidationIssue = {
   code: "invalid_study_json",
@@ -106,6 +108,7 @@ const rounded: AcknowledgedWarning = {
   author: "mkoenig",
   resolved_by: "mkoenig",
   resolved: "2026-10-06T09:00:00Z",
+  scope: "rows",
 };
 const smokers: AcknowledgedWarning = {
   id: SMOKERS,
@@ -115,7 +118,17 @@ const smokers: AcknowledgedWarning = {
   author: "janekg",
   resolved_by: null,
   resolved: null,
+  scope: "study",
 };
+
+// Two datasets of a WebPlotDigitizer project without mapped rows, and the acknowledgements that the
+// local server lists: one of a dataset by its key, and one of a whole file as review.json files
+// written before keys hold it (python/tests/test_curation_contract.py).
+const [legendDataset, labelsDataset] = acknowledgementsFixture.warnings as ValidationIssue[];
+const [legacyAcknowledged, keyedAcknowledged] = (acknowledgementsFixture.acknowledged as Omit<
+  AcknowledgedWarning,
+  "resolved"
+>[]).map((entry) => ({ ...entry, resolved: "2026-09-18T07:00:00Z" }) as AcknowledgedWarning);
 
 /** The problems of the last validation of caffeine/Example in five files, with two acknowledged warnings. */
 function withProblems(changes: Partial<StudyDetail> = {}): StudyDetail {
@@ -161,13 +174,19 @@ function job(id: string, action: Job["action"], created: string): Job {
 const WRITTEN = "2026-10-07T12:00:00.500000+00:00";
 
 const acknowledge: Handler = (body) => {
+  // The target of exactly the warning: its key, or its row and column.
+  const file = String(body?.file);
+  const target: ReviewTarget =
+    typeof body?.key === "string"
+      ? { file, key: body.key }
+      : { file, rows: { line: String(body?.line) }, ...(typeof body?.column === "string" ? { column: body.column } : {}) };
   const item = reviewItem({
     id: ADDED,
     kind: "issue",
     state: "resolved",
     acknowledges: String(body?.code),
     text: String(body?.text),
-    target: { file: String(body?.file) },
+    target,
     author: "curator",
     resolved_by: "curator",
   });
@@ -186,6 +205,7 @@ const acknowledge: Handler = (body) => {
         author: "curator",
         resolved_by: "curator",
         resolved: "2026-10-07T12:00:00Z",
+        scope: target.key ? "key" : "rows",
       },
     ],
   };
@@ -278,6 +298,15 @@ function problem(code: string): DOMWrapper<HTMLElement> {
   return found[0]!;
 }
 
+/** The shown issue whose message contains `text`. */
+function problemWith(text: string): DOMWrapper<HTMLElement> {
+  const found = section()
+    .findAll<HTMLElement>(".problem")
+    .filter((candidate) => candidate.get(".problem-message").text().includes(text));
+  if (found.length !== 1) throw new Error(`Expected one issue with "${text}", found ${found.length}`);
+  return found[0]!;
+}
+
 /** An element of the page, from `get` or `find`. */
 type Within = Pick<DOMWrapper<Element>, "findAll">;
 
@@ -292,10 +321,6 @@ function control(within: Within, name: string): DOMWrapper<HTMLElement> {
   const found = controls(within, name);
   if (found.length !== 1) throw new Error(`Expected one control "${name}", found ${found.length}`);
   return found[0]!;
-}
-
-function textOf(element: Pick<DOMWrapper<Element>, "text">): string {
-  return element.text().replace(/\s+/g, " ").trim();
 }
 
 function dialog() {
@@ -389,8 +414,9 @@ describe("issues", () => {
     expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["mg/l", "g/l"]);
 
     expect(problem("outside_range").get(".problem-severity").text()).toBe("Warning");
-    // An issue of a whole file names no location below the file.
-    expect(problem("digitized_mismatch").find(".problem-location").exists()).toBe(false);
+    // An issue of a whole file names no location below the file, or the key that tells it apart.
+    expect(problem("invalid_study_json").find(".problem-location").exists()).toBe(false);
+    expect(problem("digitized_mismatch").get(".problem-location").text()).toBe("caf_plasma_D150");
   });
 
   it("offers the spellings of an unknown term with their caveat after them", async () => {
@@ -569,6 +595,7 @@ describe("acknowledgements", () => {
         file: "interventions.tsv",
         line: 3,
         column: "name",
+        key: null,
         text: "The paper lists the dose, but no group received it.",
       },
     ]);
@@ -733,9 +760,10 @@ describe("acknowledgements", () => {
     );
   });
 
-  it("acknowledges a warning of a whole file without a line or column", async () => {
+  it("acknowledges a warning of a whole file by its key", async () => {
     await mountSection();
     await openAcknowledge("digitized_mismatch");
+    expect(dialog().text()).toContain("Example_Fig1.wpd.json · caf_plasma_D150");
     await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
@@ -749,48 +777,47 @@ describe("acknowledgements", () => {
         // Null is exact: only the warnings of the file without a line or column.
         line: null,
         column: null,
+        key: "caf_plasma_D150",
         text: "The point lies on the axis.",
       },
     ]);
   });
 
-  it("tells that a warning without a row in a data table is acknowledged in its whole file", async () => {
-    const second: ValidationIssue = {
-      ...digitizedMismatch,
-      message: "2 points of dataset 'caf_plasma_D300' have no mapped row within 2 pixels",
-    };
-    const problems = [outsideRange, digitizedMismatch, second];
+  it("acknowledges one dataset of a project by its key and keeps the warning of the other", async () => {
+    const problems = [outsideRange, legendDataset!, labelsDataset!];
     await mountSection(withProblems({ problems, counts: { errors: 0, warnings: 3 } }));
-    const items = section().findAll<HTMLElement>(".problem");
-    const opener = control(items[1]!, "Acknowledge");
+    const legend = problemWith("'legend'");
+    const opener = control(legend, "Acknowledge");
     opener.element.focus();
     await opener.trigger("click");
     await flushPromises();
-    const scope = dialog().get(".acknowledge-scope");
-    expect(textOf(scope.get(".acknowledge-scope-text"))).toBe(
-      "This warning has no row in a data table. The acknowledgement covers every digitized_mismatch warning in " +
-        "Example_Fig1.wpd.json, also later ones. It covers 2 warnings now.",
-    );
-    expect(scope.findAll(".acknowledge-covered li").map(textOf)).toEqual([digitizedMismatch.message, second.message]);
-
-    await textArea("Reason", dialog().element).setValue("The points lie on the axis.");
+    expect(dialog().text()).toContain("Demo2020_Fig1.wpd.json · legend");
+    expect(dialog().text()).not.toContain("Covers every");
+    await textArea("Reason", dialog().element).setValue("The legend is no series.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
-    // Both warnings leave the list after the next validation.
-    expect(section().findAll(".problem-acknowledged")).toHaveLength(2);
-    expect(notice()).toBe("2 warnings digitized_mismatch acknowledged.");
-  });
-
-  it("names no wider scope for a warning at a row of a data table", async () => {
-    await mountSection();
-    await openAcknowledge("outside_range");
-    expect(dialog().find(".acknowledge-scope").exists()).toBe(false);
+    expect(posted(REVIEW)).toEqual([
+      {
+        study: "caffeine/Example",
+        revision: "review-7",
+        action: "acknowledge",
+        ...acknowledgementsFixture.payloads[0],
+        text: "The legend is no series.",
+      },
+    ]);
+    expect(notice()).toBe("Warning unknown_dataset acknowledged.");
+    // Only the acknowledged dataset is marked; the other keeps its Acknowledge.
+    expect(problemWith("'legend'").find(".problem-acknowledged").exists()).toBe(true);
+    expect(problemWith("'axis_labels'").find(".problem-acknowledged").exists()).toBe(false);
+    expect(controls(problemWith("'axis_labels'"), "Acknowledge")).toHaveLength(1);
+    // The focus moves to the Acknowledge of the other dataset.
+    expect(document.activeElement).toBe(control(problemWith("'axis_labels'"), "Acknowledge").element);
   });
 
   it("keeps the dialog open with the locations when several warnings match", async () => {
     const ambiguous =
       "2 warnings [digitized_mismatch] match in Example_Fig1.wpd.json at line 3, line 5; " +
-      "give the line and column of one";
+      "give the line, column and key of one";
     await mountSection(withProblems(), {
       [`POST ${REVIEW}`]: () => json({ error: ambiguous, issues: [] }, { status: 422 }),
     });
@@ -882,6 +909,20 @@ describe("acknowledgements", () => {
     expect(control(entries[1]!, "Show the review item").attributes("href")).toBe(
       `#/studies/caffeine/Example/review?item=${SMOKERS}`,
     );
+  });
+
+  it("says which acknowledgements cover more than their own warning", async () => {
+    await mountSection(withProblems({ acknowledged: [rounded, legacyAcknowledged!, keyedAcknowledged!, smokers] }));
+    const entries = section().get(".problems-acknowledged").findAll("li");
+    const scope = (index: number) => entries[index]!.find(".acknowledged-scope");
+    // A target of a file alone, written before acknowledgements were exact, covers every warning of its code there.
+    expect(entries[1]!.text()).toContain("timecourses_Fig1.tsv");
+    expect(scope(1).text()).toBe("Covers every digitized_mismatch warning in timecourses_Fig1.tsv, also later ones.");
+    expect(scope(3).text()).toBe("Covers every unused_subject warning of the study, also later ones.");
+    // Rows and keys cover just their warnings.
+    expect(scope(0).exists()).toBe(false);
+    expect(entries[2]!.text()).toContain("Demo2020_Fig1.wpd.json · legend");
+    expect(scope(2).exists()).toBe(false);
   });
 
   it("names the file of an Open button and every control", async () => {

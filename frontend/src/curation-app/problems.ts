@@ -3,7 +3,16 @@
  * suggestions, links to the tables and the acknowledgements of warnings.
  */
 import { isValidationError } from "./api/client";
-import type { Job, Json, SaveMode, Snapshot, StudyDetail, Suggestion, ValidationIssue } from "./api/types";
+import type {
+  AcknowledgedWarning,
+  Job,
+  Json,
+  SaveMode,
+  Snapshot,
+  StudyDetail,
+  Suggestion,
+  ValidationIssue,
+} from "./api/types";
 import { plural } from "./overview";
 import { reviewFailure, type ReviewFailure } from "./review";
 
@@ -85,7 +94,9 @@ export function groupByFile(issues: readonly ValidationIssue[]): IssueGroup[] {
 /**
  * Where an issue is: `timecourses_Fig1.tsv · line 6 · mean · sheet cell timecourses_Fig1!O6`.
  * A table names its TSV line and the cell of its workbook sheet; the workbook names the row of
- * its sheet. Without `file`, the location starts after the file, which a group names already.
+ * its sheet; a file without rows names the key of the issue, such as a dataset of a
+ * WebPlotDigitizer project. Without `file`, the location starts after the file, which a group
+ * names already.
  */
 export function location(issue: ValidationIssue, { file = true }: { file?: boolean } = {}): string {
   const source = issue.source;
@@ -94,6 +105,7 @@ export function location(issue: ValidationIssue, { file = true }: { file?: boole
   const parts = file ? [source.file] : [];
   if (source.row != null) parts.push(`${workbook ? "row" : "line"} ${source.row}`);
   if (source.header) parts.push(source.header);
+  if (source.key) parts.push(source.key);
   if (source.sheet && source.cell) parts.push(`sheet cell ${source.sheet}!${source.cell}`);
   else if (source.sheet && workbook) parts.push(`sheet ${source.sheet}`);
   return parts.join(" · ");
@@ -142,45 +154,47 @@ export function tableQuery(issue: ValidationIssue): Record<string, string> | nul
 
 /**
  * The location of the `acknowledge` action of review.json: the warnings of `code` there. A null
- * line or column matches only warnings without one; the local server matches every line or
- * column only when the key is left out, as `pkdb review acknowledge` without the option.
+ * line, column or key matches only warnings without one; the local server matches every line,
+ * column or key only when the field is left out, as `pkdb review acknowledge` without the option.
  */
 export interface Acknowledgement {
   code: string;
   file: string;
   line: number | null;
   column: string | null;
+  key: string | null;
 }
 
 /**
- * Where an acknowledgement of a warning applies: exactly its code, file, line and column;
- * null for an error or an issue without a file.
+ * Where an acknowledgement of a warning applies: exactly its code, file, line, column and key;
+ * null for an error or an issue without a file. The local server writes a review item that
+ * covers exactly this warning: at its row and column, or by its key.
  */
 export function acknowledgement(issue: ValidationIssue): Acknowledgement | null {
   const source = issue.source;
   if (issue.severity !== "warning" || !source?.file) return null;
-  return { code: issue.code, file: source.file, line: source.row ?? null, column: source.header ?? null };
+  return {
+    code: issue.code,
+    file: source.file,
+    line: source.row ?? null,
+    column: source.header ?? null,
+    key: source.key ?? null,
+  };
 }
 
-/**
- * The warnings that acknowledging `issue` covers when its review item can target only its file,
- * else null. The library pins an acknowledgement to a row only for a warning at a line of a data
- * table (`target_for_issue` in `studyformat/review_edit.py`); any other warning gets the target of
- * its file alone. This mirrors `acknowledged` in `studyformat/validation.py` for such a target:
- * it matches every warning of the same code in that file, at any line and column, also the
- * warnings of later validations. `dataTables` are the data tables of the study, without raw tables.
- */
-export function fileWideScope(
-  issue: ValidationIssue,
-  problems: readonly ValidationIssue[],
-  dataTables: ReadonlySet<string>,
-): ValidationIssue[] | null {
-  const file = issue.source?.file;
-  if (issue.severity !== "warning" || !file) return null;
-  if (issue.source?.row != null && dataTables.has(file)) return null;
-  return problems.filter(
-    (other) => other.severity === "warning" && other.code === issue.code && other.source?.file === file,
-  );
+/** What an acknowledgement covers beyond its own warning, or null when it covers just that one. */
+export function scopeText(entry: AcknowledgedWarning): string | null {
+  const file = entry.target?.file;
+  switch (entry.scope) {
+    case "study":
+      return `Covers every ${entry.code} warning of the study, also later ones.`;
+    case "file":
+      return `Covers every ${entry.code} warning in ${file}, also later ones.`;
+    case "column":
+      return `Covers every ${entry.code} warning in column ${entry.target?.column} of ${file}, also later ones.`;
+    default:
+      return null;
+  }
 }
 
 /** What the dialog says when the warning is no longer in the files that the server validated. */
@@ -208,10 +222,16 @@ export function validatesAfterWrite(
   return mode !== "upload" || (!snapshot.offline && snapshot.account !== null && snapshot.can_upload);
 }
 
-/** A key that the warnings of one acknowledgement share: one code at one file, line and column. */
+/** A key that the warnings of one acknowledgement share: one code at one file, line, column and key. */
 export function locationKey(issue: ValidationIssue): string {
   const source = issue.source;
-  return JSON.stringify([issue.code, source?.file ?? null, source?.row ?? null, source?.header ?? null]);
+  return JSON.stringify([
+    issue.code,
+    source?.file ?? null,
+    source?.row ?? null,
+    source?.header ?? null,
+    source?.key ?? null,
+  ]);
 }
 
 /**

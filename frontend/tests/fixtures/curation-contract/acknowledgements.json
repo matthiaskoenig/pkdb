@@ -1,0 +1,89 @@
+{
+  "warnings": [
+    {
+      "code": "unknown_dataset",
+      "severity": "warning",
+      "message": "The dataset 'legend' matches no mapped row of source Fig1",
+      "source": {
+        "file": "Demo2020_Fig1.wpd.json",
+        "sheet": null,
+        "row": null,
+        "column": null,
+        "path": [],
+        "key": "legend"
+      },
+      "category": "digitization",
+      "stage": "validate",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [],
+      "documentation_url": null
+    },
+    {
+      "code": "unknown_dataset",
+      "severity": "warning",
+      "message": "The dataset 'axis_labels' matches no mapped row of source Fig1",
+      "source": {
+        "file": "Demo2020_Fig1.wpd.json",
+        "sheet": null,
+        "row": null,
+        "column": null,
+        "path": [],
+        "key": "axis_labels"
+      },
+      "category": "digitization",
+      "stage": "validate",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [],
+      "documentation_url": null
+    }
+  ],
+  "payloads": [
+    {
+      "code": "unknown_dataset",
+      "file": "Demo2020_Fig1.wpd.json",
+      "line": null,
+      "column": null,
+      "key": "legend"
+    },
+    {
+      "code": "unknown_dataset",
+      "file": "Demo2020_Fig1.wpd.json",
+      "line": null,
+      "column": null,
+      "key": "axis_labels"
+    }
+  ],
+  "acknowledged": [
+    {
+      "id": "01M2S000000000000000000000",
+      "code": "digitized_mismatch",
+      "target": {
+        "file": "timecourses_Fig1.tsv",
+        "rows": {}
+      },
+      "text": "Written before acknowledgements were exact.",
+      "author": "curator",
+      "resolved_by": "curator",
+      "scope": "file"
+    },
+    {
+      "id": "01M3B00000000000000000000Z",
+      "code": "unknown_dataset",
+      "target": {
+        "file": "Demo2020_Fig1.wpd.json",
+        "rows": {},
+        "key": "legend"
+      },
+      "text": "The legend is no series.",
+      "author": "curator",
+      "resolved_by": "curator",
+      "scope": "key"
+    }
+  ]
+}

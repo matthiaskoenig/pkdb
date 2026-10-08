@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { Job, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
+import type { AcknowledgedWarning, Job, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   acknowledgeFailure,
   acknowledgement,
-  fileWideScope,
   filterIssues,
   groupByFile,
   groupCounts,
@@ -15,6 +14,7 @@ import {
   NO_SUCH_WARNING,
   noIssuesText,
   reportAfter,
+  scopeText,
   severityCounts,
   suggestionView,
   tableQuery,
@@ -179,44 +179,40 @@ describe("links and acknowledgements", () => {
     expect(tableQuery(raw)).toEqual({ file: "Example_Tab2.tsv", line: "3", column: "B" });
   });
 
-  it("acknowledges a warning at exactly its file, line and column", () => {
+  it("acknowledges a warning at exactly its file, line, column and key", () => {
     expect(acknowledgement(mean)).toEqual({
       code: "outside_range",
       file: "timecourses_Fig1.tsv",
       line: 6,
       column: "mean",
+      key: null,
     });
-    // A null line or column matches only warnings without one, never every line.
+    // A null line, column or key matches only warnings without one, never every line.
     const whole = issue("digitized_mismatch", "warning", { file: "Example_Fig1.wpd.json", path: [] });
     expect(acknowledgement(whole)).toEqual({
       code: "digitized_mismatch",
       file: "Example_Fig1.wpd.json",
       line: null,
       column: null,
+      key: null,
     });
     const row = issue("duplicate_observation", "warning", { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 4 });
-    expect(acknowledgement(row)).toMatchObject({ line: 4, column: null });
+    expect(acknowledgement(row)).toMatchObject({ line: 4, column: null, key: null });
+    // A warning of a whole file is told apart from the others of its code by its key.
+    const legend = issue("unknown_dataset", "warning", { file: "Example_Fig1.wpd.json", path: [], key: "legend" });
+    expect(acknowledgement(legend)).toEqual({
+      code: "unknown_dataset",
+      file: "Example_Fig1.wpd.json",
+      line: null,
+      column: null,
+      key: "legend",
+    });
   });
 
-  it("finds the warnings that an acknowledgement of the whole file covers", () => {
-    const tables = new Set(["timecourses_Fig1.tsv", "interventions.tsv"]);
-    const figure = { file: "Example_Fig1.wpd.json", path: [] };
-    const first = issue("unknown_dataset", "warning", figure, { message: "Dataset A matches no mapped row" });
-    const second = issue("unknown_dataset", "warning", figure, { message: "Dataset B matches no mapped row" });
-    // The same code at a line of the file, and another code: as acknowledged() in validation.py.
-    const atLine = issue("unknown_dataset", "warning", { ...figure, row: 7, header: "x" });
-    const other = issue("digitized_mismatch", "warning", figure);
-    const problems = [first, second, atLine, other, mean, unused];
-    expect(fileWideScope(first, problems, tables)).toEqual([first, second, atLine]);
-    // A line of a file that is no data table, such as the workbook or a raw table, covers the file too.
-    const workbook = issue("unknown_dataset", "warning", { file: "Example.xlsx", sheet: "outputs_Tab2", row: 4 });
-    expect(fileWideScope(workbook, [workbook], tables)).toEqual([workbook]);
-    const raw = issue("unknown_dataset", "warning", cell("Example_Tab2.tsv", 3, "B", "B"));
-    expect(fileWideScope(raw, [raw], tables)).toEqual([raw]);
-    // A line of a data table is pinned to its row; errors are never acknowledged.
-    expect(fileWideScope(mean, problems, tables)).toBeNull();
-    expect(fileWideScope(header, [header], tables)).toBeNull();
-    expect(fileWideScope(issue("unknown_dataset", "warning"), problems, tables)).toBeNull();
+  it("names the key of a warning of a whole file in its location", () => {
+    const legend = issue("unknown_dataset", "warning", { file: "Example_Fig1.wpd.json", path: [], key: "legend" });
+    expect(location(legend)).toBe("Example_Fig1.wpd.json · legend");
+    expect(location(legend, { file: false })).toBe("legend");
   });
 
   it("says plainly that a warning is no longer in the files", () => {
@@ -254,6 +250,32 @@ describe("links and acknowledgements", () => {
     expect(locationKey(mean)).toBe(locationKey({ ...mean, message: "Another message" }));
     expect(locationKey(mean)).not.toBe(locationKey(unused));
     expect(locationKey(mean)).not.toBe(locationKey({ ...mean, source: { ...mean.source!, header: "sd" } }));
+    // Two datasets of one project: one code in one file without a row, told apart by their keys.
+    const dataset = (key: string) => issue("unknown_dataset", "warning", { file: "Example_Fig1.wpd.json", key });
+    expect(locationKey(dataset("legend"))).not.toBe(locationKey(dataset("axis labels")));
+    expect(locationKey(dataset("legend"))).toBe(locationKey({ ...dataset("legend"), message: "Another message" }));
+  });
+
+  it("says what an acknowledgement covers beyond its own warning", () => {
+    const entry = (scope: AcknowledgedWarning["scope"], target: AcknowledgedWarning["target"]): AcknowledgedWarning => ({
+      id: "01JA33A1B2C3D4E5F6G7H8J9K0",
+      code: "digitized_mismatch",
+      target,
+      text: "Expected.",
+      author: "curator",
+      resolved_by: "curator",
+      resolved: "2026-10-06T09:00:00Z",
+      scope,
+    });
+    expect(scopeText(entry("study", null))).toBe("Covers every digitized_mismatch warning of the study, also later ones.");
+    expect(scopeText(entry("file", { file: "timecourses_Fig1.tsv" }))).toBe(
+      "Covers every digitized_mismatch warning in timecourses_Fig1.tsv, also later ones.",
+    );
+    expect(scopeText(entry("column", { file: "timecourses_Fig1.tsv", column: "mean" }))).toBe(
+      "Covers every digitized_mismatch warning in column mean of timecourses_Fig1.tsv, also later ones.",
+    );
+    expect(scopeText(entry("rows", { file: "timecourses_Fig1.tsv", rows: { time: "1" }, column: "mean" }))).toBeNull();
+    expect(scopeText(entry("key", { file: "Example_Fig1.wpd.json", key: "legend" }))).toBeNull();
   });
 
   it("ends a mark only with the report of a job queued after the write", () => {
