@@ -5,7 +5,7 @@ from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.formulas import error_bars
 
 
-def study_with(root, spread, *, column="sd"):
+def study_with(root, spread, *, column="sd", upper=3.25):
     """A format 1 output whose `column` cell B3 holds `spread`.
 
     Row 1 holds notes and row 2 the header, so mean is A3 and upper C3.
@@ -29,7 +29,7 @@ def study_with(root, spread, *, column="sd"):
         "groupset": {"groups": [{"name": "all", "count": 4}]},
         "outputset": {"outputs": [output]},
     }
-    sheets = {"Tab2": [["mean", column, "upper"], [2.5, spread, 3.25]]}
+    sheets = {"Tab2": [["mean", column, "upper"], [2.5, spread, upper]]}
     folder = v1_study(root, study, sheets, ())
     return folder / "Example.xlsx", parse_bundle(load_folder(folder))
 
@@ -61,6 +61,12 @@ def test_operands_in_either_order_spaces_and_dollars_are_accepted(tmp_path, form
 )
 def test_other_formulas_are_no_error_bars(tmp_path, formula, value):
     workbook, study = study_with(tmp_path, Formula(formula, value))
+    assert error_bars(workbook, study) == {}
+
+
+def test_an_error_bar_below_zero_keeps_the_spread(tmp_path):
+    # The other cell is the lower end of the error bar, below zero.
+    workbook, study = study_with(tmp_path, Formula("=ABS(C3-A3)", 2.75), upper=-0.25)
     assert error_bars(workbook, study) == {}
 
 

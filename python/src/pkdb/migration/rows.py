@@ -1,5 +1,6 @@
 """Table rows of a parsed format 1 study: the inverse of the format 2 reader."""
 
+import re
 from collections import Counter
 from collections.abc import Mapping
 from decimal import Decimal
@@ -32,6 +33,8 @@ LIST = ","
 # The administration times of an irregular schedule.
 TIMES = ";"
 GEOMETRIC_MEAN = "geometric mean"
+# Separators that a format 2 name cannot hold, with the spaces around them.
+SEPARATORS = re.compile(r"\s*[,;\t\n]\s*")
 
 
 def number(value: float | int | None) -> str:
@@ -99,16 +102,23 @@ def observation(record: Observation, error_bars: ErrorBars) -> dict[str, str]:
     }
 
 
+def label_name(label: str) -> str:
+    """The format 2 name of a timecourse label: separators become `_`."""
+    return label if NAME_PATTERN.fullmatch(label) else SEPARATORS.sub("_", label)
+
+
 def _geometric(
     record: Observation, row: dict[str, str], decisions: list[Decision]
 ) -> dict[str, str]:
-    """A geometric mean that format 1 wrote as `mean` moves to `gmean`."""
+    """Format 2 retired the calculation `geometric mean`: gmean says it.
+
+    A geometric mean that format 1 wrote as `mean` moves to `gmean`.
+    """
+    if record.calculation_type != GEOMETRIC_MEAN:
+        return row
+    row = {**row, "calculation": ""}
     stats = record.statistics
-    if (
-        record.calculation_type != GEOMETRIC_MEAN
-        or stats.gmean is not None
-        or stats.mean is None
-    ):
+    if stats.gmean is not None or stats.mean is None:
         return row
     if any(getattr(stats, name) is not None for name in ("sd", "se", "cv")):
         decisions.append(
@@ -117,8 +127,7 @@ def _geometric(
                 detail=f"{record.key}: geometric mean with sd, se or cv",
             )
         )
-    # Format 2 retired the calculation `geometric mean`: gmean says it.
-    return {**row, "gmean": row["mean"], "mean": "", "calculation": ""}
+    return {**row, "gmean": row["mean"], "mean": ""}
 
 
 def _name(name: str) -> str:
@@ -424,6 +433,42 @@ def _scatter_rows(
     return tables, used
 
 
+class _Labels:
+    """Format 2 names of the timecourse labels, renamed per table file."""
+
+    def __init__(self, study: CanonicalStudy):
+        self.taken = {record.label for record in study.measurements if record.label}
+        self.names: dict[str, str] = {}
+        self.renamed: dict[str, dict[str, str]] = {}
+
+    def __call__(self, label: str, file: str) -> str:
+        name = label_name(label)
+        if name == label:
+            return name
+        if not NAME_PATTERN.fullmatch(name):
+            raise NotConverted(
+                "label_name", f"Timecourse label {label!r} is no format 2 name."
+            )
+        if name in self.taken or self.names.setdefault(name, label) != label:
+            raise NotConverted(
+                "label_name",
+                f"Timecourse label {label!r} would become {name}, "
+                "which another label of the study already is.",
+            )
+        self.renamed.setdefault(file, {})[label] = name
+        return name
+
+    def decisions(self) -> list[Decision]:
+        return [
+            Decision(
+                kind="label_renamed",
+                detail=f"{file}: "
+                + ", ".join(f"{old!r} to {new}" for old, new in renames.items()),
+            )
+            for file, renames in self.renamed.items()
+        ]
+
+
 def _plural(count: int, noun: str) -> str:
     return f"{count} {noun}" if count == 1 else f"{count} {noun}s"
 
@@ -450,6 +495,7 @@ def study_tables(
     }
     arrays: Counter[str] = Counter()
     labels: Counter[str] = Counter()
+    names = _Labels(study)
     for record in study.measurements:
         if record.key in used:
             file = used[record.key]
@@ -458,7 +504,7 @@ def study_tables(
             row = _geometric(record, row, decisions)
             if record.label and record.output_type in ("timecourse", "array"):
                 file = table_file("timecourses", source)
-                row = {**row, "label": text(record.label)}
+                row = {**row, "label": names(record.label, file)}
             else:
                 file = table_file("outputs", source)
                 if record.label:
@@ -482,6 +528,7 @@ def study_tables(
         )
         for file, count in labels.items()
     ]
+    decisions += names.decisions()
     return {file: rows for file, rows in tables.items() if rows}, decisions
 
 

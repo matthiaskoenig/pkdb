@@ -65,19 +65,19 @@ def test_an_inline_image_outside_the_naming_refuses_the_study():
 def test_a_curator_sheet_is_the_source_only_when_it_has_an_image():
     sheet = SourceLocation(file="Example.xlsx", sheet="TabGroups", row=3)
     tab1 = frozenset({"Tab1"})
-    assert curator_source(sheet, None, "Example", frozenset()) == ""
+    assert curator_source(sheet, None, "Example", frozenset()) == "Text"
     assert curator_source(sheet, "Example_Tab1.png", "Example", tab1) == "Tab1"
     assert (
         curator_source(sheet, None, "Example", frozenset({"TabGroups"})) == "TabGroups"
     )
 
 
-def test_a_curator_row_takes_an_existing_image_then_empty_or_text():
+def test_a_curator_row_takes_an_existing_image_then_text():
     groups = SourceLocation(file="Example.xlsx", sheet="Groups", row=3)
     images = frozenset({"Groups", "Tab1"})
     assert curator_source(groups, "Example_Tab1.png", "Example", images) == "Tab1"
-    assert curator_source(groups, "Example_Tab2.png", "Example", images) == ""
-    assert curator_source(groups, None, "Example", images) == ""
+    assert curator_source(groups, "Example_Tab2.png", "Example", images) == "Text"
+    assert curator_source(groups, None, "Example", images) == "Text"
     assert curator_source(WORKBOOK, None, "Example", frozenset({"Fig1"})) == "Fig1"
     assert curator_source(INLINE, "Example_Tab1.png", "Example", images) == "Tab1"
     assert curator_source(INLINE, "Example_Tab2.png", "Example", images) == "Text"

@@ -87,6 +87,8 @@ def error_bars(workbook: Path, study: CanonicalStudy) -> dict[str, tuple[float, 
     found = {}
     for key, sheet, kind, other in bars:
         bar = values.get((sheet, other))
-        if isinstance(bar, (int, float)) and not isinstance(bar, bool):
+        # Format 2 refuses negative error bars of concentrations; the saved
+        # spread says the same.
+        if isinstance(bar, (int, float)) and not isinstance(bar, bool) and bar >= 0:
             found[key] = (float(bar), kind)
     return found

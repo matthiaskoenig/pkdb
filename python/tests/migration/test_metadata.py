@@ -76,8 +76,18 @@ def test_a_v1_date_other_than_the_release_date_is_a_decision():
 
 
 def test_a_pkdb_sid_that_the_registry_does_not_hold_is_a_decision():
-    _, decisions = study_metadata(V1, REFERENCE, None, creator_fallback="mkoenig")
+    v1 = {**V1, "access": "private"}
+    _, decisions = study_metadata(v1, REFERENCE, None, creator_fallback="mkoenig")
     assert [d.kind for d in decisions] == ["registry_sid"]
+
+
+def test_a_public_study_without_release_becomes_private():
+    v1 = {**V1, "sid": "Harder1988"}
+    metadata, decisions = study_metadata(v1, REFERENCE, None, creator_fallback="x")
+    assert metadata.access == "private"
+    assert [(d.kind, d.detail) for d in decisions] == [
+        ("access_private", "Public study without a release becomes private")
+    ]
 
 
 def test_a_reference_without_pmid_or_doi_is_a_manual_reference():

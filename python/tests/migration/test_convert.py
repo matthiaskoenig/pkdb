@@ -128,7 +128,7 @@ def test_hidden_folders_are_kept(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("images", "source"), [((), ""), (("TabGroups",), "TabGroups")]
+    ("images", "source"), [((), "Text"), (("TabGroups",), "TabGroups")]
 )
 def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image(
     tmp_path, images, source
@@ -153,6 +153,15 @@ def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image(
         source
     ]
     assert conversion.decisions == []
+
+
+def test_a_public_study_without_release_is_written_private(tmp_path):
+    v1 = v1_full_example(tmp_path / "v1")
+    rewrite_study(v1, access="public")
+    conversion = convert(v1, tmp_path)
+    metadata = json.loads((conversion.folder / "study.json").read_text())
+    assert metadata["access"] == "private"
+    assert [d.kind for d in conversion.decisions] == ["access_private"]
 
 
 def test_unreferenced_sheets_are_listed(tmp_path):

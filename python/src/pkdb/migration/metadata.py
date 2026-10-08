@@ -116,6 +116,16 @@ def study_metadata(
                 detail=f"study.json sid {sid}, registry identifier {release.pkdb_id}",
             )
         )
+    access = v1.get("access", "private")
+    if access == "public" and release is None:
+        # Format 2: only released studies can be public.
+        access = "private"
+        decisions.append(
+            Decision(
+                kind="access_private",
+                detail="Public study without a release becomes private",
+            )
+        )
     provenance = v1.get("provenance")
     metadata = StudyMetadata.model_validate(
         {
@@ -125,7 +135,7 @@ def study_metadata(
             "curators": _curators(v1.get("curators")),
             "collaborators": [single_line(c) for c in v1.get("collaborators") or []],
             "licence": v1.get("licence", "closed"),
-            "access": v1.get("access", "private"),
+            "access": access,
             "provenance": provenance if provenance else ManualCuration(),
             "release": release,
             "descriptions": _descriptions(v1.get("descriptions")),

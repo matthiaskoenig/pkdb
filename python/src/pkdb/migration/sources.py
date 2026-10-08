@@ -77,14 +77,13 @@ def curator_source(
 
     Format 2 needs `<study>_<source>.png` for every source but `Text`, so the
     sheet, else the source of the row's image, is the source only when the v1
-    folder holds its image (`images`); otherwise a sheet row has no source and
-    an entity of study.json the source `Text`.
+    folder holds its image (`images`); otherwise the source is `Text`.
     """
     sheet = sheet_of(location, study)
     for source in (sheet, image_source(image, study)):
         if source is not None and source in images and SOURCE_PATTERN.fullmatch(source):
             return source
-    return TEXT_SOURCE if sheet is None else ""
+    return TEXT_SOURCE
 
 
 def image_sources(v1: Path, study: str) -> frozenset[str]:

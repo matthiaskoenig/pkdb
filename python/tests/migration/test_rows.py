@@ -294,6 +294,42 @@ def test_a_geometric_mean_moves_to_gmean(tmp_path):
     assert [d.kind for d in decisions] == ["geometric_spread"]
 
 
+def test_a_retired_calculation_without_a_mean_is_left_empty(tmp_path):
+    median = {key: v for key, v in OUTPUT.items() if key not in ("mean", "sd")}
+    output = {**median, "median": "col==mean", "calculation_type": "geometric mean"}
+    study = {**STUDY, "outputset": {"outputs": [output]}}
+    folder = v1_study(tmp_path, study, SHEETS, IMAGES)
+    tables, decisions = tables_of(folder)
+    [row] = tables["outputs_Tab2.tsv"]
+    assert (row["median"], row["gmean"], row["calculation"]) == ("2.5", "", "")
+    assert decisions == []
+
+
+def test_timecourse_labels_that_format_2_cannot_hold_are_renamed(tmp_path):
+    timecourse = {**TIMECOURSE, "label": "drug, plasma;\tfasted"}
+    study = {**STUDY, "outputset": {"outputs": [OUTPUT, timecourse]}}
+    folder = v1_study(tmp_path, study, SHEETS, IMAGES)
+    tables, decisions = tables_of(folder)
+    labels = {row["label"] for row in tables["timecourses_Fig1.tsv"]}
+    assert labels == {"drug_plasma_fasted"}
+    assert [(d.kind, d.detail) for d in decisions] == [
+        (
+            "label_renamed",
+            "timecourses_Fig1.tsv: 'drug, plasma;\\tfasted' to drug_plasma_fasted",
+        )
+    ]
+
+
+def test_a_renamed_label_that_another_label_has_refuses_the_study(tmp_path):
+    outputs = [{**TIMECOURSE, "label": label} for label in ("a,b", "a_b")]
+    study = {**STUDY, "outputset": {"outputs": outputs}}
+    folder = v1_study(tmp_path, study, SHEETS, IMAGES)
+    with pytest.raises(NotConverted) as error:
+        tables_of(folder)
+    assert error.value.code == "label_name"
+    assert "a_b" in error.value.message
+
+
 def test_a_geometric_mean_of_a_characteristic_moves_to_gmean(tmp_path):
     age = {"measurement_type": "age", "mean": 35, "unit": "yr"}
     group = {
