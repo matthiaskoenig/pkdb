@@ -43,9 +43,9 @@ const ROUNDED = "01JA33A1B2C3D4E5F6G7H8J9K0";
 const SMOKERS = "01JA34B1C2D3E4F5G6H7J8K9M0";
 const ADDED = "01JA40A1B2C3D4E5F6G7H8J9K0";
 
-// Suggestions of the library: the spellings of an unknown substance and the candidates of an
-// unknown subject group (python/tests/test_curation_contract.py).
-const [termSuggestion, groupSuggestion] = messagesFixture.suggestions as Suggestion[];
+// Suggestions of the library: the spellings of an unknown substance, the candidates of an
+// unknown subject group and the units of a measurement (python/tests/test_curation_contract.py).
+const [termSuggestion, groupSuggestion, unitSuggestion] = messagesFixture.suggestions as Suggestion[];
 const unknownGroup: ValidationIssue = {
   code: "unknown_reference",
   severity: "error",
@@ -63,15 +63,9 @@ const unknownSubstance: ValidationIssue = {
 const unitDimension: ValidationIssue = {
   code: "unit_dimension",
   severity: "error",
-  message: "mg/lightyear cannot be converted to a unit of cmax",
+  message: "mg cannot be converted to a unit of concentration",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "X", cell: "X2", header: "unit" },
-  suggestions: [
-    {
-      kind: "fix",
-      message: "Units of cmax; amounts of a substance convert with its molar mass.",
-      candidates: ["g/l", "mol/l"],
-    },
-  ],
+  suggestions: [unitSuggestion!],
 };
 const outsideRange: ValidationIssue = {
   code: "outside_range",
@@ -388,10 +382,11 @@ describe("issues", () => {
     expect(group.find(".problem-suggestion-note").exists()).toBe(false);
 
     const unit = problem("unit_dimension");
+    // A hint comes before its candidates.
     expect(unit.get(".problem-suggestion-lead").text()).toBe(
-      "Units of cmax; amounts of a substance convert with its molar mass.",
+      "Units of concentration; amounts of a substance convert with its molar mass.",
     );
-    expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["g/l", "mol/l"]);
+    expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["mg/l", "g/l"]);
 
     expect(problem("outside_range").get(".problem-severity").text()).toBe("Warning");
     // An issue of a whole file names no location below the file.
@@ -512,7 +507,7 @@ describe("actions", () => {
     await flushPromises();
     const alert = section().get(".problems-failure");
     expect(alert.text()).toContain("The workbook could not be opened.");
-    expect(alert.text()).toContain("mg/lightyear cannot be converted to a unit of cmax");
+    expect(alert.text()).toContain("mg cannot be converted to a unit of concentration");
     await alert.get('button[aria-label="Close"]').trigger("click");
     await flushPromises();
     expect(section().find(".problems-failure").exists()).toBe(false);

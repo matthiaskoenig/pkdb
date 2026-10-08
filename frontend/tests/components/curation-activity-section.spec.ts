@@ -422,14 +422,16 @@ describe("cancel", () => {
   });
 
   it("cancels a queued job and shows it as canceled", async () => {
+    // The server writes one message for every job canceled before it started (contract fixture).
+    const canceled = { ...queued, status: PART_C_CANCELED!.status, message: PART_C_CANCELED!.message };
     const cancel: Handler = () => {
-      serveJobs([{ ...queued, status: "canceled", message: "Canceled before starting" }, ...HISTORY]);
+      serveJobs([canceled, ...HISTORY]);
       return json(state);
     };
     await mountSection([queued, ...HISTORY], { [`POST ${CANCEL}`]: cancel });
     await press(button("Cancel queued validation"));
     expect(posted(CANCEL)).toEqual([{ ids: ["queued-1"] }]);
-    expect(entries()[0]!.get(".activity-text").text()).toBe("Canceled before starting");
+    expect(entries()[0]!.get(".activity-text").text()).toBe("Canceled before it started");
     expect(entries()[0]!.get(".activity-status").text()).toBe("Canceled");
     expect(notice()).toBe("Canceled the queued validation.");
     expect(buttons("Cancel queued validation")).toHaveLength(0);
