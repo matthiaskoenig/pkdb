@@ -169,3 +169,141 @@ def test_repository_and_token_from_the_environment():
     assert token_from({"GITHUB_TOKEN": "b"}) == "b"
     assert token_from({"GH_TOKEN": "a", "GITHUB_TOKEN": "b"}) == "a"
     assert token_from({}) is None
+
+
+def test_issues_are_listed_oldest_first_and_repeats_are_dropped():
+    seen = []
+
+    def handler(request):
+        params = request.url.params
+        seen.append((params["sort"], params["direction"]))
+        if params["page"] == "1":
+            return httpx2.Response(200, json=[issue(n) for n in range(1, 101)])
+        return httpx2.Response(200, json=[issue(100), issue(101)])
+
+    with github(handler) as client:
+        issues = client.issues()
+    assert [i.number for i in issues] == list(range(1, 102))
+    assert seen == [("created", "asc")] * 2
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [
+        {"retry-after": "soon"},
+        {"retry-after": "nan"},
+        {"x-ratelimit-remaining": "0", "x-ratelimit-reset": "later"},
+        {"x-ratelimit-remaining": "0", "x-ratelimit-reset": "inf"},
+    ],
+)
+def test_malformed_limit_headers_wait_the_fallback(headers):
+    answers = [
+        httpx2.Response(403, headers=headers, json={"message": "m"}),
+        httpx2.Response(200, json=[]),
+    ]
+    clock = Clock()
+    with github(lambda request: answers.pop(0), clock) as client:
+        client.labels()
+    assert clock.slept == [60.0]
+
+
+def test_an_http_date_retry_after_is_waited_for():
+    answers = [
+        httpx2.Response(
+            429,
+            headers={"retry-after": "Thu, 01 Jan 1970 00:17:30 GMT"},
+            json={"message": "m"},
+        ),
+        httpx2.Response(200, json=[]),
+    ]
+    clock = Clock(now=1000.0)
+    with github(lambda request: answers.pop(0), clock) as client:
+        client.labels()
+    assert clock.slept == [50.0]
+
+
+def test_an_infinite_retry_after_does_not_escape_the_error_contract():
+    response = httpx2.Response(
+        429, headers={"retry-after": "inf"}, json={"message": "m"}
+    )
+    with github(lambda request: response, max_wait=0) as client:
+        with pytest.raises(GitHubError) as error:
+            client.labels()
+    assert error.value.rate_limited
+
+
+def test_exhausted_waits_are_a_rate_limit_error_but_other_errors_are_not():
+    response = httpx2.Response(429, headers={"retry-after": "1"}, json={"message": "m"})
+    with github(lambda request: response) as client:
+        with pytest.raises(GitHubError) as error:
+            client.labels()
+    assert error.value.rate_limited and error.value.status_code == 429
+    with github(
+        lambda request: httpx2.Response(404, json={"message": "Not Found"})
+    ) as client:
+        with pytest.raises(GitHubError) as error:
+            client.labels()
+    assert not error.value.rate_limited
+
+
+def test_a_secondary_rate_limit_message_waits_a_minute():
+    answers = [
+        httpx2.Response(
+            403, json={"message": "You have exceeded a Secondary Rate Limit."}
+        ),
+        httpx2.Response(200, json=[]),
+    ]
+    clock = Clock()
+    with github(lambda request: answers.pop(0), clock) as client:
+        client.labels()
+    assert clock.slept == [60.0]
+
+
+def test_a_redirect_is_an_error_naming_the_location():
+    response = httpx2.Response(
+        301, headers={"location": "https://api.github.com/repositories/1/issues"}
+    )
+    with github(lambda request: response) as client:
+        with pytest.raises(GitHubError, match="301.*repositories/1/issues") as error:
+            client.issues()
+        with pytest.raises(GitHubError):
+            client.update_issue(5, title="drug/S5")
+    assert error.value.status_code == 301
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        httpx2.Response(200, content=b"<html>"),
+        httpx2.Response(200, json={"title": "drug/S5", "state": "open"}),
+        httpx2.Response(200, json=issue(5, labels="curate")),
+        httpx2.Response(200, json=issue(5, title=None)),
+        httpx2.Response(200, json=[]),
+    ],
+)
+def test_unexpected_bodies_are_errors(response):
+    with github(lambda request: response) as client:
+        with pytest.raises(GitHubError):
+            client.update_issue(5, title="drug/S5")
+
+
+def test_unexpected_listings_are_errors():
+    for body in (b"<html>", b'[{"number": 1}]', b'{"a": 1}', b'[{"name": 3}]'):
+        with github(
+            lambda request, body=body: httpx2.Response(200, content=body)
+        ) as client:
+            for call in (client.issues, client.labels, client.assignable):
+                with pytest.raises(GitHubError):
+                    call()
+
+
+def test_token_and_repository_are_validated():
+    assert token_from({"GH_TOKEN": "  ", "GITHUB_TOKEN": " b\n"}) == "b"
+    assert token_from({"GH_TOKEN": ""}) is None
+    for token in ("a b", "a\nb", "a\x00b"):
+        with pytest.raises(ValueError, match="token"):
+            GitHub("owner/data", token)
+    for value in ("../..", "./x", "a/..", ".hidden/x", "x/.hidden", "a/b/c"):
+        with pytest.raises(ValueError, match="owner/name"):
+            repository_from(value, environ={})
+    assert repository_from("a.b/c.d-e_f", environ={}) == "a.b/c.d-e_f"

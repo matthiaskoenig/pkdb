@@ -1,10 +1,12 @@
 """A small GitHub REST client for the issues of the pkdb_data repository."""
 
+import math
 import os
 import re
 import time
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
+from email.utils import parsedate_to_datetime
 
 import httpx2
 
@@ -12,18 +14,27 @@ from pkdb import __version__
 
 API = "https://api.github.com"
 DEFAULT_REPOSITORY = "matthiaskoenig/pkdb_data"
-REPOSITORY = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+")
+REPOSITORY = re.compile(r"[A-Za-z0-9_-][A-Za-z0-9_.-]*/[A-Za-z0-9_-][A-Za-z0-9_.-]*")
 PER_PAGE = 100
 MAX_PAGES = 1000
 MAX_WAITS = 5
 # GitHub asks for at least one second between mutating requests.
 WRITE_INTERVAL = 1.0
+# GitHub documents one minute for a secondary rate limit without a Retry-After header.
+FALLBACK_WAIT = 60.0
 
 
 class GitHubError(RuntimeError):
-    def __init__(self, message: str, *, status_code: int | None = None):
+    def __init__(
+        self,
+        message: str,
+        *,
+        status_code: int | None = None,
+        rate_limited: bool = False,
+    ):
         super().__init__(message)
         self.status_code = status_code
+        self.rate_limited = rate_limited
 
 
 @dataclass(frozen=True)
@@ -37,14 +48,26 @@ class Issue:
 
     @classmethod
     def from_api(cls, data: dict) -> Issue:
-        return cls(
-            number=data["number"],
-            title=data["title"],
-            state=data["state"],
-            state_reason=data.get("state_reason"),
-            labels=tuple(label["name"] for label in data.get("labels", [])),
-            assignees=tuple(user["login"] for user in data.get("assignees", [])),
-        )
+        try:
+            number, title, state = data["number"], data["title"], data["state"]
+            if not (
+                isinstance(number, int)
+                and isinstance(title, str)
+                and isinstance(state, str)
+            ):
+                raise TypeError
+            return cls(
+                number=number,
+                title=title,
+                state=state,
+                state_reason=data.get("state_reason"),
+                labels=tuple(_names(data.get("labels", []), "name")),
+                assignees=tuple(_names(data.get("assignees", []), "login")),
+            )
+        except KeyError, TypeError, AttributeError:
+            raise GitHubError(
+                "GitHub answered an issue in an unexpected shape"
+            ) from None
 
 
 def repository_from(
@@ -57,7 +80,10 @@ def repository_from(
 
 
 def token_from(environ: Mapping[str, str] = os.environ) -> str | None:
-    return environ.get("GH_TOKEN") or environ.get("GITHUB_TOKEN") or None
+    for name in ("GH_TOKEN", "GITHUB_TOKEN"):
+        if token := environ.get(name, "").strip():
+            return token
+    return None
 
 
 class GitHub:
@@ -73,6 +99,10 @@ class GitHub:
         max_wait: float | None = None,
     ):
         self.repository = repository_from(repository, environ={})
+        if token and any(c.isspace() or not c.isprintable() for c in token):
+            raise ValueError(
+                "GitHub token must not contain whitespace or control characters"
+            )
         headers = {
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
@@ -106,8 +136,10 @@ class GitHub:
                 f"/repos/{self.repository}/{resource}",
                 params={**(params or {}), "per_page": PER_PAGE, "page": page},
             )
-            values = response.json()
-            if not isinstance(values, list):
+            values = _json(response)
+            if not isinstance(values, list) or not all(
+                isinstance(value, dict) for value in values
+            ):
                 raise GitHubError(f"GitHub answered {resource} with no list")
             items.extend(values)
             if len(values) < PER_PAGE:
@@ -115,21 +147,23 @@ class GitHub:
         raise GitHubError(f"GitHub lists more than {MAX_PAGES} pages of {resource}")
 
     def issues(self) -> list[Issue]:
-        return [
-            Issue.from_api(item)
-            for item in self.pages("issues", {"state": "all"})
-            if "pull_request" not in item
-        ]
+        # Oldest first: new issues land on the last page, so no page repeats an item.
+        items = self.pages(
+            "issues", {"state": "all", "sort": "created", "direction": "asc"}
+        )
+        issues: dict[int, Issue] = {}
+        for item in items:
+            if "pull_request" not in item:
+                issue = Issue.from_api(item)
+                issues.setdefault(issue.number, issue)
+        return list(issues.values())
 
     def assignable(self) -> set[str]:
-        return {
-            user["login"]
-            for user in self.pages("assignees")
-            if user.get("type") != "Bot"
-        }
+        users = [user for user in self.pages("assignees") if user.get("type") != "Bot"]
+        return set(_safe_names(users, "login"))
 
     def labels(self) -> list[str]:
-        return [label["name"] for label in self.pages("labels")]
+        return _safe_names(self.pages("labels"), "name")
 
     def create_label(self, name: str, color: str) -> None:
         self._write(
@@ -141,7 +175,7 @@ class GitHub:
     ) -> Issue:
         body = {"title": title, "labels": labels, "assignees": assignees}
         return Issue.from_api(
-            self._write("POST", f"/repos/{self.repository}/issues", body).json()
+            _object(self._write("POST", f"/repos/{self.repository}/issues", body))
         )
 
     def update_issue(
@@ -163,9 +197,9 @@ class GitHub:
         }
         body = {key: value for key, value in fields.items() if value is not None}
         return Issue.from_api(
-            self._write(
-                "PATCH", f"/repos/{self.repository}/issues/{number}", body
-            ).json()
+            _object(
+                self._write("PATCH", f"/repos/{self.repository}/issues/{number}", body)
+            )
         )
 
     def comment(self, number: int, body: str) -> None:
@@ -201,9 +235,17 @@ class GitHub:
                 raise GitHubError(
                     f"GitHub limits the requests; try again in {round(wait)} seconds",
                     status_code=response.status_code,
+                    rate_limited=True,
                 )
             waits += 1
             self._sleep(wait)
+        if 300 <= response.status_code < 400:
+            location = response.headers.get("location", "unknown")
+            raise GitHubError(
+                f"GitHub answered {response.status_code} for {method} {path} "
+                f"and points to {location}; check the repository name",
+                status_code=response.status_code,
+            )
         if response.is_error:
             raise GitHubError(
                 f"GitHub answered {response.status_code} for {method} {path}: {_message(response)}",
@@ -215,11 +257,67 @@ class GitHub:
         if response.status_code not in (403, 429):
             return None
         if (after := response.headers.get("retry-after")) is not None:
-            return max(float(after), 1.0)
+            return max(self._retry_after(after), 1.0)
         if response.headers.get("x-ratelimit-remaining") == "0":
-            reset = float(response.headers.get("x-ratelimit-reset", "0"))
+            reset = _number(response.headers.get("x-ratelimit-reset", ""))
+            if reset is None:
+                return FALLBACK_WAIT
             return max(reset - self._clock(), 0.0) + 1.0
+        if "secondary rate limit" in _message(response).lower():
+            return FALLBACK_WAIT
         return None
+
+    def _retry_after(self, value: str) -> float:
+        if (seconds := _number(value)) is not None:
+            return seconds
+        try:
+            return parsedate_to_datetime(value).timestamp() - self._clock()
+        except TypeError, ValueError, OverflowError:
+            return FALLBACK_WAIT
+
+
+def _number(value: str) -> float | None:
+    try:
+        number = float(value)
+    except ValueError:
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _json(response: httpx2.Response):
+    try:
+        return response.json()
+    except ValueError:
+        raise GitHubError(
+            "GitHub answered with a body that is no JSON",
+            status_code=response.status_code,
+        ) from None
+
+
+def _object(response: httpx2.Response) -> dict:
+    data = _json(response)
+    if not isinstance(data, dict):
+        raise GitHubError(
+            "GitHub answered an issue in an unexpected shape",
+            status_code=response.status_code,
+        )
+    return data
+
+
+def _safe_names(items, key: str) -> list[str]:
+    try:
+        return _names(items, key)
+    except KeyError, TypeError, AttributeError:
+        raise GitHubError("GitHub answered a list in an unexpected shape") from None
+
+
+def _names(items, key: str) -> list[str]:
+    if not isinstance(items, list):
+        raise TypeError
+    names = [item[key] for item in items]
+    if not all(isinstance(name, str) for name in names):
+        raise TypeError
+    return names
 
 
 def _message(response: httpx2.Response) -> str:
