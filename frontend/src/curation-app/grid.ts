@@ -33,7 +33,8 @@ export function visibleColumns(table: TableResponse, hideEmpty: boolean, keep: r
 
 // Review targets and problems
 
-const NOTHING: TargetMatch = { lines: null, series: null };
+/** What the target of an item without a file selects. */
+export const NOTHING: TargetMatch = { lines: null, series: null, total: null };
 
 /** What the target of `item` selects, as the local server matched it; nothing for an item without a file. */
 export function targetMatch(targets: Readonly<Record<string, TargetMatch>>, item: ReviewItem): TargetMatch {

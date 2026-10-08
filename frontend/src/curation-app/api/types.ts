@@ -529,6 +529,11 @@ export interface StudyDetail {
   /** Newest first. */
   jobs: Job[];
   report_id: string | null;
+  /**
+   * Changes with the content of any file of the study, as the local server last scanned it; null
+   * before the first scan. Unlike the ETag of the page, it stays when only a job changes.
+   */
+  files_version: string | null;
   metadata: DocumentState<StudyMetadata>;
   reference: ReferenceSummary | null;
   /** Whether `reference.json` has the identifiers of `study.json`; null when it names none. */
@@ -563,6 +568,8 @@ export interface TargetMatch {
   lines: number[] | null;
   /** The series that its filter names in a timecourse or scatter table of a digitized figure. */
   series: DigitizedSeries | null;
+  /** The rows of the data table that `lines` were matched in; null for a file that is no data table. */
+  total: number | null;
 }
 
 export interface TableRow {
@@ -753,6 +760,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "last_upload",
   "jobs",
   "report_id",
+  "files_version",
   "metadata",
   "reference",
   "reference_match",
@@ -799,7 +807,7 @@ export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "ch
 
 export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues");
 
-export const isTargetMatch = hasKeys<TargetMatch>("lines", "series");
+export const isTargetMatch = hasKeys<TargetMatch>("lines", "series", "total");
 
 export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
 

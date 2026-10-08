@@ -97,7 +97,8 @@ describe("targets contract", () => {
 
   it("counts the rows of a draft target as the server matched them", () => {
     const [point, , , none, raw] = targetsFixture.previews.map((entry) => contract<TargetMatch>(entry.response));
-    expect(matchText(point?.lines?.length ?? -1, 18)).toBe("Matches 1 of 18 rows.");
+    // The count and the total come from one version of the table.
+    expect(matchText(point?.lines?.length ?? -1, point?.total ?? -1)).toBe("Matches 1 of 18 rows.");
     expect(none?.lines).toEqual([]);
     expect(raw?.lines).toBeNull();
   });

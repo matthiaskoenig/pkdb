@@ -41,7 +41,12 @@ def test_a_target_without_rows_or_of_another_file_has_no_lines(valid_study):
         ReviewTarget(file="timecourses_Fig1.tsv", column="mean"),
         ReviewTarget(file="study.json"),
     ):
-        assert match_target(study, target) == TargetMatch(None, None)
+        assert match_target(study, target).lines is None
+        assert match_target(study, target).series is None
+    # The rows of a data table are counted, also without a row filter.
+    column = ReviewTarget(file="timecourses_Fig1.tsv", column="mean")
+    assert match_target(study, column).total == 3
+    assert match_target(study, ReviewTarget(file="study.json")).total is None
 
 
 def test_a_series_of_a_digitized_figure_is_named(make_study, valid_files):
@@ -68,8 +73,8 @@ def test_a_scatter_series_is_named_by_its_name(make_study, valid_files):
     study = load_study(folder)
     target = ReviewTarget(file="scatters_Fig2.tsv", rows={"name": "age_vs_cmax"})
     assert match_target(study, target) == TargetMatch(
-        (2, 3), DigitizedSeries("Fig2", "age_vs_cmax")
+        (2, 3), DigitizedSeries("Fig2", "age_vs_cmax"), 2
     )
     # A scatter series is named by `name`, not by `label`.
     label = ReviewTarget(file="scatters_Fig2.tsv", rows={"label": "age_vs_cmax"})
-    assert match_target(study, label) == TargetMatch((), None)
+    assert match_target(study, label) == TargetMatch((), None, 2)

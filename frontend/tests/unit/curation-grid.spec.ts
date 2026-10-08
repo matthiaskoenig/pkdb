@@ -63,14 +63,14 @@ describe("visibleColumns", () => {
 
 /** The lines of `lines` as the local server matches a row filter, without a digitized series. */
 function rowsOf(lines: number[] | null): TargetMatch {
-  return { lines, series: null };
+  return { lines, series: null, total: 3 };
 }
 
 describe("targetMatch", () => {
   it("is what the local server matched for the item, and nothing for an item without a match", () => {
-    const series = { lines: [2], series: { source: "Fig1", series: "caf_plasma" } };
+    const series = { lines: [2], series: { source: "Fig1", series: "caf_plasma" }, total: 3 };
     expect(targetMatch({ a: series }, reviewItem({ id: "a" }))).toEqual(series);
-    expect(targetMatch({ a: series }, reviewItem({ id: "b" }))).toEqual({ lines: null, series: null });
+    expect(targetMatch({ a: series }, reviewItem({ id: "b" }))).toEqual({ lines: null, series: null, total: null });
   });
 });
 

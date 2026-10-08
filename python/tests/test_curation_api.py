@@ -533,6 +533,7 @@ def test_detail_and_preview_match_review_targets(api):
         item: {
             "lines": sorted(at.values()),
             "series": {"source": "Fig1", "series": "drug_plasma"},
+            "total": len(at),
         }
     }
     preview = "/local/studies/review/preview"
@@ -542,7 +543,7 @@ def test_detail_and_preview_match_review_targets(api):
     }
     status, _, data = request(server, "POST", preview, body, headers)
     assert status == 200
-    assert json.loads(data) == {"lines": [at["1"]], "series": None}
+    assert json.loads(data) == {"lines": [at["1"]], "series": None, "total": len(at)}
     status, _, data = request(
         server, "POST", preview, {**body, "target": {"rows": {"time": "1"}}}, headers
     )
@@ -553,6 +554,23 @@ def test_detail_and_preview_match_review_targets(api):
     assert request(server, "POST", preview, body, headers)[0] == 200
     assert _detail(server, headers)["jobs"] == []
     assert json.loads((folder / "review.json").read_text()) == review
+
+
+def test_files_version_changes_with_the_files_only(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    _, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    version = json.loads(data)["files_version"]
+    assert isinstance(version, str) and version
+    # A write of the app lists an entry in the activity: the page changes, its files do not.
+    engine._record_write("caffeine/Example", "Saved study.json")
+    _, changed, data = request(server, "GET", DETAIL, headers=headers)
+    assert changed["ETag"] != response_headers["ETag"]
+    assert json.loads(data)["files_version"] == version
+    timecourses = folder / "timecourses_Fig1.tsv"
+    timecourses.write_text(timecourses.read_text().replace("drug_plasma", "drug_urine"))
+    engine.scan()
+    assert _detail(server, headers)["files_version"] != version
 
 
 def test_metadata_write_and_conflict(api):

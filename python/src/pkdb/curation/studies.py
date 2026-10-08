@@ -422,6 +422,9 @@ class StudiesMixin(EngineState):
                         "last_upload": row["last_upload"],
                         "jobs": self._study_jobs(identity)[::-1],
                         "report_id": row["report_id"],
+                        # Changes with the content of any file of the study, as the
+                        # watcher last scanned it, unlike the ETag also with jobs.
+                        "files_version": row["_fingerprint"],
                     }
                 )
             )

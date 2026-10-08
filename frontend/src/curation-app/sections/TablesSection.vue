@@ -2,7 +2,7 @@
 import { computed, ref, useId } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VProgressLinear, VSwitch, VTab, VTabs } from "vuetify/components";
-import type { TableResponse } from "../api/types";
+import type { StudyDetail, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
 import ConflictPanel from "../components/ConflictPanel.vue";
@@ -126,7 +126,7 @@ const focus = computed(() => {
   return column ? { line, column } : { line };
 });
 
-const { data, error, loading, reload } = useLoaded<TableResponse>(
+const { data, error, loading, reload } = useLoaded<TableResponse, StudyDetail | null>(
   () => selected.value,
   (file) => study.table(file),
   () => study.detail,
@@ -135,15 +135,22 @@ const { data, error, loading, reload } = useLoaded<TableResponse>(
 const table = computed(() => (data.value && data.value.key === selected.value ? data.value.content : null));
 
 const hideEmpty = ref(false);
-/** The review items of the study; the local server matched their targets. */
-const reviewItems = computed(() => detail.value?.review.value?.items ?? []);
+/**
+ * The study page that the rows were loaded for. Its review items and the lines that the local
+ * server matched for them belong to these rows: after a table changed, a newer page can arrive
+ * before the rows, and its lines would mark other rows.
+ */
+const rowsDetail = computed(() => (table.value ? (data.value?.version ?? null) : null));
+const reviewItems = computed(() => rowsDetail.value?.review.value?.items ?? []);
 const highlight = computed(() =>
-  table.value ? targetLines(table.value.file, reviewItems.value, detail.value?.targets ?? {}) : new Set<number>(),
+  table.value ? targetLines(table.value.file, reviewItems.value, rowsDetail.value?.targets ?? {}) : new Set<number>(),
 );
 const issues = computed(() => issueCells(detail.value?.problems ?? [], selected.value ?? ""));
 
 const without = computed(() =>
-  table.value ? itemsWithoutRows(table.value.file, reviewItems.value, detail.value?.targets ?? {}) : { whole: 0, unmatched: 0 },
+  table.value
+    ? itemsWithoutRows(table.value.file, reviewItems.value, rowsDetail.value?.targets ?? {})
+    : { whole: 0, unmatched: 0 },
 );
 
 /** The rows, the targets, the cells with problems and the hidden columns, in sentences. */

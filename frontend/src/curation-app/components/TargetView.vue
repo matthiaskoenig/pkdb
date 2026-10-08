@@ -2,7 +2,7 @@
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
-import type { ReviewItem, SourceView, TableResponse, TargetMatch } from "../api/types";
+import type { ReviewItem, SourceView, StudyDetail, TableResponse } from "../api/types";
 import { useLoaded } from "../composables/useLoaded";
 import { targetMatch } from "../grid";
 import { plural } from "../overview";
@@ -26,27 +26,36 @@ const headingId = useId();
 
 const target = computed(() => props.item.target);
 const file = computed(() => target.value?.file ?? null);
-/** The rows and the digitized series of the target, as the local server matched them. */
-const match = computed<TargetMatch>(() =>
-  study.detail ? targetMatch(study.detail.targets, props.item) : { lines: null, series: null },
-);
-/** Whether a row filter narrows the rows; without one, the target is the whole table. */
-const filtered = computed(() => match.value.lines !== null);
 /** A data table or a raw table of the study, whose rows the local API serves. */
 const tableFile = computed(() =>
   file.value !== null && study.detail !== null && tableFiles(study.detail).includes(file.value) ? file.value : null,
 );
 /** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
-const series = computed(() => match.value.series);
+const series = computed(() => targetMatch(study.detail?.targets ?? {}, props.item).series);
 
 const {
   data: table,
   error: tableError,
   loading: tableLoading,
-} = useLoaded<TableResponse>(
+} = useLoaded<TableResponse, StudyDetail | null>(
   () => tableFile.value,
   (name) => study.table(name),
   () => study.detail,
+);
+/**
+ * The lines of the target as the local server matched them for the study page that the rows were
+ * loaded for: after a table changed, a newer page can arrive before the rows.
+ */
+const rowsTargets = computed(() => table.value?.version?.targets ?? {});
+const match = computed(() => targetMatch(rowsTargets.value, props.item));
+/** Whether a row filter narrows the rows; without one, the target is the whole table. */
+const filtered = computed(() => match.value.lines !== null);
+/** A new item that the page of the rows does not know yet: its rows come with the next load. */
+const pending = computed(
+  () =>
+    tableError.value === null &&
+    !(props.item.id in rowsTargets.value) &&
+    props.item.id in (study.detail?.targets ?? {}),
 );
 const {
   data: figure,
@@ -105,7 +114,12 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
       </div>
 
       <div v-if="tableFile" class="target-block">
-        <VProgressLinear v-if="tableLoading" indeterminate color="primary" :aria-label="`Loading ${tableFile}`" />
+        <VProgressLinear
+          v-if="tableLoading || pending"
+          indeterminate
+          color="primary"
+          :aria-label="`Loading ${tableFile}`"
+        />
         <p v-else-if="tableError" class="field-error">
           The rows of {{ tableFile }} could not be loaded. {{ tableError }}
         </p>

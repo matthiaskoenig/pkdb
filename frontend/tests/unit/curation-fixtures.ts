@@ -191,6 +191,7 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     last_upload: null,
     jobs: [],
     report_id: null,
+    files_version: "files-1",
     metadata: { revision: "study-1", value: studyMetadata(), issues: [] },
     reference: null,
     reference_match: null,

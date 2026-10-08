@@ -23,20 +23,23 @@ class TargetMatch:
     `lines` are the TSV lines of the rows that its row filter matches in a data table, in file
     order; None for a target without a row filter or of a file that is no data table. `series` is
     the series that its filter names in a timecourse or scatter table of a figure with a
-    WebPlotDigitizer project, else None.
+    WebPlotDigitizer project, else None. `total` counts the rows of the data table that the lines
+    were matched in, so that "2 of 18 rows" comes from one version of the table; None for a file
+    that is no data table.
     """
 
     lines: tuple[int, ...] | None
     series: DigitizedSeries | None
+    total: int | None
 
 
 def match_target(study: LoadedStudy, target: ReviewTarget | None) -> TargetMatch:
     """The rows and the digitized series of a review target, as `pkdb review show` counts them."""
     if target is None or target.file is None:
-        return TargetMatch(None, None)
+        return TargetMatch(None, None, None)
     table = study.table(target.file)
     if table is None:
-        return TargetMatch(None, None)
+        return TargetMatch(None, None, None)
     lines = tuple(sorted(table.matching_lines(target.rows))) if target.rows else None
     column = SERIES_COLUMNS.get(table.kind)
     name = target.rows.get(column) if column else None
@@ -48,4 +51,4 @@ def match_target(study: LoadedStudy, target: ReviewTarget | None) -> TargetMatch
         and study.digitization(table.source) is not None
     ):
         series = DigitizedSeries(table.source, name)
-    return TargetMatch(lines, series)
+    return TargetMatch(lines, series, len(table.rows))

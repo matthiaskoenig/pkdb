@@ -11,6 +11,7 @@ import type {
 } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import { useStudyStore } from "../../src/curation-app/stores/study";
 import {
   conflictAnswer,
   FILE_DELETED_CONFLICT,
@@ -95,7 +96,7 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
       issues: [],
     },
     // As the local server matches the targets in the rows of `outputs`.
-    targets: { a: { lines: [4], series: null }, b: { lines: [2], series: null } },
+    targets: { a: { lines: [4], series: null, total: 3 }, b: { lines: [2], series: null, total: 3 } },
     problems: [problem("invalid_number", 3, "mean"), problem("unknown_unit", 4, "unit", "warning")],
     counts: { errors: 1, warnings: 1 },
     ...changes,
@@ -451,7 +452,11 @@ describe("tabs", () => {
       reviewItem({ id: "d", target: { file: "outputs_Tab2.tsv", rows: {} } }),
       reviewItem({ id: "e", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_auc" } } }),
     ];
-    const targets = { c: { lines: null, series: null }, d: { lines: null, series: null }, e: { lines: [], series: null } };
+    const targets = {
+      c: { lines: null, series: null, total: 3 },
+      d: { lines: null, series: null, total: 3 },
+      e: { lines: [], series: null, total: 3 },
+    };
     await mountSection(
       { ...value, review: { ...value.review, value: { ...value.review.value!, items } }, targets, problems: [] },
       {},
@@ -460,6 +465,46 @@ describe("tabs", () => {
     expect(panel().get(".tables-caption").text()).toBe(
       "3 rows. 2 open review items are about the whole table. 1 open review item matches no row.",
     );
+  });
+
+  it("marks the rows that the page of these rows targets, until the rows of a newer page arrive", async () => {
+    let answerRows: ((response: Response) => void) | null = null;
+    let hold = false;
+    const rowsAt = (line: number) => outputs.rows.find((row) => row.line === line)!;
+    // The table after an edit: caf_vd moved from line 4 to line 2.
+    const edited: TableResponse = {
+      ...outputs,
+      rows: [
+        { ...rowsAt(4), line: 2 },
+        { ...rowsAt(3), line: 3 },
+        { ...rowsAt(2), line: 4 },
+      ],
+    };
+    const marked = () =>
+      panel()
+        .findAll("tbody tr.grid-row--target")
+        .map((row) => `${row.get("th").text()} ${row.findAll("td")[2]?.text()}`);
+    await mountSection(
+      detail(),
+      {
+        [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: () =>
+          hold ? new Promise<Response>((resolve) => (answerRows = resolve)) : json(outputs),
+      },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    expect(marked()).toEqual(["4 caf_vd"]);
+
+    // The page with the new line of caf_vd arrives before the edited rows.
+    hold = true;
+    served = { ...served, files_version: "files-2", targets: { ...served.targets, a: { lines: [2], series: null, total: 3 } } };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(answerRows).not.toBeNull();
+    expect(marked()).toEqual(["4 caf_vd"]);
+
+    answerRows!(json(edited));
+    await flushPromises();
+    expect(marked()).toEqual(["2 caf_vd"]);
   });
 
   it("shows a raw table with the letters of its columns", async () => {

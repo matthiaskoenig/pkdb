@@ -76,12 +76,12 @@ watch(file, () => {
 });
 
 /**
- * Counts the openings of the dialog and the versions of the study page while it is open: the
- * rows of the chosen table load again and their count is asked again when a file of the study
- * changed. Nothing is asked while the dialog is closed.
+ * Counts the openings of the dialog and the changes of the files of the study while it is open:
+ * the rows of the chosen table load again and their count is asked again. A job that changes
+ * the study page but no file asks nothing, and nothing is asked while the dialog is closed.
  */
 const version = ref(0);
-watch([() => study.detail, open], () => {
+watch([() => study.detail?.files_version, open], () => {
   if (open.value) version.value += 1;
 });
 
@@ -96,7 +96,7 @@ const {
     return file.value !== null && detail !== null && tableFiles(detail).includes(file.value) ? file.value : null;
   },
   (name) => study.table(name),
-  version,
+  () => version.value,
 );
 /** The header and rows of the chosen table; null for another file or a raw table. */
 const table = computed(() => {
@@ -159,16 +159,16 @@ const preview = usePreview(
   (value) => study.previewTarget(value.target),
 );
 /**
- * How many rows the row filters match, as the local server counted them: for the current filters,
- * or for the last ones while the count of the current ones loads; null without filters.
+ * How many rows the row filters match, of the rows of the same version of the table, as the
+ * local server counted them: for the current filters, or for the last ones while the count of the
+ * current ones loads; null without filters.
  */
 const matches = computed(() => {
-  const loaded = table.value;
-  if (!loaded) return null;
   const failed = preview.shownError.value;
   if (failed) return { matched: null, text: `The rows could not be matched. ${failed}` };
-  const lines = preview.shown.value?.lines;
-  return lines == null ? null : { matched: lines.length, text: matchText(lines.length, loaded.rows.length) };
+  const answer = preview.shown.value;
+  if (!answer || answer.lines === null || answer.total === null) return null;
+  return { matched: answer.lines.length, text: matchText(answer.lines.length, answer.total) };
 });
 const target = computed<ReviewTarget | null>(() => {
   if (file.value === null) return null;
