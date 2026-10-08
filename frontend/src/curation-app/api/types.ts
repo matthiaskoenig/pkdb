@@ -63,6 +63,15 @@ export interface ValidationIssue {
   documentation_url?: string | null;
 }
 
+/** An issue of the study page: of the last validation, of a sync that stopped it, or of the limits. */
+export interface Problem extends ValidationIssue {
+  /**
+   * Whether a review item can acknowledge it, as the local server knows: a warning of the
+   * validation, not an issue of a stopped sync.
+   */
+  acknowledgeable: boolean;
+}
+
 // study.json
 
 export type TableKind = "subjects" | "interventions" | "characteristica" | "outputs" | "timecourses" | "scatters";
@@ -540,7 +549,7 @@ export interface StudyDetail {
   counts: { errors: number; warnings: number };
   summary: StudySummary;
   issue: IssueState | null;
-  problems: ValidationIssue[];
+  problems: Problem[];
   message: string | null;
   last_upload: Upload | null;
   /** Newest first. */

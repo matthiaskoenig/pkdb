@@ -19,7 +19,8 @@
       "context": {},
       "related_sources": [],
       "suggestions": [],
-      "documentation_url": null
+      "documentation_url": null,
+      "acknowledgeable": true
     },
     {
       "code": "unknown_dataset",
@@ -40,7 +41,8 @@
       "context": {},
       "related_sources": [],
       "suggestions": [],
-      "documentation_url": null
+      "documentation_url": null,
+      "acknowledgeable": true
     }
   ],
   "payloads": [

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { AcknowledgedWarning, Job, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
+import type { AcknowledgedWarning, Job, Problem, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   acknowledgeFailure,
   acknowledgement,
@@ -22,13 +22,14 @@ import {
   validatesAfterWrite,
 } from "../../src/curation-app/problems";
 
+/** A problem of the study page; the local server marks its warnings of the validation as acknowledgeable. */
 function issue(
   code: string,
   severity: ValidationIssue["severity"],
   source: SourceLocation | null = null,
-  changes: Partial<ValidationIssue> = {},
-): ValidationIssue {
-  return { code, severity, message: `${code} message`, source, ...changes };
+  changes: Partial<Problem> = {},
+): Problem {
+  return { code, severity, message: `${code} message`, source, acknowledgeable: severity === "warning", ...changes };
 }
 
 /** A cell of a TSV table as the library locates it: the sheet is the table, the cell its column letter and line. */
@@ -248,9 +249,12 @@ describe("links and acknowledgements", () => {
     expect(validatesAfterWrite("off", null)).toBe(false);
   });
 
-  it("acknowledges no error and no warning without a file", () => {
+  it("acknowledges no error, no warning without a file and none that the local server cannot acknowledge", () => {
     expect(acknowledgement(unit)).toBeNull();
     expect(acknowledgement(issue("unknown_dataset", "warning"))).toBeNull();
+    // A warning of a sync that stopped the validation, which no review item can acknowledge.
+    const saved = issue("workbook_changed", "warning", { file: "Example.xlsx", path: [] }, { acknowledgeable: false });
+    expect(acknowledgement(saved)).toBeNull();
   });
 
   it("keys a warning by the location that an acknowledgement covers", () => {

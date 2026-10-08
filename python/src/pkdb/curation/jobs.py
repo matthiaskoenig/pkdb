@@ -431,6 +431,9 @@ class JobsMixin(EngineState):
                 return
         expected = row["_fingerprint"]
         outcome = {"persistence": "not_attempted", "report": {"issues": []}}
+        # Whether the report holds the issues of a stopped sync instead of the validation,
+        # whose warnings alone review items can acknowledge.
+        sync_report = False
         workbook = workbook_path(row["_folder"])
         # A lock file of the workbook at the start or in the sync: closing it during
         # this job, which scans skip, is handled when the job ends.
@@ -513,6 +516,7 @@ class JobsMixin(EngineState):
                 outcome["report"] = ValidationReport(
                     issues=list(pipeline.issues)
                 ).model_dump(mode="json")
+                sync_report = True
                 job.update(status="conflict", message=stop_message(pipeline))
                 row.update(status="conflict", stale=True)
                 return  # The finally block writes the report.
@@ -529,6 +533,7 @@ class JobsMixin(EngineState):
             if sync_failed:
                 # Tables that do not load or a workbook that cannot be read are reported
                 # like validation problems, also when this job wrote files before the stop.
+                sync_report = True
                 raise StudyValidationError(
                     ValidationReport(issues=list(pipeline.issues))
                 )
@@ -540,6 +545,7 @@ class JobsMixin(EngineState):
                 raise reference_error
             if pipeline.stopped == "format":
                 # Tables that cannot be formatted are reported like validation problems.
+                sync_report = True
                 raise StudyValidationError(
                     ValidationReport(issues=list(pipeline.issues))
                 )
@@ -747,6 +753,7 @@ class JobsMixin(EngineState):
                 row["problems"] = json.loads(
                     self._safe(json.dumps(outcome["report"].get("issues", [])))
                 )
+                row["_sync_problems"] = sync_report
                 row["counts"] = issue_counts(outcome["report"])
                 row["report_complete"] = outcome["report"].get("complete", True)
                 row["report_truncated"] = outcome["report"].get("truncated", False)

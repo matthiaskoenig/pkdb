@@ -178,6 +178,19 @@ def _issues(issues: list[ValidationIssue]) -> list[dict]:
     return [issue.model_dump(mode="json") for issue in issues]
 
 
+def _problems(issues: list[dict], *, validated: bool) -> list[dict]:
+    """The problems of the study page, each with whether a review item can acknowledge it.
+
+    Acknowledge matches the warnings of the validation, as `pkdb review acknowledge` does, so
+    only `validated` warnings can be acknowledged: not the issues of a stopped sync or of a
+    study that cannot be read.
+    """
+    return [
+        {**issue, "acknowledgeable": validated and issue["severity"] == "warning"}
+        for issue in issues
+    ]
+
+
 def _document[D: (MetadataDocument, ReviewDocument)](
     folder: Path, layout: Layout, name: str, read: Callable[[Path], D]
 ) -> tuple[dict, D | None]:
@@ -437,6 +450,7 @@ class StudiesMixin(EngineState):
             row = self._study_row(identity)
             folder, root = row["_folder"], self.root
             conflicted = row["sync"]["status"] == "conflict"
+            validated = not row["_sync_problems"]
             # A copy, so that the files are read outside the lock.
             detail = json.loads(
                 json.dumps(
@@ -465,6 +479,7 @@ class StudiesMixin(EngineState):
             if (parts := job_parts(job)) is not None:
                 job["parts"] = parts
         study: LoadedStudy | None
+        refusal: list[dict] = []
         try:
             study = _bounded(folder)
         except StudyValidationError as error:
@@ -473,10 +488,6 @@ class StudiesMixin(EngineState):
             study = None
             layout = scan_folder(folder)
             refusal = _issues(error.report.issues)
-            detail["problems"] = [
-                *refusal,
-                *(problem for problem in detail["problems"] if problem not in refusal),
-            ]
             sources, files, tables = [], [], []
         else:
             layout = study.layout
@@ -490,6 +501,17 @@ class StudiesMixin(EngineState):
         reference = reference_summary(folder)
         return {
             **detail,
+            "problems": [
+                *_problems(refusal, validated=False),
+                *_problems(
+                    [
+                        problem
+                        for problem in detail["problems"]
+                        if problem not in refusal
+                    ],
+                    validated=validated,
+                ),
+            ],
             "metadata": metadata,
             "reference": reference,
             "reference_match": reference_match(metadata["value"], reference),

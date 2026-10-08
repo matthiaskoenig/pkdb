@@ -3,6 +3,7 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView, type Router } from "vue-router";
 import type {
+  Problem,
   StudyDetail,
   SyncState,
   TableResponse,
@@ -73,10 +74,11 @@ function problem(
   row: number,
   header: string,
   severity: ValidationIssue["severity"] = "error",
-): ValidationIssue {
+): Problem {
   return {
     code,
     severity,
+    acknowledgeable: severity === "warning",
     message: `${code} at line ${row}`,
     source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row, header },
   };

@@ -1,0 +1,108 @@
+{
+  "validated": [
+    {
+      "code": "unused_intervention",
+      "severity": "warning",
+      "message": "'D400' is not referenced by any row",
+      "source": {
+        "file": "interventions.tsv",
+        "sheet": "interventions",
+        "row": 4,
+        "column": "C",
+        "path": [],
+        "cell": "C4",
+        "header": "name"
+      },
+      "category": "reference",
+      "stage": "validate",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [],
+      "documentation_url": null,
+      "acknowledgeable": true
+    },
+    {
+      "code": "digitized_mismatch",
+      "severity": "warning",
+      "message": "mean 1.24 at 4 hr lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json",
+      "source": {
+        "file": "timecourses_Fig1.tsv",
+        "sheet": "timecourses_Fig1",
+        "row": 6,
+        "column": "O",
+        "path": [],
+        "cell": "O6",
+        "header": "mean"
+      },
+      "category": "digitization",
+      "stage": "validate",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [],
+      "documentation_url": null,
+      "acknowledgeable": true
+    }
+  ],
+  "synced": [
+    {
+      "code": "workbook_base_missing",
+      "severity": "warning",
+      "message": "The workbook has no _base sheet, so changes in both the workbook and the tables cannot be merged",
+      "source": {
+        "file": "Demo2020.xlsx",
+        "sheet": null,
+        "row": null,
+        "column": null,
+        "path": []
+      },
+      "category": "workbook",
+      "stage": "parse",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [
+        {
+          "kind": "fix",
+          "message": "Close the workbook and run pkdb tables sync; if the tables and the workbook differ, choose a side with --keep",
+          "candidates": [],
+          "command": null
+        }
+      ],
+      "documentation_url": null,
+      "acknowledgeable": false
+    },
+    {
+      "code": "sync_conflict",
+      "severity": "error",
+      "message": "The workbook and the tables changed the same rows of subjects differently since the last sync: rows 1-2 of the sheet, lines 1-2 of subjects.tsv",
+      "source": {
+        "file": "Demo2020.xlsx",
+        "sheet": "subjects",
+        "row": 1,
+        "column": null,
+        "path": []
+      },
+      "category": "workbook",
+      "stage": "parse",
+      "field": null,
+      "expected": {},
+      "context": {},
+      "related_sources": [],
+      "suggestions": [
+        {
+          "kind": "fix",
+          "message": "Keep one side with pkdb tables sync --keep workbook or --keep tables, or edit the workbook so that the conflicting rows equal the tables.",
+          "candidates": [],
+          "command": null
+        }
+      ],
+      "documentation_url": null,
+      "acknowledgeable": false
+    }
+  ]
+}

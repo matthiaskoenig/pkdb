@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
-import type { AcknowledgedWarning, Profile, ValidationIssue } from "../api/types";
+import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../api/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import ProblemItem from "../components/ProblemItem.vue";
@@ -41,7 +41,7 @@ const section = ref<HTMLElement | null>(null);
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
-const problems = computed<ValidationIssue[]>(() => detail.value?.problems ?? []);
+const problems = computed<Problem[]>(() => detail.value?.problems ?? []);
 /** The issues of the upload limits, shown above the others. */
 const limits = computed(() => problems.value.filter(isLimitIssue));
 const listed = computed(() => problems.value.filter((issue) => !isLimitIssue(issue)));
@@ -158,21 +158,21 @@ const automatic = computed(() =>
   detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
 );
 
-const chosen = ref<ValidationIssue | null>(null);
+const chosen = ref<Problem | null>(null);
 const dialog = ref(false);
 /** Whether the dialog writes an acknowledgement; the other actions wait meanwhile. */
 const acknowledging = ref(false);
 /** The shown issues, in order, when the dialog opened: the place to move the focus to afterwards. */
 let order: string[] = [];
 
-function acknowledge(issue: ValidationIssue): void {
+function acknowledge(issue: Problem): void {
   if (working.value) return;
   chosen.value = issue;
   order = groups.value.flatMap((group) => group.issues.map(locationKey));
   dialog.value = true;
 }
 
-function acknowledgedWarning(issue: ValidationIssue): void {
+function acknowledgedWarning(issue: Problem): void {
   // The acknowledgement covers exactly this warning. A validation that left it out already needs no mark.
   const key = locationKey(issue);
   if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);

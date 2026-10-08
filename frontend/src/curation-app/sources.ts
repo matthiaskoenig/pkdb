@@ -20,11 +20,11 @@ export function mappedGrid(table: MappedTable): { grid: TableResponse; columns: 
  * The problems of the files of a source: its image, its raw extraction and its own tables; of a
  * table that several sources share, only the problems at a mapped row of the source.
  */
-export function sourceProblems(
-  problems: readonly ValidationIssue[],
+export function sourceProblems<I extends ValidationIssue>(
+  problems: readonly I[],
   summary: SourceSummary,
   view: SourceView,
-): ValidationIssue[] {
+): I[] {
   const whole = new Set([summary.image, summary.raw, ...view.mapped.filter((t) => !t.shared).map((t) => t.file)]);
   const lines = new Map(view.mapped.map((table) => [table.file, new Set(table.rows.map(([line]) => line))]));
   return problems.filter((issue) => {

@@ -7,6 +7,7 @@ import type {
   AcknowledgedWarning,
   Job,
   Json,
+  Problem,
   SaveMode,
   Snapshot,
   StudyDetail,
@@ -28,7 +29,7 @@ export const SEVERITY_CHIPS: readonly { value: SeverityFilter; label: string }[]
 export const SEVERITY_LABELS: Record<ValidationIssue["severity"], string> = { error: "Error", warning: "Warning" };
 
 /** The issues of a severity, in their order. */
-export function filterIssues(issues: readonly ValidationIssue[], severity: SeverityFilter): ValidationIssue[] {
+export function filterIssues<I extends ValidationIssue>(issues: readonly I[], severity: SeverityFilter): I[] {
   return issues.filter((issue) => severity === "all" || issue.severity === severity);
 }
 
@@ -56,9 +57,9 @@ export function groupCounts(issues: readonly ValidationIssue[]): string {
 }
 
 /** The issues of one file; `file` is null for issues of the whole study. */
-export interface IssueGroup {
+export interface IssueGroup<I extends ValidationIssue = ValidationIssue> {
   file: string | null;
-  issues: ValidationIssue[];
+  issues: I[];
 }
 
 /**
@@ -66,15 +67,15 @@ export interface IssueGroup {
  * first issue. Within a file, the issues of the whole file come first, then those of its lines,
  * by line.
  */
-export function groupByFile(issues: readonly ValidationIssue[]): IssueGroup[] {
-  const groups = new Map<string | null, ValidationIssue[]>();
+export function groupByFile<I extends ValidationIssue>(issues: readonly I[]): IssueGroup<I>[] {
+  const groups = new Map<string | null, I[]>();
   for (const issue of issues) {
     const file = issue.source?.file ?? null;
     const group = groups.get(file);
     if (group) group.push(issue);
     else groups.set(file, [issue]);
   }
-  const errors = (entries: ValidationIssue[]) => (entries.some((issue) => issue.severity === "error") ? 0 : 1);
+  const errors = (entries: I[]) => (entries.some((issue) => issue.severity === "error") ? 0 : 1);
   return [...groups]
     .toSorted(([, a], [, b]) => errors(a) - errors(b))
     .map(([file, entries]) => ({
@@ -159,12 +160,13 @@ export interface Acknowledgement {
 
 /**
  * Where an acknowledgement of a warning applies: exactly its code, file, line, column and key;
- * null for an error or an issue without a file. The local server writes a review item that
- * covers exactly this warning: at its row and column, or by its key.
+ * null for a problem that the local server cannot acknowledge, such as an error or a warning of
+ * a stopped sync, and for one without a file. The local server writes a review item that covers
+ * exactly this warning: at its row and column, or by its key.
  */
-export function acknowledgement(issue: ValidationIssue): Acknowledgement | null {
+export function acknowledgement(issue: Problem): Acknowledgement | null {
   const source = issue.source;
-  if (issue.severity !== "warning" || !source?.file) return null;
+  if (!issue.acknowledgeable || !source?.file) return null;
   return {
     code: issue.code,
     file: source.file,

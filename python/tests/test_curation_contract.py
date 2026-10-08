@@ -19,6 +19,7 @@ from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
 from pkdb.studyformat.tables import TABLES
 from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.workbook.base import BASE_SHEET
 
 FIXTURE = Path(__file__).resolve().parents[2] / "tools" / "curation_testing" / "fixture"
 DEMO = "caffeine/Demo2020"
@@ -50,6 +51,19 @@ def engine_on(tmp_path):
     yield start
     for engine in started:
         engine.close()
+
+
+def _validated(engine: CurationEngine, identity: str) -> dict:
+    """The study page of `identity` after a validation job, run as the worker of pkdb curate does."""
+    engine.enqueue([identity], "validate")
+    job = engine.queue.pop(identity)
+    engine.active = identity
+    job["status"] = "running"
+    try:
+        engine.run_job(job)
+    finally:
+        engine.active = None
+    return engine.study_detail(identity)
 
 
 def _replace(path: Path, old: str, new: str) -> None:
@@ -163,6 +177,31 @@ def test_limits_contract(workspace, engine_on, monkeypatch):
         "row_limit",
     ]
     check_contract("limits", {"details": details})
+
+
+def test_problems_contract(workspace, engine_on):
+    """The problems of Demo2020 after a validation, whose warnings review items can acknowledge,
+    and after a sync stopped by a conflict in a workbook without its base sheet, whose warning
+    they cannot."""
+    engine = engine_on(workspace)
+    validated = _validated(engine, DEMO)["problems"]
+    folder = workspace / DEMO
+    assert sync_study(folder, bundled_vocabulary()).ok
+    workbook = openpyxl.load_workbook(folder / "Demo2020.xlsx")
+    del workbook[BASE_SHEET]
+    workbook["subjects"]["D2"] = 14
+    workbook.save(folder / "Demo2020.xlsx")
+    _replace(folder / "subjects.tsv", "Demo2020\tall\t\t12\t", "Demo2020\tall\t\t13\t")
+    synced = _validated(engine, DEMO)["problems"]
+    assert [(p["code"], p["acknowledgeable"]) for p in validated] == [
+        ("unused_intervention", True),
+        ("digitized_mismatch", True),
+    ]
+    assert [(p["code"], p["severity"], p["acknowledgeable"]) for p in synced] == [
+        ("workbook_base_missing", "warning", False),
+        ("sync_conflict", "error", False),
+    ]
+    check_contract("problems", {"validated": validated, "synced": synced})
 
 
 def test_source_contract(workspace, engine_on):
@@ -320,11 +359,14 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
     (folder / "review.json").write_text(json.dumps(review), encoding="utf-8")
     assert format_folder(folder).ok
     vocabulary = bundled_vocabulary()
+    engine = engine_on(workspace)
+    # The warnings as the study page lists them after a validation.
     warnings = [
-        issue
-        for issue in validate_folder(folder, vocabulary).issues
-        if issue.code == "unknown_dataset"
+        problem
+        for problem in _validated(engine, DEMO)["problems"]
+        if problem["code"] == "unknown_dataset"
     ]
+    assert all(problem["acknowledgeable"] for problem in warnings)
     payloads = [
         {
             "code": "unknown_dataset",
@@ -335,7 +377,6 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
         }
         for key in ("legend", "axis_labels")
     ]
-    engine = engine_on(workspace)
     monkeypatch.setattr(review_edit, "new_ulid", lambda: ACKNOWLEDGED)
     revision = engine.study_detail(DEMO)["review"]["revision"]
     # How the local server refuses an acknowledgement that matches no warning or several, and
@@ -387,7 +428,7 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
     check_contract(
         "acknowledgements",
         {
-            "warnings": [issue.model_dump(mode="json") for issue in warnings],
+            "warnings": warnings,
             "payloads": payloads,
             "acknowledged": acknowledged,
             "refusals": refusals,

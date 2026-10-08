@@ -159,6 +159,8 @@ class WorkspaceMixin(EngineState):
             "stale": True,
             "files": [],
             "problems": [],
+            # Whether the problems are the issues of a stopped sync, not of the validation.
+            "_sync_problems": False,
             "last_upload": uploads[-1] if uploads else None,
             "progress": None,
             "report_id": None,

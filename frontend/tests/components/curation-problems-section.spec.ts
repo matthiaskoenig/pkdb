@@ -6,12 +6,12 @@ import { RouterView, type Router } from "vue-router";
 import type {
   AcknowledgedWarning,
   Job,
+  Problem,
   ReviewTarget,
   Snapshot,
   StudyDetail,
   Suggestion,
   TablesResult,
-  ValidationIssue,
 } from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
@@ -20,6 +20,7 @@ import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
+import problemsFixture from "../fixtures/curation-contract/problems.json";
 import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
 import {
   button,
@@ -48,54 +49,62 @@ const ADDED = "01JA40A1B2C3D4E5F6G7H8J9K0";
 // Suggestions of the library: the spellings of an unknown substance, the candidates of an
 // unknown subject group and the units of a measurement (python/tests/test_curation_contract.py).
 const [termSuggestion, groupSuggestion, unitSuggestion] = messagesFixture.suggestions as Suggestion[];
-const unknownGroup: ValidationIssue = {
+const unknownGroup: Problem = {
   code: "unknown_reference",
   severity: "error",
+  acknowledgeable: false,
   message: "subjects.tsv has no row named 'al'",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 3, column: "E", cell: "E3", header: "group" },
   suggestions: [groupSuggestion!],
 };
-const unknownSubstance: ValidationIssue = {
+const unknownSubstance: Problem = {
   code: "unknown_substance",
   severity: "error",
+  acknowledgeable: false,
   message: "Unknown substance: cafeine",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "H", cell: "H2", header: "substance" },
   suggestions: [termSuggestion!],
 };
-const unitDimension: ValidationIssue = {
+const unitDimension: Problem = {
   code: "unit_dimension",
   severity: "error",
+  acknowledgeable: false,
   message: "mg cannot be converted to a unit of concentration",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "X", cell: "X2", header: "unit" },
   suggestions: [unitSuggestion!],
 };
-const outsideRange: ValidationIssue = {
+const outsideRange: Problem = {
   code: "outside_range",
   severity: "warning",
+  acknowledgeable: true,
   message: "mean 512 is above the usual range of a plasma concentration",
   source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 6, column: "O", cell: "O6", header: "mean" },
 };
-const unusedIntervention: ValidationIssue = {
+const unusedIntervention: Problem = {
   code: "unused_intervention",
   severity: "warning",
+  acknowledgeable: true,
   message: "'caf_po_300' is not referenced by any row",
   source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
 };
-const digitizedMismatch: ValidationIssue = {
+const digitizedMismatch: Problem = {
   code: "digitized_mismatch",
   severity: "warning",
+  acknowledgeable: true,
   message: "1 point of dataset 'caf_plasma_D150' has no mapped row within 2 pixels",
   source: { file: "Example_Fig1.wpd.json", path: [], key: "caf_plasma_D150" },
 };
-const studyJson: ValidationIssue = {
+const studyJson: Problem = {
   code: "invalid_study_json",
   severity: "error",
+  acknowledgeable: false,
   message: "study.json: curators.0.rating: Input should be a multiple of 0.5",
   source: { file: "study.json", path: [] },
 };
-const rowLimit: ValidationIssue = {
+const rowLimit: Problem = {
   code: "row_limit",
   severity: "error",
+  acknowledgeable: false,
   message: "The study tables have more than 1000000 rows",
   source: null,
 };
@@ -124,7 +133,7 @@ const smokers: AcknowledgedWarning = {
 // Two datasets of a WebPlotDigitizer project without mapped rows, and the acknowledgements that the
 // local server lists: one of a dataset by its key, and one of a whole file as review.json files
 // written before keys hold it (python/tests/test_curation_contract.py).
-const [legendDataset, labelsDataset] = acknowledgementsFixture.warnings as ValidationIssue[];
+const [legendDataset, labelsDataset] = acknowledgementsFixture.warnings as Problem[];
 // How the local server refuses an acknowledgement, with its message and code.
 const refusals = acknowledgementsFixture.refusals;
 const [legacyAcknowledged, keyedAcknowledged] = (acknowledgementsFixture.acknowledged as Omit<
@@ -222,7 +231,7 @@ function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
 /** A problem as a bare list item with its code, for tests of the list rather than its items. */
 const ProblemItemStub = defineComponent({
   name: "ProblemItem",
-  props: { issue: { type: Object as PropType<ValidationIssue>, required: true } },
+  props: { issue: { type: Object as PropType<Problem>, required: true } },
   setup: (props) => () => h("li", { class: "problem" }, [h("code", { class: "problem-code" }, props.issue.code)]),
 });
 
@@ -444,7 +453,7 @@ describe("issues", () => {
       for (const callback of due) callback(performance.now());
       await flushPromises();
     }
-    const many: ValidationIssue[] = Array.from({ length: 250 }, (_, index) => ({
+    const many: Problem[] = Array.from({ length: 250 }, (_, index) => ({
       ...outsideRange,
       message: `mean ${index} lies outside [min, max]`,
       source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
@@ -568,6 +577,21 @@ describe("acknowledgements", () => {
       expect(controls(problem(code), "Acknowledge")).toHaveLength(1);
     for (const code of ["unknown_reference", "unit_dimension", "invalid_study_json"])
       expect(controls(problem(code), "Acknowledge")).toHaveLength(0);
+  });
+
+  it("offers no Acknowledge for a warning of a stopped sync, which no review item can acknowledge", async () => {
+    // Problems as the local server lists them after a validation and after a sync stopped by a
+    // conflict in a workbook without its base sheet (python/tests/test_curation_contract.py).
+    const [unused, mismatch] = problemsFixture.validated as Problem[];
+    const [baseMissing, conflict] = problemsFixture.synced as Problem[];
+    await mountSection(
+      withProblems({ problems: [unused!, mismatch!, baseMissing!, conflict!], counts: { errors: 1, warnings: 3 } }),
+    );
+    expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(1);
+    expect(controls(problem("digitized_mismatch"), "Acknowledge")).toHaveLength(1);
+    expect(problem("workbook_base_missing").text()).toContain("Warning");
+    expect(controls(problem("workbook_base_missing"), "Acknowledge")).toHaveLength(0);
+    expect(controls(problem("sync_conflict"), "Acknowledge")).toHaveLength(0);
   });
 
   it("acknowledges a warning at its file, line and column with a required reason", async () => {

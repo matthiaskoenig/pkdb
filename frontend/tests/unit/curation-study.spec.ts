@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
 import type {
   ConflictData,
+  Problem,
   ReviewItem,
   StudyDetail,
   TableEntry,
   TablesResult,
-  ValidationIssue,
 } from "../../src/curation-app/api/types";
 import {
   actionFailure,
@@ -124,7 +124,7 @@ describe("beyondLimits", () => {
   it("knows a study beyond the upload limits by its problems, not by its empty lists", () => {
     expect(beyondLimits(beyondLimitsDetail())).toBe(true);
     expect(beyondLimits(studyDetail({ sources: [], tables: [], files: [] }))).toBe(false);
-    const unit: ValidationIssue = { code: "unit_dimension", severity: "error", message: "mg is no concentration" };
+    const unit: Problem = { code: "unit_dimension", severity: "error", message: "mg is no concentration", acknowledgeable: false };
     expect(isLimitIssue(unit)).toBe(false);
     expect(beyondLimits(studyDetail({ problems: [unit] }))).toBe(false);
   });

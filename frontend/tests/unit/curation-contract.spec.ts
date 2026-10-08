@@ -7,6 +7,7 @@ import type {
   AcknowledgedWarning,
   ConflictData,
   Job,
+  Problem,
   ReviewItem,
   SourceView,
   Suggestion,
@@ -208,7 +209,7 @@ describe("messages contract", () => {
 });
 
 describe("acknowledgements contract", () => {
-  const warnings = contract<ValidationIssue[]>(acknowledgementsFixture.warnings);
+  const warnings = contract<Problem[]>(acknowledgementsFixture.warnings);
   const entries = contract<AcknowledgedWarning[]>(acknowledgementsFixture.acknowledged);
 
   it("acknowledges each dataset of a WebPlotDigitizer project by its key", () => {

@@ -14,7 +14,8 @@
           "context": {},
           "related_sources": [],
           "suggestions": [],
-          "documentation_url": null
+          "documentation_url": null,
+          "acknowledgeable": false
         }
       ],
       "sources": [],
@@ -36,7 +37,8 @@
           "context": {},
           "related_sources": [],
           "suggestions": [],
-          "documentation_url": null
+          "documentation_url": null,
+          "acknowledgeable": false
         }
       ],
       "sources": [],

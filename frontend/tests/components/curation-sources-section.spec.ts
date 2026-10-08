@@ -3,7 +3,7 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
-import type { SourcePoint, SourceView, StudyDetail, ValidationIssue } from "../../src/curation-app/api/types";
+import type { Problem, SourcePoint, SourceView, StudyDetail } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { beyondLimitsDetail, json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
@@ -456,15 +456,17 @@ describe("loading", () => {
 });
 
 describe("problems", () => {
-  const mismatch: ValidationIssue = {
+  const mismatch: Problem = {
     code: "digitized_mismatch",
     severity: "warning",
+    acknowledgeable: true,
     message: "Line 3 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
     source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 3, column: "F", cell: "F3", header: "mean" },
   };
-  const other: ValidationIssue = {
+  const other: Problem = {
     code: "unused_intervention",
     severity: "warning",
+    acknowledgeable: true,
     message: "'caf_po_300' is not referenced by any row",
     source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
   };
@@ -481,9 +483,10 @@ describe("problems", () => {
   });
 
   it("shows the problems as the Problems section does: by file, errors first, without Acknowledge", async () => {
-    const unknown: ValidationIssue = {
+    const unknown: Problem = {
       code: "invalid_digitization",
       severity: "error",
+      acknowledgeable: false,
       message: "The project has no calibration.",
       source: { file: "Example_Fig1.wpd.json", path: [] },
     };

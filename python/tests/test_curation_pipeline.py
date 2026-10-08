@@ -6,11 +6,12 @@ import openpyxl
 import pytest
 
 from pkdb.curation import engine as module
-from pkdb.curation import jobs
+from pkdb.curation import jobs, studies
 from pkdb.curation import workspace as workspace_module
 from pkdb.studyformat import pipeline as pipeline_module
 from pkdb.studyformat.formatter import format_folder
-from pkdb.studyformat.sync import sync_study
+from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.sync import SyncResult, sync_study
 from pkdb.studyformat.workbook.base import workbook_path
 
 
@@ -143,6 +144,69 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
     assert current["status"] == "invalid"
     assert current["counts"]["errors"] >= 1
     assert "unknown_column" in {problem["code"] for problem in current["problems"]}
+
+
+def outside_range(folder):
+    """Give the second row of timecourses_Fig1.tsv a mean outside its range: a warning."""
+    table = folder / "timecourses_Fig1.tsv"
+    lines = table.read_text().splitlines()
+    header = lines[0].split("\t")
+    cells = lines[2].split("\t")
+    cells[header.index("min")], cells[header.index("max")] = "3", "4"
+    lines[2] = "\t".join(cells)
+    table.write_text("\n".join(lines) + "\n")
+
+
+def test_only_warnings_of_the_validation_can_be_acknowledged(
+    workspace, sf_vocabulary, monkeypatch
+):
+    """Acknowledge matches the warnings of the validation, never those of the sync."""
+    engine, folder = workspace
+    outside_range(folder)
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    problems = engine.study_detail("caffeine/Example")["problems"]
+    assert [(p["code"], p["acknowledgeable"]) for p in problems] == [
+        ("outside_range", True)
+    ]
+
+    # The workbook is saved during both syncs: the job stops with the warning of the sync.
+    assert sync_study(folder, sf_vocabulary).ok
+    saved = make_issue(
+        "workbook_changed",
+        "Example.xlsx was saved during the sync; sync again",
+        file="Example.xlsx",
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "sync_study",
+        lambda path, vocabulary, **_: SyncResult(
+            path, workbook_path(path), workbook_action="sync_again", issues=(saved,)
+        ),
+    )
+    engine.enqueue(["caffeine/Example"], "validate")
+    assert run_next(engine)["status"] == "conflict"
+    problems = engine.study_detail("caffeine/Example")["problems"]
+    assert [(p["code"], p["acknowledgeable"]) for p in problems] == [
+        ("workbook_changed", False)
+    ]
+    # The overview rows keep the problems as the report has them.
+    assert "acknowledgeable" not in row(engine)["problems"][0]
+
+
+def test_beyond_the_limits_the_refusal_cannot_be_acknowledged(workspace, monkeypatch):
+    """The refusal of a study beyond the upload limits comes first and cannot be acknowledged;
+    the warnings of the last validation still can."""
+    engine, folder = workspace
+    outside_range(folder)
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    monkeypatch.setattr(studies, "MAX_ROWS", 3)
+    problems = engine.study_detail("caffeine/Example")["problems"]
+    assert [(p["code"], p["acknowledgeable"]) for p in problems] == [
+        ("row_limit", False),
+        ("outside_range", True),
+    ]
 
 
 def test_a_sync_stop_after_a_reference_update_is_invalid_in_the_same_job(
