@@ -42,6 +42,38 @@ test("lists the format 2 studies of the workspace and counts the format 1 folder
   await validated(page);
 });
 
+test("the labels of the column headers share one baseline", async ({ page }) => {
+  await expect(studyRows(page)).toHaveCount(2);
+  // The box of the text of each label: with one font, equal bottoms mean one baseline.
+  const labels = await studies(page)
+    .getByRole("columnheader")
+    .evaluateAll((headers) =>
+      headers.flatMap((header) => {
+        const text = document.createTreeWalker(header, NodeFilter.SHOW_TEXT, {
+          acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
+        }).nextNode();
+        if (!text) return [];
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        return [{ label: text.textContent?.trim() ?? "", bottom: range.getBoundingClientRect().bottom }];
+      }),
+    );
+  expect(labels.map((entry) => entry.label)).toEqual([
+    "Study",
+    "Review",
+    "Open items",
+    "Problems",
+    "Sync",
+    "Release",
+    "Issue",
+    "Curators",
+    "On save",
+    "Last upload",
+  ]);
+  const bottoms = labels.map((entry) => entry.bottom);
+  expect(Math.max(...bottoms) - Math.min(...bottoms), JSON.stringify(labels)).toBeLessThanOrEqual(1);
+});
+
 test("filters the studies by search and status", async ({ page }) => {
   await validated(page);
   const search = page.getByRole("textbox", { name: "Search studies" });
