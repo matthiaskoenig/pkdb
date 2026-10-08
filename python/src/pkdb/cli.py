@@ -132,6 +132,7 @@ def main(argv=None, *, client=None) -> int:
     from pkdb import (
         figure_cli,
         import_cli,
+        migration_cli,
         reference_cli,
         study_cli,
         studyformat_cli,
@@ -141,6 +142,7 @@ def main(argv=None, *, client=None) -> int:
     reference_cli.register(commands)
     import_cli.register(commands)
     studyformat_cli.register(commands)
+    migration_cli.register(commands)
     tables_cli.register(commands)
     study_cli.register(commands)
     figure_cli.register(commands)
@@ -160,6 +162,8 @@ def main(argv=None, *, client=None) -> int:
         return import_cli.run(args)
     if args.command == "reference":
         return reference_cli.run(args, client=client)
+    if args.command == "migrate":
+        return migration_cli.run(args)
     if args.command in {"format", "schema"}:
         return studyformat_cli.run(args)
     if args.command in {"study", "review"}:
