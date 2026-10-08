@@ -66,15 +66,16 @@ afterEach(() => {
 });
 
 describe("WorkspaceDialog", () => {
-  it("lists the folders of the workspace with their kind", async () => {
+  it("lists the folders of the workspace and marks repositories and studies", async () => {
     const list = vi.spyOn(useOverviewStore(), "listDirectories").mockResolvedValue(directories());
     await openDialog();
     expect(list).toHaveBeenCalledWith("/work");
     const rows = dialog().findAll(".folder-row");
-    expect(rows.map((row) => row.text())).toEqual([
-      expect.stringMatching(/pkdb_data.*repository/),
-      expect.stringMatching(/Example.*study/),
-      expect.stringMatching(/notes.*folder/),
+    expect(rows.map((row) => row.find(".folder-name").text())).toEqual(["pkdb_data", "Example", "notes"]);
+    expect(rows.map((row) => (row.find(".folder-kind").exists() ? row.get(".folder-kind").text() : null))).toEqual([
+      "Repository",
+      "Study",
+      null,
     ]);
     expect(field("Folder on this computer").element.value).toBe("/work");
   });

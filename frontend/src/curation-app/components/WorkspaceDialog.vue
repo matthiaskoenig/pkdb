@@ -14,7 +14,7 @@ import {
   VSpacer,
   VTextField,
 } from "vuetify/components";
-import type { Directories } from "../api/types";
+import type { Directories, FolderKind } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
@@ -31,6 +31,9 @@ const busy = ref(false);
 const error = ref<string | null>(null);
 // Only the answer to the latest listing counts.
 let request = 0;
+
+/** The chips of the folders that are more than a folder: a repository and a study. */
+const KIND_LABELS: Partial<Record<FolderKind, string>> = { repository: "Repository", study: "Study" };
 
 function messageOf(caught: unknown): string {
   return caught instanceof Error ? caught.message : String(caught);
@@ -170,7 +173,9 @@ watch(
               >
                 <span class="folder-name">{{ entry.name }}</span>
               </VBtn>
-              <VChip size="small" variant="tonal" class="folder-kind">{{ entry.kind }}</VChip>
+              <VChip v-if="KIND_LABELS[entry.kind]" size="small" variant="tonal" class="folder-kind">
+                {{ KIND_LABELS[entry.kind] }}
+              </VChip>
               <VBtn
                 variant="text"
                 size="small"
