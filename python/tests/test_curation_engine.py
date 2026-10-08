@@ -191,9 +191,17 @@ def test_resume_says_why_an_unknown_upload_cannot_be_reconciled(workspace, monke
     assert identifier.startswith("caffeine/")
 
 
-#: The stages of the client from the first byte of the upload on (`client.py`), and the names
-#: that earlier versions saved for them.
-SENT = ["transfer", "server_validation", "complete", "upload", "response", "commit"]
+#: The stages of the client from the first byte of the upload on (`client.py`), the names that
+#: earlier versions saved for them, and a stage that a later client might add.
+SENT = [
+    "transfer",
+    "server_validation",
+    "complete",
+    "upload",
+    "response",
+    "commit",
+    "a_later_stage",
+]
 
 
 def interrupted_upload(engine, folder, stage):

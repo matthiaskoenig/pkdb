@@ -41,19 +41,19 @@ def now():
 #: unknown.
 ACTIVE_STATUSES = {"queued", "running", "unknown"}
 
-#: The progress stages of an upload from which the server may already have the study: the
-#: client sends the body (`transfer`), waits while the server validates and saves it
-#: (`server_validation`), and has its confirmation (`complete`), see `pkdb.client`. `upload`,
-#: `response` and `commit` are the names of the same stages in states saved by earlier versions.
-SENT_STAGES = frozenset(
-    {"transfer", "server_validation", "complete", "upload", "response", "commit"}
-)
+#: The progress stages of an upload before anything of it reaches the server: the job waits or
+#: syncs (`queued`), the library reads, parses and validates the folder (`read`, `parse`,
+#: `validate`, `pkdb.preparation`), and the client checks the server (`compatibility`, a read
+#: of its capabilities, `pkdb.client`). Every other stage, also one that a later client adds
+#: or renames, may have sent the study: `transfer`, `server_validation` and `complete` now,
+#: `upload`, `response` and `commit` in states saved by earlier versions.
+UNSENT_STAGES = frozenset({"queued", "read", "parse", "validate", "compatibility"})
 
 
 def maybe_sent(job: dict) -> bool:
     """Whether `job` is an upload that may have reached the server, so its outcome is unknown
-    unless the job recorded it."""
-    return job.get("action") == "upload" and job.get("stage") in SENT_STAGES
+    unless the job recorded it; an upload without a known unsent stage may have."""
+    return job.get("action") == "upload" and job.get("stage") not in UNSENT_STAGES
 
 
 #: The action of a job in a sentence.
@@ -430,17 +430,18 @@ class JobsMixin(EngineState):
 
         def progress(event):
             with self.lock:
+                previous = job["stage"]
                 job["stage"] = event.stage
                 row["progress"] = {
                     "stage": event.stage,
                     "completed": event.completed,
                     "total": event.total,
                 }
-                row["status"] = (
-                    "uploading" if event.stage in SENT_STAGES else "validating"
-                )
-                if event.stage == "transfer":
-                    # Persist before a potentially ambiguous write for restart recovery.
+                sent = maybe_sent(job)
+                row["status"] = "uploading" if sent else "validating"
+                if sent and event.stage != previous:
+                    # Persist before a potentially ambiguous write for restart recovery,
+                    # once per stage rather than for every chunk of the transfer.
                     self._save()
 
         try:
