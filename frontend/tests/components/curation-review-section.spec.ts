@@ -690,10 +690,16 @@ describe("new item filters", () => {
     await labeled(wrapper, VCombobox, "Value 2").setValue("0");
     await flushPromises();
     expect(dialog().get(".new-item-matches").text()).toBe("Matches 1 of 3 rows.");
+    const second = labeled(wrapper, VCombobox, "Value 2");
+    const secondInput = second.get("input").element;
 
     await click("Remove row filter 1");
     expect(labeled(wrapper, VSelect, "Column 1").props("modelValue")).toBe("time");
-    expect(labeled(wrapper, VCombobox, "Value 1").props("modelValue")).toBe("0");
+    const first = labeled(wrapper, VCombobox, "Value 1");
+    // The second row moved up as it is: the same field and input, keyed by the filter, not by its place.
+    expect(first.vm.$.uid).toBe(second.vm.$.uid);
+    expect(first.get("input").element === secondInput).toBe(true);
+    expect(first.props("modelValue")).toBe("0");
     expect(dialog().get(".new-item-matches").text()).toBe("Matches 2 of 3 rows.");
   });
 });

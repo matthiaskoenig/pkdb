@@ -3,6 +3,8 @@ import json
 import pytest
 
 import pkdb.studyformat.metadata as module
+from pkdb.schemas.review import Review
+from pkdb.studyformat.load import PATTERN_MESSAGES
 from pkdb.studyformat.metadata import (
     MetadataError,
     merge_patch,
@@ -10,6 +12,7 @@ from pkdb.studyformat.metadata import (
     read_metadata,
     write_metadata,
 )
+from pkdb.studyformat.models import ReferenceSnapshot, StudyMetadata
 from pkdb.studyformat.revision import RevisionConflict
 
 
@@ -73,6 +76,46 @@ def test_patterned_fields_have_plain_messages(valid_study):
         "release.date": (
             "release.date: A date has the form YYYY-MM-DD, such as 2026-09-28."
         ),
+    }
+
+
+def _patterns(schema: object) -> set[str]:
+    """The patterns of a property schema, also of its alternatives and items."""
+    if not isinstance(schema, dict):
+        return set()
+    found = {schema["pattern"]} if "pattern" in schema else set()
+    for key in ("anyOf", "oneOf", "allOf"):
+        for part in schema.get(key, []):
+            found |= _patterns(part)
+    for key in ("items", "additionalProperties"):
+        found |= _patterns(schema.get(key))
+    return found
+
+
+def test_only_user_names_have_the_pattern_of_the_user_name_message():
+    """`PATTERN_MESSAGES` knows a field by its pattern alone: `^\\S+$` must stay on user names.
+
+    A new field with this pattern would get "A user name has no spaces." Give it another
+    pattern, or add it here when it is a user name.
+    """
+    user = r"^\S+$"
+    assert PATTERN_MESSAGES[user] == "A user name has no spaces."
+    fields = set()
+    for model in (StudyMetadata, Review, ReferenceSnapshot):
+        schema = model.model_json_schema()
+        for name, definition in {model.__name__: schema, **schema["$defs"]}.items():
+            for field, prop in definition.get("properties", {}).items():
+                if user in _patterns(prop):
+                    fields.add(f"{name}.{field}")
+    assert fields == {
+        "StudyMetadata.creator",
+        "Curator.user",
+        "Comment.user",
+        "Review.reviewers",
+        "Review.approved_by",
+        "ReviewItem.author",
+        "ReviewItem.resolved_by",
+        "ThreadEntry.author",
     }
 
 

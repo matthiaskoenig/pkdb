@@ -20,3 +20,6 @@ vi.stubGlobal(
 );
 // jsdom has no layout: scrolling an element into view does nothing.
 Element.prototype.scrollIntoView = () => undefined;
+// jsdom logs "Not implemented" for window.scrollTo, which the routers call on navigation. Tests
+// that check the scroll position spy on it.
+window.scrollTo = () => undefined;

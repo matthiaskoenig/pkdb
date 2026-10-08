@@ -25,6 +25,13 @@ const TAIL_CHARACTERS = 20_000;
 const LAUNCH_LINE = /^PK-DB curation: (http:\/\/127\.0\.0\.1:\d+\/#token=\S+)\r?\n/m;
 /** The name of the session cookie that the launch token creates. */
 const SESSION_COOKIE = "pkdb_curation";
+/** A launch token in a URL that `pkdb curate` printed. */
+const LAUNCH_TOKEN = /#token=[^\s&]+/g;
+
+/** `text` without launch tokens, as tools/curation_docs/render.mjs reports errors. */
+function redact(text: string): string {
+  return text.replace(LAUNCH_TOKEN, "#token=<launch token>");
+}
 
 /** The interpreter of the python/ project, which the global setup found. */
 function python(): string {
@@ -50,17 +57,22 @@ export interface CurationServer {
   openLog: string;
 }
 
-/** The environment of the server: the user `curator`, no PK-DB account, and a recording opener. */
+/**
+ * The environment of the server: the user `curator`, no PK-DB account, a cache of its own in the
+ * folder of the server, which `stop` removes, and a recording opener.
+ */
 function serverEnvironment(cache: string, openLog: string): NodeJS.ProcessEnv {
   const environment: NodeJS.ProcessEnv = { ...process.env };
-  for (const name of ["PKDB_API_KEY", "PKDB_ENDPOINT", "PKDB_AGENT"]) delete environment[name];
+  for (const name of ["PKDB_API_KEY", "PKDB_ENDPOINT", "PKDB_AGENT", "PKDB_CACHE_DIR"]) delete environment[name];
   // The server splits the command like a shell, so the paths are quoted.
   const quoted = (path: string) => `'${path.replaceAll("'", "'\\''")}'`;
   return {
     ...environment,
     PKDB_USER: "curator",
     PKDB_NO_UPDATE: "1",
-    // An empty cache: validation uses the vocabulary bundled with the client.
+    // An empty cache: validation uses the vocabulary bundled with the client. PKDB_CACHE_DIR
+    // comes first in pkdb, on every platform.
+    PKDB_CACHE_DIR: cache,
     XDG_CACHE_HOME: cache,
     PKDB_OPEN_COMMAND: `${quoted(python())} ${quoted(join(testing, "record_open.py"))}`,
     PKDB_OPEN_LOG: openLog,
@@ -105,9 +117,9 @@ class RunningServer {
     return new RunningServer(folder, workspace, openLog, child);
   }
 
-  /** The latest output of the server, for the report of a failed test. */
+  /** The latest output of the server, for the report of a failed test, without the launch token. */
   get log(): string {
-    return this.tail;
+    return redact(this.tail);
   }
 
   async info(): Promise<CurationServer> {
@@ -131,7 +143,7 @@ class RunningServer {
         else reject(result);
       };
       const timer = setTimeout(
-        () => settle(new Error(`pkdb curate printed no launch URL within ${START_MS} ms:\n${this.tail}`)),
+        () => settle(new Error(`pkdb curate printed no launch URL within ${START_MS} ms:\n${this.log}`)),
         START_MS,
       );
       for (const stream of [child.stdout, child.stderr]) {
@@ -147,7 +159,7 @@ class RunningServer {
       }
       child.once("error", (error) => settle(error));
       child.once("exit", (code, signal) =>
-        settle(new Error(`pkdb curate stopped (${signal ?? `code ${code}`}) before its launch URL:\n${this.tail}`)),
+        settle(new Error(`pkdb curate stopped (${signal ?? `code ${code}`}) before its launch URL:\n${this.log}`)),
       );
     });
   }
@@ -248,7 +260,13 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
     return;
   }
   const session = page.waitForResponse((response) => new URL(response.url()).pathname === "/local/session");
-  await page.goto(server.launchUrl);
+  try {
+    await page.goto(server.launchUrl);
+  } catch (error) {
+    // The error of Playwright repeats the URL, so it is not attached as the cause.
+    // eslint-disable-next-line preserve-caught-error
+    throw new Error(redact(error instanceof Error ? error.message : String(error)));
+  }
   expect((await session).status()).toBe(200);
   // The app creates its router after the session; a route changed before would be missed.
   await expect(header).toBeVisible();

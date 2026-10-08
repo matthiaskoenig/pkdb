@@ -158,7 +158,7 @@ jobs:
             frontend/test-results/curation
           retention-days: 7
       - run: uv build --python ${{ matrix.python }}
-      - name: Verify isolated public wheel and CLI
+      - name: Verify isolated public wheel, sdist and CLI
         run: |
           uv venv --python ${{ matrix.python }} wheel-env
           if [ "$RUNNER_OS" = Windows ]; then
@@ -171,6 +171,8 @@ jobs:
           uv pip install --python "$PYTHON_BIN" dist/*.whl
           "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
           "$PYTHON_BIN" -c "import importlib.resources as r; assert (r.files('pkdb.curation') / 'static' / 'index.html').is_file()"
+          # The sdist ships the app too: a stray PKDB_BUILD_WITHOUT_CURATION_APP would leave it out.
+          "$PYTHON_BIN" -c "import glob, tarfile; names = tarfile.open(*glob.glob('dist/pkdb-*.tar.gz')).getnames(); assert any(name.endswith('/src/pkdb/curation/static/index.html') for name in names), 'The sdist lacks the curation app'"
           "$PKDB_BIN" --help
       - uses: actions/upload-artifact@v7
         if: runner.os == 'Linux' && matrix.python == '3.14'
