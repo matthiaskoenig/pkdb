@@ -102,31 +102,40 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
     decisions = []
     for source in sorted(used - {TEXT_SOURCE, ""}):
         name = image_file(study, source)
-        candidates = {
-            path.suffix.lower(): path
+        candidates = sorted(
+            path
             for path in v1.glob(f"{study}_{source}.*")
             if path.stem == f"{study}_{source}"
-        }
-        if ".png" in candidates:
-            shutil.copyfile(candidates[".png"], target / name)
-        elif jpg := candidates.get(".jpg") or candidates.get(".jpeg"):
-            try:
-                with Image.open(jpg) as image:
-                    if image.mode not in PNG_MODES:
-                        image = image.convert("RGB")
-                    image.save(target / name, format="PNG")
-            except OSError as error:
-                raise NotConverted(
-                    "image_unreadable", f"The image {jpg.name} cannot be read: {error}"
-                ) from error
-            decisions.append(
-                Decision(kind="image_converted", detail=f"{jpg.name} to {name}")
-            )
-        elif candidates:
-            found = ", ".join(sorted(path.name for path in candidates.values()))
+        )
+        images = [path for path in candidates if path.suffix.lower() in IMAGE_SUFFIXES]
+        if len(images) > 1:
+            # Neither image may silently replace the other.
+            found = ", ".join(path.name for path in images)
             raise NotConverted(
-                "image_type", f"The image of {source} is {found}; convert it to PNG"
+                "image_conflict",
+                f"Source {source} has more than one image: {found}; keep one",
             )
-        else:
+        if not images:
+            if candidates:
+                found = ", ".join(path.name for path in candidates)
+                raise NotConverted(
+                    "image_type", f"The image of {source} is {found}; convert it to PNG"
+                )
             raise NotConverted("missing_image", f"No image {name} for source {source}")
+        [image] = images
+        if image.suffix.lower() == ".png":
+            shutil.copyfile(image, target / name)
+            continue
+        try:
+            with Image.open(image) as picture:
+                if picture.mode not in PNG_MODES:
+                    picture = picture.convert("RGB")
+                picture.save(target / name, format="PNG")
+        except OSError as error:
+            raise NotConverted(
+                "image_unreadable", f"The image {image.name} cannot be read: {error}"
+            ) from error
+        decisions.append(
+            Decision(kind="image_converted", detail=f"{image.name} to {name}")
+        )
     return decisions

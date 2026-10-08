@@ -121,6 +121,27 @@ def test_a_missing_or_unsupported_image_refuses_the_study(tmp_path):
     assert unsupported.value.code == "image_type"
 
 
+@pytest.mark.parametrize(
+    "twin", ["Example_Tab2.jpg", "Example_Tab2.JPEG", "Example_Tab2.PNG"]
+)
+def test_a_source_with_two_images_refuses_the_study(tmp_path, twin):
+    # Neither image may silently replace the other.
+    v1, target = tmp_path / "v1", tmp_path / "v2"
+    v1.mkdir()
+    target.mkdir()
+    (v1 / "Example_Tab2.png").write_bytes(b"\x89PNG data")
+    Image.new("RGB", (4, 3), "red").save(v1 / twin, format="JPEG")
+    assert image_sources(v1, "Example") == {"Tab2"}
+    with pytest.raises(NotConverted) as error:
+        copy_images(v1, target, "Example", {"Tab2"})
+    assert error.value.code == "image_conflict"
+    assert error.value.message == (
+        f"Source Tab2 has more than one image: {', '.join(sorted(['Example_Tab2.png', twin]))}; "
+        "keep one"
+    )
+    assert not list(target.iterdir())
+
+
 def test_a_cmyk_jpg_is_converted_to_png(tmp_path):
     v1, target = tmp_path / "v1", tmp_path / "v2"
     v1.mkdir()

@@ -16,6 +16,7 @@ from PIL import Image
 
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import MAX_DIFFERENCES, compare, judge
+from pkdb.migration.model import NotConverted
 from pkdb.migration.registry import Registry
 from pkdb.preparation import prepare
 from pkdb.references import ReferenceResolver
@@ -320,6 +321,17 @@ def test_a_jpg_image_is_an_intended_change(tmp_path, sf_vocabulary):
     assert [(c.kind, c.examples) for c in result.changes] == [
         ("image_converted", ["Example_Tab2.jpg to Example_Tab2.png"])
     ]
+
+
+def test_a_jpg_with_a_png_twin_never_reaches_the_gate(tmp_path):
+    # The folder holds Example_Tab2.png besides the JPG that the output names:
+    # the PNG would silently replace the JPG, so the study is not converted.
+    study = with_outputs({**OUTPUT, "image": "Example_Tab2.jpg"}, TIMECOURSE)
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    Image.new("RGB", (4, 3), "red").save(v1 / "Example_Tab2.jpg")
+    with pytest.raises(NotConverted) as error:
+        converted(tmp_path, v1)
+    assert error.value.code == "image_conflict"
 
 
 @pytest.mark.parametrize("spread", [True, False], ids=["with sd", "mean only"])
