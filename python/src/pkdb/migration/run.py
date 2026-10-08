@@ -526,8 +526,10 @@ def migrate(
         written = _earlier(report, summary)
         if not dry_run:
             _recover(root, summary)
+        # A path that names no folder refuses the run before the report changes.
+        found = _discover(paths, root)
         try:
-            folders = _triage(_discover(paths, root), root, summary, dry_run)
+            folders = _triage(found, root, summary, dry_run)
             with _work_folder(root, dry_run) as work:
                 tasks = [
                     Task(

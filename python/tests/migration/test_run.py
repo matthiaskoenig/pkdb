@@ -655,3 +655,12 @@ def test_an_unreadable_earlier_report_is_replaced_with_a_warning(
     assert [s.study for s in written_report(tmp_path).studies] == ["caffeine/Example"]
     text = (tmp_path / "migration.md").read_text()
     assert "\nWarning: The earlier report migration.json could not be read" in text
+
+
+def test_a_refused_path_leaves_the_report_as_it_was(tmp_path, sf_vocabulary):
+    v1_full_example(tmp_path)
+    go(tmp_path, sf_vocabulary)
+    before = tree(tmp_path)
+    with pytest.raises(ValueError, match="is not a folder"):
+        go(tmp_path, sf_vocabulary, paths=[tmp_path / "studies" / "caffeine" / "Gone"])
+    assert tree(tmp_path) == before
