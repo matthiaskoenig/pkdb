@@ -593,6 +593,7 @@ export interface MappedTable {
 }
 
 export interface OverlayPoint {
+  /** The series of the point: the label of a timecourse row or the name of a scatter row. */
   series: string;
   role: "raw" | "mapped";
   px: number;
@@ -605,6 +606,8 @@ export interface OverlayPoint {
   /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
   x_text: string;
   y_text: string;
+  /** A digitized end of an error bar, of the dataset `<series>;error_bar`. */
+  error_bar_end: boolean;
 }
 
 /** A mapped row of a timecourse or scatter table in the units of its table. */

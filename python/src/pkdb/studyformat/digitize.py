@@ -356,6 +356,11 @@ CENTRAL = ("mean", "median", "gmean")
 PROJECT_MEMBER = "wpd.json"
 
 
+def dataset_series(name: str) -> tuple[str, bool]:
+    """The series of a dataset of a project, and whether the dataset holds the ends of its error bars."""
+    return name.removesuffix(ERROR_BAR_SUFFIX), name.endswith(ERROR_BAR_SUFFIX)
+
+
 @dataclass(frozen=True)
 class MappedPoint:
     """A mapped row as a point of a dataset, in axis units, with its cells as printed."""

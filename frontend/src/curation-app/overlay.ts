@@ -8,11 +8,8 @@
  * in table units, the values as printed, and the series in one order with their colors and axis
  * labels. This module only lays them out for Plotly.
  */
-import type { SourceSeries, SourceView } from "./api/types";
+import type { OverlayPoint, SourceSeries, SourceView } from "./api/types";
 import { plotColors, type PlotColors } from "../features/plots/theme";
-
-/** The suffix of the dataset with the ends of the error bars of a series. */
-export const ERROR_BAR_SUFFIX = ";error_bar";
 
 /**
  * The ring around a digitized point, which has contrast against the paper of the figure. The
@@ -55,8 +52,10 @@ interface HoverLabel {
 export interface OverlayTrace {
   type: "scatter";
   /**
-   * `<role> <series>`, such as `mapped caf_plasma_D150`, which names the trace for tests and
-   * debugging. Not a `uid`: Plotly puts uids into CSS selectors, which a series name would break.
+   * `<marks> <series>`, such as `mapped caf_plasma_D150`, which names the trace for tests and
+   * debugging: `raw`, `raw-bar` (digitized error bar ends), `mapped`, `error` (error bars of
+   * mapped rows) or `plot`. Not a `uid`: Plotly puts uids into CSS selectors, which a series
+   * name would break.
    */
   meta: string;
   name: string;
@@ -121,11 +120,6 @@ export interface OverlayPlot {
   layout: OverlayLayout;
 }
 
-/** A series without its `;error_bar` suffix. */
-export function baseSeries(series: string): string {
-  return series.endsWith(ERROR_BAR_SUFFIX) ? series.slice(0, -ERROR_BAR_SUFFIX.length) : series;
-}
-
 /** Whether the overlay draws on the image of the figure: the source view says so. */
 export function drawsOnImage(view: SourceView): boolean {
   return view.layout === "overlay" && view.image_url !== null && view.image_size !== null;
@@ -153,9 +147,9 @@ function seriesStyles(view: SourceView): Map<string, SourceSeries> {
   return new Map(view.series.map((series) => [series.name, series]));
 }
 
-/** The color of a series, or of the error bars of a series: its light step on paper, else the step of the theme. */
+/** The color of a series and of its error bars: its light step on paper, else the step of the theme. */
 function colorOf(styles: Map<string, SourceSeries>, series: string, dark: boolean): string {
-  const style = styles.get(baseSeries(series));
+  const style = styles.get(series);
   return (dark ? style?.dark_color : style?.color) ?? UNKNOWN_COLOR;
 }
 
@@ -181,8 +175,8 @@ function hoverLabel(theme: PlotTheme, border: string): HoverLabel {
 
 /** The opacity of each series: emphasized or not faded, the others faded. */
 function opacities(drawn: readonly string[], highlight: string | null | undefined): (series: string) => number {
-  const active = highlight != null && drawn.some((series) => baseSeries(series) === highlight);
-  return (series) => (active && baseSeries(series) !== highlight ? FADED : 1);
+  const active = highlight != null && drawn.includes(highlight);
+  return (series) => (active && series !== highlight ? FADED : 1);
 }
 
 /** The emphasized traces last, so that they are drawn on top. */
@@ -207,11 +201,22 @@ function baseLayout(theme: PlotTheme): Omit<OverlayLayout, "xaxis" | "yaxis" | "
 export const MIN_MARK_SCALE = 0.6;
 
 /**
+ * The marker traces of the overlay in drawing order: the role and the error bar flag of their
+ * points, and the prefix of their meta.
+ */
+const MARKS: readonly (readonly [role: OverlayPoint["role"], errorBarEnd: boolean, prefix: string])[] = [
+  ["raw", false, "raw"],
+  ["raw", true, "raw-bar"],
+  ["mapped", false, "mapped"],
+];
+
+/**
  * The overlay of a digitized figure in the pixels of its image: the image below, a trace per
- * series and role (small dots for digitized points, thin crosses for mapped rows), and the error
- * bars of mapped rows as segments to their digitized end. With `highlight`, the other series
- * fade. `scale` is the size at which the image is shown: the marks shrink with it, down to
- * `MIN_MARK_SCALE`, so that they do not hide the printed symbols of a small image.
+ * series and kind of mark (small dots for digitized points and digitized error bar ends, thin
+ * crosses for mapped rows), and the error bars of mapped rows as segments to their digitized
+ * end. With `highlight`, the other series fade. `scale` is the size at which the image is
+ * shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not hide the
+ * printed symbols of a small image.
  */
 export function overlayTraces(
   view: SourceView,
@@ -229,7 +234,7 @@ export function overlayTraces(
   const color = (name: string) => colorOf(styles, name, false);
   const traces: OverlayTrace[] = [];
 
-  for (const name of series.filter((entry) => !entry.endsWith(ERROR_BAR_SUFFIX))) {
+  for (const name of series) {
     const bars = view.overlay.flatMap((point) =>
       point.series === name && point.role === "mapped" && point.error_px ? [{ ...point, end: point.error_px }] : [],
     );
@@ -247,9 +252,11 @@ export function overlayTraces(
       hoverinfo: "skip",
     });
   }
-  for (const role of ["raw", "mapped"] as const) {
+  for (const [role, end, prefix] of MARKS) {
     for (const name of series) {
-      const points = view.overlay.filter((point) => point.series === name && point.role === role);
+      const points = view.overlay.filter(
+        (point) => point.series === name && point.role === role && point.error_bar_end === end,
+      );
       if (!points.length) continue;
       const marker =
         role === "raw"
@@ -258,7 +265,7 @@ export function overlayTraces(
           : { symbol: "x-thin-open", size: 11 * marks, color: color(name), line: { width: stroke, color: color(name) } };
       traces.push({
         type: "scatter",
-        meta: `${role} ${name}`,
+        meta: `${prefix} ${name}`,
         name,
         mode: "markers",
         x: points.map((point) => point.px),
@@ -266,7 +273,8 @@ export function overlayTraces(
         opacity: opacity(name),
         showlegend: false,
         marker,
-        customdata: points.map(customdata),
+        // The hover text names a digitized error bar end with its series.
+        customdata: points.map((point) => customdata(end ? { ...point, series: `${point.series} (error bar)` } : point)),
         hovertemplate: role === "raw" ? RAW_HOVER : MAPPED_HOVER,
         hoverlabel: hoverLabel(theme, color(name)),
       });
@@ -365,7 +373,7 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
 export function legendEntries(view: SourceView, mode: OverlayMode, dark: boolean): { series: string; color: string }[] {
   const styles = seriesStyles(view);
   const series =
-    mode === "overlay" ? unique(view.overlay.map((point) => baseSeries(point.series))) : plottedSeries(view);
+    mode === "overlay" ? unique(view.overlay.map((point) => point.series)) : plottedSeries(view);
   // The overlay marks sit on the image, which keeps its light colors.
   return series.map((name) => ({ series: name, color: colorOf(styles, name, mode === "plot" && dark) }));
 }
@@ -373,7 +381,7 @@ export function legendEntries(view: SourceView, mode: OverlayMode, dark: boolean
 /** A point of the data table of the plot. */
 export interface DataRow {
   series: string;
-  kind: "Digitized" | "Mapped";
+  kind: "Digitized" | "Digitized error bar" | "Mapped";
   x: string;
   y: string;
   file: string;
@@ -385,7 +393,7 @@ export function dataRows(view: SourceView, mode: OverlayMode): DataRow[] {
   if (mode === "overlay")
     return view.overlay.map((point) => ({
       series: point.series,
-      kind: point.role === "raw" ? "Digitized" : "Mapped",
+      kind: point.role === "mapped" ? "Mapped" : point.error_bar_end ? "Digitized error bar" : "Digitized",
       x: point.x_text,
       y: point.y_text,
       file: point.file,

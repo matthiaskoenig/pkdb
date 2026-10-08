@@ -135,3 +135,17 @@ def test_targets_contract(workspace, engine_on):
             "previews": previews,
         },
     )
+
+
+def test_source_contract(workspace, engine_on):
+    """The source view of Fig1 of Demo2020, whose project digitizes the error bar ends of both series."""
+    view = engine_on(workspace).study_source(DEMO, "Fig1")
+    assert {
+        (p["series"], p["error_bar_end"]) for p in view["overlay"] if p["role"] == "raw"
+    } == {
+        ("caf_plasma_100mg", False),
+        ("caf_plasma_100mg", True),
+        ("caf_plasma_200mg", False),
+        ("caf_plasma_200mg", True),
+    }
+    check_contract("source-fig1", view)

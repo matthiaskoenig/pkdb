@@ -162,6 +162,28 @@ def test_series_colors_repeat_after_the_palette(valid_study):
     assert len(set(SERIES_COLORS)) == 8
 
 
+def test_error_bar_ends_belong_to_their_series(make_study, valid_files, tsv):
+    wpd = project(GOOD)
+    wpd["datasetColl"].append(
+        {
+            "name": "drug_plasma;error_bar",
+            "axesName": "XY",
+            "data": [{"x": 10, "y": 50}],
+        }
+    )
+    folder = with_error_bars(
+        make_study,
+        valid_files,
+        tsv,
+        **{"Example_Fig1.png": png(100, 100), "Example_Fig1.wpd.json": json.dumps(wpd)},
+    )
+    view = source_view(load_study(folder), "Fig1")
+    raw = [(p.series, p.error_bar_end) for p in view.overlay if p.role == "raw"]
+    assert raw == [("drug_plasma", False)] * 3 + [("drug_plasma", True)]
+    assert not any(p.error_bar_end for p in view.overlay if p.role == "mapped")
+    assert [s.name for s in view.series] == ["drug_plasma", "drug_urine"]
+
+
 def test_overlay_points_carry_their_values_as_text(make_study, valid_files, tsv):
     folder = with_error_bars(
         make_study,

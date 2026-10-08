@@ -3,13 +3,22 @@
  * python/tests/test_curation_contract.py. Regenerate them there with PKDB_UPDATE_CONTRACT=1.
  */
 import { describe, expect, it } from "vitest";
-import type { ConflictData, ReviewItem, TableEntry, TablePreview, TargetMatch } from "../../src/curation-app/api/types";
-import { isTablePreview, isTargetMatch } from "../../src/curation-app/api/types";
+import type {
+  ConflictData,
+  ReviewItem,
+  SourceView,
+  TableEntry,
+  TablePreview,
+  TargetMatch,
+} from "../../src/curation-app/api/types";
+import { isSourceView, isTablePreview, isTargetMatch } from "../../src/curation-app/api/types";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
+import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
 import { matchText } from "../../src/curation-app/review";
 import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
+import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 import targetsFixture from "../fixtures/curation-contract/targets.json";
@@ -105,5 +114,27 @@ describe("targets contract", () => {
 
   it("accepts every preview answer", () => {
     for (const { response } of targetsFixture.previews) expect(isTargetMatch(response)).toBe(true);
+  });
+});
+
+describe("source view contract", () => {
+  const view = contract<SourceView>(sourceFixture);
+
+  it("accepts the answer", () => {
+    expect(isSourceView(sourceFixture)).toBe(true);
+  });
+
+  it("draws the digitized error bar ends in the color of their series", () => {
+    const { traces } = overlayTraces(view);
+    const trace = (meta: string) => traces.find((entry) => entry.meta === meta);
+    for (const series of ["caf_plasma_100mg", "caf_plasma_200mg"]) {
+      expect(trace(`raw ${series}`)).toBeDefined();
+      expect(trace(`mapped ${series}`)).toBeDefined();
+      expect(trace(`raw-bar ${series}`)?.marker?.color).toBe(trace(`raw ${series}`)?.marker?.color);
+    }
+  });
+
+  it("lists each series once in the legend", () => {
+    expect(legendEntries(view, "overlay", false).map((entry) => entry.series)).toEqual(["caf_plasma_100mg", "caf_plasma_200mg"]);
   });
 });

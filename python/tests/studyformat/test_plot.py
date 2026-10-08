@@ -87,10 +87,13 @@ def test_error_bar_dataset_shares_the_series_color_and_legend_entry(
         }
     )
     assert format_folder(folder).ok
-    result = render_source(load_study(folder), "Fig1", tmp_path / "out.png")
+    study = load_study(folder)
+    result = render_source(study, "Fig1", tmp_path / "out.png")
     colors = dict(result.colors)
     assert result.legend == ("drug_plasma",)
-    assert colors["drug_plasma;error_bar"] == colors["drug_plasma"]
+    assert list(colors) == ["drug_plasma"]
+    # The colors of the source view, which the curation app draws alike.
+    assert colors == {s.name: s.color for s in source_view(study, "Fig1").series}
     assert png_size(result.path.read_bytes()) == (100, 100)
 
 
@@ -198,3 +201,20 @@ def test_side_by_side_plots_the_points_of_the_source_view(valid_study, tmp_path)
     assert result.mode == "side_by_side"
     assert result.legend == tuple(dict.fromkeys(p.series for p in view.points))
     assert dict(result.colors) == {s.name: s.color for s in view.series}
+
+
+def test_side_by_side_colors_only_the_series_it_draws(
+    make_study, valid_files, tmp_path
+):
+    wpd = project(GOOD)
+    wpd["datasetColl"].append(
+        {"name": "parent_plasma", "axesName": "XY", "data": [{"x": 50, "y": 50}]}
+    )
+    # A project without its image: the figure is drawn side by side, from the mapped rows.
+    folder = make_study({**valid_files, "Example_Fig1.wpd.json": json.dumps(wpd)})
+    study = load_study(folder)
+    view = source_view(study, "Fig1")
+    assert [s.name for s in view.series] == ["drug_plasma", "parent_plasma"]
+    result = render_source(study, "Fig1", tmp_path / "Fig1.png")
+    assert result.mode == "side_by_side"
+    assert dict(result.colors) == {"drug_plasma": view.series[0].color}

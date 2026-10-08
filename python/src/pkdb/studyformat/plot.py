@@ -10,14 +10,17 @@ from pathlib import Path
 from typing import Literal
 
 from pkdb.studyformat.colors import POINT_RING
-from pkdb.studyformat.digitize import ERROR_BAR_SUFFIX
 from pkdb.studyformat.load import LoadedStudy
 from pkdb.studyformat.sources import SourceView, source_view
 
 
 @dataclass(frozen=True)
 class PlotResult:
-    """The written PNG, its mode, the pixels of the mapped points drawn in overlay mode and the series without dataset."""
+    """The written PNG and its mode, with what the plot draws.
+
+    `points` are the pixels of the mapped points drawn in overlay mode, `legend` the series of the
+    legend, `colors` the color of each drawn series once, and `unmatched` the series without a dataset.
+    """
 
     path: Path
     mode: Literal["overlay", "side_by_side"]
@@ -56,21 +59,18 @@ def _overlay(study, view, path: Path) -> PlotResult:
     axes.axis("off")
     # The colors and their order of the source view, which the curation app draws alike.
     base = {series.name: series.color for series in view.series}
-    drawn = {p.series.removesuffix(ERROR_BAR_SUFFIX) for p in view.overlay}
+    drawn = {p.series for p in view.overlay}
     series = [name for name in base if name in drawn]
-    color = {
-        p.series: base[p.series.removesuffix(ERROR_BAR_SUFFIX)] for p in view.overlay
-    }
     mapped = []
     for point in view.overlay:
         if point.role == "raw":
-            bar = point.series.endswith(ERROR_BAR_SUFFIX)
+            bar = point.error_bar_end
             axes.scatter(
                 point.px,
                 point.py,
                 s=40 if bar else 16,
                 marker="_" if bar else "o",
-                color=color[point.series],
+                color=base[point.series],
                 edgecolors=None if bar else POINT_RING,
                 linewidths=None if bar else 0.75,
             )
@@ -82,13 +82,13 @@ def _overlay(study, view, path: Path) -> PlotResult:
             s=60,
             marker="x",
             linewidths=2,
-            color=color[point.series],
+            color=base[point.series],
         )
         if point.error_px is not None:
             axes.plot(
                 [point.px, point.error_px[0]],
                 [point.py, point.error_px[1]],
-                color=color[point.series],
+                color=base[point.series],
             )
     handles = [
         Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
@@ -102,7 +102,7 @@ def _overlay(study, view, path: Path) -> PlotResult:
         "overlay",
         tuple(mapped),
         tuple(series),
-        tuple(sorted(color.items())),
+        tuple(sorted((name, base[name]) for name in drawn)),
         view.unmatched,
     )
 
@@ -145,6 +145,6 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
         path,
         "side_by_side",
         legend=tuple(series),
-        colors=tuple(sorted((entry.name, entry.color) for entry in view.series)),
+        colors=tuple(sorted((name, styles[name].color) for name in series)),
         unmatched=view.unmatched,
     )

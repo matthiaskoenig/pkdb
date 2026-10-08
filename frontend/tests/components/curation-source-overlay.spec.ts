@@ -53,6 +53,7 @@ const view: SourceView = {
       error_px: null,
       x_text: "0.5",
       y_text: "2.42",
+      error_bar_end: false,
     },
     {
       series: "caf_plasma_D150",
@@ -66,6 +67,7 @@ const view: SourceView = {
       error_px: null,
       x_text: "0.5",
       y_text: "2.419",
+      error_bar_end: false,
     },
   ],
   unmatched: ["caf_plasma_D75"],
