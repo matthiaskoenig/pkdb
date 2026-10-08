@@ -14,7 +14,10 @@ npm run test:unit -- --run
 npm run build
 npx playwright install --with-deps
 npm run test:e2e
+npm run build:curation && npm run test:curation-e2e
 ```
+
+`npm run test:curation-e2e` tests the curation app in Chromium against the real `pkdb curate` on copies of the synthetic fixture workspace in `tools/curation_testing/fixture`, which `tools/curation_testing/make_fixture.py` keeps consistent (its figure, table images and WebPlotDigitizer project are drawn from its tables). It needs `uv` and the built app, and no Docker.
 
 For live GUI development, keep `npm run dev` running and open **http://localhost:8080**. Saving Vue, TypeScript, or CSS source updates the browser automatically through Vite hot module replacement; public asset changes reload the page. With Docker, use `docker compose --profile dev up --build --wait` from the repository root for the same live workflow; Docker enables polling to detect changes reliably across bind mounts. Native development can opt into polling with `PKDB_DEV_USE_POLLING=true`. `npm run build` and `npm run preview` serve production-build workflows and do not provide live source updates.
 

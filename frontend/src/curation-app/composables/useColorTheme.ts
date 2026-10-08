@@ -1,0 +1,98 @@
+import { watch } from "vue";
+import { useTheme } from "vuetify";
+import type { ThemeChoice } from "../api/types";
+import { useOverviewStore } from "../stores/overview";
+
+/**
+ * Where the browser keeps the theme that the curator chose in the header, for a page without the
+ * theme of the local server. The server keeps the choice and puts it into index.html: the
+ * browser forgets it, as `pkdb curate` starts on another port, and so another origin, every time.
+ */
+export const THEME_STORAGE_KEY = "pkdb.curation.theme";
+
+/** The theme that this browser kept, or null without a choice or without storage. */
+function storedChoice(): ThemeChoice | null {
+  try {
+    const value = localStorage.getItem(THEME_STORAGE_KEY);
+    return value === "light" || value === "dark" ? value : null;
+  } catch {
+    // Storage can be unavailable, for example in a private window.
+    return null;
+  }
+}
+
+/** Keep `choice` in this browser, or forget it for the system theme; without storage it lasts until a reload. */
+function store(choice: ThemeChoice): void {
+  try {
+    if (choice === "system") localStorage.removeItem(THEME_STORAGE_KEY);
+    else localStorage.setItem(THEME_STORAGE_KEY, choice);
+  } catch {
+    // The choice then lasts until the page is reloaded.
+  }
+}
+
+/** Whether `value` names a theme choice. */
+function isChoice(value: unknown): value is ThemeChoice {
+  return value === "light" || value === "dark" || value === "system";
+}
+
+/**
+ * The theme of the state of `pkdb curate`, which it puts into the `pkdb-theme` meta tag of
+ * index.html; null without one, as on the development server.
+ */
+export function servedTheme(): ThemeChoice | null {
+  const content = document.querySelector<HTMLMetaElement>('meta[name="pkdb-theme"]')?.content;
+  return isChoice(content) ? content : null;
+}
+
+/**
+ * The theme of the first paint, before the state of the local server is loaded: the one that
+ * index.html brings, else the one that this browser kept, else the theme of the system.
+ */
+export function initialTheme(): ThemeChoice {
+  return servedTheme() ?? storedChoice() ?? "system";
+}
+
+function systemTheme(): "light" | "dark" {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+/** The light or dark theme: it follows the system until the curator switches it in the header. */
+export function useColorTheme() {
+  const theme = useTheme();
+  const overview = useOverviewStore();
+
+  function apply(choice: ThemeChoice): void {
+    void theme.change(choice);
+    store(choice);
+  }
+
+  /**
+   * Apply the theme of the first paint (`initialTheme`), then the one of the state of the local
+   * server once it is loaded, and again whenever it changes there, such as from another tab.
+   */
+  function restore(): void {
+    void theme.change(initialTheme());
+    watch(
+      () => overview.snapshot?.theme,
+      (choice) => {
+        if (choice) apply(choice);
+      },
+      { immediate: true },
+    );
+  }
+
+  /**
+   * Switch between light and dark. A choice other than the system theme is kept for the next
+   * starts; switching back to the system theme follows the system again.
+   */
+  function toggle(): void {
+    const next = theme.global.current.value.dark ? "light" : "dark";
+    const choice: ThemeChoice = next === systemTheme() ? "system" : next;
+    apply(choice);
+    // The theme applies also when the local server cannot keep it, until the page is reloaded.
+    overview.configure({ theme: choice }).catch(() => undefined);
+  }
+
+  return { restore, toggle };
+}

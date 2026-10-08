@@ -83,7 +83,11 @@ def test_local_engine_validates_uploads_and_observes_saves(
         engine.schedule_changes()
         job = engine.queue.pop(identity)
         engine.run_job(job)
-        assert job["status"] == "failed"
+        # A check that ran and found problems, not a failure of the job.
+        assert (job["status"], job["message"]) == (
+            "invalid",
+            "Validation found problems",
+        )
         assert job["persistence"] == "not_attempted"
         problems = engine._row_of(identity)["problems"]
         assert [(issue["code"], issue["source"]["file"]) for issue in problems] == [

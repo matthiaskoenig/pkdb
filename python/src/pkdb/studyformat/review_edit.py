@@ -3,6 +3,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from enum import Enum
 from pathlib import Path
 from typing import Literal
 
@@ -33,6 +34,9 @@ APPROVED = "The study is approved; set the status to in_review first"
 class ReviewError(ValueError):
     """An unknown item, an invalid transition or an invalid file; nothing was written."""
 
+    #: Names the kind of refusal for the curation app; None for any other one.
+    code: str | None = None
+
     def __init__(self, message: str, issues: list[ValidationIssue] | None = None):
         super().__init__(message)
         self.issues = issues or []
@@ -40,6 +44,23 @@ class ReviewError(ValueError):
 
 class ApprovalRefused(ReviewError):
     """Approval needs zero open items, zero validation errors and a person."""
+
+    code = "approval_refused"
+
+
+class NoSuchWarning(ReviewError):
+    """No warning has the code, file, line and column to acknowledge."""
+
+    code = "no_such_warning"
+
+
+class Wildcard(Enum):
+    """A line or column of `matching_warnings` that every warning has."""
+
+    ANY = "any"
+
+
+ANY = Wildcard.ANY
 
 
 @dataclass(frozen=True)
@@ -279,14 +300,16 @@ def set_status(
             return review
         open_items = [item for item in review.items if item.state == "open"]
         if open_items:
-            raise ApprovalRefused(f"{len(open_items)} review items are open")
+            items = "review item is" if len(open_items) == 1 else "review items are"
+            raise ApprovalRefused(f"{len(open_items)} {items} open")
         errors = [
             issue
             for issue in validate_folder(folder, vocabulary).issues
             if issue.severity == "error"
         ]
         if errors:
-            raise ApprovalRefused(f"Validation has {len(errors)} errors", errors)
+            noun = "error" if len(errors) == 1 else "errors"
+            raise ApprovalRefused(f"Validation has {len(errors)} {noun}", errors)
         reviewers = review.reviewers
         if author.user not in reviewers:
             reviewers = [*reviewers, author.user]
@@ -329,10 +352,14 @@ def matching_warnings(
     issues: list[ValidationIssue],
     code: str,
     file: str,
-    line: int | None = None,
-    column: str | None = None,
+    line: int | None | Wildcard = ANY,
+    column: str | None | Wildcard = ANY,
 ) -> list[ValidationIssue]:
-    """The warnings `code` of `file`, at `line` and `column` when they are given."""
+    """The warnings `code` of `file` at `line` and `column`.
+
+    `ANY` matches every line or column, and None only a warning without a line or
+    without a column.
+    """
     return [
         issue
         for issue in issues
@@ -340,8 +367,8 @@ def matching_warnings(
         and issue.code == code
         and issue.source is not None
         and issue.source.file == file
-        and (line is None or issue.source.row == line)
-        and (column is None or issue.source.header == column)
+        and (line is ANY or issue.source.row == line)
+        and (column is ANY or issue.source.header == column)
     ]
 
 

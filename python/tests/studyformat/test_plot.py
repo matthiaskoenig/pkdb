@@ -5,6 +5,7 @@ import pytest
 from digitize_fixtures import GOOD, png, project
 
 from pkdb.cli import main
+from pkdb.studyformat.colors import SERIES_COLORS
 from pkdb.studyformat.digitize import png_size
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.load import load_study
@@ -165,3 +166,35 @@ def test_plot_refuses_an_output_folder_in_the_study(valid_study, capsys, inside)
     assert "never into the study folder" in capsys.readouterr().err
     assert not (valid_study / "plots").exists()
     assert not list(valid_study.glob("*.plot.png"))
+
+
+def test_plot_takes_the_series_colors_and_order_of_the_source_view(
+    make_study, valid_files, tmp_path
+):
+    wpd = project(GOOD)
+    wpd["datasetColl"].insert(
+        0, {"name": "parent_plasma", "axesName": "XY", "data": [{"x": 50, "y": 50}]}
+    )
+    folder = make_study(
+        {
+            **valid_files,
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(wpd),
+        }
+    )
+    assert format_folder(folder).ok
+    study = load_study(folder)
+    view = source_view(study, "Fig1")
+    result = render_source(study, "Fig1", tmp_path / "out.png")
+    assert result.legend == ("parent_plasma", "drug_plasma")
+    assert dict(result.colors) == {s.name: s.color for s in view.series}
+    assert [s.color for s in view.series] == list(SERIES_COLORS[:2])
+
+
+def test_side_by_side_plots_the_points_of_the_source_view(valid_study, tmp_path):
+    study = load_study(valid_study)
+    view = source_view(study, "Fig1")
+    result = render_source(study, "Fig1", tmp_path / "Fig1.png")
+    assert result.mode == "side_by_side"
+    assert result.legend == tuple(dict.fromkeys(p.series for p in view.points))
+    assert dict(result.colors) == {s.name: s.color for s in view.series}

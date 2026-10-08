@@ -138,7 +138,7 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
     engine.scan()
     settle(engine)
     job = run_next(engine)
-    assert job["status"] == "failed", job["message"]
+    assert job["status"] == "invalid", job["message"]
     current = row(engine)
     assert current["status"] == "invalid"
     assert current["counts"]["errors"] >= 1
@@ -168,7 +168,7 @@ def test_a_sync_stop_after_a_reference_update_is_invalid_in_the_same_job(
     monkeypatch.setattr(references, "sync_reference", refresh)
     settle(engine)
     job = run_next(engine)
-    assert job["status"] == "failed", job["message"]
+    assert job["status"] == "invalid", job["message"]
     current = engine.studies["caffeine/Example"]
     assert current["status"] == "invalid" and current["stale"] is False
     assert current["_pending"] is False
@@ -216,7 +216,7 @@ def test_format_problems_fail_like_validation(workspace, monkeypatch):
     called = []
     monkeypatch.setattr(jobs, "prepare", lambda *a, **k: called.append(1))
     job = run_next(engine)
-    assert job["status"] == "failed" and not called
+    assert job["status"] == "invalid" and not called
     assert row(engine)["status"] == "invalid"
     assert row(engine)["counts"]["errors"] >= 1
     report = engine.report(job["report_id"])

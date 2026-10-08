@@ -15,7 +15,8 @@ from pkdb.cache import (
 from pkdb.curation.connection import ConnectionMixin
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
-from pkdb.curation.jobs import JobsMixin, fingerprint, now
+from pkdb.curation.jobs import JobsMixin, fingerprint, maybe_sent, now
+from pkdb.curation.state import THEMES
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -67,6 +68,8 @@ class CurationEngine(
         )
         self.offline = offline
         self.github_user = github_user or saved.get("github_user", "")
+        theme = saved.get("theme")
+        self.theme = theme if isinstance(theme, str) and theme in THEMES else "system"
         self.repository = (
             repository or saved.get("repository") or "matthiaskoenig/pkdb_data"
         )
@@ -94,17 +97,23 @@ class CurationEngine(
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
             if job.get("status") in {"queued", "running"}:
-                job["status"] = (
-                    "unknown"
-                    if job.get("action") == "upload"
-                    and job.get("stage") in {"transfer", "upload", "response", "commit"}
-                    else "canceled"
-                )
-                if job["status"] == "unknown":
-                    job["persistence"] = "unknown"
-                job["message"] = (
-                    "Interrupted by previous shutdown; inspect before retrying"
-                )
+                if maybe_sent(job):
+                    # The server may have saved the study: the curator inspects it first.
+                    job.update(
+                        status="unknown",
+                        persistence="unknown",
+                        message="Interrupted by previous shutdown; inspect before retrying",
+                    )
+                else:
+                    job.update(
+                        status="canceled", message="Canceled when pkdb curate stopped"
+                    )
+            elif (
+                job.get("status") == "failed"
+                and job.get("message") == "Validation found problems"
+            ):
+                # Saved before problems found had a status of their own.
+                job["status"] = "invalid"
         self.modes = saved.get("modes", {})
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
@@ -141,6 +150,7 @@ class CurationEngine(
             "user": self.user,
             "github_user": self.github_user,
             "repository": self.repository,
+            "theme": self.theme,
             "github": self.github.data,
             "modes": self.modes,
             "recent_workspaces": self.recent_workspaces,
@@ -185,6 +195,7 @@ class CurationEngine(
                         "update_required": newer(self.server_version),
                         "offline": self.offline,
                         "paused": self.paused,
+                        "theme": self.theme,
                         "vocabulary": self.vocabulary,
                         "github": {
                             **self.github.data,
@@ -206,6 +217,8 @@ class CurationEngine(
                         ],
                         "format1_folders": self.format1_folders,
                         "jobs": self.jobs,
+                        # What Clear finished history would remove.
+                        "clearable_jobs": len(self._clearable()),
                         "recent_workspaces": recent,
                     }
                 )
@@ -215,7 +228,7 @@ class CurationEngine(
         self.stop.set()
         self.wakeup.set()
         with self.lock:
-            self._cancel_pending()
+            self._cancel_pending("Canceled when pkdb curate stopped")
             self._save()
         for thread in self.threads:
             thread.join(timeout=2)

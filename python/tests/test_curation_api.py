@@ -61,6 +61,9 @@ def test_study_detail(api):
     assert detail["metadata"]["revision"] and detail["metadata"]["issues"] == []
     assert detail["review"]["value"]["status"] == "draft"
     assert {s["source"] for s in detail["sources"]} >= {"Fig1", "Tab2"}
+    tab2 = next(s for s in detail["sources"] if s["source"] == "Tab2")
+    assert (tab2["kind"], tab2["missing_image"]) == ("table", None)
+    assert "missing_raw" in tab2
     assert "Example_Fig1.wpd.json" in detail["files"]
     etag = response_headers["ETag"]
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
@@ -261,7 +264,13 @@ def test_tables_sources_and_images(api):
         request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
     )
     assert source["image_url"] == f"{DETAIL}/files/Example_Fig1.png"
-    assert source["overlay"]
+    assert source["overlay"] and source["layout"] == "overlay"
+    # The points, the series with their colors, and the texts of the hover pass through.
+    assert source["points"][0]["series"] == "drug_plasma"
+    assert {"x_text", "y_text", "error_bar"} <= set(source["points"][0])
+    assert source["series"][0]["name"] == "drug_plasma"
+    assert {"color", "dark_color", "x_label", "y_label"} <= set(source["series"][0])
+    assert {"x_text", "y_text"} <= set(source["overlay"][0])
     status, image_headers, data = request(
         server, "GET", source["image_url"], headers=headers
     )
@@ -386,7 +395,21 @@ def test_duplicate_identity_answers_409(api, valid_files):
         )
     engine.scan()
     status, _, data = request(server, "GET", DETAIL, headers=authenticate(server))
-    assert status == 409 and "identity of two folders" in json.loads(data)["error"]
+    body = json.loads(data)
+    assert status == 409 and "identity of two folders" in body["error"]
+    # The app lists the folders without parsing the message.
+    assert sorted(body["paths"]) == ["caffeine/Example", "copies/caffeine/Example"]
+
+
+def test_ambiguous_study_counts_and_lists_its_folders():
+    error = studies.AmbiguousStudy(
+        "caffeine/Example", ["a, b/caffeine/Example", "c", "d"]
+    )
+    assert str(error) == (
+        "caffeine/Example is the identity of 3 folders: "
+        "a, b/caffeine/Example, c, d; rename all but one"
+    )
+    assert error.paths == ["a, b/caffeine/Example", "c", "d"]
 
 
 def test_study_routes_require_the_session(api):
@@ -571,6 +594,39 @@ def test_review_write_errors(api):
     assert stale[0] == 409 and stale[1]["file"] == "review.json"
     assert json.loads(stale[1]["content"]) == {"status": "draft"}
     assert read_review(folder).review.items == []
+
+
+@pytest.mark.parametrize(
+    ("key", "change", "action"),
+    [
+        (
+            "review",
+            {"status": "in_review"},
+            {"action": "add", "kind": "issue", "text": "Check the dose."},
+        ),
+        ("metadata", {"licence": "closed"}, {}),
+    ],
+)
+def test_a_stale_write_shows_the_file_on_disk_at_once(api, key, change, action):
+    """The study page loads the study after a 409 and gets the file on disk, not a 304."""
+    server, engine, folder = api
+    headers = authenticate(server)
+    status, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    document = json.loads(data)[key]
+    on_disk = {**document["value"], **change}
+    name = "review.json" if key == "review" else "study.json"
+    (folder / name).write_text(json.dumps(on_disk, indent=2) + "\n")
+    body = action or {"metadata": document["value"]}
+    route = f"/local/studies/{key}"
+    write = {"study": "caffeine/Example", "revision": document["revision"], **body}
+    stale = request(server, "POST", route, write, headers)
+    assert stale[0] == 409
+    etag = {**headers, "If-None-Match": response_headers["ETag"]}
+    status, _, data = request(server, "GET", DETAIL, headers=etag)
+    assert status == 200
+    reloaded = json.loads(data)[key]
+    assert reloaded["revision"] == json.loads(stale[2])["revision"]
+    assert reloaded["value"] == on_disk
 
 
 def test_writes_need_a_user(api):
@@ -758,18 +814,33 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     }
     status, _, data = request(server, "POST", "/local/studies/review", body, headers)
     assert status == 422
-    assert json.loads(data)["error"] == (
-        "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 column "
-        "mean, line 4 column mean; give the line and column of one"
-    )
+    # A line and a column that are left out match every line and column.
+    assert json.loads(data) == {
+        "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
+        "column mean, line 4 column mean; give the line and column of one",
+        "issues": [],
+    }
     missing = {**body, "code": "missing_image"}
     status, _, data = request(server, "POST", "/local/studies/review", missing, headers)
     assert status == 422
-    assert json.loads(data)["error"] == (
-        "No warning [missing_image] in timecourses_Fig1.tsv matches"
-    )
+    assert json.loads(data) == {
+        "error": "No warning [missing_image] in timecourses_Fig1.tsv matches",
+        "issues": [],
+        "code": "no_such_warning",
+    }
+    # A null line or column matches only warnings without one.
+    for exact in ({"line": None}, {"column": None}, {"line": 4, "column": None}):
+        status, _, data = request(
+            server, "POST", "/local/studies/review", {**body, **exact}, headers
+        )
+        assert status == 422 and json.loads(data)["code"] == "no_such_warning"
+    assert read_review(folder).review.items == []
     status, _, data = request(
-        server, "POST", "/local/studies/review", {**body, "line": 4}, headers
+        server,
+        "POST",
+        "/local/studies/review",
+        {**body, "line": 4, "column": "mean"},
+        headers,
     )
     assert status == 200
     item = json.loads(data)["item"]
@@ -874,7 +945,9 @@ def test_write_routes_refuse_an_ambiguous_identity(api, valid_files, path, body)
     status, _, data = request(
         server, "POST", path, {"study": "caffeine/Example", **body}, headers
     )
-    assert status == 409 and "identity of two folders" in json.loads(data)["error"]
+    refused = json.loads(data)
+    assert status == 409 and "identity of two folders" in refused["error"]
+    assert len(refused["paths"]) == 2
     for route, existing in [
         ("/local/jobs", {"ids": ["caffeine/Example"], "action": "validate"}),
         ("/local/mode", {"ids": ["caffeine/Example"], "mode": "off"}),

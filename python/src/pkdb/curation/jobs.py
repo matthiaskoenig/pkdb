@@ -37,6 +37,33 @@ def now():
     return datetime.now(UTC).isoformat()
 
 
+#: Jobs that the history keeps whatever their age: they have not ended, or their outcome is
+#: unknown.
+ACTIVE_STATUSES = {"queued", "running", "unknown"}
+
+#: The progress stages of an upload before anything of it reaches the server: the job waits or
+#: syncs (`queued`), the library reads, parses and validates the folder (`read`, `parse`,
+#: `validate`, `pkdb.preparation`), and the client checks the server (`compatibility`, a read
+#: of its capabilities, `pkdb.client`). Every other stage, also one that a later client adds
+#: or renames, may have sent the study: `transfer`, `server_validation` and `complete` now,
+#: `upload`, `response` and `commit` in states saved by earlier versions.
+UNSENT_STAGES = frozenset({"queued", "read", "parse", "validate", "compatibility"})
+
+
+def maybe_sent(job: dict) -> bool:
+    """Whether `job` is an upload that may have reached the server, so its outcome is unknown
+    unless the job recorded it; an upload without a known unsent stage may have."""
+    return job.get("action") == "upload" and job.get("stage") not in UNSENT_STAGES
+
+
+#: The action of a job in a sentence.
+ACTION_NAMES = {
+    "validate": "validation",
+    "validate_remote": "server validation",
+    "upload": "upload",
+}
+
+
 def duplicate_message(identifier):
     return f"Rename one of the folders with identity {identifier} before uploading"
 
@@ -122,6 +149,10 @@ def stop_message(pipeline: PipelineResult) -> str:
     return "Resolve the conflict between the workbook and the tables"
 
 
+class ResumeRefused(ValueError):
+    """Resuming cannot establish the outcome of an upload; the message says what to do."""
+
+
 class JobsMixin(EngineState):
     def _enqueue_one(self, row, action, automatic=False):
         if row["_blocked"]:
@@ -134,12 +165,17 @@ class JobsMixin(EngineState):
             raise ValueError("Upload requires a connected endpoint and API key")
         existing = self.queue.get(row["id"])
         if existing:
-            existing["status"] = "canceled"
+            existing.update(
+                status="canceled",
+                message=f"Replaced by a newer {ACTION_NAMES[action]}",
+            )
         job = {
             "id": uuid4().hex,
             "study_id": row["id"],
             # Keeps activity readable after switching to another workspace.
             "study_name": row["name"],
+            # Clearing the history removes the finished jobs of the current workspace only.
+            "workspace": str(self.root),
             "action": action,
             "status": "queued",
             "stage": "queued",
@@ -160,24 +196,46 @@ class JobsMixin(EngineState):
         self.wakeup.set()
         return job
 
-    def _remember(self, job):
-        """Add a job to the history, which keeps the last 100 finished jobs.
+    def _partition_history(self):
+        """The jobs that the history always keeps, and the other, finished jobs, in order.
 
-        Queued, running and unknown jobs are kept besides them, and so is the latest upload
-        of each study, from which its row shows the last upload after a restart.
+        It keeps queued, running and unknown jobs, the latest upload of each study, from which
+        its row shows the last upload after a restart, and the job of the current report of
+        each study, which the study page offers and acknowledgements are checked against.
         """
-        self.jobs.append(job)
         uploads = {j["study_id"]: j for j in self.jobs if j.get("upload")}
-        protected, finished = [], []
+        reports = {
+            row["report_id"] for row in self.studies.values() if row.get("report_id")
+        }
+        kept, finished = [], []
         for entry in self.jobs:
             if (
-                entry["status"] in {"queued", "running", "unknown"}
+                entry["status"] in ACTIVE_STATUSES
                 or uploads.get(entry["study_id"]) is entry
+                or entry.get("report_id") in reports
             ):
-                protected.append(entry)
+                kept.append(entry)
             else:
                 finished.append(entry)
-        self.jobs = sorted(protected + finished[-100:], key=lambda j: j["created_at"])
+        return kept, finished
+
+    def _clearable(self):
+        """The finished jobs that clearing the history removes: those of the current workspace.
+
+        A job saved without its workspace, by an earlier version, cannot be placed and stays.
+        """
+        workspace = str(self.root)
+        return [
+            job
+            for job in self._partition_history()[1]
+            if job.get("workspace") == workspace
+        ]
+
+    def _remember(self, job):
+        """Add a job to the history: the last 100 finished jobs, and those it always keeps."""
+        self.jobs.append(job)
+        kept, finished = self._partition_history()
+        self.jobs = sorted(kept + finished[-100:], key=lambda j: j["created_at"])
 
     def _record_write(self, identity, message, status="succeeded"):
         """List a write of the app in the activity of the study; it starts nothing."""
@@ -187,6 +245,7 @@ class JobsMixin(EngineState):
                     "id": uuid4().hex,
                     "study_id": identity,
                     "study_name": identity.rsplit("/", 1)[-1],
+                    "workspace": str(self.root),
                     "action": "write",
                     "status": status,
                     "created_at": now(),
@@ -254,9 +313,10 @@ class JobsMixin(EngineState):
             self._save()
         return self.snapshot()
 
-    def _cancel_pending(self):
+    def _cancel_pending(self, message):
+        """Cancel the queued jobs; `message` says why."""
         for job in self.queue.values():
-            job["status"] = "canceled"
+            job.update(status="canceled", message=message)
         self.queue.clear()
 
     def set_paused(self, paused):
@@ -269,7 +329,7 @@ class JobsMixin(EngineState):
                         # Resuming queues the canceled action again, not the save action:
                         # an initial or manual validation never becomes an upload.
                         row["_resume_action"] = job["action"]
-                self._cancel_pending()
+                self._cancel_pending("Canceled when automatic actions were paused")
             self._save()
         self.wakeup.set()
         return self.snapshot()
@@ -370,19 +430,18 @@ class JobsMixin(EngineState):
 
         def progress(event):
             with self.lock:
+                previous = job["stage"]
                 job["stage"] = event.stage
                 row["progress"] = {
                     "stage": event.stage,
                     "completed": event.completed,
                     "total": event.total,
                 }
-                row["status"] = (
-                    "uploading"
-                    if event.stage in {"transfer", "response", "commit"}
-                    else "validating"
-                )
-                if event.stage == "transfer":
-                    # Persist before a potentially ambiguous write for restart recovery.
+                sent = maybe_sent(job)
+                row["status"] = "uploading" if sent else "validating"
+                if sent and event.stage != previous:
+                    # Persist before a potentially ambiguous write for restart recovery,
+                    # once per stage rather than for every chunk of the transfer.
                     self._save()
 
         try:
@@ -596,7 +655,8 @@ class JobsMixin(EngineState):
                     self._wait(row, unreadable)
             else:
                 job.update(
-                    status="failed" if current else "canceled",
+                    # A check that ran and found problems, not a failure of the job.
+                    status="invalid" if current else "canceled",
                     message="Validation found problems"
                     if current
                     else "Source changed; diagnostics belong to a previous save",
@@ -616,8 +676,18 @@ class JobsMixin(EngineState):
             outcome.update(persistence=error.persistence, request_id=error.request_id)
             if error.report:
                 outcome["report"] = error.report.model_dump(mode="json")
+            # The validation of the server refused the study with a report of its problems.
+            refused = (
+                error.report is not None
+                and not isinstance(error, CompatibilityError)
+                and error.persistence in {"not_attempted", "not_saved"}
+            )
             job.update(
-                status="unknown" if error.persistence == "unknown" else "failed",
+                status="unknown"
+                if error.persistence == "unknown"
+                else "invalid"
+                if refused
+                else "failed",
                 message=self._safe(str(error)),
             )
             row["status"] = job["status"]
@@ -636,11 +706,10 @@ class JobsMixin(EngineState):
             )
             row.update(status="failed", stale=True)
         except Exception:
-            uncertain = (
-                job["action"] == "upload"
-                and job.get("stage") in {"transfer", "upload", "response", "commit"}
-                and outcome["persistence"] not in {"created", "replaced"}
-            )
+            uncertain = maybe_sent(job) and outcome["persistence"] not in {
+                "created",
+                "replaced",
+            }
             job.update(
                 status="unknown" if uncertain else "failed",
                 message="Unexpected job failure; inspect the report before retrying",
@@ -696,19 +765,30 @@ class JobsMixin(EngineState):
                 for j in reversed(self.jobs)
                 if j["study_id"] == row["id"] and j["status"] == "unknown"
             )
-            if (
-                self.offline
-                or job["endpoint"] != self.endpoint
-                or not job.get("source_digest")
-            ):
-                raise ValueError(
-                    "Inspect the original server before retrying the unknown upload"
+            name = row["id"]
+            review = "review the uncertain upload in the overview"
+            if self.offline:
+                raise ResumeRefused(
+                    f"The upload of {name} has an unknown outcome. Turn off offline "
+                    f"mode so that Resume can check it on the server, or {review}."
+                )
+            if job["endpoint"] != self.endpoint:
+                raise ResumeRefused(
+                    f"The upload of {name} with an unknown outcome went to "
+                    f"{job['endpoint']}. Connect to that server so that Resume can "
+                    f"check it, or {review}."
+                )
+            if not job.get("source_digest"):
+                raise ResumeRefused(
+                    f"The outcome of the upload of {name} cannot be checked "
+                    f"automatically. Please {review}."
                 )
             with Client(self.endpoint, api_key=self.api_key) as client:
                 publication = client.publication(job["sid"]).model_dump()
             if publication.get("digest") != job["source_digest"]:
-                raise ValueError(
-                    "Server publication differs; outcome cannot be established automatically"
+                raise ResumeRefused(
+                    f"The server has another version of {name} than the upload sent, "
+                    f"so its outcome is unknown. Please {review}."
                 )
             job.update(
                 status="succeeded",
@@ -735,10 +815,10 @@ class JobsMixin(EngineState):
         return self.snapshot()
 
     def clear_history(self):
+        """Remove the finished jobs of the current workspace and their reports (`_clearable`)."""
         with self.lock:
-            self.jobs = [
-                j for j in self.jobs if j["status"] in {"queued", "running", "unknown"}
-            ]
+            removed = {id(job) for job in self._clearable()}
+            self.jobs = [job for job in self.jobs if id(job) not in removed]
             keep = {j["report_id"] for j in self.jobs if j.get("report_id")}
             for path in (self.state_dir / "reports").glob("*.json"):
                 if path.stem not in keep:

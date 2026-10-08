@@ -11,6 +11,9 @@ from typing import TYPE_CHECKING, Any
 from pkdb.cache import VocabularyCache
 from pkdb.curation.github import GitHubAssignments
 
+#: The color themes of the app: the system theme, or one that the curator chose.
+THEMES = ("light", "dark", "system")
+
 
 class EngineState:
     lock: threading.RLock
@@ -25,6 +28,8 @@ class EngineState:
     offline: bool
     github_user: str
     repository: str
+    # The color theme of the app; the server keeps it, as the browser origin changes with the port.
+    theme: str
     github: GitHubAssignments
     account: Any
     can_upload: bool
@@ -63,7 +68,7 @@ class EngineState:
         def _enqueue_one(
             self, row: Any, action: Any, automatic: bool = False
         ) -> Any: ...
-        def _cancel_pending(self) -> Any: ...
+        def _cancel_pending(self, message: str) -> Any: ...
         def refresh_assignments(self) -> Any: ...
         def _issue_for(self, number: Any) -> dict | None: ...
         def _local_vocabulary(self) -> Any: ...

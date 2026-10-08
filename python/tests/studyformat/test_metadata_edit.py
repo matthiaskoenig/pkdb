@@ -3,6 +3,8 @@ import json
 import pytest
 
 import pkdb.studyformat.metadata as module
+from pkdb.schemas.review import Review
+from pkdb.studyformat.load import PATTERN_MESSAGES
 from pkdb.studyformat.metadata import (
     MetadataError,
     merge_patch,
@@ -10,6 +12,7 @@ from pkdb.studyformat.metadata import (
     read_metadata,
     write_metadata,
 )
+from pkdb.studyformat.models import ReferenceSnapshot, StudyMetadata
 from pkdb.studyformat.revision import RevisionConflict
 
 
@@ -39,6 +42,123 @@ def test_invalid_patch_writes_nothing(valid_study):
         patch_metadata(valid_study, {"licence": "maybe"}, None)
     assert error.value.issues[0].code == "invalid_study_json"
     assert (valid_study / "study.json").read_bytes() == before
+
+
+def test_patterned_fields_have_plain_messages(valid_study):
+    patch = {
+        "creator": "Jane Doe",
+        "reference": {"pmid": "0123", "doi": None},
+        "provenance": {
+            "kind": "automatic_curation",
+            "source_key": "pkdb.ai",
+            "method": "claude",
+            "version": "1",
+            "assets": [{"url": "https://example.org/a.pdf", "sha256": "abc"}],
+            "run_id": "run-1",
+        },
+        "release": {"pkdb_id": "PK1", "date": "2026-09-28T10:00:00"},
+    }
+    with pytest.raises(MetadataError) as error:
+        patch_metadata(valid_study, patch, None)
+    messages = {issue.field: issue.message for issue in error.value.issues}
+    assert messages == {
+        "creator": "creator: A user name has no spaces.",
+        "reference.pmid": (
+            "reference.pmid: A PubMed ID has only digits and does not start with 0."
+        ),
+        "provenance.automatic_curation.assets.0.sha256": (
+            "provenance.automatic_curation.assets.0.sha256: "
+            "A SHA-256 has 64 characters 0-9 and a-f."
+        ),
+        "release.pkdb_id": (
+            "release.pkdb_id: A release ID is PKDB and five digits, such as PKDB00198."
+        ),
+        "release.date": (
+            "release.date: A date has the form YYYY-MM-DD, such as 2026-09-28."
+        ),
+    }
+
+
+def _patterns(schema: object) -> set[str]:
+    """The patterns of a property schema, also of its alternatives and items."""
+    if not isinstance(schema, dict):
+        return set()
+    found = {schema["pattern"]} if "pattern" in schema else set()
+    for key in ("anyOf", "oneOf", "allOf"):
+        for part in schema.get(key, []):
+            found |= _patterns(part)
+    for key in ("items", "additionalProperties"):
+        found |= _patterns(schema.get(key))
+    return found
+
+
+def test_only_user_names_have_the_pattern_of_the_user_name_message():
+    """`PATTERN_MESSAGES` knows a field by its pattern alone: `^\\S+$` must stay on user names.
+
+    A new field with this pattern would get "A user name has no spaces." Give it another
+    pattern, or add it here when it is a user name.
+    """
+    user = r"^\S+$"
+    assert PATTERN_MESSAGES[user] == "A user name has no spaces."
+    fields = set()
+    for model in (StudyMetadata, Review, ReferenceSnapshot):
+        schema = model.model_json_schema()
+        for name, definition in {model.__name__: schema, **schema["$defs"]}.items():
+            for field, prop in definition.get("properties", {}).items():
+                if user in _patterns(prop):
+                    fields.add(f"{name}.{field}")
+    assert fields == {
+        "StudyMetadata.creator",
+        "Curator.user",
+        "Comment.user",
+        "Review.reviewers",
+        "Review.approved_by",
+        "ReviewItem.author",
+        "ReviewItem.resolved_by",
+        "ThreadEntry.author",
+    }
+
+
+def test_empty_texts_and_user_names_have_plain_messages(valid_study):
+    patch = {
+        "creator": "",
+        "curators": [{"user": "", "rating": 1}],
+        "collaborators": [""],
+        "descriptions": [""],
+        "comments": [{"user": "mkoenig", "text": ""}],
+        "notes": {"outputs": {"descriptions": [""], "comments": []}},
+    }
+    with pytest.raises(MetadataError) as error:
+        patch_metadata(valid_study, patch, None)
+    messages = {issue.field: issue.message for issue in error.value.issues}
+    text = "Enter some text or remove this entry."
+    assert messages == {
+        "creator": "creator: Enter a user name.",
+        "curators.0.user": "curators.0.user: Enter a user name.",
+        "collaborators.0": f"collaborators.0: {text}",
+        "descriptions.0": f"descriptions.0: {text}",
+        "comments.0.text": f"comments.0.text: {text}",
+        "notes.outputs.descriptions.0": f"notes.outputs.descriptions.0: {text}",
+    }
+
+
+def test_other_messages_stay_those_of_pydantic(valid_study):
+    patch = {
+        "licence": "maybe",
+        "curators": [{"user": "mkoenig", "rating": 7}],
+        "provenance": {"kind": "manual_curation", "source_key": ""},
+    }
+    with pytest.raises(MetadataError) as error:
+        patch_metadata(valid_study, patch, None)
+    messages = {issue.field: issue.message for issue in error.value.issues}
+    assert messages == {
+        "licence": "licence: Input should be 'open' or 'closed'",
+        "curators.0.rating": "curators.0.rating: Input should be less than or equal to 5",
+        "provenance.manual_curation.source_key": (
+            "provenance.manual_curation.source_key: "
+            "String should have at least 1 character"
+        ),
+    }
 
 
 def test_missing_file_is_a_metadata_error(tmp_path):

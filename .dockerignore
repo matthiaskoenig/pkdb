@@ -14,7 +14,10 @@
 !python/pyproject.toml
 !python/README.md
 !python/LICENSE
+!python/hatch_build.py
 !python/src
 !python/src/**
+# Built by npm run build:curation; the server image does not ship the curation app.
+python/src/pkdb/curation/static
 **/__pycache__
 **/*.pyc

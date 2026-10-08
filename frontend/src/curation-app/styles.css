@@ -1,0 +1,435 @@
+@import "../styles/base.css";
+h1 {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+/* Aligned with the 16px padding of the page content. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 16px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.brand {
+  color: rgb(var(--v-theme-on-surface));
+}
+/* The status colors of the theme are too light for text on a light surface: tinted chips and
+   alerts keep the color for their tint and icon and show their text in the surface color. */
+.status-chip .v-chip__content,
+.status-alert .v-alert__content {
+  color: rgb(var(--v-theme-on-surface));
+}
+/* In the dark theme the light error color tints a chip at the default opacity almost like a
+   neutral chip: it gets a stronger tint, under which the text keeps more than 7:1. */
+.v-theme--dark .status-chip.text-error > .v-chip__underlay {
+  opacity: 0.24;
+}
+/* Filter chips with the count of what each one shows. The group adds its own margins around
+   the chips; the gap of the filters is enough. */
+.filter-chips .v-slide-group__content {
+  margin: 0;
+  padding: 0;
+}
+.chip-count {
+  margin-inline-start: 8px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* Header */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin-inline-end: 8px;
+}
+.header-control .v-btn__content {
+  min-width: 0;
+}
+.header-control-label {
+  margin-inline-end: 8px;
+}
+/* Buttons keep their width; the folder name of the workspace shrinks when the header is full. */
+.header-workspace {
+  flex-shrink: 1;
+  max-width: 20rem;
+}
+@media (max-width: 1279.98px) {
+  .header-controls .header-control-label {
+    display: none;
+  }
+}
+
+/* Menus of the header and the collapsed header. */
+.header-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(380px, calc(100vw - 24px));
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 16px;
+}
+.header-menu h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.header-menu p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.panel-note {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.panel-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.panel-facts dt {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.panel-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+/* In a dialog on a phone, each fact stands below its name, so that a server address keeps its
+   line. */
+@media (max-width: 599.98px) {
+  .v-dialog .panel-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .v-dialog .panel-facts dd + dt {
+    margin-top: 8px;
+  }
+}
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.header-panel {
+  gap: 4px;
+  padding: 8px;
+}
+.header-panel .header-control {
+  justify-content: flex-start;
+  width: 100%;
+}
+.header-panel .header-control .v-btn__content {
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+.header-panel .v-divider {
+  margin: 4px 0;
+}
+
+/* Dialogs: the actions keep the side padding of the dialog content. */
+.dialog-actions {
+  padding: 0 24px 24px;
+}
+
+/* Metadata form: lists of rows with a heading, and the marks of a reload. */
+.field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* A list that changed on disk at the last reload has a bar at its start. */
+.field-block--disk,
+.field-block--conflict {
+  padding-inline-start: 12px;
+  border-inline-start: 3px solid rgb(var(--v-theme-info));
+}
+.field-block--conflict {
+  border-inline-start-color: rgb(var(--v-theme-warning));
+}
+.field-heading {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.field-mark,
+.field-mark-inline,
+.field-note,
+.field-empty,
+.field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.field-mark,
+.field-mark-inline {
+  font-weight: 600;
+}
+.field-mark-inline {
+  margin-inline-start: 8px;
+}
+/* The button that takes the disk version of a field follows its message, or goes below it in a
+   narrow column. */
+.v-input__details:has(.disk-version) {
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 12px;
+}
+.v-input__details:has(.disk-version) .v-messages {
+  flex: 1 1 16rem;
+}
+/* The mark of a list that changed on both sides, with the button that takes the disk version. */
+.field-mark-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 12px;
+}
+.field-note,
+.field-empty {
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
+.field-error {
+  color: rgb(var(--v-theme-error));
+}
+.row-add {
+  align-self: flex-start;
+}
+/* A text area grows with its text up to ten lines. Where browsers size fields by content, CSS
+   does it; elsewhere the components turn on Vuetify's auto-grow (see fieldSizing.ts). */
+@supports (field-sizing: content) {
+  .grow-textarea textarea {
+    field-sizing: content;
+    min-height: calc(2lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
+    max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
+    resize: none;
+  }
+}
+/* Messages of fields that wrap keep their lines apart. */
+.v-input .v-messages__message {
+  line-height: 1.35;
+}
+
+/* Tabs that scroll: a tab cut at an edge with more tabs beyond fades out, so that it reads as a
+   hint of the tabs beyond, not as a broken tab. */
+.scroll-tabs:has(.v-slide-group__prev:not(.v-slide-group__prev--disabled)) {
+  --tabs-fade-start: transparent;
+}
+.scroll-tabs:has(.v-slide-group__next:not(.v-slide-group__next--disabled)) {
+  --tabs-fade-end: transparent;
+}
+.scroll-tabs .v-slide-group__container {
+  mask-image: linear-gradient(
+    to right,
+    var(--tabs-fade-start, #000),
+    #000 24px,
+    #000 calc(100% - 24px),
+    var(--tabs-fade-end, #000)
+  );
+}
+
+/* Problems: the parts of an issue and of an acknowledged warning. */
+.problem-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.problem-code {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.problem-message {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+/* A fact has an icon in a 1rem column and its text 8 px after it. */
+.problem-fact {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.problem-icon {
+  width: 1rem;
+  flex: 0 0 auto;
+  text-align: center;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+/* The issues of a file, in the Problems and the Sources sections. */
+/* A file is a card: its name in a bar, then its issues apart by a line. */
+.problem-group {
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background-color: rgb(var(--v-theme-surface));
+}
+.problem-group-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background-color: rgba(var(--v-theme-on-surface), 0.04);
+}
+/* The counts go below a long file name, and an action stays at the end of the bar. */
+.problem-group-title {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  min-width: 0;
+}
+.problem-file {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.problem-group-counts {
+  font-size: 0.8125rem;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.problem-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The frame of a figure, a plot or the image of a source: the line and the corners of the tables
+   beside them. It sits inside the box, so that frames and tables line up. */
+.figure-frame {
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background-color: rgb(var(--v-theme-surface));
+}
+/* An image of the paper keeps a white background in the dark theme. */
+.figure-frame--paper {
+  background-color: #fff;
+}
+
+/* Rows of a table in a region of their own, such as the rows of a review target or of a source.
+   At most about twelve rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
+   the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
+   them at the start and the end. */
+.rows-scroll {
+  --cover: rgb(var(--v-theme-surface));
+  --cover-clear: rgba(var(--v-theme-surface), 0);
+  --shade: rgba(var(--v-theme-on-surface), 0.2);
+  max-height: var(--rows-max-height, 420px);
+  overflow: auto;
+  /* A region scrolled into view stays clear of the app bar, or of more with --rows-scroll-margin. */
+  scroll-margin-top: var(--rows-scroll-margin, 80px);
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background:
+    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) left center / 14px 100% no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    var(--cover);
+}
+.rows-table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.8125rem;
+}
+.rows-table th,
+.rows-table td {
+  height: 32px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  text-align: start;
+  white-space: nowrap;
+}
+.rows-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.rows-table thead th {
+  font-weight: 600;
+}
+/* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
+   sides show in the rows below it. The cells have no background, so that the shadows show
+   through. A tall region has the sticky header from the start, a table grid once its rows have
+   scrolled below the header. */
+.rows-scroll--tall .rows-table thead th,
+.rows-scroll--stuck .rows-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(var(--v-theme-surface));
+}
+/* A table that spans its region with its columns as narrow as their cells: the last column takes
+   the rest of the width, so that a few columns stay together at the start. */
+.rows-table--packed {
+  width: 100%;
+}
+.rows-table--packed :is(th, td) {
+  width: 1px;
+}
+.rows-table--packed :is(th, td):last-child {
+  width: auto;
+}
+/* The line column stays in view while wide rows scroll. It covers the start of the region, so the
+   shadow and the cover of the start move to its right edge. */
+.rows-scroll--sticky-line {
+  --line-width: var(--rows-line-width, 4rem);
+  background:
+    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
+      local,
+    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) var(--line-width) center / 14px 100% no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    var(--cover);
+}
+.rows-scroll--sticky-line .rows-table .rows-line {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: var(--line-width);
+  min-width: var(--line-width);
+  max-width: var(--line-width);
+  border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background-color: rgb(var(--v-theme-surface));
+}
+.rows-scroll--sticky-line .rows-table thead .rows-line {
+  z-index: 2;
+}
+/* The line of a row in its file. */
+.rows-table .rows-line {
+  font-variant-numeric: tabular-nums;
+}
+.rows-table tbody .rows-line {
+  font-weight: 400;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}

@@ -7,6 +7,7 @@ from pkdb.schemas.review import ReviewTarget
 from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.review_edit import (
+    ANY,
     ApprovalRefused,
     ReviewError,
     acknowledge,
@@ -22,7 +23,7 @@ from pkdb.studyformat.review_edit import (
     warning_locations,
 )
 from pkdb.studyformat.revision import RevisionConflict
-from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.validation import Acknowledgement, acknowledged, validate_folder
 
 NOW = datetime(2026, 10, 6, 12, 0, tzinfo=UTC)
 PERSON = Author("curator")
@@ -101,6 +102,28 @@ def test_approval_refused_with_validation_errors(valid_study, sf_vocabulary):
     (valid_study / "Example_Fig1.png").unlink()  # missing_image is an error
     with pytest.raises(ApprovalRefused, match="error"):
         set_status(valid_study, PERSON, "approved", vocabulary=sf_vocabulary, now=NOW)
+
+
+def _refusal(folder, vocabulary) -> str:
+    with pytest.raises(ApprovalRefused) as refused:
+        set_status(folder, PERSON, "approved", vocabulary=vocabulary, now=NOW)
+    return str(refused.value)
+
+
+def test_approval_refusal_counts_the_open_items(valid_study, sf_vocabulary):
+    _, revision = add_item(valid_study, PERSON, kind="question", text="One?", now=NOW)
+    assert _refusal(valid_study, sf_vocabulary) == "1 review item is open"
+    add_item(
+        valid_study, PERSON, kind="question", text="Two?", revision=revision, now=NOW
+    )
+    assert _refusal(valid_study, sf_vocabulary) == "2 review items are open"
+
+
+def test_approval_refusal_counts_the_validation_errors(valid_study, sf_vocabulary):
+    (valid_study / "Example_Fig1.png").unlink()  # missing_image of timecourses_Fig1.tsv
+    assert _refusal(valid_study, sf_vocabulary) == "Validation has 1 error"
+    (valid_study / "Example_Fig2.png").unlink()  # missing_image of scatters_Fig2.tsv
+    assert _refusal(valid_study, sf_vocabulary) == "Validation has 2 errors"
 
 
 def _outside_range(folder, vocabulary):
@@ -286,6 +309,35 @@ def test_target_filter_adds_columns_until_it_matches_one_row(
     assert table.matching_lines(target.rows) == {row.line}
 
 
+def test_a_warning_off_a_data_table_row_is_acknowledged_in_its_whole_file(valid_study):
+    """The rule that `fileWideScope` of the curation app mirrors (problems.ts).
+
+    A warning without a line, or with a line in a file that is no data table, gets the
+    target of its file alone, and `acknowledged` matches that target with every warning of
+    the same code in the file, at any line and column. The app tells this in its dialog.
+    """
+    study = load_study(valid_study)
+    figure = "Example2020_Fig1.wpd.json"
+    no_line = make_issue("unknown_dataset", "A.", file=figure, severity="warning")
+    workbook_row = make_issue(
+        "unknown_dataset", "B.", file="Example2020.xlsx", line=4, severity="warning"
+    )
+    raw_row = make_issue(
+        "unknown_dataset", "C.", file="Example2020_Tab2.tsv", line=3, severity="warning"
+    )
+    for issue in (no_line, workbook_row, raw_row):
+        assert issue.source is not None
+        assert target_for_issue(study, issue) == ReviewTarget(file=issue.source.file)
+    targets = {"unknown_dataset": [Acknowledgement(file=figure)]}
+    elsewhere = make_issue(
+        "unknown_dataset", "D.", file=figure, line=7, header="x", severity="warning"
+    )
+    other_code = make_issue("digitized_mismatch", "E.", file=figure, severity="warning")
+    assert acknowledged(no_line, targets)
+    assert acknowledged(elsewhere, targets)
+    assert not acknowledged(other_code, targets)
+
+
 def test_matching_warnings_and_their_locations():
     table = "timecourses_Fig1.tsv"
     at_mean = make_issue(
@@ -322,3 +374,21 @@ def test_matching_warnings_and_their_locations():
     file_level = matching_warnings(issues, "unknown_dataset", "Example_Fig1.wpd.json")
     assert file_level == project
     assert warning_locations(file_level) == {(None, None)}
+
+
+def test_matching_warnings_without_a_line_or_column():
+    table = "outputs_Tab2.tsv"
+    whole = make_issue("outside_range", "Whole.", file=table, severity="warning")
+    row = make_issue("outside_range", "Row.", file=table, line=3, severity="warning")
+    cell = make_issue(
+        "outside_range", "Cell.", file=table, line=3, header="mean", severity="warning"
+    )
+    issues = [whole, row, cell]
+    # None is exact: no line, or no column.
+    assert matching_warnings(issues, "outside_range", table, None, None) == [whole]
+    assert matching_warnings(issues, "outside_range", table, 3, None) == [row]
+    assert matching_warnings(issues, "outside_range", table, None, ANY) == [whole]
+    # ANY, the default, matches every line or column.
+    assert matching_warnings(issues, "outside_range", table, 3, ANY) == [row, cell]
+    assert matching_warnings(issues, "outside_range", table) == issues
+    assert matching_warnings(issues, "outside_range", table, ANY, None) == [whole, row]

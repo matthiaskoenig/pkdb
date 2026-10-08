@@ -543,6 +543,7 @@ def _review_status(args, folder: Path, author) -> int:
 
 def _review_acknowledge(args, folder: Path, author) -> int:
     from pkdb.studyformat.review_edit import (
+        ANY,
         acknowledge,
         matching_warnings,
         warning_locations,
@@ -553,12 +554,13 @@ def _review_acknowledge(args, folder: Path, author) -> int:
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 1
+    # An option that is left out matches every line or column.
     matches = matching_warnings(
         validate_folder(folder, vocabulary).issues,
         args.code,
         args.file,
-        args.line,
-        args.column,
+        ANY if args.line is None else args.line,
+        ANY if args.column is None else args.column,
     )
     # One item acknowledges the warnings of one location: same row and column.
     locations = warning_locations(matches)

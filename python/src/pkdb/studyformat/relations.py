@@ -493,9 +493,10 @@ def _review_rules(study: LoadedStudy) -> Issues:
         return
     open_items = sum(item.state == "open" for item in review.items)
     if review.status == "approved" and open_items:
+        verb = "is" if open_items == 1 else "are"
         yield make_issue(
             "approved_with_open_items",
-            f"A study can only be approved when no review item is open; {open_items} are open",
+            f"A study can only be approved when no review item is open; {open_items} {verb} open",
             file=REVIEW_JSON,
             field="status",
         )

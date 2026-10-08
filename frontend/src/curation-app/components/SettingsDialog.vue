@@ -1,0 +1,208 @@
+<script setup lang="ts">
+import { computed, reactive, ref, useId, watch } from "vue";
+import {
+  VAlert,
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardItem,
+  VCardText,
+  VCardTitle,
+  VDialog,
+  VSpacer,
+  VSwitch,
+  VTextField,
+} from "vuetify/components";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useOverviewStore, type Settings } from "../stores/overview";
+import { messageOf } from "../study";
+
+const open = defineModel<boolean>({ default: false });
+const props = defineProps<{
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
+
+const overview = useOverviewStore();
+const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
+/** The settings when the dialog opened, to send only what the curator changed. */
+const initial = { endpoint: "", user: "", offline: false };
+const form = reactive({ endpoint: "", user: "", offline: false });
+// Write-only: the key never comes from the server and leaves this field on submit and on close.
+const apiKey = ref("");
+const busy = ref(false);
+const removing = ref(false);
+const error = ref<string | null>(null);
+
+const keyHint = computed(() =>
+  overview.snapshot?.authenticated ? "A key is set. Leave this empty to keep it." : "No key is set.",
+);
+
+function prefill(): void {
+  const snapshot = overview.snapshot;
+  initial.endpoint = form.endpoint = snapshot?.endpoint ?? "";
+  initial.user = form.user = snapshot?.user ?? "";
+  initial.offline = form.offline = snapshot?.offline ?? false;
+  apiKey.value = "";
+  error.value = null;
+}
+
+/** The changed settings, and the API key when one was typed. */
+function changes(): Settings {
+  const settings: Settings = {};
+  const endpoint = form.endpoint.trim();
+  const user = form.user.trim();
+  if (endpoint !== initial.endpoint) settings.endpoint = endpoint;
+  if (user !== initial.user) settings.user = user;
+  if (form.offline !== initial.offline) settings.offline = form.offline;
+  const key = apiKey.value.trim();
+  if (key) settings.api_key = key;
+  return settings;
+}
+
+/** Remove the API key from pkdb curate; the dialog stays open with the other settings. */
+async function removeKey(): Promise<void> {
+  removing.value = true;
+  error.value = null;
+  try {
+    await overview.configure({ api_key: "" });
+    apiKey.value = "";
+  } catch (caught) {
+    error.value = messageOf(caught);
+  } finally {
+    removing.value = false;
+  }
+}
+
+async function submit(): Promise<void> {
+  const settings = changes();
+  apiKey.value = "";
+  if (Object.keys(settings).length === 0) {
+    open.value = false;
+    return;
+  }
+  busy.value = true;
+  error.value = null;
+  try {
+    await overview.configure(settings);
+    open.value = false;
+  } catch (caught) {
+    error.value = messageOf(caught);
+  } finally {
+    busy.value = false;
+  }
+}
+
+watch(
+  open,
+  (value) => {
+    if (value) prefill();
+    else apiKey.value = "";
+  },
+  { immediate: true },
+);
+</script>
+
+<template>
+  <VDialog v-model="open" max-width="560" :aria-labelledby="titleId">
+    <form @submit.prevent="submit">
+      <VCard>
+        <VCardItem>
+          <VCardTitle :id="titleId" tag="h2">Connection settings</VCardTitle>
+        </VCardItem>
+        <VCardText class="settings-fields">
+          <VAlert
+            v-if="overview.snapshot?.author.reason"
+            type="warning"
+            variant="tonal"
+            density="compact"
+            class="status-alert"
+          >
+            {{ overview.snapshot.author.reason }}
+          </VAlert>
+          <VTextField
+            v-model="form.endpoint"
+            label="PK-DB server"
+            type="url"
+            placeholder="https://beta.pk-db.com"
+            autocomplete="url"
+            spellcheck="false"
+            hint="Checks and uploads go to this server."
+            persistent-hint
+          />
+          <VTextField
+            v-model="form.user"
+            label="PK-DB user"
+            autocomplete="username"
+            spellcheck="false"
+            hint="With an API key, the server checks this user."
+            persistent-hint
+          />
+          <VTextField
+            v-model="apiKey"
+            label="Personal API key"
+            type="password"
+            autocomplete="new-password"
+            spellcheck="false"
+            :hint="keyHint"
+            persistent-hint
+            class="settings-key"
+          >
+            <template v-if="overview.snapshot?.authenticated" #details>
+              <VBtn
+                variant="text"
+                size="small"
+                density="compact"
+                color="primary"
+                class="settings-key-remove"
+                :loading="removing"
+                @click="removeKey"
+              >
+                Remove key
+              </VBtn>
+            </template>
+          </VTextField>
+          <VSwitch v-model="form.offline" label="Work offline" color="primary" hide-details inset />
+          <p class="settings-note">
+            Offline, pkdb curate sends no network requests. It keeps the API key in memory only, and the browser
+            never stores it.
+          </p>
+          <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+        </VCardText>
+        <VCardActions class="dialog-actions">
+          <VSpacer />
+          <VBtn variant="text" @click="open = false">Cancel</VBtn>
+          <VBtn type="submit" variant="flat" color="primary" :loading="busy">Save settings</VBtn>
+        </VCardActions>
+      </VCard>
+    </form>
+  </VDialog>
+</template>
+
+<style scoped>
+.settings-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.settings-fields :deep(.v-messages__message) {
+  line-height: 1.35;
+}
+/* Remove key shares the baseline of the hint, and its box ends with the field. The row lets
+   the focus ring of the button show. */
+.settings-key :deep(.v-input__details) {
+  align-items: baseline;
+  overflow: visible;
+}
+.settings-key-remove {
+  flex: none;
+  margin-inline-end: -16px;
+  padding-inline: 8px;
+}
+.settings-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+</style>

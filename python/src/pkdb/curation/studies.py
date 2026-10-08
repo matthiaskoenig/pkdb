@@ -12,7 +12,8 @@ import hashlib
 import json
 import os
 import stat
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
@@ -36,12 +37,19 @@ from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_meta
 from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import (
+    ANY,
+    NoSuchWarning,
     ReviewError,
     matching_warnings,
     read_review,
     warning_locations,
 )
-from pkdb.studyformat.revision import folder_lock, read_revision, revision_of
+from pkdb.studyformat.revision import (
+    RevisionConflict,
+    folder_lock,
+    read_revision,
+    revision_of,
+)
 from pkdb.studyformat.sources import source_view, study_sources
 from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_study
 from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
@@ -62,12 +70,16 @@ class UnsafeFile(ValueError):
 
 
 class AmbiguousStudy(ValueError):
-    """Two folders of the workspace have the same identity `<substance>/<name>`."""
+    """Two or more folders of the workspace have the same identity `<substance>/<name>`."""
 
     def __init__(self, identity: str, paths: list[str]):
+        two = len(paths) == 2
         super().__init__(
-            f"{identity} is the identity of two folders: {', '.join(paths)}; rename one"
+            f"{identity} is the identity of {'two' if two else len(paths)} folders: "
+            f"{', '.join(paths)}; {'rename one' if two else 'rename all but one'}"
         )
+        # The folders relative to the workspace, for the app to list.
+        self.paths = paths
 
 
 def _read(path: Path) -> object | None:
@@ -319,6 +331,17 @@ class StudiesMixin(EngineState):
             raise AmbiguousStudy(identity, [row["path"] for row in matches])
         return matches[0]
 
+    def _study_jobs(self, identity: str) -> list[dict]:
+        """The jobs of a study of the current workspace, oldest first, with those saved without
+        their workspace by an earlier version. Called with the engine lock held."""
+        workspace = str(self.root)
+        return [
+            job
+            for job in self.jobs
+            if job["study_id"] == identity
+            and job.get("workspace", workspace) == workspace
+        ]
+
     def study_folder(self, identity: str) -> Path:
         with self.lock:
             folder, root = self._study_row(identity)["_folder"], self.root
@@ -342,7 +365,7 @@ class StudiesMixin(EngineState):
                 "issue": self._issue_for(row["summary"].get("issue")),
                 "message": row.get("message"),
                 "last_upload": row["last_upload"],
-                "jobs": [job for job in self.jobs if job["study_id"] == identity],
+                "jobs": self._study_jobs(identity),
             }
             data = json.dumps(key, sort_keys=True, default=str).encode()
         _unlinked(folder, root)
@@ -368,11 +391,7 @@ class StudiesMixin(EngineState):
                         "problems": row["problems"],
                         "message": row.get("message"),
                         "last_upload": row["last_upload"],
-                        "jobs": [
-                            job
-                            for job in reversed(self.jobs)
-                            if job["study_id"] == identity
-                        ],
+                        "jobs": self._study_jobs(identity)[::-1],
                         "report_id": row["report_id"],
                     }
                 )
@@ -480,15 +499,28 @@ class StudiesMixin(EngineState):
             return stream.read(), media_type
 
     def _rescan(self) -> None:
-        """Rescan after a write, so that the study ETag changes at once.
+        """Rescan, so that the study ETag changes at once after a write or a stale write.
 
-        The write succeeded; a failed scan is left to the watcher, which retries every second.
+        A failed scan is left to the watcher, which retries every second.
         """
         try:
             self.scan()
         except Exception:
             # Nothing is logged, since errors can carry paths and settings.
             pass
+
+    @contextmanager
+    def _rescanned_on_conflict(self) -> Iterator[None]:
+        """Rescan when a write finds its file changed on disk since the app read it.
+
+        The study page loads the study after the conflict; without the scan, its ETag would
+        still be the one of the old file until the watcher notices the change.
+        """
+        try:
+            yield
+        except RevisionConflict:
+            self._rescan()
+            raise
 
     def write_metadata(self, identity: str, revision: str, metadata: dict) -> dict:
         """Write `study.json`; a changed PubMed ID or DOI refreshes `reference.json`.
@@ -507,9 +539,13 @@ class StudiesMixin(EngineState):
                 validation_issues(error, STUDY_JSON, study_metadata.CODE)
             ) from None
         _writable(folder, STUDY_JSON, MetadataError)
-        written = study_metadata.write_metadata(
-            folder, model, revision, resolver=ReferenceResolver(offline=self.offline)
-        )
+        with self._rescanned_on_conflict():
+            written = study_metadata.write_metadata(
+                folder,
+                model,
+                revision,
+                resolver=ReferenceResolver(offline=self.offline),
+            )
         self._record_write(identity, "Saved study.json")
         self._rescan()
         return {
@@ -528,7 +564,8 @@ class StudiesMixin(EngineState):
         revision = _text(payload, "revision")
         _writable(folder, REVIEW_JSON, _review_error)
         try:
-            result = self._review_change(folder, author, revision, payload)
+            with self._rescanned_on_conflict():
+                result = self._review_change(folder, author, revision, payload)
         except ValidationError as error:
             # A new item, target or reply that the review model refuses.
             raise _review_error(
@@ -600,15 +637,21 @@ class StudiesMixin(EngineState):
     def _acknowledge(
         self, folder: Path, author: Author, revision: str, payload: dict
     ) -> dict:
-        """Acknowledge the warnings of one location, as `pkdb review acknowledge` does."""
+        """Acknowledge the warnings of one location, as `pkdb review acknowledge` does.
+
+        A `line` or `column` of null matches only warnings without one; a left out one
+        matches every line or column, as an option left out of the command does.
+        """
         code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
         matches = matching_warnings(
             validate_folder(folder, self._local_vocabulary()).issues,
             code,
             file,
-            _line(payload),
-            _optional_text(payload, "column"),
+            _line(payload) if "line" in payload else ANY,
+            _optional_text(payload, "column") if "column" in payload else ANY,
         )
+        if not matches:
+            raise NoSuchWarning(f"No warning [{code}] in {file} matches")
         locations = warning_locations(matches)
         if len(locations) != 1:
             named = ", ".join(
@@ -620,8 +663,6 @@ class StudiesMixin(EngineState):
             raise ReviewError(
                 f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
                 "the line and column of one"
-                if matches
-                else f"No warning [{code}] in {file} matches"
             )
         item, revision = review_edit.acknowledge(
             folder, author, matches[0], text, revision=revision

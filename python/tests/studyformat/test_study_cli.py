@@ -168,7 +168,7 @@ def test_review_add_and_status_refusal_in_human_output(valid_study, reviewer, ca
     assert captured.out == ""
     assert "A person must approve a study" in captured.err
     assert main(status) == 1
-    assert "1 review items are open" in capsys.readouterr().err
+    assert "1 review item is open" in capsys.readouterr().err
 
 
 def test_review_refuses_writes_that_would_fail_validation(

@@ -8,7 +8,8 @@ FROM python-${PYTHON_VERSION} AS base
 FROM base AS build
 COPY --from=uv /uv /usr/local/bin/uv
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && rm -rf /var/lib/apt/lists/*
-ENV UV_PROJECT_ENVIRONMENT=/opt/venv UV_PYTHON=/usr/local/bin/python UV_PYTHON_DOWNLOADS=never UV_LINK_MODE=copy
+# The server never runs pkdb curate, so its pkdb wheel is built without the curation app.
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv UV_PYTHON=/usr/local/bin/python UV_PYTHON_DOWNLOADS=never UV_LINK_MODE=copy PKDB_BUILD_WITHOUT_CURATION_APP=1
 WORKDIR /build/backend
 COPY backend/pyproject.toml backend/uv.lock ./
 COPY python /build/python

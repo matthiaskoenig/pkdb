@@ -1,0 +1,7 @@
+study	source	subjects	measurement	calculation	substance	tissue	method	choice	time	time_unit	count	mean	sd	se	cv	gmean	gsd	gcv	median	min	max	unit	error_bar	error_type	comment
+Demo2020	Text	all	age								12	27	4									yr			
+Demo2020	Text	all	healthy					Y																	
+Demo2020	Text	all	sex					MF																	
+Demo2020	Text	all	smoking					N																	
+Demo2020	Text	all	species					homo sapiens																	
+Demo2020	Text	all	weight								12	71	8									kg			

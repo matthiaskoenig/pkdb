@@ -348,6 +348,13 @@ def test_approval_with_open_items_names_the_rule(make_study, valid_files):
     ]
 
 
+def test_approval_with_one_open_item_uses_the_singular(make_study, valid_files):
+    messages = review_messages(make_study, valid_files, {}, status="approved")
+    assert messages == [
+        "A study can only be approved when no review item is open; 1 is open"
+    ]
+
+
 def test_scatter_mixing_groups_and_individuals_is_reported_at_the_other_rows(
     make_study, valid_files, tsv
 ):

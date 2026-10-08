@@ -62,10 +62,14 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
       - run: uv build --python ${{ matrix.python }}
       - name: Install wheel in clean environment
+        env:
+          # The server environment does not ship the curation app; the client job builds it.
+          PKDB_BUILD_WITHOUT_CURATION_APP: '1'
         run: |
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
-          uv build --python ${{ matrix.python }} --project ../python --out-dir dist
-          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
+          # Kept apart from dist/, so no pkdb wheel without the app sits next to release files.
+          uv build --python ${{ matrix.python }} --project ../python --out-dir "$RUNNER_TEMP/pkdb-dist"
+          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl "$RUNNER_TEMP"/pkdb-dist/*.whl
           cd /tmp
           /tmp/pkdb-wheel/bin/python -c 'import pkdb, pkdb_server, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
       - uses: actions/upload-artifact@v7
@@ -92,7 +96,7 @@ jobs:
   client:
     name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -123,8 +127,38 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
+      # The wheel ships the curation app, which is built from frontend/.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build:curation
+        working-directory: frontend
+      # The curation app end to end in Chromium against the real `pkdb curate`, which the specs
+      # start with the Python of the uv environment on copies of tools/curation_testing/fixture.
+      - name: Install Chromium for the curation app tests
+        if: runner.os == 'Linux' && matrix.python == '3.14'
+        run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Test the curation app end to end
+        if: runner.os == 'Linux' && matrix.python == '3.14'
+        run: npm run test:curation-e2e
+        working-directory: frontend
+      - uses: actions/upload-artifact@v7
+        if: failure() && runner.os == 'Linux' && matrix.python == '3.14'
+        with:
+          name: curation-browser-failures
+          path: |
+            frontend/playwright-report/curation
+            frontend/test-results/curation
+          retention-days: 7
       - run: uv build --python ${{ matrix.python }}
-      - name: Verify isolated public wheel and CLI
+      - name: Verify isolated public wheel, sdist and CLI
         run: |
           uv venv --python ${{ matrix.python }} wheel-env
           if [ "$RUNNER_OS" = Windows ]; then
@@ -136,6 +170,9 @@ jobs:
           fi
           uv pip install --python "$PYTHON_BIN" dist/*.whl
           "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
+          "$PYTHON_BIN" -c "import importlib.resources as r; assert (r.files('pkdb.curation') / 'static' / 'index.html').is_file()"
+          # The sdist ships the app too: a stray PKDB_BUILD_WITHOUT_CURATION_APP would leave it out.
+          "$PYTHON_BIN" -c "import glob, tarfile; names = tarfile.open(*glob.glob('dist/pkdb-*.tar.gz')).getnames(); assert any(name.endswith('/src/pkdb/curation/static/index.html') for name in names), 'The sdist lacks the curation app'"
           "$PKDB_BIN" --help
       - uses: actions/upload-artifact@v7
         if: runner.os == 'Linux' && matrix.python == '3.14'

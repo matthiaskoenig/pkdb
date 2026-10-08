@@ -387,6 +387,46 @@ def _read_json(study: LoadedStudy, name: str) -> object:
         return _UNUSABLE
 
 
+# Plain messages for the patterns of study format 2 fields, which pydantic only names.
+PATTERN_MESSAGES = {
+    r"^[a-f0-9]{64}$": "A SHA-256 has 64 characters 0-9 and a-f.",
+    r"^[1-9][0-9]*$": "A PubMed ID has only digits and does not start with 0.",
+    r"^10\.\d{4,9}/\S+$": (
+        "A DOI is 10., 4 to 9 digits, a slash and a suffix without spaces, "
+        "such as 10.1007/BF00637675."
+    ),
+    r"^\S+$": "A user name has no spaces.",
+    r"^PKDB[0-9]{5}$": "A release ID is PKDB and five digits, such as PKDB00198.",
+}
+DATE_ERRORS = {
+    "date_type",
+    "date_parsing",
+    "date_from_datetime_parsing",
+    "date_from_datetime_inexact",
+}
+DATE_MESSAGE = "A date has the form YYYY-MM-DD, such as 2026-09-28."
+# An empty text of a list row of study.json, such as a description, and an empty user name.
+TEXT_MESSAGE = "Enter some text or remove this entry."
+USER_MESSAGE = "Enter a user name."
+
+
+def _plain_message(detail: Mapping, file: str) -> str:
+    """The message of a pydantic error, in plain words for patterns, dates and empty texts."""
+    if detail["type"] == "string_pattern_mismatch":
+        pattern = (detail.get("ctx") or {}).get("pattern")
+        if pattern in PATTERN_MESSAGES:
+            return PATTERN_MESSAGES[pattern]
+    if detail["type"] in DATE_ERRORS:
+        return DATE_MESSAGE
+    if file == STUDY_JSON and detail["type"] == "string_too_short" and detail["loc"]:
+        last = detail["loc"][-1]
+        if last in ("creator", "user"):
+            return USER_MESSAGE
+        if isinstance(last, int) or last == "text":
+            return TEXT_MESSAGE
+    return detail["msg"]
+
+
 def validation_issues(
     error: ValidationError, file: str, code: str
 ) -> list[ValidationIssue]:
@@ -404,7 +444,7 @@ def validation_issues(
         issues.append(
             make_issue(
                 code,
-                f"{path or file}: {detail['msg']}",
+                f"{path or file}: {_plain_message(detail, file)}",
                 file=file,
                 field=path or None,
             )

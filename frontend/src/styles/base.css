@@ -1,0 +1,71 @@
+/* Shared by the website and the local curation app. */
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+body {
+  margin: 0;
+}
+a {
+  text-underline-offset: 3px;
+}
+a:not(.v-btn) {
+  color: rgb(var(--v-theme-primary));
+}
+button,
+a,
+input,
+summary {
+  touch-action: manipulation;
+}
+:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 3px;
+}
+/* A focused text field shows a thick primary border instead of a ring: the notch of
+   the border keeps the floating label clear. An error field keeps its error color. */
+.v-field :is(input, textarea):focus-visible {
+  outline: none;
+}
+.v-field:has(:is(input, textarea):focus-visible) .v-field__outline {
+  --v-field-border-width: 3px;
+  --v-field-border-opacity: 1;
+}
+.v-field:not(.v-field--error):has(:is(input, textarea):focus-visible) .v-field__outline {
+  color: rgb(var(--v-theme-primary));
+}
+/* Vuetify shows placeholders at the disabled opacity, below 4.5:1. They still stay hidden
+   while the label of an empty, unfocused field sits in their place. */
+.v-field:is(.v-field--active, .v-field--no-label) :is(input, textarea)::placeholder {
+  color: rgba(var(--v-theme-on-surface), 0.58);
+  opacity: 1;
+}
+/* Vuetify dims field labels, the labels of radio groups and hints below the contrast of WCAG AA
+   in the light theme. */
+.v-field-label,
+.v-radio-group > .v-input__control > .v-label {
+  opacity: 1 !important;
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
+.v-input:not(.v-input--error, .v-input--disabled) .v-messages {
+  opacity: 1;
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
+.app-header {
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.brand-logo {
+  object-fit: contain;
+}
+.v-theme--dark .brand-logo {
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px;
+}

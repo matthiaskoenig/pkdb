@@ -51,7 +51,13 @@ import {
 } from "vuetify/components";
 import { Ripple } from "vuetify/directives";
 import { aliases, fa } from "vuetify/iconsets/fa";
-export function makeVuetify() {
+/**
+ * The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles, and
+ * `defaultTheme` sets the theme of the first paint (light by default).
+ */
+export function makeVuetify(
+  options: { cspNonce?: string | undefined; defaultTheme?: "light" | "dark" | "system" } = {},
+) {
   return createVuetify({
     components: {
       VAlert,
@@ -102,7 +108,9 @@ export function makeVuetify() {
     directives: { Ripple },
     icons: { defaultSet: "fa", aliases, sets: { fa } },
     theme: {
-      defaultTheme: "light",
+      // exactOptionalPropertyTypes: Vuetify accepts no explicit undefined.
+      ...(options.cspNonce ? { cspNonce: options.cspNonce } : {}),
+      defaultTheme: options.defaultTheme ?? "light",
       themes: {
         light: {
           colors: {
@@ -118,6 +126,12 @@ export function makeVuetify() {
             primary: "#79d5d6",
             background: "#101e23",
             surface: "#192b31",
+            // Vuetify's default (#cf6679) has 4.1:1 on the surface; field errors are text.
+            error: "#f28b82",
+            // Text on the error color, such as a flat error alert: 5.5:1; Vuetify picks white, 2.4:1.
+            "on-error": "#601410",
+            // The thumb of switches; Vuetify's default is lavender.
+            "surface-bright": "#dcefef",
           },
         },
       },

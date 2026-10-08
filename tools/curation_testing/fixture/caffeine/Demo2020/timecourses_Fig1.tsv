@@ -1,0 +1,19 @@
+study	source	label	subjects	interventions	measurement	calculation	substance	tissue	method	choice	time	time_unit	count	mean	sd	se	cv	gmean	gsd	gcv	median	min	max	unit	error_bar	error_type	comment
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			0.25	hr	12	1.48										mg/l	1.83	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			0.5	hr	12	1.97										mg/l	2.41	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			1	hr	12	2.1										mg/l	2.57	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			2	hr	12	1.87										mg/l	2.29	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			4	hr	12	1.24										mg/l	1.75	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			6	hr	12	1.07										mg/l	1.33	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			8	hr	12	0.81										mg/l	1.02	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			12	hr	12	0.47										mg/l	0.61	sd	
+Demo2020	Fig1	caf_plasma_100mg	all	D100	concentration		caffeine	plasma			24	hr	12	0.09										mg/l	0.16	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			0.25	hr	12	2.95										mg/l	3.59	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			0.5	hr	12	3.93										mg/l	4.77	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			1	hr	12	4.2										mg/l	5.09	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			2	hr	12	3.74										mg/l	4.54	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			4	hr	12	2.83										mg/l	3.45	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			6	hr	12	2.15										mg/l	2.63	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			8	hr	12	1.63										mg/l	2.01	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			12	hr	12	0.93										mg/l	1.17	sd	
+Demo2020	Fig1	caf_plasma_200mg	all	D200	concentration		caffeine	plasma			24	hr	12	0.18										mg/l	0.27	sd	

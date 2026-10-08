@@ -11,13 +11,15 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
+from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
+from pkdb.curation.state import THEMES
 from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat.metadata import MetadataError
-from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
+from pkdb.studyformat.review_edit import ReviewError
 from pkdb.studyformat.revision import RevisionConflict
 
 MAX_BODY = 1024 * 1024
@@ -26,6 +28,9 @@ DRAIN_LIMIT = 4 * MAX_BODY
 ASSETS = Path(__file__).parent / "static"
 AVATARS = Path(__file__).parent / "avatars"
 NONCE_PLACEHOLDER = b"__PKDB_NONCE__"
+# The theme of the state in the `pkdb-theme` meta tag of index.html, which the app reads before
+# it mounts, so that its first paint has the theme that the curator chose.
+THEME_PLACEHOLDER = b"__PKDB_THEME__"
 
 
 def _csp(nonce: str | None) -> str:
@@ -81,6 +86,9 @@ class CurationServer(ThreadingHTTPServer):
         self.csrf_token = secrets.token_urlsafe(32)
         super().__init__(("127.0.0.1", port), Handler)
         self.origin = f"http://127.0.0.1:{self.server_port}"
+        # A browser keeps the cookies of 127.0.0.1 for all ports: the name of the session
+        # cookie has the port, so that two instances keep separate sessions.
+        self.cookie_name = f"pkdb_curation_{self.server_port}"
         self.launch_url = f"{self.origin}/#token={self.bootstrap_token}"
 
     def server_close(self):
@@ -186,7 +194,7 @@ class Handler(BaseHTTPRequestHandler):
             cookie.load(self.headers.get("Cookie", ""))
         except Exception:
             pass
-        value = cookie.get("pkdb_curation")
+        value = cookie.get(self.server.cookie_name)
         if not value or not _matches(value.value, self.server.session_token):
             self._reply(401, {"error": "Open the launch URL printed in your terminal"})
             return False
@@ -227,7 +235,7 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:
-                self._reply(409, {"error": str(error)})
+                self._reply(409, {"error": str(error), "paths": error.paths})
             except StudyValidationError as error:
                 # The study is beyond the upload limits.
                 self._reply(413, {"error": str(error)})
@@ -253,7 +261,10 @@ class Handler(BaseHTTPRequestHandler):
         data, nonce = asset.read_bytes(), None
         if root is ASSETS and asset == (ASSETS / "index.html").resolve():
             nonce = secrets.token_urlsafe(16)
-            data = data.replace(NONCE_PLACEHOLDER, nonce.encode())
+            theme = getattr(self.server.engine, "theme", None)
+            data = data.replace(NONCE_PLACEHOLDER, nonce.encode()).replace(
+                THEME_PLACEHOLDER, (theme if theme in THEMES else "system").encode()
+            )
         self._reply(200, data, content_type=content_type, nonce=nonce)
 
     def do_POST(self):
@@ -293,7 +304,7 @@ class Handler(BaseHTTPRequestHandler):
                 self._reply(
                     200,
                     {"csrf_token": self.server.csrf_token},
-                    cookie=f"pkdb_curation={self.server.session_token}; HttpOnly; SameSite=Strict; Path=/",
+                    cookie=f"{self.server.cookie_name}={self.server.session_token}; HttpOnly; SameSite=Strict; Path=/",
                 )
                 return
             result = self._action(path, payload)
@@ -311,8 +322,8 @@ class Handler(BaseHTTPRequestHandler):
             )
         except (MetadataError, ReviewError) as error:
             refused = (
-                {"code": "approval_refused"}
-                if isinstance(error, ApprovalRefused)
+                {"code": error.code}
+                if isinstance(error, ReviewError) and error.code
                 else {}
             )
             self._reply(
@@ -328,8 +339,8 @@ class Handler(BaseHTTPRequestHandler):
         except IdentityError as error:
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:
-            self._reply(409, {"error": str(error)})
-        except (ReferenceError, WorkspaceError, UnsafeFile) as error:
+            self._reply(409, {"error": str(error), "paths": error.paths})
+        except (ReferenceError, WorkspaceError, UnsafeFile, ResumeRefused) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
             self._reply(404, {"error": "Unknown resource or study"})
@@ -406,6 +417,7 @@ class Handler(BaseHTTPRequestHandler):
                 "github_user",
                 "offline",
                 "repository",
+                "theme",
             }:
                 raise ValueError("Unknown setting")
             return engine.configure(**body)

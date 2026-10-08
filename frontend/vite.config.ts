@@ -68,6 +68,10 @@ export default defineConfig(({ mode }) => {
         ),
       ),
     },
-    build: { sourcemap: false },
+    build: {
+      sourcemap: false,
+      // plotly.js-dist-min is one prebuilt 4.6 MB chunk that loads lazily and cannot be split.
+      chunkSizeWarningLimit: 5000,
+    },
   };
 });

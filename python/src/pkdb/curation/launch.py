@@ -41,11 +41,19 @@ def run(
     no_browser=False,
     state_dir=None,
 ):
+    from pkdb.curation import server as transport
     from pkdb.curation.engine import CurationEngine
-    from pkdb.curation.server import create_server
 
     if not 0 <= port <= 65535:
         raise ValueError("Port must be between 0 and 65535")
+    if not (transport.ASSETS / "index.html").is_file():
+        # A source checkout without `npm run build:curation`; release wheels ship the app.
+        print(
+            "The curation app is not built. "
+            "Run npm ci and npm run build:curation in frontend/.",
+            file=sys.stderr,
+        )
+        return 1
     engine = CurationEngine(
         path=path,
         endpoint=endpoint,
@@ -57,7 +65,7 @@ def run(
         api_key=os.environ.get("PKDB_API_KEY"),
     )
     try:
-        server = create_server(engine, port)
+        server = transport.create_server(engine, port)
     except Exception:
         engine.close()
         raise

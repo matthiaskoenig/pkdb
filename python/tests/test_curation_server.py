@@ -22,6 +22,7 @@ def local_server(tmp_path, monkeypatch):
     assets = tmp_path / "static"
     assets.mkdir()
     (assets / "index.html").write_text(
+        '<meta name="pkdb-theme" content="__PKDB_THEME__">'
         '<h1>Local curation</h1><style nonce="__PKDB_NONCE__"></style>'
     )
     (assets / "app.js").write_text("console.log('loaded')")
@@ -59,6 +60,32 @@ def test_browser_bootstrap_and_actions(local_server):
         == 200
     )
     engine.enqueue.assert_called_once_with(["abc"], "validate")
+
+
+def test_two_servers_on_other_ports_keep_their_own_sessions(local_server):
+    first, _ = local_server
+    engine = Mock()
+    engine.snapshot.return_value = {"studies": []}
+    second = transport.create_server(engine)
+    thread = threading.Thread(target=second.serve_forever, daemon=True)
+    thread.start()
+    try:
+        cookies = [authenticate(server)["Cookie"] for server in (first, second)]
+        names = [cookie.split("=", 1)[0] for cookie in cookies]
+        assert names == [
+            f"pkdb_curation_{first.server_port}",
+            f"pkdb_curation_{second.server_port}",
+        ]
+        # A browser keeps the cookies of 127.0.0.1 for every port and sends them all.
+        both = {"Cookie": "; ".join(cookies)}
+        assert request(first, "GET", "/local/state", headers=both)[0] == 200
+        assert request(second, "GET", "/local/state", headers=both)[0] == 200
+        other = {"Cookie": cookies[1].replace(names[1], names[0])}
+        assert request(first, "GET", "/local/state", headers=other)[0] == 401
+    finally:
+        second.shutdown()
+        second.server_close()
+        thread.join(timeout=3)
 
 
 def test_host_origin_and_csrf_rejected(local_server):
@@ -118,6 +145,10 @@ def test_payload_limits_paths_and_errors(local_server):
         == 200
     )
     engine.configure.assert_called_with(user="curator")
+    assert (
+        request(server, "POST", "/local/settings", {"theme": "dark"}, headers)[0] == 200
+    )
+    engine.configure.assert_called_with(theme="dark")
     engine.enqueue.side_effect = RuntimeError("secret-api-key")
     status, _, body = request(
         server, "POST", "/local/jobs", {"ids": [], "action": "upload"}, headers
@@ -137,6 +168,24 @@ def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     assert "shell" not in runner.call_args.kwargs
     open_path(file, reveal=True)
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
+
+
+def test_curate_exits_with_an_instruction_without_built_assets(
+    tmp_path, monkeypatch, capsys
+):
+    from pkdb.curation import launch
+
+    monkeypatch.setattr(transport, "ASSETS", tmp_path / "static")
+    engine = Mock(side_effect=AssertionError("The engine must not start"))
+    monkeypatch.setattr("pkdb.curation.engine.CurationEngine", engine)
+    assert launch.run(tmp_path, offline=True, no_browser=True) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == (
+        "The curation app is not built. "
+        "Run npm ci and npm run build:curation in frontend/.\n"
+    )
+    engine.assert_not_called()
 
 
 def test_curate_cli_routes_options(monkeypatch):
@@ -290,6 +339,24 @@ def test_index_gets_a_fresh_style_nonce_per_response(local_server):
     assert "unsafe-inline" not in headers["Content-Security-Policy"]
 
 
+def test_index_carries_the_theme_of_the_state_for_the_first_paint(local_server):
+    server, engine = local_server
+    # A new port is a new origin without the choice in its storage: the page brings it.
+    for theme in ("dark", "light", "system"):
+        engine.theme = theme
+        status, headers, data = request(server, "GET", "/")
+        assert status == 200
+        assert f'<meta name="pkdb-theme" content="{theme}">'.encode() in data
+        assert "unsafe-inline" not in headers["Content-Security-Policy"]
+    # Only the three themes reach the page.
+    engine.theme = '"><script>alert(1)</script>'
+    data = request(server, "GET", "/")[2]
+    assert b'<meta name="pkdb-theme" content="system">' in data
+    assert b"<script>" not in data
+    del engine.theme
+    assert b'content="system"' in request(server, "GET", "/")[2]
+
+
 def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
@@ -341,9 +408,26 @@ def test_folder_browsing_and_recent_workspace_actions(local_server):
     assert request(server, "POST", "/local/directories", {"path": 3}, headers)[0] == 400
 
 
-def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
+def test_a_refused_resume_reports_its_reason(local_server):
+    from pkdb.curation.jobs import ResumeRefused
+
+    server, engine = local_server
+    reason = "The upload of caffeine/Example has an unknown outcome."
+    engine.resume.side_effect = ResumeRefused(reason)
+    status, _, body = request(server, "POST", "/local/resume", {}, authenticate(server))
+    assert status == 400
+    assert json.loads(body)["error"] == reason
+
+
+def test_curate_cli_explains_missing_workspace(tmp_path, capsys, monkeypatch):
     from pkdb.cli import main
 
+    # A built app, so that the check of the workspace runs whether or not
+    # `npm run build:curation` has run in this checkout.
+    assets = tmp_path / "static"
+    assets.mkdir()
+    (assets / "index.html").write_text("<h1>Local curation</h1>")
+    monkeypatch.setattr(transport, "ASSETS", assets)
     missing = tmp_path / "missing"
     assert (
         main(

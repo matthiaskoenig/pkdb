@@ -1,0 +1,4 @@
+study	source	name	subjects	measurement	calculation	substance	tissue	method	choice	route	form	application	time	time_end	interval	doses	time_unit	count	mean	sd	se	cv	gmean	gsd	gcv	median	min	max	unit	error_bar	error_type	comment
+Demo2020	Text	D100		dosing		caffeine				oral	capsule	single dose	0				hr		100										mg			
+Demo2020	Text	D200		dosing		caffeine				oral	capsule	single dose	0				hr		200										mg			
+Demo2020	Text	D400		dosing		caffeine				oral	capsule	single dose	0				hr		400										mg			

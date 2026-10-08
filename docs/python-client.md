@@ -81,7 +81,7 @@ Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pk
 
 ## Prepare, validate, and upload a study folder
 
-The development version includes a [local curation app](local-curation.md) with file watching, external file opening, and validation/upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
+The development version includes a [local curation app](local-curation.md) for study format 2 folders: forms for the metadata and the review items, the sources and tables side by side, file watching, and validation or upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
 
 Pass the existing study directory from `pkdb_data` directly. Keep its original `study.json`, `reference.json`, workbooks, tables, and attachments together. The directory name must match the study's name. The parser understands existing spreadsheet sheet names, second-row workbook headers, `col==...` expressions, and TSV sources; no intermediate conversion is needed. A folder whose `study.json` contains `"format": 2` is a [study format 2](study-format.md) folder; `prepare`, `validate`, and `upload` accept both formats, and for study format 2 the folder is located as `<substance>/<name>` (for example `studies/caffeine/Harder1988`).
 
@@ -127,7 +127,7 @@ Permission feedback includes a stable `code`, explanatory message, and correctio
 
 ## TSV tables from the study workbook
 
-`pkdb prepare`, `validate`, and `upload`, as well as validation and upload in the local curation app, first write each non-empty `Tab…` or `Fig…` sheet of `<Study>/<Study>.xlsx` to a hidden `.<Study>_<Sheet>.tsv` file next to it, as the previous upload scripts did. The first row of a sheet is its description and is skipped, lines starting with `#` are comments, unnamed columns and empty rows are dropped, and missing values are written as `NA`. Files are only written when their content changes, and each result reports the created, updated, and removed files.
+For a study format 1 folder, `pkdb prepare`, `validate`, and `upload` first write each non-empty `Tab…` or `Fig…` sheet of `<Study>/<Study>.xlsx` to a hidden `.<Study>_<Sheet>.tsv` file next to it, as the previous upload scripts did. The first row of a sheet is its description and is skipped, lines starting with `#` are comments, unnamed columns and empty rows are dropped, and missing values are written as `NA`. Files are only written when their content changes, and each result reports the created, updated, and removed files.
 
 A hidden TSV whose sheet was deleted or emptied is removed, unless `study.json` still uses that sheet or file name; then it is kept as the last copy of the table and validation reports the missing sheet. Validation always reads the workbook itself; the TSV files are a reviewable text copy for version control. Folders without a workbook are not changed.
 

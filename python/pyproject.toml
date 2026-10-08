@@ -52,7 +52,15 @@ imports = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=9.1.1", "ruff>=0.16.8", "ty>=0.0.83"]
+# hatchling imports the build hook in its tests.
+dev = ["hatchling>=1.32.4", "pytest>=9.1.1", "ruff>=0.16.8", "ty>=0.0.83"]
+
+[tool.hatch.build]
+# The curation app is built into this gitignored folder by npm run build:curation.
+artifacts = ["src/pkdb/curation/static/**"]
+
+[tool.hatch.build.hooks.custom]
+path = "hatch_build.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pkdb"]

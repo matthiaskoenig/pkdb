@@ -19,6 +19,8 @@ dist/
 .idea/
 /site/
 node_modules/
+# Built by npm run build:curation in frontend/.
+python/src/pkdb/curation/static/
 .git-credentials
 *.dump
 *.sql.gz
