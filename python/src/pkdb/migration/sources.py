@@ -39,8 +39,18 @@ def image_source(image: str | None, study: str) -> str | None:
     return source or None
 
 
-def observation_source(location: SourceLocation, image: str | None, study: str) -> str:
-    """The source of a row of an outputs, timecourses or scatters table, which names its file."""
+def observation_source(
+    location: SourceLocation, image: str | None, study: str, images: frozenset[str]
+) -> str:
+    """The source of a row of an outputs, timecourses or scatters table, which names its file.
+
+    Format 2 names the paper table or figure that a row comes from, so the
+    source of the row's image comes first when the v1 folder holds that image
+    (`images`); otherwise the sheet, else `Text` for an entity of study.json.
+    """
+    source = image_source(image, study)
+    if source is not None and source in images and SOURCE_PATTERN.fullmatch(source):
+        return source
     sheet = sheet_of(location, study)
     if sheet is not None:
         if not SOURCE_PATTERN.fullmatch(sheet):

@@ -32,22 +32,33 @@ def test_the_source_of_an_image():
     assert image_source(None, "Example") is None
 
 
-def test_observation_rows_take_the_sheet_or_the_image_or_text():
-    assert observation_source(WORKBOOK, None, "Example") == "Fig1"
-    assert observation_source(INLINE, "Example_Fig3.png", "Example") == "Fig3"
-    assert observation_source(INLINE, None, "Example") == "Text"
+IMAGES = frozenset({"Fig1", "Fig3", "Tab2", "figure"})
+
+
+def test_observation_rows_take_their_image_then_the_sheet_or_text():
+    assert observation_source(WORKBOOK, "Example_Tab2.png", "Example", IMAGES) == "Tab2"
+    assert observation_source(WORKBOOK, None, "Example", IMAGES) == "Fig1"
+    # An image that the folder lacks or that names no source leaves the sheet.
+    assert observation_source(WORKBOOK, "Example_Fig9.png", "Example", IMAGES) == "Fig1"
+    assert (
+        observation_source(WORKBOOK, "Example_figure.png", "Example", IMAGES) == "Fig1"
+    )
+    assert observation_source(INLINE, "Example_Fig3.png", "Example", IMAGES) == "Fig3"
+    assert observation_source(INLINE, None, "Example", IMAGES) == "Text"
 
 
 def test_a_sheet_outside_the_source_pattern_refuses_the_study():
     with pytest.raises(NotConverted) as error:
-        observation_source(PLAIN, None, "Example")
+        observation_source(PLAIN, None, "Example", IMAGES)
     assert error.value.code == "sheet_name"
     assert "Results" in error.value.message
+    # The image of the row names its source instead.
+    assert observation_source(PLAIN, "Example_Tab2.png", "Example", IMAGES) == "Tab2"
 
 
 def test_an_inline_image_outside_the_naming_refuses_the_study():
     with pytest.raises(NotConverted) as error:
-        observation_source(INLINE, "figure.png", "Example")
+        observation_source(INLINE, "figure.png", "Example", IMAGES)
     assert error.value.code == "image_name"
 
 

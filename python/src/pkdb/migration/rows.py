@@ -117,7 +117,8 @@ def _geometric(
                 detail=f"{record.key}: geometric mean with sd, se or cv",
             )
         )
-    return {**row, "gmean": row["mean"], "mean": ""}
+    # Format 2 retired the calculation `geometric mean`: gmean says it.
+    return {**row, "gmean": row["mean"], "mean": "", "calculation": ""}
 
 
 def _name(name: str) -> str:
@@ -239,11 +240,11 @@ def _interventions(
 
 
 def _measurement(
-    record: Measurement, name: str, error_bars: ErrorBars
+    record: Measurement, name: str, error_bars: ErrorBars, images: frozenset[str]
 ) -> tuple[str, dict[str, str]]:
     """The source and the row of an output or a timecourse point."""
     assert record.source is not None
-    source = observation_source(record.source, record.image, name)
+    source = observation_source(record.source, record.image, name, images)
     return source, {
         **observation(record, error_bars),
         "subjects": text(record.group or record.individual),
@@ -300,10 +301,12 @@ def _scatter_pairs(
     return [(subject, x, ys[subject]) for subject, x in xs.items()]
 
 
-def _scatter_source(scatter: str, records: list[Measurement], name: str) -> str:
+def _scatter_source(
+    scatter: str, records: list[Measurement], name: str, images: frozenset[str]
+) -> str:
     """The one source of the points of a scatter, which names its file."""
     sources = {
-        observation_source(record.source, record.image, name)
+        observation_source(record.source, record.image, name, images)
         for record in records
         if record.source is not None
     }
@@ -350,7 +353,7 @@ def _point(scatter: str, prefix: str, record: Measurement) -> dict[str, str]:
 
 
 def _scatter_rows(
-    study: CanonicalStudy, name: str, decisions: list[Decision]
+    study: CanonicalStudy, name: str, images: frozenset[str], decisions: list[Decision]
 ) -> tuple[Tables, dict[str, str]]:
     """Rows of scatters_<source>.tsv, one per subject pairing its x and y outputs.
 
@@ -382,7 +385,7 @@ def _scatter_rows(
                 )
             pairs = _scatter_pairs(scatter, labels, subset.shared, by_label)
             points = [record for _, x, y in pairs for record in (x, y)]
-            source = _scatter_source(scatter, points, name)
+            source = _scatter_source(scatter, points, name, images)
             file = table_file("scatters", source)
             for record in points:
                 if record.key in used:
@@ -437,7 +440,7 @@ def study_tables(
     `images` are the sources that have an image in the v1 folder (`image_sources`).
     """
     decisions: list[Decision] = []
-    scatters, used = _scatter_rows(study, name, decisions)
+    scatters, used = _scatter_rows(study, name, images, decisions)
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, images, decisions),
         "characteristica.tsv": _characteristica(
@@ -446,17 +449,21 @@ def study_tables(
         "interventions.tsv": _interventions(study, name, images, error_bars, decisions),
     }
     arrays: Counter[str] = Counter()
+    labels: Counter[str] = Counter()
     for record in study.measurements:
         if record.key in used:
             file = used[record.key]
         else:
-            source, row = _measurement(record, name, error_bars)
+            source, row = _measurement(record, name, error_bars, images)
             row = _geometric(record, row, decisions)
             if record.label and record.output_type in ("timecourse", "array"):
                 file = table_file("timecourses", source)
                 row = {**row, "label": text(record.label)}
             else:
                 file = table_file("outputs", source)
+                if record.label:
+                    # The outputs table has no label column.
+                    labels[file] += 1
             tables.setdefault(file, []).append(row)
         if record.output_type == "array":
             arrays[file] += 1
@@ -467,6 +474,13 @@ def study_tables(
             kind="array_output", detail=f"{_plural(count, 'array output')} in {file}"
         )
         for file, count in arrays.items()
+    ]
+    decisions += [
+        Decision(
+            kind="output_label",
+            detail=f"{_plural(count, 'output label')} dropped in {file}",
+        )
+        for file, count in labels.items()
     ]
     return {file: rows for file, rows in tables.items() if rows}, decisions
 

@@ -18,7 +18,7 @@ from pkdb.migration.sources import image_sources
 from pkdb.preparation import prepare
 
 INTERVENTION = STUDY["interventionset"]["interventions"][0]
-OUTPUT = STUDY["outputset"]["outputs"][0]
+OUTPUT, TIMECOURSE = STUDY["outputset"]["outputs"]
 X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
 
 
@@ -240,17 +240,56 @@ def test_array_outputs_become_outputs_or_timecourses(tmp_path):
     ]
 
 
+def test_outputs_take_the_source_of_their_image(tmp_path):
+    # Sheets Tab2A and Tab2B hold rows of the paper's Tab2; a row of sheet
+    # Tab2 shows Fig1, and a row without image keeps its sheet.
+    no_image = {key: value for key, value in OUTPUT.items() if key != "image"}
+    outputs = [
+        {**OUTPUT, "source": "Tab2A"},
+        {**OUTPUT, "source": "Tab2B"},
+        {**OUTPUT, "image": "Fig1"},
+        no_image,
+    ]
+    sheets = {
+        "Tab2A": [["mean", "sd"], [2.5, 0.5]],
+        "Tab2B": [["mean", "sd"], [3.5, 0.5]],
+        "Tab2": [["mean", "sd"], [4.5, 0.5]],
+    }
+    study = {**STUDY, "outputset": {"outputs": outputs}}
+    folder = v1_study(tmp_path, study, sheets, IMAGES)
+    tables, decisions = tables_of(folder)
+    assert {
+        file: [row["mean"] for row in rows]
+        for file, rows in tables.items()
+        if file.startswith("outputs")
+    } == {
+        "outputs_Tab2.tsv": ["2.5", "3.5", "4.5"],
+        "outputs_Fig1.tsv": ["4.5"],
+    }
+    assert {row["source"] for row in tables["outputs_Fig1.tsv"]} == {"Fig1"}
+    assert decisions == []
+
+
+def test_labels_of_outputs_are_dropped_and_a_decision(tmp_path):
+    outputs = [{**OUTPUT, "label": "cmax_all"}, {**OUTPUT, "label": "cmax_2"}]
+    study = {**STUDY, "outputset": {"outputs": [*outputs, TIMECOURSE]}}
+    folder = v1_study(tmp_path, study, SHEETS, IMAGES)
+    tables, decisions = tables_of(folder)
+    assert len(tables["outputs_Tab2.tsv"]) == 2
+    assert all("label" not in row for row in tables["outputs_Tab2.tsv"])
+    assert [(d.kind, d.detail) for d in decisions] == [
+        ("output_label", "2 output labels dropped in outputs_Tab2.tsv")
+    ]
+
+
 def test_a_geometric_mean_moves_to_gmean(tmp_path):
     output = {**STUDY["outputset"]["outputs"][0], "calculation_type": "geometric mean"}
     study = {**STUDY, "outputset": {"outputs": [output]}}
     folder = v1_study(tmp_path, study, SHEETS, IMAGES)
     tables, decisions = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
-    assert (row["mean"], row["gmean"], row["calculation"]) == (
-        "",
-        "2.5",
-        "geometric mean",
-    )
+    # Format 2 retired the calculation `geometric mean`.
+    assert (row["mean"], row["gmean"], row["calculation"]) == ("", "2.5", "")
     # It also has sd: arithmetic or geometric is unclear.
     assert [d.kind for d in decisions] == ["geometric_spread"]
 
@@ -270,7 +309,7 @@ def test_a_geometric_mean_of_a_characteristic_moves_to_gmean(tmp_path):
     folder = v1_study(tmp_path, study, {}, ("Tab1",))
     tables, decisions = tables_of(folder)
     [row] = tables["characteristica.tsv"]
-    assert (row["mean"], row["gmean"]) == ("", "35")
+    assert (row["mean"], row["gmean"], row["calculation"]) == ("", "35", "")
     assert decisions == []
 
 
@@ -362,7 +401,10 @@ BY_TIME = scatter("age_vs_cmax", *LABELS, shared=["time"])
             id="timecourse in a scatter",
         ),
         pytest.param(
-            {"y": {"source": "Fig3"}, "sheets": {"Fig3": SCATTER_SHEET["Fig2"]}},
+            {
+                "y": {"source": "Fig3", "image": "Fig3"},
+                "sheets": {"Fig3": SCATTER_SHEET["Fig2"]},
+            },
             "scatter_source",
             id="two sources",
         ),
