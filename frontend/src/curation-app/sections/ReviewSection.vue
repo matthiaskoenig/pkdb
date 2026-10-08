@@ -9,6 +9,7 @@ import ReviewItemDetail from "../components/ReviewItemDetail.vue";
 import TargetView from "../components/TargetView.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
+import { sectionHeading } from "../composables/useReturnFocus";
 import {
   emptyText,
   filterItems,
@@ -338,7 +339,7 @@ function added(item: ReviewItem | null): void {
       </div>
     </template>
 
-    <NewItemDialog v-model="newItem" v-model:busy="adding" @added="added" />
+    <NewItemDialog v-model="newItem" v-model:busy="adding" :fallback-focus="sectionHeading" @added="added" />
   </div>
 </template>
 

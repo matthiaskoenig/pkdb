@@ -13,15 +13,21 @@ import {
   VSpacer,
 } from "vuetify/components";
 import type { StudyRow } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { uploadBlocker } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 
 const open = defineModel<boolean>({ default: false });
-const props = defineProps<{ study: StudyRow | null }>();
+const props = defineProps<{
+  study: StudyRow | null;
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 const emit = defineEmits<{ done: [study: StudyRow] }>();
 
 const overview = useOverviewStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const acknowledged = ref(false);
 const busy = ref(false);
 const error = ref<string | null>(null);

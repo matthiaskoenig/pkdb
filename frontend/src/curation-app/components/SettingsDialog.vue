@@ -13,12 +13,18 @@ import {
   VSwitch,
   VTextField,
 } from "vuetify/components";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore, type Settings } from "../stores/overview";
 
 const open = defineModel<boolean>({ default: false });
+const props = defineProps<{
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 
 const overview = useOverviewStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 /** The settings when the dialog opened, to send only what the curator changed. */
 const initial = { endpoint: "", user: "", offline: false };
 const form = reactive({ endpoint: "", user: "", offline: false });

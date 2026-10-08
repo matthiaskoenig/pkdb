@@ -15,14 +15,20 @@ import {
   VTextField,
 } from "vuetify/components";
 import type { Directories, FolderKind } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore } from "../stores/overview";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
 const open = defineModel<boolean>({ default: false });
+const props = defineProps<{
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 
 const overview = useOverviewStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const pathId = useId();
 const listing = shallowRef<Directories | null>(null);
 const typed = ref("");

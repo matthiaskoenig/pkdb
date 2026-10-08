@@ -121,3 +121,26 @@ test("Validate queues a job, and the study shows it until it ran", async ({ page
   await expect(row.getByText("Queued", { exact: true })).toBeHidden();
   await expect(row.getByRole("cell", { name: "1 error" })).toBeVisible();
 });
+
+test("a dialog returns the keyboard focus to the control that opened it", async ({ page }) => {
+  const settings = page.getByRole("button", { name: "Settings", exact: true });
+  await settings.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog", { name: "Connection settings" });
+  await expect(dialog).toBeVisible();
+  // The dialog takes the focus once it shows; Escape closes it from there.
+  await expect.poll(() => dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(settings).toBeFocused();
+
+  // An item of a menu goes with the menu: the focus returns to the button of the menu.
+  const connection = page.getByRole("button", { name: /^Connection: / });
+  await connection.focus();
+  await page.keyboard.press("Enter");
+  await page.getByRole("button", { name: "Connection settings" }).click();
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(connection).toBeFocused();
+});

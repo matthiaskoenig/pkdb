@@ -59,6 +59,12 @@ export async function click(name: string | RegExp): Promise<void> {
   await flushPromises();
 }
 
+/** Moves the focus into the open dialog, as Vuetify does once it shows: jsdom runs no transitions. */
+export function focusDialog(): void {
+  const dialogs = page().findAll<HTMLElement>(".v-dialog .v-overlay__content");
+  dialogs.at(-1)?.element.focus();
+}
+
 /** Waits until a closed menu opens again: Vuetify ignores clicks on its activator for 50 ms. */
 export function afterMenuClosed(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 60));

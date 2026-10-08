@@ -11,6 +11,7 @@ import TableGrid from "../components/TableGrid.vue";
 import UserHint from "../components/UserHint.vue";
 import { useLoaded } from "../composables/useLoaded";
 import { useNotice } from "../composables/useNotice";
+import { sectionHeading } from "../composables/useReturnFocus";
 import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
 import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
@@ -327,7 +328,7 @@ const missingLine = computed(() => {
       </div>
     </template>
 
-    <AddTableDialog v-model="addTable" @added="added" />
+    <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
   </div>
 </template>
 

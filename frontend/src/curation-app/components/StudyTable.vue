@@ -181,6 +181,7 @@ const items = computed(() =>
       <tr
         v-for="{ row, curators, others, hidden, problems, activity, issue } in items"
         :key="row.path"
+        :data-study="row.duplicate ? undefined : row.id"
         :class="{ 'study-row--link': !row.duplicate, 'study-row--selected': isSelected(row) }"
         @click="openRow(row, $event)"
       >

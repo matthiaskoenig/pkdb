@@ -10,7 +10,7 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
-import { button, click, field, page, serve, setViewport } from "./curation-dom";
+import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -506,6 +506,31 @@ describe("OverviewPage", () => {
     expect(retry).toHaveBeenCalledWith("caffeine/Example", { acknowledgeUnknown: true });
     expect(dialogOpen()).toBe(false);
     expect(page().get('[role="status"]').text()).toBe("Upload queued again for caffeine/Example.");
+  });
+
+  it("focuses the link of the study when the retry removed its Review", async () => {
+    const connected = {
+      can_upload: true,
+      offline: false,
+      authenticated: true,
+      connection: "connected" as const,
+      endpoint: "https://beta.pk-db.com",
+    };
+    const queued = snapshot({ studies: [studyRow({ status: "validating" })], ...connected });
+    vi.spyOn(useOverviewStore(), "retry").mockImplementation(async () => {
+      serve({ "/local/state": queued, "/local/curators": { curators: profiles } });
+      await useOverviewStore().refresh();
+      return queued;
+    });
+    await mountPage(snapshot({ studies: [studyRow({ status: "unknown" })], jobs: [unknownJob()], ...connected }));
+    button("Review uncertain upload of caffeine/Example").element.focus();
+    await click("Review uncertain upload of caffeine/Example");
+    focusDialog();
+    await dialog().get('input[type="checkbox"]').trigger("click");
+    await flushPromises();
+    await click("Validate and upload again");
+    expect(page().find(".retry-button").exists()).toBe(false);
+    expect(document.activeElement).toBe(rowOf("caffeine/Example").get("a.study-identity").element);
   });
 
   it("offers no retry once the outcome of the upload is known", async () => {

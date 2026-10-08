@@ -13,7 +13,7 @@ import type { ConnectionStatus } from "../../src/curation-app/api/types";
 import { ApiError } from "../../src/curation-app/api/client";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, snapshot, studyRow } from "../unit/curation-fixtures";
-import { afterMenuClosed, button, buttons, click, loadSnapshot, page, setViewport } from "./curation-dom";
+import { afterMenuClosed, button, buttons, click, focusDialog, loadSnapshot, page, setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -33,6 +33,12 @@ function mountHeader() {
     attachTo: document.body,
     global: { plugins: [pinia, router()] },
   });
+}
+
+/** Focuses the button `name` and clicks it, as a keyboard does. */
+async function focusAndClick(name: string): Promise<void> {
+  button(name).element.focus();
+  await click(name);
 }
 
 /** An app that calls `use` in its setup, for code that needs the Vuetify instance. */
@@ -189,6 +195,53 @@ describe("AppHeader", () => {
     await flushPromises();
     await click("Settings");
     expect(page().get('[role="dialog"]').text()).toContain("Connection settings");
+  });
+
+  it("returns the focus to the gear button when the settings close", async () => {
+    await loadSnapshot(snapshot());
+    mountHeader();
+    await flushPromises();
+    await focusAndClick("Settings");
+    focusDialog();
+    await click("Cancel");
+    expect(document.activeElement).toBe(button("Settings").element);
+  });
+
+  it("returns the focus to the menu button after a dialog that a menu item opened", async () => {
+    await loadSnapshot(snapshot());
+    mountHeader();
+    await flushPromises();
+    await focusAndClick("Connection: Offline");
+    await focusAndClick("Connection settings");
+    focusDialog();
+    await click("Cancel");
+    // The item went with the menu; its button stays.
+    expect(document.activeElement).toBe(button("Connection: Offline").element);
+  });
+
+  it("returns the focus to the header menu in a narrow window", async () => {
+    await loadSnapshot(snapshot());
+    setViewport(800);
+    mountHeader();
+    await flushPromises();
+    await focusAndClick("Header menu");
+    await focusAndClick("Settings");
+    focusDialog();
+    await click("Cancel");
+    expect(document.activeElement).toBe(button("Header menu").element);
+  });
+
+  it("focuses the gear button when the control that opened the settings is gone", async () => {
+    await loadSnapshot(snapshot({ user: "", author: { user: null, reason: "Set a user" } }));
+    const wrapper = mountHeader();
+    await flushPromises();
+    await focusAndClick("Set user");
+    // Saving a user removes Set user.
+    await loadSnapshot(snapshot());
+    expect(wrapper.text()).not.toContain("Set user");
+    focusDialog();
+    await click("Cancel");
+    expect(document.activeElement).toBe(button("Settings").element);
   });
 
   it("pauses the automatic actions", async () => {

@@ -19,6 +19,7 @@ import {
 } from "vuetify/components";
 import { isAbort } from "../api/client";
 import type { ReviewItem, ReviewTarget, TableRow } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { KIND_LABELS, KINDS, matchingRows, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
@@ -34,12 +35,17 @@ const OFFERED_VALUES = 200;
  * Cancel and are emptied after the item was added.
  */
 const open = defineModel<boolean>({ default: false });
+const props = defineProps<{
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 /** Whether the new item is being written; the section waits with the actions on items meanwhile. */
 const busy = defineModel<boolean>("busy", { default: false });
 const emit = defineEmits<{ added: [item: ReviewItem | null] }>();
 
 const study = useStudyStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const targetId = useId();
 const autoGrow = !sizesFieldsByContent();
 

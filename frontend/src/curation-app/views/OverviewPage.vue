@@ -186,6 +186,18 @@ function reviewRetry(row: StudyRow): void {
   retryOpen.value = true;
 }
 
+// The focus after a dialog when the control that opened it is gone.
+const panel = ref<HTMLElement | null>(null);
+/** The checkbox that selects all studies, when Upload went with the selection. */
+const selectAll = () => panel.value?.querySelector<HTMLElement>("thead .cell-select input");
+/** The link of the study of the retry, when its Review went with the unknown outcome. */
+function retriedStudy(): HTMLElement | null | undefined {
+  const id = retryStudy.value?.id;
+  return [...(panel.value?.querySelectorAll<HTMLElement>("tr[data-study]") ?? [])]
+    .find((row) => row.dataset.study === id)
+    ?.querySelector<HTMLElement>("a.study-identity");
+}
+
 // Curator profiles for the avatars; without them the avatars show initials.
 const profiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
 onMounted(() => {
@@ -270,7 +282,7 @@ const format1Notice = computed(() =>
           {{ error }}
         </VAlert>
 
-        <section class="study-panel" aria-label="Studies">
+        <section ref="panel" class="study-panel" aria-label="Studies">
           <div class="batch-toolbar">
             <span class="batch-count">{{ selectionText }}</span>
             <div class="batch-actions">
@@ -342,10 +354,17 @@ const format1Notice = computed(() =>
       <VProgressLinear indeterminate color="primary" aria-label="Loading the studies" />
     </div>
 
-    <UploadDialog v-model="upload.open" :studies="upload.studies" :action="upload.action" @done="uploaded" />
+    <UploadDialog
+      v-model="upload.open"
+      :studies="upload.studies"
+      :action="upload.action"
+      :fallback-focus="selectAll"
+      @done="uploaded"
+    />
     <RetryDialog
       v-model="retryOpen"
       :study="retryStudy"
+      :fallback-focus="retriedStudy"
       @done="(row) => (notice = `Upload queued again for ${row.id}.`)"
     />
   </VContainer>

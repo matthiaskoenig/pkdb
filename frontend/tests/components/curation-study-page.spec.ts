@@ -23,6 +23,7 @@ import {
   buttons,
   click,
   field,
+  focusDialog,
   labeled,
   page,
   radio,
@@ -586,6 +587,17 @@ describe("StudyPage", () => {
     ]);
     expect(page().find('.v-overlay--active[role="dialog"]').exists()).toBe(false);
     expect(page().get(".study-notice").text()).toBe("Added the sheet outputs_Tab3 to the workbook.");
+  });
+
+  it("returns the focus to More actions when Add table, an item of its menu, closes", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    button("More actions").element.focus();
+    await click("More actions");
+    button("Add table").element.focus();
+    await click("Add table");
+    focusDialog();
+    await click("Cancel");
+    expect(document.activeElement).toBe(button("More actions").element);
   });
 
   it("adds a raw table and shows the issues of the API", async () => {

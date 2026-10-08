@@ -13,6 +13,7 @@ import {
   VSpacer,
 } from "vuetify/components";
 import type { StudyRow } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 
@@ -21,11 +22,14 @@ const props = defineProps<{
   studies: StudyRow[];
   /** `upload` uploads the studies now; `enable` makes Upload their On save action. */
   action: "upload" | "enable";
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
 }>();
 const emit = defineEmits<{ done: [count: number] }>();
 
 const overview = useOverviewStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const busy = ref(false);
 const error = ref<string | null>(null);
 

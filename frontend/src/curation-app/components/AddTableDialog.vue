@@ -16,16 +16,22 @@ import {
   VTextField,
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useDialogStore } from "../stores/dialogs";
 import { useStudyStore } from "../stores/study";
 import { NEW_TABLE_KINDS, newTable, type NewTableKind } from "../study";
 
 const open = defineModel<boolean>({ default: false });
+const props = defineProps<{
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 const emit = defineEmits<{ added: [table: string] }>();
 
 const study = useStudyStore();
 const dialogs = useDialogStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const kind = ref<NewTableKind>("outputs");
 const source = ref("");
 const busy = ref(false);

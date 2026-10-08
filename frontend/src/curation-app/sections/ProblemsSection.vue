@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
 import { isNoUser } from "../api/client";
 import type { AcknowledgedWarning, Profile, ValidationIssue } from "../api/types";
@@ -8,6 +8,7 @@ import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import ProblemItem from "../components/ProblemItem.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
+import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import {
   acknowledgement,
@@ -179,22 +180,23 @@ function acknowledge(issue: ValidationIssue): void {
   dialog.value = true;
 }
 
-async function acknowledgedWarning(issue: ValidationIssue): Promise<void> {
+function acknowledgedWarning(issue: ValidationIssue): void {
   const key = locationKey(issue);
   // A validation that left the warning out already needs no mark.
   if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
   announce(`Warning ${issue.code} acknowledged.`);
-  await nextTick();
-  focusAfter(key, issue.source?.file ?? null);
 }
 
 /**
- * The Acknowledge button of the issue went away: focus the Acknowledge button of the next
- * warning, else the heading of the file of the issue, else the acknowledged warnings.
+ * Where the focus goes when the dialog closed and the Acknowledge button of its warning went
+ * away: the Acknowledge button of the next warning, else the heading of the file of the warning,
+ * else the acknowledged warnings, else the heading of the section.
  */
-function focusAfter(key: string, file: string | null): void {
+function afterAcknowledge(): HTMLElement | null | undefined {
   const root = section.value;
-  if (!root) return;
+  const issue = chosen.value;
+  if (!root || !issue) return sectionHeading();
+  const key = locationKey(issue);
   const items = [...root.querySelectorAll<HTMLElement>(".problem")];
   const button = (item: HTMLElement | undefined) =>
     item?.querySelector<HTMLButtonElement>(".problem-acknowledge:not([disabled])") ?? null;
@@ -203,9 +205,9 @@ function focusAfter(key: string, file: string | null): void {
     .map((later) => button(items.find((item) => item.dataset.key === later)))
     .find((found) => found !== null);
   const heading = [...root.querySelectorAll<HTMLElement>(".problem-group")]
-    .find((group) => group.dataset.file === (file ?? ""))
+    .find((group) => group.dataset.file === (issue.source?.file ?? ""))
     ?.querySelector<HTMLElement>(".problem-file");
-  (next ?? heading ?? root.querySelector<HTMLElement>(".problems-heading"))?.focus();
+  return next ?? heading ?? root.querySelector<HTMLElement>(".problems-heading") ?? sectionHeading();
 }
 
 // Open tables and files
@@ -402,6 +404,7 @@ function openFile(file: string): Promise<void> {
       v-model="dialog"
       v-model:busy="acknowledging"
       :issue="chosen"
+      :fallback-focus="afterAcknowledge"
       @acknowledged="acknowledgedWarning"
     />
   </div>

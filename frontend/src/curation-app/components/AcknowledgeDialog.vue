@@ -13,6 +13,7 @@ import {
   VTextarea,
 } from "vuetify/components";
 import type { ValidationIssue } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { acknowledgeFailure, acknowledgement, location, locationKey } from "../problems";
 import type { ReviewFailure } from "../review";
@@ -23,7 +24,11 @@ import UserHint from "./UserHint.vue";
  * Acknowledges a warning with a reason: a resolved review item that names the warning and its
  * location. The reason stays after Cancel for the same warning, and starts empty for another one.
  */
-const props = defineProps<{ issue: ValidationIssue | null }>();
+const props = defineProps<{
+  issue: ValidationIssue | null;
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
+}>();
 const open = defineModel<boolean>({ default: false });
 /** Whether the acknowledgement is being written; the section waits with its actions meanwhile. */
 const busy = defineModel<boolean>("busy", { default: false });
@@ -31,6 +36,7 @@ const emit = defineEmits<{ acknowledged: [issue: ValidationIssue] }>();
 
 const study = useStudyStore();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const autoGrow = !sizesFieldsByContent();
 
 const reason = ref("");

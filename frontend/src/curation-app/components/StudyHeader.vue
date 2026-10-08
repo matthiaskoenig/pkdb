@@ -58,6 +58,9 @@ const { notice, announce } = useNotice();
 const menu = ref(false);
 const addTable = ref(false);
 const upload = ref(false);
+const root = ref<HTMLElement | null>(null);
+/** Takes the focus after a dialog when the control that opened it is gone, such as an item of the menu. */
+const moreActions = () => root.value?.querySelector<HTMLElement>(".more-actions");
 
 const substance = computed(() => props.detail.id.slice(0, props.detail.id.indexOf("/")));
 const name = computed(() => studyName(props.detail));
@@ -210,7 +213,7 @@ function added(table: string): void {
 </script>
 
 <template>
-  <header class="study-header">
+  <header ref="root" class="study-header">
     <div class="study-header-row">
       <div class="study-heading">
         <!-- A long identity wraps after the slash rather than inside a name. -->
@@ -421,12 +424,13 @@ function added(table: string): void {
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="study-notice">{{ notice }}</span>
 
-    <AddTableDialog v-model="addTable" @added="added" />
+    <AddTableDialog v-model="addTable" :fallback-focus="moreActions" @added="added" />
     <UploadDialog
       v-if="row"
       v-model="upload"
       :studies="[row]"
       action="upload"
+      :fallback-focus="moreActions"
       @done="announce('Upload queued.')"
     />
   </header>

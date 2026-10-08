@@ -29,6 +29,7 @@ import type { Job } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import { useNotice } from "../composables/useNotice";
+import { useReturnFocus } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -86,6 +87,9 @@ const working = computed(() => busy.value !== null);
 const failure = ref<ActionFailure | null>(null);
 const confirming = ref(false);
 const retrying = ref(false);
+/** Takes the focus after a dialog when the control that opened it is gone. */
+const activityList = () => root.value?.querySelector<HTMLElement>(".activity-list, .activity-empty");
+useReturnFocus(confirming, activityList);
 
 async function run(
   action: string,
@@ -165,9 +169,20 @@ function clear(): Promise<void> {
   });
 }
 
-function retried(): void {
+/** The upload whose Review opened the dialog. */
+let reviewed: string | null = null;
+
+function review(job: Job): void {
+  reviewed = job.id;
+  retrying.value = true;
+}
+
+async function retried(): Promise<void> {
   announce("Upload queued again.");
-  void study.refresh();
+  const job = reviewed;
+  await study.refresh();
+  // The dialog returned the focus to Review, which went with the unknown outcome: the focus goes to the job.
+  if (document.activeElement === document.body) await focusOn(`[data-job="${job}"]`);
 }
 </script>
 
@@ -258,7 +273,7 @@ function retried(): void {
               prepend-icon="fas fa-triangle-exclamation"
               :disabled="working || row === null"
               aria-label="Review uncertain upload"
-              @click="retrying = true"
+              @click="review(entry.job)"
             >
               Review
             </VBtn>
@@ -307,7 +322,7 @@ function retried(): void {
       </li>
     </ol>
 
-    <RetryDialog v-model="retrying" :study="row" @done="retried" />
+    <RetryDialog v-model="retrying" :study="row" :fallback-focus="activityList" @done="retried" />
   </div>
 </template>
 

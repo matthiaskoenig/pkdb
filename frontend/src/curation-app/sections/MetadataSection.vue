@@ -30,6 +30,7 @@ import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
+import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import {
   changedFields,
   clone,
@@ -460,6 +461,7 @@ function answerLeave(leave: boolean): void {
 watch(leaving, (value) => {
   if (!value && answer) answerLeave(false);
 });
+useReturnFocus(leaving, sectionHeading);
 
 onBeforeRouteLeave(() => confirmLeave());
 onBeforeRouteUpdate((to, from) =>
@@ -938,6 +940,7 @@ onBeforeUnmount(() => {
     <ReferenceDialog
       v-model="referenceOpen"
       :unsaved-identifiers="identifiersChanged"
+      :fallback-focus="sectionHeading"
       @saved="announce('reference.json saved.')"
       @use-doi="useDoi"
     />

@@ -17,6 +17,7 @@ import {
   VTextField,
 } from "vuetify/components";
 import type { Json, ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
+import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -29,9 +30,11 @@ import { useStudyStore } from "../stores/study";
  * A preview shows what saving would write; any edit afterwards needs a new preview.
  */
 const open = defineModel<boolean>({ default: false });
-defineProps<{
+const props = defineProps<{
   /** The form has a PMID or DOI that study.json does not have yet. */
   unsavedIdentifiers: boolean;
+  /** Takes the focus when the dialog closes and the control that opened it is gone. */
+  fallbackFocus?: FocusTarget;
 }>();
 const emit = defineEmits<{ saved: []; useDoi: [doi: string] }>();
 
@@ -39,6 +42,7 @@ const study = useStudyStore();
 const overview = useOverviewStore();
 const autoGrow = !sizesFieldsByContent();
 const titleId = useId();
+useReturnFocus(open, () => props.fallbackFocus?.());
 const searchId = useId();
 const correctionsId = useId();
 const previewId = useId();

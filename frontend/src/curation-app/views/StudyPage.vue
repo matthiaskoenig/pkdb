@@ -129,7 +129,8 @@ watch(
             class="study-rail"
           />
           <section v-if="section" class="study-section" :aria-labelledby="headingId">
-            <h2 :id="headingId" class="study-section-heading">{{ SECTION_LABELS[section] }}</h2>
+            <!-- It takes the focus after a dialog of the section when the control that opened it is gone. -->
+            <h2 :id="headingId" tabindex="-1" class="study-section-heading">{{ SECTION_LABELS[section] }}</h2>
             <component :is="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
           </section>
         </div>

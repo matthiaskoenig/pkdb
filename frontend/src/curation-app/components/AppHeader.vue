@@ -29,6 +29,15 @@ watch(wide, () => {
 });
 const snapshot = computed(() => overview.snapshot);
 
+/**
+ * The control of the header that takes the focus when a dialog closes and the control that
+ * opened it is gone, such as an item of a menu: `selector` in the wide header, else the header
+ * menu.
+ */
+function headerControl(selector: string): HTMLElement | null {
+  return document.querySelector<HTMLElement>(`.app-header ${wide.value ? selector : ".header-menu-button"}`);
+}
+
 /** Open a dialog from the collapsed menu, which closes first. */
 function fromPanel(open: () => void): void {
   panel.value = false;
@@ -50,12 +59,18 @@ function fromPanel(open: () => void): void {
         <ConnectionMenu :snapshot="snapshot" @settings="dialogs.openSettings" />
         <AuthorStatus :author="snapshot.author" @settings="dialogs.openSettings" />
       </template>
-      <VBtn icon="fas fa-gear" variant="text" aria-label="Settings" @click="dialogs.openSettings" />
+      <VBtn
+        icon="fas fa-gear"
+        variant="text"
+        aria-label="Settings"
+        class="header-settings"
+        @click="dialogs.openSettings"
+      />
       <VBtn icon="fas fa-circle-half-stroke" variant="text" aria-label="Toggle color theme" @click="theme.toggle" />
     </div>
     <VMenu v-else v-model="panel" location="bottom end" :close-on-content-click="false">
       <template #activator="{ props: activator }">
-        <VBtn v-bind="activator" icon="fas fa-bars" variant="text" aria-label="Header menu" />
+        <VBtn v-bind="activator" icon="fas fa-bars" variant="text" aria-label="Header menu" class="header-menu-button" />
       </template>
       <VCard elevation="6" border class="header-menu header-panel">
         <template v-if="snapshot">
@@ -74,6 +89,6 @@ function fromPanel(open: () => void): void {
       </VCard>
     </VMenu>
   </VAppBar>
-  <WorkspaceDialog v-model="dialogs.workspace" />
-  <SettingsDialog v-model="dialogs.settings" />
+  <WorkspaceDialog v-model="dialogs.workspace" :fallback-focus="() => headerControl('.header-workspace')" />
+  <SettingsDialog v-model="dialogs.settings" :fallback-focus="() => headerControl('.header-settings')" />
 </template>

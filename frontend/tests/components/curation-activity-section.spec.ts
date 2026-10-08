@@ -7,7 +7,16 @@ import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, reviewItem, snapshot, studyDetail, studyRow } from "../unit/curation-fixtures";
-import { button, buttons, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
+import {
+  button,
+  buttons,
+  focusDialog,
+  page,
+  serveApi,
+  setViewport,
+  type Handler,
+  type ServedRequest,
+} from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -532,6 +541,35 @@ describe("an upload with an unknown outcome", () => {
     await press(review);
     expect(dialog().get("h2").text()).toBe("Review uncertain upload");
     expect(dialog().text()).toContain("The connection closed during the upload");
+  });
+
+  it("returns the focus to Review after Cancel, and to the job when the retry removed Review", async () => {
+    const connected: Partial<Snapshot> = {
+      studies: [studyRow({ status: "unknown" })],
+      endpoint: "https://beta.pk-db.com",
+      can_upload: true,
+      offline: false,
+      authenticated: true,
+      connection: "connected",
+    };
+    const retry: Handler = () => {
+      // The server keeps the earlier upload as failed and queues a new one.
+      serveJobs([{ ...unknown, status: "failed" }]);
+      return json(state);
+    };
+    await mountSection([unknown], { "POST /local/retry": retry }, connected);
+    button("Review uncertain upload").element.focus();
+    await press(button("Review uncertain upload"));
+    focusDialog();
+    await press(button("Cancel"));
+    expect(document.activeElement).toBe(button("Review uncertain upload").element);
+
+    await press(button("Review uncertain upload"));
+    focusDialog();
+    await press(dialog().get('input[type="checkbox"]'));
+    await press(button("Validate and upload again"));
+    expect(buttons("Review uncertain upload")).toHaveLength(0);
+    expect(document.activeElement).toBe(page().get('[data-job="upload-9"]').element);
   });
 
   it("says so when the review queued the upload again", async () => {

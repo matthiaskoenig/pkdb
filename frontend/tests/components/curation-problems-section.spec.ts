@@ -17,7 +17,17 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
-import { button, click, page, serveApi, setViewport, textArea, type Handler, type ServedRequest } from "./curation-dom";
+import {
+  button,
+  click,
+  focusDialog,
+  page,
+  serveApi,
+  setViewport,
+  textArea,
+  type Handler,
+  type ServedRequest,
+} from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -275,7 +285,10 @@ function dialog() {
 }
 
 async function openAcknowledge(code: string): Promise<void> {
-  await control(problem(code), "Acknowledge").trigger("click");
+  // As with a keyboard: the button has the focus when it opens the dialog.
+  const opener = control(problem(code), "Acknowledge");
+  opener.element.focus();
+  await opener.trigger("click");
   await flushPromises();
 }
 
@@ -603,6 +616,15 @@ describe("acknowledgements", () => {
       .findAll(".problem-file")
       .find((candidate) => candidate.text() === "Example_Fig1.wpd.json");
     expect(document.activeElement).toBe(heading?.element);
+  });
+
+  it("returns the focus to Acknowledge after Cancel", async () => {
+    await mountSection();
+    await openAcknowledge("outside_range");
+    focusDialog();
+    await control(dialog(), "Cancel").trigger("click");
+    await flushPromises();
+    expect(document.activeElement).toBe(control(problem("outside_range"), "Acknowledge").element);
   });
 
   it("acknowledges nothing while Open tables runs, and opens nothing while it acknowledges", async () => {
