@@ -59,16 +59,22 @@ def _curators(values: list | None) -> list[Curator]:
     return curators
 
 
+def _pmid(value: object) -> str | None:
+    return str(value) if value is not None and PMID.fullmatch(str(value)) else None
+
+
 def _reference(v1: dict, reference: dict) -> StudyReference | None:
-    pmid = next(
-        (
-            str(value)
-            for value in (reference.get("pmid"), v1.get("reference"))
-            if value is not None and PMID.fullmatch(str(value))
-        ),
-        None,
-    )
+    """The PubMed ID of study.json and the DOI of its reference.json snapshot.
+
+    study.json names the publication; reference.json only describes it. A
+    snapshot with another PubMed ID describes another publication, so its DOI
+    is not kept, and `sync_reference` replaces the snapshot.
+    """
+    stated, snapshot = _pmid(v1.get("reference")), _pmid(reference.get("pmid"))
+    pmid = stated or snapshot
     doi = reference.get("doi") or None
+    if snapshot is not None and snapshot != pmid:
+        doi = None
     if pmid is None and doi is None:
         return None
     return StudyReference(pmid=pmid, doi=doi)
@@ -79,6 +85,14 @@ def study_metadata(
 ) -> tuple[StudyMetadata, list[Decision]]:
     """The metadata of the converted study and what a person should check."""
     creator = str(v1.get("creator") or creator_fallback)
+    decisions = []
+    if not v1.get("creator"):
+        decisions.append(
+            Decision(
+                kind="creator_fallback",
+                detail=f"study.json has no creator; {creator} is the creator",
+            )
+        )
     notes: dict[str, Notes] = {}
     for section, kind in SECTION_KINDS.items():
         content = v1.get(section) or {}
@@ -88,7 +102,6 @@ def study_metadata(
             merged = notes.setdefault(kind, Notes())
             merged.descriptions.extend(descriptions)
             merged.comments.extend(comments)
-    decisions = []
     if (
         release is not None
         and v1.get("date")

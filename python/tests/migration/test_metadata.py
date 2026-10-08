@@ -75,6 +75,28 @@ def test_a_v1_date_other_than_the_release_date_is_a_decision():
     assert "2020-05-05" in decisions[0].detail and "2021-01-01" in decisions[0].detail
 
 
+def test_the_pubmed_id_of_study_json_wins_over_the_snapshot():
+    # reference.json describes another publication: its DOI is not kept either.
+    snapshot = {**REFERENCE, "sid": "999", "pmid": "999", "doi": "10.1111/other"}
+    metadata, _ = study_metadata(V1, snapshot, None, creator_fallback="mkoenig")
+    assert metadata.reference is not None
+    assert (metadata.reference.pmid, metadata.reference.doi) == ("3402561", None)
+
+
+def test_a_study_without_creator_takes_the_fallback_and_a_decision():
+    v1 = {key: value for key, value in V1.items() if key != "creator"}
+    metadata, decisions = study_metadata(
+        v1,
+        REFERENCE,
+        Release(pkdb_id="PKDB00198", date=date(2020, 5, 5)),
+        creator_fallback="mkoenig",
+    )
+    assert metadata.creator == "mkoenig"
+    assert [(d.kind, d.detail) for d in decisions] == [
+        ("creator_fallback", "study.json has no creator; mkoenig is the creator")
+    ]
+
+
 def test_a_public_study_without_release_becomes_private():
     v1 = {**V1, "sid": "Harder1988"}
     metadata, decisions = study_metadata(v1, REFERENCE, None, creator_fallback="x")

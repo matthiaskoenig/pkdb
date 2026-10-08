@@ -1,6 +1,7 @@
 """Write the migration report as JSON for tools and as Markdown for maintainers and curators."""
 
 import json
+import os
 from collections import defaultdict
 from pathlib import Path
 
@@ -31,6 +32,7 @@ DECISION_HEADINGS = {
     "label_renamed": "Renamed timecourse labels",
     "reference_replaced": "Replaced reference snapshots",
     "reference_resolved": "Resolved missing references",
+    "creator_fallback": "Studies without a creator",
 }
 # Reasons of studies that are not converted, listed again under manual decisions.
 REASON_HEADINGS = {
@@ -122,8 +124,9 @@ def _decisions(
     lines = ["## Manual decisions", ""]
     by_kind: dict[str, list[list[str]]] = defaultdict(list)
     for study in report.studies:
+        written = "yes" if study.written else "no"
         for decision in study.decisions:
-            by_kind[decision.kind].append([study.study, decision.detail])
+            by_kind[decision.kind].append([study.study, decision.detail, written])
     unknown = sorted(kind for kind in by_kind if kind not in DECISION_HEADINGS)
     for kind in [*DECISION_HEADINGS, *unknown]:
         if kind in by_kind:
@@ -131,7 +134,7 @@ def _decisions(
             lines += [
                 f"### {heading}",
                 "",
-                *_table(["Study", "Detail"], by_kind[kind]),
+                *_table(["Study", "Detail", "Written"], by_kind[kind]),
                 "",
             ]
     lines += _registry(report)
@@ -188,14 +191,23 @@ def _papers(report: MigrationReport) -> list[str]:
     ]
 
 
+def _status(report: MigrationReport) -> str:
+    """Such as `Written: 3 studies.`, `Dry run.` or `Interrupted. Written: 1 study.`"""
+    if report.dry_run:
+        status = "Dry run."
+    else:
+        count = sum(study.written for study in report.studies)
+        status = f"Written: {count} {'study' if count == 1 else 'studies'}."
+    return f"Interrupted. {status}" if report.interrupted else status
+
+
 def markdown(report: MigrationReport) -> str:
     report = _sorted(report)
     grouped = _by_outcome(report)
-    status = "Dry run." if report.dry_run else "Written."
     lines = [
         "# Study format 2 migration",
         "",
-        f"Interrupted. {status}" if report.interrupted else status,
+        _status(report),
         "",
         *(line for warning in report.warnings for line in (f"Warning: {warning}", "")),
         *_summary(report, grouped),
@@ -203,6 +215,20 @@ def markdown(report: MigrationReport) -> str:
         *_decisions(report, grouped),
     ]
     return "\n".join(lines).rstrip("\n") + "\n"
+
+
+def check_report_path(path: Path) -> None:
+    """Refuse a report path that the run could not write, before the run starts."""
+    if path.suffix.lower() == ".md":
+        raise ValueError(
+            f"The report {path} cannot end in .md, because the Markdown report "
+            "is written next to it; name a .json file."
+        )
+    folder = path.parent
+    if not folder.is_dir():
+        raise ValueError(f"The folder {folder} of the report does not exist.")
+    if not os.access(folder, os.W_OK | os.X_OK):
+        raise ValueError(f"The folder {folder} of the report is not writable.")
 
 
 def write_report(report: MigrationReport, path: Path) -> Path:

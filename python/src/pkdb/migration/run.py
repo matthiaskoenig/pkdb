@@ -37,7 +37,7 @@ from pkdb.migration.model import (
     StudyResult,
 )
 from pkdb.migration.registry import Registry
-from pkdb.migration.report import write_report
+from pkdb.migration.report import check_report_path, write_report
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
@@ -135,8 +135,8 @@ def _recover(root: Path, report: MigrationReport) -> None:
             shutil.rmtree(backup)
         else:
             raise ValueError(
-                f"{backup} and {folder} both hold the format 1 study {location}; "
-                f"keep one by hand, delete {work} and run again"
+                f"{backup} and {folder} both hold the format 1 study {location}. "
+                f"Keep the right one in {folder}, delete {backup} and run again."
             )
         report.recovered.append(location)
     if _exists(work):
@@ -511,6 +511,7 @@ def migrate(
         )
     if jobs is not None and jobs < 1:
         raise ValueError("The number of jobs must be at least 1")
+    check_report_path(report)
     root = repository_root(paths[0])
     _check_paths(paths, root)
     known = Registry.read(registry)

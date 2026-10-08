@@ -276,6 +276,21 @@ def test_a_reference_json_that_misses_the_pubmed_id_is_resolved(tmp_path):
     ]
 
 
+def test_a_snapshot_of_another_publication_is_replaced(tmp_path):
+    v1 = v1_full_example(tmp_path / "v1")
+    # The PubMed ID of the snapshot is a typo, as in canagliflozin/Sha2011.
+    snapshot = {"sid": "123", "name": "Example", "pmid": "1234", "doi": "10.1/other"}
+    (v1 / "reference.json").write_text(json.dumps(snapshot))
+    conversion = convert(v1, tmp_path, resolver=Resolved(offline=True))
+    metadata = json.loads((conversion.folder / "study.json").read_text())
+    assert metadata["reference"] == {"pmid": "123"}
+    reference = json.loads((conversion.folder / "reference.json").read_text())
+    assert (reference["pmid"], reference["title"]) == ("123", "Resolved")
+    assert [(d.kind, d.detail) for d in conversion.decisions] == [
+        ("reference_replaced", "Replaced reference.json (SID 123) with PubMed 123")
+    ]
+
+
 def test_a_reference_that_cannot_be_resolved_is_not_converted(tmp_path):
     v1 = v1_full_example(tmp_path / "v1")
     (v1 / "reference.json").write_text(json.dumps({"sid": "123", "name": "Example"}))

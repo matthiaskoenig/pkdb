@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from pkdb.migration.model import (
     Change,
     Decision,
@@ -80,7 +82,8 @@ def test_the_markdown_summary_and_sections():
     assert "| caffeine/C2001 | sheet_name: Sheet Fig1.2 is not a source name |" in text
     assert "| caffeine/D2002 | group_count_1 x 1 |" in text
     assert "### Converted dosing schedules" in text
-    assert "| caffeine/A1999 | D1: time 0, interval 12, doses 3 |" in text
+    assert "| Study | Detail | Written |" in text
+    assert "| caffeine/A1999 | D1: time 0, interval 12, doses 3 | no |" in text
     assert "### Studies with two PKDB identifiers" in text
     assert "| caffeine/A1999 | PKDB00001, PKDB00002 |" in text
     assert "### Registry paths that do not exist" in text
@@ -92,7 +95,7 @@ def test_the_markdown_summary_and_sections():
     ) in text
     assert "| studies/caffeine/F2004 | papers/caffeine/F2004 | yes |" in text
     assert "caffeine/B2000\n" in text
-    assert "—" not in text
+    assert "\u2014" not in text
 
 
 def test_cells_escape_pipes_and_line_breaks():
@@ -101,7 +104,26 @@ def test_cells_escape_pipes_and_line_breaks():
         studies=[StudyResult(study="x/Y", outcome="not_converted", reason="a|b\nc")],
     )
     assert "| x/Y | a\\|b c |" in markdown(report)
-    assert "Written." in markdown(report)
+
+
+@pytest.mark.parametrize(
+    ("dry_run", "interrupted", "written", "status"),
+    [
+        (False, False, 2, "Written: 2 studies."),
+        (False, False, 1, "Written: 1 study."),
+        (False, True, 0, "Interrupted. Written: 0 studies."),
+        (True, False, 0, "Dry run."),
+    ],
+)
+def test_the_header_says_how_many_studies_were_written(
+    dry_run, interrupted, written, status
+):
+    studies = [
+        StudyResult(study=f"x/S{n}", outcome="identical", written=n < written)
+        for n in range(3)
+    ]
+    report = MigrationReport(dry_run=dry_run, interrupted=interrupted, studies=studies)
+    assert markdown(report).startswith(f"# Study format 2 migration\n\n{status}\n")
 
 
 def test_an_interrupted_run_says_so_first():
@@ -118,6 +140,7 @@ def test_every_decision_kind_appears_under_a_heading():
         "label_renamed",
         "reference_replaced",
         "reference_resolved",
+        "creator_fallback",
         "future_kind",
     ]
     report = MigrationReport(
@@ -126,6 +149,7 @@ def test_every_decision_kind_appears_under_a_heading():
             StudyResult(
                 study="x/Y",
                 outcome="intended",
+                written=True,
                 decisions=[Decision(kind=k, detail=f"detail {k}") for k in kinds],
             )
         ],
@@ -140,4 +164,5 @@ def test_every_decision_kind_appears_under_a_heading():
         "future_kind",
     ]:
         assert f"### {heading}\n" in text
-    assert "| x/Y | detail future_kind |" in text
+    assert "| x/Y | detail future_kind | yes |" in text
+    assert "### Studies without a creator\n" in text

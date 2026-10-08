@@ -414,8 +414,13 @@ def test_a_finished_swap_drops_its_backup_on_the_next_run(tmp_path, sf_vocabular
 def test_a_backup_beside_a_v1_folder_stops_the_run(tmp_path, sf_vocabulary):
     v1_full_example(tmp_path)
     backup = backup_of_example(tmp_path)
-    with pytest.raises(ValueError, match="by hand"):
+    with pytest.raises(ValueError) as error:
         go(tmp_path, sf_vocabulary)
+    folder = tmp_path / "studies" / "caffeine" / "Example"
+    assert str(error.value) == (
+        f"{backup} and {folder} both hold the format 1 study caffeine/Example. "
+        f"Keep the right one in {folder}, delete {backup} and run again."
+    )
     assert (backup / "Example.xlsx").exists()
 
 
