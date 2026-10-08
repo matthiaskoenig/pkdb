@@ -84,3 +84,24 @@ def test_a_missing_or_unsupported_image_refuses_the_study(tmp_path):
     with pytest.raises(NotConverted) as unsupported:
         copy_images(v1, target, "Example", {"Fig1"})
     assert unsupported.value.code == "image_type"
+
+
+def test_a_cmyk_jpg_is_converted_to_png(tmp_path):
+    v1, target = tmp_path / "v1", tmp_path / "v2"
+    v1.mkdir()
+    target.mkdir()
+    Image.new("CMYK", (4, 3)).save(v1 / "Example_Fig1.jpg")
+    copy_images(v1, target, "Example", {"Fig1"})
+    with Image.open(target / "Example_Fig1.png") as image:
+        assert (image.format, image.size) == ("PNG", (4, 3))
+
+
+def test_a_corrupt_jpg_refuses_the_study(tmp_path):
+    v1, target = tmp_path / "v1", tmp_path / "v2"
+    v1.mkdir()
+    target.mkdir()
+    (v1 / "Example_Fig1.jpg").write_bytes(b"not an image")
+    with pytest.raises(NotConverted) as error:
+        copy_images(v1, target, "Example", {"Fig1"})
+    assert error.value.code == "image_unreadable"
+    assert "Example_Fig1.jpg" in error.value.message

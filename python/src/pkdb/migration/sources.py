@@ -14,6 +14,7 @@ from pkdb.studyformat.tables import (
     image_file,
 )
 
+PNG_MODES = ("1", "L", "LA", "P", "RGB", "RGBA", "I", "I;16")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg")
 
 
@@ -83,8 +84,15 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
         if ".png" in candidates:
             shutil.copyfile(candidates[".png"], target / name)
         elif jpg := candidates.get(".jpg") or candidates.get(".jpeg"):
-            with Image.open(jpg) as image:
-                image.save(target / name, format="PNG")
+            try:
+                with Image.open(jpg) as image:
+                    if image.mode not in PNG_MODES:
+                        image = image.convert("RGB")
+                    image.save(target / name, format="PNG")
+            except OSError as error:
+                raise NotConverted(
+                    "image_unreadable", f"The image {jpg.name} cannot be read: {error}"
+                ) from error
             decisions.append(
                 Decision(kind="image_converted", detail=f"{jpg.name} to {name}")
             )
