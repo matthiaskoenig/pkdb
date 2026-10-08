@@ -378,16 +378,33 @@ describe("issues", () => {
   });
 
   it("renders a long list in steps, so that the first issues show at once", async () => {
-    const many: ValidationIssue[] = Array.from({ length: 250 }, (_, index) => ({
+    // The frames run when the test says so: a busy machine neither skips nor delays a step.
+    const frames = new Map<number, FrameRequestCallback>();
+    let frameIds = 0;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      frames.set(++frameIds, callback);
+      return frameIds;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation((id) => void frames.delete(id));
+    async function nextFrame(): Promise<void> {
+      const due = [...frames.values()];
+      frames.clear();
+      for (const callback of due) callback(performance.now());
+      await flushPromises();
+    }
+    const many: ValidationIssue[] = Array.from({ length: 120 }, (_, index) => ({
       ...outsideRange,
       message: `mean ${index} lies outside [min, max]`,
       source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
     }));
-    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }));
-    expect(codes().length).toBeLessThan(250);
-    expect(codes().length).toBeGreaterThanOrEqual(100);
-    expect(section().get(".problem-group-counts").text()).toBe("250 warnings");
-    await vi.waitFor(() => expect(codes()).toHaveLength(250));
+    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 120 } }));
+    // The first step of 100 issues shows at once, and the next frame adds the rest.
+    expect(codes()).toHaveLength(100);
+    expect(section().get(".problem-group-counts").text()).toBe("120 warnings");
+    await nextFrame();
+    expect(codes()).toHaveLength(120);
+    await nextFrame();
+    expect(codes()).toHaveLength(120);
   });
 
   it("says how many problems the last validation left out", async () => {
