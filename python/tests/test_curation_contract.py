@@ -10,6 +10,7 @@ from curation_contract import check_contract
 
 import pkdb.studyformat.review_edit as review_edit
 from pkdb.cache import bundled_vocabulary
+from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue
@@ -141,6 +142,27 @@ def test_targets_contract(workspace, engine_on):
             "previews": previews,
         },
     )
+
+
+def test_limits_contract(workspace, engine_on, monkeypatch):
+    """The study page of Demo2020 beyond each upload limit: the limit first, and no tables or sources."""
+    engine = engine_on(workspace)
+    details = []
+    for limit, value in (("MAX_FILES", 2), ("MAX_ROWS", 3)):
+        with monkeypatch.context() as patch:
+            patch.setattr(studies, limit, value)
+            detail = engine.study_detail(DEMO)
+        details.append(
+            {
+                key: detail[key]
+                for key in ("problems", "sources", "files", "tables", "targets")
+            }
+        )
+    assert [detail["problems"][0]["code"] for detail in details] == [
+        "file_limit",
+        "row_limit",
+    ]
+    check_contract("limits", {"details": details})
 
 
 def test_source_contract(workspace, engine_on):

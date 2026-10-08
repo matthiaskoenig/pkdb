@@ -9,7 +9,6 @@ import {
   filterIssues,
   groupByFile,
   groupCounts,
-  isLimitIssue,
   location,
   locationKey,
   lastWrite,
@@ -112,12 +111,6 @@ describe("severity", () => {
     expect(noIssuesText("all")).toBe("No errors or warnings.");
     expect(noIssuesText("error")).toBe("No errors.");
     expect(noIssuesText("warning")).toBe("No warnings.");
-  });
-
-  it("knows the issues of the upload limits", () => {
-    expect(isLimitIssue(limit)).toBe(true);
-    expect(isLimitIssue(issue("file_limit", "error"))).toBe(true);
-    expect(isLimitIssue(unit)).toBe(false);
   });
 });
 

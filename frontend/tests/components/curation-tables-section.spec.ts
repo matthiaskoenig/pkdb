@@ -13,6 +13,7 @@ import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import {
+  beyondLimitsDetail,
   conflictAnswer,
   FILE_DELETED_CONFLICT,
   json,
@@ -409,6 +410,26 @@ describe("conflicts", () => {
     // The panel shows the conflict already.
     expect(page().find(".action-failure").exists()).toBe(false);
     expect(page().get(".tables-notice").text()).toBe("The workbook opened.");
+  });
+});
+
+describe("beyond the upload limits", () => {
+  it("says that the app cannot show the tables, suggests no Add table and counts no tables", async () => {
+    await mountSection(beyondLimitsDetail());
+    expect(tabs()).toHaveLength(0);
+    const text = page().get(".tables-empty");
+    expect(text.text()).toBe("This study is beyond the upload limits, so the app cannot show its tables. See Problems.");
+    expect(text.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
+    expect(page().text()).not.toContain("no tables yet");
+    expect(requests.filter((request) => request.path.startsWith(`${EXAMPLE}/tables/`))).toEqual([]);
+    // The rail claims no count of the tables and sources that the study page cannot list.
+    const rail = (label: string) =>
+      page()
+        .findAll(".rail-link")
+        .find((link) => link.get(".rail-label").text().startsWith(label))!;
+    expect(rail("Tables").find(".rail-count").exists()).toBe(false);
+    expect(rail("Sources").find(".rail-count").exists()).toBe(false);
+    expect(rail("Problems").get(".rail-count").text()).toBe("1");
   });
 });
 

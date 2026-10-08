@@ -1,14 +1,23 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { ConflictData, ReviewItem, StudyDetail, TableEntry, TablesResult } from "../../src/curation-app/api/types";
+import type {
+  ConflictData,
+  ReviewItem,
+  StudyDetail,
+  TableEntry,
+  TablesResult,
+  ValidationIssue,
+} from "../../src/curation-app/api/types";
 import {
   actionFailure,
   approvalRefusal,
+  beyondLimits,
   defaultSection,
   duplicateFolders,
   duplicateHeading,
   findProfile,
   folderPath,
+  isLimitIssue,
   isRawTable,
   rawTableFiles,
   isSection,
@@ -27,7 +36,7 @@ import {
   tablesOutcome,
   userHint,
 } from "../../src/curation-app/study";
-import { profile, roster, studyDetail } from "./curation-fixtures";
+import { beyondLimitsDetail, profile, roster, studyDetail } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {
   return {
@@ -103,6 +112,21 @@ describe("railCounts", () => {
       sources: 0,
       tables: 0,
     });
+  });
+
+  it("counts no sources and tables beyond the upload limits, where the study page lists none", () => {
+    const review = { revision: "review-1", value: { status: "in_review" as const, reviewers: [], items: [item("open")] }, issues: [] };
+    expect(railCounts(beyondLimitsDetail({ review }))).toEqual({ review: 1, problems: 1 });
+  });
+});
+
+describe("beyondLimits", () => {
+  it("knows a study beyond the upload limits by its problems, not by its empty lists", () => {
+    expect(beyondLimits(beyondLimitsDetail())).toBe(true);
+    expect(beyondLimits(studyDetail({ sources: [], tables: [], files: [] }))).toBe(false);
+    const unit: ValidationIssue = { code: "unit_dimension", severity: "error", message: "mg is no concentration" };
+    expect(isLimitIssue(unit)).toBe(false);
+    expect(beyondLimits(studyDetail({ problems: [unit] }))).toBe(false);
   });
 });
 

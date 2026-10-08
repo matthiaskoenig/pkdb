@@ -15,7 +15,6 @@ import {
   filterIssues,
   groupByFile,
   groupCounts,
-  isLimitIssue,
   locationKey,
   noIssuesText,
   scopeText,
@@ -27,7 +26,7 @@ import {
 import { targetParts } from "../review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, profileOf, sectionRoute, tableFiles, tablesOutcome } from "../study";
+import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles, tablesOutcome } from "../study";
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the

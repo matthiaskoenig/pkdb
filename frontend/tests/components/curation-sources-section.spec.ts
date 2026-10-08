@@ -6,7 +6,7 @@ import { RouterView, type Router } from "vue-router";
 import type { SourcePoint, SourceView, StudyDetail, ValidationIssue } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { beyondLimitsDetail, json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import { button, click, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
@@ -315,6 +315,15 @@ describe("tabs", () => {
     await mountSection(detail({ sources: [] }));
     expect(tabs()).toHaveLength(0);
     expect(page().text()).toContain("The study has no sources yet.");
+  });
+
+  it("says that the app cannot show the sources of a study beyond the upload limits", async () => {
+    await mountSection(beyondLimitsDetail());
+    expect(tabs()).toHaveLength(0);
+    const text = page().get(".sources-empty");
+    expect(text.text()).toBe("This study is beyond the upload limits, so the app cannot show its sources. See Problems.");
+    expect(text.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
+    expect(page().text()).not.toContain("no sources yet");
   });
 });
 

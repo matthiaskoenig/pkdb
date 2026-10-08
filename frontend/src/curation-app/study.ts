@@ -4,7 +4,16 @@
  */
 import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
-import type { IssueState, People, Profile, Release, StudyDetail, StudySummary, TablesResult } from "./api/types";
+import type {
+  IssueState,
+  People,
+  Profile,
+  Release,
+  StudyDetail,
+  StudySummary,
+  TablesResult,
+  ValidationIssue,
+} from "./api/types";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -63,14 +72,31 @@ export function isRawTable(detail: Pick<StudyDetail, "tables">, file: string): b
   return rawTableFiles(detail).has(file);
 }
 
-/** The counts of the rail: open items, errors plus warnings, sources, and table and raw table files. */
+/** The issues of the upload limits, which the library reports before reading the whole study. */
+const LIMIT_CODES: ReadonlySet<string> = new Set(["row_limit", "file_limit"]);
+
+/** Whether the issue says that the study is beyond the upload limits. */
+export function isLimitIssue(issue: ValidationIssue): boolean {
+  return LIMIT_CODES.has(issue.code);
+}
+
+/**
+ * Whether the study is beyond the upload limits. Its page then lists no files, sources, tables
+ * or targets, because the local server does not read the study, and names the limit in its problems.
+ */
+export function beyondLimits(detail: Pick<StudyDetail, "problems">): boolean {
+  return detail.problems.some(isLimitIssue);
+}
+
+/**
+ * The counts of the rail: open items, errors plus warnings, sources, and table and raw table
+ * files; none of the sources and tables beyond the upload limits, where the page cannot list them.
+ */
 export function railCounts(detail: StudyDetail): Partial<Record<Section, number>> {
-  return {
-    review: openItems(detail),
-    problems: detail.counts.errors + detail.counts.warnings,
-    sources: detail.sources.length,
-    tables: detail.tables.length,
-  };
+  const counts = { review: openItems(detail), problems: detail.counts.errors + detail.counts.warnings };
+  return beyondLimits(detail)
+    ? counts
+    : { ...counts, sources: detail.sources.length, tables: detail.tables.length };
 }
 
 // Header

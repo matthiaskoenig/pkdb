@@ -11,6 +11,7 @@ import type {
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import limitsFixture from "../fixtures/curation-contract/limits.json";
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -244,6 +245,23 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     targets: {},
     ...changes,
   };
+}
+
+/** The fields of a study page that the local server sends beyond the upload limits. */
+type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets">;
+
+/**
+ * What the local server sends for a study beyond the upload limits, by limit: the limit as the
+ * first problem, and no files, sources, tables or targets (python/tests/test_curation_contract.py).
+ */
+export const BEYOND_LIMITS = limitsFixture.details as BeyondLimits[];
+
+/**
+ * The study page of `caffeine/Example` beyond the upload limit of files, with `changes`: the
+ * fields beyond the limits as the local server sends them, on the fields of `studyDetail`.
+ */
+export function beyondLimitsDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
+  return studyDetail({ status: "invalid", counts: { errors: 1, warnings: 0 }, ...BEYOND_LIMITS[0], ...changes });
 }
 
 /** A source of `GET /local/studies/<id>`: a paper table with its image and raw extraction unless `changes` say otherwise. */

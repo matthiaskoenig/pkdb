@@ -8,7 +8,7 @@ import { targetMatch } from "../grid";
 import { plural } from "../overview";
 import { matchText, rowsAt, shownColumns, targetText } from "../review";
 import { useStudyStore } from "../stores/study";
-import { sectionRoute, tableFiles } from "../study";
+import { beyondLimits, sectionRoute, tableFiles } from "../study";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
 
@@ -16,7 +16,8 @@ import TableGrid from "./TableGrid.vue";
  * What a review item is about: the rows of its table that match its row filters, with its column
  * marked, and for a digitized series the figure overlay with that series emphasized, as the local
  * server matched its target. Nothing shows for the whole study or a file that is no table. The
- * rows link to the Tables section.
+ * rows link to the Tables section. Beyond the upload limits a target of a file says that its rows
+ * cannot be shown.
  */
 const props = defineProps<{ item: ReviewItem }>();
 
@@ -102,7 +103,12 @@ function tableRoute(line?: number) {
   });
 }
 const rawTable = computed(() => table.value?.content.kind === "raw");
-const shown = computed(() => tableFile.value !== null || series.value !== null);
+/**
+ * Beyond the upload limits the local server lists no tables and matches no target: a target of a
+ * file, which may be a table, says why its rows do not show.
+ */
+const limited = computed(() => file.value !== null && study.detail !== null && beyondLimits(study.detail));
+const shown = computed(() => tableFile.value !== null || series.value !== null || limited.value);
 </script>
 
 <template>
@@ -112,6 +118,11 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
         <h3 :id="headingId" class="target-heading">Target</h3>
         <p class="target-text">{{ targetText(target) }}</p>
       </div>
+
+      <p v-if="limited" class="field-note target-limits">
+        This study is beyond the upload limits, so the app cannot show the rows of its tables. See
+        <RouterLink :to="sectionRoute(study.detail?.id ?? '', 'problems')">Problems</RouterLink>.
+      </p>
 
       <div v-if="tableFile" class="target-block">
         <VProgressLinear

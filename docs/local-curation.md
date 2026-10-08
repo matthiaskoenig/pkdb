@@ -93,7 +93,7 @@ Study format 1 folders are not listed. The line below the table counts them, and
 
 The header of a study shows its identity, its release, its issue and its provenance, the title of the publication, the PMID, the On save action, the sync status, the problems and the last upload. Its actions are the **Review status** select, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
 
-The rail on the left lists the sections Metadata, Review, Problems, Sources, Tables and Activity, with the number of open review items, problems, sources and tables. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
+The rail on the left lists the sections Metadata, Review, Problems, Sources, Tables and Activity, with the number of open review items, problems, sources and tables. A study beyond the upload limits shows no number of sources and tables, because the app cannot read them; its Sources and Tables sections and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
 
 ### Metadata
 

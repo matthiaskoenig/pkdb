@@ -16,14 +16,14 @@ import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, vi
 import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
-import { rawTableFiles, tableFiles, tablesOutcome } from "../study";
+import { beyondLimits, rawTableFiles, sectionRoute, tableFiles, tablesOutcome } from "../study";
 
 /**
  * The sync status of the workbook first, with the conflict panel while the workbook and the
  * tables conflict; then one tab per table and raw table with its rows, read only. Rows that open
  * review items target are amber and cells with problems are outlined. Tables are edited in the
  * workbook, which Open tables of the study header opens: Sync syncs it, and Add table adds a
- * sheet.
+ * sheet. Beyond the upload limits the section says that it cannot show the tables.
  *
  * The chosen table is the `file` of the route, and its `line` and `column` focus a cell, so that
  * the Problems, Review and Sources sections can link to a row.
@@ -86,6 +86,8 @@ function added(table: string): void {
 
 // Tables
 
+/** Beyond the upload limits the local server lists no tables, which the study may well have. */
+const limited = computed(() => (detail.value ? beyondLimits(detail.value) : false));
 const files = computed(() => (detail.value ? tableFiles(detail.value) : []));
 const raw = computed(() => (detail.value ? rawTableFiles(detail.value) : new Set<string>()));
 
@@ -231,7 +233,11 @@ const missingLine = computed(() => {
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="tables-notice">{{ notice }}</span>
 
-    <p v-if="!files.length" class="tables-empty">
+    <p v-if="limited" class="tables-empty">
+      This study is beyond the upload limits, so the app cannot show its tables. See
+      <RouterLink :to="sectionRoute(identity, 'problems')">Problems</RouterLink>.
+    </p>
+    <p v-else-if="!files.length" class="tables-empty">
       The study has no tables yet. Add table adds a sheet to the workbook.
     </p>
     <template v-else>

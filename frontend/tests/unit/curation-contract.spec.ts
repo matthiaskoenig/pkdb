@@ -32,7 +32,7 @@ import {
   suggestionView,
 } from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
-import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
+import { beyondLimits, isLimitIssue, isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
@@ -41,12 +41,24 @@ import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 import targetsFixture from "../fixtures/curation-contract/targets.json";
-import { reviewItem, studyDetail, SUBJECTS_COLUMNS } from "./curation-fixtures";
+import { BEYOND_LIMITS, reviewItem, studyDetail, SUBJECTS_COLUMNS } from "./curation-fixtures";
 
 /** A fixture as the type of the app; the fixture is a real answer of the server. */
 function contract<T>(value: unknown): T {
   return value as T;
 }
+
+describe("limits contract", () => {
+  it("knows a study beyond each upload limit by the limit, its first problem", () => {
+    expect(BEYOND_LIMITS.map((detail) => detail.problems[0]?.code)).toEqual(["file_limit", "row_limit"]);
+    for (const detail of BEYOND_LIMITS) {
+      expect(isLimitIssue(detail.problems[0]!)).toBe(true);
+      expect(beyondLimits(detail)).toBe(true);
+      // The rail claims no count of the sources and tables that the study page cannot list.
+      expect(railCounts(studyDetail({ ...detail, counts: { errors: 1, warnings: 0 } }))).toEqual({ review: 0, problems: 1 });
+    }
+  });
+});
 
 describe("tables contract", () => {
   const tables = contract<TableEntry[]>(tablesFixture.tables);

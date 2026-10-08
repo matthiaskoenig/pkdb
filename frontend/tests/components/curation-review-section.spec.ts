@@ -18,7 +18,15 @@ import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
-import { json, reviewItem, roster, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import {
+  beyondLimitsDetail,
+  json,
+  reviewItem,
+  roster,
+  snapshot,
+  sourceSummary,
+  studyDetail,
+} from "../unit/curation-fixtures";
 import {
   button,
   buttons,
@@ -1061,14 +1069,27 @@ describe("target", () => {
 });
 
 describe("target beyond the upload limits", () => {
-  it("shows no target and asks for no table, since the local server matched none", async () => {
-    // The study page of a study beyond the upload limits has no tables, files, sources or targets.
-    const beyond = { ...withReview({}, "review-7", {}), tables: [], files: [], sources: [] };
-    await mountSection(beyond, {}, `${SECTION}?item=${AGENT}`);
+  // The study page of a study beyond the upload limits has no tables, files, sources or targets.
+  const beyond = () => beyondLimitsDetail({ review: withReview().review });
+
+  it("says that the rows cannot be shown, and asks for no table, since the local server matched none", async () => {
+    await mountSection(beyond(), {}, `${SECTION}?item=${AGENT}`);
     expect(detail().get(".review-detail-text").text()).toBe("The error bars may be SE rather than SD.");
-    expect(page().find(".review-target").exists()).toBe(false);
+    const target = page().get(".review-target");
+    expect(target.get(".target-text").text()).toBe("timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type");
+    const limits = target.get(".target-limits");
+    expect(limits.text()).toBe(
+      "This study is beyond the upload limits, so the app cannot show the rows of its tables. See Problems.",
+    );
+    expect(limits.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
     expect(fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`)).toBe(0);
     expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(0);
+  });
+
+  it("shows no target for the whole study", async () => {
+    await mountSection(beyond(), {}, `${SECTION}?item=${RESOLVED}`);
+    expect(detail().get(".review-detail-text").text()).toBe("The dose unit was missing.");
+    expect(page().find(".review-target").exists()).toBe(false);
   });
 });
 

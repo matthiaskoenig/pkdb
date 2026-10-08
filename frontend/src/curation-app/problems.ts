@@ -55,14 +55,6 @@ export function groupCounts(issues: readonly ValidationIssue[]): string {
     .join(" · ");
 }
 
-/** The issues of the upload limits, which the library reports before reading the whole study. */
-const LIMIT_CODES: ReadonlySet<string> = new Set(["row_limit", "file_limit"]);
-
-/** Whether the issue says that the study is beyond the upload limits. */
-export function isLimitIssue(issue: ValidationIssue): boolean {
-  return LIMIT_CODES.has(issue.code);
-}
-
 /** The issues of one file; `file` is null for issues of the whole study. */
 export interface IssueGroup {
   file: string | null;
