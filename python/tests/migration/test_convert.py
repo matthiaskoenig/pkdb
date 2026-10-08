@@ -3,7 +3,7 @@ from datetime import date
 
 import openpyxl
 import pytest
-from migration_fixtures import v1_full_example, write_sheets
+from migration_fixtures import SHEETS, STUDY, v1_full_example, v1_study, write_sheets
 
 from pkdb.migration.convert import convert_study, is_v1_file
 from pkdb.migration.model import NotConverted
@@ -38,6 +38,11 @@ def convert(v1, tmp_path, *, resolver=None):
         approver=None,
         resolver=resolver or NoNetwork(offline=True),
     )
+
+
+def rows(path):
+    header, *lines = [line.split("\t") for line in path.read_text().splitlines()]
+    return [dict(zip(header, line, strict=True)) for line in lines]
 
 
 def rewrite_study(v1, **changes):
@@ -119,6 +124,34 @@ def test_hidden_folders_are_kept(tmp_path):
     (v1 / ".misc" / "data.xlsx").write_bytes(b"xlsx")
     conversion = convert(v1, tmp_path)
     assert (conversion.folder / ".misc" / "data.xlsx").read_bytes() == b"xlsx"
+    assert conversion.decisions == []
+
+
+@pytest.mark.parametrize(
+    ("images", "source"), [((), ""), (("TabGroups",), "TabGroups")]
+)
+def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image(
+    tmp_path, images, source
+):
+    group = {
+        "source": "TabGroups",
+        "name": "col==name",
+        "count": "col==count",
+        "characteristica": [{"measurement_type": "species", "choice": "Homo sapiens"}],
+    }
+    v1 = v1_study(
+        tmp_path / "v1",
+        {**STUDY, "groupset": {"groups": [group]}},
+        {**SHEETS, "TabGroups": [["name", "count"], ["all", 2]]},
+        ("TabA", "Tab2", "Fig1", *images),
+    )
+    conversion = convert(v1, tmp_path)
+    subjects = rows(conversion.folder / "subjects.tsv")
+    characteristica = rows(conversion.folder / "characteristica.tsv")
+    assert [row["source"] for row in subjects if row["name"] == "all"] == [source]
+    assert [row["source"] for row in characteristica if row["subjects"] == "all"] == [
+        source
+    ]
     assert conversion.decisions == []
 
 

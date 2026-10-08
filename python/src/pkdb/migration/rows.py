@@ -131,7 +131,7 @@ def _name(name: str) -> str:
 
 
 def _subjects(
-    study: CanonicalStudy, name: str, decisions: list[Decision]
+    study: CanonicalStudy, name: str, images: frozenset[str], decisions: list[Decision]
 ) -> list[dict[str, str]]:
     rows, seen = [], set()
     subjects: list[Group | Individual] = [*study.groups, *study.individuals]
@@ -153,7 +153,7 @@ def _subjects(
                 "name": _name(subject.name),
                 "parent": text(parent),
                 "count": number(count),
-                "source": curator_source(subject.source, subject.image, name),
+                "source": curator_source(subject.source, subject.image, name, images),
                 "comment": comment(subject),
             }
         )
@@ -178,6 +178,7 @@ def _characteristic_image(
 def _characteristica(
     study: CanonicalStudy,
     name: str,
+    images: frozenset[str],
     error_bars: ErrorBars,
     decisions: list[Decision],
 ) -> list[dict[str, str]]:
@@ -190,7 +191,7 @@ def _characteristica(
             row = {
                 **observation(record, error_bars),
                 "subjects": subject.name,
-                "source": curator_source(record.source, image, name),
+                "source": curator_source(record.source, image, name, images),
             }
             rows.append(_geometric(record, row, decisions))
     return rows
@@ -212,6 +213,7 @@ def _schedule(record: Intervention) -> Decision | None:
 def _interventions(
     study: CanonicalStudy,
     name: str,
+    images: frozenset[str],
     error_bars: ErrorBars,
     decisions: list[Decision],
 ) -> list[dict[str, str]]:
@@ -230,7 +232,7 @@ def _interventions(
             "time_end": number(record.time_end),
             "interval": number(record.interval),
             "doses": number(record.doses),
-            "source": curator_source(record.source, record.image, name),
+            "source": curator_source(record.source, record.image, name, images),
         }
         rows.append(_geometric(record, row, decisions))
     return rows
@@ -424,15 +426,24 @@ def _plural(count: int, noun: str) -> str:
 
 
 def study_tables(
-    study: CanonicalStudy, name: str, error_bars: ErrorBars = {}
+    study: CanonicalStudy,
+    name: str,
+    error_bars: ErrorBars = {},
+    *,
+    images: frozenset[str],
 ) -> tuple[Tables, list[Decision]]:
-    """The format 2 tables of a parsed format 1 study and the decisions to check."""
+    """The format 2 tables of a parsed format 1 study and the decisions to check.
+
+    `images` are the sources that have an image in the v1 folder (`image_sources`).
+    """
     decisions: list[Decision] = []
     scatters, used = _scatter_rows(study, name, decisions)
     tables: Tables = {
-        "subjects.tsv": _subjects(study, name, decisions),
-        "characteristica.tsv": _characteristica(study, name, error_bars, decisions),
-        "interventions.tsv": _interventions(study, name, error_bars, decisions),
+        "subjects.tsv": _subjects(study, name, images, decisions),
+        "characteristica.tsv": _characteristica(
+            study, name, images, error_bars, decisions
+        ),
+        "interventions.tsv": _interventions(study, name, images, error_bars, decisions),
     }
     arrays: Counter[str] = Counter()
     for record in study.measurements:

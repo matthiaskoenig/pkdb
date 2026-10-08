@@ -60,15 +60,32 @@ def observation_source(location: SourceLocation, image: str | None, study: str) 
     return source
 
 
-def curator_source(location: SourceLocation, image: str | None, study: str) -> str:
-    """The `source` column of subjects, interventions and characteristica: curator data."""
+def curator_source(
+    location: SourceLocation, image: str | None, study: str, images: frozenset[str]
+) -> str:
+    """The `source` column of subjects, interventions and characteristica: curator data.
+
+    Format 2 needs `<study>_<source>.png` for every source but `Text`, so the
+    sheet, else the source of the row's image, is the source only when the v1
+    folder holds its image (`images`); otherwise a sheet row has no source and
+    an entity of study.json the source `Text`.
+    """
     sheet = sheet_of(location, study)
-    if sheet is not None and SOURCE_PATTERN.fullmatch(sheet):
-        return sheet
-    source = image_source(image, study)
-    if source is not None and SOURCE_PATTERN.fullmatch(source):
-        return source
+    for source in (sheet, image_source(image, study)):
+        if source is not None and source in images and SOURCE_PATTERN.fullmatch(source):
+            return source
     return TEXT_SOURCE if sheet is None else ""
+
+
+def image_sources(v1: Path, study: str) -> frozenset[str]:
+    """The sources that have an image `<study>_<source>` in the v1 folder."""
+    return frozenset(
+        source
+        for path in v1.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in IMAGE_SUFFIXES
+        and (source := image_source(path.name, study)) is not None
+    )
 
 
 def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Decision]:

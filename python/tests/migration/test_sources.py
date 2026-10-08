@@ -6,6 +6,7 @@ from pkdb.migration.sources import (
     copy_images,
     curator_source,
     image_source,
+    image_sources,
     observation_source,
     sheet_of,
 )
@@ -50,12 +51,35 @@ def test_an_inline_image_outside_the_naming_refuses_the_study():
     assert error.value.code == "image_name"
 
 
-def test_curator_sources_fall_back_to_the_image_then_empty():
+def test_a_curator_sheet_is_the_source_only_when_it_has_an_image():
+    sheet = SourceLocation(file="Example.xlsx", sheet="TabGroups", row=3)
+    tab1 = frozenset({"Tab1"})
+    assert curator_source(sheet, None, "Example", frozenset()) == ""
+    assert curator_source(sheet, "Example_Tab1.png", "Example", tab1) == "Tab1"
+    assert (
+        curator_source(sheet, None, "Example", frozenset({"TabGroups"})) == "TabGroups"
+    )
+
+
+def test_a_curator_row_takes_an_existing_image_then_empty_or_text():
     groups = SourceLocation(file="Example.xlsx", sheet="Groups", row=3)
-    assert curator_source(groups, "Example_Tab1.png", "Example") == "Tab1"
-    assert curator_source(groups, None, "Example") == ""
-    assert curator_source(WORKBOOK, None, "Example") == "Fig1"
-    assert curator_source(INLINE, None, "Example") == "Text"
+    images = frozenset({"Groups", "Tab1"})
+    assert curator_source(groups, "Example_Tab1.png", "Example", images) == "Tab1"
+    assert curator_source(groups, "Example_Tab2.png", "Example", images) == ""
+    assert curator_source(groups, None, "Example", images) == ""
+    assert curator_source(WORKBOOK, None, "Example", frozenset({"Fig1"})) == "Fig1"
+    assert curator_source(INLINE, "Example_Tab1.png", "Example", images) == "Tab1"
+    assert curator_source(INLINE, "Example_Tab2.png", "Example", images) == "Text"
+    assert curator_source(INLINE, None, "Example", images) == "Text"
+
+
+def test_the_sources_that_have_an_image(tmp_path):
+    names = ["Example_Tab1.png", "Example_Fig2.JPG", "Example_Fig3.jpeg"]
+    names += ["Example_Fig4.svg", "Other_Fig5.png", "Example.pdf", "Example_.png"]
+    for name in names:
+        (tmp_path / name).write_bytes(b"")
+    (tmp_path / "Example_Fig6.png").mkdir()
+    assert image_sources(tmp_path, "Example") == {"Tab1", "Fig2", "Fig3"}
 
 
 def test_images_are_copied_and_jpg_becomes_png(tmp_path):

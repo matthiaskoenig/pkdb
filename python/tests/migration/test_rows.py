@@ -14,6 +14,7 @@ from migration_fixtures import (
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.model import NotConverted
 from pkdb.migration.rows import render, study_tables, used_sources
+from pkdb.migration.sources import image_sources
 from pkdb.preparation import prepare
 
 INTERVENTION = STUDY["interventionset"]["interventions"][0]
@@ -21,8 +22,10 @@ OUTPUT = STUDY["outputset"]["outputs"][0]
 X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
 
 
-def parsed(folder):
-    return parse_bundle(load_folder(folder))
+def tables_of(folder):
+    """The format 2 tables of the v1 study `Example` and the decisions to check."""
+    study = parse_bundle(load_folder(folder))
+    return study_tables(study, "Example", images=image_sources(folder, "Example"))
 
 
 def cells(text):
@@ -37,7 +40,7 @@ def cells(text):
 @pytest.mark.parametrize("workbook", [True, False])
 def test_rows_equal_the_rows_of_the_format_2_twin(tmp_path, valid_study, workbook):
     folder = v1_example(tmp_path / "v1", workbook=workbook)
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     rendered = render(tables)
     assert set(rendered) == {
         "subjects.tsv",
@@ -67,7 +70,7 @@ def test_comments_lose_line_breaks_and_tabs(tmp_path):
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1", "TabA"))
-    tables, _ = study_tables(parsed(folder), "Example")
+    tables, _ = tables_of(folder)
     [row] = tables["interventions.tsv"]
     assert row["comment"] == "Given with water. Fasted. / curator: Dose from Tab1"
 
@@ -80,7 +83,7 @@ def test_percent_statistics_are_written_in_percent(tmp_path):
     folder = v1_study(
         tmp_path, study, {"Tab2": [["mean"], [2.5]]}, ("Tab1", "TabA", "Tab2")
     )
-    tables, _ = study_tables(parsed(folder), "Example")
+    tables, _ = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert row["cv"] == "12.3"
 
@@ -89,7 +92,7 @@ def test_times_not_reported_are_written_as_nr(tmp_path):
     output = {**OUTPUT, "time": "NR", "time_unit": "NR"}
     study = {**STUDY, "outputset": {"outputs": [output]}}
     folder = v1_study(tmp_path, study, SHEETS, IMAGES)
-    tables, _ = study_tables(parsed(folder), "Example")
+    tables, _ = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert (row["time"], row["time_unit"]) == ("NR", "NR")
 
@@ -106,7 +109,7 @@ def test_schedules_and_dose_lists_are_decisions(tmp_path):
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1", "TabA"))
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     [row] = tables["interventions.tsv"]
     assert (row["time"], row["interval"], row["doses"]) == ("0", "12", "3")
     assert [(d.kind, d.detail) for d in decisions] == [
@@ -122,7 +125,7 @@ def test_a_dose_list_is_a_semicolon_list_and_a_decision(tmp_path):
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1", "TabA"))
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     [row] = tables["interventions.tsv"]
     assert (row["time"], row["interval"], row["doses"]) == ("0;12;40", "", "")
     assert [(d.kind, d.detail) for d in decisions] == [("schedule", "D1: time 0;12;40")]
@@ -136,7 +139,7 @@ def test_the_interventions_of_a_row_are_a_comma_list(tmp_path):
         "outputset": {"outputs": [{**OUTPUT, "interventions": "D1, D2"}]},
     }
     folder = v1_study(tmp_path, study, SHEETS, IMAGES)
-    tables, _ = study_tables(parsed(folder), "Example")
+    tables, _ = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert row["interventions"] == "D1,D2"
 
@@ -156,7 +159,7 @@ def test_characteristica_without_an_image_take_the_image_of_their_subject(tmp_pa
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1",))
-    tables, _ = study_tables(parsed(folder), "Example")
+    tables, _ = tables_of(folder)
     [row] = tables["characteristica.tsv"]
     assert (row["subjects"], row["source"]) == ("all", "Tab1")
 
@@ -170,7 +173,7 @@ def test_a_group_with_count_one_becomes_an_individual_and_a_decision(tmp_path):
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1",))
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     assert tables["subjects.tsv"] == [
         {"name": "all", "parent": "", "count": "1", "source": "Tab1", "comment": ""}
     ]
@@ -196,7 +199,7 @@ def test_subject_names_that_format_2_cannot_hold_refuse_the_study(
     }
     folder = v1_study(tmp_path, study, {}, ())
     with pytest.raises(NotConverted) as error:
-        study_tables(parsed(folder), "Example")
+        tables_of(folder)
     assert error.value.code == code
 
 
@@ -210,7 +213,7 @@ def test_the_full_twin_with_scatters(tmp_path, valid_study, sf_vocabulary, workb
     folder = v1_full_example(tmp_path / "v1", workbook=workbook)
     issues = prepare(folder, vocabulary=sf_vocabulary).report.issues
     assert not [i for i in issues if i.severity == "error"]
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     rendered = render(tables)
     assert set(rendered) == {path.name for path in valid_study.glob("*.tsv")}
     assert "scatters_Fig2.tsv" in rendered
@@ -225,7 +228,7 @@ def test_array_outputs_become_outputs_or_timecourses(tmp_path):
     labelled = {**STUDY["outputset"]["outputs"][1], "output_type": "array"}
     study = {**STUDY, "outputset": {"outputs": [array, labelled]}}
     folder = v1_study(tmp_path, study, SHEETS, IMAGES)
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     assert len(tables["outputs_Tab2.tsv"]) == 1
     assert [row["label"] for row in tables["timecourses_Fig1.tsv"]] == [
         "drug_plasma"
@@ -241,7 +244,7 @@ def test_a_geometric_mean_moves_to_gmean(tmp_path):
     output = {**STUDY["outputset"]["outputs"][0], "calculation_type": "geometric mean"}
     study = {**STUDY, "outputset": {"outputs": [output]}}
     folder = v1_study(tmp_path, study, SHEETS, IMAGES)
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert (row["mean"], row["gmean"], row["calculation"]) == (
         "",
@@ -265,7 +268,7 @@ def test_a_geometric_mean_of_a_characteristic_moves_to_gmean(tmp_path):
         "outputset": {},
     }
     folder = v1_study(tmp_path, study, {}, ("Tab1",))
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     [row] = tables["characteristica.tsv"]
     assert (row["mean"], row["gmean"]) == ("", "35")
     assert decisions == []
@@ -301,7 +304,7 @@ def test_a_scatter_is_named_by_its_subset_and_takes_the_source_of_its_points(
         y={"label": "y_cmax"},
         dataset=dataset,
     )
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     rows = tables["scatters_Fig2.tsv"]
     assert [(row["name"], row["subjects"]) for row in rows] == [
         ("age_vs_cmax", "S1"),
@@ -319,7 +322,7 @@ def test_a_scatter_is_named_by_its_subset_and_takes_the_source_of_its_points(
 def test_array_points_of_a_scatter_are_a_decision(tmp_path):
     array = {"output_type": "array"}
     folder = scatter_study(tmp_path, x=array, y=array)
-    tables, decisions = study_tables(parsed(folder), "Example")
+    tables, decisions = tables_of(folder)
     assert len(tables["scatters_Fig2.tsv"]) == 2
     assert [(d.kind, d.detail) for d in decisions] == [
         ("array_output", "4 array outputs in scatters_Fig2.tsv")
@@ -378,5 +381,5 @@ BY_TIME = scatter("age_vs_cmax", *LABELS, shared=["time"])
 def test_scatters_that_format_2_cannot_hold_refuse_the_study(tmp_path, changes, code):
     folder = scatter_study(tmp_path, **changes)
     with pytest.raises(NotConverted) as error:
-        study_tables(parsed(folder), "Example")
+        tables_of(folder)
     assert error.value.code == code

@@ -14,7 +14,7 @@ from pkdb.migration.metadata import review, study_metadata
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.migration.registry import Registry
 from pkdb.migration.rows import render, study_tables, used_sources
-from pkdb.migration.sources import IMAGE_SUFFIXES, copy_images, sheet_of
+from pkdb.migration.sources import IMAGE_SUFFIXES, copy_images, image_sources, sheet_of
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
 from pkdb.schemas.study import CanonicalStudy, DataRecord, Observation, Subject
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
@@ -164,7 +164,7 @@ def convert_study(
         raise NotConverted("unreadable", _issues(error.report.issues)) from error
     workbook = v1 / f"{name}.xlsx"
     bars = error_bars(workbook, study) if workbook.exists() else {}
-    tables, decisions = study_tables(study, name, bars)
+    tables, decisions = study_tables(study, name, bars, images=image_sources(v1, name))
     if "subjects.tsv" not in tables:
         raise NotConverted("no_subjects", "The study has no groups or individuals")
     release = registry.release(f"{v1.parent.name}/{name}")
