@@ -117,6 +117,12 @@ const DIALOGS: Dialog[] = [
 ];
 
 async function expectAccessible(page: Page): Promise<void> {
+  // A fading menu or dialog would have a lower contrast than it shows once it stands still.
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length),
+    )
+    .toBe(0);
   const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
   const found = violations.map((violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(" ")).join(", ")}`);
   expect(found, "axe violations").toEqual([]);
