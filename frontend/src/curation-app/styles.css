@@ -211,6 +211,14 @@ a.brand {
 .row-add {
   align-self: flex-start;
 }
+/* The last answer of a preview stays while the answer for the current input loads (usePreview).
+   It dims after a moment, so that an answer that arrives at once does not flash. A field dims
+   only its messages, never the text being typed. */
+.is-updating:not(.v-input),
+.v-input.is-updating .v-messages {
+  opacity: 0.5;
+  transition: opacity 0.15s ease 0.1s;
+}
 /* A text area grows with its text up to ten lines. Where browsers size fields by content, CSS
    does it; elsewhere the components turn on Vuetify's auto-grow (see fieldSizing.ts). */
 @supports (field-sizing: content) {

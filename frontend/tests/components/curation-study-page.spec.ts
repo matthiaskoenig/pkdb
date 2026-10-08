@@ -772,17 +772,27 @@ describe("StudyPage", () => {
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
     expect(button("Add").attributes("disabled")).toBeUndefined();
 
-    const area = dialog().get(".add-table-preview");
-    expect(area.classes()).not.toContain("is-updating");
-    expect(area.attributes("aria-busy")).toBe("false");
+    /** The marks of the last preview while the next one loads: on the output, never on the field typed in. */
+    const updating = () => {
+      const source = dialog().get(".v-text-field");
+      const facts = dialog().get(".table-preview");
+      return {
+        messages: source.classes().includes("is-updating"),
+        facts: facts.classes().includes("is-updating"),
+        factsBusy: facts.attributes("aria-busy"),
+        statusBusy: dialog().get('[role="status"]').attributes("aria-busy"),
+        fieldBusy: source.element.closest('[aria-busy="true"]') !== null,
+      };
+    };
+    const settled = { messages: false, facts: false, factsBusy: "false", statusBusy: "false", fieldBusy: false };
+    expect(updating()).toEqual(settled);
     expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab3 can be added. The image is in the folder.");
 
     // Another key: Add waits at once; the last preview stays, marked as updating, and is not announced again.
     await field("Source").setValue("Tab34");
     await flushPromises();
     expect(button("Add").attributes("disabled")).toBeDefined();
-    expect(area.classes()).toContain("is-updating");
-    expect(area.attributes("aria-busy")).toBe("true");
+    expect(updating()).toEqual({ messages: true, facts: true, factsBusy: "true", statusBusy: "true", fieldBusy: false });
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
     expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab3 can be added. The image is in the folder.");
     await dialog().get("form").trigger("submit");
@@ -793,8 +803,7 @@ describe("StudyPage", () => {
       json({ ...HARDER_PREVIEWS["outputs Tab3"], table: "outputs_Tab34", file: "outputs_Tab34.tsv", image_found: false }),
     );
     await flushPromises();
-    expect(area.classes()).not.toContain("is-updating");
-    expect(area.attributes("aria-busy")).toBe("false");
+    expect(updating()).toEqual(settled);
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab34.tsv");
     expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab34 can be added. The image is missing.");
     await click("Add");

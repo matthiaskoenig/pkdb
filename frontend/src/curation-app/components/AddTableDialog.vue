@@ -128,48 +128,49 @@ async function add(): Promise<void> {
         <VRadioGroup v-model="kind" label="Kind" inline hide-details class="add-table-kind">
           <VRadio v-for="item in NEW_TABLE_KINDS" :key="item.value" :value="item.value" :label="item.label" />
         </VRadioGroup>
-        <!-- While the answer for the current kind and source loads, the last one stays, marked as updating. -->
-        <div
-          class="add-table-preview"
+        <!-- While the answer for the current kind and source loads, the last one stays, marked as
+             updating: the messages of the field, the facts and the status line, not the field. -->
+        <VTextField
+          v-model="source"
+          label="Source"
+          placeholder="Tab3"
+          :hint="hint"
+          persistent-hint
+          :error-messages="problem"
+          :class="{ 'is-updating': preview.loading.value }"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <dl
+          v-if="table && !table.issues.length"
+          class="panel-facts table-preview"
           :class="{ 'is-updating': preview.loading.value }"
           :aria-busy="preview.loading.value"
         >
-          <VTextField
-            v-model="source"
-            label="Source"
-            placeholder="Tab3"
-            :hint="hint"
-            persistent-hint
-            :error-messages="problem"
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <dl v-if="table && !table.issues.length" class="panel-facts table-preview">
-            <dt>Sheet</dt>
-            <dd>{{ table.table }}</dd>
-            <dt>File</dt>
-            <dd>{{ table.file }}</dd>
-            <dt>Image</dt>
-            <dd v-if="table.image" class="table-image">
-              <span class="table-image-name">
-                {{ table.image }}
-                <VChip
-                  size="small"
-                  variant="tonal"
-                  :color="table.image_found ? 'success' : 'warning'"
-                  class="status-chip image-state"
-                >
-                  {{ table.image_found ? "In the folder" : "Missing" }}
-                </VChip>
-              </span>
-              <span v-if="!table.image_found" class="table-image-note">
-                Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
-              </span>
-            </dd>
-            <dd v-else>None for the text of the paper</dd>
-          </dl>
-          <span role="status" aria-live="polite" class="d-sr-only">{{ ready }}</span>
-        </div>
+          <dt>Sheet</dt>
+          <dd>{{ table.table }}</dd>
+          <dt>File</dt>
+          <dd>{{ table.file }}</dd>
+          <dt>Image</dt>
+          <dd v-if="table.image" class="table-image">
+            <span class="table-image-name">
+              {{ table.image }}
+              <VChip
+                size="small"
+                variant="tonal"
+                :color="table.image_found ? 'success' : 'warning'"
+                class="status-chip image-state"
+              >
+                {{ table.image_found ? "In the folder" : "Missing" }}
+              </VChip>
+            </span>
+            <span v-if="!table.image_found" class="table-image-note">
+              Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
+            </span>
+          </dd>
+          <dd v-else>None for the text of the paper</dd>
+        </dl>
+        <span role="status" aria-live="polite" class="d-sr-only" :aria-busy="preview.loading.value">{{ ready }}</span>
         <VAlert v-if="failure" type="error" variant="tonal" density="compact" class="status-alert">
           {{ failure.text }}
           <ul v-if="failure.issues.length" class="add-table-issues">
@@ -206,21 +207,6 @@ async function add(): Promise<void> {
 }
 .add-table-kind :deep(.v-selection-control-group) {
   margin-inline-start: -8px;
-}
-.add-table-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-/* An answer that arrives at once does not flash: the dimming starts after a moment. */
-.add-table-preview :deep(.v-messages),
-.add-table-preview .table-preview {
-  transition: opacity 0.1s ease;
-}
-.add-table-preview.is-updating :deep(.v-messages),
-.add-table-preview.is-updating .table-preview {
-  opacity: 0.5;
-  transition: opacity 0.15s ease 0.1s;
 }
 .table-preview dd {
   overflow-wrap: anywhere;

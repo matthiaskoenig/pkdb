@@ -380,12 +380,6 @@ async function add(): Promise<void> {
 .new-item-matches {
   margin: 0;
   font-size: 0.875rem;
-  transition: opacity 0.1s ease;
-}
-/* A count that arrives at once does not flash: the dimming starts after a moment. */
-.new-item-matches.is-updating {
-  opacity: 0.5;
-  transition: opacity 0.15s ease 0.1s;
 }
 .new-item-matches--none {
   font-weight: 600;
