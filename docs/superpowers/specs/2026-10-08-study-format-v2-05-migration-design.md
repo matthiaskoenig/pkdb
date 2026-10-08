@@ -69,7 +69,8 @@ The gate runs on the temporary folder before anything replaces the v1 folder.
 
 - A is the v1 folder prepared by today's `prepare()`. B is the converted folder read by the format 2 reader and prepared by the same `prepare_study`. B must also pass the format check and offline validation; an error makes the study a `mismatch`.
 - Both are normalized: subjects by name, measurements by their natural key (subject, interventions, measurement type, substance, tissue, method, time, label), timecourses by label, scatter pairs by subject. Numbers compare with a relative tolerance of 1e-9; text compares exactly.
-- Intended changes are listed per study and do not fail the gate: a v1 group with count 1 becomes an individual; an `ABS(X - mean)` cell becomes `error_bar`, so `sd` or `se` is `calculated`; a geometric mean becomes `gmean`; an empty count is inherited from the subject; the sid becomes `<substance>/<name>`; release and review data are added.
+- Intended changes are listed per study and do not fail the gate: a v1 group with count 1 becomes an individual; an `ABS(X - mean)` cell becomes `error_bar`, so `sd` or `se` is `calculated`; a geometric mean becomes `gmean`; an `array` output becomes an output, or a timecourse when it has a label; scatter outputs are renamed `<dataset>_x` and `<dataset>_y`; a JPG image becomes PNG.
+- Metadata (sid, release, review, reference, attachments, notes) is not compared: the sid, release and review are new by design. Counts inherited from the subject need no rule, because both sides are prepared by the same `prepare_study`.
 
 Each study gets one class:
 
