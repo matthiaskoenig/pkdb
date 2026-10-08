@@ -8,7 +8,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
 
-from pkdb.schemas.validation import ValidationIssue, fail
+from pkdb.schemas.validation import StudyValidationError, ValidationIssue, refusal
 from pkdb.studyformat.cells import canonical_cell, parse_cell
 from pkdb.studyformat.digitize import LoadedDigitization, load_digitization
 from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
@@ -150,6 +150,14 @@ def _candidates(name: str, spec: TableSpec) -> list[str]:
     return get_close_matches(name, spec.names, n=3, cutoff=0.6)
 
 
+class BeyondLimits(StudyValidationError):
+    """The study has more table rows (`row_limit`) or files (`file_limit`) than an upload may have.
+
+    A refusal of `load_study` that says nothing else about the study; any other refusal is a
+    plain StudyValidationError.
+    """
+
+
 @dataclass
 class RowLimit:
     """Counts the data lines of a study's tables against the upload row limit.
@@ -164,7 +172,11 @@ class RowLimit:
     def count(self) -> None:
         self.lines += 1
         if self.maximum is not None and self.lines > self.maximum:
-            fail("row_limit", f"The study tables have more than {self.maximum} rows")
+            raise BeyondLimits(
+                refusal(
+                    "row_limit", f"The study tables have more than {self.maximum} rows"
+                )
+            )
 
 
 def _header_issues(
@@ -476,15 +488,17 @@ def load_study(
 ) -> LoadedStudy:
     """Read a study folder into typed tables and JSON files; problems become issues.
 
-    Upload limits fail with `file_limit` when the study has more than
-    `max_files` files besides study.json and reference.json, and with
-    `row_limit` as soon as its tables have more than `max_rows` data lines.
+    Upload limits raise BeyondLimits: `file_limit` when the study has more than
+    `max_files` files besides study.json and reference.json, and `row_limit` as
+    soon as its tables have more than `max_rows` data lines.
     """
     study = LoadedStudy(layout=(layout := scan_folder(Path(folder))))
     study.issues.extend(layout.issues)
     files = layout.files - {STUDY_JSON, REFERENCE_JSON}
     if max_files is not None and len(files) > max_files:
-        fail("file_limit", f"The study has more than {max_files} files")
+        raise BeyondLimits(
+            refusal("file_limit", f"The study has more than {max_files} files")
+        )
     limit = RowLimit(max_rows)
     for table_file in layout.tables:
         with (layout.folder / table_file.name).open("rb") as stream:

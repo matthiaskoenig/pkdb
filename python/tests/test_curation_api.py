@@ -112,6 +112,8 @@ def test_invalid_documents_keep_their_revision(api):
     assert detail["review"]["value"] is None and detail["review"]["revision"]
     assert detail["review"]["issues"][0]["code"] == "invalid_review_json"
     assert detail["metadata"]["value"]["licence"] == "open"
+    # The targets come from the same read of review.json as the items.
+    assert detail["targets"] == {}
 
 
 def test_symlinked_review_json_is_not_read(api, tmp_path_factory):

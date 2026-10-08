@@ -420,6 +420,7 @@ def _review_show(args, folder: Path) -> int:
     from pkdb.studyformat import study_label
     from pkdb.studyformat.load import load_study
     from pkdb.studyformat.review_edit import read_review
+    from pkdb.studyformat.targets import match_target
 
     document = read_review(folder)
     study = load_study(folder)
@@ -428,13 +429,8 @@ def _review_show(args, folder: Path) -> int:
         if args.state and item.state != args.state:
             continue
         data = item.model_dump(mode="json", exclude_none=True)
-        target = item.target
-        table = study.table(target.file) if target and target.file else None
-        data["matches"] = (
-            len(table.matching_lines(target.rows))
-            if table is not None and target is not None and target.rows
-            else None
-        )
+        lines = match_target(study, item.target).lines
+        data["matches"] = None if lines is None else len(lines)
         items.append(data)
     label = study_label(folder)
     lines = [label, f"revision {document.revision}", f"status {document.review.status}"]

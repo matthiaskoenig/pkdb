@@ -15,12 +15,8 @@ from curation_http import authenticate, request
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.launch import open_path
-from pkdb.curation.studies import BeyondLimits
-from pkdb.schemas.validation import (
-    StudyValidationError,
-    ValidationIssue,
-    ValidationReport,
-)
+from pkdb.schemas.validation import StudyValidationError, refusal
+from pkdb.studyformat.load import BeyondLimits
 
 
 @pytest.fixture
@@ -163,22 +159,14 @@ def test_payload_limits_paths_and_errors(local_server):
     assert b"secret-api-key" not in body
 
 
-def _refusal(code, message):
-    return ValidationReport(
-        complete=False, issues=[ValidationIssue(code=code, message=message)]
-    )
-
-
 def test_only_a_study_beyond_the_upload_limits_answers_413(local_server):
     """A study that cannot be read answers 422 with its issues; it is not too large."""
     server, engine = local_server
     headers = authenticate(server)
     engine.study_version.return_value = "v1"
-    limit = BeyondLimits(
-        _refusal("row_limit", "The study tables have more than 3 rows")
-    )
+    limit = BeyondLimits(refusal("row_limit", "The study tables have more than 3 rows"))
     unreadable = StudyValidationError(
-        _refusal("invalid_tsv", "timecourses_Fig1.tsv cannot be read")
+        refusal("invalid_tsv", "timecourses_Fig1.tsv cannot be read")
     )
     preview = {"study": "caffeine/Example", "target": {"file": "timecourses_Fig1.tsv"}}
     for method, path, body, route in [

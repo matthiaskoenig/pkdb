@@ -572,7 +572,7 @@ def read_workbook(
     file is read once, and both passes of openpyxl, with formulas and with
     values, read these bytes, so a save in between cannot mix two versions.
     `max_rows` limits the data rows of all sheets together; more raise
-    StudyValidationError `row_limit`, as `load_study` does.
+    BeyondLimits `row_limit`, as `load_study` does.
     """
     path = Path(path)
     with warnings.catch_warnings(), ExitStack() as stack:

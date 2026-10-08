@@ -39,6 +39,7 @@ from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import (
     ANY,
     NoSuchWarning,
+    ReviewDocument,
     ReviewError,
     matching_warnings,
     read_review,
@@ -75,17 +76,6 @@ IMAGE_TYPES = {
 
 class UnsafeFile(ValueError):
     """A file of the study that the app refuses to open or write, such as a symlink."""
-
-
-# The issue codes of a study beyond the upload limits, as `load_study` refuses it.
-LIMIT_CODES = frozenset({"row_limit", "file_limit"})
-
-
-class BeyondLimits(StudyValidationError):
-    """The study has more table rows or files than an upload may have.
-
-    The app shows its documents, but no tables, sources or review targets.
-    """
 
 
 class AmbiguousStudy(ValueError):
@@ -187,15 +177,18 @@ def _issues(issues: list[ValidationIssue]) -> list[dict]:
     return [issue.model_dump(mode="json") for issue in issues]
 
 
-def _document(folder: Path, layout: Layout, name: str, read: Callable) -> dict:
-    """`study.json` or `review.json` as `{"revision", "value", "issues"}`; `value` None when invalid.
+def _document[D: (MetadataDocument, ReviewDocument)](
+    folder: Path, layout: Layout, name: str, read: Callable[[Path], D]
+) -> tuple[dict, D | None]:
+    """`study.json` or `review.json` as `{"revision", "value", "issues"}`, and the document read.
 
-    A file that the layout does not register, such as a symlink or a folder, is never read: it
-    gets the issues of the layout and no revision, or the `absent` revision when it is missing.
+    `value` and the document are None when the file is invalid. A file that the layout does not
+    register, such as a symlink or a folder, is never read: it gets the issues of the layout and
+    no revision, or the `absent` revision when it is missing.
     """
     path = folder / name
     if name not in layout.files:
-        return {
+        state = {
             "revision": None if os.path.lexists(path) else revision_of(None),
             "value": None,
             "issues": _issues(
@@ -206,22 +199,39 @@ def _document(folder: Path, layout: Layout, name: str, read: Callable) -> dict:
                 ]
             ),
         }
+        return state, None
     try:
         document = read(folder)
     except (MetadataError, ReviewError) as error:
         # The revision lets the app replace an invalid file.
-        return {
+        state = {
             "revision": read_revision(path)[1],
             "value": None,
             "issues": _issues(error.issues),
         }
+        return state, None
     model = (
         document.metadata if isinstance(document, MetadataDocument) else document.review
     )
-    return {
+    state = {
         "revision": document.revision,
         "value": model.model_dump(mode="json", exclude_none=True),
         "issues": [],
+    }
+    return state, document
+
+
+def _targets(study: LoadedStudy | None, document: ReviewDocument | None) -> dict:
+    """What the target of each review item with a file selects, by item id.
+
+    Nothing for a study beyond the upload limits or an invalid `review.json`.
+    """
+    if study is None or document is None:
+        return {}
+    return {
+        item.id: dataclasses.asdict(match_target(study, item.target))
+        for item in document.review.items
+        if item.target is not None and item.target.file is not None
     }
 
 
@@ -250,18 +260,8 @@ def _unlinked(folder: Path, root: Path) -> Path:
 
 
 def _bounded(folder: Path) -> LoadedStudy:
-    """The study within the upload limits; BeyondLimits beyond them.
-
-    Any other refusal stays a StudyValidationError: the study cannot be read, which says
-    nothing about its size.
-    """
-    try:
-        return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
-    except StudyValidationError as error:
-        codes = {issue.code for issue in error.report.issues}
-        if codes and codes <= LIMIT_CODES:
-            raise BeyondLimits(error.report) from None
-        raise
+    """The study within the upload limits; BeyondLimits beyond them."""
+    return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
 
 
 def _review_error(issues: list[ValidationIssue]) -> ReviewError:
@@ -426,18 +426,20 @@ class StudiesMixin(EngineState):
                 )
             )
         _unlinked(folder, root)
+        study: LoadedStudy | None
         try:
             study = _bounded(folder)
         except StudyValidationError as error:
             # Beyond the upload limits, or unreadable: the documents, and the refusal as the
             # first problem.
+            study = None
             layout = scan_folder(folder)
-            limits = _issues(error.report.issues)
+            refusal = _issues(error.report.issues)
             detail["problems"] = [
-                *limits,
-                *(problem for problem in detail["problems"] if problem not in limits),
+                *refusal,
+                *(problem for problem in detail["problems"] if problem not in refusal),
             ]
-            sources, files, tables, targets = [], [], [], {}
+            sources, files, tables = [], [], []
         else:
             layout = study.layout
             sources = [dataclasses.asdict(source) for source in study_sources(study)]
@@ -445,13 +447,8 @@ class StudiesMixin(EngineState):
             tables = [
                 {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
             ]
-            targets = {
-                item.id: dataclasses.asdict(match_target(study, item.target))
-                for item in (study.review.items if study.review else ())
-                if item.target is not None and item.target.file is not None
-            }
-        review = _document(folder, layout, REVIEW_JSON, read_review)
-        metadata = _document(folder, layout, STUDY_JSON, read_metadata)
+        review, review_document = _document(folder, layout, REVIEW_JSON, read_review)
+        metadata, _ = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
         return {
             **detail,
@@ -466,7 +463,8 @@ class StudiesMixin(EngineState):
             "sources": sources,
             "files": files,
             "tables": tables,
-            "targets": targets,
+            # The items of `review` with their targets, matched in the tables of this answer.
+            "targets": _targets(study, review_document),
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:

@@ -310,21 +310,26 @@ class StudyValidationError(ValueError):
         super().__init__("; ".join(issue.message for issue in report.issues))
 
 
+def refusal(
+    code: str, message: str, source: SourceLocation | None = None, **details
+) -> ValidationReport:
+    """The report of a check that stopped at its first error, `code`."""
+    return ValidationReport(
+        error_count=1,
+        complete=False,
+        stopped_reason=code,
+        issues=[
+            ValidationIssue(
+                code=code,
+                message=message,
+                source=source,
+                **details,
+            )
+        ],
+    )
+
+
 def fail(
     code: str, message: str, source: SourceLocation | None = None, **details
 ) -> NoReturn:
-    raise StudyValidationError(
-        ValidationReport(
-            error_count=1,
-            complete=False,
-            stopped_reason=code,
-            issues=[
-                ValidationIssue(
-                    code=code,
-                    message=message,
-                    source=source,
-                    **details,
-                )
-            ],
-        )
-    )
+    raise StudyValidationError(refusal(code, message, source, **details))

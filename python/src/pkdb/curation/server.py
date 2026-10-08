@@ -14,10 +14,11 @@ from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
 from pkdb.curation.state import THEMES
-from pkdb.curation.studies import AmbiguousStudy, BeyondLimits, UnsafeFile
+from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat.load import BeyondLimits
 from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.review_edit import ReviewError
 from pkdb.studyformat.revision import RevisionConflict
