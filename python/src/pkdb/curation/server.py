@@ -32,6 +32,9 @@ NONCE_PLACEHOLDER = b"__PKDB_NONCE__"
 # The theme of the state in the `pkdb-theme` meta tag of index.html, which the app reads before
 # it mounts, so that its first paint has the theme that the curator chose.
 THEME_PLACEHOLDER = b"__PKDB_THEME__"
+# The `code` of the 403 for a missing or stale CSRF token; the app then takes a fresh token from
+# the state and sends the action once more.
+ACTION_TOKEN = "action_token"
 
 
 def _csp(nonce: str | None) -> str:
@@ -202,7 +205,9 @@ class Handler(BaseHTTPRequestHandler):
         if mutation and not _matches(
             self.headers.get("X-CSRF-Token", ""), self.server.csrf_token
         ):
-            self._reply(403, {"error": "Missing or invalid action token"})
+            self._reply(
+                403, {"error": "Missing or invalid action token", "code": ACTION_TOKEN}
+            )
             return False
         return True
 

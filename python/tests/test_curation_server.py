@@ -116,6 +116,28 @@ def test_host_origin_and_csrf_rejected(local_server):
     )
 
 
+def test_a_refused_action_token_has_a_code(local_server):
+    """The app sends an action again with a fresh token when the code says so, never by the text."""
+    server, engine = local_server
+    headers = authenticate(server)
+    for token in ({"X-CSRF-Token": "stale"}, {}):
+        status, _, body = request(
+            server,
+            "POST",
+            "/local/jobs",
+            {"ids": [], "action": "validate"},
+            {key: value for key, value in headers.items() if key != "X-CSRF-Token"}
+            | token,
+        )
+        assert status == 403
+        assert json.loads(body) == {
+            "error": "Missing or invalid action token",
+            "code": transport.ACTION_TOKEN,
+        }
+    assert transport.ACTION_TOKEN == "action_token"
+    engine.enqueue.assert_not_called()
+
+
 def test_payload_limits_paths_and_errors(local_server):
     server, engine = local_server
     headers = authenticate(server)

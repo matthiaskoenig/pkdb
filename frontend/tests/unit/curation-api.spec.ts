@@ -113,7 +113,7 @@ describe("postJson", () => {
     setCsrfToken("");
     const fetch = vi
       .spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(json({ error: "Missing or invalid action token" }, { status: 403 }))
+      .mockResolvedValueOnce(json({ error: "Missing or invalid action token", code: "action_token" }, { status: 403 }))
       .mockResolvedValueOnce(json({ workspace: "/work", csrf_token: "fresh" }))
       .mockResolvedValueOnce(json({ revision: "r2" }));
     await expect(postJson("/local/studies/metadata", { study: "caffeine/Example" }, isRecord)).resolves.toEqual({
@@ -137,11 +137,25 @@ describe("postJson", () => {
       .mockImplementation(async (input) =>
         String(input) === "/local/state"
           ? json({ csrf_token: "fresh" })
-          : json({ error: "Missing or invalid action token" }, { status: 403 }),
+          : json({ error: "Missing or invalid action token", code: "action_token" }, { status: 403 }),
       );
     const error = await rejection(postJson("/local/jobs", {}, isRecord));
     expect(error).toBeInstanceOf(ApiError);
     expect(fetch).toHaveBeenCalledTimes(3);
+  });
+
+  it("knows a refused token by its code, not by the text of the server", async () => {
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(json({ error: "The token is old", code: "action_token" }, { status: 403 }))
+      .mockResolvedValueOnce(json({ csrf_token: "fresh" }))
+      .mockResolvedValueOnce(json({ ok: true }));
+    await expect(postJson("/local/jobs", {}, isRecord)).resolves.toEqual({ ok: true });
+    expect(fetch).toHaveBeenCalledTimes(3);
+
+    fetch.mockReset().mockResolvedValue(json({ error: "Missing or invalid action token" }, { status: 403 }));
+    expect(await rejection(postJson("/local/jobs", {}, isRecord))).toBeInstanceOf(ApiError);
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it("never sends an action again that a missing user refused", async () => {
