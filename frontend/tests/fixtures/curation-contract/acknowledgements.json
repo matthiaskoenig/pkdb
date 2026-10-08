@@ -85,5 +85,19 @@
       "resolved_by": "curator",
       "scope": "key"
     }
-  ]
+  ],
+  "refusals": {
+    "ambiguous": {
+      "error": "2 warnings [unknown_dataset] match in Demo2020_Fig1.wpd.json at key axis_labels, key legend; give the line, column and key of one",
+      "code": "ambiguous_warning"
+    },
+    "missing": {
+      "error": "No warning [unknown_dataset] in Demo2020_Fig1.wpd.json matches",
+      "code": "no_such_warning"
+    },
+    "inexact": {
+      "error": "The warning [unknown_dataset] in Demo2020_Fig1.wpd.json has no row of a data table and no key, so it cannot be acknowledged alone. To acknowledge every [unknown_dataset] warning of Demo2020_Fig1.wpd.json, add a review item with --acknowledges unknown_dataset --file Demo2020_Fig1.wpd.json",
+      "code": "no_exact_target"
+    }
+  }
 }

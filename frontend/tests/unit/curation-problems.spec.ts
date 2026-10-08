@@ -4,6 +4,8 @@ import type { AcknowledgedWarning, Job, SourceLocation, ValidationIssue } from "
 import {
   acknowledgeFailure,
   acknowledgement,
+  AMBIGUOUS_WARNING,
+  NO_EXACT_TARGET,
   filterIssues,
   groupByFile,
   groupCounts,
@@ -219,10 +221,22 @@ describe("links and acknowledgements", () => {
     const gone = new ApiError(422, { error: "No warning [x] in a.tsv matches", issues: [], code: "no_such_warning" });
     expect(acknowledgeFailure(gone)).toEqual({ kind: "error", text: NO_SUCH_WARNING, issues: [] });
     expect(NO_SUCH_WARNING).toBe("This warning is not in the current files. Validate the study and try again.");
-    const ambiguous = new ApiError(422, { error: "2 warnings [x] match in a.tsv at line 3, line 4", issues: [] });
-    expect(acknowledgeFailure(ambiguous)).toEqual({
+    const several = "2 warnings [x] match in a.tsv at line 3, line 4; give the line, column and key of one";
+    const ambiguous = new ApiError(422, { error: several, issues: [], code: "ambiguous_warning" });
+    expect(acknowledgeFailure(ambiguous)).toEqual({ kind: "error", text: AMBIGUOUS_WARNING, issues: [] });
+    expect(AMBIGUOUS_WARNING).toBe("Several warnings match this location. Validate the study and try again.");
+    const inexact = new ApiError(422, {
+      error: "The warning [x] in a.wpd.json has no row of a data table and no key, so it cannot be acknowledged alone.",
+      issues: [],
+      code: "no_exact_target",
+    });
+    expect(acknowledgeFailure(inexact)).toEqual({ kind: "error", text: NO_EXACT_TARGET, issues: [] });
+    expect(NO_EXACT_TARGET).toBe("This warning cannot be acknowledged on its own.");
+    // Any other refusal keeps the message of the server after the lead.
+    const other = new ApiError(422, { error: "Expected text in text", issues: [] });
+    expect(acknowledgeFailure(other)).toEqual({
       kind: "error",
-      text: "The warning was not acknowledged. 2 warnings [x] match in a.tsv at line 3, line 4",
+      text: "The warning was not acknowledged. Expected text in text",
       issues: [],
     });
   });

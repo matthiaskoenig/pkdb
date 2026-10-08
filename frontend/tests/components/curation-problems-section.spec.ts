@@ -125,6 +125,8 @@ const smokers: AcknowledgedWarning = {
 // local server lists: one of a dataset by its key, and one of a whole file as review.json files
 // written before keys hold it (python/tests/test_curation_contract.py).
 const [legendDataset, labelsDataset] = acknowledgementsFixture.warnings as ValidationIssue[];
+// How the local server refuses an acknowledgement, with its message and code.
+const refusals = acknowledgementsFixture.refusals;
 const [legacyAcknowledged, keyedAcknowledged] = (acknowledgementsFixture.acknowledged as Omit<
   AcknowledgedWarning,
   "resolved"
@@ -741,15 +743,7 @@ describe("acknowledgements", () => {
 
   it("says plainly that a warning is no longer in the files", async () => {
     await mountSection(withProblems(), {
-      [`POST ${REVIEW}`]: () =>
-        json(
-          {
-            error: "No warning [outside_range] in timecourses_Fig1.tsv matches",
-            issues: [],
-            code: "no_such_warning",
-          },
-          { status: 422 },
-        ),
+      [`POST ${REVIEW}`]: () => json({ ...refusals.missing, issues: [] }, { status: 422 }),
     });
     await openAcknowledge("outside_range");
     await textArea("Reason", dialog().element).setValue("Read from the figure as printed.");
@@ -814,18 +808,30 @@ describe("acknowledgements", () => {
     expect(document.activeElement).toBe(control(problemWith("'axis_labels'"), "Acknowledge").element);
   });
 
-  it("keeps the dialog open with the locations when several warnings match", async () => {
-    const ambiguous =
-      "2 warnings [digitized_mismatch] match in Example_Fig1.wpd.json at line 3, line 5; " +
-      "give the line, column and key of one";
+  it("keeps the dialog open with a plain sentence when several warnings match", async () => {
     await mountSection(withProblems(), {
-      [`POST ${REVIEW}`]: () => json({ error: ambiguous, issues: [] }, { status: 422 }),
+      [`POST ${REVIEW}`]: () => json({ ...refusals.ambiguous, issues: [] }, { status: 422 }),
     });
     await openAcknowledge("digitized_mismatch");
     await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
-    expect(dialog().get(".acknowledge-failure").text()).toBe(`The warning was not acknowledged. ${ambiguous}`);
+    expect(dialog().get(".acknowledge-failure").text()).toBe(
+      "Several warnings match this location. Validate the study and try again.",
+    );
+    expect(textArea("Reason", dialog().element).element.value).toBe("The point lies on the axis.");
+  });
+
+  it("says plainly when a warning cannot be acknowledged on its own", async () => {
+    await mountSection(withProblems(), {
+      [`POST ${REVIEW}`]: () => json({ ...refusals.inexact, issues: [] }, { status: 422 }),
+    });
+    await openAcknowledge("digitized_mismatch");
+    await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
+    await control(dialog(), "Acknowledge").trigger("click");
+    await flushPromises();
+    // The hint of the server names options of pkdb review, which the app has no use for.
+    expect(dialog().get(".acknowledge-failure").text()).toBe("This warning cannot be acknowledged on its own.");
     expect(textArea("Reason", dialog().element).element.value).toBe("The point lies on the axis.");
   });
 

@@ -200,10 +200,27 @@ export function scopeText(entry: AcknowledgedWarning): string | null {
 /** What the dialog says when the warning is no longer in the files that the server validated. */
 export const NO_SUCH_WARNING = "This warning is not in the current files. Validate the study and try again.";
 
-/** The failure of an acknowledgement; a warning that the files no longer have gets a plain sentence. */
+/** What the dialog says when warnings at several locations match the one to acknowledge. */
+export const AMBIGUOUS_WARNING = "Several warnings match this location. Validate the study and try again.";
+
+/** What the dialog says for a warning without a row of a data table and without a key. */
+export const NO_EXACT_TARGET = "This warning cannot be acknowledged on its own.";
+
+/**
+ * The plain sentences of the refusals of the `acknowledge` action, by their code
+ * (`studyformat/review_edit.py`). Their messages are written for `pkdb review acknowledge`: they
+ * list locations and name its options.
+ */
+const ACKNOWLEDGE_REFUSALS: ReadonlyMap<string, string> = new Map([
+  ["no_such_warning", NO_SUCH_WARNING],
+  ["ambiguous_warning", AMBIGUOUS_WARNING],
+  ["no_exact_target", NO_EXACT_TARGET],
+]);
+
+/** The failure of an acknowledgement; a refusal of the warning itself gets a plain sentence. */
 export function acknowledgeFailure(caught: unknown): ReviewFailure {
-  if (isValidationError(caught) && caught.body.code === "no_such_warning")
-    return { kind: "error", text: NO_SUCH_WARNING, issues: [] };
+  const text = isValidationError(caught) ? ACKNOWLEDGE_REFUSALS.get(caught.body.code ?? "") : undefined;
+  if (text) return { kind: "error", text, issues: [] };
   return reviewFailure(caught, "The warning was not acknowledged.");
 }
 

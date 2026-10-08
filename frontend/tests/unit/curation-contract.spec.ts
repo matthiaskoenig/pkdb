@@ -20,7 +20,17 @@ import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
-import { acknowledgement, locationKey, scopeText, suggestionView } from "../../src/curation-app/problems";
+import { ApiError } from "../../src/curation-app/api/client";
+import {
+  acknowledgeFailure,
+  acknowledgement,
+  AMBIGUOUS_WARNING,
+  locationKey,
+  NO_EXACT_TARGET,
+  NO_SUCH_WARNING,
+  scopeText,
+  suggestionView,
+} from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
 import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
@@ -201,5 +211,14 @@ describe("acknowledgements contract", () => {
     const exact = entries.find((entry) => entry.scope === "key")!;
     expect(scopeText(exact)).toBeNull();
     expect(targetText(exact.target)).toBe("Demo2020_Fig1.wpd.json · legend");
+  });
+
+  it("says plainly why an acknowledgement was refused", () => {
+    const { ambiguous, missing, inexact } = acknowledgementsFixture.refusals;
+    const text = (refusal: { error: string; code: string }) =>
+      acknowledgeFailure(new ApiError(422, { ...refusal, issues: [] })).text;
+    expect(text(ambiguous)).toBe(AMBIGUOUS_WARNING);
+    expect(text(missing)).toBe(NO_SUCH_WARNING);
+    expect(text(inexact)).toBe(NO_EXACT_TARGET);
   });
 });

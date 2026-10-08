@@ -13,6 +13,7 @@ from pkdb.cache import bundled_vocabulary
 from pkdb.curation.engine import CurationEngine
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.load import load_study
 from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
 from pkdb.studyformat.tables import TABLES
@@ -315,6 +316,26 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
     engine = engine_on(workspace)
     monkeypatch.setattr(review_edit, "new_ulid", lambda: ACKNOWLEDGED)
     revision = engine.study_detail(DEMO)["review"]["revision"]
+    # How the local server refuses an acknowledgement that matches no warning or several, and
+    # how the library refuses a warning without a row and a key; the server sends error and code.
+    refusals = {}
+    for name, payload in (
+        (
+            "ambiguous",
+            {key: value for key, value in payloads[0].items() if key != "key"},
+        ),
+        ("missing", {**payloads[0], "key": "grid"}),
+    ):
+        with pytest.raises(review_edit.ReviewError) as refused:
+            engine.review_action(
+                DEMO,
+                {"action": "acknowledge", "revision": revision, "text": "x", **payload},
+            )
+        refusals[name] = {"error": str(refused.value), "code": refused.value.code}
+    unkeyed = make_issue("unknown_dataset", "Old.", file="Demo2020_Fig1.wpd.json")
+    with pytest.raises(review_edit.NoExactTarget) as refused:
+        review_edit.target_for_issue(load_study(folder), unkeyed)
+    refusals["inexact"] = {"error": str(refused.value), "code": refused.value.code}
     engine.review_action(
         DEMO,
         {
@@ -347,5 +368,6 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
             "warnings": [issue.model_dump(mode="json") for issue in warnings],
             "payloads": payloads,
             "acknowledged": acknowledged,
+            "refusals": refusals,
         },
     )
