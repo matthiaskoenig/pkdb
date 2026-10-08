@@ -24,7 +24,7 @@ import {
   validatesAfterWrite,
   type SeverityFilter,
 } from "../problems";
-import { targetText } from "../review";
+import { targetParts } from "../review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { knownProfiles, profileOf, sectionRoute, tableFiles, tablesOutcome } from "../study";
@@ -125,6 +125,8 @@ onMounted(() => {
 const profiles = computed(() => knownProfiles(roster.value, detail.value?.people));
 
 const acknowledged = computed<AcknowledgedWarning[]>(() => detail.value?.acknowledged ?? []);
+/** The review items, which the targets of acknowledgements of warnings about review.json name. */
+const items = computed(() => detail.value?.review.value?.items ?? []);
 
 function authorName(entry: AcknowledgedWarning): string {
   return profileOf(profiles.value, entry.author).display_name;
@@ -357,7 +359,14 @@ function openFile(file: string): Promise<void> {
           </div>
           <p class="problem-fact">
             <i class="fas fa-crosshairs problem-icon" aria-hidden="true"></i>
-            <span>{{ targetText(entry.target) }}</span>
+            <span>
+              <template v-for="(part, index) in targetParts(entry.target, items)" :key="index">
+                <RouterLink v-if="part.item" :to="sectionRoute(identity, 'review', { item: part.item })">{{
+                  part.text
+                }}</RouterLink>
+                <template v-else>{{ part.text }}</template>
+              </template>
+            </span>
           </p>
           <!-- A target of a whole file, a column or the study covers more than one warning, also later ones. -->
           <p v-if="scopeText(entry)" class="problem-fact acknowledged-scope">

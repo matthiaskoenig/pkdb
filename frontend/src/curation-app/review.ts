@@ -101,6 +101,38 @@ export function targetText(target: ReviewTarget | null | undefined): string {
     .join(" · ");
 }
 
+/** A part of a text: plain text, or the reference to a review item, linked to the item `item`. */
+export type TextPart = { text: string; item?: string };
+
+/** The characters of an item text that a reference quotes. */
+const QUOTE_LENGTH = 40;
+
+/** The start of a text, cut after a word, in one line. */
+function quote(text: string): string {
+  const line = text.replace(/\s+/g, " ").trim();
+  if (line.length <= QUOTE_LENGTH) return line;
+  const cut = line.slice(0, QUOTE_LENGTH + 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 0 ? cut.slice(0, space) : line.slice(0, QUOTE_LENGTH)).replace(/[\s,;:.]+$/, "")}…`;
+}
+
+/** A review item by its kind and a short quote of its text: `question “Is the dose of 150 mg the caffeine base…”`. */
+export function itemText(item: ReviewItem): string {
+  return `${KIND_LABELS[item.kind].toLowerCase()} “${quote(item.text)}”`;
+}
+
+/**
+ * The target as `targetText` says it, in parts: a key that is the id of a review item of `items`,
+ * as warnings about review.json have, names that item by `itemText`, linked to it.
+ */
+export function targetParts(target: ReviewTarget | null | undefined, items: readonly ReviewItem[]): TextPart[] {
+  const key = target?.key;
+  const item = key === undefined ? undefined : items.find((candidate) => candidate.id === key);
+  if (!target?.file || !item) return [{ text: targetText(target) }];
+  // A key excludes rows and a column.
+  return [{ text: `${target.file} · ` }, { text: itemText(item), item: item.id }];
+}
+
 /** The rows at `lines`, in their order in the table. */
 export function rowsAt(rows: readonly TableRow[], lines: readonly number[]): TableRow[] {
   const wanted = new Set(lines);

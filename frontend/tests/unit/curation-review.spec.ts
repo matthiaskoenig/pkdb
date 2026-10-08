@@ -7,6 +7,7 @@ import {
   rowsAt,
   shownColumns,
   stateCounts,
+  targetParts,
   targetText,
 } from "../../src/curation-app/review";
 import { reviewItem } from "./curation-fixtures";
@@ -74,6 +75,25 @@ describe("targetText", () => {
     expect(targetText({ file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D150", time: "0.5" } })).toBe(
       "timecourses_Fig1.tsv · label = caf_plasma_D150, time = 0.5",
     );
+  });
+});
+
+describe("targetParts", () => {
+  const ID = "01JA2XK7Q8M3R5T6V9W0Y1Z2AB";
+  const unmatched = reviewItem({ id: ID, kind: "uncertainty", text: "The error bars may be SE rather than SD, see the legend." });
+
+  it("names the review item that a key of review.json is the id of, linked to it", () => {
+    expect(targetParts({ file: "review.json", key: ID }, [unmatched])).toEqual([
+      { text: "review.json · " },
+      { text: "uncertainty “The error bars may be SE rather than SD…”", item: ID },
+    ]);
+  });
+
+  it("keeps the text of other targets and of a key that names no item", () => {
+    const keyed = { file: "Demo2020_Fig1.wpd.json", key: "legend" };
+    expect(targetParts(keyed, [unmatched])).toEqual([{ text: "Demo2020_Fig1.wpd.json · legend" }]);
+    expect(targetParts({ file: "review.json", key: ID }, [])).toEqual([{ text: `review.json · ${ID}` }]);
+    expect(targetParts(null, [unmatched])).toEqual([{ text: "Whole study" }]);
   });
 });
 

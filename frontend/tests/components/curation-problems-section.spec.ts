@@ -931,6 +931,45 @@ describe("acknowledgements", () => {
     expect(scope(2).exists()).toBe(false);
   });
 
+  it("names the review item that an acknowledgement of a warning about review.json targets", async () => {
+    const UNMATCHED = "01JA35C1D2E3F4G5H6J7K8M9N0";
+    const unmatched = reviewItem({
+      id: UNMATCHED,
+      kind: "uncertainty",
+      target: { file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D600" } },
+      text: "The 600 mg group may be missing from the figure.",
+    });
+    const staleTarget: AcknowledgedWarning = {
+      id: ADDED,
+      code: "review_target_unmatched",
+      target: { file: "review.json", key: UNMATCHED },
+      text: "The group was dropped on purpose.",
+      author: "mkoenig",
+      resolved_by: "mkoenig",
+      resolved: "2026-10-06T09:00:00Z",
+      scope: "key",
+    };
+    await mountSection(
+      withProblems({
+        acknowledged: [staleTarget],
+        review: {
+          revision: "review-7",
+          value: { status: "in_review", reviewers: ["curator"], items: [unmatched] },
+          issues: [],
+        },
+      }),
+    );
+    const [entry] = section().get(".problems-acknowledged").findAll("li");
+    expect(entry!.get(".problem-fact").text()).toBe("review.json · uncertainty “The 600 mg group may be missing from the…”");
+    expect(entry!.text()).not.toContain(UNMATCHED);
+    expect(control(entry!, "uncertainty “The 600 mg group may be missing from the…”").attributes("href")).toBe(
+      `#/studies/caffeine/Example/review?item=${UNMATCHED}`,
+    );
+    expect(control(entry!, "Show the review item").attributes("href")).toBe(
+      `#/studies/caffeine/Example/review?item=${ADDED}`,
+    );
+  });
+
   it("names the file of an Open button and every control", async () => {
     await mountSection();
     expect(button("Open study.json").text()).toBe("Open");

@@ -4,7 +4,7 @@
  */
 import type { Job, JobAction, JobStatus, ReviewItem } from "./api/types";
 import { webUrl, type Tone } from "./overview";
-import { KIND_LABELS } from "./review";
+import { itemText, type TextPart } from "./review";
 
 export const ACTION_LABELS: Record<JobAction, string> = {
   validate: "Validation",
@@ -87,29 +87,14 @@ export function jobText(job: Job): string {
   return job.message;
 }
 
-/** A part of the text of a job: text, or the reference to a review item, linked to the item `item`. */
-export type MessagePart = { text: string; item?: string };
-
-/** The characters of an item text that a reference quotes. */
-const QUOTE_LENGTH = 40;
-
-/** The start of a text, cut after a word, in one line. */
-function quote(text: string): string {
-  const line = text.replace(/\s+/g, " ").trim();
-  if (line.length <= QUOTE_LENGTH) return line;
-  const cut = line.slice(0, QUOTE_LENGTH + 1);
-  const space = cut.lastIndexOf(" ");
-  return `${(space > 0 ? cut.slice(0, space) : line.slice(0, QUOTE_LENGTH)).replace(/[\s,;:.]+$/, "")}…`;
-}
-
 /**
  * The text of a job with readable references to the review items of `items` that it names: the
  * kind of the item and the start of its text, instead of its id. An item that no longer exists is
  * "a review item". The server splits the message around the item.
  */
-export function messageParts(job: Job, items: readonly ReviewItem[]): MessagePart[] {
+export function messageParts(job: Job, items: readonly ReviewItem[]): TextPart[] {
   if (!job.parts) return [{ text: jobText(job) }];
-  const parts: MessagePart[] = [];
+  const parts: TextPart[] = [];
   let text = "";
   for (const part of job.parts) {
     if ("text" in part) {
@@ -122,7 +107,7 @@ export function messageParts(job: Job, items: readonly ReviewItem[]): MessagePar
       continue;
     }
     parts.push({ text: `${text}the ` });
-    parts.push({ text: `${KIND_LABELS[item.kind].toLowerCase()} “${quote(item.text)}”`, item: item.id });
+    parts.push({ text: itemText(item), item: item.id });
     text = "";
   }
   if (text) parts.push({ text });
