@@ -15,7 +15,7 @@ from pkdb.cache import (
 from pkdb.curation.connection import ConnectionMixin
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
-from pkdb.curation.jobs import JobsMixin, fingerprint, now
+from pkdb.curation.jobs import JobsMixin, fingerprint, maybe_sent, now
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -94,19 +94,17 @@ class CurationEngine(
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
             if job.get("status") in {"queued", "running"}:
-                job["status"] = (
-                    "unknown"
-                    if job.get("action") == "upload"
-                    and job.get("stage") in {"transfer", "upload", "response", "commit"}
-                    else "canceled"
-                )
-                if job["status"] == "unknown":
-                    job["persistence"] = "unknown"
-                job["message"] = (
-                    "Interrupted by previous shutdown; inspect before retrying"
-                    if job["status"] == "unknown"
-                    else "Canceled when pkdb curate stopped"
-                )
+                if maybe_sent(job):
+                    # The server may have saved the study: the curator inspects it first.
+                    job.update(
+                        status="unknown",
+                        persistence="unknown",
+                        message="Interrupted by previous shutdown; inspect before retrying",
+                    )
+                else:
+                    job.update(
+                        status="canceled", message="Canceled when pkdb curate stopped"
+                    )
             elif (
                 job.get("status") == "failed"
                 and job.get("message") == "Validation found problems"

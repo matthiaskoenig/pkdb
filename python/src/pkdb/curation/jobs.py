@@ -41,6 +41,21 @@ def now():
 #: unknown.
 ACTIVE_STATUSES = {"queued", "running", "unknown"}
 
+#: The progress stages of an upload from which the server may already have the study: the
+#: client sends the body (`transfer`), waits while the server validates and saves it
+#: (`server_validation`), and has its confirmation (`complete`), see `pkdb.client`. `upload`,
+#: `response` and `commit` are the names of the same stages in states saved by earlier versions.
+SENT_STAGES = frozenset(
+    {"transfer", "server_validation", "complete", "upload", "response", "commit"}
+)
+
+
+def maybe_sent(job: dict) -> bool:
+    """Whether `job` is an upload that may have reached the server, so its outcome is unknown
+    unless the job recorded it."""
+    return job.get("action") == "upload" and job.get("stage") in SENT_STAGES
+
+
 #: The action of a job in a sentence.
 ACTION_NAMES = {
     "validate": "validation",
@@ -422,9 +437,7 @@ class JobsMixin(EngineState):
                     "total": event.total,
                 }
                 row["status"] = (
-                    "uploading"
-                    if event.stage in {"transfer", "response", "commit"}
-                    else "validating"
+                    "uploading" if event.stage in SENT_STAGES else "validating"
                 )
                 if event.stage == "transfer":
                     # Persist before a potentially ambiguous write for restart recovery.
@@ -692,11 +705,10 @@ class JobsMixin(EngineState):
             )
             row.update(status="failed", stale=True)
         except Exception:
-            uncertain = (
-                job["action"] == "upload"
-                and job.get("stage") in {"transfer", "upload", "response", "commit"}
-                and outcome["persistence"] not in {"created", "replaced"}
-            )
+            uncertain = maybe_sent(job) and outcome["persistence"] not in {
+                "created",
+                "replaced",
+            }
             job.update(
                 status="unknown" if uncertain else "failed",
                 message="Unexpected job failure; inspect the report before retrying",

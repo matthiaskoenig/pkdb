@@ -191,27 +191,63 @@ def test_resume_says_why_an_unknown_upload_cannot_be_reconciled(workspace, monke
     assert identifier.startswith("caffeine/")
 
 
-def test_restart_marks_transferring_job_unknown(workspace):
-    engine, folder = workspace
+#: The stages of the client from the first byte of the upload on (`client.py`), and the names
+#: that earlier versions saved for them.
+SENT = ["transfer", "server_validation", "complete", "upload", "response", "commit"]
+
+
+def interrupted_upload(engine, folder, stage):
+    """Save a running upload at `stage` and start pkdb curate again on the saved state."""
     engine.offline = False
     engine.endpoint = "https://example.test"
     engine.api_key = "secret"
     job = engine.enqueue([row(engine)["id"]], "upload")[0]
     engine.queue.clear()
     job.update(
-        status="running", stage="transfer", source_digest="snapshot", sid="Example2020"
+        status="running", stage=stage, source_digest="snapshot", sid="Example2020"
     )
     engine._save()
-    replacement = module.CurationEngine(
+    return module.CurationEngine(
         folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
     )
+
+
+@pytest.mark.parametrize("stage", SENT)
+def test_restart_marks_an_upload_stopped_after_sending_unknown(workspace, stage):
+    engine, folder = workspace
+    replacement = interrupted_upload(engine, folder, stage)
     try:
-        assert replacement.jobs[-1]["status"] == "unknown"
+        job = replacement.jobs[-1]
+        assert (job["status"], job["persistence"], job["message"]) == (
+            "unknown",
+            "unknown",
+            "Interrupted by previous shutdown; inspect before retrying",
+        )
         assert row(replacement)["_blocked"] is True
+        assert row(replacement)["status"] == "unknown"
         settle(replacement)
         assert not replacement.queue
+        with pytest.raises(ValueError, match="Reconcile unknown uploads first"):
+            replacement.enqueue([row(replacement)["id"]], "upload")
         with pytest.raises(jobs.ResumeRefused, match="Turn off offline mode"):
             replacement.resume()
+    finally:
+        replacement.close()
+
+
+@pytest.mark.parametrize(
+    "stage", ["queued", "read", "parse", "validate", "compatibility"]
+)
+def test_restart_cancels_an_upload_stopped_before_sending(workspace, stage):
+    engine, folder = workspace
+    replacement = interrupted_upload(engine, folder, stage)
+    try:
+        job = replacement.jobs[-1]
+        assert (job["status"], job["message"]) == (
+            "canceled",
+            "Canceled when pkdb curate stopped",
+        )
+        assert row(replacement)["_blocked"] is False
     finally:
         replacement.close()
 
@@ -230,19 +266,24 @@ def test_resolve_file_rechecks_symlink_and_rejects_traversal(workspace, tmp_path
         engine.resolve_file(identifier, "study.json")
 
 
-@pytest.mark.parametrize("stage", ["transfer", "response", "commit"])
+@pytest.mark.parametrize("stage", SENT)
 def test_unexpected_failure_after_write_stays_unknown(workspace, monkeypatch, stage):
     engine, _ = workspace
     prepare_mock(monkeypatch)
     _, factory = enable_upload(engine, monkeypatch, None)
 
+    statuses = []
+
     def upload(_):
         factory.call_args.kwargs["progress"](ProgressEvent(stage))
+        statuses.append(row(engine)["status"])
         raise RuntimeError("interrupted")
 
     factory.return_value.upload.side_effect = upload
     engine.enqueue([row(engine)["id"]], "upload")
     job = run_next(engine)
+    # The server may be saving the study: the overview says uploading, not validating.
+    assert statuses == ["uploading"]
     assert job["status"] == "unknown"
     assert job["persistence"] == "unknown"
     assert row(engine)["_blocked"] is True
