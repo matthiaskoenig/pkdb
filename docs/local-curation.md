@@ -83,7 +83,7 @@ The overview lists the study format 2 folders of the workspace by their identity
 | On save | What a save does, see [What happens on save](#what-happens-on-save). |
 | Last upload | The time of the last upload, with a link to the study on PK-DB. |
 
-**Search studies** matches the identity and the title, and **Substance** shows one substance. The status chips **All**, **Needs attention**, **Draft**, **In review** and **Approved** count their studies. **Needs attention** lists the studies with errors, with a sync conflict, or with open items while they are in review. Click a column header to sort, and click a row to open the study.
+**Search studies** matches the identity and the title, and **Substance** shows one substance. The status chips **All**, **Needs attention**, **Draft**, **In review** and **Approved** count their studies. **Needs attention** lists the studies with errors, with a sync conflict, or with open items while they are in review. Click a column header to sort by it; every column except Curators sorts. Click a row to open the study.
 
 Select studies with their checkboxes for the batch actions above the table. **Validate** queues a validation of each. **Upload** shows the server, the account and the studies, and then validates and uploads them. **On save** with **Apply** sets the On save action of the selected studies. Upload needs a connected server and the API key of an account that may upload studies; the disabled button says what is missing.
 
@@ -104,7 +104,7 @@ The Metadata section edits `study.json` in forms.
 - **Reference**: the PMID and the DOI, whether `reference.json` matches them, and the title, the authors and the journal of `reference.json`. **Correct title, authors, journal...** opens the Reference dialog.
 - **People**: the creator, the curators with a rating from 0 to 5 stars in half steps, and the collaborators, offered from the curator roster.
 - **Access and provenance**: the licence, open or closed, and the access, public or private; public needs a release. The provenance is a manual curation, or an automatic curation with its method, version, run ID and assets. A data import is shown as the importer set it.
-- **Issue and release**: read only, set by `pkdb release`.
+- **Issue and release**: read only. They are set when the study is released; the `pkdb release` command for this is planned.
 - **Descriptions and comments**, and **Notes per table** for each kind of table. A comment records the user who wrote it.
 
 Edits stay in the form until you save them. The bar at the bottom shows **Unsaved changes in study.json** with **Save** and **Discard**, and **Undo** brings discarded edits back for a few seconds. Leaving the section with unsaved changes asks first. **Save** checks the whole document and writes it. When it is not valid, nothing is written and the fields with problems are marked. A new PMID or DOI fetches `reference.json` for it; when the lookup fails, `study.json` is saved and the bar says why.
@@ -119,7 +119,7 @@ The Review section lists the items of `review.json`: questions, uncertainties an
 
 [![The Review section with two open items, the selected uncertainty written by an AI agent, its thread and actions, and the two rows of outputs_Tab2.tsv that it targets.](images/curation/review.png)](images/curation/review.png)
 
-Filter the items by state (**Open**, **Resolved**, **Dismissed**, **All**) and by kind. A card shows the kind, the state, the target, the code of an acknowledged warning, a robot for an item of an AI agent, and the number of replies. Select a card to see the item with its thread. **Reply**, **Resolve**, **Dismiss** and **Reopen** change it. Resolve and Dismiss also add the text of the reply field to the thread. **New item** adds an item about the whole study, a file, the rows with given column values, or a column.
+Filter the items by state (**Open**, **Resolved**, **Dismissed**, **All**) and by kind. A card shows the kind, the state, the target, the code of an acknowledged warning, a robot for an item of an AI agent, and the number of replies. Select a card to see the item with its thread. **Reply**, **Resolve**, **Dismiss** and **Reopen** change it. For an open item, Resolve and Dismiss also add the text of the reply field to the thread; for a resolved item, Dismiss and Reopen do. A dismissed item has no reply field and can only be reopened. **New item** adds an item about the whole study, a file, the rows with given column values, or a column.
 
 Below the item, the target shows the rows that it matches, with **Show in table**. When the target is a series of a digitized figure, the `label` of `timecourses_<Fig>.tsv` or the `name` of `scatters_<Fig>.tsv`, the figure is drawn too, with that series emphasized and the other series faded.
 
@@ -160,6 +160,7 @@ The Tables section starts with the sync status of the workbook `<name>.xlsx` and
 | Conflict | The workbook and the tables changed the same rows. |
 | No workbook | The study has no workbook yet. **Open tables** creates it. |
 | Unknown | The workbook or the tables cannot be read. |
+| Not checked yet | The app has not checked the workbook and the tables yet. |
 
 When the workbook and the tables conflict, the panel **Conflicting rows** shows the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it. Validation and upload wait until the conflict is resolved.
 
@@ -216,7 +217,7 @@ pkdb digitize import /path/to/studies/caffeine/Demo2020 Fig1 Demo2020_Fig1.tar
 
 The command takes a project `.json` file or a saved `.tar` project, checks it against the image, and writes `<name>_<source>.wpd.json`. When the study has no image yet and the `.tar` project holds exactly one PNG image, it writes the image too. Name each dataset after its series: the `label` of a timecourse for its central values, `<label>;error_bar` for the ends of its error bars, and the `name` of a scatter for its points.
 
-The Sources section then draws the digitized points and the mapped rows on the image. Validation warns about a dataset without rows (`unknown_dataset`) and about a mapped row more than 2 pixels away from every point of its dataset (`digitized_mismatch`). `pkdb plot` draws the same comparison into PNG files, for agents. See [Raw extraction](study-format.md#raw-extraction) for the accepted projects.
+The Sources section then draws the digitized points and the mapped rows on the image. Validation warns about a dataset without rows (`unknown_dataset`). It also warns, as `digitized_mismatch`, about a mapped row more than 2 pixels away from every point of its dataset, and about the points of a dataset that have no mapped row within 2 pixels. `pkdb plot` draws the same comparison into PNG files, for agents. See [Raw extraction](study-format.md#raw-extraction) for the accepted projects.
 
 ## AI-curated studies
 
@@ -258,7 +259,7 @@ uv run --project python pkdb curate /path/to/workspace --no-browser --port 43117
 PKDB_CURATION_URL=http://127.0.0.1:43117 npm run dev:curation
 ```
 
-Then open `http://localhost:8090/` followed by the `#token=...` part of the launch URL that `pkdb curate` printed. The browser tests of the app run against the real `pkdb curate`; see [Local setup](installation.md).
+Then open `http://localhost:8090/` followed by the `#token=...` part of the launch URL that `pkdb curate` printed. The browser tests of the app run against the real `pkdb curate`; see [Native frontend and frontend checks](installation.md#native-frontend-and-frontend-checks).
 
 ## Troubleshooting
 
@@ -270,3 +271,4 @@ Then open `http://localhost:8090/` followed by the `#token=...` part of the laun
 | Unable to start curation. Application state must be outside the selected source workspace | Choose a `--state-dir` outside the workspace. |
 | The header offers **Set user**. | Set your PK-DB user in **Settings**, or start the app with `--user` or `PKDB_USER`. |
 | **Upload** is disabled. | Hover it to see why: offline mode, no API key, no connected server, or an account that may not upload. |
+| **Open tables**, **Open folder**, **Open PDF** or **Open** opens nothing, or the wrong program. | The app opens files with `xdg-open` on Linux, `open` on macOS and the file associations on Windows. To use another command, set `PKDB_OPEN_COMMAND` before you start the app, for example `PKDB_OPEN_COMMAND='gio open'`. The app splits it like a shell command and adds the absolute path of the file or folder as the last argument. The command must exit within 15 seconds, so use one that starts the program and returns. |
