@@ -118,6 +118,10 @@ def test_payload_limits_paths_and_errors(local_server):
         == 200
     )
     engine.configure.assert_called_with(user="curator")
+    assert (
+        request(server, "POST", "/local/settings", {"theme": "dark"}, headers)[0] == 200
+    )
+    engine.configure.assert_called_with(theme="dark")
     engine.enqueue.side_effect = RuntimeError("secret-api-key")
     status, _, body = request(
         server, "POST", "/local/jobs", {"ids": [], "action": "upload"}, headers

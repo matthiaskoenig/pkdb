@@ -16,6 +16,7 @@ from pkdb.curation.connection import ConnectionMixin
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
 from pkdb.curation.jobs import JobsMixin, fingerprint, maybe_sent, now
+from pkdb.curation.state import THEMES
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -67,6 +68,8 @@ class CurationEngine(
         )
         self.offline = offline
         self.github_user = github_user or saved.get("github_user", "")
+        theme = saved.get("theme")
+        self.theme = theme if isinstance(theme, str) and theme in THEMES else "system"
         self.repository = (
             repository or saved.get("repository") or "matthiaskoenig/pkdb_data"
         )
@@ -147,6 +150,7 @@ class CurationEngine(
             "user": self.user,
             "github_user": self.github_user,
             "repository": self.repository,
+            "theme": self.theme,
             "github": self.github.data,
             "modes": self.modes,
             "recent_workspaces": self.recent_workspaces,
@@ -191,6 +195,7 @@ class CurationEngine(
                         "update_required": newer(self.server_version),
                         "offline": self.offline,
                         "paused": self.paused,
+                        "theme": self.theme,
                         "vocabulary": self.vocabulary,
                         "github": {
                             **self.github.data,

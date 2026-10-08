@@ -65,6 +65,7 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     update_required: false,
     offline: true,
     paused: false,
+    theme: "system",
     vocabulary: { status: "offline" },
     github: { users: [], issues: [], status: "not_loaded", user: "", repository: "matthiaskoenig/pkdb_data" },
     studies: [studyRow()],

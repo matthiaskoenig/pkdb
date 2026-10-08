@@ -1129,6 +1129,41 @@ def test_changing_user_reconnects_and_is_saved(workspace, monkeypatch):
         engine.configure(user=1)
 
 
+def test_the_theme_is_saved_and_restored_after_a_restart(workspace, monkeypatch):
+    engine, folder = workspace
+    connect = Mock()
+    monkeypatch.setattr(engine, "connect", connect)
+    # The browser origin changes with every random port, so the server keeps the choice.
+    assert engine.snapshot()["theme"] == "system"
+    assert engine.configure(theme="dark")["theme"] == "dark"
+    connect.assert_not_called()
+    assert json.loads((engine.state_dir / "state.json").read_text())["theme"] == "dark"
+    replacement = module.CurationEngine(
+        folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        assert replacement.snapshot()["theme"] == "dark"
+    finally:
+        replacement.close()
+    for value in ("blue", 1, ""):
+        with pytest.raises(ValueError, match="Theme must be light, dark or system"):
+            engine.configure(theme=value)
+    assert engine.configure(theme="system")["theme"] == "system"
+
+
+def test_an_unknown_saved_theme_follows_the_system(workspace):
+    engine, folder = workspace
+    path = engine.state_dir / "state.json"
+    path.write_text(json.dumps({**json.loads(path.read_text()), "theme": "neon"}))
+    replacement = module.CurationEngine(
+        folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        assert replacement.snapshot()["theme"] == "system"
+    finally:
+        replacement.close()
+
+
 def test_reference_preview_save_and_stale_review(workspace):
     import httpx2
 

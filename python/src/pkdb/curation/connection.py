@@ -14,7 +14,7 @@ from pkdb.cache import (
 from pkdb.client import Client
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.jobs import now
-from pkdb.curation.state import EngineState
+from pkdb.curation.state import THEMES, EngineState
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
@@ -113,6 +113,7 @@ class ConnectionMixin(EngineState):
         github_user=None,
         offline=None,
         repository=None,
+        theme=None,
     ):
         with self.lock:
             changed = (
@@ -129,6 +130,8 @@ class ConnectionMixin(EngineState):
                 raise ValueError("API key must be text")
             if user is not None and not isinstance(user, str):
                 raise ValueError("PK-DB user must be text")
+            if theme is not None and theme not in THEMES:
+                raise ValueError("Theme must be light, dark or system")
             resolved_endpoint = (
                 self.endpoint
                 if endpoint is None
@@ -164,6 +167,8 @@ class ConnectionMixin(EngineState):
                 self.offline = offline
             if github_user is not None:
                 self.github_user = github_user
+            if theme is not None:
+                self.theme = theme
             self.github = github
             self.repository = github.repository
             if changed:

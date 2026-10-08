@@ -407,6 +407,7 @@ class Handler(BaseHTTPRequestHandler):
                 "github_user",
                 "offline",
                 "repository",
+                "theme",
             }:
                 raise ValueError("Unknown setting")
             return engine.configure(**body)

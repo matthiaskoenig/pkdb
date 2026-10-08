@@ -13,6 +13,7 @@ import {
   type JobReport,
   type SaveMode,
   type Snapshot,
+  type ThemeChoice,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 
@@ -24,6 +25,7 @@ export interface Settings {
   github_user?: string;
   offline?: boolean;
   repository?: string;
+  theme?: ThemeChoice;
 }
 
 /** The workspace, the connection, the study rows and the jobs of `GET /local/state`. */

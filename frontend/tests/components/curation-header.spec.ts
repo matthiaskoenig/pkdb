@@ -416,6 +416,26 @@ describe("AppHeader", () => {
     expect(followsSystem()).toBe(true);
   });
 
+  it("keeps the choice in the local server, as the next start has another origin", async () => {
+    await loadSnapshot(snapshot());
+    const configure = vi.spyOn(useOverviewStore(), "configure").mockResolvedValue(snapshot({ theme: "dark" }));
+    mountHeader();
+    await flushPromises();
+    await click("Toggle color theme");
+    expect(configure).toHaveBeenLastCalledWith({ theme: "dark" });
+    await click("Toggle color theme");
+    expect(configure).toHaveBeenLastCalledWith({ theme: "system" });
+  });
+
+  it("switches the theme when the local server cannot keep it", async () => {
+    await loadSnapshot(snapshot());
+    vi.spyOn(useOverviewStore(), "configure").mockRejectedValue(new Error("The local server stopped."));
+    const wrapper = mountHeader();
+    await flushPromises();
+    await click("Toggle color theme");
+    expect(themeOf(wrapper)).toBe("v-theme--dark");
+  });
+
   it("follows a dark system again when the curator switches to dark", async () => {
     // tests/setup-media.ts mocks matchMedia for all tests: this test replaces it and puts it back.
     const original = window.matchMedia;
@@ -471,6 +491,21 @@ describe("useColorTheme", () => {
 
   it("follows the system without a choice", () => {
     expect(mountRestored().system()).toBe(true);
+  });
+
+  it("applies the theme that the local server keeps over the one of this browser", async () => {
+    localStorage.setItem(THEME_KEY, "light");
+    await loadSnapshot(snapshot({ theme: "dark" }));
+    const { wrapper } = mountRestored();
+    await flushPromises();
+    expect(wrapper.get(".v-application").classes()).toContain("v-theme--dark");
+    expect(localStorage.getItem(THEME_KEY)).toBe("dark");
+    // A choice made in another tab arrives with the next state.
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(snapshot({ theme: "system" })));
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(followsSystem()).toBe(true);
+    expect(localStorage.getItem(THEME_KEY)).toBeNull();
   });
 
   it("follows the system when the browser refuses storage", () => {

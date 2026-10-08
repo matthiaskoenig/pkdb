@@ -418,6 +418,9 @@ export interface GitHubAssignments {
   error?: string | null;
 }
 
+/** The color theme of the app: one that the curator chose, or the theme of the system. */
+export type ThemeChoice = "light" | "dark" | "system";
+
 export interface Snapshot {
   workspace: string;
   endpoint: string;
@@ -435,6 +438,8 @@ export interface Snapshot {
   update_required: boolean;
   offline: boolean;
   paused: boolean;
+  /** Kept by the local server: the browser forgets it, as the port and so the origin change with every start. */
+  theme: ThemeChoice;
   vocabulary: VocabularyState;
   github: GitHubAssignments & { user: string; repository: string };
   studies: StudyRow[];
@@ -676,6 +681,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "update_required",
   "offline",
   "paused",
+  "theme",
   "vocabulary",
   "github",
   "studies",

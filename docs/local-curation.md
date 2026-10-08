@@ -48,7 +48,7 @@ Uploads need your personal API key (see [Accounts and API keys](authentication.m
 
 ### The header
 
-The header shows the workspace, **File watching**, **Connection**, the user, **Settings** and a button that switches between the light and the dark theme. The theme follows your system until you choose one.
+The header shows the workspace, **File watching**, **Connection**, the user, **Settings** and a button that switches between the light and the dark theme. The theme follows your system until you choose one. The app keeps your choice with its settings (see `--state-dir`), so it stays after `pkdb curate` starts again. Switching back to the theme of your system follows the system again.
 
 The **Connection** badge shows the state of the PK-DB server. The app checks the server every 30 seconds, and the menu shows the upload target, the PK-DB account, the vocabulary and the versions of `pkdb` on both sides.
 
