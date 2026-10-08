@@ -339,6 +339,9 @@ const items = computed(() =>
 }
 .study-table th {
   vertical-align: middle;
+  /* Every header has one line height, also those of the columns whose cells set their own, so
+     that the labels share a baseline. */
+  line-height: 24px;
   font-size: 0.8125rem;
   font-weight: 600;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
@@ -357,6 +360,8 @@ const items = computed(() =>
 }
 .sort-button {
   display: inline-flex;
+  /* The top of the line box, where a label without a button starts too. */
+  vertical-align: top;
   align-items: center;
   gap: 6px;
   padding: 0;
