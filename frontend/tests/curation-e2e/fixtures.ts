@@ -23,8 +23,10 @@ const STOP_MS = 10_000;
 const TAIL_CHARACTERS = 20_000;
 /** The line in which `pkdb curate` prints its launch URL. */
 const LAUNCH_LINE = /^PK-DB curation: (http:\/\/127\.0\.0\.1:\d+\/#token=\S+)\r?\n/m;
-/** The name of the session cookie that the launch token creates. */
-const SESSION_COOKIE = "pkdb_curation";
+/** The name of the session cookie that the launch token creates: one per port, so per server. */
+function sessionCookie(origin: string): string {
+  return `pkdb_curation_${new URL(origin).port}`;
+}
 /** A launch token in a URL that `pkdb curate` printed. */
 const LAUNCH_TOKEN = /#token=[^\s&]+/g;
 
@@ -271,7 +273,7 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
   // The app creates its router after the session; a route changed before would be missed.
   await expect(header).toBeVisible();
   const cookies = await context.cookies(server.origin);
-  expect(cookies.map((cookie) => cookie.name)).toContain(SESSION_COOKIE);
+  expect(cookies.map((cookie) => cookie.name)).toContain(sessionCookie(server.origin));
   servers.cookies = cookies;
   if (hash !== "#/") await showRoute(page, hash);
 }

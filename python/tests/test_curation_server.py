@@ -61,6 +61,32 @@ def test_browser_bootstrap_and_actions(local_server):
     engine.enqueue.assert_called_once_with(["abc"], "validate")
 
 
+def test_two_servers_on_other_ports_keep_their_own_sessions(local_server):
+    first, _ = local_server
+    engine = Mock()
+    engine.snapshot.return_value = {"studies": []}
+    second = transport.create_server(engine)
+    thread = threading.Thread(target=second.serve_forever, daemon=True)
+    thread.start()
+    try:
+        cookies = [authenticate(server)["Cookie"] for server in (first, second)]
+        names = [cookie.split("=", 1)[0] for cookie in cookies]
+        assert names == [
+            f"pkdb_curation_{first.server_port}",
+            f"pkdb_curation_{second.server_port}",
+        ]
+        # A browser keeps the cookies of 127.0.0.1 for every port and sends them all.
+        both = {"Cookie": "; ".join(cookies)}
+        assert request(first, "GET", "/local/state", headers=both)[0] == 200
+        assert request(second, "GET", "/local/state", headers=both)[0] == 200
+        other = {"Cookie": cookies[1].replace(names[1], names[0])}
+        assert request(first, "GET", "/local/state", headers=other)[0] == 401
+    finally:
+        second.shutdown()
+        second.server_close()
+        thread.join(timeout=3)
+
+
 def test_host_origin_and_csrf_rejected(local_server):
     server, engine = local_server
     headers = authenticate(server)

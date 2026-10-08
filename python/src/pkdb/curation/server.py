@@ -82,6 +82,9 @@ class CurationServer(ThreadingHTTPServer):
         self.csrf_token = secrets.token_urlsafe(32)
         super().__init__(("127.0.0.1", port), Handler)
         self.origin = f"http://127.0.0.1:{self.server_port}"
+        # A browser keeps the cookies of 127.0.0.1 for all ports: the name of the session
+        # cookie has the port, so that two instances keep separate sessions.
+        self.cookie_name = f"pkdb_curation_{self.server_port}"
         self.launch_url = f"{self.origin}/#token={self.bootstrap_token}"
 
     def server_close(self):
@@ -187,7 +190,7 @@ class Handler(BaseHTTPRequestHandler):
             cookie.load(self.headers.get("Cookie", ""))
         except Exception:
             pass
-        value = cookie.get("pkdb_curation")
+        value = cookie.get(self.server.cookie_name)
         if not value or not _matches(value.value, self.server.session_token):
             self._reply(401, {"error": "Open the launch URL printed in your terminal"})
             return False
@@ -294,7 +297,7 @@ class Handler(BaseHTTPRequestHandler):
                 self._reply(
                     200,
                     {"csrf_token": self.server.csrf_token},
-                    cookie=f"pkdb_curation={self.server.session_token}; HttpOnly; SameSite=Strict; Path=/",
+                    cookie=f"{self.server.cookie_name}={self.server.session_token}; HttpOnly; SameSite=Strict; Path=/",
                 )
                 return
             result = self._action(path, payload)
