@@ -12,10 +12,10 @@ import type {
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
-import { PREVIEW_HOLD_MS } from "../../src/curation-app/composables/usePreview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import { useStudyStore } from "../../src/curation-app/stores/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
@@ -772,24 +772,124 @@ describe("StudyPage", () => {
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
     expect(button("Add").attributes("disabled")).toBeUndefined();
 
-    // Another key: Add waits at once, while the last preview shows for a moment only.
+    const area = dialog().get(".add-table-preview");
+    expect(area.classes()).not.toContain("is-updating");
+    expect(area.attributes("aria-busy")).toBe("false");
+    expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab3 can be added. The image is in the folder.");
+
+    // Another key: Add waits at once; the last preview stays, marked as updating, and is not announced again.
     await field("Source").setValue("Tab34");
     await flushPromises();
     expect(button("Add").attributes("disabled")).toBeDefined();
+    expect(area.classes()).toContain("is-updating");
+    expect(area.attributes("aria-busy")).toBe("true");
+    expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
+    expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab3 can be added. The image is in the folder.");
     await dialog().get("form").trigger("submit");
     await flushPromises();
     expect(posted("/local/studies/tables")).toEqual([]);
-    await new Promise((resolve) => setTimeout(resolve, PREVIEW_HOLD_MS));
-    expect(dialog().find(".table-preview").exists()).toBe(false);
+
     answers.get("Tab34")?.(
-      json({ ...HARDER_PREVIEWS["outputs Tab3"], table: "outputs_Tab34", file: "outputs_Tab34.tsv" }),
+      json({ ...HARDER_PREVIEWS["outputs Tab3"], table: "outputs_Tab34", file: "outputs_Tab34.tsv", image_found: false }),
     );
     await flushPromises();
+    expect(area.classes()).not.toContain("is-updating");
+    expect(area.attributes("aria-busy")).toBe("false");
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab34.tsv");
+    expect(dialog().get('[role="status"]').text()).toBe("outputs_Tab34 can be added. The image is missing.");
     await click("Add");
     expect(posted("/local/studies/tables")).toEqual([
       { study: "caffeine/Harder1988", action: "add", kind: "outputs", source: "Tab34" },
     ]);
+  });
+
+  it("asks for the preview again when the folder gets the image or the table file", async () => {
+    let files = [...harder.files];
+    const tab4 = HARDER_PREVIEWS["raw Tab4"]!;
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: () => json({ ...harder, files }),
+      // The local server answers for the files in the folder.
+      "POST /local/studies/tables/preview": () =>
+        json(
+          files.includes(tab4.file)
+            ? { ...tab4, image_found: true, issues: [issue(`${tab4.file} already exists`, { code: "table_exists" })] }
+            : { ...tab4, image_found: files.includes("Harder1988_Tab4.png") },
+        ),
+    });
+    await click("More actions");
+    await click("Add table");
+    radio("Raw table").click();
+    await flushPromises();
+    await field("Source").setValue("Tab4");
+    await flushPromises();
+    expect(dialog().get(".image-state").text()).toBe("Missing");
+
+    files = [...files, "Harder1988_Tab4.png"];
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(dialog().get(".image-state").text()).toBe("In the folder");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+
+    files = [...files, tab4.file];
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(dialog().text()).toContain("Harder1988_Tab4.tsv already exists");
+    expect(button("Add").attributes("disabled")).toBeDefined();
+    expect(posted("/local/studies/tables/preview")).toHaveLength(3);
+  });
+
+  it("asks for a failed preview again once the local server answers again", async () => {
+    let stopped = false;
+    const stop = () => Promise.reject(new TypeError("Failed to fetch"));
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: () => (stopped ? stop() : json(harder)),
+      "POST /local/studies/tables/preview": (body: Record<string, unknown> | null) =>
+        stopped ? stop() : harderPreview(body),
+    });
+    stopped = true;
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    expect(dialog().text()).toContain("The local server stopped. Start pkdb curate again.");
+    expect(button("Add").attributes("disabled")).toBeDefined();
+
+    // The next poll fails too; once a poll succeeds, the preview is asked for again.
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = false;
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+  });
+
+  it("drops a late preview of the study that was open before", async () => {
+    const answers: { study: unknown; resolve: (answer: Response) => void }[] = [];
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": (body: Record<string, unknown> | null) =>
+        new Promise<Response>((resolve) => answers.push({ study: body?.study, resolve })),
+    });
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    await router.push("/studies/caffeine/Example/tables");
+    await flushPromises();
+    answers[0]?.resolve(json(HARDER_PREVIEWS["outputs Tab3"]));
+    await flushPromises();
+    expect(page().text()).not.toContain("Harder1988_Tab3.png");
+
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    expect(answers.map((answer) => answer.study)).toEqual(["caffeine/Harder1988", "caffeine/Example"]);
+    answers[1]?.resolve(
+      json({ ...HARDER_PREVIEWS["outputs Tab3"], image: "Example_Tab3.png", image_found: false }),
+    );
+    await flushPromises();
+    expect(dialog().get(".table-preview").text()).toContain("Example_Tab3.png");
+    expect(page().text()).not.toContain("Harder1988_Tab3.png");
   });
 
   it("explains a duplicate identity with both folders", async () => {

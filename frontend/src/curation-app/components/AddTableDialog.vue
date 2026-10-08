@@ -16,7 +16,7 @@ import {
   VTextField,
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
-import { usePreview, useShownPreview } from "../composables/usePreview";
+import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useStudyStore } from "../stores/study";
 import { messageOf, userHint } from "../study";
@@ -42,18 +42,31 @@ const failure = ref<{ text: string; issues: string[] } | null>(null);
 const userText = ref<string | null>(null);
 
 const preview = usePreview(
-  () => (study.detail && source.value.trim() ? { kind: kind.value, source: source.value.trim() } : null),
+  () => {
+    const detail = study.detail;
+    const name = source.value.trim();
+    if (!detail || !name) return null;
+    // The files of the study stand for the folder, so an added image or table file asks again; a
+    // preview that failed while the local server did not answer is asked again once it answers.
+    return { study: detail.id, files: detail.files, answering: study.error === null, kind: kind.value, source: name };
+  },
   (value) => study.previewTable(value.kind, value.source),
 );
-const shown = useShownPreview(preview);
-/** The new table as the server previews it for the current kind and source; the last one for a moment while it loads. */
-const table = computed(() => shown.data.value);
+/** The new table as the server previews it: for the current kind and source, or the last one while that loads. */
+const table = computed(() => preview.shown.value);
 /** Why the table cannot be added: the refusal of the server, or a failed preview. */
-const problem = computed(() => table.value?.issues[0]?.message ?? shown.error.value);
+const problem = computed(() => table.value?.issues[0]?.message ?? preview.shownError.value);
 /** Only the answer for the current kind and source can add a table. */
 const canAdd = computed(() => {
   const current = preview.data.value;
   return current !== null && current.issues.length === 0 && !busy.value;
+});
+/** What the preview says, for screen readers; a refusal is announced as the message of the field. */
+const ready = computed(() => {
+  const value = table.value;
+  if (!value || value.issues.length) return "";
+  if (value.image === null) return `${value.table} can be added.`;
+  return `${value.table} can be added. ${value.image_found ? "The image is in the folder." : "The image is missing."}`;
 });
 const hint = computed(() =>
   kind.value === "raw"
@@ -115,40 +128,48 @@ async function add(): Promise<void> {
         <VRadioGroup v-model="kind" label="Kind" inline hide-details class="add-table-kind">
           <VRadio v-for="item in NEW_TABLE_KINDS" :key="item.value" :value="item.value" :label="item.label" />
         </VRadioGroup>
-        <VTextField
-          v-model="source"
-          label="Source"
-          placeholder="Tab3"
-          :hint="hint"
-          persistent-hint
-          :error-messages="problem"
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <dl v-if="table && !table.issues.length" class="panel-facts table-preview">
-          <dt>Sheet</dt>
-          <dd>{{ table.table }}</dd>
-          <dt>File</dt>
-          <dd>{{ table.file }}</dd>
-          <dt>Image</dt>
-          <dd v-if="table.image" class="table-image">
-            <span class="table-image-name">
-              {{ table.image }}
-              <VChip
-                size="small"
-                variant="tonal"
-                :color="table.image_found ? 'success' : 'warning'"
-                class="status-chip image-state"
-              >
-                {{ table.image_found ? "In the folder" : "Missing" }}
-              </VChip>
-            </span>
-            <span v-if="!table.image_found" class="table-image-note">
-              Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
-            </span>
-          </dd>
-          <dd v-else>None for the text of the paper</dd>
-        </dl>
+        <!-- While the answer for the current kind and source loads, the last one stays, marked as updating. -->
+        <div
+          class="add-table-preview"
+          :class="{ 'is-updating': preview.loading.value }"
+          :aria-busy="preview.loading.value"
+        >
+          <VTextField
+            v-model="source"
+            label="Source"
+            placeholder="Tab3"
+            :hint="hint"
+            persistent-hint
+            :error-messages="problem"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <dl v-if="table && !table.issues.length" class="panel-facts table-preview">
+            <dt>Sheet</dt>
+            <dd>{{ table.table }}</dd>
+            <dt>File</dt>
+            <dd>{{ table.file }}</dd>
+            <dt>Image</dt>
+            <dd v-if="table.image" class="table-image">
+              <span class="table-image-name">
+                {{ table.image }}
+                <VChip
+                  size="small"
+                  variant="tonal"
+                  :color="table.image_found ? 'success' : 'warning'"
+                  class="status-chip image-state"
+                >
+                  {{ table.image_found ? "In the folder" : "Missing" }}
+                </VChip>
+              </span>
+              <span v-if="!table.image_found" class="table-image-note">
+                Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
+              </span>
+            </dd>
+            <dd v-else>None for the text of the paper</dd>
+          </dl>
+          <span role="status" aria-live="polite" class="d-sr-only">{{ ready }}</span>
+        </div>
         <VAlert v-if="failure" type="error" variant="tonal" density="compact" class="status-alert">
           {{ failure.text }}
           <ul v-if="failure.issues.length" class="add-table-issues">
@@ -185,6 +206,21 @@ async function add(): Promise<void> {
 }
 .add-table-kind :deep(.v-selection-control-group) {
   margin-inline-start: -8px;
+}
+.add-table-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* An answer that arrives at once does not flash: the dimming starts after a moment. */
+.add-table-preview :deep(.v-messages),
+.add-table-preview .table-preview {
+  transition: opacity 0.1s ease;
+}
+.add-table-preview.is-updating :deep(.v-messages),
+.add-table-preview.is-updating .table-preview {
+  opacity: 0.5;
+  transition: opacity 0.15s ease 0.1s;
 }
 .table-preview dd {
   overflow-wrap: anywhere;

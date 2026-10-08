@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { flushPromises } from "@vue/test-utils";
-import { effectScope, nextTick, ref, watch, type Ref } from "vue";
-import { PREVIEW_HOLD_MS, usePreview, useShownPreview } from "../../src/curation-app/composables/usePreview";
+import { nextTick, ref, watch, type Ref } from "vue";
+import { usePreview } from "../../src/curation-app/composables/usePreview";
 
 /** A request that the test answers when it wants. */
 function deferred<T>(): { promise: Promise<T>; resolve: (value: T) => void; reject: (error: unknown) => void } {
@@ -62,71 +62,59 @@ describe("usePreview", () => {
   });
 });
 
-describe("useShownPreview", () => {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  /** Fake timeouts only: flushPromises waits with setImmediate. */
-  const fakeTimeouts = () => vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
-
-  /** A shown preview of `input`, with every value that it showed. */
+describe("the shown preview", () => {
+  /** A preview of `input`, with every answer that it showed. */
   function shown(input: Ref<string | null>) {
     const { answers, load } = recorder();
     const preview = usePreview(() => input.value, load);
-    const view = useShownPreview(preview);
     const seen: (string | null)[] = [];
-    watch(view.data, (value) => seen.push(value), { flush: "sync" });
-    return { answers, preview, view, seen };
+    watch(preview.shown, (value) => seen.push(value), { flush: "sync" });
+    return { answers, preview, seen };
   }
 
-  it("replaces the last answer by a fast one without showing nothing in between", async () => {
+  it("keeps the last settled answer while the next one loads, and never shows a stale one", async () => {
     const input = ref<string | null>("Tab");
-    const { answers, preview, view, seen } = shown(input);
+    const { answers, preview, seen } = shown(input);
     answers.get("Tab")?.resolve("refused");
     await flushPromises();
+    expect([preview.shown.value, preview.loading.value]).toEqual(["refused", false]);
+
     input.value = "Tab3";
     await nextTick();
-    // The answer for Tab3 loads: no action can use the answer for Tab, which still shows.
-    expect([preview.data.value, preview.loading.value, view.data.value]).toEqual([null, true, "refused"]);
+    // Actions use `data`, which waits for the answer about Tab3; the dialog shows the last answer as updating.
+    expect([preview.data.value, preview.loading.value, preview.shown.value]).toEqual([null, true, "refused"]);
+    input.value = "Tab31";
+    await nextTick();
     answers.get("Tab3")?.resolve("outputs_Tab3");
     await flushPromises();
-    expect(view.data.value).toBe("outputs_Tab3");
-    expect(seen).toEqual(["refused", "outputs_Tab3"]);
+    // The answer about Tab3 came after Tab31 was typed: it never shows.
+    expect([preview.shown.value, preview.loading.value]).toEqual(["refused", true]);
+    answers.get("Tab31")?.resolve("outputs_Tab31");
+    await flushPromises();
+    expect([preview.data.value, preview.shown.value, preview.loading.value]).toEqual([
+      "outputs_Tab31",
+      "outputs_Tab31",
+      false,
+    ]);
+    expect(seen).toEqual(["refused", "outputs_Tab31"]);
   });
 
-  it("shows nothing when an answer takes longer than the hold, and clears at once without input", async () => {
-    fakeTimeouts();
+  it("keeps the last failure while the next answer loads, and clears both at once without input", async () => {
     const input = ref<string | null>("Tab");
-    const { answers, view } = shown(input);
+    const { answers, preview } = shown(input);
     answers.get("Tab")?.reject(new Error("The local server stopped."));
     await flushPromises();
-    expect(view.error.value).toBe("The local server stopped.");
     input.value = "Tab3";
     await nextTick();
-    vi.advanceTimersByTime(PREVIEW_HOLD_MS - 1);
-    expect(view.error.value).toBe("The local server stopped.");
-    vi.advanceTimersByTime(1);
-    expect([view.data.value, view.error.value]).toEqual([null, null]);
+    expect([preview.error.value, preview.shownError.value]).toEqual([null, "The local server stopped."]);
     answers.get("Tab3")?.resolve("outputs_Tab3");
     await flushPromises();
-    expect(view.data.value).toBe("outputs_Tab3");
+    expect([preview.shown.value, preview.shownError.value]).toEqual(["outputs_Tab3", null]);
+
+    input.value = "Tab4";
+    await nextTick();
     input.value = null;
     await nextTick();
-    expect([view.data.value, view.error.value]).toEqual([null, null]);
-  });
-
-  it("stops its timer with its scope", async () => {
-    fakeTimeouts();
-    const input = ref<string | null>("Tab");
-    const scope = effectScope();
-    const { answers, view } = scope.run(() => shown(input))!;
-    answers.get("Tab")?.resolve("refused");
-    await flushPromises();
-    input.value = "Tab3";
-    await nextTick();
-    scope.stop();
-    vi.advanceTimersByTime(PREVIEW_HOLD_MS);
-    expect(view.data.value).toBe("refused");
+    expect([preview.shown.value, preview.shownError.value, preview.loading.value]).toEqual([null, null, false]);
   });
 });
