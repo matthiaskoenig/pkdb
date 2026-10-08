@@ -17,6 +17,7 @@ import {
 } from "../overlay";
 import { loadNoncedPlotly, plotlyImport, retryPlotly } from "../plotly";
 import { messageOf } from "../study";
+import { listText } from "../tables";
 import { plotColors } from "../../features/plots/theme";
 
 /**
@@ -76,9 +77,18 @@ const name = computed(() => {
     const count = rows.value.length;
     return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}`;
   }
-  const raw = props.view.overlay.filter((point) => point.role === "raw").length;
-  const mapped = props.view.overlay.length - raw;
-  return `Figure ${props.view.source} with ${plural(raw, "digitized point")} and ${plural(mapped, "mapped row")}${of}${emphasis}`;
+  const counted = (role: "raw" | "mapped", errorBarEnd: boolean) =>
+    props.view.overlay.filter((point) => point.role === role && point.error_bar_end === errorBarEnd).length;
+  // The kinds of marks that the figure has, with their counts.
+  const marks = (
+    [
+      [counted("raw", false), "digitized point"],
+      [counted("raw", true), "digitized error bar end"],
+      [counted("mapped", false), "mapped row"],
+    ] as const
+  ).flatMap(([number, one]) => (number ? [plural(number, one)] : []));
+  const contents = marks.length ? ` with ${listText(marks)}` : "";
+  return `Figure ${props.view.source}${contents}${of}${emphasis}`;
 });
 const caption = computed(() =>
   shown.value === "overlay"
@@ -262,6 +272,10 @@ onBeforeUnmount(() => {
           Digitized point
         </span>
         <span class="overlay-key-item">
+          <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line"><path d="M2 6 L10 6" /></svg>
+          Digitized error bar
+        </span>
+        <span class="overlay-key-item">
           <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line">
             <path d="M2 2 L10 10 M10 2 L2 10" />
           </svg>
@@ -274,7 +288,7 @@ onBeforeUnmount(() => {
       </p>
 
       <p v-if="selectable" class="overlay-key">
-        Click a {{ shown === "overlay" ? "cross" : "point" }} to show its row in the Tables section.
+        Click a {{ shown === "overlay" ? "point, bar or cross" : "point" }} to show its row in the Tables section.
       </p>
     </template>
 

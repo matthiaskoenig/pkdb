@@ -11,12 +11,22 @@ import type {
   SourceView,
   StudyDetail,
   TableResponse,
+  TargetMatch,
 } from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, reviewItem, roster, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { useStudyStore } from "../../src/curation-app/stores/study";
+import {
+  beyondLimitsDetail,
+  json,
+  reviewItem,
+  roster,
+  snapshot,
+  sourceSummary,
+  studyDetail,
+} from "../unit/curation-fixtures";
 import {
   button,
   buttons,
@@ -95,6 +105,30 @@ const resolvedAcknowledgement = reviewItem({
   author: "mkoenig",
 });
 
+/** What the local server matches for the targets of the items, in the rows of `timecourses`. */
+const TARGETS: Record<string, TargetMatch> = {
+  [QUESTION]: { lines: null, series: null, total: 2 },
+  [AGENT]: { lines: [2, 3], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
+  [ACKNOWLEDGEMENT]: { lines: null, series: null, total: 3 },
+  [RESOLVED_ACKNOWLEDGEMENT]: { lines: [3], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
+};
+
+/** The lines of the rows of `timecourses` that the row filters of a draft target match, by its filters. */
+const DRAFT_LINES: Record<string, number[]> = {
+  [JSON.stringify({ label: "caf_plasma_D150" })]: [2, 3],
+  [JSON.stringify({ label: "caf_plasma_D75" })]: [],
+  [JSON.stringify({ label: "caf_plasma_D150", time: "0" })]: [2],
+  [JSON.stringify({ time: "0" })]: [2, 4],
+};
+
+/** Answers the preview of a draft target as the local server would for `timecourses`. */
+const draftPreview: Handler = (body) => {
+  const target = body?.target as ReviewTarget | undefined;
+  const lines = DRAFT_LINES[JSON.stringify(target?.rows ?? {})];
+  if (target?.file !== "timecourses_Fig1.tsv" || !lines) throw new Error(`Unexpected preview ${JSON.stringify(body)}`);
+  return json({ lines, series: null, total: timecourses.rows.length } satisfies TargetMatch);
+};
+
 const timecourses: TableResponse = {
   file: "timecourses_Fig1.tsv",
   kind: "table",
@@ -157,9 +191,14 @@ let wrapper: VueWrapper;
 /** The detail that `GET /local/studies/caffeine/Example` answers; a write may change it. */
 let served: StudyDetail;
 
-function withReview(review: Partial<Review> = {}, revision = "review-7"): StudyDetail {
+function withReview(
+  review: Partial<Review> = {},
+  revision = "review-7",
+  targets: Record<string, TargetMatch> = TARGETS,
+): StudyDetail {
   const base = studyDetail();
   return studyDetail({
+    targets,
     review: {
       revision,
       value: {
@@ -253,6 +292,7 @@ async function mountSection(
     [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: outputs,
     [`GET ${EXAMPLE}/sources/Fig1`]: figure,
     [`POST ${REVIEW}`]: write,
+    "POST /local/studies/review/preview": draftPreview,
     ...routes,
   });
   await useOverviewStore().refresh();
@@ -676,6 +716,202 @@ describe("new item", () => {
   });
 });
 
+describe("new item count", () => {
+  /** Opens New item with the text filled and a row filter on `label` of timecourses_Fig1.tsv. */
+  async function filterLabel(wrapper: VueWrapper, value: string): Promise<void> {
+    await click("New item");
+    await textArea("Text").setValue("Which dose?");
+    await labeled(wrapper, VSelect, "File").setValue("timecourses_Fig1.tsv");
+    await flushPromises();
+    await click("Add row filter");
+    await labeled(wrapper, VSelect, "Column 1").setValue("label");
+    await labeled(wrapper, VCombobox, "Value 1").setValue(value);
+    await flushPromises();
+  }
+
+  function count() {
+    return dialog().get(".new-item-matches");
+  }
+
+  it("shows only the count of the current row filter when an older answer comes late", async () => {
+    let answerFirst: (response: Response) => void = () => undefined;
+    const preview: Handler = (body) => {
+      const target = body?.target as { rows?: Record<string, string> } | undefined;
+      if (target?.rows?.label === "caf_plasma_D150") return new Promise<Response>((resolve) => (answerFirst = resolve));
+      return json({ lines: [3], series: null, total: 3 });
+    };
+    const wrapper = await mountSection(withReview(), { "POST /local/studies/review/preview": preview });
+    await click("New item");
+    await labeled(wrapper, VSelect, "File").setValue("timecourses_Fig1.tsv");
+    await flushPromises();
+    await click("Add row filter");
+    await labeled(wrapper, VSelect, "Column 1").setValue("label");
+    await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D150");
+    await flushPromises();
+    await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D75");
+    await flushPromises();
+    answerFirst(json({ lines: [2, 3], series: null, total: 3 }));
+    await flushPromises();
+    expect(dialog().get(".new-item-matches").text()).toBe("Matches 1 of 3 rows.");
+  });
+
+  it("keeps the last count marked as updating while the next one loads, and Add waits for it", async () => {
+    let answer: (response: Response) => void = () => undefined;
+    const preview: Handler = (body) => {
+      const target = body?.target as ReviewTarget | undefined;
+      if (target?.rows?.label === "caf_plasma_D75") return new Promise<Response>((resolve) => (answer = resolve));
+      return draftPreview(body);
+    };
+    const wrapper = await mountSection(withReview(), { "POST /local/studies/review/preview": preview });
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(count().text()).toBe("Matches 2 of 3 rows.");
+    expect(count().classes()).not.toContain("is-updating");
+    expect(count().attributes("aria-busy")).toBe("false");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+
+    await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D75");
+    await flushPromises();
+    // The last count stays, so that it is not announced again, and Add waits for the current one.
+    expect(count().text()).toBe("Matches 2 of 3 rows.");
+    expect(count().classes()).toContain("is-updating");
+    expect(count().attributes("aria-busy")).toBe("true");
+    expect(button("Add").attributes("disabled")).toBeDefined();
+    await dialog().get("form").trigger("submit");
+    await flushPromises();
+    expect(posted()).toEqual([]);
+
+    answer(json({ lines: [], series: null, total: 3 }));
+    await flushPromises();
+    expect(count().text()).toBe("Matches none of 3 rows.");
+    expect(count().classes()).not.toContain("is-updating");
+    expect(count().attributes("aria-busy")).toBe("false");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+  });
+
+  it("loads the rows and counts again when a file of the study changes", async () => {
+    let lines = [2, 3];
+    let table = timecourses;
+    const wrapper = await mountSection(withReview(), {
+      [`GET ${EXAMPLE}/tables/timecourses_Fig1.tsv`]: () => json(table),
+      "POST /local/studies/review/preview": () => json({ lines, series: null, total: table.rows.length }),
+    });
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(count().text()).toBe("Matches 2 of 3 rows.");
+    const loads = fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`);
+
+    // The table changed on disk, and with it the version of the files of the study.
+    const added = { line: 5, cells: ["Example", "Fig1", "caf_plasma_D300", "0.5", "1.9", "0.5", "sd", ""] };
+    table = { ...timecourses, rows: [...timecourses.rows, added] };
+    lines = [3];
+    served = { ...served, files_version: "files-2" };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(count().text()).toBe("Matches 1 of 4 rows.");
+    expect(fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`)).toBe(loads + 1);
+  });
+
+  it("counts the rows of the version of the table that the server matched in", async () => {
+    // The answer comes from a newer table than the rows that the dialog loaded.
+    const wrapper = await mountSection(withReview(), {
+      "POST /local/studies/review/preview": () => json({ lines: [3], series: null, total: 4 }),
+    });
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(count().text()).toBe("Matches 1 of 4 rows.");
+  });
+
+  it("asks nothing again and keeps Add enabled when only a job changes the study page", async () => {
+    const wrapper = await mountSection();
+    const previews = () => requests.filter((request) => request.path === "/local/studies/review/preview").length;
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(previews()).toBe(1);
+    const loads = fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`);
+    // A validation job runs: the page changes, its files do not.
+    served = { ...served, status: "validating" };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(previews()).toBe(1);
+    expect(fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`)).toBe(loads);
+    expect(count().classes()).not.toContain("is-updating");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+  });
+
+  it("asks for a failed count again once the local server answers again", async () => {
+    let stopped = false;
+    let restarted = false;
+    const stop = () => Promise.reject(new TypeError("Failed to fetch"));
+    // The local server restarts with the same version of the study page, which it confirms with a 304.
+    const page = () => (restarted ? new Response(null, { status: 304 }) : json(served));
+    const wrapper = await mountSection(withReview(), {
+      [`GET ${EXAMPLE}`]: () => (stopped ? stop() : page()),
+      "POST /local/studies/review/preview": (body: Record<string, unknown> | null) =>
+        stopped ? stop() : draftPreview(body),
+    });
+    await click("New item");
+    await labeled(wrapper, VSelect, "File").setValue("timecourses_Fig1.tsv");
+    await flushPromises();
+    stopped = true;
+    await click("Add row filter");
+    await labeled(wrapper, VSelect, "Column 1").setValue("label");
+    await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D150");
+    await flushPromises();
+    expect(count().text()).toBe("The rows could not be matched. The local server stopped. Start pkdb curate again.");
+    expect(count().classes()).toContain("field-error");
+
+    // The next poll fails too; once a poll succeeds, the count is asked for again.
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = false;
+    restarted = true;
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(count().text()).toBe("Matches 2 of 3 rows.");
+    expect(count().classes()).not.toContain("field-error");
+  });
+
+  it("asks for nothing while the dialog is closed and the local server stops and answers again", async () => {
+    let stopped = false;
+    const wrapper = await mountSection(withReview(), {
+      [`GET ${EXAMPLE}`]: () => (stopped ? Promise.reject(new TypeError("Failed to fetch")) : json(served)),
+    });
+    const previews = () => requests.filter((request) => request.path === "/local/studies/review/preview").length;
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(previews()).toBe(1);
+    await click("Cancel");
+    stopped = true;
+    await useStudyStore().refresh();
+    await flushPromises();
+    stopped = false;
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(previews()).toBe(1);
+  });
+
+  it("asks for nothing while the dialog is closed, and asks again when it opens", async () => {
+    let lines = [2, 3];
+    const wrapper = await mountSection(withReview(), {
+      "POST /local/studies/review/preview": () => json({ lines, series: null, total: 3 }),
+    });
+    const previews = () => requests.filter((request) => request.path === "/local/studies/review/preview").length;
+    const table = `${EXAMPLE}/tables/timecourses_Fig1.tsv`;
+    await filterLabel(wrapper, "caf_plasma_D150");
+    expect(previews()).toBe(1);
+    await click("Cancel");
+    const loads = fetched(table);
+    lines = [3];
+    served = { ...served, files_version: "files-2" };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(previews()).toBe(1);
+    expect(fetched(table)).toBe(loads);
+    // The fields stay after Cancel, and the rows and their count come again for them.
+    await click("New item");
+    await flushPromises();
+    expect(previews()).toBe(2);
+    expect(fetched(table)).toBe(loads + 1);
+    expect(count().text()).toBe("Matches 1 of 3 rows.");
+  });
+});
+
 describe("new item filters", () => {
   it("keeps the values of a filter when a filter above it is removed", async () => {
     const wrapper = await mountSection();
@@ -739,6 +975,77 @@ describe("target", () => {
     expect(overlay.props("highlight")).toBe("caf_plasma_D150");
   });
 
+  it("shows the rows that the page of these rows matched, until the rows of a newer page arrive", async () => {
+    let answerRows: ((response: Response) => void) | null = null;
+    let hold = false;
+    // The table after an edit: a row of the 300 mg series moved to the top.
+    const [first, second, third] = timecourses.rows;
+    const edited: TableResponse = {
+      ...timecourses,
+      rows: [
+        { ...third!, line: 2 },
+        { ...first!, line: 3 },
+        { ...second!, line: 4 },
+      ],
+    };
+    await mountSection(withReview(), {
+      [`GET ${EXAMPLE}/tables/timecourses_Fig1.tsv`]: () =>
+        hold ? new Promise<Response>((resolve) => (answerRows = resolve)) : json(timecourses),
+    });
+    await select("The error bars");
+    expect(targetLines()).toEqual(["2", "3"]);
+
+    // The page with the new lines of the series arrives before the edited rows.
+    hold = true;
+    served = {
+      ...served,
+      files_version: "files-2",
+      targets: { ...served.targets, [AGENT]: { ...TARGETS[AGENT]!, lines: [3, 4] } },
+    };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(answerRows).not.toBeNull();
+    expect(targetLines()).toEqual(["2", "3"]);
+    expect(target().text()).toContain("Matches 2 of 3 rows.");
+
+    answerRows!(json(edited));
+    await flushPromises();
+    expect(targetLines()).toEqual(["3", "4"]);
+    expect(target().findAll("tbody td").some((cell) => cell.text() === "caf_plasma_D300")).toBe(false);
+  });
+
+  it("waits for the rows of a new item until the page of the rows knows its target", async () => {
+    const NEW = "01JA41A1B2C3D4E5F6G7H8J9K0";
+    const fresh = reviewItem({
+      id: NEW,
+      target: { file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D300" } },
+      text: "Is the 300 mg series complete?",
+    });
+    let answerRows: ((response: Response) => void) | null = null;
+    let hold = false;
+    await mountSection(withReview(), {
+      [`GET ${EXAMPLE}/tables/timecourses_Fig1.tsv`]: () =>
+        hold ? new Promise<Response>((resolve) => (answerRows = resolve)) : json(timecourses),
+    });
+    await select("The error bars");
+    hold = true;
+    served = {
+      ...changed("", (entry) => entry, [fresh]),
+      files_version: "files-2",
+      targets: { ...served.targets, [NEW]: { lines: [4], series: null, total: 3 } },
+    };
+    await useStudyStore().refresh();
+    await router.push(`${SECTION}?item=${NEW}`);
+    await flushPromises();
+    // Not every row of the table as if the item had no row filter: the rows are loading.
+    expect(target().find(".v-progress-linear").exists()).toBe(true);
+    expect(target().find("tbody").exists()).toBe(false);
+
+    answerRows!(json(timecourses));
+    await flushPromises();
+    expect(targetLines()).toEqual(["4"]);
+  });
+
   it("opens the Tables section at the row of a clicked mapped point", async () => {
     await mountSection();
     await select("The error bars");
@@ -754,9 +1061,35 @@ describe("target", () => {
       target: { file: "scatters_Fig1.tsv", rows: { name: "age_vs_cmax" } },
       text: "Is the age the median?",
     });
-    await mountSection(withReview({ items: [scatter] }));
+    const targets = { [ADDED]: { lines: [2], series: { source: "Fig1", series: "age_vs_cmax" }, total: 2 } };
+    await mountSection(withReview({ items: [scatter] }, "review-7", targets));
     expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
     expect(wrapper.findComponent(OverlayStub).props("highlight")).toBe("age_vs_cmax");
+  });
+});
+
+describe("target beyond the upload limits", () => {
+  // The study page of a study beyond the upload limits has no tables, files, sources or targets.
+  const beyond = () => beyondLimitsDetail({ review: withReview().review });
+
+  it("says that the rows cannot be shown, and asks for no table, since the local server matched none", async () => {
+    await mountSection(beyond(), {}, `${SECTION}?item=${AGENT}`);
+    expect(detail().get(".review-detail-text").text()).toBe("The error bars may be SE rather than SD.");
+    const target = page().get(".review-target");
+    expect(target.get(".target-text").text()).toBe("timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type");
+    const limits = target.get(".target-limits");
+    expect(limits.text()).toBe(
+      "This study is beyond the upload limits, so the app cannot show the rows of its tables. See Problems.",
+    );
+    expect(limits.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
+    expect(fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`)).toBe(0);
+    expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(0);
+  });
+
+  it("shows no target for the whole study", async () => {
+    await mountSection(beyond(), {}, `${SECTION}?item=${RESOLVED}`);
+    expect(detail().get(".review-detail-text").text()).toBe("The dose unit was missing.");
+    expect(page().find(".review-target").exists()).toBe(false);
   });
 });
 

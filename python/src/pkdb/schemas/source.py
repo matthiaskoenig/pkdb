@@ -22,6 +22,9 @@ class SourceLocation(BaseModel):
     path: tuple[str | int, ...] = ()
     cell: str | None = None
     header: str | None = None
+    # A name that identifies the place of an issue in a file without rows: the dataset of a
+    # WebPlotDigitizer project or the review item of `review.json`.
+    key: str | None = None
     # Pydantic copies these defaults per instance. Avoid inspecting a factory
     # signature for every source coordinate created during table expansion.
     _columns: dict[str, str] = PrivateAttr(default={})
@@ -80,13 +83,13 @@ class SourceLocation(BaseModel):
     @model_serializer(mode="wrap")
     def serialize(self, handler):
         result = handler(self)
-        for field in ("cell", "header"):
+        for field in ("cell", "header", "key"):
             if result.get(field) is None:
                 result.pop(field, None)
         return result
 
     def legacy_dict(self) -> dict:
-        return self.model_dump(mode="json", exclude={"cell", "header"})
+        return self.model_dump(mode="json", exclude={"cell", "header", "key"})
 
 
 class SourceBundle(BaseModel):

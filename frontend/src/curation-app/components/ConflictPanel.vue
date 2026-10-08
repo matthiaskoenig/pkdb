@@ -3,7 +3,6 @@ import { computed, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { ConflictData } from "../api/types";
 import { useStudyStore } from "../stores/study";
-import { isRawTable } from "../study";
 import { conflictView, type Side } from "../tables";
 import TableGrid from "./TableGrid.vue";
 
@@ -27,17 +26,19 @@ const study = useStudyStore();
 const id = useId();
 
 const unresolved = computed(() => props.conflicts.filter((conflict) => conflict.kept === null));
-const files = computed(() => [...new Set(unresolved.value.map((conflict) => conflict.file))]);
+/** A conflict of each conflicting file, in the order of the conflicts; the conflicts of a file share its kind. */
+const byFile = computed(() => new Map(unresolved.value.map((conflict) => [conflict.file, conflict])));
+const files = computed(() => [...byFile.value.keys()]);
 
 /** The header of each conflicting table; null for a raw table, or a table that is deleted or does not load. */
 const headers = shallowRef(new Map<string, string[] | null>());
 let request = 0;
 
-async function header(file: string): Promise<string[] | null> {
+async function header(conflict: ConflictData): Promise<string[] | null> {
   // A deleted table takes its header from its sheet.
-  if (isRawTable(file) || !study.detail?.files.includes(file)) return null;
+  if (conflict.kind === "raw" || !study.detail?.files.includes(conflict.file)) return null;
   try {
-    const table = await study.table(file);
+    const table = await study.table(conflict.file);
     return table.kind === "table" ? table.header : null;
   } catch {
     return null;
@@ -48,7 +49,9 @@ watch(
   () => files.value.join("\n"),
   async () => {
     const current = ++request;
-    const loaded = await Promise.all(files.value.map(async (file) => [file, await header(file)] as const));
+    const loaded = await Promise.all(
+      [...byFile.value.values()].map(async (conflict) => [conflict.file, await header(conflict)] as const),
+    );
     if (current === request) headers.value = new Map(loaded);
   },
   { immediate: true },
@@ -72,7 +75,8 @@ const many = computed(() => files.value.length > 1);
         The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit
         the rows in the workbook, save it, and then keep the workbook.
         <template v-if="unresolved.length">The columns that differ come first and are marked.</template>
-        <template v-if="many">Keep workbook and Keep tables resolve all conflicts.</template>
+        <!-- The space between the sentences, which the template compiler drops between elements. -->
+        <template v-if="many">{{ " " }}Keep workbook and Keep tables resolve all conflicts.</template>
       </p>
       <p v-if="!unresolved.length" class="conflict-text">
         The conflicting rows could not be read. Open the workbook to see them, or keep one side.

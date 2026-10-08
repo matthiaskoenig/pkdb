@@ -339,6 +339,35 @@ def test_rows_and_columns_of_plain_files_are_explained(make_study, valid_files):
     ]
 
 
+def test_an_unmatched_review_target_carries_its_item_as_key(make_study, valid_files):
+    item = {
+        **ITEM,
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "9"}},
+    }
+    review = dump_json({"status": "draft", "items": [item]})
+    study = load_study(make_study({**valid_files, "review.json": review}))
+    [issue] = check_relations(study)
+    assert issue.code == "review_target_unmatched"
+    assert issue.source is not None and issue.source.key == ITEM["id"]
+
+
+def test_a_key_of_a_table_is_an_unknown_review_target(make_study, valid_files):
+    messages = review_messages(
+        make_study, valid_files, {"file": "timecourses_Fig1.tsv", "key": "x"}
+    )
+    assert messages == [
+        "Review item 01JA2XK7Q8M3R5T6V9W0Y1Z2A0 targets the key x of "
+        "timecourses_Fig1.tsv; a key names a part of a file without rows"
+    ]
+
+
+def test_a_key_of_a_file_without_rows_is_a_valid_review_target(make_study, valid_files):
+    assert (
+        review_messages(make_study, valid_files, {"file": "Example.pdf", "key": "x"})
+        == []
+    )
+
+
 def test_approval_with_open_items_names_the_rule(make_study, valid_files):
     messages = review_messages(
         make_study, valid_files, {"file": "Example.pdf"}, {}, status="approved"
@@ -462,3 +491,7 @@ def test_every_review_item_with_an_unknown_target_is_reported(make_study, valid_
         if i.code == "unknown_review_target"
     ]
     assert len(found) == count
+    # Each issue names its review item, so that the issues stay apart.
+    assert [i.source.key for i in found if i.source] == [
+        item["id"] for item in review["items"]
+    ]

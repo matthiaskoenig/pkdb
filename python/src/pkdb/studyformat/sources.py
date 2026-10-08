@@ -17,6 +17,7 @@ from pkdb.studyformat.digitize import (
     Axes,
     DigitizationError,
     MappedPoint,
+    dataset_series,
     digitization_file,
     mapped_points,
     png_size,
@@ -76,8 +77,10 @@ class MappedTable:
 class OverlayPoint:
     """A digitized (raw) or mapped point of a figure at an image pixel.
 
-    `x_text` and `y_text` are the values as printed: the cells of a mapped row, and the six
-    significant digits of the canonical project for a digitized point.
+    `series` is the timecourse label or scatter name of the point; `error_bar_end` marks a
+    digitized end of an error bar, from the dataset `<series>;error_bar`. `x_text` and `y_text`
+    are the values as printed: the cells of a mapped row, and the six significant digits of the
+    canonical project for a digitized point.
     """
 
     series: str
@@ -91,6 +94,7 @@ class OverlayPoint:
     error_px: tuple[float, float] | None
     x_text: str
     y_text: str
+    error_bar_end: bool = False
 
 
 @dataclass(frozen=True)
@@ -269,11 +273,12 @@ def _overlay(
     if digitization:
         for dataset in digitization.datasets:
             axes = digitization.axes[dataset.axes]
+            series, bar = dataset_series(dataset.name)
             for px, py in dataset.points:
                 x, y = axes.pixel_to_data(px, py)
                 overlay.append(
                     OverlayPoint(
-                        dataset.name,
+                        series,
                         "raw",
                         px,
                         py,
@@ -284,6 +289,7 @@ def _overlay(
                         None,
                         _value_text(x),
                         _value_text(y),
+                        bar,
                     )
                 )
     bars = _error_bars(points)
@@ -392,7 +398,7 @@ def _series(
     """The series in the order of their colors: the overlay first, then those without a dataset, then the rest."""
     names = dict.fromkeys(
         [
-            *(p.series.removesuffix(ERROR_BAR_SUFFIX) for p in overlay),
+            *(p.series for p in overlay),
             *unmatched,
             *(p.series for p in points),
         ]

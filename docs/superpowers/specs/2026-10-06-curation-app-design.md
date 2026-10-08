@@ -86,8 +86,8 @@ Raw extractions are optional for validation, because migrated studies have none.
 - `pkdb digitize import <study> <source> <file>` accepts a bare `wpd.json` or a saved `.tar` project, validates it, and writes the canonical file. When `<name>_<source>.png` is missing and the project contains exactly one PNG image, the import writes it.
 - Validation:
   - `digitization_outside_image` (error): a calibration or data pixel lies outside the image.
-  - `unknown_dataset` (warning): a dataset name matches no label, `<label>;error_bar` or scatter name of the source.
-  - `digitized_mismatch` (warning): a mapped row lies more than 2 pixels from every point of its dataset, or a dataset point has no mapped row. The issue sits at the row and column, so it can be acknowledged.
+  - `unknown_dataset` (warning): a dataset name matches no label, `<label>;error_bar` or scatter name of the source. The issue carries the dataset name as its key, so each dataset can be acknowledged on its own.
+  - `digitized_mismatch` (warning): a mapped row lies more than 2 pixels from every point of its dataset, or a dataset point has no mapped row. The issue sits at the row and column, or carries the dataset name as its key for points without a mapped row, so it can be acknowledged.
 - Rows of a figure source without a matching dataset are not compared; the app draws them beside the image.
 
 ### 4.4 Review approval
@@ -112,7 +112,7 @@ New modules in `pkdb.studyformat`, used by the CLI and the app. Every write func
 - `revision.py`: revisions, the per-folder lock and `RevisionConflict`.
 - `ulid.py`: monotonic ULIDs (48-bit milliseconds and 80 random bits, Crockford base 32).
 - `metadata.py`: `read_metadata(folder)` and `write_metadata(folder, metadata, revision)`; `patch_metadata` applies a JSON merge patch (RFC 7386) and writes; a changed PMID or DOI refreshes `reference.json` through `sync_reference`.
-- `review_edit.py`: `add_item`, `reply`, `resolve`, `dismiss`, `reopen`, `set_status` (section 4.4) and `acknowledge(folder, issue, text)`. `acknowledge` builds the target from the issue: the file, the column, and a `rows` filter over the table's sort columns of that row, extended column by column until it matches only that row; issues without a row target the file.
+- `review_edit.py`: `add_item`, `reply`, `resolve`, `dismiss`, `reopen`, `set_status` (section 4.4) and `acknowledge(folder, issue, text)`. `acknowledge` builds the target from the issue: the file, the column, and a `rows` filter over the table's sort columns of that row, extended column by column until it matches only that row; issues without a row target their key (a dataset name, a review item id), and an issue with neither is refused.
 - `raw.py`: loading, rendering and workbook reading and writing of raw tables.
 - `digitize.py`: loading and validating WebPlotDigitizer projects, the calibration in both directions, the canonical form, `import_project`, and the comparison behind `digitized_mismatch`.
 - `sources.py`: `study_sources(study)` lists each source with its image, raw extraction and mapped rows; `source_view(study, source)` returns them with pixel coordinates for every raw point and every mapped row of a digitized figure, and with data values for hover.
@@ -129,10 +129,10 @@ All commands take `--user` (default `PKDB_USER`) and `--agent` (default `PKDB_AG
 | `pkdb study patch <study> (--json TEXT \| --file F) [--revision R]` | Apply a JSON merge patch to `study.json`. |
 | `pkdb study reference <study> [--pmid N] [--doi D]` | Set the identifiers and refresh `reference.json`. |
 | `pkdb review show <study> [--state S]` | Print items with their target matches. |
-| `pkdb review add <study> --kind K --text T [--file F] [--rows COL=VALUE ...] [--column C] [--acknowledges CODE]` | Add an item; prints its id. |
+| `pkdb review add <study> --kind K --text T [--file F] [--rows COL=VALUE ...] [--column C] [--key K] [--acknowledges CODE]` | Add an item; prints its id. |
 | `pkdb review reply\|resolve\|dismiss\|reopen <study> <id> [--text T]` | Change an item. |
 | `pkdb review status <study> draft\|in_review\|approved` | Change the status (section 4.4). |
-| `pkdb review acknowledge <study> <code> --file F --line N [--column C] --text T` | Acknowledge one warning. |
+| `pkdb review acknowledge <study> <code> --file F [--line N] [--column C] [--key K] --text T` | Acknowledge one warning. |
 | `pkdb digitize import <study> <source> <file>` | Write `<name>_<source>.wpd.json` (section 4.3). |
 | `pkdb plot <study> [--source S] [--out DIR]` | Render `<name>_<source>.plot.png` per source into DIR (default a new temporary folder), never into the study folder. |
 | `pkdb tables add <study> --raw <source>` | Add a raw table sheet (extends section 10.1 of the format 2 design). |
@@ -172,13 +172,15 @@ All `/local/` routes keep today's session cookie, CSRF header, Host and Origin c
 | Method and path | Purpose |
 |---|---|
 | `GET /local/state` | Overview: workspace, connection, user, study rows, jobs. |
-| `GET /local/studies/{substance}/{name}` | Study page: metadata and revision, review and revision, problems, acknowledged warnings, sync status and conflicts, sources, files, jobs. |
+| `GET /local/studies/{substance}/{name}` | Study page: metadata and revision, review and revision, problems, acknowledged warnings with their scope, sync status and conflicts, sources, files, table files with their kinds, the rows and digitized series of each review target, jobs. |
 | `GET /local/studies/{substance}/{name}/tables/{file}` | Header and rows with TSV line numbers, or the grid of a raw table. |
 | `GET /local/studies/{substance}/{name}/sources/{source}` | `source_view` (section 5). |
 | `GET /local/studies/{substance}/{name}/files/{file}` | A registered image of the study (`png`, `jpg`, `jpeg`, `webp`), for `<img>` and the plot. |
 | `POST /local/studies/metadata` | Write `study.json` (`study`, `revision`, `metadata`). |
-| `POST /local/studies/review` | `add`, `reply`, `resolve`, `dismiss`, `reopen`, `status`, `acknowledge`. |
-| `POST /local/studies/tables` | `open` the workbook, `sync`, `resolve` with `keep`, `add` a data or raw sheet. |
+| `POST /local/studies/review` | `add`, `reply`, `resolve`, `dismiss`, `reopen`, `status`, `acknowledge` (a warning by its `code`, `file`, `line`, `column` and `key`). |
+| `POST /local/studies/review/preview` | The rows and the digitized series of a draft review target; writes nothing. |
+| `POST /local/studies/tables` | `open` the workbook, `sync`, `resolve` with `keep`, `add` a table of a `kind` for a `source`. |
+| `POST /local/studies/tables/preview` | Preview a new table: the file and sheet that `add` would write for a `kind` and `source`, or why it would refuse; writes nothing. |
 | existing | Session, workspace, folder browser, settings, mode, jobs, pause, resume, retry, reference, files open, history, reports. |
 
 A stale revision returns `409` with the current document; validation errors return `422` with the issues; everything else keeps today's error mapping. The body limit rises from 64 KiB to 1 MiB.

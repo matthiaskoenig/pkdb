@@ -3,6 +3,8 @@ import json
 import pytest
 from pydantic import ValidationError
 
+from pkdb.schemas.review import ReviewTarget
+from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import MAX_DEPTH, JsonFileError, dump_json, load_json
 from pkdb.studyformat.models import (
     Review,
@@ -262,3 +264,34 @@ def test_approved_review_records_who_and_when():
 def test_approval_fields_follow_the_status(data):
     with pytest.raises(ValidationError):
         Review.model_validate(data)
+
+
+def test_a_key_needs_a_file_and_excludes_rows_and_column():
+    with pytest.raises(ValidationError, match="key requires file"):
+        ReviewTarget(key="legend")
+    with pytest.raises(ValidationError, match="key excludes rows and column"):
+        ReviewTarget(file="Example_Fig1.wpd.json", key="legend", column="x")
+    with pytest.raises(ValidationError, match="key excludes rows and column"):
+        ReviewTarget(file="Example_Fig1.wpd.json", key="legend", rows={"x": "1"})
+    with pytest.raises(ValidationError):
+        ReviewTarget(file="Example_Fig1.wpd.json", key="")
+    # A target without a key serializes as before.
+    assert ReviewTarget(file="a.tsv").model_dump(mode="json") == {
+        "file": "a.tsv",
+        "rows": {},
+        "column": None,
+    }
+    assert "key" not in ReviewTarget(file="a.tsv").model_dump_json()
+    keyed = ReviewTarget(file="Example_Fig1.wpd.json", key="legend")
+    assert keyed.model_dump(mode="json")["key"] == "legend"
+
+
+def test_a_source_without_a_key_serializes_as_before():
+    plain = make_issue("unknown_dataset", "A.", file="Example_Fig1.wpd.json").source
+    keyed = make_issue(
+        "unknown_dataset", "A.", file="Example_Fig1.wpd.json", key="legend"
+    ).source
+    assert plain is not None and keyed is not None
+    assert "key" not in plain.model_dump(mode="json")
+    assert keyed.model_dump(mode="json")["key"] == "legend"
+    assert "key" not in keyed.legacy_dict()

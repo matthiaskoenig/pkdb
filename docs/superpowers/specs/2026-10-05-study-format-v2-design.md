@@ -242,7 +242,7 @@ Row order (natural sort, so `Tab2` sorts before `Tab10`; remaining ties are brok
 - `status` is `draft`, `in_review` or `approved`. `reviewers` lists the reviewing users.
 - `kind` is `question` (unclear, needs a person), `uncertainty` (low-confidence extraction or digitization) or `issue` (known problem, such as an inconsistency in the paper).
 - `state` is `open`, `resolved` or `dismissed`. `resolved_by` and `resolved` are set when the state leaves `open`.
-- `target` is optional (missing means the whole study). `file` names a table, `rows` is a column-to-value filter that may match several rows (for example a series by `label`), and `column` names a column. A filter survives re-sorting and edits.
+- `target` is optional (missing means the whole study). `file` names a file of the study (a table for `rows` and `column`), `rows` is a column-to-value filter that may match several rows (for example a series by `label`), and `column` names a column. A filter survives re-sorting and edits. A `key` instead of `rows` and `column` names a part of a file without rows, such as a dataset of a WebPlotDigitizer project, so that an acknowledgement covers exactly one warning.
 - `author` is the responsible person. `agent` is set when an AI wrote the item.
 - `acknowledges` names a validation warning code. The validator then no longer reports that warning for the target, unless the item is `dismissed`.
 - `id` is a ULID. Items are sorted by `id`.
@@ -282,7 +282,7 @@ One run collects all issues instead of stopping at the first. Layers:
 5. Vocabulary: values and per-measurement rules (allowed units, choices, required time, negative values), against the vocabulary lock offline or the server online.
 6. Postprocessing: derivations, unit normalization and PK derivation through the existing `prepare_study` stages.
 
-Issues reuse `ValidationIssue` (code, severity, message, suggestions). `SourceLocation` points to file, row, column and header. Workbook rows match TSV lines one to one (header on line and row 1), so the same location identifies the TSV line and the workbook cell. Output goes to the terminal, the curation app and `--json`.
+Issues reuse `ValidationIssue` (code, severity, message, suggestions). `SourceLocation` points to file, row, column and header, and, for a file without rows, a key (the dataset of a WebPlotDigitizer project, a review item). Workbook rows match TSV lines one to one (header on line and row 1), so the same location identifies the TSV line and the workbook cell. Output goes to the terminal, the curation app and `--json`.
 
 The same code runs on workbook save in the curation app, in `pkdb validate`, in the pkdb_data pre-commit hook, in pkdb_data CI and on the server for every upload.
 

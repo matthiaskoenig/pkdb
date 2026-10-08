@@ -56,6 +56,10 @@ def maybe_sent(job: dict) -> bool:
     return job.get("action") == "upload" and job.get("stage") not in UNSENT_STAGES
 
 
+#: The message of a queued job that the curator canceled, and of one that earlier versions
+#: canceled while keeping its message "Queued".
+CANCELED_BEFORE_START = "Canceled before it started"
+
 #: The action of a job in a sentence.
 ACTION_NAMES = {
     "validate": "validation",
@@ -237,8 +241,11 @@ class JobsMixin(EngineState):
         kept, finished = self._partition_history()
         self.jobs = sorted(kept + finished[-100:], key=lambda j: j["created_at"])
 
-    def _record_write(self, identity, message, status="succeeded"):
-        """List a write of the app in the activity of the study; it starts nothing."""
+    def _record_write(self, identity, message, status="succeeded", item=None):
+        """List a write of the app in the activity of the study; it starts nothing.
+
+        `item` is the review item that the message names, which the activity links.
+        """
         with self.lock:
             self._remember(
                 {
@@ -250,6 +257,7 @@ class JobsMixin(EngineState):
                     "status": status,
                     "created_at": now(),
                     "message": message,
+                    **({"item": item} if item else {}),
                     "automatic": False,
                     "report_id": None,
                 }
@@ -423,6 +431,9 @@ class JobsMixin(EngineState):
                 return
         expected = row["_fingerprint"]
         outcome = {"persistence": "not_attempted", "report": {"issues": []}}
+        # Whether the report holds the issues of a stopped sync instead of the validation,
+        # whose warnings alone review items can acknowledge.
+        sync_report = False
         workbook = workbook_path(row["_folder"])
         # A lock file of the workbook at the start or in the sync: closing it during
         # this job, which scans skip, is handled when the job ends.
@@ -505,6 +516,7 @@ class JobsMixin(EngineState):
                 outcome["report"] = ValidationReport(
                     issues=list(pipeline.issues)
                 ).model_dump(mode="json")
+                sync_report = True
                 job.update(status="conflict", message=stop_message(pipeline))
                 row.update(status="conflict", stale=True)
                 return  # The finally block writes the report.
@@ -521,6 +533,7 @@ class JobsMixin(EngineState):
             if sync_failed:
                 # Tables that do not load or a workbook that cannot be read are reported
                 # like validation problems, also when this job wrote files before the stop.
+                sync_report = True
                 raise StudyValidationError(
                     ValidationReport(issues=list(pipeline.issues))
                 )
@@ -532,6 +545,7 @@ class JobsMixin(EngineState):
                 raise reference_error
             if pipeline.stopped == "format":
                 # Tables that cannot be formatted are reported like validation problems.
+                sync_report = True
                 raise StudyValidationError(
                     ValidationReport(issues=list(pipeline.issues))
                 )
@@ -739,6 +753,7 @@ class JobsMixin(EngineState):
                 row["problems"] = json.loads(
                     self._safe(json.dumps(outcome["report"].get("issues", [])))
                 )
+                row["_sync_problems"] = sync_report
                 row["counts"] = issue_counts(outcome["report"])
                 row["report_complete"] = outcome["report"].get("complete", True)
                 row["report_truncated"] = outcome["report"].get("truncated", False)
@@ -805,7 +820,7 @@ class JobsMixin(EngineState):
         with self.lock:
             for identifier, job in list(self.queue.items()):
                 if job["id"] in ids:
-                    job.update(status="canceled", message="Canceled before starting")
+                    job.update(status="canceled", message=CANCELED_BEFORE_START)
                     self.queue.pop(identifier)
                     if row := self._row_of(identifier):
                         row["_pending"] = False

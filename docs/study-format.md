@@ -20,7 +20,7 @@ There is no `value` column. `mean` is the arithmetic mean, the value of a single
 
 ## Review
 
-`review.json` holds the review status (`draft`, `in_review`, `approved`), the reviewers and the review items. `approved_by` and `approved` record the person who approved the study and when; `pkdb review status <study> approved` requires zero open items and zero validation errors and is refused for agents (`--agent` or `PKDB_AGENT`). A dismissed item no longer acknowledges a warning. `pkdb study` and `pkdb review` write `study.json` and `review.json`; every write is refused when the file changed since the revision the caller read.
+`review.json` holds the review status (`draft`, `in_review`, `approved`), the reviewers and the review items. `approved_by` and `approved` record the person who approved the study and when; `pkdb review status <study> approved` requires zero open items and zero validation errors and is refused for agents (`--agent` or `PKDB_AGENT`). A dismissed item no longer acknowledges a warning. A review item targets the whole study, a file, the rows of a table with given values (`rows`) and a `column`, or a part of a file without rows that a `key` names: the dataset of a WebPlotDigitizer project or a review item of `review.json`. `acknowledges` names a warning code, and `pkdb review acknowledge` targets exactly one warning, at its row and column or by its key. A target of a file alone acknowledges every warning of the code in that file, also later ones. `pkdb study` and `pkdb review` write `study.json` and `review.json`; every write is refused when the file changed since the revision the caller read.
 
 ## Tables
 

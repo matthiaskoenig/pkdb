@@ -334,7 +334,7 @@ function added(item: ReviewItem | null): void {
           </VAlert>
           <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
           <span role="status" aria-live="polite" class="review-notice">{{ notice }}</span>
-          <TargetView v-if="selected" :target="selected.target" />
+          <TargetView v-if="selected" :item="selected" />
         </div>
       </div>
     </template>

@@ -12,6 +12,7 @@ import pytest
 from pkdb.curation import connection, jobs
 from pkdb.curation import engine as module
 from pkdb.curation import workspace as workspace_module
+from pkdb.curation.studies import job_parts
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
@@ -575,6 +576,53 @@ def test_saved_problems_found_load_with_their_own_status(workspace):
         assert statuses == {"problems": "invalid", "broken": "failed"}
     finally:
         restarted.close()
+
+
+def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
+    engine, _ = workspace
+    engine.jobs.extend(
+        [
+            job_entry(
+                "write",
+                action="write",
+                message="Added review item 01M2FC4AG038NKRKAYDXR834N3",
+            ),
+            job_entry("queued", "canceled", message="Queued"),
+            job_entry("canceled", "canceled", message="Canceled before starting"),
+        ]
+    )
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        jobs = {
+            job["id"]: job for job in restarted.study_detail("caffeine/Example")["jobs"]
+        }
+        assert jobs["write"]["item"] == "01M2FC4AG038NKRKAYDXR834N3"
+        assert jobs["write"]["parts"] == [
+            {"text": "Added "},
+            {"item": "01M2FC4AG038NKRKAYDXR834N3"},
+        ]
+        # One wording for a job canceled before it started, whichever version saved it.
+        assert jobs["queued"]["message"] == "Canceled before it started"
+        assert jobs["canceled"]["message"] == "Canceled before it started"
+    finally:
+        restarted.close()
+
+
+def test_only_the_item_of_a_job_splits_its_message():
+    """The study detail parses no message text: the item comes from the job."""
+    message = "Acknowledged warning unknown_dataset with review item 01M2"
+    assert job_parts({"action": "write", "message": message}) is None
+    assert job_parts({"action": "write", "message": message, "item": "01M2"}) == [
+        {"text": "Acknowledged warning unknown_dataset with "},
+        {"item": "01M2"},
+    ]
+    assert (
+        job_parts({"action": "write", "message": "Saved study.json", "item": "01M2"})
+        is None
+    )
 
 
 def upload_result():

@@ -3,7 +3,6 @@ import { fileURLToPath } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { OverlayPoint, SourcePoint, SourceSeries, SourceView } from "../../src/curation-app/api/types";
 import {
-  baseSeries,
   dataRows,
   drawsOnImage,
   legendEntries,
@@ -33,6 +32,7 @@ function point(changes: Partial<OverlayPoint> & Pick<OverlayPoint, "series" | "r
     error_px: null,
     x_text: String(changes.x ?? 0),
     y_text: String(changes.y ?? 0),
+    error_bar_end: false,
     ...changes,
   };
 }
@@ -68,7 +68,7 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
     overlay: [
       point({ series: "drug_plasma", role: "raw", px: 10, py: 90, x: 0, y: 0.1 }),
       point({ series: "drug_plasma", role: "raw", px: 20, py: 50, x: 1, y: 5.000004, y_text: "5" }),
-      point({ series: "drug_plasma;error_bar", role: "raw", px: 20, py: 40, x: 1, y: 6 }),
+      point({ series: "drug_plasma", error_bar_end: true, role: "raw", px: 20, py: 40, x: 1, y: 6 }),
       point({ series: "drug_urine", role: "raw", px: 60, py: 31, x: 2, y: 7 }),
       point({
         series: "drug_plasma",
@@ -143,7 +143,7 @@ describe("overlayTraces", () => {
     expect(crosses).toEqual(expect.objectContaining({ mode: "markers", x: [20], y: [50] }));
     expect(crosses.marker?.symbol).toBe("x-thin-open");
     expect(trace(traces, "mapped drug_urine")).toEqual(expect.objectContaining({ x: [60], y: [30] }));
-    expect(trace(traces, "raw drug_plasma;error_bar")).toEqual(expect.objectContaining({ x: [20], y: [40] }));
+    expect(trace(traces, "raw-bar drug_plasma")).toEqual(expect.objectContaining({ x: [20], y: [40] }));
     expect(traces.map((entry) => entry.meta)).not.toContain("mapped drug_feces");
   });
 
@@ -163,6 +163,19 @@ describe("overlayTraces", () => {
     expect(trace(half, "error drug_plasma").line?.width).toBe(1.5);
   });
 
+  it("draws digitized error bar ends as short horizontal bars, as pkdb plot does", () => {
+    const full = overlayTraces(figure()).traces;
+    expect(trace(full, "raw-bar drug_plasma").marker).toEqual({
+      symbol: "line-ew-open",
+      size: 9,
+      color: "#1a2b3c",
+      line: { width: 2, color: "#1a2b3c" },
+    });
+    const half = trace(overlayTraces(figure(), null, undefined, 0.5).traces, "raw-bar drug_plasma");
+    expect(half.marker?.size).toBeCloseTo(5.4);
+    expect(half.marker?.line).toEqual({ width: 1.5, color: "#1a2b3c" });
+  });
+
   it("draws the error bars of mapped rows as segments that end at error_px", () => {
     const { traces } = overlayTraces(figure());
     const bars = trace(traces, "error drug_plasma");
@@ -175,7 +188,7 @@ describe("overlayTraces", () => {
     const { traces } = overlayTraces(figure());
     expect(trace(traces, "raw drug_plasma").marker?.color).toBe("#1a2b3c");
     expect(trace(traces, "mapped drug_plasma").marker?.line?.color).toBe("#1a2b3c");
-    expect(trace(traces, "raw drug_plasma;error_bar").marker?.color).toBe("#1a2b3c");
+    expect(trace(traces, "raw-bar drug_plasma").marker?.color).toBe("#1a2b3c");
     expect(trace(traces, "error drug_plasma").line?.color).toBe("#1a2b3c");
     expect(trace(traces, "raw drug_urine").marker?.color).toBe("#2b3c4d");
   });
@@ -195,7 +208,7 @@ describe("overlayTraces", () => {
     const plain = overlayTraces(figure()).traces;
     expect(plain.every((entry) => entry.opacity === 1)).toBe(true);
     const { traces } = overlayTraces(figure(), "drug_plasma");
-    for (const meta of ["raw drug_plasma", "raw drug_plasma;error_bar", "mapped drug_plasma", "error drug_plasma"])
+    for (const meta of ["raw drug_plasma", "raw-bar drug_plasma", "mapped drug_plasma", "error drug_plasma"])
       expect(trace(traces, meta).opacity).toBe(1);
     for (const meta of ["raw drug_urine", "mapped drug_urine"]) expect(trace(traces, meta).opacity).toBe(0.2);
     expect(traces.at(-1)?.meta).toBe("mapped drug_plasma");
@@ -209,17 +222,23 @@ describe("overlayTraces", () => {
   it("names the file, line, series and values as printed on hover", () => {
     const { traces } = overlayTraces(figure());
     const crosses = trace(traces, "mapped drug_plasma");
-    expect(crosses.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5.00"]]);
+    expect(crosses.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5.00", false]]);
     expect(crosses.hovertemplate).toBe(
       "%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
     );
     const raw = trace(traces, "raw drug_plasma");
     expect(raw.customdata).toEqual([
-      [PROJECT, null, "drug_plasma", "0", "0.1"],
-      [PROJECT, null, "drug_plasma", "1", "5"],
+      [PROJECT, null, "drug_plasma", "0", "0.1", false],
+      [PROJECT, null, "drug_plasma", "1", "5", false],
     ]);
     expect(raw.hovertemplate).toBe(
       "%{customdata[0]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
+    );
+    // A digitized error bar end says so, and its customdata says so to a click.
+    const bar = trace(traces, "raw-bar drug_plasma");
+    expect(bar.customdata).toEqual([[PROJECT, null, "drug_plasma", "1", "6", true]]);
+    expect(bar.hovertemplate).toBe(
+      "%{customdata[0]}<br>%{customdata[2]} (error bar)<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
     );
   });
 
@@ -245,8 +264,8 @@ describe("plotTraces", () => {
     expect(feces.error_y).toEqual(expect.objectContaining({ type: "data", array: [0.5, 0.75], visible: true }));
     expect(trace(traces, "plot drug_urine").error_y).toBeUndefined();
     expect(feces.customdata).toEqual([
-      [TIMECOURSES, 4, "drug_feces", "0", "1"],
-      [TIMECOURSES, 6, "drug_feces", "1", "3.25"],
+      [TIMECOURSES, 4, "drug_feces", "0", "1", false],
+      [TIMECOURSES, 6, "drug_feces", "1", "3.25", false],
     ]);
     expect(trace(traces, "plot drug_plasma").customdata?.[0]?.[4]).toBe("5.00");
     expect(feces.marker?.color).toBe("#3c4d5e");
@@ -324,6 +343,22 @@ describe("rowAt", () => {
     expect(rowAt(figure(), {})).toBeNull();
   });
 
+  it("selects the mapped row whose error bar ends at a clicked digitized error bar end", () => {
+    const bar = trace(overlayTraces(figure()).traces, "raw-bar drug_plasma").customdata?.[0];
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 40 })).toEqual({ file: TIMECOURSES, line: 2 });
+    // Within the radius of a digitized point of the end of the error bar.
+    expect(rowAt(figure(), { customdata: bar, x: 22, y: 41 })).toEqual({ file: TIMECOURSES, line: 2 });
+  });
+
+  it("selects nothing for a digitized error bar end without a mapped error bar at it", () => {
+    const bar = trace(overlayTraces(figure()).traces, "raw-bar drug_plasma").customdata?.[0];
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 30 })).toBeNull();
+    // The cross of the row does not count: the end of its error bar is 10 pixels away.
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 50 })).toBeNull();
+    // drug_urine has no error bar.
+    expect(rowAt(figure(), { customdata: [PROJECT, null, "drug_urine", "2", "7", true], x: 60, y: 30 })).toBeNull();
+  });
+
   it("reads names back from the escaped customdata", () => {
     const view = figure({
       overlay: [
@@ -337,11 +372,6 @@ describe("rowAt", () => {
 });
 
 describe("the parts around the plot", () => {
-  it("names a series without its error bar suffix", () => {
-    expect(baseSeries("drug_plasma;error_bar")).toBe("drug_plasma");
-    expect(baseSeries("drug_plasma")).toBe("drug_plasma");
-  });
-
   it("draws on the image when the source view says so and the image is known", () => {
     expect(drawsOnImage(figure())).toBe(true);
     expect(drawsOnImage(figure({ layout: "side_by_side" }))).toBe(false);
@@ -366,7 +396,7 @@ describe("the parts around the plot", () => {
     expect(dataRows(figure(), "overlay")).toEqual([
       { series: "drug_plasma", kind: "Digitized", x: "0", y: "0.1", file: PROJECT, line: null },
       { series: "drug_plasma", kind: "Digitized", x: "1", y: "5", file: PROJECT, line: null },
-      { series: "drug_plasma;error_bar", kind: "Digitized", x: "1", y: "6", file: PROJECT, line: null },
+      { series: "drug_plasma", kind: "Digitized error bar", x: "1", y: "6", file: PROJECT, line: null },
       { series: "drug_urine", kind: "Digitized", x: "2", y: "7", file: PROJECT, line: null },
       { series: "drug_plasma", kind: "Mapped", x: "1", y: "5.00", file: TIMECOURSES, line: 2 },
       { series: "drug_urine", kind: "Mapped", x: "2", y: "7", file: TIMECOURSES, line: 3 },

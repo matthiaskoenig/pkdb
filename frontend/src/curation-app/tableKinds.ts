@@ -1,15 +1,14 @@
 /** The kinds of the tables of a study, in the order of the sheets of the workbook (`studyformat`). */
 import type { TableKind } from "./api/types";
 
-/** The data tables, one file each: `subjects.tsv`, `interventions.tsv` and `characteristica.tsv`. */
-export const DATA_TABLE_KINDS = ["subjects", "interventions", "characteristica"] as const satisfies readonly TableKind[];
-
-/** The tables of mapped data, split by their source: `<kind>_<source>.tsv`. */
-export const SOURCE_TABLE_KINDS = ["outputs", "timecourses", "scatters"] as const satisfies readonly TableKind[];
-
-export type SourceTableKind = (typeof SOURCE_TABLE_KINDS)[number];
-
-export const TABLE_KINDS: readonly TableKind[] = [...DATA_TABLE_KINDS, ...SOURCE_TABLE_KINDS];
+export const TABLE_KINDS = [
+  "subjects",
+  "interventions",
+  "characteristica",
+  "outputs",
+  "timecourses",
+  "scatters",
+] as const satisfies readonly TableKind[];
 
 export const TABLE_KIND_LABELS: Record<TableKind, string> = {
   subjects: "Subjects",
@@ -19,3 +18,13 @@ export const TABLE_KIND_LABELS: Record<TableKind, string> = {
   timecourses: "Timecourses",
   scatters: "Scatters",
 };
+
+/** The kinds of a new table, as the local server adds them (`NEW_TABLE_KINDS` of the library). */
+export type NewTableKind = "outputs" | "timecourses" | "scatters" | "raw";
+
+export const NEW_TABLE_KINDS: readonly { value: NewTableKind; label: string }[] = [
+  { value: "outputs", label: TABLE_KIND_LABELS.outputs },
+  { value: "timecourses", label: TABLE_KIND_LABELS.timecourses },
+  { value: "scatters", label: TABLE_KIND_LABELS.scatters },
+  { value: "raw", label: "Raw table" },
+];

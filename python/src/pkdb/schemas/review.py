@@ -3,7 +3,14 @@
 from datetime import date as Date
 from typing import Annotated, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    model_serializer,
+    model_validator,
+)
 
 User = Annotated[str, Field(min_length=1, max_length=255, pattern=r"^\S+$")]
 Text = Annotated[str, Field(min_length=1)]
@@ -24,20 +31,36 @@ class Release(Model):
 
 
 class ReviewTarget(Model):
-    """What a review item refers to: a file, optionally narrowed to rows and a column.
+    """What a review item refers to: a file, optionally narrowed to rows and a column, or to a key.
 
-    `rows` and `column` require `file`.
+    `rows` and `column` narrow a table. `key` names a part of a file without rows: the dataset of
+    a WebPlotDigitizer project, or a review item of review.json. Each requires `file`, and `key`
+    excludes `rows` and `column`.
     """
 
     file: str | None = None
     rows: dict[str, str] = Field(default_factory=dict)
     column: str | None = None
+    key: Annotated[str, Field(min_length=1)] | None = None
 
     @model_validator(mode="after")
     def file_required(self):
         if (self.rows or self.column) and self.file is None:
             raise ValueError("rows and column require file")
+        if self.key is not None:
+            if self.file is None:
+                raise ValueError("key requires file")
+            if self.rows or self.column:
+                raise ValueError("key excludes rows and column")
         return self
+
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        # A target without a key serializes as before keys existed, also in the backend.
+        result = handler(self)
+        if result.get("key") is None:
+            result.pop("key", None)
+        return result
 
 
 class ThreadEntry(Model):

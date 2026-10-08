@@ -9,8 +9,8 @@ import {
   type ValidationErrorBody,
 } from "./types";
 
-/** The `error` of the 403 for a missing or stale CSRF token (`_authenticated` in server.py). */
-const ACTION_TOKEN_REFUSED = "Missing or invalid action token";
+/** The `code` of the 403 for a missing or stale CSRF token (`ACTION_TOKEN` in server.py). */
+const ACTION_TOKEN = "action_token";
 
 let token = "";
 
@@ -173,7 +173,7 @@ export async function postJson<T>(path: string, body: Record<string, unknown>, a
   try {
     return await post(path, body, accept);
   } catch (error) {
-    if (!(error instanceof ApiError && error.status === 403 && error.body.error === ACTION_TOKEN_REFUSED)) throw error;
+    if (!(error instanceof ApiError && error.status === 403 && error.body.code === ACTION_TOKEN)) throw error;
   }
   await getJson("/local/state", isSession);
   return post(path, body, accept);

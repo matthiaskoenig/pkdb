@@ -31,14 +31,16 @@ from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat import metadata as study_metadata
 from pkdb.studyformat import review_edit
 from pkdb.studyformat.jsonio import JsonFileError, load_json
-from pkdb.studyformat.layout import Layout, scan_folder
+from pkdb.studyformat.layout import Layout, scan_folder, workbook_tables
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import (
     ANY,
+    AmbiguousWarning,
     NoSuchWarning,
+    ReviewDocument,
     ReviewError,
     matching_warnings,
     read_review,
@@ -51,10 +53,18 @@ from pkdb.studyformat.revision import (
     revision_of,
 )
 from pkdb.studyformat.sources import source_view, study_sources
-from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_study
-from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
+from pkdb.studyformat.sync import (
+    AddTableResult,
+    SyncResult,
+    add_table,
+    conflict_data,
+    preview_table,
+    sync_study,
+)
+from pkdb.studyformat.tables import RAW_KIND, REVIEW_JSON, STUDY_JSON
+from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
-from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
 from pkdb.studyformat.workbook.base import workbook_path
 
 IMAGE_TYPES = {
@@ -168,15 +178,31 @@ def _issues(issues: list[ValidationIssue]) -> list[dict]:
     return [issue.model_dump(mode="json") for issue in issues]
 
 
-def _document(folder: Path, layout: Layout, name: str, read: Callable) -> dict:
-    """`study.json` or `review.json` as `{"revision", "value", "issues"}`; `value` None when invalid.
+def _problems(issues: list[dict], *, validated: bool) -> list[dict]:
+    """The problems of the study page, each with whether a review item can acknowledge it.
 
-    A file that the layout does not register, such as a symlink or a folder, is never read: it
-    gets the issues of the layout and no revision, or the `absent` revision when it is missing.
+    Acknowledge matches the warnings of the validation, as `pkdb review acknowledge` does, so
+    only `validated` warnings can be acknowledged: not the issues of a stopped sync or of a
+    study that cannot be read.
+    """
+    return [
+        {**issue, "acknowledgeable": validated and issue["severity"] == "warning"}
+        for issue in issues
+    ]
+
+
+def _document[D: (MetadataDocument, ReviewDocument)](
+    folder: Path, layout: Layout, name: str, read: Callable[[Path], D]
+) -> tuple[dict, D | None]:
+    """`study.json` or `review.json` as `{"revision", "value", "issues"}`, and the document read.
+
+    `value` and the document are None when the file is invalid. A file that the layout does not
+    register, such as a symlink or a folder, is never read: it gets the issues of the layout and
+    no revision, or the `absent` revision when it is missing.
     """
     path = folder / name
     if name not in layout.files:
-        return {
+        state = {
             "revision": None if os.path.lexists(path) else revision_of(None),
             "value": None,
             "issues": _issues(
@@ -187,22 +213,39 @@ def _document(folder: Path, layout: Layout, name: str, read: Callable) -> dict:
                 ]
             ),
         }
+        return state, None
     try:
         document = read(folder)
     except (MetadataError, ReviewError) as error:
         # The revision lets the app replace an invalid file.
-        return {
+        state = {
             "revision": read_revision(path)[1],
             "value": None,
             "issues": _issues(error.issues),
         }
+        return state, None
     model = (
         document.metadata if isinstance(document, MetadataDocument) else document.review
     )
-    return {
+    state = {
         "revision": document.revision,
         "value": model.model_dump(mode="json", exclude_none=True),
         "issues": [],
+    }
+    return state, document
+
+
+def _targets(study: LoadedStudy | None, document: ReviewDocument | None) -> dict:
+    """What the target of each review item with a file selects, by item id.
+
+    Nothing for a study beyond the upload limits or an invalid `review.json`.
+    """
+    if study is None or document is None:
+        return {}
+    return {
+        item.id: dataclasses.asdict(match_target(study, item.target))
+        for item in document.review.items
+        if item.target is not None and item.target.file is not None
     }
 
 
@@ -217,6 +260,11 @@ def _acknowledged(review: dict | None) -> list[dict]:
             "author": item["author"],
             "resolved_by": item.get("resolved_by"),
             "resolved": item.get("resolved"),
+            "scope": acknowledgement_scope(
+                ReviewTarget.model_validate(item["target"])
+                if item.get("target")
+                else None
+            ),
         }
         for item in (review["items"] if review else [])
         if item.get("acknowledges") and item["state"] != "dismissed"
@@ -231,7 +279,7 @@ def _unlinked(folder: Path, root: Path) -> Path:
 
 
 def _bounded(folder: Path) -> LoadedStudy:
-    """The study within the upload limits; StudyValidationError beyond them."""
+    """The study within the upload limits; BeyondLimits beyond them."""
     return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
 
 
@@ -277,9 +325,10 @@ def _line(payload: dict) -> int | None:
     return line
 
 
-def _located(line: int | None, column: str | None) -> str:
+def _located(line: int | None, column: str | None, key: str | None) -> str:
     parts = [f"line {line}"] if line is not None else []
     parts += [f"column {column}"] if column is not None else []
+    parts += [f"key {key}"] if key is not None else []
     return " ".join(parts) or "the file"
 
 
@@ -296,21 +345,46 @@ def _sync_result(result: SyncResult) -> dict:
     }
 
 
-def _review_message(payload: dict, result: dict) -> str:
-    """A review action as the activity of the study lists it."""
+def _item_reference(item: str) -> str:
+    """How the message of a write job names its review item."""
+    return f"review item {item}"
+
+
+def _review_message(payload: dict, result: dict) -> tuple[str, str | None]:
+    """A review action as the activity of the study lists it, and the review item it names."""
     item = result["item"]["id"] if "item" in result else payload.get("item")
+    reference = _item_reference(item) if item else ""
     match payload["action"]:
         case "add":
-            return f"Added review item {item}"
+            message = f"Added {reference}"
         case "reply":
-            return f"Replied to review item {item}"
+            message = f"Replied to {reference}"
         case "status":
-            return f"Set the review status to {payload['status']}"
+            return f"Set the review status to {payload['status']}", None
         case "acknowledge":
-            return f"Acknowledged warning {payload['code']} with review item {item}"
+            message = f"Acknowledged warning {payload['code']} with {reference}"
         case action:
             done = {"resolve": "Resolved", "dismiss": "Dismissed", "reopen": "Reopened"}
-            return f"{done[action]} review item {item}"
+            message = f"{done[action]} {reference}"
+    return message, item
+
+
+def job_parts(job: dict) -> list[dict] | None:
+    """The text of a write job split around the review item it names, for a link in the activity.
+
+    The engine gives jobs saved before writes recorded `item` theirs when it loads them.
+    """
+    item = job.get("item")
+    if item is None:
+        return None
+    before, reference, after = job["message"].partition(_item_reference(item))
+    if not reference:
+        return None
+    return [
+        *([{"text": before}] if before else []),
+        {"item": item},
+        *([{"text": after}] if after else []),
+    ]
 
 
 def _sync_activity(done: str, sync: SyncResult) -> tuple[str, str]:
@@ -376,6 +450,7 @@ class StudiesMixin(EngineState):
             row = self._study_row(identity)
             folder, root = row["_folder"], self.root
             conflicted = row["sync"]["status"] == "conflict"
+            validated = not row["_sync_problems"]
             # A copy, so that the files are read outside the lock.
             detail = json.loads(
                 json.dumps(
@@ -393,30 +468,50 @@ class StudiesMixin(EngineState):
                         "last_upload": row["last_upload"],
                         "jobs": self._study_jobs(identity)[::-1],
                         "report_id": row["report_id"],
+                        # Changes with the content of any file of the study, as the
+                        # watcher last scanned it, unlike the ETag also with jobs.
+                        "files_version": row["_fingerprint"],
                     }
                 )
             )
         _unlinked(folder, root)
+        for job in detail["jobs"]:
+            if (parts := job_parts(job)) is not None:
+                job["parts"] = parts
+        study: LoadedStudy | None
+        refusal: list[dict] = []
         try:
             study = _bounded(folder)
         except StudyValidationError as error:
-            # Beyond the upload limits: the documents, and the limit as the first problem.
+            # Beyond the upload limits, or unreadable: the documents, and the refusal as the
+            # first problem.
+            study = None
             layout = scan_folder(folder)
-            limits = _issues(error.report.issues)
-            detail["problems"] = [
-                *limits,
-                *(problem for problem in detail["problems"] if problem not in limits),
-            ]
-            sources, files = [], []
+            refusal = _issues(error.report.issues)
+            sources, files, tables = [], [], []
         else:
             layout = study.layout
             sources = [dataclasses.asdict(source) for source in study_sources(study)]
             files = sorted(layout.files, key=natural_key)
-        review = _document(folder, layout, REVIEW_JSON, read_review)
-        metadata = _document(folder, layout, STUDY_JSON, read_metadata)
+            tables = [
+                {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
+            ]
+        review, review_document = _document(folder, layout, REVIEW_JSON, read_review)
+        metadata, _ = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
         return {
             **detail,
+            "problems": [
+                *_problems(refusal, validated=False),
+                *_problems(
+                    [
+                        problem
+                        for problem in detail["problems"]
+                        if problem not in refusal
+                    ],
+                    validated=validated,
+                ),
+            ],
             "metadata": metadata,
             "reference": reference,
             "reference_match": reference_match(metadata["value"], reference),
@@ -427,6 +522,9 @@ class StudiesMixin(EngineState):
             "conflicts": self._conflicts(folder) if conflicted else [],
             "sources": sources,
             "files": files,
+            "tables": tables,
+            # The items of `review` with their targets, matched in the tables of this answer.
+            "targets": _targets(study, review_document),
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:
@@ -571,7 +669,8 @@ class StudiesMixin(EngineState):
             raise _review_error(
                 validation_issues(error, REVIEW_JSON, review_edit.CODE)
             ) from None
-        self._record_write(identity, _review_message(payload, result))
+        message, item = _review_message(payload, result)
+        self._record_write(identity, message, item=item)
         self._rescan()
         return result
 
@@ -639,8 +738,8 @@ class StudiesMixin(EngineState):
     ) -> dict:
         """Acknowledge the warnings of one location, as `pkdb review acknowledge` does.
 
-        A `line` or `column` of null matches only warnings without one; a left out one
-        matches every line or column, as an option left out of the command does.
+        A `line`, `column` or `key` of null matches only warnings without one; a left out
+        one matches every line, column or key, as an option left out of the command does.
         """
         code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
         matches = matching_warnings(
@@ -649,20 +748,21 @@ class StudiesMixin(EngineState):
             file,
             _line(payload) if "line" in payload else ANY,
             _optional_text(payload, "column") if "column" in payload else ANY,
+            _optional_text(payload, "key") if "key" in payload else ANY,
         )
         if not matches:
             raise NoSuchWarning(f"No warning [{code}] in {file} matches")
         locations = warning_locations(matches)
         if len(locations) != 1:
             named = ", ".join(
-                _located(line, column)
-                for line, column in sorted(
-                    locations, key=lambda at: (at[0] or 0, at[1] or "")
+                _located(line, column, key)
+                for line, column, key in sorted(
+                    locations, key=lambda at: (at[0] or 0, at[1] or "", at[2] or "")
                 )
             )
-            raise ReviewError(
+            raise AmbiguousWarning(
                 f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
-                "the line and column of one"
+                "the line, column and key of one"
             )
         item, revision = review_edit.acknowledge(
             folder, author, matches[0], text, revision=revision
@@ -683,6 +783,32 @@ class StudiesMixin(EngineState):
             # A sync can have written some files before it failed.
             self._rescan()
 
+    def table_preview(self, identity: str, payload: dict) -> dict:
+        """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""
+        preview = preview_table(
+            self.study_folder(identity),
+            _text(payload, "kind"),
+            _text(payload, "source"),
+        )
+        return {
+            "table": preview.table,
+            "file": preview.file,
+            "image": preview.image,
+            "image_found": preview.image_found,
+            "issues": _issues(list(preview.issues)),
+        }
+
+    def target_preview(self, identity: str, payload: dict) -> dict:
+        """The rows and the digitized series of a draft review target; writes nothing."""
+        try:
+            target = ReviewTarget.model_validate(payload.get("target"))
+        except ValidationError as error:
+            raise _review_error(
+                validation_issues(error, REVIEW_JSON, review_edit.CODE)
+            ) from None
+        study = _bounded(self.study_folder(identity))
+        return dataclasses.asdict(match_target(study, target))
+
     def tables_action(self, identity: str, payload: dict) -> dict:
         """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
         # The workbook and the tables record no author, but writes need a user (spec 7.4).
@@ -696,18 +822,15 @@ class StudiesMixin(EngineState):
             )
         action = payload.get("action")
         if action == "add":
-            table, raw = (
-                _optional_text(payload, "table"),
-                _optional_text(payload, "raw"),
-            )
-            if (table is None) == (raw is None):
-                raise ValueError(
-                    "Give the name of a table or the source of a raw table"
+            kind = _text(payload, "kind")
+            preview = preview_table(folder, kind, _text(payload, "source"))
+            added = (
+                AddTableResult(preview.table, None, preview.issues)
+                if preview.issues
+                else self._under_folder_lock(
+                    folder,
+                    lambda vocabulary: add_table(folder, vocabulary, preview.table),
                 )
-            # A raw table is named after the study folder.
-            name = table if table is not None else f"{folder.name}_{raw}"
-            added = self._under_folder_lock(
-                folder, lambda vocabulary: add_table(folder, vocabulary, name)
             )
             synced = (
                 _sync_result(added.sync)
@@ -715,12 +838,12 @@ class StudiesMixin(EngineState):
                 else {"workbook_action": "unchanged", "changes": [], "conflicts": []}
             )
             issues = [*(added.sync.issues if added.sync else ()), *added.issues]
-            kind = "table" if table is not None else "raw table"
+            noun = "raw table" if kind == RAW_KIND else "table"
             self._record_write(
                 identity,
-                f"Added {kind} {added.table or name}"
+                f"Added {noun} {added.table}"
                 if added.ok
-                else f"Could not add {kind} {name}",
+                else f"Could not add {noun} {preview.table}",
                 "succeeded" if added.ok else "failed",
             )
             return {

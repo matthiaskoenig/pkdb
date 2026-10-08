@@ -16,9 +16,11 @@ import {
   VTextField,
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
+import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useStudyStore } from "../stores/study";
-import { messageOf, NEW_TABLE_KINDS, newTable, userHint, type NewTableKind } from "../study";
+import { messageOf, userHint } from "../study";
+import { NEW_TABLE_KINDS, type NewTableKind } from "../tableKinds";
 import UserHint from "./UserHint.vue";
 
 const open = defineModel<boolean>({ default: false });
@@ -39,20 +41,52 @@ const failure = ref<{ text: string; issues: string[] } | null>(null);
 /** What to do when the write was refused without a user. */
 const userText = ref<string | null>(null);
 
-const table = computed(() => (study.detail ? newTable(study.detail, kind.value, source.value) : null));
+const preview = usePreview(
+  () => {
+    const detail = study.detail;
+    const name = source.value.trim();
+    // A closed dialog asks nothing.
+    if (!open.value || !detail || !name) return null;
+    // The files of the study stand for the folder, so an added image or table file asks again; a
+    // preview that failed while the local server did not answer is asked again once it answers.
+    return { study: detail.id, files: detail.files, answering: study.error === null, kind: kind.value, source: name };
+  },
+  (value) => study.previewTable(value.kind, value.source),
+);
+/** The new table as the server previews it: for the current kind and source, or the last one while that loads. */
+const table = computed(() => preview.shown.value);
+/** Why the table cannot be added: the refusal of the server, or a failed preview. */
+const problem = computed(() => table.value?.issues[0]?.message ?? preview.shownError.value);
+/** Only the answer for the current kind and source can add a table. */
+const canAdd = computed(() => {
+  const current = preview.data.value;
+  return current !== null && current.issues.length === 0 && !busy.value;
+});
+/** What the preview says, for screen readers; a refusal is announced as the message of the field. */
+const ready = computed(() => {
+  const value = table.value;
+  if (!value || value.issues.length) return "";
+  if (value.image === null) return `${value.table} can be added.`;
+  return `${value.table} can be added. ${value.image_found ? "The image is in the folder." : "The image is missing."}`;
+});
 const hint = computed(() =>
   kind.value === "raw"
     ? "A paper table such as Tab3."
     : "A paper table such as Tab3, a figure such as Fig2A, or Text.",
 );
 
-watch(open, (value) => {
-  if (!value) return;
-  kind.value = "outputs";
-  source.value = "";
-  failure.value = null;
-  userText.value = null;
-});
+// At once, so that the preview never asks for the source of the last time the dialog was open.
+watch(
+  open,
+  (value) => {
+    if (!value) return;
+    kind.value = "outputs";
+    source.value = "";
+    failure.value = null;
+    userText.value = null;
+  },
+  { flush: "sync" },
+);
 
 // A failure belongs to the table that it was about.
 watch([kind, source], () => {
@@ -61,19 +95,19 @@ watch([kind, source], () => {
 });
 
 async function add(): Promise<void> {
-  const chosen = table.value;
-  if (!chosen || chosen.problem || busy.value) return;
+  const chosen = preview.data.value;
+  if (!chosen || !canAdd.value) return;
   busy.value = true;
   failure.value = null;
   userText.value = null;
   try {
-    const result = await study.tablesAction("add", chosen.payload);
+    const result = await study.tablesAction("add", { kind: kind.value, source: source.value.trim() });
     if (result.ok) {
       open.value = false;
-      emit("added", result.table ?? chosen.sheet);
+      emit("added", result.table ?? chosen.table);
     } else {
       failure.value = {
-        text: `${chosen.sheet} was not added.`,
+        text: `${chosen.table} was not added.`,
         issues: result.issues.map((issue) => issue.message),
       };
     }
@@ -100,19 +134,27 @@ async function add(): Promise<void> {
         <VRadioGroup v-model="kind" label="Kind" inline hide-details class="add-table-kind">
           <VRadio v-for="item in NEW_TABLE_KINDS" :key="item.value" :value="item.value" :label="item.label" />
         </VRadioGroup>
+        <!-- While the answer for the current kind and source loads, the last one stays, marked as
+             updating: the messages of the field, the facts and the status line, not the field. -->
         <VTextField
           v-model="source"
           label="Source"
           placeholder="Tab3"
           :hint="hint"
           persistent-hint
-          :error-messages="table?.problem ?? null"
+          :error-messages="problem"
+          :class="{ 'is-updating': preview.loading.value }"
           autocomplete="off"
           spellcheck="false"
         />
-        <dl v-if="table && !table.problem" class="panel-facts table-preview">
+        <dl
+          v-if="table && !table.issues.length"
+          class="panel-facts table-preview"
+          :class="{ 'is-updating': preview.loading.value }"
+          :aria-busy="preview.loading.value"
+        >
           <dt>Sheet</dt>
-          <dd>{{ table.sheet }}</dd>
+          <dd>{{ table.table }}</dd>
           <dt>File</dt>
           <dd>{{ table.file }}</dd>
           <dt>Image</dt>
@@ -122,18 +164,19 @@ async function add(): Promise<void> {
               <VChip
                 size="small"
                 variant="tonal"
-                :color="table.imageFound ? 'success' : 'warning'"
+                :color="table.image_found ? 'success' : 'warning'"
                 class="status-chip image-state"
               >
-                {{ table.imageFound ? "In the folder" : "Missing" }}
+                {{ table.image_found ? "In the folder" : "Missing" }}
               </VChip>
             </span>
-            <span v-if="!table.imageFound" class="table-image-note">
+            <span v-if="!table.image_found" class="table-image-note">
               Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
             </span>
           </dd>
           <dd v-else>None for the text of the paper</dd>
         </dl>
+        <span role="status" aria-live="polite" class="d-sr-only" :aria-busy="preview.loading.value">{{ ready }}</span>
         <VAlert v-if="failure" type="error" variant="tonal" density="compact" class="status-alert">
           {{ failure.text }}
           <ul v-if="failure.issues.length" class="add-table-issues">
@@ -145,7 +188,7 @@ async function add(): Promise<void> {
       <VCardActions class="dialog-actions">
         <VSpacer />
         <VBtn variant="text" @click="open = false">Cancel</VBtn>
-        <VBtn type="submit" variant="flat" color="primary" :disabled="!table || table.problem !== null" :loading="busy">
+        <VBtn type="submit" variant="flat" color="primary" :disabled="!canAdd" :loading="busy">
           Add
         </VBtn>
       </VCardActions>

@@ -167,3 +167,22 @@ def test_import_refuses_a_project_digitized_on_another_image_size(
     same = _archive(tmp_path / "same.tar", png(100, 100))
     assert import_project(folder, "Fig1", same).issues == []
     assert (folder / "Example_Fig1.wpd.json").exists()
+
+
+def test_file_level_digitization_warnings_carry_their_dataset_as_key(
+    make_study, valid_files, sf_vocabulary
+):
+    folder = study_with(
+        make_study, valid_files, project([*GOOD, (30, 50)], extra=("legend",))
+    )
+    keys = {
+        (issue.code, issue.source.key)
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.source
+        and issue.source.file == "Example_Fig1.wpd.json"
+        and issue.code in {"unknown_dataset", "digitized_mismatch"}
+    }
+    assert keys == {
+        ("unknown_dataset", "legend"),
+        ("digitized_mismatch", "drug_plasma"),
+    }

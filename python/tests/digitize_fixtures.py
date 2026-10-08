@@ -3,12 +3,14 @@
 import zlib
 
 
-def png(width: int, height: int) -> bytes:
+def png(width: int, height: int, color: bytes = b"\xff\xff\xff") -> bytes:
+    """A PNG image of one RGB color, white by default."""
+
     def chunk(kind: bytes, data: bytes) -> bytes:
         body = kind + data
         return len(data).to_bytes(4) + body + zlib.crc32(body).to_bytes(4)
 
-    rows = b"".join(b"\x00" + b"\xff\xff\xff" * width for _ in range(height))
+    rows = b"".join(b"\x00" + color * width for _ in range(height))
     header = width.to_bytes(4) + height.to_bytes(4) + b"\x08\x02\x00\x00\x00"
     return (
         b"\x89PNG\r\n\x1a\n"

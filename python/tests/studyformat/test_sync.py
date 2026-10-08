@@ -15,7 +15,13 @@ from openpyxl.utils import get_column_letter
 
 from pkdb.studyformat import SyncResult, add_table, sync, sync_study, workbook_check
 from pkdb.studyformat.formatter import FileChange, format_folder
-from pkdb.studyformat.sync import SyncConflict
+from pkdb.studyformat.sync import (
+    NEW_TABLE_KINDS,
+    SyncConflict,
+    TablePreview,
+    conflict_data,
+    preview_table,
+)
 from pkdb.studyformat.tables import parse_table_file
 from pkdb.studyformat.workbook.base import (
     read_state,
@@ -567,8 +573,11 @@ def test_a_removed_sheet_whose_table_changed_conflicts(study, workbook, sf_vocab
             workbook_rows=(),
             table_lines=tuple(enumerate(changed, start=1)),
             base_lines=tuple(base),
+            removed="workbook",
         ),
     )
+    data = conflict_data(result.conflicts[0])
+    assert (data["kind"], data["removed"]) == ("outputs", "workbook")
     [issue] = result.issues
     assert issue.code == "sync_conflict"
     assert issue.source is not None
@@ -717,6 +726,7 @@ def test_a_table_deleted_while_its_sheet_changed_conflicts(
             workbook_rows=((1, base[0]), (2, replaced(base[1], OUTPUTS, mean="3.5"))),
             table_lines=(),
             base_lines=tuple(base),
+            removed="tables",
         ),
     )
     [issue] = result.issues
@@ -1511,6 +1521,109 @@ def test_add_table_never_replaces_a_workbook_saved_meanwhile(
     assert "outputs_Tab3" not in content.sheets
     [_, _, row, _] = lines(content.tables[TIMECOURSES].text)
     assert row.split("\t")[names(TIMECOURSES).index("mean")] == "2.25"
+
+
+def test_new_table_kinds_are_the_tables_split_by_source_and_raw():
+    assert NEW_TABLE_KINDS == ("outputs", "timecourses", "scatters", "raw")
+
+
+def test_preview_table_names_the_sheet_file_and_image(valid_study):
+    assert preview_table(valid_study, "outputs", " Tab3 ") == TablePreview(
+        table="outputs_Tab3",
+        file="outputs_Tab3.tsv",
+        image="Example_Tab3.png",
+        image_found=False,
+        issues=(),
+    )
+    raw = preview_table(valid_study, "raw", "Tab2")
+    assert (raw.table, raw.file, raw.image, raw.image_found, raw.issues) == (
+        "Example_Tab2",
+        "Example_Tab2.tsv",
+        "Example_Tab2.png",
+        True,
+        (),
+    )
+    text = preview_table(valid_study, "outputs", "Text")
+    assert (text.image, text.image_found, text.issues) == (None, False, ())
+
+
+@pytest.mark.parametrize(
+    ("kind", "source", "code", "message"),
+    [
+        (
+            "raw",
+            "Fig2",
+            "invalid_table_name",
+            "A raw table needs a paper table source such as Tab3",
+        ),
+        (
+            "outputs",
+            "Tab 3",
+            "invalid_table_name",
+            "Use a source such as Tab3, Fig2A or Text",
+        ),
+        (
+            "subjects",
+            "Tab3",
+            "invalid_table_name",
+            "Choose the kind outputs, timecourses, scatters or raw",
+        ),
+        ("timecourses", "Fig1", "table_exists", "timecourses_Fig1.tsv already exists"),
+        ("outputs", "Tab" + "1" * 30, "table_name_too_long", None),
+    ],
+)
+def test_preview_table_refuses_what_add_table_refuses(
+    valid_study, kind, source, code, message
+):
+    [issue] = preview_table(valid_study, kind, source).issues
+    assert issue.code == code
+    if message is not None:
+        assert issue.message == message
+
+
+@pytest.mark.parametrize(("kind", "source"), [("raw", "Fig2"), ("outputs", "Tab 3")])
+def test_preview_table_names_no_image_for_a_refused_source(valid_study, kind, source):
+    # Example_Fig2.png exists, but a raw table of Fig2 is refused.
+    preview = preview_table(valid_study, kind, source)
+
+    assert (preview.image, preview.image_found) == (None, False)
+    assert [issue.code for issue in preview.issues] == ["invalid_table_name"]
+
+
+@pytest.mark.parametrize("source", ["TabA", "Taba"])
+def test_preview_table_refuses_a_sheet_of_the_workbook_ignoring_case(
+    study, workbook, sf_vocabulary, source
+):
+    assert add_table(study, sf_vocabulary, "outputs_TabA").ok
+
+    [issue] = preview_table(study, "outputs", source).issues
+
+    assert issue.code == "table_exists"
+    assert issue.message == "The sheet outputs_TabA already exists in Example.xlsx"
+    assert not add_table(study, sf_vocabulary, f"outputs_{source}").ok
+
+
+def test_preview_table_ok_means_that_add_table_adds_the_sheet(
+    study, workbook, sf_vocabulary
+):
+    assert preview_table(study, "raw", "Tab9").issues == ()
+
+    assert add_table(study, sf_vocabulary, "Example_Tab9").ok
+
+
+def test_preview_table_reads_no_workbook_it_cannot_trust(
+    study, workbook, sf_vocabulary, tmp_path
+):
+    assert add_table(study, sf_vocabulary, "outputs_TabA").ok
+    # A symlinked workbook is never read: it would reach outside the study folder.
+    outside = tmp_path / "outside.xlsx"
+    workbook.rename(outside)
+    workbook.symlink_to(outside)
+    assert preview_table(study, "outputs", "TabA").issues == ()
+    # An unreadable workbook is reported by add_table after its sync.
+    workbook.unlink()
+    workbook.write_bytes(b"not a workbook")
+    assert preview_table(study, "outputs", "TabA").issues == ()
 
 
 def test_workbook_check_plans_without_writing(study, workbook, sf_vocabulary):

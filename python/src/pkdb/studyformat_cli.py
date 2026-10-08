@@ -131,7 +131,7 @@ def print_issues(issues, *, file=None) -> None:
 
     Candidates of a hint are printed one per line, such as lines to add to a file.
     """
-    from pkdb.studyformat.issues import DID_YOU_MEAN
+    from pkdb.studyformat.issues import CANDIDATES
 
     for issue in issues:
         where = _location(issue.source)
@@ -140,7 +140,7 @@ def print_issues(issues, *, file=None) -> None:
             file=file,
         )
         for suggestion in issue.suggestions:
-            if suggestion.message == DID_YOU_MEAN:
+            if suggestion.kind == CANDIDATES:
                 candidates = ", ".join(map(str, suggestion.candidates))
                 say(f"    Did you mean: {candidates}", file=file)
                 continue

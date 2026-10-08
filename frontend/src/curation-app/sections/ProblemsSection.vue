@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
-import type { AcknowledgedWarning, Profile, ValidationIssue } from "../api/types";
+import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../api/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import ProblemItem from "../components/ProblemItem.vue";
@@ -12,29 +12,21 @@ import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import {
   acknowledgement,
-  fileWideScope,
   filterIssues,
   groupByFile,
   groupCounts,
-  isLimitIssue,
   locationKey,
   noIssuesText,
+  scopeText,
   SEVERITY_CHIPS,
   severityCounts,
   validatesAfterWrite,
   type SeverityFilter,
 } from "../problems";
-import { targetText } from "../review";
+import { targetParts } from "../review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import {
-  dataTableFiles,
-  knownProfiles,
-  profileOf,
-  sectionRoute,
-  tableFiles,
-  tablesOutcome,
-} from "../study";
+import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles, tablesOutcome } from "../study";
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the
@@ -49,7 +41,7 @@ const section = ref<HTMLElement | null>(null);
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
-const problems = computed<ValidationIssue[]>(() => detail.value?.problems ?? []);
+const problems = computed<Problem[]>(() => detail.value?.problems ?? []);
 /** The issues of the upload limits, shown above the others. */
 const limits = computed(() => problems.value.filter(isLimitIssue));
 const listed = computed(() => problems.value.filter((issue) => !isLimitIssue(issue)));
@@ -132,6 +124,8 @@ onMounted(() => {
 const profiles = computed(() => knownProfiles(roster.value, detail.value?.people));
 
 const acknowledged = computed<AcknowledgedWarning[]>(() => detail.value?.acknowledged ?? []);
+/** The review items, which the targets of acknowledgements of warnings about review.json name. */
+const items = computed(() => detail.value?.review.value?.items ?? []);
 
 function authorName(entry: AcknowledgedWarning): string {
   return profileOf(profiles.value, entry.author).display_name;
@@ -164,31 +158,25 @@ const automatic = computed(() =>
   detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
 );
 
-const chosen = ref<ValidationIssue | null>(null);
+const chosen = ref<Problem | null>(null);
 const dialog = ref(false);
 /** Whether the dialog writes an acknowledgement; the other actions wait meanwhile. */
 const acknowledging = ref(false);
 /** The shown issues, in order, when the dialog opened: the place to move the focus to afterwards. */
 let order: string[] = [];
 
-function acknowledge(issue: ValidationIssue): void {
+function acknowledge(issue: Problem): void {
   if (working.value) return;
   chosen.value = issue;
   order = groups.value.flatMap((group) => group.issues.map(locationKey));
   dialog.value = true;
 }
 
-function acknowledgedWarning(issue: ValidationIssue): void {
-  // An acknowledgement of the whole file covers every warning of the code in the file.
-  const covered = (detail.value && fileWideScope(issue, problems.value, dataTableFiles(detail.value))) || [issue];
-  // A validation that left the warning out already needs no mark.
-  for (const key of new Set(covered.map(locationKey)))
-    if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
-  announce(
-    covered.length > 1
-      ? `${plural(covered.length, "warning")} ${issue.code} acknowledged.`
-      : `Warning ${issue.code} acknowledged.`,
-  );
+function acknowledgedWarning(issue: Problem): void {
+  // The acknowledgement covers exactly this warning. A validation that left it out already needs no mark.
+  const key = locationKey(issue);
+  if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
+  announce(`Warning ${issue.code} acknowledged.`);
 }
 
 /**
@@ -370,7 +358,19 @@ function openFile(file: string): Promise<void> {
           </div>
           <p class="problem-fact">
             <i class="fas fa-crosshairs problem-icon" aria-hidden="true"></i>
-            <span>{{ targetText(entry.target) }}</span>
+            <span>
+              <template v-for="(part, index) in targetParts(entry.target, items)" :key="index">
+                <RouterLink v-if="part.item" :to="sectionRoute(identity, 'review', { item: part.item })">{{
+                  part.text
+                }}</RouterLink>
+                <template v-else>{{ part.text }}</template>
+              </template>
+            </span>
+          </p>
+          <!-- A target of a whole file, a column or the study covers more than one warning, also later ones. -->
+          <p v-if="scopeText(entry)" class="problem-fact acknowledged-scope">
+            <i class="fas fa-layer-group problem-icon" aria-hidden="true"></i>
+            <span>{{ scopeText(entry) }}</span>
           </p>
           <p class="problem-message">{{ entry.text }}</p>
           <p class="acknowledged-meta">

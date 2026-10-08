@@ -11,6 +11,7 @@ import type {
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import limitsFixture from "../fixtures/curation-contract/limits.json";
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -191,6 +192,7 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     last_upload: null,
     jobs: [],
     report_id: null,
+    files_version: "files-1",
     metadata: { revision: "study-1", value: studyMetadata(), issues: [] },
     reference: null,
     reference_match: null,
@@ -232,8 +234,34 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
       "subjects.tsv",
       "timecourses_Fig1.tsv",
     ],
+    tables: [
+      { file: "subjects.tsv", kind: "subjects" },
+      { file: "interventions.tsv", kind: "interventions" },
+      { file: "characteristica.tsv", kind: "characteristica" },
+      { file: "outputs_Tab2.tsv", kind: "outputs" },
+      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
+      { file: "Example_Tab2.tsv", kind: "raw" },
+    ],
+    targets: {},
     ...changes,
   };
+}
+
+/** The fields of a study page that the local server sends beyond the upload limits. */
+type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets">;
+
+/**
+ * What the local server sends for a study beyond the upload limits, by limit: the limit as the
+ * first problem, and no files, sources, tables or targets (python/tests/test_curation_contract.py).
+ */
+export const BEYOND_LIMITS = limitsFixture.details as BeyondLimits[];
+
+/**
+ * The study page of `caffeine/Example` beyond the upload limit of files, with `changes`: the
+ * fields beyond the limits as the local server sends them, on the fields of `studyDetail`.
+ */
+export function beyondLimitsDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
+  return studyDetail({ status: "invalid", counts: { errors: 1, warnings: 0 }, ...BEYOND_LIMITS[0], ...changes });
 }
 
 /** A source of `GET /local/studies/<id>`: a paper table with its image and raw extraction unless `changes` say otherwise. */
@@ -346,11 +374,13 @@ function syncConflict(sheet: string, row: number | null, message: string): Valid
 /** The workbook and the table changed the mean of the same row differently. */
 export const REGION_CONFLICT: ConflictData = {
   file: "outputs_Tab2.tsv",
+  kind: "outputs",
   sheet: "outputs_Tab2",
   workbook_rows: [{ row: 2, text: outputsLine("6.1") }],
   table_lines: [{ line: 2, text: outputsLine("6.3") }],
   base_lines: [outputsLine("5.9")],
   kept: null,
+  removed: null,
 };
 
 export const REGION_ISSUE = syncConflict(
@@ -363,11 +393,13 @@ export const REGION_ISSUE = syncConflict(
 /** The workbook removed a row that the table changed. */
 export const ROWS_REMOVED_CONFLICT: ConflictData = {
   file: "subjects.tsv",
+  kind: "subjects",
   sheet: "subjects",
   workbook_rows: [],
   table_lines: [{ line: 3, text: "Example\tS1\tall\t2\tTabA\t" }],
   base_lines: ["Example\tS1\tall\t1\tTabA\t"],
   kept: null,
+  removed: null,
 };
 
 export const ROWS_REMOVED_ISSUE = syncConflict(
@@ -380,6 +412,7 @@ export const ROWS_REMOVED_ISSUE = syncConflict(
 /** The table file was deleted while its sheet changed: the sides list the whole table from its header. */
 export const FILE_DELETED_CONFLICT: ConflictData = {
   file: "scatters_Fig2.tsv",
+  kind: "scatters",
   sheet: "scatters_Fig2",
   workbook_rows: [
     { row: 1, text: SCATTERS_COLUMNS.join("\t") },
@@ -389,6 +422,7 @@ export const FILE_DELETED_CONFLICT: ConflictData = {
   table_lines: [],
   base_lines: [SCATTERS_COLUMNS.join("\t"), scattersLine("S1", "30", "2"), scattersLine("S2", "40", "3")],
   kept: null,
+  removed: "tables",
 };
 
 export const FILE_DELETED_ISSUE = syncConflict(

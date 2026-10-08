@@ -3,10 +3,10 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
-import type { SourcePoint, SourceView, StudyDetail, ValidationIssue } from "../../src/curation-app/api/types";
+import type { Problem, SourcePoint, SourceView, StudyDetail } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { beyondLimitsDetail, json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import { button, click, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
@@ -99,6 +99,7 @@ const digitized: SourceView = {
       error_px: null,
       x_text: "0.5",
       y_text: "2.42",
+      error_bar_end: false,
     },
     {
       series: "caf_plasma_D150",
@@ -112,6 +113,7 @@ const digitized: SourceView = {
       error_px: [120, 250],
       x_text: "0.5",
       y_text: "2.419",
+      error_bar_end: false,
     },
   ],
   unmatched: ["caf_plasma_D75"],
@@ -181,6 +183,15 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
       sourceSummary({ source: "Tab3", missing_image: "Example_Tab3.png", missing_raw: "Example_Tab3.tsv" }),
     ],
     files: [...base.files, "Example_Fig1.wpd.json", "Example_Fig2.png", "timecourses_Fig2.tsv"].sort(),
+    tables: [
+      { file: "subjects.tsv", kind: "subjects" },
+      { file: "interventions.tsv", kind: "interventions" },
+      { file: "characteristica.tsv", kind: "characteristica" },
+      { file: "outputs_Tab2.tsv", kind: "outputs" },
+      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
+      { file: "timecourses_Fig2.tsv", kind: "timecourses" },
+      { file: "Example_Tab2.tsv", kind: "raw" },
+    ],
     ...changes,
   });
 }
@@ -304,6 +315,15 @@ describe("tabs", () => {
     await mountSection(detail({ sources: [] }));
     expect(tabs()).toHaveLength(0);
     expect(page().text()).toContain("The study has no sources yet.");
+  });
+
+  it("says that the app cannot show the sources of a study beyond the upload limits", async () => {
+    await mountSection(beyondLimitsDetail());
+    expect(tabs()).toHaveLength(0);
+    const text = page().get(".sources-empty");
+    expect(text.text()).toBe("This study is beyond the upload limits, so the app cannot show its sources. See Problems.");
+    expect(text.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
+    expect(page().text()).not.toContain("no sources yet");
   });
 });
 
@@ -436,15 +456,17 @@ describe("loading", () => {
 });
 
 describe("problems", () => {
-  const mismatch: ValidationIssue = {
+  const mismatch: Problem = {
     code: "digitized_mismatch",
     severity: "warning",
+    acknowledgeable: true,
     message: "Line 3 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
     source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 3, column: "F", cell: "F3", header: "mean" },
   };
-  const other: ValidationIssue = {
+  const other: Problem = {
     code: "unused_intervention",
     severity: "warning",
+    acknowledgeable: true,
     message: "'caf_po_300' is not referenced by any row",
     source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
   };
@@ -461,9 +483,10 @@ describe("problems", () => {
   });
 
   it("shows the problems as the Problems section does: by file, errors first, without Acknowledge", async () => {
-    const unknown: ValidationIssue = {
+    const unknown: Problem = {
       code: "invalid_digitization",
       severity: "error",
+      acknowledgeable: false,
       message: "The project has no calibration.",
       source: { file: "Example_Fig1.wpd.json", path: [] },
     };

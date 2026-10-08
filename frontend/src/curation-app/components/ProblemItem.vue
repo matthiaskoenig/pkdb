@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
-import type { ValidationIssue } from "../api/types";
+import type { Problem } from "../api/types";
 import { acknowledgement, location, locationKey, SEVERITY_LABELS, suggestionView, tableQuery } from "../problems";
 import { sectionRoute } from "../study";
 
@@ -12,7 +12,7 @@ import { sectionRoute } from "../study";
  */
 const props = withDefaults(
   defineProps<{
-    issue: ValidationIssue;
+    issue: Problem;
     /** The identity of the study, for the link to the Tables section. */
     study: string;
     /** The start of the ids of the message and the location, unique in the page. */

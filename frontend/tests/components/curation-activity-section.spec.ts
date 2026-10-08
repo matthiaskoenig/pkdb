@@ -2,10 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView } from "vue-router";
-import type { Job, JobReport, Snapshot, StudyDetail, Upload } from "../../src/curation-app/api/types";
+import type { Job, JobReport, ReviewItem, Snapshot, StudyDetail, Upload } from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import messagesFixture from "../fixtures/curation-contract/messages.json";
 import { json, reviewItem, snapshot, studyDetail, studyRow } from "../unit/curation-fixtures";
 import {
   button,
@@ -49,7 +50,7 @@ function job(id: string, changes: Partial<Job> = {}): Job {
   };
 }
 
-function write(id: string, message: string, created: string): Job {
+function write(id: string, message: string, created: string, changes: Partial<Job> = {}): Job {
   return {
     id,
     study_id: "caffeine/Example",
@@ -60,8 +61,20 @@ function write(id: string, message: string, created: string): Job {
     message,
     automatic: false,
     report_id: null,
+    ...changes,
   };
 }
+
+/**
+ * The jobs of the messages contract fixture, newest first: a review item added in the app, one
+ * that part C saved without its item, and a validation that part C saved as canceled with the
+ * message "Queued" (python/tests/test_curation_contract.py).
+ */
+const [ADDED, PART_C_WRITE, PART_C_CANCELED] = messagesFixture.jobs.map((entry, place) =>
+  job(`contract-${place}`, { ...(entry as Partial<Job>), report_id: null, created_at: at(30 - place) }),
+);
+/** The review items of the fixture, among them the items of the jobs. */
+const ITEMS = messagesFixture.items.map((entry) => reviewItem(entry as Partial<ReviewItem>));
 
 const UPLOADED: Upload = {
   persistence: "created",
@@ -72,7 +85,10 @@ const UPLOADED: Upload = {
 
 /** The activity of caffeine/Example as the detail lists it, newest first. */
 const HISTORY: Job[] = [
-  write("write-2", "Added review item 01K6Y4ZJ6Q8D3W6B6V5N1S2T3X", at(40)),
+  write("write-2", "Added review item 01K6Y4ZJ6Q8D3W6B6V5N1S2T3X", at(40), {
+    item: "01K6Y4ZJ6Q8D3W6B6V5N1S2T3X",
+    parts: [{ text: "Added " }, { item: "01K6Y4ZJ6Q8D3W6B6V5N1S2T3X" }],
+  }),
   job("upload-1", {
     action: "upload",
     created_at: at(30),
@@ -259,8 +275,8 @@ describe("the activity of a study", () => {
 
   it("says why a job was canceled, also for jobs that an earlier version canceled", async () => {
     await mountSection([
-      job("replaced-1", { status: "canceled", message: "Replaced by a newer validation", report_id: null, created_at: at(5) }),
-      job("legacy-1", { status: "canceled", message: "Queued", report_id: null }),
+      job("replaced-1", { status: "canceled", message: "Replaced by a newer validation", report_id: null, created_at: at(40) }),
+      PART_C_CANCELED!,
     ]);
     expect(entries().map((element) => element.get(".activity-text").text())).toEqual([
       "Replaced by a newer validation",
@@ -268,27 +284,23 @@ describe("the activity of a study", () => {
     ]);
   });
 
-  it("names review items by kind and text, linked to the item", async () => {
-    const item = reviewItem({
-      id: "01K6Y4ZJ6Q8D3W6B6V5N1S2T3X",
-      text: "Is the dose of 150 mg the caffeine base or the citrate salt?",
-    });
-    await mountSection(
-      [
-        write("write-2", "Resolved review item 01K6Y4ZJ6Q8D3W6B6V5N1S2T3Y", at(20)),
-        write("write-1", `Added review item ${item.id}`, at(10)),
-      ],
-      {},
-      {},
-      { review: { revision: "review-2", value: { status: "draft", reviewers: [], items: [item] }, issues: [] } },
-    );
-    const added = entries()[1]!.get(".activity-text");
-    expect(textOf(added)).toBe("Added the question “Is the dose of 150 mg the caffeine base…”");
+  it("names review items by kind and text, linked to the item, also in a job saved by part C", async () => {
+    const review = { revision: "review-2", value: { status: "draft" as const, reviewers: [], items: ITEMS }, issues: [] };
+    await mountSection([ADDED!, PART_C_WRITE!], {}, {}, { review });
+    const added = entries()[0]!.get(".activity-text");
+    expect(textOf(added)).toBe("Added the question “Is the 4 h point read from the figure?”");
     const link = added.get("a");
-    expect(link.text()).toBe("question “Is the dose of 150 mg the caffeine base…”");
-    expect(link.attributes("href")).toBe(`#/studies/caffeine/Example/review?item=${item.id}`);
-    // An item that is no longer in review.json.
-    expect(textOf(entries()[0]!.get(".activity-text"))).toBe("Resolved a review item");
+    expect(link.text()).toBe("question “Is the 4 h point read from the figure?”");
+    expect(link.attributes("href")).toBe(`#/studies/caffeine/Example/review?item=${ADDED!.item}`);
+    const saved = entries()[1]!.get(".activity-text");
+    expect(textOf(saved)).toBe("Added the question “The methods describe a 400 mg dose, but…”");
+    expect(saved.get("a").attributes("href")).toBe("#/studies/caffeine/Example/review?item=01M2FC4AG038NKRKAYDXR834N3");
+  });
+
+  it("says a review item when the item is no longer in review.json", async () => {
+    const review = { revision: "review-2", value: { status: "draft" as const, reviewers: [], items: [] }, issues: [] };
+    await mountSection([ADDED!], {}, {}, { review });
+    expect(textOf(entries()[0]!.get(".activity-text"))).toBe("Added a review item");
     expect(entries()[0]!.find(".activity-text a").exists()).toBe(false);
   });
 
@@ -410,14 +422,16 @@ describe("cancel", () => {
   });
 
   it("cancels a queued job and shows it as canceled", async () => {
+    // The server writes one message for every job canceled before it started (contract fixture).
+    const canceled = { ...queued, status: PART_C_CANCELED!.status, message: PART_C_CANCELED!.message };
     const cancel: Handler = () => {
-      serveJobs([{ ...queued, status: "canceled", message: "Canceled before starting" }, ...HISTORY]);
+      serveJobs([canceled, ...HISTORY]);
       return json(state);
     };
     await mountSection([queued, ...HISTORY], { [`POST ${CANCEL}`]: cancel });
     await press(button("Cancel queued validation"));
     expect(posted(CANCEL)).toEqual([{ ids: ["queued-1"] }]);
-    expect(entries()[0]!.get(".activity-text").text()).toBe("Canceled before starting");
+    expect(entries()[0]!.get(".activity-text").text()).toBe("Canceled before it started");
     expect(entries()[0]!.get(".activity-status").text()).toBe("Canceled");
     expect(notice()).toBe("Canceled the queued validation.");
     expect(buttons("Cancel queued validation")).toHaveLength(0);

@@ -1,0 +1,167 @@
+{
+  "items": [
+    {
+      "id": "01M2FC4AG038NKRKAYDXR834N3",
+      "state": "open",
+      "target": {
+        "file": "interventions.tsv",
+        "rows": {
+          "name": "D400"
+        }
+      }
+    },
+    {
+      "id": "01M2J1J2Z05CY4TQKFE20S58XM",
+      "state": "open",
+      "target": {
+        "file": "outputs_Tab2.tsv",
+        "rows": {
+          "measurement": "auc_inf"
+        }
+      }
+    },
+    {
+      "id": "01M2N341A07H6NWVVGG69A7D65",
+      "state": "resolved",
+      "target": {
+        "file": "subjects.tsv",
+        "rows": {
+          "name": "all"
+        }
+      }
+    },
+    {
+      "id": "01M2QC2MB09NF6YW41JAHV9HEP",
+      "state": "dismissed",
+      "target": {
+        "file": "timecourses_Fig1.tsv",
+        "rows": {
+          "label": "caf_plasma_100mg",
+          "time": "4"
+        },
+        "column": "mean"
+      }
+    }
+  ],
+  "targets": {
+    "01M2FC4AG038NKRKAYDXR834N3": {
+      "lines": [
+        4
+      ],
+      "series": null,
+      "total": 3
+    },
+    "01M2J1J2Z05CY4TQKFE20S58XM": {
+      "lines": [
+        2,
+        6
+      ],
+      "series": null,
+      "total": 8
+    },
+    "01M2N341A07H6NWVVGG69A7D65": {
+      "lines": [
+        2
+      ],
+      "series": null,
+      "total": 1
+    },
+    "01M2QC2MB09NF6YW41JAHV9HEP": {
+      "lines": [
+        6
+      ],
+      "series": {
+        "source": "Fig1",
+        "series": "caf_plasma_100mg"
+      },
+      "total": 18
+    }
+  },
+  "previews": [
+    {
+      "request": {
+        "file": "timecourses_Fig1.tsv",
+        "rows": {
+          "label": "caf_plasma_100mg",
+          "time": "4"
+        }
+      },
+      "response": {
+        "lines": [
+          6
+        ],
+        "series": {
+          "source": "Fig1",
+          "series": "caf_plasma_100mg"
+        },
+        "total": 18
+      }
+    },
+    {
+      "request": {
+        "file": "timecourses_Fig1.tsv",
+        "rows": {
+          "label": "caf_plasma_200mg"
+        }
+      },
+      "response": {
+        "lines": [
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "series": {
+          "source": "Fig1",
+          "series": "caf_plasma_200mg"
+        },
+        "total": 18
+      }
+    },
+    {
+      "request": {
+        "file": "outputs_Tab2.tsv",
+        "rows": {
+          "measurement": "auc_inf",
+          "comment": ""
+        }
+      },
+      "response": {
+        "lines": [
+          2,
+          6
+        ],
+        "series": null,
+        "total": 8
+      }
+    },
+    {
+      "request": {
+        "file": "outputs_Tab2.tsv",
+        "rows": {
+          "measurement": "AUC"
+        }
+      },
+      "response": {
+        "lines": [],
+        "series": null,
+        "total": 8
+      }
+    },
+    {
+      "request": {
+        "file": "Demo2020_Tab2.tsv"
+      },
+      "response": {
+        "lines": null,
+        "series": null,
+        "total": null
+      }
+    }
+  ]
+}

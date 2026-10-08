@@ -11,23 +11,29 @@ import {
   isReviewWrite,
   isSourceView,
   isStudyDetail,
+  isTablePreview,
   isTableResponse,
   isTablesResult,
+  isTargetMatch,
   type Guard,
   type MetadataWrite,
   type Profile,
   type ReferenceAuthor,
   type ReferencePreview,
   type ReferenceRecord,
+  type ReviewTarget,
   type ReviewWrite,
   type SourceView,
   type StudyDetail,
   type StudyMetadata,
+  type TablePreview,
   type TableResponse,
   type TablesResult,
+  type TargetMatch,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
+import type { NewTableKind } from "../tableKinds";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
 
@@ -194,6 +200,16 @@ export const useStudyStore = defineStore("curation-study", () => {
     return result;
   }
 
+  /** What Add table would add for `kind` and `source`, and why the server would refuse it; writes nothing. */
+  function previewTable(kind: NewTableKind, source: string): Promise<TablePreview> {
+    return postJson("/local/studies/tables/preview", { study: opened(), kind, source }, isTablePreview);
+  }
+
+  /** The rows and the digitized series that a draft review target selects; writes nothing. */
+  function previewTarget(target: ReviewTarget): Promise<TargetMatch> {
+    return postJson("/local/studies/review/preview", { study: opened(), target }, isTargetMatch);
+  }
+
   /** `reference.json` of the open study; empty when there is none. */
   async function readReference(): Promise<ReferenceRecord> {
     return (await postJson("/local/reference/read", { id: opened() }, isReferenceRead)).reference;
@@ -242,6 +258,8 @@ export const useStudyStore = defineStore("curation-study", () => {
     saveMetadata,
     reviewAction,
     tablesAction,
+    previewTable,
+    previewTarget,
     readReference,
     searchReference,
     previewReference,

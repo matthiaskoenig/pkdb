@@ -1,0 +1,50 @@
+{
+  "details": [
+    {
+      "problems": [
+        {
+          "code": "file_limit",
+          "severity": "error",
+          "message": "The study has more than 2 files",
+          "source": null,
+          "category": null,
+          "stage": null,
+          "field": null,
+          "expected": {},
+          "context": {},
+          "related_sources": [],
+          "suggestions": [],
+          "documentation_url": null,
+          "acknowledgeable": false
+        }
+      ],
+      "sources": [],
+      "files": [],
+      "tables": [],
+      "targets": {}
+    },
+    {
+      "problems": [
+        {
+          "code": "row_limit",
+          "severity": "error",
+          "message": "The study tables have more than 3 rows",
+          "source": null,
+          "category": null,
+          "stage": null,
+          "field": null,
+          "expected": {},
+          "context": {},
+          "related_sources": [],
+          "suggestions": [],
+          "documentation_url": null,
+          "acknowledgeable": false
+        }
+      ],
+      "sources": [],
+      "files": [],
+      "tables": [],
+      "targets": {}
+    }
+  ]
+}

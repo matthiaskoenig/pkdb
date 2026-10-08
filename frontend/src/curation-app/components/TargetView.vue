@@ -2,48 +2,61 @@
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
-import type { ReviewTarget, SourceView, TableResponse } from "../api/types";
+import type { ReviewItem, SourceView, StudyDetail, TableResponse } from "../api/types";
 import { useLoaded } from "../composables/useLoaded";
+import { targetMatch } from "../grid";
 import { plural } from "../overview";
-import { matchingRows, matchText, seriesOfTarget, shownColumns, targetText } from "../review";
+import { matchText, rowsAt, shownColumns, targetText } from "../review";
 import { useStudyStore } from "../stores/study";
-import { sectionRoute, tableFiles } from "../study";
+import { beyondLimits, sectionRoute, tableFiles } from "../study";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
 
 /**
  * What a review item is about: the rows of its table that match its row filters, with its column
- * marked, and for a digitized series the figure overlay with that series emphasized. Nothing
- * shows for the whole study or a file that is no table. The rows link to the Tables section.
+ * marked, and for a digitized series the figure overlay with that series emphasized, as the local
+ * server matched its target. Nothing shows for the whole study or a file that is no table. The
+ * rows link to the Tables section. Beyond the upload limits a target of a file says that its rows
+ * cannot be shown.
  */
-const props = defineProps<{ target: ReviewTarget | undefined }>();
+const props = defineProps<{ item: ReviewItem }>();
 
 const study = useStudyStore();
 const router = useRouter();
 const headingId = useId();
 
-const file = computed(() => props.target?.file ?? null);
-const filters = computed(() => props.target?.rows ?? {});
-const filtered = computed(() => Object.keys(filters.value).length > 0);
+const target = computed(() => props.item.target);
+const file = computed(() => target.value?.file ?? null);
 /** A data table or a raw table of the study, whose rows the local API serves. */
 const tableFile = computed(() =>
   file.value !== null && study.detail !== null && tableFiles(study.detail).includes(file.value) ? file.value : null,
 );
 /** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
-const series = computed(() => {
-  const found = seriesOfTarget(props.target);
-  const summary = found && study.detail?.sources.find((source) => source.source === found.source);
-  return summary?.raw_kind === "digitization" ? found : null;
-});
+const series = computed(() => targetMatch(study.detail?.targets ?? {}, props.item).series);
 
 const {
   data: table,
   error: tableError,
   loading: tableLoading,
-} = useLoaded<TableResponse>(
+} = useLoaded<TableResponse, StudyDetail | null>(
   () => tableFile.value,
   (name) => study.table(name),
   () => study.detail,
+);
+/**
+ * The lines of the target as the local server matched them for the study page that the rows were
+ * loaded for: after a table changed, a newer page can arrive before the rows.
+ */
+const rowsTargets = computed(() => table.value?.version?.targets ?? {});
+const match = computed(() => targetMatch(rowsTargets.value, props.item));
+/** Whether a row filter narrows the rows; without one, the target is the whole table. */
+const filtered = computed(() => match.value.lines !== null);
+/** A new item that the page of the rows does not know yet: its rows come with the next load. */
+const pending = computed(
+  () =>
+    tableError.value === null &&
+    !(props.item.id in rowsTargets.value) &&
+    props.item.id in (study.detail?.targets ?? {}),
 );
 const {
   data: figure,
@@ -63,9 +76,11 @@ function showRow(row: { file: string; line: number }): void {
 const rows = computed(() => {
   const loaded = table.value?.content;
   if (!loaded || loaded.kind !== "table") return null;
-  const matched = matchingRows(loaded.header, loaded.rows, filters.value);
-  const column = props.target?.column ?? null;
-  const kept = shownColumns(loaded.header, matched, [...Object.keys(filters.value), ...(column ? [column] : [])]);
+  const lines = match.value.lines;
+  const matched = lines === null ? loaded.rows : rowsAt(loaded.rows, lines);
+  const column = target.value?.column ?? null;
+  const filters = Object.keys(target.value?.rows ?? {});
+  const kept = shownColumns(loaded.header, matched, [...filters, ...(column ? [column] : [])]);
   // The column of the item comes first, so that it is in view in a wide table.
   const marked = column === null ? -1 : loaded.header.indexOf(column);
   return {
@@ -88,7 +103,12 @@ function tableRoute(line?: number) {
   });
 }
 const rawTable = computed(() => table.value?.content.kind === "raw");
-const shown = computed(() => tableFile.value !== null || series.value !== null);
+/**
+ * Beyond the upload limits the local server lists no tables and matches no target: a target of a
+ * file, which may be a table, says why its rows do not show.
+ */
+const limited = computed(() => file.value !== null && study.detail !== null && beyondLimits(study.detail));
+const shown = computed(() => tableFile.value !== null || series.value !== null || limited.value);
 </script>
 
 <template>
@@ -99,8 +119,18 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
         <p class="target-text">{{ targetText(target) }}</p>
       </div>
 
+      <p v-if="limited" class="field-note target-limits">
+        This study is beyond the upload limits, so the app cannot show the rows of its tables. See
+        <RouterLink :to="sectionRoute(study.detail?.id ?? '', 'problems')">Problems</RouterLink>.
+      </p>
+
       <div v-if="tableFile" class="target-block">
-        <VProgressLinear v-if="tableLoading" indeterminate color="primary" :aria-label="`Loading ${tableFile}`" />
+        <VProgressLinear
+          v-if="tableLoading || pending"
+          indeterminate
+          color="primary"
+          :aria-label="`Loading ${tableFile}`"
+        />
         <p v-else-if="tableError" class="field-error">
           The rows of {{ tableFile }} could not be loaded. {{ tableError }}
         </p>

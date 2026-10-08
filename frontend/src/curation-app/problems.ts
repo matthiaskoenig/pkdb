@@ -3,7 +3,17 @@
  * suggestions, links to the tables and the acknowledgements of warnings.
  */
 import { isValidationError } from "./api/client";
-import type { Job, Json, SaveMode, Snapshot, StudyDetail, Suggestion, ValidationIssue } from "./api/types";
+import type {
+  AcknowledgedWarning,
+  Job,
+  Json,
+  Problem,
+  SaveMode,
+  Snapshot,
+  StudyDetail,
+  Suggestion,
+  ValidationIssue,
+} from "./api/types";
 import { plural } from "./overview";
 import { reviewFailure, type ReviewFailure } from "./review";
 
@@ -19,7 +29,7 @@ export const SEVERITY_CHIPS: readonly { value: SeverityFilter; label: string }[]
 export const SEVERITY_LABELS: Record<ValidationIssue["severity"], string> = { error: "Error", warning: "Warning" };
 
 /** The issues of a severity, in their order. */
-export function filterIssues(issues: readonly ValidationIssue[], severity: SeverityFilter): ValidationIssue[] {
+export function filterIssues<I extends ValidationIssue>(issues: readonly I[], severity: SeverityFilter): I[] {
   return issues.filter((issue) => severity === "all" || issue.severity === severity);
 }
 
@@ -46,18 +56,10 @@ export function groupCounts(issues: readonly ValidationIssue[]): string {
     .join(" · ");
 }
 
-/** The issues of the upload limits, which the library reports before reading the whole study. */
-const LIMIT_CODES: ReadonlySet<string> = new Set(["row_limit", "file_limit"]);
-
-/** Whether the issue says that the study is beyond the upload limits. */
-export function isLimitIssue(issue: ValidationIssue): boolean {
-  return LIMIT_CODES.has(issue.code);
-}
-
 /** The issues of one file; `file` is null for issues of the whole study. */
-export interface IssueGroup {
+export interface IssueGroup<I extends ValidationIssue = ValidationIssue> {
   file: string | null;
-  issues: ValidationIssue[];
+  issues: I[];
 }
 
 /**
@@ -65,15 +67,15 @@ export interface IssueGroup {
  * first issue. Within a file, the issues of the whole file come first, then those of its lines,
  * by line.
  */
-export function groupByFile(issues: readonly ValidationIssue[]): IssueGroup[] {
-  const groups = new Map<string | null, ValidationIssue[]>();
+export function groupByFile<I extends ValidationIssue>(issues: readonly I[]): IssueGroup<I>[] {
+  const groups = new Map<string | null, I[]>();
   for (const issue of issues) {
     const file = issue.source?.file ?? null;
     const group = groups.get(file);
     if (group) group.push(issue);
     else groups.set(file, [issue]);
   }
-  const errors = (entries: ValidationIssue[]) => (entries.some((issue) => issue.severity === "error") ? 0 : 1);
+  const errors = (entries: I[]) => (entries.some((issue) => issue.severity === "error") ? 0 : 1);
   return [...groups]
     .toSorted(([, a], [, b]) => errors(a) - errors(b))
     .map(([file, entries]) => ({
@@ -85,7 +87,9 @@ export function groupByFile(issues: readonly ValidationIssue[]): IssueGroup[] {
 /**
  * Where an issue is: `timecourses_Fig1.tsv · line 6 · mean · sheet cell timecourses_Fig1!O6`.
  * A table names its TSV line and the cell of its workbook sheet; the workbook names the row of
- * its sheet. Without `file`, the location starts after the file, which a group names already.
+ * its sheet; a file without rows names the key of the issue, such as a dataset of a
+ * WebPlotDigitizer project. Without `file`, the location starts after the file, which a group
+ * names already.
  */
 export function location(issue: ValidationIssue, { file = true }: { file?: boolean } = {}): string {
   const source = issue.source;
@@ -94,16 +98,11 @@ export function location(issue: ValidationIssue, { file = true }: { file?: boole
   const parts = file ? [source.file] : [];
   if (source.row != null) parts.push(`${workbook ? "row" : "line"} ${source.row}`);
   if (source.header) parts.push(source.header);
+  if (source.key) parts.push(source.key);
   if (source.sheet && source.cell) parts.push(`sheet cell ${source.sheet}!${source.cell}`);
   else if (source.sheet && workbook) parts.push(`sheet ${source.sheet}`);
   return parts.join(" · ");
 }
-
-/** The message of a spelling suggestion of the library (`DID_YOU_MEAN` in `studyformat/issues.py`). */
-export const DID_YOU_MEAN = "Did you mean one of these?";
-
-/** The hint of the spelling suggestions of an unknown term (`studyformat/terms.py`). */
-export const SPELLING_HINT = "Candidates are spelling suggestions, not equivalent terms.";
 
 function candidateText(candidate: Json): string {
   return typeof candidate === "string" ? candidate : JSON.stringify(candidate);
@@ -117,14 +116,14 @@ export interface SuggestionView {
 }
 
 /**
- * A suggestion to show: spelling suggestions follow `Did you mean:`, with the caveat of term
- * suggestions after them; any other hint comes before its candidates, such as lines to add to
- * a file.
+ * A suggestion to show, by its kind (`studyformat/issues.py`): candidates alone follow
+ * `Did you mean:`, and so do the spelling suggestions of an unknown term, with their caveat after
+ * them; any other hint comes before its candidates, such as lines to add to a file.
  */
 export function suggestionView(suggestion: Suggestion): SuggestionView {
   const candidates = (suggestion.candidates ?? []).map(candidateText);
-  if (suggestion.message === DID_YOU_MEAN) return { lead: "Did you mean:", candidates, note: null };
-  if (suggestion.message === SPELLING_HINT && candidates.length)
+  if (suggestion.kind === "did_you_mean") return { lead: "Did you mean:", candidates, note: null };
+  if (suggestion.kind === "check_vocabulary" && candidates.length)
     return { lead: "Did you mean:", candidates, note: suggestion.message };
   return { lead: suggestion.message, candidates, note: null };
 }
@@ -148,54 +147,74 @@ export function tableQuery(issue: ValidationIssue): Record<string, string> | nul
 
 /**
  * The location of the `acknowledge` action of review.json: the warnings of `code` there. A null
- * line or column matches only warnings without one; the local server matches every line or
- * column only when the key is left out, as `pkdb review acknowledge` without the option.
+ * line, column or key matches only warnings without one; the local server matches every line,
+ * column or key only when the field is left out, as `pkdb review acknowledge` without the option.
  */
 export interface Acknowledgement {
   code: string;
   file: string;
   line: number | null;
   column: string | null;
+  key: string | null;
 }
 
 /**
- * Where an acknowledgement of a warning applies: exactly its code, file, line and column;
- * null for an error or an issue without a file.
+ * Where an acknowledgement of a warning applies: exactly its code, file, line, column and key;
+ * null for a problem that the local server cannot acknowledge, such as an error or a warning of
+ * a stopped sync, and for one without a file. The local server writes a review item that covers
+ * exactly this warning: at its row and column, or by its key.
  */
-export function acknowledgement(issue: ValidationIssue): Acknowledgement | null {
+export function acknowledgement(issue: Problem): Acknowledgement | null {
   const source = issue.source;
-  if (issue.severity !== "warning" || !source?.file) return null;
-  return { code: issue.code, file: source.file, line: source.row ?? null, column: source.header ?? null };
+  if (!issue.acknowledgeable || !source?.file) return null;
+  return {
+    code: issue.code,
+    file: source.file,
+    line: source.row ?? null,
+    column: source.header ?? null,
+    key: source.key ?? null,
+  };
 }
 
-/**
- * The warnings that acknowledging `issue` covers when its review item can target only its file,
- * else null. The library pins an acknowledgement to a row only for a warning at a line of a data
- * table (`target_for_issue` in `studyformat/review_edit.py`); any other warning gets the target of
- * its file alone. This mirrors `acknowledged` in `studyformat/validation.py` for such a target:
- * it matches every warning of the same code in that file, at any line and column, also the
- * warnings of later validations. `dataTables` are the data tables of the study, without raw tables.
- */
-export function fileWideScope(
-  issue: ValidationIssue,
-  problems: readonly ValidationIssue[],
-  dataTables: ReadonlySet<string>,
-): ValidationIssue[] | null {
-  const file = issue.source?.file;
-  if (issue.severity !== "warning" || !file) return null;
-  if (issue.source?.row != null && dataTables.has(file)) return null;
-  return problems.filter(
-    (other) => other.severity === "warning" && other.code === issue.code && other.source?.file === file,
-  );
+/** What an acknowledgement covers beyond its own warning, or null when it covers just that one. */
+export function scopeText(entry: AcknowledgedWarning): string | null {
+  const file = entry.target?.file;
+  switch (entry.scope) {
+    case "study":
+      return `Covers every ${entry.code} warning of the study, also later ones.`;
+    case "file":
+      return `Covers every ${entry.code} warning in ${file}, also later ones.`;
+    case "column":
+      return `Covers every ${entry.code} warning in column ${entry.target?.column} of ${file}, also later ones.`;
+    default:
+      return null;
+  }
 }
 
 /** What the dialog says when the warning is no longer in the files that the server validated. */
 export const NO_SUCH_WARNING = "This warning is not in the current files. Validate the study and try again.";
 
-/** The failure of an acknowledgement; a warning that the files no longer have gets a plain sentence. */
+/** What the dialog says when warnings at several locations match the one to acknowledge. */
+export const AMBIGUOUS_WARNING = "Several warnings match this location. Validate the study and try again.";
+
+/** What the dialog says for a warning without a row of a data table and without a key. */
+export const NO_EXACT_TARGET = "This warning cannot be acknowledged on its own.";
+
+/**
+ * The plain sentences of the refusals of the `acknowledge` action, by their code
+ * (`studyformat/review_edit.py`). Their messages are written for `pkdb review acknowledge`: they
+ * list locations and name its options.
+ */
+const ACKNOWLEDGE_REFUSALS: ReadonlyMap<string, string> = new Map([
+  ["no_such_warning", NO_SUCH_WARNING],
+  ["ambiguous_warning", AMBIGUOUS_WARNING],
+  ["no_exact_target", NO_EXACT_TARGET],
+]);
+
+/** The failure of an acknowledgement; a refusal of the warning itself gets a plain sentence. */
 export function acknowledgeFailure(caught: unknown): ReviewFailure {
-  if (isValidationError(caught) && caught.body.code === "no_such_warning")
-    return { kind: "error", text: NO_SUCH_WARNING, issues: [] };
+  const text = isValidationError(caught) ? ACKNOWLEDGE_REFUSALS.get(caught.body.code ?? "") : undefined;
+  if (text) return { kind: "error", text, issues: [] };
   return reviewFailure(caught, "The warning was not acknowledged.");
 }
 
@@ -214,10 +233,16 @@ export function validatesAfterWrite(
   return mode !== "upload" || (!snapshot.offline && snapshot.account !== null && snapshot.can_upload);
 }
 
-/** A key that the warnings of one acknowledgement share: one code at one file, line and column. */
+/** A key that the warnings of one acknowledgement share: one code at one file, line, column and key. */
 export function locationKey(issue: ValidationIssue): string {
   const source = issue.source;
-  return JSON.stringify([issue.code, source?.file ?? null, source?.row ?? null, source?.header ?? null]);
+  return JSON.stringify([
+    issue.code,
+    source?.file ?? null,
+    source?.row ?? null,
+    source?.header ?? null,
+    source?.key ?? null,
+  ]);
 }
 
 /**

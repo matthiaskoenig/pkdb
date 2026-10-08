@@ -1,16 +1,19 @@
 /**
  * The sections of the study page, the section it opens on, the counts of its rail, the labels
- * of its header, failed actions, the profiles of its people and the names of a new table.
+ * of its header, failed actions and the profiles of its people.
  */
 import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
-import type { IssueState, People, Profile, Release, StudyDetail, StudySummary, TablesResult } from "./api/types";
-import {
-  DATA_TABLE_KINDS,
-  SOURCE_TABLE_KINDS,
-  TABLE_KIND_LABELS,
-  type SourceTableKind,
-} from "./tableKinds";
+import type {
+  IssueState,
+  People,
+  Profile,
+  Release,
+  StudyDetail,
+  StudySummary,
+  TablesResult,
+  ValidationIssue,
+} from "./api/types";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -54,43 +57,46 @@ export function sectionRoute(id: string, section: Section, query: Record<string,
   return Object.keys(query).length ? { name: "Study", params, query } : { name: "Study", params };
 }
 
-/** A paper table, a figure or the text, as `SOURCE_PATTERN` of the library accepts it. */
-const SOURCE = /^(?:Text|(?:Tab|Fig)[A-Za-z0-9_-]+)$/;
-/** A paper table, the only source of a raw table. */
-const RAW_SOURCE = /^Tab[A-Za-z0-9_-]+$/;
-const DATA_TABLE = new RegExp(`^(?:${DATA_TABLE_KINDS.join("|")})\\.tsv$`);
-const SOURCE_TABLE = new RegExp(`^(?:${SOURCE_TABLE_KINDS.join("|")})_(.+)\\.tsv$`);
-
-/** The files of the data tables and the raw tables of a study, in the order of its files. */
-export function tableFiles(detail: Pick<StudyDetail, "id" | "files">): string[] {
-  const prefix = `${studyName(detail)}_`;
-  return detail.files.filter((file) => {
-    if (DATA_TABLE.test(file)) return true;
-    const source = SOURCE_TABLE.exec(file)?.[1];
-    if (source !== undefined) return SOURCE.test(source);
-    // A raw table `<name>_<source>.tsv` of a paper table.
-    return file.startsWith(prefix) && file.endsWith(".tsv") && RAW_SOURCE.test(file.slice(prefix.length, -4));
-  });
+/** The table files of a study, data tables and raw tables, in the order of the workbook sheets, as the server lists them. */
+export function tableFiles(detail: Pick<StudyDetail, "tables">): string[] {
+  return detail.tables.map((table) => table.file);
 }
 
-/** Whether a file of `tableFiles` is a raw table: neither a data table nor a table of a source. */
-export function isRawTable(file: string): boolean {
-  return !DATA_TABLE.test(file) && !SOURCE_TABLE.test(file);
+/** The raw tables of a study, the paper tables as printed. */
+export function rawTableFiles(detail: Pick<StudyDetail, "tables">): Set<string> {
+  return new Set(detail.tables.filter((table) => table.kind === "raw").map((table) => table.file));
 }
 
-/** The data tables of a study, which the library loads as tables: `tableFiles` without the raw tables. */
-export function dataTableFiles(detail: Pick<StudyDetail, "id" | "files">): Set<string> {
-  return new Set(tableFiles(detail).filter((file) => !isRawTable(file)));
+/** Whether a table file of the study is a raw table, the paper table as printed. */
+export function isRawTable(detail: Pick<StudyDetail, "tables">, file: string): boolean {
+  return rawTableFiles(detail).has(file);
 }
 
-/** The counts of the rail: open items, errors plus warnings, sources, and table and raw table files. */
+/** The issues of the upload limits, which the library reports before reading the whole study. */
+const LIMIT_CODES: ReadonlySet<string> = new Set(["row_limit", "file_limit"]);
+
+/** Whether the issue says that the study is beyond the upload limits. */
+export function isLimitIssue(issue: ValidationIssue): boolean {
+  return LIMIT_CODES.has(issue.code);
+}
+
+/**
+ * Whether the study is beyond the upload limits. Its page then lists no files, sources, tables
+ * or targets, because the local server does not read the study, and names the limit in its problems.
+ */
+export function beyondLimits(detail: Pick<StudyDetail, "problems">): boolean {
+  return detail.problems.some(isLimitIssue);
+}
+
+/**
+ * The counts of the rail: open items, errors plus warnings, sources, and table and raw table
+ * files; none of the sources and tables beyond the upload limits, where the page cannot list them.
+ */
 export function railCounts(detail: StudyDetail): Partial<Record<Section, number>> {
-  return {
-    review: openItems(detail),
-    problems: detail.counts.errors + detail.counts.warnings,
-    sources: detail.sources.length,
-    tables: tableFiles(detail).length,
-  };
+  const counts = { review: openItems(detail), problems: detail.counts.errors + detail.counts.warnings };
+  return beyondLimits(detail)
+    ? counts
+    : { ...counts, sources: detail.sources.length, tables: detail.tables.length };
 }
 
 // Header
@@ -233,59 +239,4 @@ const NUMBERS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
 export function duplicateHeading(folders: number): string {
   if (folders < 2) return "This identity belongs to more than one folder";
   return `This identity belongs to ${NUMBERS[folders] ?? folders} folders`;
-}
-
-// New tables
-
-/** Excel limits sheet names to 31 characters. */
-const SHEET_NAME_LIMIT = 31;
-
-/** The kind of a new table: a table of mapped data split by source, or the raw table of a paper table. */
-export type NewTableKind = SourceTableKind | "raw";
-
-export const NEW_TABLE_KINDS: readonly { value: NewTableKind; label: string }[] = [
-  ...SOURCE_TABLE_KINDS.map((kind) => ({ value: kind, label: TABLE_KIND_LABELS[kind] })),
-  { value: "raw", label: "Raw table" },
-];
-
-export interface NewTable {
-  /** The sheet of the workbook, also the name of the table. */
-  sheet: string;
-  file: string;
-  /** The image of the source that the table needs; null for the text of the paper. */
-  image: string | null;
-  imageFound: boolean;
-  /** The body of the `add` action besides the study. */
-  payload: { table: string } | { raw: string };
-  /** Why the table cannot be added, or null. */
-  problem: string | null;
-}
-
-/** The sheet, file and image of a new table of `kind` for `source`; null without a source. */
-export function newTable(
-  detail: Pick<StudyDetail, "id" | "files">,
-  kind: NewTableKind,
-  source: string,
-): NewTable | null {
-  const name = source.trim();
-  if (!name) return null;
-  const study = studyName(detail);
-  const sheet = kind === "raw" ? `${study}_${name}` : `${kind}_${name}`;
-  const file = `${sheet}.tsv`;
-  const image = name === "Text" ? null : `${study}_${name}.png`;
-  const files = new Set(detail.files.map((entry) => entry.toLowerCase()));
-  let problem: string | null = null;
-  if (kind === "raw" && !RAW_SOURCE.test(name)) problem = "A raw table needs a paper table source such as Tab3.";
-  else if (!SOURCE.test(name)) problem = "Use a source such as Tab3, Fig2A or Text.";
-  else if (files.has(file.toLowerCase())) problem = `${file} already exists.`;
-  else if (sheet.length > SHEET_NAME_LIMIT)
-    problem = `The sheet ${sheet} has ${sheet.length} characters. Excel allows ${SHEET_NAME_LIMIT}.`;
-  return {
-    sheet,
-    file,
-    image,
-    imageFound: image !== null && detail.files.includes(image),
-    payload: kind === "raw" ? { raw: name } : { table: sheet },
-    problem,
-  };
 }

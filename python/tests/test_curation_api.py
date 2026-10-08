@@ -2,6 +2,7 @@
 
 import json
 import threading
+from types import SimpleNamespace
 
 import openpyxl
 import pytest
@@ -12,7 +13,9 @@ from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.server import create_server
 from pkdb.identity import Author, IdentityError
+from pkdb.schemas.validation import fail
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.sync import sync_study
@@ -65,6 +68,15 @@ def test_study_detail(api):
     assert (tab2["kind"], tab2["missing_image"]) == ("table", None)
     assert "missing_raw" in tab2
     assert "Example_Fig1.wpd.json" in detail["files"]
+    assert detail["tables"] == [
+        {"file": "subjects.tsv", "kind": "subjects"},
+        {"file": "interventions.tsv", "kind": "interventions"},
+        {"file": "characteristica.tsv", "kind": "characteristica"},
+        {"file": "outputs_Tab2.tsv", "kind": "outputs"},
+        {"file": "timecourses_Fig1.tsv", "kind": "timecourses"},
+        {"file": "scatters_Fig2.tsv", "kind": "scatters"},
+        {"file": "Example_Tab2.tsv", "kind": "raw"},
+    ]
     etag = response_headers["ETag"]
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
     assert again[0] == 304 and again[2] == b"" and again[1]["ETag"] == etag
@@ -102,6 +114,8 @@ def test_invalid_documents_keep_their_revision(api):
     assert detail["review"]["value"] is None and detail["review"]["revision"]
     assert detail["review"]["issues"][0]["code"] == "invalid_review_json"
     assert detail["metadata"]["value"]["licence"] == "open"
+    # The targets come from the same read of review.json as the items.
+    assert detail["targets"] == {}
 
 
 def test_symlinked_review_json_is_not_read(api, tmp_path_factory):
@@ -154,10 +168,44 @@ def test_upload_limits_bound_the_read_routes(api, monkeypatch, limit, value, cod
     assert detail["metadata"]["value"]["licence"] == "open"
     assert detail["review"]["value"]["status"] == "draft"
     assert detail["problems"][0]["code"] == code
-    assert detail["sources"] == [] and detail["files"] == []
+    assert detail["sources"] == [] and detail["files"] == [] and detail["tables"] == []
+    assert detail["targets"] == {}
     for path in (f"{DETAIL}/tables/timecourses_Fig1.tsv", f"{DETAIL}/sources/Fig1"):
         status, _, data = request(server, "GET", path, headers=headers)
         assert status == 413 and "more than" in json.loads(data)["error"]
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    status, _, data = request(
+        server, "POST", "/local/studies/review/preview", body, headers
+    )
+    assert status == 413 and "more than" in json.loads(data)["error"]
+
+
+def test_a_study_that_cannot_be_read_is_not_beyond_the_limits(api, monkeypatch):
+    server, engine, folder = api
+
+    def unreadable(folder, **limits):
+        fail("invalid_tsv", "timecourses_Fig1.tsv cannot be read")
+
+    monkeypatch.setattr(studies, "load_study", unreadable)
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    for method, path, payload in [
+        ("POST", "/local/studies/review/preview", body),
+        ("GET", f"{DETAIL}/tables/timecourses_Fig1.tsv", None),
+    ]:
+        status, _, data = request(server, method, path, payload, headers)
+        refused = json.loads(data)
+        assert status == 422, path
+        assert [issue["code"] for issue in refused["issues"]] == ["invalid_tsv"]
+    detail = _detail(server, headers)
+    assert detail["problems"][0]["code"] == "invalid_tsv"
+    assert detail["tables"] == [] and detail["targets"] == {}
 
 
 def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
@@ -241,6 +289,7 @@ def test_acknowledged_warnings_are_listed_until_dismissed(api):
             "author": "curator",
             "resolved_by": "curator",
             "resolved": created,
+            "scope": "rows",
         }
     ]
 
@@ -418,6 +467,33 @@ def test_study_routes_require_the_session(api):
     assert request(server, "GET", f"{DETAIL}/files/Example_Fig1.png")[0] == 401
 
 
+@pytest.mark.parametrize(
+    ("path", "body"),
+    [
+        (
+            "/local/studies/tables/preview",
+            {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"},
+        ),
+        (
+            "/local/studies/review/preview",
+            {
+                "study": "caffeine/Example",
+                "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+            },
+        ),
+    ],
+)
+def test_preview_routes_require_the_session_and_the_action_token(api, path, body):
+    server, engine, folder = api
+    headers = authenticate(server)
+    without_session = {"X-CSRF-Token": headers["X-CSRF-Token"]}
+    assert request(server, "POST", path, body, without_session)[0] == 401
+    status, _, data = request(server, "POST", path, body, {"Cookie": headers["Cookie"]})
+    assert status == 403
+    assert json.loads(data)["code"] == "action_token"
+    assert request(server, "POST", path, body, headers)[0] == 200
+
+
 def test_state_etag(api):
     server, engine, folder = api
     headers = authenticate(server)
@@ -444,6 +520,87 @@ def test_state_etag(api):
 
 def _detail(server, headers):
     return json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+
+
+def test_detail_and_preview_match_review_targets(api):
+    server, engine, folder = api
+    created = "2026-10-01T10:00:00Z"
+    item = new_ulid()
+    review = {
+        "status": "draft",
+        "items": [
+            {
+                "id": item,
+                "kind": "question",
+                "target": {
+                    "file": "timecourses_Fig1.tsv",
+                    "rows": {"label": "drug_plasma"},
+                },
+                "text": "Which dose?",
+                "author": "curator",
+                "created": created,
+            },
+            {
+                "id": new_ulid(),
+                "kind": "question",
+                "text": "Is the study complete?",
+                "author": "curator",
+                "created": created,
+            },
+        ],
+    }
+    (folder / "review.json").write_text(json.dumps(review))
+    # The TSV line of each time point of the formatted table.
+    lines = (folder / "timecourses_Fig1.tsv").read_text().splitlines()
+    time = lines[0].split("\t").index("time")
+    at = {
+        row.split("\t")[time]: number for number, row in enumerate(lines[1:], start=2)
+    }
+    headers = authenticate(server)
+    detail = _detail(server, headers)
+    # Only items with a target file have a match.
+    assert detail["targets"] == {
+        item: {
+            "lines": sorted(at.values()),
+            "series": {"source": "Fig1", "series": "drug_plasma"},
+            "total": len(at),
+        }
+    }
+    preview = "/local/studies/review/preview"
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    status, _, data = request(server, "POST", preview, body, headers)
+    assert status == 200
+    assert json.loads(data) == {"lines": [at["1"]], "series": None, "total": len(at)}
+    status, _, data = request(
+        server, "POST", preview, {**body, "target": {"rows": {"time": "1"}}}, headers
+    )
+    assert status == 422
+    assert json.loads(data)["issues"][0]["code"] == "invalid_review_json"
+    # A preview writes nothing, needs no user and records no activity.
+    engine.user = ""
+    assert request(server, "POST", preview, body, headers)[0] == 200
+    assert _detail(server, headers)["jobs"] == []
+    assert json.loads((folder / "review.json").read_text()) == review
+
+
+def test_files_version_changes_with_the_files_only(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    _, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    version = json.loads(data)["files_version"]
+    assert isinstance(version, str) and version
+    # A write of the app lists an entry in the activity: the page changes, its files do not.
+    engine._record_write("caffeine/Example", "Saved study.json")
+    _, changed, data = request(server, "GET", DETAIL, headers=headers)
+    assert changed["ETag"] != response_headers["ETag"]
+    assert json.loads(data)["files_version"] == version
+    timecourses = folder / "timecourses_Fig1.tsv"
+    timecourses.write_text(timecourses.read_text().replace("drug_plasma", "drug_urine"))
+    engine.scan()
+    assert _detail(server, headers)["files_version"] != version
 
 
 def test_metadata_write_and_conflict(api):
@@ -665,7 +822,7 @@ def test_writes_need_a_user(api):
         {"action": "open"},
         {"action": "sync"},
         {"action": "resolve", "keep": "workbook"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         tables = request(
             server,
@@ -817,8 +974,9 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     # A line and a column that are left out match every line and column.
     assert json.loads(data) == {
         "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
-        "column mean, line 4 column mean; give the line and column of one",
+        "column mean, line 4 column mean; give the line, column and key of one",
         "issues": [],
+        "code": "ambiguous_warning",
     }
     missing = {**body, "code": "missing_image"}
     status, _, data = request(server, "POST", "/local/studies/review", missing, headers)
@@ -847,6 +1005,87 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     assert item["acknowledges"] == "outside_range" and item["state"] == "resolved"
     assert item["target"]["rows"] == {"label": "drug_plasma", "time": "2"}
     assert json.loads(data)["revision"] == read_review(folder).revision
+
+
+def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    (folder / "Example_Fig1.wpd.json").write_text(
+        json.dumps(project(GOOD, extra=("legend", "axis labels")))
+    )
+    assert format_folder(folder).ok
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "revision": _detail(server, headers)["review"]["revision"],
+        "action": "acknowledge",
+        "code": "unknown_dataset",
+        "file": "Example_Fig1.wpd.json",
+        "line": None,
+        "column": None,
+        "text": "Not data.",
+    }
+    status, _, data = request(server, "POST", "/local/studies/review", body, headers)
+    assert status == 422
+    assert json.loads(data) == {
+        "error": "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json at key "
+        "axis labels, key legend; give the line, column and key of one",
+        "issues": [],
+        "code": "ambiguous_warning",
+    }
+    # A null key matches only warnings without one.
+    status, _, data = request(
+        server, "POST", "/local/studies/review", {**body, "key": None}, headers
+    )
+    assert status == 422 and json.loads(data)["code"] == "no_such_warning"
+    status, _, data = request(
+        server, "POST", "/local/studies/review", {**body, "key": "legend"}, headers
+    )
+    assert status == 200
+    target = json.loads(data)["item"]["target"]
+    assert (target["file"], target["key"], "column" in target) == (
+        "Example_Fig1.wpd.json",
+        "legend",
+        False,
+    )
+    [entry] = _detail(server, headers)["acknowledged"]
+    assert entry["scope"] == "key"
+    assert entry["target"] == {
+        "file": "Example_Fig1.wpd.json",
+        "rows": {},
+        "key": "legend",
+    }
+
+
+def test_a_warning_without_a_row_or_a_key_is_refused_plainly(
+    api, sf_vocabulary, monkeypatch
+):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    unkeyed = make_issue("unknown_dataset", "Old.", file="Example_Fig1.wpd.json")
+    monkeypatch.setattr(
+        studies,
+        "validate_folder",
+        lambda folder, vocabulary: SimpleNamespace(issues=[unkeyed]),
+    )
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "revision": _detail(server, headers)["review"]["revision"],
+        "action": "acknowledge",
+        "code": "unknown_dataset",
+        "file": "Example_Fig1.wpd.json",
+        "text": "Not data.",
+    }
+    status, _, data = request(server, "POST", "/local/studies/review", body, headers)
+    assert status == 422
+    answer = json.loads(data)
+    assert answer["code"] == "no_exact_target"
+    assert answer["error"].startswith(
+        "The warning [unknown_dataset] in Example_Fig1.wpd.json has no row of a data "
+        "table and no key, so it cannot be acknowledged alone."
+    )
+    assert read_review(folder).review.items == []
 
 
 def test_tables_open_uses_the_opener(api, monkeypatch):
@@ -911,17 +1150,44 @@ def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
         .split("\t")[lines[0].split("\t").index("mean")]
         == "5"
     )
-    status, result = tables(action="add", raw="Tab3")
+    status, result = tables(action="add", kind="raw", source="Tab3")
     assert status == 200 and result["ok"] and result["table"] == "Example_Tab3"
     assert "Example_Tab3" in openpyxl.load_workbook(workbook_path(folder)).sheetnames
-    status, result = tables(action="add", table="outputs_Tab3")
+    status, result = tables(action="add", kind="outputs", source="Tab3")
     assert status == 200 and result["ok"]
-    status, result = tables(action="add", table="nonsense")
+    status, result = tables(action="add", kind="outputs", source="nonsense")
     assert status == 200 and not result["ok"]
     assert result["issues"][0]["code"] == "invalid_table_name"
     assert tables(action="add")[0] == 400
-    assert tables(action="add", table="outputs_Tab4", raw="Tab4")[0] == 400
+    assert tables(action="add", kind="outputs")[0] == 400
     assert tables(action="close")[0] == 400
+
+
+def test_table_preview_and_add_by_kind_and_source(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    headers = authenticate(server)
+    preview = "/local/studies/tables/preview"
+    body = {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"}
+    status, _, data = request(server, "POST", preview, body, headers)
+    assert status == 200
+    assert json.loads(data) == {
+        "table": "outputs_Tab3",
+        "file": "outputs_Tab3.tsv",
+        "image": "Example_Tab3.png",
+        "image_found": False,
+        "issues": [],
+    }
+    status, _, data = request(
+        server, "POST", preview, {**body, "kind": "raw", "source": "Fig1"}, headers
+    )
+    assert [issue["message"] for issue in json.loads(data)["issues"]] == [
+        "A raw table needs a paper table source such as Tab3"
+    ]
+    # A preview writes nothing and needs no user.
+    engine.user = ""
+    assert request(server, "POST", preview, body, headers)[0] == 200
+    assert not (folder / "outputs_Tab3.tsv").exists()
 
 
 @pytest.mark.parametrize(
@@ -1103,7 +1369,7 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     for body in [
         {"action": "open"},
         {"action": "sync"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         request(
             server,
@@ -1136,6 +1402,18 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     assert [job["message"] for job in saved if job["action"] == "write"][0] == (
         "Saved study.json"
     )
+    by_message = {job["message"]: job for job in writes}
+    assert by_message[f"Added review item {item}"]["item"] == item
+    assert by_message[f"Added review item {item}"]["parts"] == [
+        {"text": "Added "},
+        {"item": item},
+    ]
+    assert by_message[f"Resolved review item {item}"]["parts"] == [
+        {"text": "Resolved "},
+        {"item": item},
+    ]
+    assert "item" not in by_message["Saved study.json"]
+    assert "parts" not in by_message["Saved study.json"]
 
 
 def test_detail_has_the_reference_and_the_state_of_the_row(api):
@@ -1191,7 +1469,7 @@ def test_tables_refuse_a_symlinked_workbook(api, tmp_path_factory, monkeypatch):
         {"action": "open"},
         {"action": "sync"},
         {"action": "resolve", "keep": "tables"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         status, _, data = request(
             server,

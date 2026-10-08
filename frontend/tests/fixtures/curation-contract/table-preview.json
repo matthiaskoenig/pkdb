@@ -1,0 +1,160 @@
+{
+  "kinds": [
+    "outputs",
+    "timecourses",
+    "scatters",
+    "raw"
+  ],
+  "previews": [
+    {
+      "request": {
+        "kind": "outputs",
+        "source": "Tab3"
+      },
+      "response": {
+        "table": "outputs_Tab3",
+        "file": "outputs_Tab3.tsv",
+        "image": "Demo2020_Tab3.png",
+        "image_found": false,
+        "issues": []
+      }
+    },
+    {
+      "request": {
+        "kind": "timecourses",
+        "source": "Text"
+      },
+      "response": {
+        "table": "timecourses_Text",
+        "file": "timecourses_Text.tsv",
+        "image": null,
+        "image_found": false,
+        "issues": []
+      }
+    },
+    {
+      "request": {
+        "kind": "raw",
+        "source": "Tab2"
+      },
+      "response": {
+        "table": "Demo2020_Tab2",
+        "file": "Demo2020_Tab2.tsv",
+        "image": "Demo2020_Tab2.png",
+        "image_found": true,
+        "issues": [
+          {
+            "code": "table_exists",
+            "severity": "error",
+            "message": "Demo2020_Tab2.tsv already exists",
+            "source": {
+              "file": "Demo2020_Tab2.tsv",
+              "sheet": "Demo2020_Tab2",
+              "row": null,
+              "column": null,
+              "path": []
+            },
+            "category": "layout",
+            "stage": "parse",
+            "field": null,
+            "expected": {},
+            "context": {},
+            "related_sources": [],
+            "suggestions": [],
+            "documentation_url": null
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "kind": "raw",
+        "source": "Fig2"
+      },
+      "response": {
+        "table": "Demo2020_Fig2",
+        "file": "Demo2020_Fig2.tsv",
+        "image": null,
+        "image_found": false,
+        "issues": [
+          {
+            "code": "invalid_table_name",
+            "severity": "error",
+            "message": "A raw table needs a paper table source such as Tab3",
+            "source": null,
+            "category": "layout",
+            "stage": "parse",
+            "field": null,
+            "expected": {},
+            "context": {},
+            "related_sources": [],
+            "suggestions": [],
+            "documentation_url": null
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "kind": "outputs",
+        "source": "Tab 3"
+      },
+      "response": {
+        "table": "outputs_Tab 3",
+        "file": "outputs_Tab 3.tsv",
+        "image": null,
+        "image_found": false,
+        "issues": [
+          {
+            "code": "invalid_table_name",
+            "severity": "error",
+            "message": "Use a source such as Tab3, Fig2A or Text",
+            "source": null,
+            "category": "layout",
+            "stage": "parse",
+            "field": null,
+            "expected": {},
+            "context": {},
+            "related_sources": [],
+            "suggestions": [],
+            "documentation_url": null
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "kind": "outputs",
+        "source": "Tab2"
+      },
+      "response": {
+        "table": "outputs_Tab2",
+        "file": "outputs_Tab2.tsv",
+        "image": "Demo2020_Tab2.png",
+        "image_found": true,
+        "issues": [
+          {
+            "code": "table_exists",
+            "severity": "error",
+            "message": "outputs_Tab2.tsv already exists",
+            "source": {
+              "file": "outputs_Tab2.tsv",
+              "sheet": "outputs_Tab2",
+              "row": null,
+              "column": null,
+              "path": []
+            },
+            "category": "layout",
+            "stage": "parse",
+            "field": null,
+            "expected": {},
+            "context": {},
+            "related_sources": [],
+            "suggestions": [],
+            "documentation_url": null
+          }
+        ]
+      }
+    }
+  ]
+}

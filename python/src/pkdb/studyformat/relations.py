@@ -515,13 +515,24 @@ def _review_rules(study: LoadedStudy) -> Issues:
                     "unknown_review_target",
                     f"Review item {item.id} targets {target.file}, which is not a file of this study",
                     file=REVIEW_JSON,
+                    key=item.id,
                 )
             elif target.rows or target.column:
                 yield make_issue(
                     "unknown_review_target",
                     f"Review item {item.id} targets rows or a column of {target.file}; rows and column apply only to table files",
                     file=REVIEW_JSON,
+                    key=item.id,
                 )
+            continue
+        if target.key is not None:
+            yield make_issue(
+                "unknown_review_target",
+                f"Review item {item.id} targets the key {target.key} of {target.file}; "
+                "a key names a part of a file without rows",
+                file=REVIEW_JSON,
+                key=item.id,
+            )
             continue
         columns = [*target.rows, *([target.column] if target.column else [])]
         unknown = [name for name in columns if name not in table.spec.names]
@@ -530,6 +541,7 @@ def _review_rules(study: LoadedStudy) -> Issues:
                 "unknown_review_target",
                 f"Review item {item.id} targets unknown columns {', '.join(unknown)} of {target.file}",
                 file=REVIEW_JSON,
+                key=item.id,
             )
             continue
         if target.rows and not table.matching_lines(target.rows):
@@ -537,4 +549,5 @@ def _review_rules(study: LoadedStudy) -> Issues:
                 "review_target_unmatched",
                 f"Review item {item.id} no longer matches a row of {target.file}",
                 file=REVIEW_JSON,
+                key=item.id,
             )

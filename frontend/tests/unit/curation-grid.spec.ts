@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SourceLocation, TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
+import type { SourceLocation, TableResponse, TargetMatch, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   columnName,
   issueCells,
@@ -7,6 +7,7 @@ import {
   rawTable,
   ROW,
   targetLines,
+  targetMatch,
   visibleColumns,
 } from "../../src/curation-app/grid";
 import { reviewItem } from "./curation-fixtures";
@@ -60,8 +61,21 @@ describe("visibleColumns", () => {
   });
 });
 
+/** The lines of `lines` as the local server matches a row filter, without a digitized series. */
+function rowsOf(lines: number[] | null): TargetMatch {
+  return { lines, series: null, total: 3 };
+}
+
+describe("targetMatch", () => {
+  it("is what the local server matched for the item, and nothing for an item without a match", () => {
+    const series = { lines: [2], series: { source: "Fig1", series: "caf_plasma" }, total: 3 };
+    expect(targetMatch({ a: series }, reviewItem({ id: "a" }))).toEqual(series);
+    expect(targetMatch({ a: series }, reviewItem({ id: "b" }))).toEqual({ lines: null, series: null, total: null });
+  });
+});
+
 describe("targetLines", () => {
-  it("matches the rows of the open items about the table by their row filters", () => {
+  it("joins the lines that the server matched for the open items about the file", () => {
     const items = [
       reviewItem({ id: "a", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_cl" } } }),
       reviewItem({ id: "b", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_vd", mean: "0.7" } } }),
@@ -71,18 +85,28 @@ describe("targetLines", () => {
       reviewItem({ id: "e", target: { file: "outputs_Tab2.tsv", column: "sd" } }),
       reviewItem({ id: "f", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_vd", mean: "0.8" } } }),
       reviewItem({ id: "g" }),
+      // An item that the server has not matched yet adds no rows either.
+      reviewItem({ id: "h", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_cl" } } }),
     ];
-    expect([...targetLines(outputs, items)].sort()).toEqual([2, 4]);
+    const targets = {
+      a: rowsOf([2]),
+      b: rowsOf([4, 2]),
+      c: rowsOf([3]),
+      d: rowsOf([5]),
+      e: rowsOf(null),
+      f: rowsOf([]),
+    };
+    expect([...targetLines("outputs_Tab2.tsv", items, targets)].sort()).toEqual([2, 4]);
   });
 
-  it("finds no rows in a raw table, which has no column names to filter", () => {
-    const items = [reviewItem({ target: { file: "Example_Tab2.tsv", rows: { A: "CL" } } })];
-    expect(targetLines(raw, items).size).toBe(0);
+  it("finds no rows in a raw table, which the server matches no row filter in", () => {
+    const items = [reviewItem({ id: "a", target: { file: "Example_Tab2.tsv", rows: { A: "CL" } } })];
+    expect(targetLines(raw.file, items, { a: rowsOf(null) }).size).toBe(0);
   });
 });
 
 describe("itemsWithoutRows", () => {
-  it("counts the open items about the whole table and those whose row filters match no row", () => {
+  it("counts the open items about the file without a row filter and those whose filter matches no row", () => {
     const items = [
       reviewItem({ id: "a", target: { file: "outputs_Tab2.tsv", column: "sd" } }),
       reviewItem({ id: "b", target: { file: "outputs_Tab2.tsv", rows: {} } }),
@@ -91,10 +115,18 @@ describe("itemsWithoutRows", () => {
       reviewItem({ id: "e", state: "dismissed", target: { file: "outputs_Tab2.tsv" } }),
       reviewItem({ id: "f", target: { file: "subjects.tsv" } }),
     ];
-    expect(itemsWithoutRows(outputs, items)).toEqual({ whole: 2, unmatched: 1 });
-    // A raw table has no column names to filter: its items are about the whole table.
-    const rawItems = [reviewItem({ target: { file: "Example_Tab2.tsv", rows: { A: "CL" } } })];
-    expect(itemsWithoutRows(raw, rawItems)).toEqual({ whole: 1, unmatched: 0 });
+    const targets = {
+      a: rowsOf(null),
+      b: rowsOf(null),
+      c: rowsOf([]),
+      d: rowsOf([2]),
+      e: rowsOf(null),
+      f: rowsOf(null),
+    };
+    expect(itemsWithoutRows(outputs.file, items, targets)).toEqual({ whole: 2, unmatched: 1 });
+    // The server matches no row filter in a raw table: its items are about the whole table.
+    const rawItems = [reviewItem({ id: "r", target: { file: "Example_Tab2.tsv", rows: { A: "CL" } } })];
+    expect(itemsWithoutRows(raw.file, rawItems, { r: rowsOf(null) })).toEqual({ whole: 1, unmatched: 0 });
   });
 });
 

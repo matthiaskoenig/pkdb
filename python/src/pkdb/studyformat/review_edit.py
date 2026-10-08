@@ -54,8 +54,26 @@ class NoSuchWarning(ReviewError):
     code = "no_such_warning"
 
 
+class AmbiguousWarning(ReviewError):
+    """Warnings at several locations have the code, file, line, column and key to acknowledge.
+
+    One item acknowledges the warnings of one location: the same row, column and key.
+    """
+
+    code = "ambiguous_warning"
+
+
+class NoExactTarget(ReviewError):
+    """A warning without a row of a data table and without a key.
+
+    A target of its file alone would cover every warning of its code in the file.
+    """
+
+    code = "no_exact_target"
+
+
 class Wildcard(Enum):
-    """A line or column of `matching_warnings` that every warning has."""
+    """A line, column or key of `matching_warnings` that every warning has."""
 
     ANY = "any"
 
@@ -325,17 +343,32 @@ def set_status(
     return _update(folder, revision, change)[1]
 
 
-def target_for_issue(study: LoadedStudy, issue: ValidationIssue) -> ReviewTarget | None:
-    """The review target that pins a warning to its file, row and column."""
+def target_for_issue(study: LoadedStudy, issue: ValidationIssue) -> ReviewTarget:
+    """The review target that acknowledges exactly this warning.
+
+    A warning at a row of a data table gets a row filter that matches only that row, and its
+    column; a warning of a file without rows gets its key. A warning with neither raises
+    `NoExactTarget`, because a target of its file alone would cover every warning of its code
+    in the file.
+    """
     source = issue.source
     if source is None:
-        return None
+        raise NoExactTarget(
+            f"The warning [{issue.code}] has no file, so it cannot be acknowledged alone"
+        )
     table = study.table(source.file)
     row = None
     if table is not None and source.row is not None:
         row = next((row for row in table.rows if row.line == source.row), None)
     if table is None or row is None:
-        return ReviewTarget(file=source.file)
+        if source.key is not None:
+            return ReviewTarget(file=source.file, key=source.key)
+        raise NoExactTarget(
+            f"The warning [{issue.code}] in {source.file} has no row of a data table and no "
+            "key, so it cannot be acknowledged alone. To acknowledge every "
+            f"[{issue.code}] warning of {source.file}, add a review item with "
+            f"--acknowledges {issue.code} --file {source.file}"
+        )
     filters = {
         name: row.cells[name] for name in table.spec.sort_columns if row.cells.get(name)
     }
@@ -354,11 +387,12 @@ def matching_warnings(
     file: str,
     line: int | None | Wildcard = ANY,
     column: str | None | Wildcard = ANY,
+    key: str | None | Wildcard = ANY,
 ) -> list[ValidationIssue]:
-    """The warnings `code` of `file` at `line` and `column`.
+    """The warnings `code` of `file` at `line`, `column` and `key`.
 
-    `ANY` matches every line or column, and None only a warning without a line or
-    without a column.
+    `ANY` matches every line, column or key, and None only a warning without a line,
+    without a column or without a key.
     """
     return [
         issue
@@ -369,14 +403,19 @@ def matching_warnings(
         and issue.source.file == file
         and (line is ANY or issue.source.row == line)
         and (column is ANY or issue.source.header == column)
+        and (key is ANY or issue.source.key == key)
     ]
 
 
 def warning_locations(
     issues: list[ValidationIssue],
-) -> set[tuple[int | None, str | None]]:
-    """The rows and columns of these issues; one item acknowledges the warnings of one."""
-    return {(source.row, source.header) for issue in issues if (source := issue.source)}
+) -> set[tuple[int | None, str | None, str | None]]:
+    """The rows, columns and keys of these issues; one item acknowledges the warnings of one."""
+    return {
+        (source.row, source.header, source.key)
+        for issue in issues
+        if (source := issue.source)
+    }
 
 
 def acknowledge(

@@ -87,35 +87,56 @@ export function emptyText(state: StateFilter, kind: KindFilter): string {
   return state === "all" ? `No ${noun}.` : `No ${STATE_LABELS[state].toLowerCase()} ${noun}.`;
 }
 
-/** `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, or `Whole study` without a file. */
+/**
+ * `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, `Demo2020_Fig1.wpd.json ·
+ * legend` with a key, or `Whole study` without a file.
+ */
 export function targetText(target: ReviewTarget | null | undefined): string {
   if (!target?.file) return "Whole study";
   const rows = Object.entries(target.rows ?? {})
     .map(([column, value]) => `${column} = ${value}`)
     .join(", ");
-  return [target.file, rows, target.column ? `column ${target.column}` : ""].filter(Boolean).join(" · ");
+  return [target.file, rows, target.column ? `column ${target.column}` : "", target.key ?? ""]
+    .filter(Boolean)
+    .join(" · ");
 }
 
-/** A timecourse or scatter table of a figure, `timecourses_<Fig>.tsv` or `scatters_<Fig>.tsv`. */
-const FIGURE_TABLE = /^(timecourses|scatters)_(Fig[A-Za-z0-9_-]+)\.tsv$/;
+/** A part of a text: plain text, or the reference to a review item, linked to the item `item`. */
+export type TextPart = { text: string; item?: string };
 
-/** The column that names the series of a figure table, as the datasets of its digitization. */
-const SERIES_COLUMNS: Record<string, string> = { timecourses: "label", scatters: "name" };
+/** The characters of an item text that a reference quotes. */
+const QUOTE_LENGTH = 40;
+
+/** The start of a text, cut after a word, in one line. */
+function quote(text: string): string {
+  const line = text.replace(/\s+/g, " ").trim();
+  if (line.length <= QUOTE_LENGTH) return line;
+  const cut = line.slice(0, QUOTE_LENGTH + 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 0 ? cut.slice(0, space) : line.slice(0, QUOTE_LENGTH)).replace(/[\s,;:.]+$/, "")}…`;
+}
+
+/** A review item by its kind and a short quote of its text: `question “Is the dose of 150 mg the caffeine base…”`. */
+export function itemText(item: ReviewItem): string {
+  return `${KIND_LABELS[item.kind].toLowerCase()} “${quote(item.text)}”`;
+}
 
 /**
- * The digitized series that a target names: the `label` rows of the timecourse table of a figure
- * and the `name` rows of its scatter table are series of the figure; null for any other target.
+ * The target as `targetText` says it, in parts: a key that is the id of a review item of `items`,
+ * as warnings about review.json have, names that item by `itemText`, linked to it.
  */
-export function seriesOfTarget(target: ReviewTarget | null | undefined): { source: string; series: string } | null {
-  const match = target?.file ? FIGURE_TABLE.exec(target.file) : null;
-  const series = match ? target?.rows?.[SERIES_COLUMNS[match[1]!]!] : undefined;
-  return match && series ? { source: match[2]!, series } : null;
+export function targetParts(target: ReviewTarget | null | undefined, items: readonly ReviewItem[]): TextPart[] {
+  const key = target?.key;
+  const item = key === undefined ? undefined : items.find((candidate) => candidate.id === key);
+  if (!target?.file || !item) return [{ text: targetText(target) }];
+  // A key excludes rows and a column.
+  return [{ text: `${target.file} · ` }, { text: itemText(item), item: item.id }];
 }
 
-/** The rows whose cells, as printed in the TSV file, have every value of `filters`. */
-export function matchingRows(header: readonly string[], rows: readonly TableRow[], filters: Record<string, string>): TableRow[] {
-  const wanted = Object.entries(filters).map(([column, value]) => [header.indexOf(column), value] as const);
-  return rows.filter((row) => wanted.every(([index, value]) => index >= 0 && (row.cells[index] ?? "") === value));
+/** The rows at `lines`, in their order in the table. */
+export function rowsAt(rows: readonly TableRow[], lines: readonly number[]): TableRow[] {
+  const wanted = new Set(lines);
+  return rows.filter((row) => wanted.has(row.line));
 }
 
 /** `Matches 2 of 3 rows.`, or `Matches none of 3 rows.` */

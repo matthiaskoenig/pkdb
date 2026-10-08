@@ -15,6 +15,8 @@ from curation_http import authenticate, request
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.launch import open_path
+from pkdb.schemas.validation import StudyValidationError, refusal
+from pkdb.studyformat.load import BeyondLimits
 
 
 @pytest.fixture
@@ -114,6 +116,28 @@ def test_host_origin_and_csrf_rejected(local_server):
     )
 
 
+def test_a_refused_action_token_has_a_code(local_server):
+    """The app sends an action again with a fresh token when the code says so, never by the text."""
+    server, engine = local_server
+    headers = authenticate(server)
+    for token in ({"X-CSRF-Token": "stale"}, {}):
+        status, _, body = request(
+            server,
+            "POST",
+            "/local/jobs",
+            {"ids": [], "action": "validate"},
+            {key: value for key, value in headers.items() if key != "X-CSRF-Token"}
+            | token,
+        )
+        assert status == 403
+        assert json.loads(body) == {
+            "error": "Missing or invalid action token",
+            "code": transport.ACTION_TOKEN,
+        }
+    assert transport.ACTION_TOKEN == "action_token"
+    engine.enqueue.assert_not_called()
+
+
 def test_payload_limits_paths_and_errors(local_server):
     server, engine = local_server
     headers = authenticate(server)
@@ -155,6 +179,39 @@ def test_payload_limits_paths_and_errors(local_server):
     )
     assert status == 500
     assert b"secret-api-key" not in body
+
+
+def test_only_a_study_beyond_the_upload_limits_answers_413(local_server):
+    """A study that cannot be read answers 422 with its issues; it is not too large."""
+    server, engine = local_server
+    headers = authenticate(server)
+    engine.study_version.return_value = "v1"
+    limit = BeyondLimits(refusal("row_limit", "The study tables have more than 3 rows"))
+    unreadable = StudyValidationError(
+        refusal("invalid_tsv", "timecourses_Fig1.tsv cannot be read")
+    )
+    preview = {"study": "caffeine/Example", "target": {"file": "timecourses_Fig1.tsv"}}
+    for method, path, body, route in [
+        ("POST", "/local/studies/review/preview", preview, engine.target_preview),
+        (
+            "GET",
+            "/local/studies/caffeine/Example/tables/timecourses_Fig1.tsv",
+            None,
+            engine.study_table,
+        ),
+    ]:
+        route.side_effect = limit
+        status, _, data = request(server, method, path, body, headers)
+        assert (status, json.loads(data)) == (
+            413,
+            {"error": "The study tables have more than 3 rows"},
+        ), path
+        route.side_effect = unreadable
+        status, _, data = request(server, method, path, body, headers)
+        assert status == 422, path
+        refused = json.loads(data)
+        assert refused["error"] == "timecourses_Fig1.tsv cannot be read"
+        assert [issue["code"] for issue in refused["issues"]] == ["invalid_tsv"]
 
 
 def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):

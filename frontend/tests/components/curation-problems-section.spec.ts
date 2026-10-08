@@ -1,21 +1,26 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
+import { defineComponent, h, type Component, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
 import type {
   AcknowledgedWarning,
   Job,
+  Problem,
+  ReviewTarget,
   Snapshot,
   StudyDetail,
+  Suggestion,
   TablesResult,
-  ValidationIssue,
 } from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
-import { DID_YOU_MEAN } from "../../src/curation-app/problems";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
+import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
+import messagesFixture from "../fixtures/curation-contract/messages.json";
+import problemsFixture from "../fixtures/curation-contract/problems.json";
 import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
 import {
   button,
@@ -41,53 +46,65 @@ const ROUNDED = "01JA33A1B2C3D4E5F6G7H8J9K0";
 const SMOKERS = "01JA34B1C2D3E4F5G6H7J8K9M0";
 const ADDED = "01JA40A1B2C3D4E5F6G7H8J9K0";
 
-const unknownGroup: ValidationIssue = {
+// Suggestions of the library: the spellings of an unknown substance, the candidates of an
+// unknown subject group and the units of a measurement (python/tests/test_curation_contract.py).
+const [termSuggestion, groupSuggestion, unitSuggestion] = messagesFixture.suggestions as Suggestion[];
+const unknownGroup: Problem = {
   code: "unknown_reference",
   severity: "error",
-  message: "subjects.tsv has no row named 'smoker'",
+  acknowledgeable: false,
+  message: "subjects.tsv has no row named 'al'",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 3, column: "E", cell: "E3", header: "group" },
-  suggestions: [{ kind: "fix", message: DID_YOU_MEAN, candidates: ["smokers", "all"] }],
+  suggestions: [groupSuggestion!],
 };
-const unitDimension: ValidationIssue = {
+const unknownSubstance: Problem = {
+  code: "unknown_substance",
+  severity: "error",
+  acknowledgeable: false,
+  message: "Unknown substance: cafeine",
+  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "H", cell: "H2", header: "substance" },
+  suggestions: [termSuggestion!],
+};
+const unitDimension: Problem = {
   code: "unit_dimension",
   severity: "error",
-  message: "mg/lightyear cannot be converted to a unit of cmax",
+  acknowledgeable: false,
+  message: "mg cannot be converted to a unit of concentration",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "X", cell: "X2", header: "unit" },
-  suggestions: [
-    {
-      kind: "fix",
-      message: "Units of cmax; amounts of a substance convert with its molar mass.",
-      candidates: ["g/l", "mol/l"],
-    },
-  ],
+  suggestions: [unitSuggestion!],
 };
-const outsideRange: ValidationIssue = {
+const outsideRange: Problem = {
   code: "outside_range",
   severity: "warning",
+  acknowledgeable: true,
   message: "mean 512 is above the usual range of a plasma concentration",
   source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 6, column: "O", cell: "O6", header: "mean" },
 };
-const unusedIntervention: ValidationIssue = {
+const unusedIntervention: Problem = {
   code: "unused_intervention",
   severity: "warning",
+  acknowledgeable: true,
   message: "'caf_po_300' is not referenced by any row",
   source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
 };
-const digitizedMismatch: ValidationIssue = {
+const digitizedMismatch: Problem = {
   code: "digitized_mismatch",
   severity: "warning",
+  acknowledgeable: true,
   message: "1 point of dataset 'caf_plasma_D150' has no mapped row within 2 pixels",
-  source: { file: "Example_Fig1.wpd.json", path: [] },
+  source: { file: "Example_Fig1.wpd.json", path: [], key: "caf_plasma_D150" },
 };
-const studyJson: ValidationIssue = {
+const studyJson: Problem = {
   code: "invalid_study_json",
   severity: "error",
+  acknowledgeable: false,
   message: "study.json: curators.0.rating: Input should be a multiple of 0.5",
   source: { file: "study.json", path: [] },
 };
-const rowLimit: ValidationIssue = {
+const rowLimit: Problem = {
   code: "row_limit",
   severity: "error",
+  acknowledgeable: false,
   message: "The study tables have more than 1000000 rows",
   source: null,
 };
@@ -100,6 +117,7 @@ const rounded: AcknowledgedWarning = {
   author: "mkoenig",
   resolved_by: "mkoenig",
   resolved: "2026-10-06T09:00:00Z",
+  scope: "rows",
 };
 const smokers: AcknowledgedWarning = {
   id: SMOKERS,
@@ -109,7 +127,19 @@ const smokers: AcknowledgedWarning = {
   author: "janekg",
   resolved_by: null,
   resolved: null,
+  scope: "study",
 };
+
+// Two datasets of a WebPlotDigitizer project without mapped rows, and the acknowledgements that the
+// local server lists: one of a dataset by its key, and one of a whole file as review.json files
+// written before keys hold it (python/tests/test_curation_contract.py).
+const [legendDataset, labelsDataset] = acknowledgementsFixture.warnings as Problem[];
+// How the local server refuses an acknowledgement, with its message and code.
+const refusals = acknowledgementsFixture.refusals;
+const [legacyAcknowledged, keyedAcknowledged] = (acknowledgementsFixture.acknowledged as Omit<
+  AcknowledgedWarning,
+  "resolved"
+>[]).map((entry) => ({ ...entry, resolved: "2026-09-18T07:00:00Z" }) as AcknowledgedWarning);
 
 /** The problems of the last validation of caffeine/Example in five files, with two acknowledged warnings. */
 function withProblems(changes: Partial<StudyDetail> = {}): StudyDetail {
@@ -155,13 +185,19 @@ function job(id: string, action: Job["action"], created: string): Job {
 const WRITTEN = "2026-10-07T12:00:00.500000+00:00";
 
 const acknowledge: Handler = (body) => {
+  // The target of exactly the warning: its key, or its row and column.
+  const file = String(body?.file);
+  const target: ReviewTarget =
+    typeof body?.key === "string"
+      ? { file, key: body.key }
+      : { file, rows: { line: String(body?.line) }, ...(typeof body?.column === "string" ? { column: body.column } : {}) };
   const item = reviewItem({
     id: ADDED,
     kind: "issue",
     state: "resolved",
     acknowledges: String(body?.code),
     text: String(body?.text),
-    target: { file: String(body?.file) },
+    target,
     author: "curator",
     resolved_by: "curator",
   });
@@ -180,6 +216,7 @@ const acknowledge: Handler = (body) => {
         author: "curator",
         resolved_by: "curator",
         resolved: "2026-10-07T12:00:00Z",
+        scope: target.key ? "key" : "rows",
       },
     ],
   };
@@ -191,10 +228,18 @@ function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
 }
 
 /** The problems section inside the app's router view, with `routes` besides the defaults. */
+/** A problem as a bare list item with its code, for tests of the list rather than its items. */
+const ProblemItemStub = defineComponent({
+  name: "ProblemItem",
+  props: { issue: { type: Object as PropType<Problem>, required: true } },
+  setup: (props) => () => h("li", { class: "problem" }, [h("code", { class: "problem-code" }, props.issue.code)]),
+});
+
 async function mountSection(
   detail: StudyDetail = withProblems(),
   routes: Record<string, unknown> = {},
   state: Snapshot = snapshot(),
+  stubs: Record<string, Component> = {},
 ) {
   served = detail;
   requests = serveApi({
@@ -210,7 +255,7 @@ async function mountSection(
   router = makeRouter();
   await router.push(SECTION);
   await router.isReady();
-  const wrapper = mount(RouterView, { attachTo: document.body, global: { plugins: [pinia, router] } });
+  const wrapper = mount(RouterView, { attachTo: document.body, global: { plugins: [pinia, router], stubs } });
   await flushPromises();
   return wrapper;
 }
@@ -264,6 +309,15 @@ function problem(code: string): DOMWrapper<HTMLElement> {
   return found[0]!;
 }
 
+/** The shown issue whose message contains `text`. */
+function problemWith(text: string): DOMWrapper<HTMLElement> {
+  const found = section()
+    .findAll<HTMLElement>(".problem")
+    .filter((candidate) => candidate.get(".problem-message").text().includes(text));
+  if (found.length !== 1) throw new Error(`Expected one issue with "${text}", found ${found.length}`);
+  return found[0]!;
+}
+
 /** An element of the page, from `get` or `find`. */
 type Within = Pick<DOMWrapper<Element>, "findAll">;
 
@@ -278,10 +332,6 @@ function control(within: Within, name: string): DOMWrapper<HTMLElement> {
   const found = controls(within, name);
   if (found.length !== 1) throw new Error(`Expected one control "${name}", found ${found.length}`);
   return found[0]!;
-}
-
-function textOf(element: Pick<DOMWrapper<Element>, "text">): string {
-  return element.text().replace(/\s+/g, " ").trim();
 }
 
 function dialog() {
@@ -360,34 +410,67 @@ describe("issues", () => {
 
     const group = problem("unknown_reference");
     expect(group.get(".problem-severity").text()).toBe("Error");
-    expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'smoker'");
+    expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'al'");
     expect(group.get(".problem-location").text()).toBe("line 3 · group · sheet cell outputs_Tab2!E3");
     // Each candidate is a chip of its own.
     expect(group.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
-    expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["smokers", "all"]);
+    expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["all"]);
+    expect(group.find(".problem-suggestion-note").exists()).toBe(false);
 
     const unit = problem("unit_dimension");
+    // A hint comes before its candidates.
     expect(unit.get(".problem-suggestion-lead").text()).toBe(
-      "Units of cmax; amounts of a substance convert with its molar mass.",
+      "Units of concentration; amounts of a substance convert with its molar mass.",
     );
-    expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["g/l", "mol/l"]);
+    expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["mg/l", "g/l"]);
 
     expect(problem("outside_range").get(".problem-severity").text()).toBe("Warning");
-    // An issue of a whole file names no location below the file.
-    expect(problem("digitized_mismatch").find(".problem-location").exists()).toBe(false);
+    // An issue of a whole file names no location below the file, or the key that tells it apart.
+    expect(problem("invalid_study_json").find(".problem-location").exists()).toBe(false);
+    expect(problem("digitized_mismatch").get(".problem-location").text()).toBe("caf_plasma_D150");
+  });
+
+  it("offers the spellings of an unknown term with their caveat after them", async () => {
+    await mountSection(withProblems({ problems: [unknownSubstance], counts: { errors: 1, warnings: 0 } }));
+    const term = problem("unknown_substance");
+    expect(term.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
+    expect(term.findAll(".problem-candidate").map((item) => item.text())).toEqual(termSuggestion!.candidates);
+    expect(term.get(".problem-suggestion-note").text()).toBe("Candidates are spelling suggestions, not equivalent terms.");
   });
 
   it("renders a long list in steps, so that the first issues show at once", async () => {
-    const many: ValidationIssue[] = Array.from({ length: 250 }, (_, index) => ({
+    // The frames run when the test says so: a busy machine neither skips nor delays a step.
+    const frames = new Map<number, FrameRequestCallback>();
+    let frameIds = 0;
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      frames.set(++frameIds, callback);
+      return frameIds;
+    });
+    vi.spyOn(window, "cancelAnimationFrame").mockImplementation((id) => void frames.delete(id));
+    async function nextFrame(): Promise<void> {
+      const due = [...frames.values()];
+      frames.clear();
+      for (const callback of due) callback(performance.now());
+      await flushPromises();
+    }
+    const many: Problem[] = Array.from({ length: 250 }, (_, index) => ({
       ...outsideRange,
       message: `mean ${index} lies outside [min, max]`,
       source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
     }));
-    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }));
-    expect(codes().length).toBeLessThan(250);
-    expect(codes().length).toBeGreaterThanOrEqual(100);
+    // Only the steps count here: the items are bare list items.
+    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }), {}, snapshot(), {
+      ProblemItem: ProblemItemStub,
+    });
+    // The first step of 100 issues shows at once, and each frame adds the next step.
+    expect(codes()).toHaveLength(100);
     expect(section().get(".problem-group-counts").text()).toBe("250 warnings");
-    await vi.waitFor(() => expect(codes()).toHaveLength(250));
+    await nextFrame();
+    expect(codes()).toHaveLength(200);
+    await nextFrame();
+    expect(codes()).toHaveLength(250);
+    await nextFrame();
+    expect(codes()).toHaveLength(250);
   });
 
   it("says how many problems the last validation left out", async () => {
@@ -410,6 +493,7 @@ describe("issues", () => {
         problems: [rowLimit, unitDimension],
         counts: { errors: 2, warnings: 0 },
         files: [],
+        tables: [],
         sources: [],
       }),
     );
@@ -460,7 +544,7 @@ describe("actions", () => {
     await flushPromises();
     const alert = section().get(".problems-failure");
     expect(alert.text()).toContain("The workbook could not be opened.");
-    expect(alert.text()).toContain("mg/lightyear cannot be converted to a unit of cmax");
+    expect(alert.text()).toContain("mg cannot be converted to a unit of concentration");
     await alert.get('button[aria-label="Close"]').trigger("click");
     await flushPromises();
     expect(section().find(".problems-failure").exists()).toBe(false);
@@ -495,6 +579,21 @@ describe("acknowledgements", () => {
       expect(controls(problem(code), "Acknowledge")).toHaveLength(0);
   });
 
+  it("offers no Acknowledge for a warning of a stopped sync, which no review item can acknowledge", async () => {
+    // Problems as the local server lists them after a validation and after a sync stopped by a
+    // conflict in a workbook without its base sheet (python/tests/test_curation_contract.py).
+    const [unused, mismatch] = problemsFixture.validated as Problem[];
+    const [baseMissing, conflict] = problemsFixture.synced as Problem[];
+    await mountSection(
+      withProblems({ problems: [unused!, mismatch!, baseMissing!, conflict!], counts: { errors: 1, warnings: 3 } }),
+    );
+    expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(1);
+    expect(controls(problem("digitized_mismatch"), "Acknowledge")).toHaveLength(1);
+    expect(problem("workbook_base_missing").text()).toContain("Warning");
+    expect(controls(problem("workbook_base_missing"), "Acknowledge")).toHaveLength(0);
+    expect(controls(problem("sync_conflict"), "Acknowledge")).toHaveLength(0);
+  });
+
   it("acknowledges a warning at its file, line and column with a required reason", async () => {
     await mountSection();
     await openAcknowledge("unused_intervention");
@@ -522,6 +621,7 @@ describe("acknowledgements", () => {
         file: "interventions.tsv",
         line: 3,
         column: "name",
+        key: null,
         text: "The paper lists the dose, but no group received it.",
       },
     ]);
@@ -667,15 +767,7 @@ describe("acknowledgements", () => {
 
   it("says plainly that a warning is no longer in the files", async () => {
     await mountSection(withProblems(), {
-      [`POST ${REVIEW}`]: () =>
-        json(
-          {
-            error: "No warning [outside_range] in timecourses_Fig1.tsv matches",
-            issues: [],
-            code: "no_such_warning",
-          },
-          { status: 422 },
-        ),
+      [`POST ${REVIEW}`]: () => json({ ...refusals.missing, issues: [] }, { status: 422 }),
     });
     await openAcknowledge("outside_range");
     await textArea("Reason", dialog().element).setValue("Read from the figure as printed.");
@@ -686,9 +778,10 @@ describe("acknowledgements", () => {
     );
   });
 
-  it("acknowledges a warning of a whole file without a line or column", async () => {
+  it("acknowledges a warning of a whole file by its key", async () => {
     await mountSection();
     await openAcknowledge("digitized_mismatch");
+    expect(dialog().text()).toContain("Example_Fig1.wpd.json · caf_plasma_D150");
     await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
@@ -702,56 +795,67 @@ describe("acknowledgements", () => {
         // Null is exact: only the warnings of the file without a line or column.
         line: null,
         column: null,
+        key: "caf_plasma_D150",
         text: "The point lies on the axis.",
       },
     ]);
   });
 
-  it("tells that a warning without a row in a data table is acknowledged in its whole file", async () => {
-    const second: ValidationIssue = {
-      ...digitizedMismatch,
-      message: "2 points of dataset 'caf_plasma_D300' have no mapped row within 2 pixels",
-    };
-    const problems = [outsideRange, digitizedMismatch, second];
+  it("acknowledges one dataset of a project by its key and keeps the warning of the other", async () => {
+    const problems = [outsideRange, legendDataset!, labelsDataset!];
     await mountSection(withProblems({ problems, counts: { errors: 0, warnings: 3 } }));
-    const items = section().findAll<HTMLElement>(".problem");
-    const opener = control(items[1]!, "Acknowledge");
+    const legend = problemWith("'legend'");
+    const opener = control(legend, "Acknowledge");
     opener.element.focus();
     await opener.trigger("click");
     await flushPromises();
-    const scope = dialog().get(".acknowledge-scope");
-    expect(textOf(scope.get(".acknowledge-scope-text"))).toBe(
-      "This warning has no row in a data table. The acknowledgement covers every digitized_mismatch warning in " +
-        "Example_Fig1.wpd.json, also later ones. It covers 2 warnings now.",
-    );
-    expect(scope.findAll(".acknowledge-covered li").map(textOf)).toEqual([digitizedMismatch.message, second.message]);
-
-    await textArea("Reason", dialog().element).setValue("The points lie on the axis.");
+    expect(dialog().text()).toContain("Demo2020_Fig1.wpd.json · legend");
+    expect(dialog().text()).not.toContain("Covers every");
+    await textArea("Reason", dialog().element).setValue("The legend is no series.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
-    // Both warnings leave the list after the next validation.
-    expect(section().findAll(".problem-acknowledged")).toHaveLength(2);
-    expect(notice()).toBe("2 warnings digitized_mismatch acknowledged.");
+    expect(posted(REVIEW)).toEqual([
+      {
+        study: "caffeine/Example",
+        revision: "review-7",
+        action: "acknowledge",
+        ...acknowledgementsFixture.payloads[0],
+        text: "The legend is no series.",
+      },
+    ]);
+    expect(notice()).toBe("Warning unknown_dataset acknowledged.");
+    // Only the acknowledged dataset is marked; the other keeps its Acknowledge.
+    expect(problemWith("'legend'").find(".problem-acknowledged").exists()).toBe(true);
+    expect(problemWith("'axis_labels'").find(".problem-acknowledged").exists()).toBe(false);
+    expect(controls(problemWith("'axis_labels'"), "Acknowledge")).toHaveLength(1);
+    // The focus moves to the Acknowledge of the other dataset.
+    expect(document.activeElement).toBe(control(problemWith("'axis_labels'"), "Acknowledge").element);
   });
 
-  it("names no wider scope for a warning at a row of a data table", async () => {
-    await mountSection();
-    await openAcknowledge("outside_range");
-    expect(dialog().find(".acknowledge-scope").exists()).toBe(false);
-  });
-
-  it("keeps the dialog open with the locations when several warnings match", async () => {
-    const ambiguous =
-      "2 warnings [digitized_mismatch] match in Example_Fig1.wpd.json at line 3, line 5; " +
-      "give the line and column of one";
+  it("keeps the dialog open with a plain sentence when several warnings match", async () => {
     await mountSection(withProblems(), {
-      [`POST ${REVIEW}`]: () => json({ error: ambiguous, issues: [] }, { status: 422 }),
+      [`POST ${REVIEW}`]: () => json({ ...refusals.ambiguous, issues: [] }, { status: 422 }),
     });
     await openAcknowledge("digitized_mismatch");
     await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
     await control(dialog(), "Acknowledge").trigger("click");
     await flushPromises();
-    expect(dialog().get(".acknowledge-failure").text()).toBe(`The warning was not acknowledged. ${ambiguous}`);
+    expect(dialog().get(".acknowledge-failure").text()).toBe(
+      "Several warnings match this location. Validate the study and try again.",
+    );
+    expect(textArea("Reason", dialog().element).element.value).toBe("The point lies on the axis.");
+  });
+
+  it("says plainly when a warning cannot be acknowledged on its own", async () => {
+    await mountSection(withProblems(), {
+      [`POST ${REVIEW}`]: () => json({ ...refusals.inexact, issues: [] }, { status: 422 }),
+    });
+    await openAcknowledge("digitized_mismatch");
+    await textArea("Reason", dialog().element).setValue("The point lies on the axis.");
+    await control(dialog(), "Acknowledge").trigger("click");
+    await flushPromises();
+    // The hint of the server names options of pkdb review, which the app has no use for.
+    expect(dialog().get(".acknowledge-failure").text()).toBe("This warning cannot be acknowledged on its own.");
     expect(textArea("Reason", dialog().element).element.value).toBe("The point lies on the axis.");
   });
 
@@ -834,6 +938,59 @@ describe("acknowledgements", () => {
     expect(entries[1]!.text()).toContain("Acknowledged by Jan Grzegorzewski. The review item is open.");
     expect(control(entries[1]!, "Show the review item").attributes("href")).toBe(
       `#/studies/caffeine/Example/review?item=${SMOKERS}`,
+    );
+  });
+
+  it("says which acknowledgements cover more than their own warning", async () => {
+    await mountSection(withProblems({ acknowledged: [rounded, legacyAcknowledged!, keyedAcknowledged!, smokers] }));
+    const entries = section().get(".problems-acknowledged").findAll("li");
+    const scope = (index: number) => entries[index]!.find(".acknowledged-scope");
+    // A target of a file alone, written before acknowledgements were exact, covers every warning of its code there.
+    expect(entries[1]!.text()).toContain("timecourses_Fig1.tsv");
+    expect(scope(1).text()).toBe("Covers every digitized_mismatch warning in timecourses_Fig1.tsv, also later ones.");
+    expect(scope(3).text()).toBe("Covers every unused_subject warning of the study, also later ones.");
+    // Rows and keys cover just their warnings.
+    expect(scope(0).exists()).toBe(false);
+    expect(entries[2]!.text()).toContain("Demo2020_Fig1.wpd.json · legend");
+    expect(scope(2).exists()).toBe(false);
+  });
+
+  it("names the review item that an acknowledgement of a warning about review.json targets", async () => {
+    const UNMATCHED = "01JA35C1D2E3F4G5H6J7K8M9N0";
+    const unmatched = reviewItem({
+      id: UNMATCHED,
+      kind: "uncertainty",
+      target: { file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D600" } },
+      text: "The 600 mg group may be missing from the figure.",
+    });
+    const staleTarget: AcknowledgedWarning = {
+      id: ADDED,
+      code: "review_target_unmatched",
+      target: { file: "review.json", key: UNMATCHED },
+      text: "The group was dropped on purpose.",
+      author: "mkoenig",
+      resolved_by: "mkoenig",
+      resolved: "2026-10-06T09:00:00Z",
+      scope: "key",
+    };
+    await mountSection(
+      withProblems({
+        acknowledged: [staleTarget],
+        review: {
+          revision: "review-7",
+          value: { status: "in_review", reviewers: ["curator"], items: [unmatched] },
+          issues: [],
+        },
+      }),
+    );
+    const [entry] = section().get(".problems-acknowledged").findAll("li");
+    expect(entry!.get(".problem-fact").text()).toBe("review.json · uncertainty “The 600 mg group may be missing from the…”");
+    expect(entry!.text()).not.toContain(UNMATCHED);
+    expect(control(entry!, "uncertainty “The 600 mg group may be missing from the…”").attributes("href")).toBe(
+      `#/studies/caffeine/Example/review?item=${UNMATCHED}`,
+    );
+    expect(control(entry!, "Show the review item").attributes("href")).toBe(
+      `#/studies/caffeine/Example/review?item=${ADDED}`,
     );
   });
 

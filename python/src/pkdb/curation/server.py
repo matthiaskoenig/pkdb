@@ -18,6 +18,7 @@ from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat.load import BeyondLimits
 from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.review_edit import ReviewError
 from pkdb.studyformat.revision import RevisionConflict
@@ -31,6 +32,9 @@ NONCE_PLACEHOLDER = b"__PKDB_NONCE__"
 # The theme of the state in the `pkdb-theme` meta tag of index.html, which the app reads before
 # it mounts, so that its first paint has the theme that the curator chose.
 THEME_PLACEHOLDER = b"__PKDB_THEME__"
+# The `code` of the 403 for a missing or stale CSRF token; the app then takes a fresh token from
+# the state and sends the action once more.
+ACTION_TOKEN = "action_token"
 
 
 def _csp(nonce: str | None) -> str:
@@ -201,7 +205,9 @@ class Handler(BaseHTTPRequestHandler):
         if mutation and not _matches(
             self.headers.get("X-CSRF-Token", ""), self.server.csrf_token
         ):
-            self._reply(403, {"error": "Missing or invalid action token"})
+            self._reply(
+                403, {"error": "Missing or invalid action token", "code": ACTION_TOKEN}
+            )
             return False
         return True
 
@@ -236,9 +242,10 @@ class Handler(BaseHTTPRequestHandler):
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:
                 self._reply(409, {"error": str(error), "paths": error.paths})
-            except StudyValidationError as error:
-                # The study is beyond the upload limits.
+            except BeyondLimits as error:
                 self._reply(413, {"error": str(error)})
+            except StudyValidationError as error:
+                self._unreadable(error)
             except LookupError, FileNotFoundError:
                 self._reply(404, {"error": "Resource is not available"})
             except Exception:
@@ -340,6 +347,10 @@ class Handler(BaseHTTPRequestHandler):
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:
             self._reply(409, {"error": str(error), "paths": error.paths})
+        except BeyondLimits as error:
+            self._reply(413, {"error": str(error)})
+        except StudyValidationError as error:
+            self._unreadable(error)
         except (ReferenceError, WorkspaceError, UnsafeFile, ResumeRefused) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
@@ -358,6 +369,18 @@ class Handler(BaseHTTPRequestHandler):
                     "error": "The local action failed. Review workspace activity and retry."
                 },
             )
+
+    def _unreadable(self, error):
+        """Reply that the study cannot be read, with the issues of the library."""
+        self._reply(
+            422,
+            {
+                "error": str(error),
+                "issues": [
+                    issue.model_dump(mode="json") for issue in error.report.issues
+                ],
+            },
+        )
 
     def _refuse(self, status, message, size):
         """Reply without reading the body, then discard what the client sends, within bounds.
@@ -380,6 +403,8 @@ class Handler(BaseHTTPRequestHandler):
             "/local/studies/metadata",
             "/local/studies/review",
             "/local/studies/tables",
+            "/local/studies/tables/preview",
+            "/local/studies/review/preview",
         }:
             study = body.get("study")
             if not isinstance(study, str):
@@ -390,6 +415,10 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if path == "/local/studies/review":
                 return engine.review_action(study, body)
+            if path == "/local/studies/tables/preview":
+                return engine.table_preview(study, body)
+            if path == "/local/studies/review/preview":
+                return engine.target_preview(study, body)
             return engine.tables_action(study, body)
         if path in {
             "/local/reference/read",

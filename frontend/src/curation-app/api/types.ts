@@ -31,6 +31,8 @@ export interface SourceLocation {
   path?: (string | number)[];
   cell?: string;
   header?: string;
+  /** Names the place of an issue in a file without rows: a dataset of a WebPlotDigitizer project, a review item. */
+  key?: string;
 }
 
 export interface Suggestion {
@@ -61,9 +63,27 @@ export interface ValidationIssue {
   documentation_url?: string | null;
 }
 
+/** An issue of the study page: of the last validation, of a sync that stopped it, or of the limits. */
+export interface Problem extends ValidationIssue {
+  /**
+   * Whether a review item can acknowledge it, as the local server knows: a warning of the
+   * validation, not an issue of a stopped sync.
+   */
+  acknowledgeable: boolean;
+}
+
 // study.json
 
 export type TableKind = "subjects" | "interventions" | "characteristica" | "outputs" | "timecourses" | "scatters";
+
+/** The kind of a table file: a table kind, or `raw` for the raw table of a paper table. */
+export type TableFileKind = TableKind | "raw";
+
+/** A table file of the study with its kind; the study detail lists them in the order of the workbook sheets. */
+export interface TableEntry {
+  file: string;
+  kind: TableFileKind;
+}
 
 export interface StudyReference {
   pmid?: string;
@@ -184,6 +204,8 @@ export interface ReviewTarget {
   file?: string;
   rows?: Record<string, string>;
   column?: string;
+  /** A part of a file without rows, such as a dataset of a WebPlotDigitizer project; excludes rows and column. */
+  key?: string;
 }
 
 export interface ThreadEntry {
@@ -345,6 +367,9 @@ export type JobStatus =
   | "unknown"
   | "reviewed";
 
+/** A part of the message of a job: text, or the review item that the message names. */
+export type JobMessagePart = { text: string } | { item: string };
+
 export interface Job {
   id: string;
   study_id: string;
@@ -356,6 +381,10 @@ export interface Job {
   stage?: string;
   created_at: string;
   message: string;
+  /** The review item that a write of the app named. */
+  item?: string;
+  /** The message split around the review item it names, from the server. */
+  parts?: JobMessagePart[];
   automatic: boolean;
   endpoint?: string;
   persistence?: string;
@@ -477,15 +506,24 @@ export interface AcknowledgedWarning {
   author: string;
   resolved_by: string | null;
   resolved: string | null;
+  /**
+   * What the acknowledgement covers (`acknowledgement_scope` in `studyformat/validation.py`):
+   * every warning of its code in the study, in its file or in a column of the file, also later
+   * ones; or just the warnings at its rows or with its key.
+   */
+  scope: "study" | "file" | "column" | "rows" | "key";
 }
 
 export interface ConflictData {
   file: string;
+  kind: TableFileKind;
   sheet: string;
   workbook_rows: { row: number; text: string }[];
   table_lines: { line: number; text: string }[];
   base_lines: string[];
   kept: "workbook" | "tables" | null;
+  /** The side that removed the whole table, which the other side lists from its header; null for rows that both sides changed. */
+  removed: "workbook" | "tables" | null;
 }
 
 export interface SourceSummary {
@@ -511,12 +549,17 @@ export interface StudyDetail {
   counts: { errors: number; warnings: number };
   summary: StudySummary;
   issue: IssueState | null;
-  problems: ValidationIssue[];
+  problems: Problem[];
   message: string | null;
   last_upload: Upload | null;
   /** Newest first. */
   jobs: Job[];
   report_id: string | null;
+  /**
+   * Changes with the content of any file of the study, as the local server last scanned it; null
+   * before the first scan. Unlike the ETag of the page, it stays when only a job changes.
+   */
+  files_version: string | null;
   metadata: DocumentState<StudyMetadata>;
   reference: ReferenceSummary | null;
   /** Whether `reference.json` has the identifiers of `study.json`; null when it names none. */
@@ -527,6 +570,32 @@ export interface StudyDetail {
   conflicts: ConflictData[];
   sources: SourceSummary[];
   files: string[];
+  /** The table files and raw tables in the order of the workbook sheets; empty beyond the upload limits. */
+  tables: TableEntry[];
+  /**
+   * What the target of each review item with a file selects, by item id, as the library matches
+   * it; empty beyond the upload limits.
+   */
+  targets: Record<string, TargetMatch>;
+}
+
+/** A series of a figure with a WebPlotDigitizer project: the figure and the series name. */
+export interface DigitizedSeries {
+  source: string;
+  series: string;
+}
+
+/** What a review target selects, as the local server matches it. */
+export interface TargetMatch {
+  /**
+   * The TSV lines of the rows that its row filter matches in a data table, in file order; null
+   * for a target without a row filter or of a file that is no data table, such as a raw table.
+   */
+  lines: number[] | null;
+  /** The series that its filter names in a timecourse or scatter table of a digitized figure. */
+  series: DigitizedSeries | null;
+  /** The rows of the data table that `lines` were matched in; null for a file that is no data table. */
+  total: number | null;
 }
 
 export interface TableRow {
@@ -550,6 +619,7 @@ export interface MappedTable {
 }
 
 export interface OverlayPoint {
+  /** The series of the point: the label of a timecourse row or the name of a scatter row. */
   series: string;
   role: "raw" | "mapped";
   px: number;
@@ -562,6 +632,8 @@ export interface OverlayPoint {
   /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
   x_text: string;
   y_text: string;
+  /** A digitized end of an error bar, of the dataset `<series>;error_bar`. */
+  error_bar_end: boolean;
 }
 
 /** A mapped row of a timecourse or scatter table in the units of its table. */
@@ -644,6 +716,18 @@ export interface TablesResult {
   table?: string;
 }
 
+/** What Add table would add for a kind and a source, and why the local server would refuse it. */
+export interface TablePreview {
+  /** The sheet of the workbook, also the name of the table. */
+  table: string;
+  file: string;
+  /** The image of the source that the table needs; null for the text of the paper. */
+  image: string | null;
+  image_found: boolean;
+  /** Why the table cannot be added; empty when it can. */
+  issues: ValidationIssue[];
+}
+
 // Error bodies
 
 /** The body of a 409 for a file that changed on disk since the app read it. */
@@ -705,6 +789,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "last_upload",
   "jobs",
   "report_id",
+  "files_version",
   "metadata",
   "reference",
   "reference_match",
@@ -714,6 +799,8 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "conflicts",
   "sources",
   "files",
+  "tables",
+  "targets",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");
@@ -746,6 +833,10 @@ export const isMetadataWrite = hasKeys<MetadataWrite>("revision", "reference", "
 export const isReviewWrite = hasKeys<ReviewWrite>("revision");
 
 export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "changes", "conflicts", "issues");
+
+export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues");
+
+export const isTargetMatch = hasKeys<TargetMatch>("lines", "series", "total");
 
 export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
 

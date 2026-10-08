@@ -42,9 +42,17 @@ from pkdb.studyformat.load import (
     load_table,
 )
 from pkdb.studyformat.merge import Conflict, Preference, merge_lines
-from pkdb.studyformat.raw import load_raw, parse_raw_file, render_raw
+from pkdb.studyformat.raw import (
+    RAW_SOURCE,
+    load_raw,
+    parse_raw_file,
+    raw_file,
+    render_raw,
+)
 from pkdb.studyformat.tables import (
     KIND_ORDER,
+    RAW_KIND,
+    SOURCE_PATTERN,
     TABLES,
     TEXT_SOURCE,
     TableSpec,
@@ -62,7 +70,7 @@ from pkdb.studyformat.workbook.base import (
     workbook_path,
     write_state,
 )
-from pkdb.studyformat.workbook.read import WorkbookContent, read_workbook
+from pkdb.studyformat.workbook.read import WorkbookContent, read_workbook, sheet_names
 from pkdb.studyformat.workbook.write import WorkbookError, build_workbook
 
 Side = Literal["workbook", "tables"]
@@ -92,7 +100,9 @@ class SyncConflict:
     TSV line numbers, each with its canonical text, and `base_lines` the lines
     both sides changed. When one side removed the whole table, its rows are
     empty and the other side lists all of its lines. `kept` is the side that
-    resolved the conflict, or None while it is unresolved.
+    resolved the conflict, or None while it is unresolved. `removed` is the
+    side that removed the whole table, which the other side then lists from its
+    header, or None for rows that both sides changed.
     """
 
     file: str
@@ -101,12 +111,20 @@ class SyncConflict:
     table_lines: tuple[tuple[int, str], ...]
     base_lines: tuple[str, ...]
     kept: Side | None = None
+    removed: Side | None = None
+
+
+def _conflict_kind(file: str) -> str:
+    """The table kind of a conflicting file, or `raw`: conflicts are about table files and raw tables."""
+    parsed = parse_table_file(file)
+    return RAW_KIND if parsed is None else parsed[0].kind
 
 
 def conflict_data(conflict: SyncConflict) -> dict:
     """A conflict as JSON, as pkdb tables sync and the curation app report it."""
     return {
         "file": conflict.file,
+        "kind": _conflict_kind(conflict.file),
         "sheet": conflict.sheet,
         "workbook_rows": [
             {"row": row, "text": text} for row, text in conflict.workbook_rows
@@ -116,6 +134,7 @@ def conflict_data(conflict: SyncConflict) -> dict:
         ],
         "base_lines": list(conflict.base_lines),
         "kept": conflict.kept,
+        "removed": conflict.removed,
     }
 
 
@@ -324,6 +343,7 @@ def _removal_conflict(
         tuple(enumerate(_lines(tables), start=1)),
         tuple(_lines(base)),
         kept=keep,
+        removed="workbook" if workbook is None else "tables",
     )
     if keep is not None:
         return found, None
@@ -901,6 +921,115 @@ def _add_open_issue(workbook: Path, table: str, lock: Path | None) -> Validation
     )
 
 
+# The kinds of a new table: the tables split by source, and the raw table of a paper table.
+NEW_TABLE_KINDS = (
+    *(kind for kind, spec in TABLES.items() if spec.per_source),
+    RAW_KIND,
+)
+
+
+def new_table_file(study: str, kind: str, source: str) -> str:
+    """The table file of a new table, or of the raw table of a study; its sheet is its name without `.tsv`."""
+    return raw_file(study, source) if kind == RAW_KIND else table_file(kind, source)
+
+
+@dataclass(frozen=True)
+class TablePreview:
+    """A new table before it is added: its sheet, file and image, and why it cannot be added.
+
+    `image` is the image of its source; None for the text of the paper and for a refused
+    kind or source. `issues` hold the refusal of the name, and are empty when `add_table`
+    would sync and add the sheet.
+    """
+
+    table: str
+    file: str
+    image: str | None
+    image_found: bool
+    issues: tuple[ValidationIssue, ...] = ()
+
+
+def _name_refusal(folder: Path, table: str) -> ValidationIssue | None:
+    """Why `add_table` refuses a name before it syncs: not a new table name, or an existing file."""
+    if (issue := _table_name_issue(table, folder.name)) is not None:
+        return issue
+    try:
+        names = [entry.name for entry in folder.iterdir()]
+    except OSError:
+        # The sync reports a folder it cannot read.
+        names = []
+    if (existing := _same_name(f"{table}.tsv", names)) is not None:
+        return make_issue("table_exists", f"{existing} already exists", file=existing)
+    return None
+
+
+def _sheet_exists(workbook: Path, sheet: str) -> ValidationIssue:
+    return make_issue(
+        "table_exists",
+        f"The sheet {sheet} already exists in {workbook.name}",
+        file=workbook.name,
+        sheet=sheet,
+    )
+
+
+def _sheet_refusal(folder: Path, table: str) -> ValidationIssue | None:
+    """A sheet of the workbook named `table` ignoring case, which `add_table` refuses after its sync.
+
+    A symlinked workbook is never read, and one that cannot be read has no sheets here:
+    `add_table` reports both.
+    """
+    path = workbook_path(folder)
+    if path.is_symlink() or not path.is_file():
+        return None
+    sheet = _same_name(table, sheet_names(path) or ())
+    return None if sheet is None else _sheet_exists(path, sheet)
+
+
+def _source_refusal(kind: str, source: str) -> ValidationIssue | None:
+    """Why a new table cannot have a kind and a source: a kind of NEW_TABLE_KINDS, a paper
+    table for a raw table, and otherwise a source such as Tab3, Fig2A or Text."""
+    if kind not in NEW_TABLE_KINDS:
+        *kinds, last = NEW_TABLE_KINDS
+        return make_issue(
+            "invalid_table_name", f"Choose the kind {', '.join(kinds)} or {last}"
+        )
+    if kind == RAW_KIND and not RAW_SOURCE.fullmatch(source):
+        return make_issue(
+            "invalid_table_name", "A raw table needs a paper table source such as Tab3"
+        )
+    if not SOURCE_PATTERN.fullmatch(source):
+        return make_issue(
+            "invalid_table_name", "Use a source such as Tab3, Fig2A or Text"
+        )
+    return None
+
+
+def preview_table(folder: Path, kind: str, source: str) -> TablePreview:
+    """What `add_table` would add for a kind of NEW_TABLE_KINDS and a source, or why it refuses.
+
+    It refuses a kind or a source that a new table cannot have, then what `add_table`
+    refuses before its sync, and a sheet of the workbook with the same name ignoring case,
+    as `add_table` refuses after its sync. The image is named for an accepted source only.
+    """
+    folder = Path(folder).resolve()
+    source = source.strip()
+    file = new_table_file(folder.name, kind, source)
+    table = file.removesuffix(".tsv")
+    image = None
+    if (issue := _source_refusal(kind, source)) is None:
+        image = None if source == TEXT_SOURCE else image_file(folder.name, source)
+        issue = _name_refusal(folder, table)
+        if issue is None:
+            issue = _sheet_refusal(folder, table)
+    return TablePreview(
+        table=table,
+        file=file,
+        image=image,
+        image_found=image is not None and (folder / image).is_file(),
+        issues=() if issue is None else (issue,),
+    )
+
+
 def add_table(
     folder: Path,
     vocabulary: Vocabulary,
@@ -920,15 +1049,7 @@ def add_table(
     """
     folder = Path(folder).resolve()
     path = workbook_path(folder)
-    if (issue := _table_name_issue(table, folder.name)) is not None:
-        return AddTableResult(table, None, (issue,))
-    try:
-        names = [entry.name for entry in folder.iterdir()]
-    except OSError:
-        # The sync reports a folder it cannot read.
-        names = []
-    if (existing := _same_name(f"{table}.tsv", names)) is not None:
-        issue = make_issue("table_exists", f"{existing} already exists", file=existing)
+    if (issue := _name_refusal(folder, table)) is not None:
         return AddTableResult(table, None, (issue,))
     synced = sync_study(folder, vocabulary, max_rows=max_rows)
 
@@ -965,14 +1086,7 @@ def add_table(
             )
         )
     if (sheet := _same_name(table, content.sheets)) is not None:
-        return refused(
-            make_issue(
-                "table_exists",
-                f"The sheet {sheet} already exists in {path.name}",
-                file=path.name,
-                sheet=sheet,
-            )
-        )
+        return refused(_sheet_exists(path, sheet))
     replaced = _replace_workbook(
         path,
         tables,

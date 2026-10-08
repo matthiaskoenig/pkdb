@@ -356,6 +356,11 @@ CENTRAL = ("mean", "median", "gmean")
 PROJECT_MEMBER = "wpd.json"
 
 
+def dataset_series(name: str) -> tuple[str, bool]:
+    """The series of a dataset of a project, and whether the dataset holds the ends of its error bars."""
+    return name.removesuffix(ERROR_BAR_SUFFIX), name.endswith(ERROR_BAR_SUFFIX)
+
+
 @dataclass(frozen=True)
 class MappedPoint:
     """A mapped row as a point of a dataset, in axis units, with its cells as printed."""
@@ -377,13 +382,18 @@ def central_column(row: Row) -> str | None:
     )
 
 
+# The column that names the series of a timecourse or scatter row, as its dataset is named.
+SERIES_COLUMNS = {"timecourses": "label", "scatters": "name"}
+
+
 def mapped_points(table: LoadedTable) -> list[MappedPoint]:
     """The rows of a timecourse or scatter table as dataset points."""
     points: list[MappedPoint] = []
     for row in table.rows:
         values = row.values
         if table.kind == "timecourses":
-            time, label = values.get("time"), row.cells.get("label", "")
+            time = values.get("time")
+            label = row.cells.get(SERIES_COLUMNS["timecourses"], "")
             column = central_column(row)
             if not isinstance(time, float) or column is None or not label:
                 continue
@@ -417,7 +427,7 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                 )
         elif table.kind == "scatters":
             x, y = values.get("x_mean"), values.get("y_mean")
-            name = row.cells.get("name", "")
+            name = row.cells.get(SERIES_COLUMNS["scatters"], "")
             if isinstance(x, float) and isinstance(y, float) and name:
                 points.append(
                     MappedPoint(
@@ -494,6 +504,7 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
                     "unknown_dataset",
                     f"The dataset {dataset.name!r} matches no mapped row of source {digitization.source}",
                     file=digitization.file,
+                    key=dataset.name,
                 )
         matched: dict[str, set[int]] = {name: set() for name in datasets}
         for point in points:
@@ -537,6 +548,7 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
                     "digitized_mismatch",
                     f"{unmatched} {points} of dataset {dataset.name!r} {have} no mapped row within {MISMATCH_PIXELS:g} pixels",
                     file=digitization.file,
+                    key=dataset.name,
                 )
 
 

@@ -7,7 +7,6 @@ import {
   syncAlert,
   syncOutcome,
   syncSummary,
-  tableOrder,
   withoutConflicts,
 } from "../../src/curation-app/tables";
 import { actionFailure } from "../../src/curation-app/study";
@@ -32,33 +31,6 @@ const invalidCell: ValidationIssue = {
   message: "Cell N3 of outputs_Tab2 is not a number.",
   source: { file: "Example.xlsx", sheet: "outputs_Tab2", row: 3, column: "N" },
 };
-
-describe("tableOrder", () => {
-  it("orders the tables as the sheets of the workbook, the raw tables last", () => {
-    const files = [
-      "characteristica.tsv",
-      "Example_Tab10.tsv",
-      "Example_Tab2.tsv",
-      "interventions.tsv",
-      "outputs_Tab10.tsv",
-      "outputs_Tab2.tsv",
-      "scatters_Fig2.tsv",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
-    ];
-    expect(tableOrder(files)).toEqual([
-      "subjects.tsv",
-      "interventions.tsv",
-      "characteristica.tsv",
-      "outputs_Tab2.tsv",
-      "outputs_Tab10.tsv",
-      "timecourses_Fig1.tsv",
-      "scatters_Fig2.tsv",
-      "Example_Tab2.tsv",
-      "Example_Tab10.tsv",
-    ]);
-  });
-});
 
 describe("listText", () => {
   it("joins names as a sentence does", () => {
@@ -244,6 +216,7 @@ describe("conflictView", () => {
         ...FILE_DELETED_CONFLICT,
         workbook_rows: [],
         table_lines: FILE_DELETED_CONFLICT.workbook_rows.map(({ row, text }) => ({ line: row, text })),
+        removed: "workbook",
       },
       SCATTERS_COLUMNS,
     );
@@ -260,11 +233,13 @@ describe("conflictView", () => {
     const view = conflictView(
       {
         file: "Example_Tab2.tsv",
+        kind: "raw",
         sheet: "Example_Tab2",
         workbook_rows: [{ row: 1, text: "\tCaffeine 150 mg\t300 mg" }],
         table_lines: [{ line: 1, text: "\tCaffeine 150 mg\t300 mg (n=8)" }],
         base_lines: ["\t150 mg\t300 mg"],
         kept: null,
+        removed: null,
       },
       null,
     );

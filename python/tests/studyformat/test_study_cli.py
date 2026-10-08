@@ -1,13 +1,17 @@
 import json
 import re
+from types import SimpleNamespace
 
 import pytest
 from digitize_fixtures import GOOD, png, project
 
 import pkdb.studyformat.metadata as metadata
+import pkdb.studyformat.validation as validation
 from pkdb.cli import main
 from pkdb.errors import ClientError
+from pkdb.schemas.review import ReviewTarget
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.validation import validate_folder
 
@@ -244,8 +248,9 @@ def test_review_acknowledge_one_row(valid_study, reviewer, capsys):
     command += ["--file", "timecourses_Fig1.tsv", "--text", "As printed."]
     command += ["--vocabulary", str(reviewer)]
     assert main([*command, "--format", "json"]) == 1
-    message = json.loads(capsys.readouterr().out)["message"]
-    assert message == (
+    output = json.loads(capsys.readouterr().out)
+    assert output["error"] == "ambiguous_warning"
+    assert output["message"] == (
         "2 warnings [outside_range] match in timecourses_Fig1.tsv; "
         "narrow them with --line (3, 4)"
     )
@@ -278,13 +283,76 @@ def test_review_acknowledge_file_warnings_that_share_a_code(
     command = ["review", "acknowledge", str(folder), "unknown_dataset"]
     command += ["--file", "Example_Fig1.wpd.json", "--text", "Not data."]
     command += ["--vocabulary", str(reviewer), "--format", "human"]
-    assert main(command) == 0
-    assert capsys.readouterr().out.endswith("; the item covers 2 warnings\n")
-    codes = [issue.code for issue in validate_folder(folder, sf_vocabulary).issues]
-    assert "unknown_dataset" not in codes
+    assert main(command) == 1
+    assert capsys.readouterr().err == (
+        "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json; "
+        "narrow them with --key (axis labels, legend)\n"
+    )
+    assert main([*command, "--format", "json"]) == 1
+    assert json.loads(capsys.readouterr().out)["error"] == "ambiguous_warning"
+    assert read_review(folder).review.items == []
+    assert main([*command, "--key", "legend"]) == 0
     [item] = read_review(folder).review.items
-    assert item.target is not None and item.target.file == "Example_Fig1.wpd.json"
-    assert not item.target.rows and item.target.column is None
+    assert capsys.readouterr().out == (
+        f"caffeine/Example: acknowledged unknown_dataset with review item {item.id}\n"
+    )
+    assert item.target == ReviewTarget(file="Example_Fig1.wpd.json", key="legend")
+    keys = [
+        issue.source.key
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.code == "unknown_dataset" and issue.source
+    ]
+    assert keys == ["axis labels"]
+
+
+def test_review_acknowledge_reports_the_code_of_its_refusal(
+    valid_study, reviewer, capsys, monkeypatch
+):
+    unkeyed = make_issue("unknown_dataset", "Old.", file="Example_Fig1.wpd.json")
+    monkeypatch.setattr(
+        validation,
+        "validate_folder",
+        lambda folder, vocabulary: SimpleNamespace(issues=[unkeyed]),
+    )
+    command = ["review", "acknowledge", str(valid_study), "unknown_dataset"]
+    command += ["--file", "Example_Fig1.wpd.json", "--text", "Not data."]
+    command += ["--vocabulary", str(reviewer), "--format", "json"]
+    assert main(command) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["error"] == "no_exact_target"
+    assert output["message"].startswith(
+        "The warning [unknown_dataset] in Example_Fig1.wpd.json has no row of a data "
+        "table and no key, so it cannot be acknowledged alone."
+    )
+    assert read_review(valid_study).review.items == []
+
+
+def test_review_add_with_a_key(valid_study, reviewer, capsys):
+    add = ["review", "add", str(valid_study), "--kind", "issue", "--text", "Blurry."]
+    add += ["--file", "Example_Fig1.png", "--key", "legend", "--format", "json"]
+    assert main(add) == 0
+    item = json.loads(capsys.readouterr().out)["item"]
+    assert item["target"] == {"file": "Example_Fig1.png", "rows": {}, "key": "legend"}
+    assert main(["review", "show", str(valid_study), "--format", "human"]) == 0
+    assert (
+        capsys.readouterr()
+        .out.splitlines()[3]
+        .endswith(" open issue Example_Fig1.png key legend: Blurry.")
+    )
+    empty = ["review", "add", str(valid_study), "--kind", "issue", "--text", "No."]
+    empty += ["--file", "Example_Fig1.png", "--key", "", "--format", "human"]
+    assert main(empty) == 1
+    assert capsys.readouterr().err == "--key needs a value\n"
+    for options in (
+        ["--key", "legend"],
+        ["--file", "Example_Fig1.png", "--key", "legend", "--column", "x"],
+    ):
+        command = ["review", "add", str(valid_study), "--kind", "issue"]
+        assert main([*command, "--text", "No.", *options, "--format", "human"]) == 1
+        assert capsys.readouterr().err == (
+            "--rows, --column and --key require --file, and --key excludes --rows "
+            "and --column\n"
+        )
 
 
 def test_study_patch_revision_conflict_in_human_output(valid_study, capsys):

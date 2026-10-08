@@ -7,7 +7,7 @@ from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat import load
 from pkdb.studyformat.issues import REPEATED_ISSUES
 from pkdb.studyformat.jsonio import dump_json
-from pkdb.studyformat.load import RowLimit, load_study, load_table
+from pkdb.studyformat.load import BeyondLimits, RowLimit, load_study, load_table
 from pkdb.studyformat.tables import TABLES
 from pkdb.studyformat.text import MAX_CELLS, read_tsv
 
@@ -297,7 +297,7 @@ def test_load_table_stops_reading_at_the_row_limit():
             read.append(number)
             yield b"all\t1\n"
 
-    with pytest.raises(StudyValidationError) as error:
+    with pytest.raises(BeyondLimits) as error:
         load_table(
             "outputs_Tab1.tsv", lines(), OUT, "Tab1", study="Example", limit=RowLimit(5)
         )
@@ -315,9 +315,11 @@ def test_row_limit_counts_the_rows_of_all_tables(make_study, valid_files):
     assert (
         sum(len(table.rows) for table in load_study(folder, max_rows=15).tables) == 15
     )
-    with pytest.raises(StudyValidationError) as error:
+    with pytest.raises(BeyondLimits) as error:
         load_study(folder, max_rows=14)
     assert codes(error.value.report.issues) == ["row_limit"]
+    # Callers that catch any refusal of the study keep catching it.
+    assert isinstance(error.value, StudyValidationError)
 
 
 def test_study_reading_stops_at_the_row_limit(
@@ -348,7 +350,7 @@ def test_file_limit_counts_files_besides_study_and_reference_json(
     folder = make_study(valid_files)
     files = len(valid_files) - 2
     assert load_study(folder, max_files=files).issues == []
-    with pytest.raises(StudyValidationError) as error:
+    with pytest.raises(BeyondLimits) as error:
         load_study(folder, max_files=files - 1)
     assert codes(error.value.report.issues) == ["file_limit"]
 

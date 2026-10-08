@@ -1,20 +1,29 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { ConflictData, ReviewItem, StudyDetail, TablesResult } from "../../src/curation-app/api/types";
+import type {
+  ConflictData,
+  Problem,
+  ReviewItem,
+  StudyDetail,
+  TableEntry,
+  TablesResult,
+} from "../../src/curation-app/api/types";
 import {
   actionFailure,
   approvalRefusal,
-  dataTableFiles,
+  beyondLimits,
   defaultSection,
   duplicateFolders,
   duplicateHeading,
   findProfile,
   folderPath,
+  isLimitIssue,
+  isRawTable,
+  rawTableFiles,
   isSection,
   issueLabel,
   knownProfiles,
   messageOf,
-  newTable,
   openItems,
   profileMap,
   profileOf,
@@ -27,7 +36,7 @@ import {
   tablesOutcome,
   userHint,
 } from "../../src/curation-app/study";
-import { profile, roster, studyDetail } from "./curation-fixtures";
+import { beyondLimitsDetail, profile, roster, studyDetail } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {
   return {
@@ -97,47 +106,61 @@ describe("railCounts", () => {
   });
 
   it("counts zeros for an empty study", () => {
-    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"] }))).toEqual({
+    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"], tables: [] }))).toEqual({
       review: 0,
       problems: 0,
       sources: 0,
       tables: 0,
     });
   });
+
+  it("counts no sources and tables beyond the upload limits, where the study page lists none", () => {
+    const review = { revision: "review-1", value: { status: "in_review" as const, reviewers: [], items: [item("open")] }, issues: [] };
+    expect(railCounts(beyondLimitsDetail({ review }))).toEqual({ review: 1, problems: 1 });
+  });
+});
+
+describe("beyondLimits", () => {
+  it("knows a study beyond the upload limits by its problems, not by its empty lists", () => {
+    expect(beyondLimits(beyondLimitsDetail())).toBe(true);
+    expect(beyondLimits(studyDetail({ sources: [], tables: [], files: [] }))).toBe(false);
+    const unit: Problem = { code: "unit_dimension", severity: "error", message: "mg is no concentration", acknowledgeable: false };
+    expect(isLimitIssue(unit)).toBe(false);
+    expect(beyondLimits(studyDetail({ problems: [unit] }))).toBe(false);
+  });
 });
 
 describe("tableFiles", () => {
-  it("keeps the data tables and the raw tables of the study in the order of the files", () => {
-    const files = [
+  const tables: TableEntry[] = [
+    { file: "subjects.tsv", kind: "subjects" },
+    { file: "characteristica.tsv", kind: "characteristica" },
+    { file: "outputs_Tab2.tsv", kind: "outputs" },
+    { file: "outputs_Tab10.tsv", kind: "outputs" },
+    { file: "scatters_Fig2.tsv", kind: "scatters" },
+    { file: "Example_Tab2.tsv", kind: "raw" },
+    { file: "Example_Tab10.tsv", kind: "raw" },
+  ];
+
+  it("keeps the tables in the order of the workbook sheets, as the server lists them", () => {
+    expect(tableFiles({ tables })).toEqual([
+      "subjects.tsv",
       "characteristica.tsv",
-      "Example_Fig1.wpd.json",
+      "outputs_Tab2.tsv",
+      "outputs_Tab10.tsv",
+      "scatters_Fig2.tsv",
       "Example_Tab2.tsv",
-      "Example_TabA.tsv",
-      "notes.tsv",
-      "Other_Tab2.tsv",
-      "outputs_Text.tsv",
-      "scatters_Fig2.tsv",
-      "study.json",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
-    ];
-    expect(tableFiles(studyDetail({ files }))).toEqual([
-      "characteristica.tsv",
-      "Example_Tab2.tsv",
-      "Example_TabA.tsv",
-      "outputs_Text.tsv",
-      "scatters_Fig2.tsv",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
+      "Example_Tab10.tsv",
     ]);
-    // The library loads only the data tables as tables.
-    expect([...dataTableFiles(studyDetail({ files }))]).toEqual([
-      "characteristica.tsv",
-      "outputs_Text.tsv",
-      "scatters_Fig2.tsv",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
-    ]);
+    expect(tableFiles({ tables: [] })).toEqual([]);
+  });
+
+  it("finds the raw tables by their kind", () => {
+    expect(isRawTable({ tables }, "Example_Tab10.tsv")).toBe(true);
+    expect(isRawTable({ tables }, "outputs_Tab10.tsv")).toBe(false);
+    // A file that is no table of the study is no raw table.
+    expect(isRawTable({ tables }, "Example_Tab3.tsv")).toBe(false);
+    expect(isRawTable({ tables }, "study.json")).toBe(false);
+    expect([...rawTableFiles({ tables })]).toEqual(["Example_Tab2.tsv", "Example_Tab10.tsv"]);
   });
 });
 
@@ -195,54 +218,6 @@ describe("paths", () => {
     expect(duplicateHeading(3)).toBe("This identity belongs to three folders");
     expect(duplicateHeading(12)).toBe("This identity belongs to 12 folders");
     expect(duplicateHeading(0)).toBe("This identity belongs to more than one folder");
-  });
-});
-
-describe("newTable", () => {
-  const example = studyDetail();
-
-  it("previews the sheet, the file and the image of a data table", () => {
-    expect(newTable(example, "outputs", "Tab3")).toEqual({
-      sheet: "outputs_Tab3",
-      file: "outputs_Tab3.tsv",
-      image: "Example_Tab3.png",
-      imageFound: false,
-      payload: { table: "outputs_Tab3" },
-      problem: null,
-    });
-    expect(newTable(example, "timecourses", " Fig1 ")).toMatchObject({
-      sheet: "timecourses_Fig1",
-      image: "Example_Fig1.png",
-      imageFound: true,
-    });
-    // The text of the paper has no image.
-    expect(newTable(example, "outputs", "Text")).toMatchObject({ image: null, problem: null });
-  });
-
-  it("names a raw table after the study folder", () => {
-    expect(newTable(example, "raw", "Tab3")).toEqual({
-      sheet: "Example_Tab3",
-      file: "Example_Tab3.tsv",
-      image: "Example_Tab3.png",
-      imageFound: false,
-      payload: { raw: "Tab3" },
-      problem: null,
-    });
-  });
-
-  it("explains why a table cannot be added", () => {
-    expect(newTable(example, "outputs", "")).toBeNull();
-    expect(newTable(example, "outputs", "3")?.problem).toBe(
-      "Use a source such as Tab3, Fig2A or Text.",
-    );
-    expect(newTable(example, "raw", "Fig2")?.problem).toBe("A raw table needs a paper table source such as Tab3.");
-    expect(newTable(example, "outputs", "tab2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
-    expect(newTable(example, "outputs", "TAB2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
-    expect(newTable(example, "outputs", "Tab2")?.problem).toBe("outputs_Tab2.tsv already exists.");
-    expect(newTable(example, "raw", "Tab2")?.problem).toBe("Example_Tab2.tsv already exists.");
-    expect(newTable(example, "timecourses", "Fig1_caffeine_plasma_D")?.problem).toBe(
-      "The sheet timecourses_Fig1_caffeine_plasma_D has 34 characters. Excel allows 31.",
-    );
   });
 });
 
@@ -313,11 +288,13 @@ describe("failures", () => {
     expect(tablesOutcome({ ...result, opened: false })).toEqual(actionFailure("The workbook could not be opened."));
     const conflict: ConflictData = {
       file: "outputs_Tab2.tsv",
+      kind: "outputs",
       sheet: "outputs_Tab2",
       workbook_rows: [],
       table_lines: [],
       base_lines: [],
       kept: null,
+      removed: null,
     };
     const conflicts = [conflict, conflict, { ...conflict, kept: "tables" as const }];
     expect(tablesOutcome({ ...result, ok: false, conflicts })).toEqual(

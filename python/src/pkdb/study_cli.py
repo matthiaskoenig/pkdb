@@ -112,6 +112,11 @@ def register_review(commands) -> None:
     )
     add.add_argument("--column", help="Column the item refers to")
     add.add_argument(
+        "--key",
+        help="Name a part of the file without rows, such as a dataset of a "
+        "WebPlotDigitizer project",
+    )
+    add.add_argument(
         "--acknowledges", metavar="CODE", help="Warning code to acknowledge"
     )
     reviewed = [show, add]
@@ -137,6 +142,11 @@ def register_review(commands) -> None:
     acknowledge.add_argument("--file", required=True)
     acknowledge.add_argument("--line", type=int)
     acknowledge.add_argument("--column")
+    acknowledge.add_argument(
+        "--key",
+        help="Key of a warning without a row, such as the dataset of a "
+        "WebPlotDigitizer project",
+    )
     acknowledge.add_argument("--text", required=True)
     _vocabulary_options(acknowledge)
     reviewed += [status, acknowledge]
@@ -363,7 +373,7 @@ def _invalid(args, folder: Path, error) -> int:
 def _review(args, folder: Path) -> int:
     """Run a `review` action; errors are reported as `pkdb study` does."""
     from pkdb.identity import IdentityError
-    from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
+    from pkdb.studyformat.review_edit import ReviewError
     from pkdb.studyformat.revision import RevisionConflict
 
     def failure(error: str, message: str, **extra) -> int:
@@ -381,10 +391,8 @@ def _review(args, folder: Path) -> int:
         return _REVIEW_ACTIONS[args.action](args, folder, author)
     except IdentityError as error:
         return _identity_failure(args, folder, error)
-    except ApprovalRefused as error:
-        return _review_error(args, folder, "approval_refused", error)
     except ReviewError as error:
-        return _review_error(args, folder, "invalid", error)
+        return _review_error(args, folder, error.code or "invalid", error)
     except RevisionConflict as conflict:
         message = (
             f"{conflict.file} changed on disk since revision {conflict.expected}; "
@@ -420,6 +428,7 @@ def _review_show(args, folder: Path) -> int:
     from pkdb.studyformat import study_label
     from pkdb.studyformat.load import load_study
     from pkdb.studyformat.review_edit import read_review
+    from pkdb.studyformat.targets import match_target
 
     document = read_review(folder)
     study = load_study(folder)
@@ -428,13 +437,8 @@ def _review_show(args, folder: Path) -> int:
         if args.state and item.state != args.state:
             continue
         data = item.model_dump(mode="json", exclude_none=True)
-        target = item.target
-        table = study.table(target.file) if target and target.file else None
-        data["matches"] = (
-            len(table.matching_lines(target.rows))
-            if table is not None and target is not None and target.rows
-            else None
-        )
+        lines = match_target(study, item.target).lines
+        data["matches"] = None if lines is None else len(lines)
         items.append(data)
     label = study_label(folder)
     lines = [label, f"revision {document.revision}", f"status {document.review.status}"]
@@ -467,6 +471,8 @@ def _target_text(target: dict | None, matches: int | None) -> str:
         text += " " + " ".join(f"{key}={value}" for key, value in rows.items())
     if target.get("column"):
         text += f" column {target['column']}"
+    if target.get("key"):
+        text += f" key {target['key']}"
     if matches is not None:
         text += f" ({matches} matching row{'' if matches == 1 else 's'})"
     return text
@@ -493,11 +499,18 @@ def _review_add(args, folder: Path, author) -> int:
         if not separator or not key:
             raise ReviewError(f"--rows needs COL=VALUE, not {pair!r}")
         rows[key] = value
-    if args.file or rows or args.column:
+    if args.key == "":
+        raise ReviewError("--key needs a value")
+    if args.file or rows or args.column or args.key is not None:
         try:
-            target = ReviewTarget(file=args.file, rows=rows, column=args.column)
+            target = ReviewTarget(
+                file=args.file, rows=rows, column=args.column, key=args.key
+            )
         except ValueError as error:
-            raise ReviewError("--rows and --column require --file") from error
+            raise ReviewError(
+                "--rows, --column and --key require --file, and --key excludes "
+                "--rows and --column"
+            ) from error
     else:
         target = None
     item, revision = add_item(
@@ -544,6 +557,8 @@ def _review_status(args, folder: Path, author) -> int:
 def _review_acknowledge(args, folder: Path, author) -> int:
     from pkdb.studyformat.review_edit import (
         ANY,
+        AmbiguousWarning,
+        NoSuchWarning,
         acknowledge,
         matching_warnings,
         warning_locations,
@@ -554,15 +569,16 @@ def _review_acknowledge(args, folder: Path, author) -> int:
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 1
-    # An option that is left out matches every line or column.
+    # An option that is left out matches every line, column or key.
     matches = matching_warnings(
         validate_folder(folder, vocabulary).issues,
         args.code,
         args.file,
         ANY if args.line is None else args.line,
         ANY if args.column is None else args.column,
+        ANY if args.key is None else args.key,
     )
-    # One item acknowledges the warnings of one location: same row and column.
+    # One item acknowledges the warnings of one location: same row, column and key.
     locations = warning_locations(matches)
     if len(locations) != 1:
         message = (
@@ -576,7 +592,7 @@ def _review_acknowledge(args, folder: Path, author) -> int:
             {
                 "path": str(folder),
                 "ok": False,
-                "error": "no_such_warning",
+                "error": (AmbiguousWarning if matches else NoSuchWarning).code,
                 "message": message,
             },
             lambda: say(message, file=sys.stderr),
@@ -595,20 +611,23 @@ def _review_acknowledge(args, folder: Path, author) -> int:
     )
 
 
-def _narrowing(locations: set[tuple[int | None, str | None]]) -> str:
-    """The options that tell apart warnings at these rows and columns, with their values.
+def _narrowing(locations: set[tuple[int | None, str | None, str | None]]) -> str:
+    """The options that tell apart warnings at these rows, columns and keys, with their values.
 
     Called for two or more locations, so at least one option tells them apart.
     """
     options = []
-    lines = {line for line, _ in locations}
+    lines = {line for line, _, _ in locations}
     if len(lines) > 1:
         given = sorted(line for line in lines if line is not None)
         options.append(f"--line ({', '.join(map(str, given))})")
-    columns = {column for _, column in locations}
-    if len(columns) > 1:
-        given = sorted(column for column in columns if column is not None)
-        options.append(f"--column ({', '.join(given)})")
+    for option, values in (
+        ("--column", {column for _, column, _ in locations}),
+        ("--key", {key for _, _, key in locations}),
+    ):
+        if len(values) > 1:
+            given = sorted(value for value in values if value is not None)
+            options.append(f"{option} ({', '.join(given)})")
     return " and ".join(options)
 
 

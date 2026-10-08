@@ -8,7 +8,7 @@ from pkdb.domain.normalization import UnitDimensionError, conversion
 from pkdb.domain.vocabulary import MeasurementRule, Vocabulary
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.columns import Column
-from pkdb.studyformat.issues import row_issue
+from pkdb.studyformat.issues import VOCABULARY, row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 from pkdb.studyformat.rows import valid_unit
 
@@ -246,6 +246,7 @@ def _term(
             actual=value,
             hint="Candidates are spelling suggestions, not equivalent terms.",
             candidates=suggest(value, column.vocabulary),
+            suggestion=VOCABULARY,
         )
 
 

@@ -131,6 +131,8 @@ npm run test:e2e
 
 Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks).
 
+The unit tests of the curation app read contract fixtures in `frontend/tests/fixtures/curation-contract/`. `python/tests/test_curation_contract.py` writes them from real answers of the local server on the fixture workspace and fails when an answer changes. Regenerate them from `python/` with `PKDB_UPDATE_CONTRACT=1 uv run --locked pytest -q tests/test_curation_contract.py`, review the diff, and run the frontend unit tests against them. Never edit them by hand.
+
 The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`. Run them from `frontend/`:
 
 ```bash

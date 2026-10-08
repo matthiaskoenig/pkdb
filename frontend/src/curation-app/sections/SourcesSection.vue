@@ -14,13 +14,14 @@ import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../p
 import { sourceProblems } from "../sources";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { sectionRoute, tableFiles } from "../study";
+import { beyondLimits, sectionRoute, tableFiles } from "../study";
 
 /**
  * One tab per source of the study. A paper table shows its image beside its raw extraction as
  * printed; a figure shows the overlay of its digitized points and mapped rows on its image, or
  * its image beside a plot of the mapped rows when it has no digitization. Below them the mapped
- * rows by table and the problems of the files of the source. Missing files are named.
+ * rows by table and the problems of the files of the source. Missing files are named. Beyond the
+ * upload limits the section says that it cannot show the sources.
  *
  * The chosen source is the `source` of the route, so that other sections can link to it. A
  * clicked mapped point or row opens the Tables section at its file and line.
@@ -39,6 +40,8 @@ const ICONS: Record<SourceSummary["kind"], string> = {
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
+/** Beyond the upload limits the local server lists no sources, which the study may well have. */
+const limited = computed(() => (detail.value ? beyondLimits(detail.value) : false));
 const sources = computed(() => detail.value?.sources ?? []);
 
 const linked = computed(() => (typeof route.query.source === "string" ? route.query.source : null));
@@ -100,7 +103,11 @@ function showRow(row: { file: string; line: number }): void {
 
 <template>
   <div class="sources">
-    <p v-if="!sources.length" class="sources-empty">The study has no sources yet.</p>
+    <p v-if="limited" class="sources-empty">
+      This study is beyond the upload limits, so the app cannot show its sources. See
+      <RouterLink :to="sectionRoute(identity, 'problems')">Problems</RouterLink>.
+    </p>
+    <p v-else-if="!sources.length" class="sources-empty">The study has no sources yet.</p>
     <template v-else>
       <VTabs
         v-model="tab"
