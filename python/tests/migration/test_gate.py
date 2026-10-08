@@ -274,6 +274,34 @@ def test_array_outputs_are_an_intended_change(tmp_path, sf_vocabulary):
     assert [(c.kind, c.count) for c in result.changes] == [("array_output", 4)]
 
 
+def test_labelled_array_outputs_that_form_no_series_are_intended_outputs(
+    tmp_path, sf_vocabulary
+):
+    # Correlation data: cmax of each individual, without time, under one label.
+    array = {
+        **OUTPUT,
+        "source": "Tab3",
+        "image": "Tab3",
+        "output_type": "array",
+        "label": "cmax_individuals",
+        "group": None,
+        "individual": "col==subject",
+        "sd": None,
+    }
+    array = {key: value for key, value in array.items() if value is not None}
+    study = with_outputs(OUTPUT, TIMECOURSE, array)
+    sheets = {**SHEETS, "Tab3": [["subject", "mean"], ["S1", 2], ["S2", 3]]}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Tab3"))
+    v2 = converted(tmp_path, v1)
+    assert not (v2 / "timecourses_Tab3.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [
+        ("array_output", 2),
+        ("output_label", 2),
+    ]
+
+
 def test_array_points_of_a_scatter_are_an_intended_change(tmp_path, sf_vocabulary):
     study = with_outputs(
         OUTPUT,

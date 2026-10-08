@@ -1,7 +1,7 @@
 """Table rows of a parsed format 1 study: the inverse of the format 2 reader."""
 
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from decimal import Decimal
 from pathlib import Path
@@ -21,6 +21,7 @@ from pkdb.schemas.study import (
     Statistics,
 )
 from pkdb.studyformat.cells import NAME_PATTERN, NOT_REPORTED
+from pkdb.studyformat.relations import SERIES_COLUMNS
 from pkdb.studyformat.tables import TABLES, TEXT_SOURCE, table_file
 from pkdb.studyformat.text import format_number, render_tsv
 
@@ -438,6 +439,68 @@ def _scatter_rows(
     return tables, used
 
 
+def _is_series(rows: list[tuple[Measurement, dict[str, str]]]) -> bool:
+    """Whether timecourse rows of one label and table file form a format 2 series.
+
+    Each row has a time, no time appears twice, and the series columns hold
+    the same value in every row.
+    """
+    columns, times = set(), set()
+    for record, row in rows:
+        if record.time_not_reported or not isinstance(record.time, (int, float)):
+            return False
+        times.add((float(record.time), row["time_unit"]))
+        columns.add(
+            tuple(
+                tuple(sorted(row[name].split(LIST)))
+                if name == "interventions"
+                else row[name]
+                for name in SERIES_COLUMNS
+            )
+        )
+    return len(columns) == 1 and len(times) == len(rows)
+
+
+def series_arrays(
+    study: CanonicalStudy, name: str, images: frozenset[str]
+) -> frozenset[str]:
+    """Keys of the labelled array outputs that become timecourse points.
+
+    Format 2 makes the timecourse rows of one label in one table file a
+    series. Labelled array outputs become timecourse points only where their
+    rows, with the timecourse rows of their label, form a valid series.
+    Others, such as correlation data of many subjects without time, stay
+    outputs. Scatter points are neither.
+    """
+    points = {
+        dimension.output
+        for dataset in study.scatters
+        for subset in dataset.subsets
+        for dimension in subset.dimensions
+    }
+    series: dict[tuple[str, str], list[tuple[Measurement, dict[str, str]]]]
+    series = defaultdict(list)
+    for record in study.measurements:
+        if (
+            record.label
+            and record.label not in points
+            and record.output_type in ("timecourse", "array")
+        ):
+            source, row = _measurement(record, name, {}, images)
+            # The decisions of a geometric mean are recorded when the row is written.
+            row = _geometric(record, row, [])
+            series[table_file("timecourses", source), record.label].append(
+                (record, row)
+            )
+    return frozenset(
+        record.key
+        for rows in series.values()
+        if _is_series(rows)
+        for record, _ in rows
+        if record.output_type == "array"
+    )
+
+
 class _Labels:
     """Format 2 names of the timecourse labels, renamed per table file."""
 
@@ -491,6 +554,7 @@ def study_tables(
     """
     decisions: list[Decision] = []
     scatters, used = _scatter_rows(study, name, images, decisions)
+    arrays = series_arrays(study, name, images)
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, images, decisions),
         "characteristica.tsv": _characteristica(
@@ -498,7 +562,7 @@ def study_tables(
         ),
         "interventions.tsv": _interventions(study, name, images, error_bars, decisions),
     }
-    arrays: Counter[str] = Counter()
+    array_files: Counter[str] = Counter()
     labels: Counter[str] = Counter()
     names = _Labels(study)
     for record in study.measurements:
@@ -507,7 +571,9 @@ def study_tables(
         else:
             source, row = _measurement(record, name, error_bars, images)
             row = _geometric(record, row, decisions)
-            if record.label and record.output_type in ("timecourse", "array"):
+            if record.label and (
+                record.output_type == "timecourse" or record.key in arrays
+            ):
                 file = table_file("timecourses", source)
                 row = {**row, "label": names(record.label, file)}
             else:
@@ -517,14 +583,14 @@ def study_tables(
                     labels[file] += 1
             tables.setdefault(file, []).append(row)
         if record.output_type == "array":
-            arrays[file] += 1
+            array_files[file] += 1
     tables |= scatters
     # One decision per table: a study can hold thousands of array outputs.
     decisions += [
         Decision(
             kind="array_output", detail=f"{_plural(count, 'array output')} in {file}"
         )
-        for file, count in arrays.items()
+        for file, count in array_files.items()
     ]
     decisions += [
         Decision(

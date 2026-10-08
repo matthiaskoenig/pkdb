@@ -8,14 +8,16 @@ and then compared with the reported records of the converted study (B).
 
 import math
 from collections import Counter, defaultdict
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Collection, Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
+from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.model import Change, Difference, StudyResult
-from pkdb.migration.rows import comment, label_name, scatter_comment
+from pkdb.migration.rows import comment, label_name, scatter_comment, series_arrays
+from pkdb.migration.sources import image_sources
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
@@ -229,11 +231,16 @@ class _Normalizer:
     """Rewrites the keys and statistics of A's records by the intended changes."""
 
     def __init__(
-        self, study: CanonicalStudy, as_individuals: set[str], changes: Changes
+        self,
+        study: CanonicalStudy,
+        as_individuals: set[str],
+        changes: Changes,
+        arrays: Collection[str],
     ):
         self.name = study.metadata.name
         self.as_individuals = as_individuals
         self.changes = changes
+        self.arrays = arrays
         self.labels = _scatter_labels(study)
         self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
@@ -287,16 +294,17 @@ class _Normalizer:
             update={"gmean": statistics.mean, "mean": None}
         )
 
-    def output(self, key: Key) -> Key:
+    def output(self, key: Key, record: str) -> Key:
         """Array outputs and output labels as format 2 holds them.
 
-        Scatter points take the labels of their scatter; other outputs lose
-        their label, since the format 2 outputs table has none.
+        Array outputs in `arrays` become timecourse points. Scatter points
+        take the labels of their scatter; other outputs lose their label,
+        since the format 2 outputs table has none.
         """
         scatter = self.labels.get(key.label) if key.label else None
         if key.output_type == "array":
             self.changes.add("array_output", described(key))
-            kind = "timecourse" if key.label and scatter is None else "output"
+            kind = "timecourse" if record in self.arrays else "output"
             key = key._replace(output_type=kind)
         if scatter is not None and scatter != key.label:
             key = key._replace(label=scatter)
@@ -310,13 +318,15 @@ class _Normalizer:
                 key = key._replace(label=name)
         return key
 
-    def __call__(self, key: Key, statistics: Statistics) -> tuple[Key, Statistics]:
+    def __call__(
+        self, key: Key, statistics: Statistics, record: str
+    ) -> tuple[Key, Statistics]:
         key, statistics = self.geometric(
             key._replace(image=self.image(key.image)), statistics
         )
         key = self.subject(key)
         if key.table == "measurements":
-            key = self.output(key)
+            key = self.output(key, record)
         return key, statistics
 
     def finish(self) -> None:
@@ -356,21 +366,27 @@ def _scatter_comments(study: CanonicalStudy) -> dict[str, str]:
 
 
 def _records(
-    study: CanonicalStudy, as_individuals: set[str], changes: Changes | None
+    study: CanonicalStudy,
+    as_individuals: set[str],
+    changes: Changes | None,
+    arrays: Collection[str] = frozenset(),
 ) -> tuple[dict[Key, list[Reported]], dict[str, Key]]:
     """The reported records by key, and the key of each measurement.
 
     With `changes`, the records are A's, rewritten by the intended changes,
-    with the comment that the converter writes for them.
+    with the comment that the converter writes for them; `arrays` are the
+    array outputs that become timecourse points.
     """
-    normalize = None if changes is None else _Normalizer(study, as_individuals, changes)
+    normalize = (
+        None if changes is None else _Normalizer(study, as_individuals, changes, arrays)
+    )
     scatter_comments = {} if changes is None else _scatter_comments(study)
     records: dict[Key, list[Reported]] = defaultdict(list)
 
     def add(key: Key, record: Observation) -> Key:
         statistics = record.statistics
         if normalize is not None:
-            key, statistics = normalize(key, statistics)
+            key, statistics = normalize(key, statistics, record.key)
         text = scatter_comments.get(record.key)
         records[key].append(
             Reported(statistics, comment(record) if text is None else text)
@@ -654,12 +670,16 @@ def _points(points: object) -> str:
 
 
 def compare(
-    a: CanonicalStudy, b: CanonicalStudy
+    a: CanonicalStudy, b: CanonicalStudy, arrays: Collection[str] = frozenset()
 ) -> tuple[list[Change], list[Difference]]:
-    """The intended changes from A to B and every other difference between them."""
+    """The intended changes from A to B and every other difference between them.
+
+    `arrays` are the keys of A's array outputs that become timecourse points
+    (`rows.series_arrays`); other array outputs become outputs.
+    """
     changes = Changes()
     as_individuals = _individuals(a, changes)
-    a_records, a_keys = _records(a, as_individuals, changes)
+    a_records, a_keys = _records(a, as_individuals, changes, arrays)
     b_records, b_keys = _records(b, set(), None)
     differences = _match(a_records, b_records, changes)
     # Timecourses and scatters hold records; their images are compared above.
@@ -688,6 +708,18 @@ def compare(
         "scatters", _scatters(a, a_keys), _scatters(b, b_keys), _points
     )
     return changes.listed(), differences
+
+
+def _series_arrays(v1: Path, study: CanonicalStudy) -> frozenset[str]:
+    """The array outputs of A that the converter writes as timecourse points.
+
+    The converter decides this on the parsed, not the prepared, format 1
+    study, whose calculation types `prepare` has not filled yet.
+    """
+    if not any(r.output_type == "array" and r.label for r in study.measurements):
+        return frozenset()
+    parsed = parse_bundle(load_folder(v1))
+    return series_arrays(parsed, v1.name, image_sources(v1, v1.name))
 
 
 def _errors(bundle: PreparedBundle) -> list[str]:
@@ -751,7 +783,7 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return _invalid(study, "validation", error.report.issues)
     if _errors(b):
         return _invalid(study, "validation", b.report.issues)
-    changes, differences = compare(a.study, b.study)
+    changes, differences = compare(a.study, b.study, _series_arrays(v1, a.study))
     if differences:
         return StudyResult(
             study=study,

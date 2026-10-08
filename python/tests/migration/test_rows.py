@@ -240,6 +240,51 @@ def test_array_outputs_become_outputs_or_timecourses(tmp_path):
     ]
 
 
+# A labelled array output: a series only with a time per row and one subject.
+ARRAY = {
+    "source": "Tab3",
+    "image": "Tab3",
+    "output_type": "array",
+    "label": "drug_individuals",
+    "individual": "col==subject",
+    "interventions": ["D1"],
+    "measurement_type": "concentration",
+    "substance": "drug",
+    "tissue": "plasma",
+    "mean": "col==mean",
+    "unit": "mg/l",
+}
+
+
+@pytest.mark.parametrize(
+    ("timed", "rows", "series"),
+    [
+        (True, [["S1", 0, 1], ["S1", 1, 2]], True),
+        (False, [["S1", 0, 1], ["S1", 1, 2]], False),
+        (True, [["S1", 0, 1], ["S2", 1, 2]], False),
+        (True, [["S1", 1, 1], ["S1", 1, 2]], False),
+    ],
+    ids=["series", "no time", "two subjects", "time twice"],
+)
+def test_labelled_array_outputs_are_timecourses_only_as_valid_series(
+    tmp_path, timed, rows, series
+):
+    array = {**ARRAY, "time": "col==time", "time_unit": "h"} if timed else ARRAY
+    study = {**STUDY, "outputset": {"outputs": [array]}}
+    sheet = [["subject", "time", "mean"], *rows]
+    folder = v1_study(tmp_path, study, {"Tab3": sheet}, (*IMAGES, "Tab3"))
+    tables, decisions = tables_of(folder)
+    file = "timecourses_Tab3.tsv" if series else "outputs_Tab3.tsv"
+    assert [table for table in tables if table.endswith("_Tab3.tsv")] == [file]
+    assert [row.get("label") for row in tables[file]] == (
+        ["drug_individuals"] * 2 if series else [None] * 2
+    )
+    details = [f"2 array outputs in {file}"]
+    if not series:
+        details.append(f"2 output labels dropped in {file}")
+    assert [d.detail for d in decisions] == details
+
+
 def test_outputs_take_the_source_of_their_image(tmp_path):
     # Sheets Tab2A and Tab2B hold rows of the paper's Tab2; a row of sheet
     # Tab2 shows Fig1, and a row without image keeps its sheet.
