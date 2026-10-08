@@ -541,7 +541,7 @@ Each study is classified as identical, intended changes only (each change listed
 | 5 | Migration converter, equivalence gate, `pkdb release`, `pkdb registry`, `pkdb new`, `pkdb move`, `pkdb issues sync`, cutover | 1, 2 |
 | 6 | pkdb_data tooling: pre-commit, CI, `.gitignore` and `.gitattributes`, curation guide, AI skill and `AGENTS.md`, issue sync workflow | 1, 3, 5 |
 
-Sub-project 5 can start once 1 and 2 are done, in parallel with 3 and 4. The cutover (15.3) happens when all six are finished.
+Sub-project 5 can start once 1 and 2 are done, in parallel with 3 and 4. The cutover (15.3) happens when all six are finished. The decisions taken while planning sub-project 5 are in [Study format 2 migration, GitHub issues and study lifecycle](2026-10-08-study-format-v2-05-migration-design.md).
 
 ## 18. Out of scope
 
