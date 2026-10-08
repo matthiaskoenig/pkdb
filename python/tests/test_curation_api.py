@@ -467,6 +467,33 @@ def test_study_routes_require_the_session(api):
     assert request(server, "GET", f"{DETAIL}/files/Example_Fig1.png")[0] == 401
 
 
+@pytest.mark.parametrize(
+    ("path", "body"),
+    [
+        (
+            "/local/studies/tables/preview",
+            {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"},
+        ),
+        (
+            "/local/studies/review/preview",
+            {
+                "study": "caffeine/Example",
+                "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+            },
+        ),
+    ],
+)
+def test_preview_routes_require_the_session_and_the_action_token(api, path, body):
+    server, engine, folder = api
+    headers = authenticate(server)
+    without_session = {"X-CSRF-Token": headers["X-CSRF-Token"]}
+    assert request(server, "POST", path, body, without_session)[0] == 401
+    status, _, data = request(server, "POST", path, body, {"Cookie": headers["Cookie"]})
+    assert status == 403
+    assert json.loads(data)["code"] == "action_token"
+    assert request(server, "POST", path, body, headers)[0] == 200
+
+
 def test_state_etag(api):
     server, engine, folder = api
     headers = authenticate(server)
