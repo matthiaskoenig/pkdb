@@ -135,13 +135,15 @@ const { data, error, loading, reload } = useLoaded<TableResponse>(
 const table = computed(() => (data.value && data.value.key === selected.value ? data.value.content : null));
 
 const hideEmpty = ref(false);
+/** The review items of the study; the local server matched their targets. */
+const reviewItems = computed(() => detail.value?.review.value?.items ?? []);
 const highlight = computed(() =>
-  table.value ? targetLines(table.value, detail.value?.review.value?.items ?? []) : new Set<number>(),
+  table.value ? targetLines(table.value.file, reviewItems.value, detail.value?.targets ?? {}) : new Set<number>(),
 );
 const issues = computed(() => issueCells(detail.value?.problems ?? [], selected.value ?? ""));
 
 const without = computed(() =>
-  table.value ? itemsWithoutRows(table.value, detail.value?.review.value?.items ?? []) : { whole: 0, unmatched: 0 },
+  table.value ? itemsWithoutRows(table.value.file, reviewItems.value, detail.value?.targets ?? {}) : { whole: 0, unmatched: 0 },
 );
 
 /** The rows, the targets, the cells with problems and the hidden columns, in sentences. */

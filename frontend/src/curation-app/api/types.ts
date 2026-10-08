@@ -541,6 +541,28 @@ export interface StudyDetail {
   files: string[];
   /** The table files and raw tables in the order of the workbook sheets; empty beyond the upload limits. */
   tables: TableEntry[];
+  /**
+   * What the target of each review item with a file selects, by item id, as the library matches
+   * it; empty beyond the upload limits.
+   */
+  targets: Record<string, TargetMatch>;
+}
+
+/** A series of a figure with a WebPlotDigitizer project: the figure and the series name. */
+export interface DigitizedSeries {
+  source: string;
+  series: string;
+}
+
+/** What a review target selects, as the local server matches it. */
+export interface TargetMatch {
+  /**
+   * The TSV lines of the rows that its row filter matches in a data table, in file order; null
+   * for a target without a row filter or of a file that is no data table, such as a raw table.
+   */
+  lines: number[] | null;
+  /** The series that its filter names in a timecourse or scatter table of a digitized figure. */
+  series: DigitizedSeries | null;
 }
 
 export interface TableRow {
@@ -741,6 +763,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "sources",
   "files",
   "tables",
+  "targets",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");
@@ -775,6 +798,8 @@ export const isReviewWrite = hasKeys<ReviewWrite>("revision");
 export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "changes", "conflicts", "issues");
 
 export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues");
+
+export const isTargetMatch = hasKeys<TargetMatch>("lines", "series");
 
 export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
 

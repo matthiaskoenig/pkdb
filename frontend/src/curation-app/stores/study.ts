@@ -14,12 +14,14 @@ import {
   isTablePreview,
   isTableResponse,
   isTablesResult,
+  isTargetMatch,
   type Guard,
   type MetadataWrite,
   type Profile,
   type ReferenceAuthor,
   type ReferencePreview,
   type ReferenceRecord,
+  type ReviewTarget,
   type ReviewWrite,
   type SourceView,
   type StudyDetail,
@@ -27,6 +29,7 @@ import {
   type TablePreview,
   type TableResponse,
   type TablesResult,
+  type TargetMatch,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
@@ -202,6 +205,11 @@ export const useStudyStore = defineStore("curation-study", () => {
     return postJson("/local/studies/tables/preview", { study: opened(), kind, source }, isTablePreview);
   }
 
+  /** The rows and the digitized series that a draft review target selects; writes nothing. */
+  function previewTarget(target: ReviewTarget): Promise<TargetMatch> {
+    return postJson("/local/studies/review/preview", { study: opened(), target }, isTargetMatch);
+  }
+
   /** `reference.json` of the open study; empty when there is none. */
   async function readReference(): Promise<ReferenceRecord> {
     return (await postJson("/local/reference/read", { id: opened() }, isReferenceRead)).reference;
@@ -251,6 +259,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     reviewAction,
     tablesAction,
     previewTable,
+    previewTarget,
     readReference,
     searchReference,
     previewReference,

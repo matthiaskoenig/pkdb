@@ -12,6 +12,7 @@ from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.server import create_server
 from pkdb.identity import Author, IdentityError
+from pkdb.schemas.validation import fail
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.review_edit import read_review
@@ -164,9 +165,43 @@ def test_upload_limits_bound_the_read_routes(api, monkeypatch, limit, value, cod
     assert detail["review"]["value"]["status"] == "draft"
     assert detail["problems"][0]["code"] == code
     assert detail["sources"] == [] and detail["files"] == [] and detail["tables"] == []
+    assert detail["targets"] == {}
     for path in (f"{DETAIL}/tables/timecourses_Fig1.tsv", f"{DETAIL}/sources/Fig1"):
         status, _, data = request(server, "GET", path, headers=headers)
         assert status == 413 and "more than" in json.loads(data)["error"]
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    status, _, data = request(
+        server, "POST", "/local/studies/review/preview", body, headers
+    )
+    assert status == 413 and "more than" in json.loads(data)["error"]
+
+
+def test_a_study_that_cannot_be_read_is_not_beyond_the_limits(api, monkeypatch):
+    server, engine, folder = api
+
+    def unreadable(folder, **limits):
+        fail("invalid_tsv", "timecourses_Fig1.tsv cannot be read")
+
+    monkeypatch.setattr(studies, "load_study", unreadable)
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    for method, path, payload in [
+        ("POST", "/local/studies/review/preview", body),
+        ("GET", f"{DETAIL}/tables/timecourses_Fig1.tsv", None),
+    ]:
+        status, _, data = request(server, method, path, payload, headers)
+        refused = json.loads(data)
+        assert status == 422, path
+        assert [issue["code"] for issue in refused["issues"]] == ["invalid_tsv"]
+    detail = _detail(server, headers)
+    assert detail["problems"][0]["code"] == "invalid_tsv"
+    assert detail["tables"] == [] and detail["targets"] == {}
 
 
 def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
@@ -453,6 +488,69 @@ def test_state_etag(api):
 
 def _detail(server, headers):
     return json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+
+
+def test_detail_and_preview_match_review_targets(api):
+    server, engine, folder = api
+    created = "2026-10-01T10:00:00Z"
+    item = new_ulid()
+    review = {
+        "status": "draft",
+        "items": [
+            {
+                "id": item,
+                "kind": "question",
+                "target": {
+                    "file": "timecourses_Fig1.tsv",
+                    "rows": {"label": "drug_plasma"},
+                },
+                "text": "Which dose?",
+                "author": "curator",
+                "created": created,
+            },
+            {
+                "id": new_ulid(),
+                "kind": "question",
+                "text": "Is the study complete?",
+                "author": "curator",
+                "created": created,
+            },
+        ],
+    }
+    (folder / "review.json").write_text(json.dumps(review))
+    # The TSV line of each time point of the formatted table.
+    lines = (folder / "timecourses_Fig1.tsv").read_text().splitlines()
+    time = lines[0].split("\t").index("time")
+    at = {
+        row.split("\t")[time]: number for number, row in enumerate(lines[1:], start=2)
+    }
+    headers = authenticate(server)
+    detail = _detail(server, headers)
+    # Only items with a target file have a match.
+    assert detail["targets"] == {
+        item: {
+            "lines": sorted(at.values()),
+            "series": {"source": "Fig1", "series": "drug_plasma"},
+        }
+    }
+    preview = "/local/studies/review/preview"
+    body = {
+        "study": "caffeine/Example",
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "1"}},
+    }
+    status, _, data = request(server, "POST", preview, body, headers)
+    assert status == 200
+    assert json.loads(data) == {"lines": [at["1"]], "series": None}
+    status, _, data = request(
+        server, "POST", preview, {**body, "target": {"rows": {"time": "1"}}}, headers
+    )
+    assert status == 422
+    assert json.loads(data)["issues"][0]["code"] == "invalid_review_json"
+    # A preview writes nothing, needs no user and records no activity.
+    engine.user = ""
+    assert request(server, "POST", preview, body, headers)[0] == 200
+    assert _detail(server, headers)["jobs"] == []
+    assert json.loads((folder / "review.json").read_text()) == review
 
 
 def test_metadata_write_and_conflict(api):

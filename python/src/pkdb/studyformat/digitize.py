@@ -377,13 +377,18 @@ def central_column(row: Row) -> str | None:
     )
 
 
+# The column that names the series of a timecourse or scatter row, as its dataset is named.
+SERIES_COLUMNS = {"timecourses": "label", "scatters": "name"}
+
+
 def mapped_points(table: LoadedTable) -> list[MappedPoint]:
     """The rows of a timecourse or scatter table as dataset points."""
     points: list[MappedPoint] = []
     for row in table.rows:
         values = row.values
         if table.kind == "timecourses":
-            time, label = values.get("time"), row.cells.get("label", "")
+            time = values.get("time")
+            label = row.cells.get(SERIES_COLUMNS["timecourses"], "")
             column = central_column(row)
             if not isinstance(time, float) or column is None or not label:
                 continue
@@ -417,7 +422,7 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                 )
         elif table.kind == "scatters":
             x, y = values.get("x_mean"), values.get("y_mean")
-            name = row.cells.get("name", "")
+            name = row.cells.get(SERIES_COLUMNS["scatters"], "")
             if isinstance(x, float) and isinstance(y, float) and name:
                 points.append(
                     MappedPoint(

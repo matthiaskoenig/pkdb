@@ -84,6 +84,10 @@ test("adds an item about a row and a column of a table", async ({ app, page }) =
   const item = page.getByRole("article", { name: "Issue" });
   await expect(item).toContainText(ISSUE);
   await expect(item).toContainText("timecourses_Fig1.tsv · label = caf_plasma_100mg, time = 4 · column mean");
+  // The local server matched the target of the new item: its row and its digitized series.
+  const target = page.getByRole("region", { name: "Target" });
+  await expect(target).toContainText("Matches 1 of 18 rows.");
+  await expect(target.getByRole("heading", { name: "Figure Fig1" })).toBeVisible();
   const added = onDisk(app.server.workspace).items.find((entry) => entry.text === ISSUE);
   expect(added).toMatchObject({
     kind: "issue",

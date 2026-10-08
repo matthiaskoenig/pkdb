@@ -4,8 +4,7 @@ import {
   emptyText,
   filterItems,
   matchText,
-  matchingRows,
-  seriesOfTarget,
+  rowsAt,
   shownColumns,
   stateCounts,
   targetText,
@@ -78,44 +77,6 @@ describe("targetText", () => {
   });
 });
 
-describe("seriesOfTarget", () => {
-  it("maps the label rows of a timecourse table to the series of its figure", () => {
-    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D150" } })).toEqual({
-      source: "Fig1",
-      series: "caf_plasma_D150",
-    });
-    expect(
-      seriesOfTarget({ file: "timecourses_Fig2A.tsv", rows: { label: "caf_plasma", time: "1" }, column: "mean" }),
-    ).toEqual({ source: "Fig2A", series: "caf_plasma" });
-  });
-
-  it("maps the name rows of a scatter table to the series of its figure", () => {
-    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "age_vs_cmax" } })).toEqual({
-      source: "Fig2",
-      series: "age_vs_cmax",
-    });
-    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "age_vs_cmax", subjects: "S1" } })).toEqual({
-      source: "Fig2",
-      series: "age_vs_cmax",
-    });
-  });
-
-  it("is null for other targets", () => {
-    expect(seriesOfTarget(undefined)).toBeNull();
-    expect(seriesOfTarget({})).toBeNull();
-    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv" })).toBeNull();
-    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { subjects: "all" } })).toBeNull();
-    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { label: "" } })).toBeNull();
-    expect(seriesOfTarget({ file: "outputs_Tab2.tsv", rows: { label: "clearance" } })).toBeNull();
-    expect(seriesOfTarget({ file: "timecourses_Tab2.tsv", rows: { label: "caf_plasma" } })).toBeNull();
-    // A scatter series is named by `name`, a timecourse series by `label`.
-    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { label: "age_vs_cmax" } })).toBeNull();
-    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { name: "caf_plasma" } })).toBeNull();
-    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "" } })).toBeNull();
-    expect(seriesOfTarget({ file: "scatters_Tab2.tsv", rows: { name: "age_vs_cmax" } })).toBeNull();
-  });
-});
-
 const header = ["label", "time", "mean", "comment"];
 const rows: TableRow[] = [
   { line: 2, cells: ["caf_plasma_D150", "0", "0.166", ""] },
@@ -123,17 +84,15 @@ const rows: TableRow[] = [
   { line: 4, cells: ["caf_plasma_D300", "0", "0.2", "smoker"] },
 ];
 
-describe("matchingRows", () => {
-  it("keeps the rows with every value of the filters", () => {
-    expect(matchingRows(header, rows, { label: "caf_plasma_D150" }).map((row) => row.line)).toEqual([2, 3]);
-    expect(matchingRows(header, rows, { label: "caf_plasma_D150", time: "0.5" }).map((row) => row.line)).toEqual([3]);
-    expect(matchingRows(header, rows, {}).map((row) => row.line)).toEqual([2, 3, 4]);
+describe("rowsAt", () => {
+  it("keeps the rows at the lines, in their order in the table", () => {
+    expect(rowsAt(rows, [4, 2]).map((row) => row.line)).toEqual([2, 4]);
+    expect(rowsAt(rows, [3])).toEqual([rows[1]]);
   });
 
-  it("compares the cells as printed and matches nothing for an unknown column", () => {
-    expect(matchingRows(header, rows, { time: "0.50" })).toEqual([]);
-    expect(matchingRows(header, rows, { dose: "150" })).toEqual([]);
-    expect(matchingRows(header, rows, { comment: "" }).map((row) => row.line)).toEqual([2, 3]);
+  it("keeps no row for no lines or lines that the table no longer has", () => {
+    expect(rowsAt(rows, [])).toEqual([]);
+    expect(rowsAt(rows, [7])).toEqual([]);
   });
 });
 

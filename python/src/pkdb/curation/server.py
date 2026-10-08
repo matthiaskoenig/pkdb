@@ -14,7 +14,7 @@ from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
 from pkdb.curation.state import THEMES
-from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
+from pkdb.curation.studies import AmbiguousStudy, BeyondLimits, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
@@ -236,9 +236,10 @@ class Handler(BaseHTTPRequestHandler):
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:
                 self._reply(409, {"error": str(error), "paths": error.paths})
-            except StudyValidationError as error:
-                # The study is beyond the upload limits.
+            except BeyondLimits as error:
                 self._reply(413, {"error": str(error)})
+            except StudyValidationError as error:
+                self._unreadable(error)
             except LookupError, FileNotFoundError:
                 self._reply(404, {"error": "Resource is not available"})
             except Exception:
@@ -340,6 +341,10 @@ class Handler(BaseHTTPRequestHandler):
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:
             self._reply(409, {"error": str(error), "paths": error.paths})
+        except BeyondLimits as error:
+            self._reply(413, {"error": str(error)})
+        except StudyValidationError as error:
+            self._unreadable(error)
         except (ReferenceError, WorkspaceError, UnsafeFile, ResumeRefused) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
@@ -358,6 +363,18 @@ class Handler(BaseHTTPRequestHandler):
                     "error": "The local action failed. Review workspace activity and retry."
                 },
             )
+
+    def _unreadable(self, error):
+        """Reply that the study cannot be read, with the issues of the library."""
+        self._reply(
+            422,
+            {
+                "error": str(error),
+                "issues": [
+                    issue.model_dump(mode="json") for issue in error.report.issues
+                ],
+            },
+        )
 
     def _refuse(self, status, message, size):
         """Reply without reading the body, then discard what the client sends, within bounds.
@@ -381,6 +398,7 @@ class Handler(BaseHTTPRequestHandler):
             "/local/studies/review",
             "/local/studies/tables",
             "/local/studies/tables/preview",
+            "/local/studies/review/preview",
         }:
             study = body.get("study")
             if not isinstance(study, str):
@@ -393,6 +411,8 @@ class Handler(BaseHTTPRequestHandler):
                 return engine.review_action(study, body)
             if path == "/local/studies/tables/preview":
                 return engine.table_preview(study, body)
+            if path == "/local/studies/review/preview":
+                return engine.target_preview(study, body)
             return engine.tables_action(study, body)
         if path in {
             "/local/reference/read",

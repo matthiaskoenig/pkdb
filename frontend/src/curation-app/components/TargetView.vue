@@ -2,10 +2,11 @@
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
-import type { ReviewTarget, SourceView, TableResponse } from "../api/types";
+import type { ReviewItem, SourceView, TableResponse, TargetMatch } from "../api/types";
 import { useLoaded } from "../composables/useLoaded";
+import { targetMatch } from "../grid";
 import { plural } from "../overview";
-import { matchingRows, matchText, seriesOfTarget, shownColumns, targetText } from "../review";
+import { matchText, rowsAt, shownColumns, targetText } from "../review";
 import { useStudyStore } from "../stores/study";
 import { sectionRoute, tableFiles } from "../study";
 import SourceOverlay from "./SourceOverlay.vue";
@@ -13,28 +14,30 @@ import TableGrid from "./TableGrid.vue";
 
 /**
  * What a review item is about: the rows of its table that match its row filters, with its column
- * marked, and for a digitized series the figure overlay with that series emphasized. Nothing
- * shows for the whole study or a file that is no table. The rows link to the Tables section.
+ * marked, and for a digitized series the figure overlay with that series emphasized, as the local
+ * server matched its target. Nothing shows for the whole study or a file that is no table. The
+ * rows link to the Tables section.
  */
-const props = defineProps<{ target: ReviewTarget | undefined }>();
+const props = defineProps<{ item: ReviewItem }>();
 
 const study = useStudyStore();
 const router = useRouter();
 const headingId = useId();
 
-const file = computed(() => props.target?.file ?? null);
-const filters = computed(() => props.target?.rows ?? {});
-const filtered = computed(() => Object.keys(filters.value).length > 0);
+const target = computed(() => props.item.target);
+const file = computed(() => target.value?.file ?? null);
+/** The rows and the digitized series of the target, as the local server matched them. */
+const match = computed<TargetMatch>(() =>
+  study.detail ? targetMatch(study.detail.targets, props.item) : { lines: null, series: null },
+);
+/** Whether a row filter narrows the rows; without one, the target is the whole table. */
+const filtered = computed(() => match.value.lines !== null);
 /** A data table or a raw table of the study, whose rows the local API serves. */
 const tableFile = computed(() =>
   file.value !== null && study.detail !== null && tableFiles(study.detail).includes(file.value) ? file.value : null,
 );
 /** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
-const series = computed(() => {
-  const found = seriesOfTarget(props.target);
-  const summary = found && study.detail?.sources.find((source) => source.source === found.source);
-  return summary?.raw_kind === "digitization" ? found : null;
-});
+const series = computed(() => match.value.series);
 
 const {
   data: table,
@@ -63,9 +66,11 @@ function showRow(row: { file: string; line: number }): void {
 const rows = computed(() => {
   const loaded = table.value?.content;
   if (!loaded || loaded.kind !== "table") return null;
-  const matched = matchingRows(loaded.header, loaded.rows, filters.value);
-  const column = props.target?.column ?? null;
-  const kept = shownColumns(loaded.header, matched, [...Object.keys(filters.value), ...(column ? [column] : [])]);
+  const lines = match.value.lines;
+  const matched = lines === null ? loaded.rows : rowsAt(loaded.rows, lines);
+  const column = target.value?.column ?? null;
+  const filters = Object.keys(target.value?.rows ?? {});
+  const kept = shownColumns(loaded.header, matched, [...filters, ...(column ? [column] : [])]);
   // The column of the item comes first, so that it is in view in a wide table.
   const marked = column === null ? -1 : loaded.header.indexOf(column);
   return {

@@ -240,6 +240,7 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
       { file: "timecourses_Fig1.tsv", kind: "timecourses" },
       { file: "Example_Tab2.tsv", kind: "raw" },
     ],
+    targets: {},
     ...changes,
   };
 }

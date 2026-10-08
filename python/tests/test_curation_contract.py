@@ -102,3 +102,36 @@ def test_table_preview_contract(workspace, engine_on):
     check_contract(
         "table-preview", {"kinds": list(NEW_TABLE_KINDS), "previews": previews}
     )
+
+
+TARGET_DRAFTS = [
+    {
+        "file": "timecourses_Fig1.tsv",
+        "rows": {"label": "caf_plasma_100mg", "time": "4"},
+    },
+    {"file": "timecourses_Fig1.tsv", "rows": {"label": "caf_plasma_200mg"}},
+    {"file": "outputs_Tab2.tsv", "rows": {"measurement": "auc_inf", "comment": ""}},
+    {"file": "outputs_Tab2.tsv", "rows": {"measurement": "AUC"}},
+    {"file": "Demo2020_Tab2.tsv"},
+]
+
+
+def test_targets_contract(workspace, engine_on):
+    """The rows and the digitized series of the review targets of Demo2020, and of draft targets."""
+    engine = engine_on(workspace)
+    detail = engine.study_detail(DEMO)
+    previews = [
+        {"request": draft, "response": engine.target_preview(DEMO, {"target": draft})}
+        for draft in TARGET_DRAFTS
+    ]
+    check_contract(
+        "targets",
+        {
+            "items": [
+                {"id": item["id"], "state": item["state"], "target": item.get("target")}
+                for item in detail["review"]["value"]["items"]
+            ],
+            "targets": detail["targets"],
+            "previews": previews,
+        },
+    )

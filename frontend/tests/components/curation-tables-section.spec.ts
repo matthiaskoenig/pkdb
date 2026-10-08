@@ -94,6 +94,8 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
       },
       issues: [],
     },
+    // As the local server matches the targets in the rows of `outputs`.
+    targets: { a: { lines: [4], series: null }, b: { lines: [2], series: null } },
     problems: [problem("invalid_number", 3, "mean"), problem("unknown_unit", 4, "unit", "warning")],
     counts: { errors: 1, warnings: 1 },
     ...changes,
@@ -449,8 +451,9 @@ describe("tabs", () => {
       reviewItem({ id: "d", target: { file: "outputs_Tab2.tsv", rows: {} } }),
       reviewItem({ id: "e", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_auc" } } }),
     ];
+    const targets = { c: { lines: null, series: null }, d: { lines: null, series: null }, e: { lines: [], series: null } };
     await mountSection(
-      { ...value, review: { ...value.review, value: { ...value.review.value!, items } }, problems: [] },
+      { ...value, review: { ...value.review, value: { ...value.review.value!, items } }, targets, problems: [] },
       {},
       `${SECTION}?file=outputs_Tab2.tsv`,
     );

@@ -2,8 +2,7 @@
  * The parts of a table grid: its columns, the rows that open review items target, the cells with
  * problems, and the raw extraction of a source as a table.
  */
-import type { ReviewItem, TableResponse, ValidationIssue } from "./api/types";
-import { matchingRows } from "./review";
+import type { ReviewItem, TableResponse, TargetMatch, ValidationIssue } from "./api/types";
 import { columnLetters } from "./columns";
 
 // Columns
@@ -34,40 +33,41 @@ export function visibleColumns(table: TableResponse, hideEmpty: boolean, keep: r
 
 // Review targets and problems
 
-/** The row filters of an open review item about the table, or null for another item or the whole table. */
-function rowFilters(table: TableResponse, item: ReviewItem): Record<string, string> | null {
-  const filters = item.target?.rows;
-  if (item.state !== "open" || item.target?.file !== table.file || !filters) return null;
-  return Object.keys(filters).length ? filters : null;
+const NOTHING: TargetMatch = { lines: null, series: null };
+
+/** What the target of `item` selects, as the local server matched it; nothing for an item without a file. */
+export function targetMatch(targets: Readonly<Record<string, TargetMatch>>, item: ReviewItem): TargetMatch {
+  return targets[item.id] ?? NOTHING;
 }
 
-/** The lines of the rows that the row filters of open review items about the table match. */
-export function targetLines(table: TableResponse, items: readonly ReviewItem[]): Set<number> {
-  const lines = new Set<number>();
-  // A raw table has no column names to filter.
-  if (table.kind !== "table") return lines;
-  for (const item of items) {
-    const filters = rowFilters(table, item);
-    if (filters) for (const row of matchingRows(table.header, table.rows, filters)) lines.add(row.line);
-  }
-  return lines;
+function openItemsOf(file: string, items: readonly ReviewItem[]): ReviewItem[] {
+  return items.filter((item) => item.state === "open" && item.target?.file === file);
+}
+
+/** The lines of the rows of `file` that the row filters of its open review items match. */
+export function targetLines(
+  file: string,
+  items: readonly ReviewItem[],
+  targets: Readonly<Record<string, TargetMatch>>,
+): Set<number> {
+  return new Set(openItemsOf(file, items).flatMap((item) => targetMatch(targets, item).lines ?? []));
 }
 
 /**
- * The open review items about the table that color no row: those about the whole table, such as
- * all items about a raw table, and those whose row filters match no row.
+ * The open review items about `file` that color no row: those without a row filter, such as all
+ * items about a raw table, and those whose row filter matches no row.
  */
 export function itemsWithoutRows(
-  table: TableResponse,
+  file: string,
   items: readonly ReviewItem[],
+  targets: Readonly<Record<string, TargetMatch>>,
 ): { whole: number; unmatched: number } {
   let whole = 0;
   let unmatched = 0;
-  for (const item of items) {
-    if (item.state !== "open" || item.target?.file !== table.file) continue;
-    const filters = rowFilters(table, item);
-    if (!filters || table.kind !== "table") whole += 1;
-    else if (!matchingRows(table.header, table.rows, filters).length) unmatched += 1;
+  for (const item of openItemsOf(file, items)) {
+    const lines = targetMatch(targets, item).lines;
+    if (lines === null) whole += 1;
+    else if (lines.length === 0) unmatched += 1;
   }
   return { whole, unmatched };
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, useId, watch } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import {
   VAlert,
   VBtn,
@@ -17,13 +17,14 @@ import {
   VSpacer,
   VTextarea,
 } from "vuetify/components";
-import { isAbort } from "../api/client";
-import type { ReviewItem, ReviewTarget, TableRow } from "../api/types";
+import type { ReviewItem, ReviewTarget, TableResponse } from "../api/types";
+import { useLoaded } from "../composables/useLoaded";
+import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { KIND_LABELS, KINDS, matchingRows, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
+import { KIND_LABELS, KINDS, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
-import { messageOf, tableFiles } from "../study";
+import { tableFiles } from "../study";
 import UserHint from "./UserHint.vue";
 
 /** At most this many values of a column are offered for a row filter. */
@@ -63,35 +64,48 @@ const text = ref("");
 const file = ref<string | null>(null);
 const filters = ref<RowFilter[]>([]);
 const column = ref<string | null>(null);
-/** The header and rows of the chosen table; null for another file or a raw table. */
-const table = shallowRef<{ header: string[]; rows: TableRow[] } | null>(null);
-const loading = ref(false);
-const tableError = ref<string | null>(null);
 const failure = ref<ReviewFailure | null>(null);
 
 const files = computed(() => study.detail?.files ?? []);
 const writable = computed(() => study.detail?.review.revision != null && study.detail.review.value !== null);
 
 // The rows and the column belong to the file; another file starts without them.
-let request = 0;
-watch(file, async (name) => {
-  const current = ++request;
+watch(file, () => {
   filters.value = [];
   column.value = null;
-  table.value = null;
-  tableError.value = null;
-  const detail = study.detail;
-  if (name === null || detail === null || !tableFiles(detail).includes(name)) return;
-  loading.value = true;
-  try {
-    const result = await study.table(name);
-    if (current === request) table.value = result.kind === "table" ? { header: result.header, rows: result.rows } : null;
-  } catch (caught) {
-    if (current === request && !isAbort(caught)) tableError.value = `The columns of ${name} could not be loaded. ${messageOf(caught)}`;
-  } finally {
-    if (current === request) loading.value = false;
-  }
 });
+
+/**
+ * Counts the openings of the dialog and the versions of the study page while it is open: the
+ * rows of the chosen table load again and their count is asked again when a file of the study
+ * changed. Nothing is asked while the dialog is closed.
+ */
+const version = ref(0);
+watch([() => study.detail, open], () => {
+  if (open.value) version.value += 1;
+});
+
+/** The chosen file when it is a table of the study; the rows on screen stay while they load again. */
+const {
+  data: loadedTable,
+  error: tableFailure,
+  loading,
+} = useLoaded<TableResponse>(
+  () => {
+    const detail = study.detail;
+    return file.value !== null && detail !== null && tableFiles(detail).includes(file.value) ? file.value : null;
+  },
+  (name) => study.table(name),
+  version,
+);
+/** The header and rows of the chosen table; null for another file or a raw table. */
+const table = computed(() => {
+  const content = loadedTable.value?.content;
+  return content?.kind === "table" ? { header: content.header, rows: content.rows } : null;
+});
+const tableError = computed(() =>
+  tableFailure.value ? `The columns of ${file.value} could not be loaded. ${tableFailure.value}` : null,
+);
 
 watch(open, (value) => {
   if (value) failure.value = null;
@@ -128,11 +142,33 @@ const rows = computed(() =>
     filters.value.flatMap((filter) => (filter.column && filter.value ? [[filter.column, filter.value]] : [])),
   ),
 );
+
+/** The draft target with its row filters, which the local server matches; null without filters. */
+const draft = computed<ReviewTarget | null>(() =>
+  file.value !== null && table.value !== null && Object.keys(rows.value).length
+    ? { file: file.value, rows: rows.value }
+    : null,
+);
+const preview = usePreview(
+  () => {
+    const detail = study.detail;
+    if (!detail || draft.value === null) return null;
+    // A preview that failed while the local server did not answer is asked again once it answers.
+    return { study: detail.id, version: version.value, answering: study.error === null, target: draft.value };
+  },
+  (value) => study.previewTarget(value.target),
+);
+/**
+ * How many rows the row filters match, as the local server counted them: for the current filters,
+ * or for the last ones while the count of the current ones loads; null without filters.
+ */
 const matches = computed(() => {
   const loaded = table.value;
-  if (!loaded || Object.keys(rows.value).length === 0) return null;
-  const matched = matchingRows(loaded.header, loaded.rows, rows.value).length;
-  return { matched, text: matchText(matched, loaded.rows.length) };
+  if (!loaded) return null;
+  const failed = preview.shownError.value;
+  if (failed) return { matched: null, text: `The rows could not be matched. ${failed}` };
+  const lines = preview.shown.value?.lines;
+  return lines == null ? null : { matched: lines.length, text: matchText(lines.length, loaded.rows.length) };
 });
 const target = computed<ReviewTarget | null>(() => {
   if (file.value === null) return null;
@@ -142,11 +178,13 @@ const target = computed<ReviewTarget | null>(() => {
     ...(column.value ? { column: column.value } : {}),
   };
 });
+/** Add waits for the count of the current row filters. */
 const canAdd = computed(
   () =>
     writable.value &&
     !busy.value &&
     !loading.value &&
+    !preview.loading.value &&
     text.value.trim() !== "" &&
     !filters.value.some(incomplete),
 );
@@ -244,11 +282,17 @@ async function add(): Promise<void> {
                   @click="filters.splice(index, 1)"
                 />
               </div>
-              <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
+              <!-- A live region stays in the page while it is empty, so that screen readers announce its
+                   text. While the count of the current filters loads, the last one stays, marked as updating. -->
               <p
                 role="status"
                 class="new-item-matches"
-                :class="{ 'new-item-matches--none': matches?.matched === 0 }"
+                :class="{
+                  'new-item-matches--none': matches?.matched === 0,
+                  'field-error': matches?.matched === null,
+                  'is-updating': preview.loading.value,
+                }"
+                :aria-busy="preview.loading.value"
               >{{ matches?.text ?? "" }}</p>
               <VBtn
                 variant="text"
@@ -336,6 +380,12 @@ async function add(): Promise<void> {
 .new-item-matches {
   margin: 0;
   font-size: 0.875rem;
+  transition: opacity 0.1s ease;
+}
+/* A count that arrives at once does not flash: the dimming starts after a moment. */
+.new-item-matches.is-updating {
+  opacity: 0.5;
+  transition: opacity 0.15s ease 0.1s;
 }
 .new-item-matches--none {
   font-weight: 600;

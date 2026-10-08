@@ -60,6 +60,7 @@ from pkdb.studyformat.sync import (
     sync_study,
 )
 from pkdb.studyformat.tables import RAW_KIND, REVIEW_JSON, STUDY_JSON
+from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import validate_folder
 from pkdb.studyformat.workbook.base import workbook_path
@@ -74,6 +75,17 @@ IMAGE_TYPES = {
 
 class UnsafeFile(ValueError):
     """A file of the study that the app refuses to open or write, such as a symlink."""
+
+
+# The issue codes of a study beyond the upload limits, as `load_study` refuses it.
+LIMIT_CODES = frozenset({"row_limit", "file_limit"})
+
+
+class BeyondLimits(StudyValidationError):
+    """The study has more table rows or files than an upload may have.
+
+    The app shows its documents, but no tables, sources or review targets.
+    """
 
 
 class AmbiguousStudy(ValueError):
@@ -238,8 +250,18 @@ def _unlinked(folder: Path, root: Path) -> Path:
 
 
 def _bounded(folder: Path) -> LoadedStudy:
-    """The study within the upload limits; StudyValidationError beyond them."""
-    return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
+    """The study within the upload limits; BeyondLimits beyond them.
+
+    Any other refusal stays a StudyValidationError: the study cannot be read, which says
+    nothing about its size.
+    """
+    try:
+        return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
+    except StudyValidationError as error:
+        codes = {issue.code for issue in error.report.issues}
+        if codes and codes <= LIMIT_CODES:
+            raise BeyondLimits(error.report) from None
+        raise
 
 
 def _review_error(issues: list[ValidationIssue]) -> ReviewError:
@@ -407,14 +429,15 @@ class StudiesMixin(EngineState):
         try:
             study = _bounded(folder)
         except StudyValidationError as error:
-            # Beyond the upload limits: the documents, and the limit as the first problem.
+            # Beyond the upload limits, or unreadable: the documents, and the refusal as the
+            # first problem.
             layout = scan_folder(folder)
             limits = _issues(error.report.issues)
             detail["problems"] = [
                 *limits,
                 *(problem for problem in detail["problems"] if problem not in limits),
             ]
-            sources, files, tables = [], [], []
+            sources, files, tables, targets = [], [], [], {}
         else:
             layout = study.layout
             sources = [dataclasses.asdict(source) for source in study_sources(study)]
@@ -422,6 +445,11 @@ class StudiesMixin(EngineState):
             tables = [
                 {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
             ]
+            targets = {
+                item.id: dataclasses.asdict(match_target(study, item.target))
+                for item in (study.review.items if study.review else ())
+                if item.target is not None and item.target.file is not None
+            }
         review = _document(folder, layout, REVIEW_JSON, read_review)
         metadata = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
@@ -438,6 +466,7 @@ class StudiesMixin(EngineState):
             "sources": sources,
             "files": files,
             "tables": tables,
+            "targets": targets,
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:
@@ -708,6 +737,17 @@ class StudiesMixin(EngineState):
             "image_found": preview.image_found,
             "issues": _issues(list(preview.issues)),
         }
+
+    def target_preview(self, identity: str, payload: dict) -> dict:
+        """The rows and the digitized series of a draft review target; writes nothing."""
+        try:
+            target = ReviewTarget.model_validate(payload.get("target"))
+        except ValidationError as error:
+            raise _review_error(
+                validation_issues(error, REVIEW_JSON, review_edit.CODE)
+            ) from None
+        study = _bounded(self.study_folder(identity))
+        return dataclasses.asdict(match_target(study, target))
 
     def tables_action(self, identity: str, payload: dict) -> dict:
         """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
