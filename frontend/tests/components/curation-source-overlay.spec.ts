@@ -263,7 +263,7 @@ describe("SourceOverlay", () => {
     expect(image.attributes("src")).toBe(`${EXAMPLE}/files/Example_Fig1.png`);
     expect(image.attributes("alt")).toBe("Image of Fig1");
     for (const part of [".overlay-legend", ".overlay-key"]) expect(wrapper.find(part).exists()).toBe(false);
-    expect(wrapper.text()).not.toContain("Click a cross");
+    expect(wrapper.text()).not.toContain("Click a point, bar or cross");
     // The data stay readable.
     expect(wrapper.findAll("details tbody tr")).toHaveLength(2);
   });

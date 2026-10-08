@@ -288,7 +288,7 @@ onBeforeUnmount(() => {
       </p>
 
       <p v-if="selectable" class="overlay-key">
-        Click a {{ shown === "overlay" ? "cross" : "point" }} to show its row in the Tables section.
+        Click a {{ shown === "overlay" ? "point, bar or cross" : "point" }} to show its row in the Tables section.
       </p>
     </template>
 
