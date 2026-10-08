@@ -36,7 +36,7 @@ search:
 2. **Two warnings of one code in one file without rows** (two `unknown_dataset` datasets in one `.wpd.json`): acknowledging one leaves the other listed after the next validation, and a dataset added later raises a new warning. Tests in Task 6 (library, local API, Playwright).
 3. **Fast typing in Add table and New review item**, where the preview answers arrive out of order or late: the dialog shows only the answer for the current input, never a stale one, and Add waits for it. Tests in Task 2 (`usePreview`) and Task 3 (New item dialog).
 4. **A study beyond the upload limits:** the study detail has empty `tables` and `targets`, the target preview answers `413` with the limit, and the sections show their limit message instead of failing. Tests in Task 1 and Task 3 (local API).
-5. **The state of `pkdb curate` saved by part C:** write jobs without `item` still link their review item in the Activity, and a job saved as canceled with the message `Queued` reads "Canceled before starting". Test in Task 5 (engine restart).
+5. **The state of `pkdb curate` saved by part C:** write jobs without `item` still link their review item in the Activity, and a job saved as canceled with the message `Queued` reads "Canceled before it started". Test in Task 5 (engine restart).
 
 ---
 
@@ -1578,7 +1578,7 @@ git commit -m "Send digitized error bar ends as part of their series"
 
 **Interfaces:**
 - Consumes: `make_issue`, `validation_issues`, `_review_message(payload, result)`, `_record_write(identity, message, status)`.
-- Produces (Python): suggestion kinds in `issues.py`: `FIX = "fix"` (a hint, with optional candidates), `CANDIDATES = "did_you_mean"` (candidates alone, message `DID_YOU_MEAN`), `VOCABULARY = "check_vocabulary"` (spelling suggestions of an unknown term with their caveat, as the domain layer already names them); `make_issue(..., suggestion: str | None = None)`; document issues from `validation_issues` carry `context={"detail": <message without the field>}`, and messages lose pydantic's `Value error, ` prefix; `_review_message(payload, result) -> tuple[str, str | None]` (message and item id); `_record_write(identity, message, status="succeeded", item=None)` stores `"item"`; `job_parts(job: dict) -> list[dict] | None`; detail jobs with an item carry `"parts": [{"text": str} | {"item": str}]`; `CANCELED_BEFORE_START = "Canceled before starting"` in `jobs.py`.
+- Produces (Python): suggestion kinds in `issues.py`: `FIX = "fix"` (a hint, with optional candidates), `CANDIDATES = "did_you_mean"` (candidates alone, message `DID_YOU_MEAN`), `VOCABULARY = "check_vocabulary"` (spelling suggestions of an unknown term with their caveat, as the domain layer already names them); `make_issue(..., suggestion: str | None = None)`; document issues from `validation_issues` carry `context={"detail": <message without the field>}`, and messages lose pydantic's `Value error, ` prefix; `_review_message(payload, result) -> tuple[str, str | None]` (message and item id); `_record_write(identity, message, status="succeeded", item=None)` stores `"item"`; `job_parts(job: dict) -> list[dict] | None`; detail jobs with an item carry `"parts": [{"text": str} | {"item": str}]`; `CANCELED_BEFORE_START = "Canceled before it started"` in `jobs.py`.
 - Produces (TypeScript): `type JobMessagePart = { text: string } | { item: string }`; `Job.item?: string`, `Job.parts?: JobMessagePart[]`; `messageParts(job: Job, items: readonly ReviewItem[]): MessagePart[]`; `suggestionView` decides by `suggestion.kind`; `issueMessage(issue)` reads `issue.context.detail`; `DID_YOU_MEAN`, `SPELLING_HINT`, `REVIEW_ITEM` and `QUEUED_MESSAGE` are gone.
 
 - [ ] **Step 1: Write the failing Python tests**
@@ -1655,7 +1655,7 @@ def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
             {"text": "Added "},
             {"item": "01M2FC4AG038NKRKAYDXR834N3"},
         ]
-        assert jobs["queued"]["message"] == "Canceled before starting"
+        assert jobs["queued"]["message"] == "Canceled before it started"
     finally:
         restarted.close()
 ```
@@ -1736,7 +1736,7 @@ def job_parts(job: dict) -> list[dict] | None:
 
 `review_action` records `message, item = _review_message(payload, result)` with `self._record_write(identity, message, item=item)`. `study_detail` adds parts after the detail copy: `for job in detail["jobs"]: if (parts := job_parts(job)) is not None: job["parts"] = parts`.
 
-`jobs.py`: `CANCELED_BEFORE_START = "Canceled before starting"`, used in `cancel_jobs`; `_record_write(self, identity, message, status="succeeded", item=None)` adds `**({"item": item} if item else {})` to the job. `state.py`: the protocol of `_record_write` gains `item: str | None = None`.
+`jobs.py`: `CANCELED_BEFORE_START = "Canceled before it started"`, used in `cancel_jobs`; `_record_write(self, identity, message, status="succeeded", item=None)` adds `**({"item": item} if item else {})` to the job. `state.py`: the protocol of `_record_write` gains `item: str | None = None`.
 
 `engine.py` (import `CANCELED_BEFORE_START` from `pkdb.curation.jobs`), in the loop over saved jobs:
 
@@ -1923,7 +1923,7 @@ describe("messages contract", () => {
     expect(messageParts(added, items)).toEqual([{ text: "Added the " }, { text: `question “${QUESTION}”`, item: ITEM }]);
     const legacy = jobs.find((job) => job.message.endsWith("01M2FC4AG038NKRKAYDXR834N3"))!;
     expect(messageParts(legacy, items)[1]?.item).toBe("01M2FC4AG038NKRKAYDXR834N3");
-    expect(jobText(jobs.find((job) => job.status === "canceled")!)).toBe("Canceled before starting");
+    expect(jobText(jobs.find((job) => job.status === "canceled")!)).toBe("Canceled before it started");
   });
 
   it("shows the message of a field without the field", () => {
