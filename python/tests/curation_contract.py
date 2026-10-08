@@ -35,10 +35,10 @@ def _normalized(value):
 
 
 def check_contract(name: str, value: object) -> None:
-    """Compare `value` with the fixture `name`, or write it when PKDB_UPDATE_CONTRACT is set."""
+    """Compare `value` with the fixture `name`, or write it when PKDB_UPDATE_CONTRACT is 1."""
     path = FIXTURES / f"{name}.json"
     data = _normalized(json.loads(json.dumps(value)))
-    if os.environ.get(UPDATE):
+    if os.environ.get(UPDATE) == "1":
         path.parent.mkdir(parents=True, exist_ok=True)
         text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
         path.write_text(text, encoding="utf-8", newline="\n")

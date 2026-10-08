@@ -11,6 +11,7 @@ import {
   findProfile,
   folderPath,
   isRawTable,
+  rawTableFiles,
   isSection,
   issueLabel,
   knownProfiles,
@@ -137,6 +138,7 @@ describe("tableFiles", () => {
     // A file that is no table of the study is no raw table.
     expect(isRawTable({ tables }, "Example_Tab3.tsv")).toBe(false);
     expect(isRawTable({ tables }, "study.json")).toBe(false);
+    expect([...rawTableFiles({ tables })]).toEqual(["Example_Tab2.tsv", "Example_Tab10.tsv"]);
   });
 
   it("keeps the data tables, which the library loads as tables, without the raw tables", () => {

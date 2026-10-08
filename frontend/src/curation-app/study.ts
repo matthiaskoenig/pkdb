@@ -59,9 +59,14 @@ export function tableFiles(detail: Pick<StudyDetail, "tables">): string[] {
   return detail.tables.map((table) => table.file);
 }
 
+/** The raw tables of a study, the paper tables as printed. */
+export function rawTableFiles(detail: Pick<StudyDetail, "tables">): Set<string> {
+  return new Set(detail.tables.filter((table) => table.kind === "raw").map((table) => table.file));
+}
+
 /** Whether a table file of the study is a raw table, the paper table as printed. */
 export function isRawTable(detail: Pick<StudyDetail, "tables">, file: string): boolean {
-  return detail.tables.some((table) => table.file === file && table.kind === "raw");
+  return rawTableFiles(detail).has(file);
 }
 
 /** The data tables of a study, which the library loads as tables: the table files without the raw tables. */

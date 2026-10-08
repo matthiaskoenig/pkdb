@@ -34,7 +34,7 @@ describe("tables contract", () => {
     expect(railCounts(studyDetail({ tables })).tables).toBe(6);
   });
 
-  it("has the notes of every table kind of the library", () => {
+  it("lists every table kind of the library", () => {
     expect([...TABLE_KINDS]).toEqual(tablesFixture.table_kinds);
   });
 

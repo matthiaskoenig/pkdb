@@ -12,6 +12,9 @@ from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.tables import TABLES
 from pkdb.studyformat.text import render_tsv
 
+# Show a structural diff when a contract fixture is stale.
+pytest.register_assert_rewrite("curation_contract")
+
 
 @pytest.fixture(autouse=True)
 def isolated_environment(tmp_path_factory, monkeypatch):

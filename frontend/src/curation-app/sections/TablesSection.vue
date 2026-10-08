@@ -16,7 +16,7 @@ import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, vi
 import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
-import { tableFiles, tablesOutcome } from "../study";
+import { rawTableFiles, tableFiles, tablesOutcome } from "../study";
 
 /**
  * The sync status of the workbook first, with the conflict panel while the workbook and the
@@ -87,9 +87,7 @@ function added(table: string): void {
 // Tables
 
 const files = computed(() => (detail.value ? tableFiles(detail.value) : []));
-const raw = computed(
-  () => new Set((detail.value?.tables ?? []).filter((table) => table.kind === "raw").map((table) => table.file)),
-);
+const raw = computed(() => (detail.value ? rawTableFiles(detail.value) : new Set<string>()));
 
 /** The problems and the open review items of each file, for its tab. */
 const counts = computed(() => {
