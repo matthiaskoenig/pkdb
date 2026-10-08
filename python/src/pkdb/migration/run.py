@@ -17,6 +17,8 @@ import os
 import shutil
 import tempfile
 from collections.abc import Callable, Iterable, Iterator
+from concurrent.futures import Future, ProcessPoolExecutor, as_completed
+from concurrent.futures.process import BrokenProcessPool
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,6 +51,8 @@ BACKUP = "v1"
 STUDIES = "studies"
 PAPERS = "papers"
 PROVEN = ("identical", "intended")
+# The reason of a study whose worker process stopped before it gave a result.
+STOPPED = "converter_error: the worker process stopped"
 
 
 class SwapError(RuntimeError):
@@ -281,15 +285,49 @@ def _one(task: Task) -> StudyResult:
     return result
 
 
+def _without_result(task: Task, error: Exception) -> StudyResult:
+    """A study whose worker gave no result; its work folders are deleted."""
+    location = _location(task.v1)
+    _remove(task.work / NEW / location)
+    _remove(task.work / SOURCE / location)
+    if isinstance(error, BrokenProcessPool):
+        return _not_converted(location, STOPPED)
+    return _not_converted(location, f"converter_error: {type(error).__name__}: {error}")
+
+
 def _results(tasks: list[Task], jobs: int | None) -> Iterator[StudyResult]:
+    """The result of each task as it completes; one job runs in this process.
+
+    A worker process that stops breaks the pool: every study without a
+    result yet is not converted, and the run goes on with the others.
+    """
     if not tasks:
         return
     if jobs == 1:
         yield from map(_one, tasks)
         return
-    processes = min(jobs or os.cpu_count() or 1, len(tasks))
-    with multiprocessing.get_context("spawn").Pool(processes) as pool:
-        yield from pool.imap_unordered(_one, tasks)
+    executor = ProcessPoolExecutor(
+        max_workers=jobs or os.cpu_count(),
+        mp_context=multiprocessing.get_context("spawn"),
+    )
+    try:
+        futures: dict[Future[StudyResult], Task] = {}
+        unsubmitted: list[tuple[Task, Exception]] = []
+        for task in tasks:
+            try:
+                futures[executor.submit(_one, task)] = task
+            except BrokenProcessPool as error:
+                unsubmitted.append((task, error))
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+            except Exception as error:
+                result = _without_result(futures[future], error)
+            yield result
+        for task, error in unsubmitted:
+            yield _without_result(task, error)
+    finally:
+        executor.shutdown(cancel_futures=True)
 
 
 def _swap(root: Path, folder: Path) -> None:

@@ -1,4 +1,6 @@
 import json
+import os
+import time
 
 import pytest
 from migration_fixtures import IMAGES, SHEETS, STUDY, v1_full_example, v1_study
@@ -32,6 +34,18 @@ def resolved():
 
 def unresolvable():
     return Unresolvable(offline=True)
+
+
+def dying(task):
+    """`_one` of a worker that stops on caffeine/Example once codeine/Example is written."""
+    if task.v1.parent.name != "caffeine":
+        return run_module._one(task)
+    other = task.v1.parent.parent / "codeine" / "Example"
+    deadline = time.monotonic() + 60
+    while not is_v2_folder(other) and time.monotonic() < deadline:
+        time.sleep(0.05)
+    (task.work / "new" / "caffeine" / "Example").mkdir(parents=True)
+    os._exit(1)
 
 
 def go(root, vocabulary, **options):
@@ -422,6 +436,36 @@ def test_two_jobs_convert_studies_in_parallel(tmp_path, sf_vocabulary):
     assert [(s.study, s.outcome, s.written) for s in report.studies] == [
         ("caffeine/Example", "identical", True),
         ("codeine/Example", "identical", True),
+    ]
+
+
+def test_a_stopped_worker_process_does_not_stop_the_run(
+    tmp_path, sf_vocabulary, monkeypatch
+):
+    two_studies(tmp_path)
+    folder = tmp_path / "studies" / "caffeine" / "Example"
+    before = sorted(p.name for p in folder.iterdir())
+    removed = []
+    remove = run_module._remove
+
+    def recorded(path):
+        removed.append(path)
+        remove(path)
+
+    monkeypatch.setattr(run_module, "_one", dying)
+    monkeypatch.setattr(run_module, "_remove", recorded)
+    report = go(tmp_path, sf_vocabulary, jobs=2)
+    assert [(s.study, s.outcome, s.reason, s.written) for s in report.studies] == [
+        ("caffeine/Example", "not_converted", run_module.STOPPED, False),
+        ("codeine/Example", "identical", None, True),
+    ]
+    assert sorted(p.name for p in folder.iterdir()) == before
+    assert tmp_path / ".pkdb-migrate" / "new" / "caffeine" / "Example" in removed
+    assert not (tmp_path / ".pkdb-migrate").exists()
+    written = json.loads((tmp_path / "migration.json").read_text())
+    assert [s["study"] for s in written["studies"]] == [
+        "caffeine/Example",
+        "codeine/Example",
     ]
 
 
