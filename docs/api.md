@@ -34,10 +34,13 @@ Replace `STUDY_SID` with a study identifier returned by the study list, such as 
 | `POST /api/v2/exports` | Download a selected dataset |
 | `GET /api/v2/vocabulary` | Vocabulary snapshot |
 | `GET /api/v2/capabilities` | Processing and report versions |
+| `GET /api/v2/curators` | Administrators, curators and reviewers with name and GitHub login, for the GitHub issue sync; needs an API key |
 | `POST /api/v2/studies/{substance}/{name}/validate` | Validate a study format 2 folder |
 | `PUT /api/v2/studies/{substance}/{name}` | Create or replace a study format 2 study |
 | `POST /api/v2/studies/validate` | Validate a study format 1 source bundle |
 | `PUT /api/v2/studies/{sid}` | Create or replace a study format 1 study |
+
+`GET /api/v2/curators` lists GitHub logins also of users who hide them on their profile, because assigning a user to a GitHub issue shows the login there anyway.
 
 A study substance search matches studies containing relevant data; it does not mean every measurement in each study concerns that substance. Combine substance and measurement-type filters on `/api/v2/measurements` to match both on the same observation. Study-level selections can include broader context than a measurement-level match. See [search scopes](web-interface.md#choose-the-scope-of-your-search) and the API reference before combining filters.
 
