@@ -1331,7 +1331,7 @@ def test_the_cpu_time_check_tells_linear_from_quadratic_work(linear_cpu_time):
     terms = 4 * 1_000 * 25_000
     assert linear_cpu_time(linear, 1_000) == terms * (terms - 1) // 2
     with pytest.raises(AssertionError, match="times the CPU time"):
-        linear_cpu_time(quadratic, 3_000)
+        linear_cpu_time(quadratic, 1_500)
 
 
 def test_a_large_study_syncs_quickly(
