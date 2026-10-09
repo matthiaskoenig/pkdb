@@ -112,12 +112,18 @@ def register(commands) -> None:
         description=(
             "Give approved studies without open review items and validation errors "
             "the next PKDB identifiers in the release block of study.json, in the "
-            "order of the arguments. Nothing is written when one study is refused."
+            "order of the arguments. --access sets their access in the same write. "
+            "Nothing is written when one study is refused."
         ),
     )
     release.add_argument("studies", nargs="+", type=Path, metavar="STUDY")
     release.add_argument(
         "--date", type=_date, help="Release date YYYY-MM-DD (default: today in UTC)"
+    )
+    release.add_argument(
+        "--access",
+        choices=("public", "private"),
+        help="Set the access of the studies with their release (default: keep it)",
     )
     _vocabulary_options(release)
     add_format(release)
@@ -482,7 +488,7 @@ def _release(args) -> int:
         return 2
     on = args.date or datetime.datetime.now(datetime.UTC).date()
     try:
-        done = release(root, folders, vocabulary, on=on)
+        done = release(root, folders, vocabulary, on=on, access=args.access)
     except ReleaseRefused as refused:
         data = {
             "refused": [
@@ -508,9 +514,24 @@ def _release(args) -> int:
         return fail(args, data, lambda: _say_all(lines))
     data = {
         "released": [
-            {"location": place, "pkdb_id": pkdb_id, "date": on.isoformat()}
-            for place, pkdb_id in done
+            {
+                "location": item.location,
+                "pkdb_id": item.pkdb_id,
+                "date": on.isoformat(),
+                "access": item.access,
+            }
+            for item in done
         ]
     }
-    emit(args, data, [f"{place}: {pkdb_id}" for place, pkdb_id in done])
+    lines = [f"{item.location}: {item.pkdb_id}" for item in done]
+    if args.access is None:
+        # A released study may be public; without --access it stays as it was.
+        lines += [
+            f"{item.location} stays private. Set its access to public with pkdb "
+            "study patch to publish it; pkdb release --access public does both "
+            "at once."
+            for item in done
+            if item.access == "private"
+        ]
+    emit(args, data, lines)
     return 0

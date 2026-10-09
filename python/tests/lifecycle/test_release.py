@@ -10,6 +10,7 @@ from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.metadata import read_metadata
 from pkdb.studyformat.review_edit import Author, add_item
+from pkdb.studyformat.validation import validate_folder
 
 APPROVED = {
     "status": "approved",
@@ -17,6 +18,11 @@ APPROVED = {
     "approved_by": "bo",
     "approved": "2026-10-01T00:00:00Z",
 }
+
+
+def numbers(done):
+    """The location and the PKDB identifier of each released study."""
+    return [(item.location, item.pkdb_id) for item in done]
 
 
 @pytest.fixture
@@ -46,7 +52,9 @@ def test_studies_are_numbered_in_argument_order(approved_studies, sf_vocabulary)
     root, first, second = approved_studies(
         "caffeine/B", "caffeine/A", highest="PKDB00009"
     )
-    assert release(root, [first, second], sf_vocabulary, on=date(2026, 10, 10)) == [
+    assert numbers(
+        release(root, [first, second], sf_vocabulary, on=date(2026, 10, 10))
+    ) == [
         ("caffeine/B", "PKDB00010"),
         ("caffeine/A", "PKDB00011"),
     ]
@@ -57,7 +65,7 @@ def test_studies_are_numbered_in_argument_order(approved_studies, sf_vocabulary)
 
 def test_the_first_study_gets_the_first_identifier(approved_studies, sf_vocabulary):
     root, first = approved_studies("caffeine/A")
-    assert release(root, [first], sf_vocabulary, on=date(2026, 10, 10)) == [
+    assert numbers(release(root, [first], sf_vocabulary, on=date(2026, 10, 10))) == [
         ("caffeine/A", "PKDB00001")
     ]
 
@@ -124,9 +132,75 @@ def test_the_command_releases_and_prints_the_number(
     assert main([*argv, "--format", "json"]) == 0
     assert json.loads(capsys.readouterr().out) == {
         "released": [
-            {"location": "caffeine/A", "pkdb_id": "PKDB00001", "date": "2026-10-10"}
+            {
+                "location": "caffeine/A",
+                "pkdb_id": "PKDB00001",
+                "date": "2026-10-10",
+                "access": "private",
+            }
         ]
     }
+
+
+def test_access_is_written_in_the_release_patch(
+    approved_studies, sf_vocabulary, monkeypatch
+):
+    from pkdb.lifecycle import release as module
+
+    root, first, second = approved_studies("caffeine/A", "caffeine/B")
+    real = module.patch_metadata
+    patches = []
+
+    def patch(folder, patch, revision):
+        patches.append((folder, patch))
+        return real(folder, patch, revision)
+
+    monkeypatch.setattr(module, "patch_metadata", patch)
+    done = release(
+        root, [first, second], sf_vocabulary, on=date(2026, 10, 10), access="public"
+    )
+    assert [(item.location, item.access) for item in done] == [
+        ("caffeine/A", "public"),
+        ("caffeine/B", "public"),
+    ]
+    released = {"date": "2026-10-10"}
+    assert patches == [
+        (first, {"release": {"pkdb_id": "PKDB00001", **released}, "access": "public"}),
+        (second, {"release": {"pkdb_id": "PKDB00002", **released}, "access": "public"}),
+    ]
+    assert read_metadata(first).metadata.access == "public"
+    assert not [
+        issue
+        for issue in validate_folder(first, sf_vocabulary).issues
+        if issue.severity == "error"
+    ]
+
+
+def test_the_command_publishes_with_access_public(
+    approved_studies, sf_vocabulary, capsys, monkeypatch
+):
+    root, first = approved_studies("caffeine/A")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    argv = ["--no-update", "release", str(first), "--date", "2026-10-10"]
+    assert main([*argv, "--access", "public", "--format", "human"]) == 0
+    assert capsys.readouterr().out == "caffeine/A: PKDB00001\n"
+    metadata = read_metadata(first).metadata
+    assert metadata.access == "public" and metadata.release is not None
+
+
+def test_the_command_hints_at_a_released_study_that_stays_private(
+    approved_studies, sf_vocabulary, capsys, monkeypatch
+):
+    root, first = approved_studies("caffeine/A")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    argv = ["--no-update", "release", str(first), "--date", "2026-10-10"]
+    assert main([*argv, "--format", "human"]) == 0
+    assert capsys.readouterr().out.splitlines() == [
+        "caffeine/A: PKDB00001",
+        "caffeine/A stays private. Set its access to public with pkdb study patch "
+        "to publish it; pkdb release --access public does both at once.",
+    ]
+    assert read_metadata(first).metadata.access == "private"
 
 
 def test_the_command_writes_nothing_when_a_study_is_refused(
@@ -180,7 +254,7 @@ def test_the_registry_file_number_is_counted(approved_studies, sf_vocabulary):
     (root / "studies" / "study_identifiers.json").write_text(
         dump_json({"PKDB00020": ["old/Study", "2020-01-01"]}), encoding="utf-8"
     )
-    assert release(root, [first], sf_vocabulary, on=date(2026, 10, 10)) == [
+    assert numbers(release(root, [first], sf_vocabulary, on=date(2026, 10, 10))) == [
         ("caffeine/A", "PKDB00021")
     ]
 
@@ -203,7 +277,7 @@ def test_an_approved_study_with_only_warnings_is_released(
 
     monkeypatch.setattr(review_edit, "validate_folder", with_warning)
     assert check(first, sf_vocabulary) == []
-    assert release(root, [first], sf_vocabulary, on=date(2026, 10, 10)) == [
+    assert numbers(release(root, [first], sf_vocabulary, on=date(2026, 10, 10))) == [
         ("caffeine/A", "PKDB00001")
     ]
 

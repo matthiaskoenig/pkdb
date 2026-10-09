@@ -17,6 +17,15 @@ class Refusal:
     reasons: list[str]
 
 
+@dataclass(frozen=True)
+class Numbered:
+    """A released study: its location, its PKDB identifier and its access now."""
+
+    location: str
+    pkdb_id: str
+    access: str
+
+
 class ReleaseRefused(Exception):
     """At least one study cannot be released; nothing was written."""
 
@@ -66,20 +75,29 @@ def check(folder: Path, vocabulary) -> list[str]:
 
 
 def release(
-    root: Path, folders: list[Path], vocabulary, *, on: datetime.date
-) -> list[tuple[str, str]]:
+    root: Path,
+    folders: list[Path],
+    vocabulary,
+    *,
+    on: datetime.date,
+    access: str | None = None,
+) -> list[Numbered]:
     """Number the studies in argument order after the largest identifier.
 
     Every study is checked first; when one is refused nothing is written.
+    `access`, when given, is written with the release block of every study,
+    in the same write; otherwise each study keeps its access.
     """
-    revisions = {}
+    revisions, accesses = {}, {}
     refusals = []
     for folder in folders:
         try:
-            revisions[folder] = read_metadata(folder).revision
+            document = read_metadata(folder)
         except MetadataError as error:
             refusals.append(Refusal(location(folder), [str(error)]))
             continue
+        revisions[folder] = document.revision
+        accesses[folder] = access or document.metadata.access
         if reasons := check(folder, vocabulary):
             refusals.append(Refusal(location(folder), reasons))
     if refusals:
@@ -90,15 +108,18 @@ def release(
             "Cannot find the largest identifier: " + "; ".join(found.errors)
         )
     first = next_identifier(found, root)
-    done: list[tuple[str, str]] = []
+    done: list[Numbered] = []
     for number, folder in enumerate(folders, first):
         pkdb_id = identifier(number)
-        patch = {"release": {"pkdb_id": pkdb_id, "date": on.isoformat()}}
+        patch: dict = {"release": {"pkdb_id": pkdb_id, "date": on.isoformat()}}
+        if access is not None:
+            patch["access"] = access
+        written = [(item.location, item.pkdb_id) for item in done]
         try:
             patch_metadata(folder, patch, revisions[folder])
         except RevisionConflict:
-            raise ReleaseConflict(location(folder), done) from None
+            raise ReleaseConflict(location(folder), written) from None
         except (MetadataError, OSError) as error:
-            raise ReleaseConflict(location(folder), done, str(error)) from None
-        done.append((location(folder), pkdb_id))
+            raise ReleaseConflict(location(folder), written, str(error)) from None
+        done.append(Numbered(location(folder), pkdb_id, accesses[folder]))
     return done
