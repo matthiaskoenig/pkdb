@@ -57,8 +57,11 @@ class Moved:
     """A moved study: its new folder and what changed in it.
 
     `renamed` lists the old and new name of every renamed file, `targets`
-    counts the review targets that now name a renamed file, `issue` is the
-    issue number of study.json, and `workbook` names the removed workbook.
+    counts the review targets that now name a renamed file, `issue` and
+    `pkdb_id` are the issue number and PKDB identifier of study.json, and
+    `workbook` names the removed workbook. `assets` counts the provenance
+    assets of study.json that now name a renamed file, and `reference` tells
+    whether reference.json got the new name.
     """
 
     folder: Path
@@ -66,6 +69,9 @@ class Moved:
     targets: int
     issue: int | None
     workbook: str | None = None
+    assets: int = 0
+    reference: bool = False
+    pkdb_id: str | None = None
 
 
 class MoveRefused(ValueError):
@@ -99,6 +105,14 @@ class _Write:
 
 
 @dataclass(frozen=True)
+class _Workbook:
+    """The checked workbook: its name, and its size and modification time then."""
+
+    name: str
+    signature: tuple[int, int]
+
+
+@dataclass(frozen=True)
 class _Plan:
     """The checked move: folders, file renames and the JSON files that change."""
 
@@ -107,8 +121,10 @@ class _Plan:
     renames: list[tuple[str, str]]
     writes: list[_Write]
     targets: int
+    assets: int
     issue: int | None
-    workbook: Path | None
+    pkdb_id: str | None
+    workbook: _Workbook | None
 
 
 # What undoes one done step, and how a failure to undo it is named.
@@ -121,26 +137,44 @@ def move_study(root: Path, old: str, new: str, vocabulary: Vocabulary) -> Moved:
     Every check runs before the first change. The folder and file renames and
     the writes of the files that name them or the study (review targets,
     provenance assets and the reference name) are undone together when one of
-    them fails, so the move either happens or leaves the study as it was. Steps after them, removing
-    the workbook and formatting, raise MoveIncomplete with the study at its new
-    place.
+    them fails, so the move either happens or leaves the study as it was.
+    Steps after them, removing the workbook and formatting, raise
+    MoveIncomplete with the study at its new place.
     """
     plan = _plan(Path(root), old, new, vocabulary)
     _apply(plan)
     _remove_if_empty(plan.old.parent)
+    problems = []
+    # Only the checked workbook goes, which holds nothing beyond the tables,
+    # and only while it is closed and unchanged since. Its state file is named
+    # after the old study and goes with it, or alone as a leftover.
+    workbook = plan.new / workbook_path(plan.old).name
+    changed = plan.workbook is not None and (
+        open_lock(workbook) is not None
+        or _signature(workbook) != plan.workbook.signature
+    )
+    if changed:
+        removed = []
+        problems.append(
+            f"{workbook.name} changed or was opened during the move, so it stays "
+            "with its sync state; carry its edits over to the tables by hand and "
+            "remove it"
+        )
+    elif plan.workbook is None:
+        removed = [state_path(workbook)]
+    else:
+        removed = [workbook, state_path(workbook)]
     moved = Moved(
         plan.new,
         plan.renames,
         plan.targets,
         plan.issue,
-        None if plan.workbook is None else plan.workbook.name,
+        None if plan.workbook is None or changed else plan.workbook.name,
+        plan.assets,
+        any(write.file == REFERENCE_JSON for write in plan.writes),
+        plan.pkdb_id,
     )
-    problems = []
-    # Only a checked workbook goes, which holds nothing beyond the tables. Its
-    # state file is named after the old study and goes in any case.
-    workbook = plan.new / workbook_path(plan.old).name
-    removed = [] if plan.workbook is None else [workbook]
-    for path in [*removed, state_path(workbook)]:
+    for path in removed:
         try:
             path.unlink(missing_ok=True)
         except OSError as error:
@@ -168,9 +202,7 @@ def move_study(root: Path, old: str, new: str, vocabulary: Vocabulary) -> Moved:
 
 def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
     """Check the move without changing anything."""
-    old_folder = root / STUDIES / _old_location(old)
-    if not old_folder.is_dir(follow_symlinks=False) or not is_v2_folder(old_folder):
-        raise MoveRefused(f"{_shown(old_folder)} is not a study format 2 folder")
+    old_folder = _old_folder(root, old)
     try:
         substance, name = parse_location(new)
     except ValueError as error:
@@ -201,7 +233,7 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
         raise MoveRefused(f"{_shown(target)} exists already")
 
     renames = _renames(old_folder, name)
-    _refuse_collisions(old_folder, renames)
+    _refuse_collisions(old_folder, renames, name)
     _refuse_long_sheets(renames)
     # A study that pkdb format cannot read would stop the move half way.
     formatted = format_folder(old_folder, check=True)
@@ -222,18 +254,22 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
     if targets:
         text = canonical_review_json(review)
         writes.append(_write_of(old_folder, REVIEW_JSON, text, document.revision))
-    if (updated := _reassets(metadata.metadata, renamed)) is not None:
+    updated, assets = _reassets(metadata.metadata, renamed)
+    if assets:
         text = canonical_study_json(updated)
         writes.append(_write_of(old_folder, STUDY_JSON, text, metadata.revision))
     if (reference := _renamed_reference(old_folder, name)) is not None:
         writes.append(reference)
+    release = metadata.metadata.release
     return _Plan(
         old_folder,
         target,
         renames,
         writes,
         targets,
+        assets,
         metadata.metadata.issue,
+        None if release is None else release.pkdb_id,
         workbook,
     )
 
@@ -246,12 +282,46 @@ def _write_of(folder: Path, file: str, text: str, revision: str) -> _Write:
     return _Write(file, text, original, revision)
 
 
-def _old_location(value: str) -> str:
-    """The `<substance>/<name>` of an existing study; a trailing slash is ignored."""
+def _old_folder(root: Path, value: str) -> Path:
+    """The folder of the existing study `<substance>/<name>`; a trailing slash is ignored.
+
+    Both parts must have the exact case of the folders. On macOS and Windows a
+    folder is found in any case, but the files are named after the exact study
+    name, so a move under another case would leave them behind.
+    """
     parts = value.removesuffix("/").split("/")
     if len(parts) != 2 or not all(parts) or any(p.startswith(".") for p in parts):
         raise MoveRefused(f"{value!r} is not <substance>/<name>")
-    return "/".join(parts)
+    substance, name = parts
+    studies = root / STUDIES
+    found = None
+    if (spelled := _spelling(studies, substance)) is not None:
+        if (study := _spelling(studies / spelled, name)) is not None:
+            found = (spelled, study)
+    if found is not None and found != (substance, name):
+        raise MoveRefused(
+            f"{STUDIES}/{substance}/{name} is {STUDIES}/{found[0]}/{found[1]}; "
+            "give it in that spelling"
+        )
+    folder = studies / substance / name
+    if (
+        found is None
+        or not folder.is_dir(follow_symlinks=False)
+        or not is_v2_folder(folder)
+    ):
+        raise MoveRefused(
+            f"{STUDIES}/{substance}/{name} is not a study format 2 folder"
+        )
+    return folder
+
+
+def _spelling(folder: Path, name: str) -> str | None:
+    """The entry of `folder` named `name`, else the one that differs only in case, else None."""
+    if not folder.is_dir(follow_symlinks=False):
+        return None
+    if name in (entry.name for entry in folder.iterdir()):
+        return name
+    return case_twin(folder, name)
 
 
 def _shown(folder: Path) -> str:
@@ -289,14 +359,23 @@ def _renames(folder: Path, new: str) -> list[tuple[str, str]]:
     return renames
 
 
-def _refuse_collisions(folder: Path, renames: list[tuple[str, str]]) -> None:
+def _refuse_collisions(folder: Path, renames: list[tuple[str, str]], new: str) -> None:
     """Refuse a new file name that another file of the folder has, also ignoring case.
 
-    A rename would replace that file, at least on the file systems of macOS and Windows.
+    A rename would replace that file, at least on the file systems of macOS
+    and Windows. A file named like the workbook of the new name, or its sync
+    state, would be taken for them.
     """
     names: dict[str, set[str]] = defaultdict(set)
     for path in folder.iterdir():
         names[path.name.casefold()].add(path.name)
+    workbook = workbook_path(folder.with_name(new))
+    for file in (workbook.name, state_path(workbook).name):
+        if others := sorted(names[file.casefold()]):
+            raise MoveRefused(
+                f"{others[0]} in {_shown(folder)} would belong to the workbook of "
+                "the moved study; remove it first"
+            )
     for old, new in renames:
         if others := sorted(names[new.casefold()] - {old}):
             raise MoveRefused(
@@ -319,14 +398,15 @@ def _refuse_long_sheets(renames: list[tuple[str, str]]) -> None:
             )
 
 
-def _removable_workbook(folder: Path, vocabulary: Vocabulary) -> Path | None:
+def _removable_workbook(folder: Path, vocabulary: Vocabulary) -> _Workbook | None:
     """The workbook of the study when it holds nothing beyond the tables, None without one.
 
     It must be closed, hold no edits that are not in the tables, and have no
     scratch sheets, which only a regeneration of the workbook keeps.
     """
     workbook = workbook_path(folder)
-    if not workbook.exists():
+    # Taken first, so that a save during the checks shows when it is removed.
+    if (signature := _signature(workbook)) is None:
         return None
     if (lock := open_lock(workbook)) is not None:
         raise MoveRefused(
@@ -346,7 +426,16 @@ def _removable_workbook(folder: Path, vocabulary: Vocabulary) -> Path | None:
             f"{workbook.name} has the scratch sheets {', '.join(scratch)}, which the "
             "move would remove with the workbook; copy what you need and delete them first"
         )
-    return workbook
+    return _Workbook(workbook.name, signature)
+
+
+def _signature(path: Path) -> tuple[int, int] | None:
+    """The size and modification time of a file, or None without one."""
+    try:
+        status = path.stat()
+    except FileNotFoundError:
+        return None
+    return status.st_size, status.st_mtime_ns
 
 
 def _scratch_sheets(workbook: Path) -> list[str]:
@@ -382,15 +471,18 @@ def _retarget(review: Review, renamed: dict[str, str]) -> tuple[Review, int]:
     return review.model_copy(update={"items": items}), count
 
 
-def _reassets(metadata: StudyMetadata, renamed: dict[str, str]) -> StudyMetadata | None:
-    """study.json with the provenance assets that name a renamed file renamed, or None when none does.
+def _reassets(
+    metadata: StudyMetadata, renamed: dict[str, str]
+) -> tuple[StudyMetadata, int]:
+    """study.json with the provenance assets that name a renamed file renamed, and how many changed.
 
     An automatic curation or a data import names the files it read, such as the PDF.
     """
     provenance = metadata.provenance
-    assets = getattr(provenance, "assets", None)
-    if not assets or not any(asset.url in renamed for asset in assets):
-        return None
+    assets = getattr(provenance, "assets", None) or []
+    count = sum(asset.url in renamed for asset in assets)
+    if not count:
+        return metadata, 0
     assets = [
         asset.model_copy(update={"url": renamed[asset.url]})
         if asset.url in renamed
@@ -398,7 +490,7 @@ def _reassets(metadata: StudyMetadata, renamed: dict[str, str]) -> StudyMetadata
         for asset in assets
     ]
     provenance = provenance.model_copy(update={"assets": assets})
-    return metadata.model_copy(update={"provenance": provenance})
+    return metadata.model_copy(update={"provenance": provenance}), count
 
 
 def _renamed_reference(folder: Path, new: str) -> _Write | None:

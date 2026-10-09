@@ -126,6 +126,7 @@ def test_a_move_renames_the_folder_and_every_file_of_the_study(
     assert targets[0] == ReviewTarget(file="Renamed_Fig1.wpd.json", key="drug_plasma")
     assert result.targets == 2
     assert result.issue is None and result.workbook is None
+    assert (result.assets, result.reference) == (0, True)
     assert study_column(folder) == {"Renamed"}
     assert format_folder(folder, check=True).changes == []
     assert not [
@@ -196,11 +197,19 @@ def test_provenance_assets_and_the_reference_name_follow_the_move(
     ]
 
 
+def test_moved_counts_the_assets_and_the_reference_name(moved_checkout, sf_vocabulary):
+    automatic_curation(study_folder(moved_checkout))
+    moved = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert (moved.assets, moved.reference) == (1, True)
+    assert moved.pkdb_id is None
+
+
 def test_a_reference_name_other_than_the_study_name_stays(
     moved_checkout, sf_vocabulary
 ):
     path = study_folder(moved_checkout) / "reference.json"
-    path.write_text(path.read_text().replace('"Example"', '"Jönsson2015"'))
+    text = path.read_text(encoding="utf-8").replace('"Example"', '"Jönsson2015"')
+    path.write_text(text, encoding="utf-8")
     before = path.read_bytes()
     folder = move_study(moved_checkout, OLD, NEW, sf_vocabulary).folder
     assert (folder / "reference.json").read_bytes() == before
@@ -272,6 +281,23 @@ def test_wrong_locations_are_refused(moved_checkout, sf_vocabulary, old, new, me
     ]
 
 
+@pytest.mark.parametrize(
+    "old", ["caffeine/example", "Caffeine/Example", "CAFFEINE/EXAMPLE"]
+)
+def test_an_old_location_in_another_case_is_refused(moved_checkout, sf_vocabulary, old):
+    # On macOS and Windows the folder is found in any case, but the files are
+    # named after the exact study name, so a move under another case would
+    # leave them behind.
+    before = snapshot(study_folder(moved_checkout))
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, old, NEW, sf_vocabulary)
+    assert str(error.value) == (
+        f"studies/{old} is studies/caffeine/Example; give it in that spelling"
+    )
+    assert snapshot(study_folder(moved_checkout)) == before
+    assert not (moved_checkout / "studies" / "codeine").exists()
+
+
 def test_a_format_1_folder_is_refused(moved_checkout, sf_vocabulary):
     legacy = study_folder(moved_checkout, "caffeine/Legacy")
     legacy.mkdir()
@@ -294,6 +320,22 @@ def test_a_file_of_the_new_name_in_the_folder_is_refused(moved_checkout, sf_voca
     before = snapshot(folder)
     with pytest.raises(MoveRefused, match="renamed_Tab1.png"):
         move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert snapshot(folder) == before
+
+
+@pytest.mark.parametrize("stray", ["Renamed.xlsx", ".renamed.xlsx.pkdb-base"])
+def test_a_workbook_file_of_the_new_name_in_the_folder_is_refused(
+    moved_checkout, sf_vocabulary, stray
+):
+    folder = study_folder(moved_checkout)
+    (folder / stray).write_bytes(b"stray")
+    before = snapshot(folder)
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert str(error.value) == (
+        f"{stray} in studies/caffeine/Example would belong to the workbook of "
+        "the moved study; remove it first"
+    )
     assert snapshot(folder) == before
 
 
@@ -346,7 +388,8 @@ def test_a_workbook_that_conflicts_with_the_tables_refuses_the_move(
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"
     set_cell(workbook_path(folder), "outputs_Tab2", 2, "mean", "3.5")
     table = folder / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t2.5\t", "\t4.5\t"))
+    text = table.read_text(encoding="utf-8").replace("\t2.5\t", "\t4.5\t")
+    table.write_text(text, encoding="utf-8")
     with pytest.raises(MoveRefused, match="pkdb tables sync"):
         move_study(moved_checkout, OLD, NEW, sf_vocabulary)
     assert (folder / "Example.xlsx").exists()
@@ -371,13 +414,55 @@ def test_a_synced_workbook_is_removed(moved_checkout, sf_vocabulary):
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"
     # A workbook that only lacks a change of the tables holds no edits.
     table = folder / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t2.5\t", "\t4.5\t"))
+    text = table.read_text(encoding="utf-8").replace("\t2.5\t", "\t4.5\t")
+    table.write_text(text, encoding="utf-8")
     state_path(workbook_path(folder)).write_text("{}", encoding="utf-8")
     result = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
     assert result.workbook == "Example.xlsx"
     names = [path.name for path in result.folder.iterdir()]
     assert not [name for name in names if name.endswith((".xlsx", ".pkdb-base"))]
-    assert "\t4.5\t" in (result.folder / "outputs_Tab2.tsv").read_text()
+    table = result.folder / "outputs_Tab2.tsv"
+    assert "\t4.5\t" in table.read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("change", ["save", "open"])
+def test_a_workbook_changed_during_the_move_is_kept(
+    moved_checkout, sf_vocabulary, monkeypatch, change
+):
+    from pkdb.lifecycle import move
+
+    folder = study_folder(moved_checkout)
+    assert sync_study(folder, sf_vocabulary).workbook_action == "created"
+    state = state_path(workbook_path(folder))
+    state.write_text("{}", encoding="utf-8")
+    rename = Path.rename
+
+    def edit_workbook(path, target):
+        # The curator saves or opens the workbook while the files are renamed.
+        moved = rename(path, target)
+        workbook = Path(target) / "Example.xlsx"
+        if workbook.exists():
+            if change == "save":
+                set_cell(workbook, "outputs_Tab2", 2, "mean", "3.5")
+            else:
+                lock = Path(target) / ".~lock.Example.xlsx#"
+                lock.write_text("lock", encoding="utf-8")
+        return moved
+
+    monkeypatch.setattr(move.Path, "rename", edit_workbook)
+    with pytest.raises(MoveIncomplete) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert str(error.value) == (
+        "Moved studies/caffeine/Example to studies/codeine/Renamed, but "
+        "Example.xlsx changed or was opened during the move, so it stays with its "
+        "sync state; carry its edits over to the tables by hand and remove it. "
+        "The study stays at its new place."
+    )
+    moved = error.value.moved
+    assert moved is not None and moved.workbook is None
+    assert (moved.folder / "Example.xlsx").exists()
+    assert (moved.folder / state.name).exists()
+    assert study_column(moved.folder) == {"Renamed"}
 
 
 @pytest.mark.parametrize("failing", [1, 4])
@@ -438,13 +523,14 @@ def test_a_review_change_during_the_move_is_kept(
         moved = rename(path, target)
         review = Path(target) / "review.json"
         if review.exists():
-            review.write_text(review.read_text().replace("Who are", "Which are"))
+            text = review.read_text(encoding="utf-8")
+            review.write_text(text.replace("Who are", "Which are"), encoding="utf-8")
         return moved
 
     monkeypatch.setattr(move.Path, "rename", edit_review)
     with pytest.raises(MoveRefused, match="review.json changed"):
         move_study(moved_checkout, OLD, NEW, sf_vocabulary)
-    assert "Which are" in (folder / "review.json").read_text()
+    assert "Which are" in (folder / "review.json").read_text(encoding="utf-8")
     assert (folder / "Example.pdf").exists()
     assert not (moved_checkout / "studies" / "codeine").exists()
 
@@ -502,8 +588,9 @@ def test_move_command_renames_the_issue(with_issue, github, monkeypatch, capsys)
     assert lines[0] == "Moved studies/caffeine/Example to studies/codeine/Renamed"
     assert "Renamed Example.pdf to Renamed.pdf" in lines
     assert "Renamed Example_Fig1.wpd.json to Renamed_Fig1.wpd.json" in lines
-    assert lines[-2:] == [
+    assert lines[-3:] == [
         "Updated 2 review targets",
+        "Updated the name in reference.json",
         "Issue #7 renamed to codeine/Renamed",
     ]
     assert output.err == ""
@@ -519,6 +606,7 @@ def test_move_command_json(with_issue, github, capsys):
     assert output["path"] == str(study_folder(with_issue, NEW))
     assert {"from": "Example.pdf", "to": "Renamed.pdf"} in output["renamed"]
     assert output["targets"] == 2 and output["workbook"] is None
+    assert output["assets"] == 0 and output["reference"] is True
     assert output["issue"] == 7 and output["issue_renamed"] is True
     assert output["warnings"] == []
 
@@ -552,15 +640,51 @@ def test_move_command_warns_when_github_fails(with_issue, github, monkeypatch, c
     assert study_folder(with_issue, NEW).is_dir()
 
 
-def test_move_command_without_an_issue_leaves_github_alone(
+NOT_FOLLOWED = (
+    "The study has no issue and no release, so PK-DB cannot follow the move: if "
+    "PK-DB stores it as caffeine/Example, uploading codeine/Renamed is refused. "
+    "Then move it back, run pkdb issues sync --adopt, upload it, and move it again."
+)
+
+
+def test_move_command_without_an_issue_or_release_warns(
     moved_checkout, github, monkeypatch, capsys
 ):
+    automatic_curation(study_folder(moved_checkout))
     monkeypatch.chdir(moved_checkout)
     assert main(["move", OLD, NEW, "--format", "human"]) == 0
-    assert not [
-        line for line in capsys.readouterr().out.splitlines() if "Issue" in line
+    output = capsys.readouterr()
+    lines = output.out.splitlines()
+    assert not [line for line in lines if "Issue" in line]
+    assert lines[-3:] == [
+        "Updated 2 review targets",
+        "Updated 1 provenance asset of study.json",
+        "Updated the name in reference.json",
     ]
+    assert output.err == f"Warning: {NOT_FOLLOWED}\n"
     assert github.writes == []
+    arguments = ["move", NEW, OLD, "--format", "json"]
+    assert main(arguments) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["assets"] == 1 and output["issue"] is None
+    assert output["warnings"] == [
+        NOT_FOLLOWED.replace("caffeine/Example", "X")
+        .replace("codeine/Renamed", "caffeine/Example")
+        .replace("X", "codeine/Renamed")
+    ]
+
+
+def test_move_command_of_a_released_study_without_an_issue_does_not_warn(
+    moved_checkout, monkeypatch, capsys
+):
+    folder = study_folder(moved_checkout)
+    release = {"release": {"pkdb_id": "PKDB00001", "date": "2026-10-01"}}
+    patch_metadata(folder, release, read_metadata(folder).revision)
+    monkeypatch.delenv("GH_TOKEN", raising=False)
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    monkeypatch.chdir(moved_checkout)
+    assert main(["move", OLD, NEW, "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["warnings"] == []
 
 
 def test_move_command_refusal_exits_1(with_issue, github, monkeypatch, capsys):

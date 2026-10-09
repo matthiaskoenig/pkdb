@@ -345,7 +345,20 @@ def _move_study(args, github) -> int:
     if moved.targets:
         plural = "" if moved.targets == 1 else "s"
         lines.append(f"Updated {moved.targets} review target{plural}")
+    if moved.assets:
+        plural = "" if moved.assets == 1 else "s"
+        lines.append(f"Updated {moved.assets} provenance asset{plural} of study.json")
+    if moved.reference:
+        lines.append("Updated the name in reference.json")
     warnings, renamed = _rename_issue(github, moved.issue, place)
+    if moved.issue is None and moved.pkdb_id is None:
+        # The server follows a move by the issue number or the PKDB identifier.
+        warnings.append(
+            "The study has no issue and no release, so PK-DB cannot follow the "
+            f"move: if PK-DB stores it as {old}, uploading {place} is refused. "
+            "Then move it back, run pkdb issues sync --adopt, upload it, and move "
+            "it again."
+        )
     if renamed:
         lines.append(f"Issue #{moved.issue} renamed to {place}")
     data = {
@@ -354,6 +367,8 @@ def _move_study(args, github) -> int:
         "path": str(moved.folder),
         "renamed": [{"from": before, "to": after} for before, after in moved.renamed],
         "targets": moved.targets,
+        "assets": moved.assets,
+        "reference": moved.reference,
         "workbook": moved.workbook,
         "issue": moved.issue,
         "issue_renamed": renamed,
