@@ -35,7 +35,9 @@ def register(commands) -> None:
         description="Align title, labels, assignees and state of the issue of every study.",
     )
     sync.add_argument(
-        "--root", type=Path, help="Repository with a studies folder (default: current)"
+        "--root",
+        type=Path,
+        help="Folder inside the repository with a studies folder (default: found by searching upward from the current folder)",
     )
     sync.add_argument(
         "--repository",

@@ -82,3 +82,69 @@ def test_adoption_writes_the_issue_number(setup, tmp_path, capsys):
     assert "caffeine/B: adopt #2, rename" in out
     assert "#1 caffeine/A: title, labels" in out
     assert "Changed 2 issues." in out
+
+
+def test_a_run_from_a_subfolder_finds_the_checkout(setup, tmp_path, monkeypatch):
+    sub = tmp_path / "studies" / "caffeine"
+    monkeypatch.chdir(sub)
+    assert main(["issues", "sync", "--format", "json"]) == 0
+    assert setup.issues[1]["title"] == "caffeine/A"
+
+
+def test_a_run_outside_a_checkout_is_a_usage_error(
+    setup, tmp_path_factory, monkeypatch, capsys
+):
+    monkeypatch.chdir(tmp_path_factory.mktemp("empty"))
+    assert main(["issues", "sync", "--format", "human"]) == 2
+    assert "studies folder" in capsys.readouterr().err
+
+
+def test_a_github_error_exits_1(setup, capsys):
+    setup.fail[("GET", None)] = 401
+    assert main(["issues", "sync", "--format", "human"]) == 1
+    assert capsys.readouterr().err
+
+
+def test_a_roster_error_exits_1(setup, monkeypatch, capsys):
+    from pkdb.errors import ClientError
+
+    def broken(endpoint, api_key):
+        raise ClientError("Roster unavailable")
+
+    monkeypatch.setattr("pkdb.issues_cli.roster", broken)
+    assert main(["issues", "sync", "--format", "human"]) == 1
+    assert "Roster unavailable" in capsys.readouterr().err
+
+
+def test_errors_of_the_result_exit_1(setup, monkeypatch, capsys):
+    setup.fail[("PATCH", 1)] = 500
+    assert main(["issues", "sync", "--format", "human"]) == 1
+    assert "Error:" in capsys.readouterr().err
+
+
+def test_ctrl_c_exits_130(setup, monkeypatch):
+    def interrupt(*args, **kwargs):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr("pkdb.issues.sync.sync", interrupt)
+    assert main(["issues", "sync"]) == 130
+
+
+@pytest.mark.parametrize("mode", ["success", "github", "roster"])
+@pytest.mark.parametrize("output", ["human", "json"])
+def test_secrets_never_appear_in_output(setup, monkeypatch, capsys, mode, output):
+    from pkdb.errors import ClientError
+
+    monkeypatch.setenv("GH_TOKEN", "ghp_SECRET_canary")
+    monkeypatch.setenv("PKDB_API_KEY", "pkdb_live_SECRET_canary")
+    if mode == "github":
+        setup.fail[("GET", None)] = 401
+    if mode == "roster":
+
+        def broken(endpoint, api_key):
+            raise ClientError("Roster unavailable")
+
+        monkeypatch.setattr("pkdb.issues_cli.roster", broken)
+    main(["issues", "sync", "--format", output])
+    captured = capsys.readouterr()
+    assert "SECRET_canary" not in captured.out + captured.err

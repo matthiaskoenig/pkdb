@@ -224,4 +224,6 @@ GitHub logins come from the PK-DB roster `GET /api/v2/curators`, which lists the
 
 `pkdb issues sync --adopt --user USER` also gives each study without `issue` an issue, and is the only mode that writes `study.json` and `review.json`. It matches an issue by its title, or the title with the prefix `Curate `, `Check ` or `Check and curate `; closes further issues with the same title as not planned with the comment "Duplicate of #N"; moves a draft study whose issue has the `check` label to `in_review`; and creates a new issue when none matches. The user must be in the roster.
 
-The exit code is 0 when the sync succeeded, 1 when GitHub, the PK-DB server or a study reported an error, and 2 for missing settings or a wrong option. `--format json` prints the full result.
+`--root PATH` names a folder inside the repository with the `studies` folder; by default the command searches upward from the current folder. `--agent AGENT` (default `PKDB_AGENT`) names the AI agent that makes an adoption, next to `--user`.
+
+The exit code is 0 when the sync succeeded, 1 when GitHub, the PK-DB server or a study reported an error, 2 for missing settings or a wrong option, and 130 when you interrupt the command with Ctrl-C. `--format json` prints the full result.
