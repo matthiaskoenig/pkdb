@@ -104,7 +104,7 @@ The Metadata section edits `study.json` in forms.
 - **Reference**: the PMID and the DOI, whether `reference.json` matches them, and the title, the authors and the journal of `reference.json`. **Correct title, authors, journal...** opens the Reference dialog.
 - **People**: the creator, the curators with a rating from 0 to 5 stars in half steps, and the collaborators, offered from the curator roster.
 - **Access and provenance**: the licence, open or closed, and the access, public or private; public needs a release. The provenance is a manual curation, or an automatic curation with its method, version, run ID and assets. A data import is shown as the importer set it.
-- **Issue and release**: read only. They are set when the study is released: run `pkdb release STUDY...` for approved studies without open review items and validation errors, and release through a pull request.
+- **Issue and release**: read only. `pkdb new` or `pkdb issues sync --adopt` sets the issue. `pkdb release STUDY...` sets the release of approved studies without open review items and validation errors; release through a pull request.
 - **Descriptions and comments**, and **Notes per table** for each kind of table. A comment records the user who wrote it.
 
 Edits stay in the form until you save them. The bar at the bottom shows **Unsaved changes in study.json** with **Save** and **Discard**, and **Undo** brings discarded edits back for a few seconds. Leaving the section with unsaved changes asks first. **Save** checks the whole document and writes it. When it is not valid, nothing is written and the fields with problems are marked. A new PMID or DOI fetches `reference.json` for it; when the lookup fails, `study.json` is saved and the bar says why.
