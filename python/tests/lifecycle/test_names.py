@@ -26,6 +26,13 @@ def test_valid_locations():
         ("caffeine/outputs", "reserved"),
         ("caffeine/Outputs", "reserved"),
         ("caffeine/VALIDATE", "reserved"),
+        # Names of the fixed files of a study, whose files a move would rename.
+        ("caffeine/study", "reserved"),
+        ("caffeine/Reference", "reserved"),
+        ("caffeine/review", "reserved"),
+        ("caffeine/subjects", "reserved"),
+        ("caffeine/INTERVENTIONS", "reserved"),
+        ("caffeine/characteristica", "reserved"),
     ],
 )
 def test_invalid_locations(value, message):

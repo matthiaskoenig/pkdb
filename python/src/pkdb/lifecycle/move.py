@@ -11,7 +11,7 @@ from pkdb.cache import atomic_bytes
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.lifecycle.names import case_twin, parse_location
 from pkdb.lifecycle.new import error_messages
-from pkdb.lifecycle.registry import REGISTRY_FILE, registry_locations
+from pkdb.lifecycle.registry import REGISTRY_FILE, REGISTRY_PATH, registry_locations
 from pkdb.repository import STUDIES, location
 from pkdb.schemas.review import Review
 from pkdb.studyformat.formatter import format_folder
@@ -32,9 +32,11 @@ from pkdb.studyformat.revision import (
 )
 from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.tables import (
+    JSON_FILES,
     REFERENCE_JSON,
     REVIEW_JSON,
     STUDY_JSON,
+    parse_table_file,
 )
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
@@ -358,12 +360,19 @@ def _renamed(file: str, old: str, new: str) -> str | None:
 def _renames(folder: Path, new: str) -> list[tuple[str, str]]:
     """The old and new names of the files named after the study, in natural order.
 
-    The workbook is not renamed: the move removes it.
+    The workbook, also in another case, is not renamed: the move removes it.
+    The JSON files and the tables are no files named after the study, also
+    when its name is their stem, such as `study` or `subjects`.
     """
     renames = []
-    workbook = workbook_path(folder).name
+    workbook = workbook_path(folder).name.casefold()
     for path in sorted(folder.iterdir(), key=lambda item: natural_key(item.name)):
-        if path.is_dir(follow_symlinks=False) or path.name == workbook:
+        if (
+            path.is_dir(follow_symlinks=False)
+            or path.name.casefold() == workbook
+            or path.name in JSON_FILES
+            or parse_table_file(path.name) is not None
+        ):
             continue
         renamed = _renamed(path.name, folder.name, new)
         if renamed is not None and renamed != path.name:
@@ -551,7 +560,13 @@ def _registry_write(studies: Path, pkdb_id: str, old: str, new: str) -> _Write |
     identifier that names the old location gets the new one, so that
     pkdb registry --check stays clean. The file keeps its order and layout.
     """
-    original, revision = read_revision(studies / REGISTRY_FILE)
+    try:
+        original, revision = read_revision(studies / REGISTRY_FILE)
+    except OSError as error:
+        raise MoveRefused(
+            f"{REGISTRY_PATH}: cannot be read: {_reason(error)}; fix it before "
+            "moving a released study"
+        ) from None
     if original is None:
         return None
     try:

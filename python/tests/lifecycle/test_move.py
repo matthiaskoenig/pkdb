@@ -256,6 +256,54 @@ def test_other_attachments_named_after_the_study_follow_the_move(
     assert (moved.targets, moved.assets) == (3, 1)
 
 
+@pytest.mark.parametrize("name", ["study", "review", "reference", "subjects"])
+def test_the_fixed_files_of_a_study_named_like_them_stay(
+    moved_checkout, sf_vocabulary, name
+):
+    # Built by hand: pkdb new and pkdb move refuse such names now.
+    (moved_checkout / "studies" / "caffeine" / "Example").rename(
+        moved_checkout / "studies" / "caffeine" / name
+    )
+    folder = study_folder(moved_checkout, f"caffeine/{name}")
+    for path in folder.glob("Example*"):
+        path.rename(folder / path.name.replace("Example", name, 1))
+    target = folder / "review.json"
+    target.write_text(
+        target.read_text(encoding="utf-8").replace('"Example', f'"{name}'),
+        encoding="utf-8",
+    )
+    assert format_folder(folder).ok
+    fixed = {"study.json", "review.json", "reference.json"} | {
+        path.name for path in folder.iterdir() if parse_table_file(path.name)
+    }
+    assert f"{name}.json" in fixed or f"{name}.tsv" in fixed
+    moved = move_study(
+        moved_checkout, f"caffeine/{name}", "caffeine/Other", sf_vocabulary
+    )
+    assert fixed <= {path.name for path in moved.folder.iterdir()}
+    assert not fixed & {before for before, _ in moved.renamed}
+    assert (moved.folder / "Other.pdf").exists()
+    assert (moved.folder / "Other_Tab9.tsv").exists()
+    assert not [
+        issue
+        for issue in validate_folder(moved.folder, sf_vocabulary).issues
+        if issue.severity == "error"
+    ]
+
+
+def test_a_workbook_in_another_case_is_not_an_attachment(moved_checkout, sf_vocabulary):
+    folder = study_folder(moved_checkout)
+    (folder / "Example.XLSX").write_bytes(b"workbook")
+    try:
+        moved = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    except MoveRefused as error:
+        # A case-insensitive file system finds it as the workbook, which is damaged.
+        assert "Example.xlsx cannot be read" in str(error)
+        return
+    assert "Example.XLSX" not in dict(moved.renamed)
+    assert (moved.folder / "Example.XLSX").read_bytes() == b"workbook"
+
+
 def test_an_attachment_whose_new_name_is_taken_is_refused(
     moved_checkout, sf_vocabulary
 ):
@@ -346,6 +394,22 @@ def test_a_malformed_registry_file_refuses_the_move_of_a_released_study(
     )
     assert snapshot(study_folder(moved_checkout)) == before
     assert path.read_text(encoding="utf-8") == "[]"
+
+
+def test_an_unreadable_registry_file_refuses_the_move_of_a_released_study(
+    moved_checkout, sf_vocabulary
+):
+    path = released(moved_checkout, "{}")
+    path.unlink()
+    path.mkdir()
+    before = snapshot(study_folder(moved_checkout))
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert str(error.value).startswith(
+        "studies/study_identifiers.json: cannot be read: "
+    )
+    assert str(error.value).endswith("; fix it before moving a released study")
+    assert snapshot(study_folder(moved_checkout)) == before
 
 
 def test_a_failed_registry_write_undoes_the_move(

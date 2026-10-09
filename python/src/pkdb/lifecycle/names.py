@@ -4,11 +4,18 @@ import re
 from pathlib import Path
 
 from pkdb.studyformat.layout import RESERVED_NAMES
+from pkdb.studyformat.tables import JSON_FILES, TABLES
 
 NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*")
 MAX_STUDY_NAME = 24
 _RULE = "letters, digits, '_' and '-', starting with a letter or a digit"
-_RESERVED = frozenset(name.casefold() for name in RESERVED_NAMES)
+# Besides the names that PK-DB and the per-source tables reserve, a new name
+# is none of the fixed files of a study, such as study.json or subjects.tsv,
+# which would look like files named after the study.
+_FIXED_FILES = {Path(file).stem for file in JSON_FILES} | {
+    spec.kind for spec in TABLES.values() if not spec.per_source
+}
+_RESERVED = frozenset(name.casefold() for name in RESERVED_NAMES | _FIXED_FILES)
 
 
 def parse_location(value: str) -> tuple[str, str]:

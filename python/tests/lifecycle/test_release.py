@@ -176,6 +176,34 @@ def test_access_is_written_in_the_release_patch(
     ]
 
 
+def test_a_conflict_names_the_new_access_of_the_studies_written(
+    approved_studies, sf_vocabulary, capsys, monkeypatch
+):
+    from pkdb.lifecycle import release as module
+    from pkdb.studyformat.revision import RevisionConflict
+
+    root, first, second = approved_studies("c/A", "c/B")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    real = module.patch_metadata
+
+    def patch(folder, patch, revision):
+        if folder == second:
+            raise RevisionConflict("study.json", "a", "b", None)
+        return real(folder, patch, revision)
+
+    monkeypatch.setattr(module, "patch_metadata", patch)
+    argv = ["--no-update", "release", str(first), str(second), "--access", "public"]
+    assert main([*argv, "--format", "json"]) == 1
+    data = json.loads(capsys.readouterr().out)
+    assert data["error"].endswith(
+        "these studies keep their identifiers: c/A: PKDB00001 with access public"
+    )
+    assert data["released"] == [
+        {"location": "c/A", "pkdb_id": "PKDB00001", "access": "public"}
+    ]
+    assert read_metadata(first).metadata.access == "public"
+
+
 def test_the_command_publishes_with_access_public(
     approved_studies, sf_vocabulary, capsys, monkeypatch
 ):

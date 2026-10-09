@@ -35,20 +35,28 @@ class ReleaseRefused(Exception):
 
 
 class ReleaseConflict(Exception):
-    """A study.json changed during the release; `released` keeps its numbers."""
+    """A study.json changed during the release; `released` keeps its numbers.
+
+    `access` is the access given to the release, which the studies written
+    before the conflict have now too.
+    """
 
     def __init__(
         self,
         where: str,
-        released: list[tuple[str, str]],
+        released: list[Numbered],
         reason: str = "study.json changed on disk since it was read",
+        access: str | None = None,
     ):
         message = f"{where}: {reason}; nothing was written for it"
         if released:
-            done = ", ".join(f"{place}: {pkdb_id}" for place, pkdb_id in released)
+            new_access = f" with access {access}" if access is not None else ""
+            done = ", ".join(
+                f"{item.location}: {item.pkdb_id}{new_access}" for item in released
+            )
             message += f"; these studies keep their identifiers: {done}"
         super().__init__(message)
-        self.location, self.released = where, released
+        self.location, self.released, self.access = where, released, access
 
 
 class LargestIdentifierUnknown(ValueError):
@@ -124,12 +132,13 @@ def release(
         patch: dict = {"release": {"pkdb_id": pkdb_id, "date": on.isoformat()}}
         if access is not None:
             patch["access"] = access
-        written = [(item.location, item.pkdb_id) for item in done]
         try:
             patch_metadata(folder, patch, revisions[folder])
         except RevisionConflict:
-            raise ReleaseConflict(location(folder), written) from None
+            raise ReleaseConflict(location(folder), done, access=access) from None
         except (MetadataError, OSError) as error:
-            raise ReleaseConflict(location(folder), written, str(error)) from None
+            raise ReleaseConflict(
+                location(folder), done, str(error), access=access
+            ) from None
         done.append(Numbered(location(folder), pkdb_id, accesses[folder]))
     return done

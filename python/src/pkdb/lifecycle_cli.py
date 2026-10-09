@@ -622,8 +622,12 @@ def _release(args) -> int:
         data = {
             "error": str(conflict),
             "released": [
-                {"location": place, "pkdb_id": pkdb_id}
-                for place, pkdb_id in conflict.released
+                {
+                    "location": item.location,
+                    "pkdb_id": item.pkdb_id,
+                    "access": item.access,
+                }
+                for item in conflict.released
             ],
         }
         lines = [str(conflict)]
