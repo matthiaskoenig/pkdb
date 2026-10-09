@@ -28,6 +28,8 @@ Run `pkdb update` to update immediately or `pkdb update --check` to only report 
 | `PKDB_API_KEY` | Personal API key for authenticated reads and uploads |
 | `PKDB_USER` | Expected PK-DB username (`--user`, `Client(user=...)`); uploads and the curation app stop when the API key belongs to another account |
 | `PKDB_AGENT` | Name of the AI agent (`--agent`) that writes review items; an agent cannot approve a study |
+| `GH_TOKEN`, `GITHUB_TOKEN` | GitHub token for `pkdb issues sync` and the curation app; `GH_TOKEN` wins |
+| `PKDB_ISSUES_REPO` | GitHub repository of the study issues, default `matthiaskoenig/pkdb_data` |
 | `PKDB_NO_UPDATE` | Set to `1` to disable automatic updates |
 
 Explicit options and arguments always take precedence over the environment.
@@ -210,5 +212,16 @@ The curation commands read and edit a study folder with checked, atomic writes; 
 | `pkdb digitize import FOLDER SOURCE FILE` | Write `<study>_<source>.wpd.json` from a WebPlotDigitizer 4 `.json` or `.tar` project, after checking it against the figure image |
 | `pkdb plot FOLDER` | Render the figure image with its digitized points and mapped rows, and the series and a key of the marks below it, to `<out>/<study>_<source>.plot.png` (`--source`, `--out` outside the study folder); by default every figure with a digitization, timecourses or scatters, and lists the series without dataset |
 | `pkdb tables add FOLDER --raw Tab2` | Add the empty sheet of the raw table of a paper table |
+| `pkdb issues sync [--adopt] [--dry-run]` | Align the GitHub issue of every study: title, labels, assignees, open or closed |
 
 Writes of `pkdb study` and `pkdb review` need a PK-DB user, given with `--user` or `PKDB_USER`. When `PKDB_API_KEY` and an endpoint (`PKDB_ENDPOINT`, or `--endpoint` of `pkdb review status` and `acknowledge`) are set, a write first asks the server for the account of the key: the write is refused with the error `user_mismatch` when the key belongs to another account, an unreachable server leaves the configured user in charge, and `--offline` skips the check. Without a configured user, the account of a confirmed key writes. The curation app resolves the author in the same way. Review writes name the AI agent with `--agent` or `PKDB_AGENT`. Agents may add, reply, resolve and dismiss items, but approving a study is refused for agents and needs a person. Approving an approved study changes nothing. While a study is approved, adding an open item or reopening an item is refused; set the status to `in_review` first. See [Study format](study-format.md) for the raw extraction files (`<study>_<source>.tsv`, `.wpd.json`) and the review file.
+
+## GitHub issues of studies
+
+`pkdb issues sync` keeps one GitHub issue per study format 2 study, in the repository of `--repository OWNER/NAME` (default `PKDB_ISSUES_REPO`, else `matthiaskoenig/pkdb_data`). For the study of each `issue` in `study.json` it aligns the title (`<substance>/<name>`), the substance label and one workflow label (`curate` for a draft, `check` for a study in review, `approved` for an approved study), the curators and reviewers as assignees, and the state: the issue is closed as completed once the study is released and approved, and open otherwise. Other labels stay as they are, and issues without a study are left alone.
+
+GitHub logins come from the PK-DB roster `GET /api/v2/curators`, which lists the logins also of users who hide them on their profile. The command therefore needs `PKDB_ENDPOINT` and `PKDB_API_KEY` next to `GH_TOKEN` or `GITHUB_TOKEN`; only `--dry-run`, which shows the plan and changes nothing, works without a GitHub token. Users without a GitHub login, users GitHub cannot assign, and assignees beyond the 10 that GitHub allows are warnings: the sync assigns the others.
+
+`pkdb issues sync --adopt --user USER` also gives each study without `issue` an issue, and is the only mode that writes `study.json` and `review.json`. It matches an issue by its title, or the title with the prefix `Curate `, `Check ` or `Check and curate `; closes further issues with the same title as not planned with the comment "Duplicate of #N"; moves a draft study whose issue has the `check` label to `in_review`; and creates a new issue when none matches. The user must be in the roster.
+
+The exit code is 0 when the sync succeeded, 1 when GitHub, the PK-DB server or a study reported an error, and 2 for missing settings or a wrong option. `--format json` prints the full result.
