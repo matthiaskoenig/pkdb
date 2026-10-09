@@ -189,7 +189,7 @@ A job:
 | Upload | Syncs, formats and validates the study, and uploads it to the configured server when it has no errors. |
 | Off | Marks the study as changed. Validate or upload it yourself. |
 
-With a server and without offline mode, validation uses the vocabulary of the server. Offline, or without a server, it uses the cached vocabulary of the server, else the vocabulary that comes with `pkdb`. A local result does not show that the server accepts the study.
+With a server and without offline mode, validation uses the vocabulary of the server. Offline, or without a server, it uses the same order as `pkdb validate --offline`: `vocabulary.lock.json` at the root of the pkdb_data checkout that contains the study, else the cached vocabulary of the server, else the vocabulary that comes with `pkdb`. A local result does not show that the server accepts the study.
 
 Turning on Upload asks you to review the server, the account and the studies first. After that, every save uploads the study without asking, and an upload can replace the study on the server. The app remembers the On save action of each study for the workspace, the server and the PK-DB account. Offline, or without an account that may upload, uploads on save wait and the study says so.
 

@@ -25,7 +25,7 @@ def workspace(tmp_path_factory, make_study, valid_files, sf_vocabulary, monkeypa
         start=False,
     )
     # The bundled vocabulary lacks the substance of the test study.
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     yield engine, folder
     engine.close()
 
@@ -643,7 +643,9 @@ def test_workbooks_are_planned_by_the_jobs_not_by_the_initial_scan(
         start=False,
     )
     try:
-        monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+        monkeypatch.setattr(
+            engine, "_local_vocabulary", lambda folder=None: sf_vocabulary
+        )
         assert row(engine)["sync"]["status"] == "not_checked"
         settle(engine)
         assert run_next(engine)["status"] == "succeeded"
@@ -685,7 +687,9 @@ def test_rows_that_no_job_checks_are_planned_a_few_per_tick(
         return {item["id"]: item["sync"]["status"] for item in row_list(engine)}
 
     try:
-        monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+        monkeypatch.setattr(
+            engine, "_local_vocabulary", lambda folder=None: sf_vocabulary
+        )
         monkeypatch.setattr(workspace_module, "workbook_check", check)
         assert set(statuses().values()) == {"not_checked"}
         # Rows whose initial job is pending, queued or running are left to the job.

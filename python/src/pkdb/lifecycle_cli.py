@@ -366,7 +366,7 @@ def _move_study(args, github) -> int:
     from pkdb.tables_cli import _vocabulary
 
     root = repository_root(args.root or Path.cwd())
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, root)
     if vocabulary is None:
         return 2
     old = args.old.removesuffix("/")
@@ -596,7 +596,7 @@ def _release(args) -> int:
     from pkdb.tables_cli import _vocabulary
 
     root, folders = _release_folders(args.studies, args.root)
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, root)
     if vocabulary is None:
         return 2
     on = args.date or datetime.datetime.now(datetime.UTC).date()

@@ -17,6 +17,7 @@ from uuid import uuid4
 from pkdb.cache import (
     atomic_json,
     bundled_vocabulary,
+    select_vocabulary,
 )
 from pkdb.client import Client
 from pkdb.curation.state import EngineState
@@ -378,16 +379,19 @@ class JobsMixin(EngineState):
         # An initial job only validates, whatever the save action of the study.
         row.update(_pending=True, _initial=True, _changed_at=time.monotonic())
 
-    def _local_vocabulary(self):
-        """The vocabulary of local work: the cached one of the endpoint, else the bundled one."""
+    def _local_vocabulary(self, folder=None):
+        """The vocabulary of local work in `folder` (default: the workspace), as pkdb validate picks it.
+
+        That is the lock file of the checkout, else the cached one of the endpoint, else the bundled one.
+        """
         with self.lock:
             endpoint = self.endpoint
-        if endpoint:
-            try:
-                return self.cache.load(endpoint)
-            except OSError, ValueError:
-                pass
-        return bundled_vocabulary()
+        try:
+            return select_vocabulary(
+                None, endpoint, self.cache, folder if folder is not None else self.root
+            )
+        except OSError, ValueError:
+            return bundled_vocabulary()
 
     def _server_validate(self, client, prepared):
         with prepared.source() as source, ExitStack() as stack:
@@ -470,7 +474,7 @@ class JobsMixin(EngineState):
             if change:
                 outcome["reference_updated"] = change
             # Chosen before the folder lock, which is never held while waiting for self.lock.
-            local = self._local_vocabulary()
+            local = self._local_vocabulary(row["_folder"])
             with self.lock:
                 row["sync"] = {**row["sync"], "status": "syncing"}
             stamps = {}

@@ -77,7 +77,7 @@ def listing(folder):
 
 def test_format_1_folders_are_never_touched(workspace, sf_vocabulary, monkeypatch):
     engine, folder, legacy = workspace
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     before = listing(legacy)
     engine.scan()
     for item in engine.studies.values():

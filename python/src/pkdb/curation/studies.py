@@ -531,7 +531,7 @@ class StudiesMixin(EngineState):
         """The conflicting rows of the workbook and the tables, as the sync plans them."""
         try:
             result = sync_study(
-                folder, self._local_vocabulary(), check=True, max_rows=MAX_ROWS
+                folder, self._local_vocabulary(folder), check=True, max_rows=MAX_ROWS
             )
         except OSError, ValueError:
             return []
@@ -723,7 +723,9 @@ class StudiesMixin(EngineState):
             case "status":
                 status = _text(payload, "status")
                 # Chosen before the folder lock that the write takes.
-                vocabulary = self._local_vocabulary() if status == "approved" else None
+                vocabulary = (
+                    self._local_vocabulary(folder) if status == "approved" else None
+                )
                 revision = review_edit.set_status(
                     folder, author, status, vocabulary=vocabulary, revision=revision
                 )
@@ -743,7 +745,7 @@ class StudiesMixin(EngineState):
         """
         code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
         matches = matching_warnings(
-            validate_folder(folder, self._local_vocabulary()).issues,
+            validate_folder(folder, self._local_vocabulary(folder)).issues,
             code,
             file,
             _line(payload) if "line" in payload else ANY,
@@ -775,7 +777,7 @@ class StudiesMixin(EngineState):
     def _under_folder_lock[T](self, folder: Path, run: Callable[[Any], T]) -> T:
         """`run(vocabulary)` under the folder lock, as the watcher job syncs; then a rescan."""
         # Chosen before the folder lock, which is never held while waiting for self.lock.
-        vocabulary = self._local_vocabulary()
+        vocabulary = self._local_vocabulary(folder)
         try:
             with folder_lock(folder):
                 return run(vocabulary)

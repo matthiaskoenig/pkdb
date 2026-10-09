@@ -127,7 +127,9 @@ def test_the_command_releases_and_prints_the_number(
     approved_studies, sf_vocabulary, capsys, monkeypatch
 ):
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     argv = ["--no-update", "release", str(first), "--date", "2026-10-10"]
     assert main([*argv, "--format", "json"]) == 0
     assert json.loads(capsys.readouterr().out) == {
@@ -183,7 +185,9 @@ def test_a_conflict_names_the_new_access_of_the_studies_written(
     from pkdb.studyformat.revision import RevisionConflict
 
     root, first, second = approved_studies("c/A", "c/B")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     real = module.patch_metadata
 
     def patch(folder, patch, revision):
@@ -208,7 +212,9 @@ def test_the_command_publishes_with_access_public(
     approved_studies, sf_vocabulary, capsys, monkeypatch
 ):
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     argv = ["--no-update", "release", str(first), "--date", "2026-10-10"]
     assert main([*argv, "--access", "public", "--format", "human"]) == 0
     assert capsys.readouterr().out == "caffeine/A: PKDB00001\n"
@@ -220,7 +226,9 @@ def test_the_command_hints_at_a_released_study_that_stays_private(
     approved_studies, sf_vocabulary, capsys, monkeypatch
 ):
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     argv = ["--no-update", "release", str(first), "--date", "2026-10-10"]
     assert main([*argv, "--format", "human"]) == 0
     assert capsys.readouterr().out.splitlines() == [
@@ -238,7 +246,9 @@ def test_the_command_writes_nothing_when_a_study_is_refused(
     (second / "review.json").write_text(
         dump_json({"status": "draft"}), encoding="utf-8"
     )
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     code = main(["--no-update", "release", str(first), str(second), "--format", "json"])
     assert code == 1
     assert json.loads(capsys.readouterr().out)["refused"][0]["location"] == "caffeine/B"
@@ -249,7 +259,9 @@ def test_the_command_rejects_wrong_arguments(
     approved_studies, sf_vocabulary, tmp_path, capsys, monkeypatch
 ):
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     base = ["--no-update", "release"]
     assert main([*base, str(first), str(first)]) == 2
     assert main([*base, str(root / "studies")]) == 2
@@ -268,7 +280,9 @@ def test_the_command_takes_substance_and_name_of_the_checkout(
     approved_studies, sf_vocabulary, capsys, monkeypatch
 ):
     root, first, second = approved_studies("caffeine/A", "caffeine/B")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     base = ["--no-update", "release", "--format", "json"]
     monkeypatch.chdir(root / "studies" / "caffeine")
     # A folder path and SUBSTANCE/NAME of the checkout that holds the current folder.
@@ -285,7 +299,9 @@ def test_the_command_refuses_unknown_and_ambiguous_locations(
     approved_studies, sf_vocabulary, tmp_path, capsys, monkeypatch
 ):
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     base = ["--no-update", "release", "--root", str(root)]
     monkeypatch.chdir(tmp_path)
     assert main([*base, "caffeine/Missing"]) == 2
@@ -323,7 +339,9 @@ def test_the_command_reports_an_unknown_largest_identifier(
 ):
     root, first = approved_studies("caffeine/A")
     (root / "studies" / "study_identifiers.json").write_text("[]", encoding="utf-8")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
     argv = ["--no-update", "release", str(first), "--format", output]
     assert main(argv) == 1
     message = (
@@ -378,7 +396,9 @@ def test_the_command_exits_with_1_on_a_conflict(
     from pkdb.studyformat.revision import RevisionConflict
 
     root, first = approved_studies("caffeine/A")
-    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    monkeypatch.setattr(
+        "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
+    )
 
     def conflict(folder, patch, revision):
         raise RevisionConflict("study.json", "a", "b", None)

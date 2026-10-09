@@ -545,7 +545,7 @@ def _review_status(args, folder: Path, author) -> int:
 
     vocabulary = None
     if args.status == "approved":  # only approval validates the folder
-        vocabulary = _vocabulary(args)
+        vocabulary = _vocabulary(args, folder)
         if vocabulary is None:
             return 1
     revision = set_status(
@@ -566,7 +566,7 @@ def _review_acknowledge(args, folder: Path, author) -> int:
     from pkdb.studyformat.validation import validate_folder
     from pkdb.tables_cli import _vocabulary
 
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, folder)
     if vocabulary is None:
         return 1
     # An option that is left out matches every line, column or key.

@@ -27,7 +27,7 @@ caffeine/Harder1988: synced
 
 On a terminal the output is readable text. Elsewhere, or with `--format json`, it is one JSON line per study with `ok`, `workbook_action`, `changes`, `conflicts` and `issues`. The exit code is 0 when the sync succeeded and 1 when it found conflicts or errors. `pkdb tables sync --check` only reports what a sync would do, writes nothing, and exits with 1 when there is anything to do.
 
-The dropdowns of the workbook list vocabulary terms. The tables commands never contact the server: they use the snapshot given with `--vocabulary`, otherwise the cached vocabulary of `--endpoint` (default `PKDB_ENDPOINT`), otherwise the vocabulary bundled with `pkdb`. The lists are written when the workbook is created or regenerated.
+The dropdowns of the workbook list vocabulary terms. The tables commands never contact the server: they use the snapshot given with `--vocabulary`, otherwise `vocabulary.lock.json` at the root of the pkdb_data checkout that contains the study, otherwise the cached vocabulary of `--endpoint` (default `PKDB_ENDPOINT`), otherwise the vocabulary bundled with `pkdb`. The lists are written when the workbook is created or regenerated.
 
 ## Sheet layout
 

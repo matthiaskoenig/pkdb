@@ -271,7 +271,13 @@ def main(argv=None, *, client=None) -> int:
                 raise ValueError(
                     "Write --output outside the study folder to keep source files unchanged"
                 )
-        snapshot = select_vocabulary(args.vocabulary, args.endpoint, cache)
+        # Upload checks against the server's cached vocabulary; validation is offline work.
+        snapshot = select_vocabulary(
+            args.vocabulary,
+            args.endpoint,
+            cache,
+            args.folder if args.command == "validate" else None,
+        )
         if args.command == "upload" and (not args.endpoint or not token):
             raise ValueError("Upload requires an endpoint and PKDB_API_KEY")
     except (ValueError, OSError, ClientError) as error:

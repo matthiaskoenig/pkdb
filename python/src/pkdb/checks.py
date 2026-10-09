@@ -15,7 +15,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from pkdb.cache import VocabularyCache, select_vocabulary
+from pkdb.cache import VocabularyCache, lock_file, select_vocabulary
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.lifecycle.registry import duplicates, registry_problems, scan
 from pkdb.preparation import study_folders
@@ -27,7 +27,6 @@ from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder, validate_folder
 from pkdb.studyformat.workbook.base import state_path, workbook_path
 
-VOCABULARY_LOCK = "vocabulary.lock.json"
 # The changes that touch a study: added, copied, deleted, modified, renamed and
 # type changed files. Without rename detection a move is a deletion and an addition.
 CHANGES = ("--no-renames", "--diff-filter=ACDMRT")
@@ -238,10 +237,11 @@ def select(
 def vocabulary_for(root: Path, path: Path | None) -> Vocabulary:
     """The vocabulary of `path`, else the lock file of the checkout, else the one bundled with pkdb.
 
-    It never contacts a server.
+    This is `select_vocabulary` without an endpoint cache, on purpose: CI has no
+    cache, and the hook must give the answer of CI, so the answer depends only
+    on the checkout. It never contacts a server.
     """
-    lock = Path(root) / VOCABULARY_LOCK
-    chosen = path or (lock if lock.exists() else None)
+    chosen = path or lock_file(root)
     try:
         return select_vocabulary(chosen, None, VocabularyCache())
     except (OSError, ValueError) as error:
@@ -370,9 +370,24 @@ def _unreadable(folder: Path, study: str, error: OSError) -> Problem:
     )
 
 
+def _tracked_studies(root: Path) -> set[Path] | None:
+    """The study folders whose study.json git tracks or has staged, or None outside a git checkout."""
+    try:
+        _git(root, "rev-parse", "--is-inside-work-tree")
+    except CheckError:
+        return None
+    paths = [_relative(root, folder / STUDY_JSON) for folder in checkout_folders(root)]
+    listed = _git_paths(root, ["ls-files", "--cached", "-z"], paths)
+    return {folder for name in listed if (folder := _study_of(root, name)) is not None}
+
+
 def _repository_problems(root: Path) -> list[Problem]:
-    """Shared identifiers and issue numbers, unreadable study.json files and registry file conflicts."""
-    result = scan(root)
+    """Shared identifiers and issue numbers, unreadable study.json files and registry file conflicts.
+
+    Inside a git checkout only the studies whose study.json git tracks or stages count: a commit
+    and CI leave an untracked copy of a study out.
+    """
+    result = scan(root, _tracked_studies(root))
     found = [
         *(("duplicate_identifier", message) for message in duplicates(result)),
         *(("unreadable_study", message) for message in result.errors),
@@ -414,8 +429,18 @@ def check(
         report.checked.append(study)
         try:
             found = _validation_problems(folder, study, vocabulary)
+        except CheckError:
+            raise
         except OSError as error:
             found = [_unreadable(folder, study, error)]
+        except ValueError as error:  # also UnicodeError
+            found = [
+                Problem(
+                    study=study,
+                    code="unreadable_study",
+                    message=f"Cannot check the study: {type(error).__name__}: {error}",
+                )
+            ]
         report.problems += _tracked_only(root, folder, found, untracked)
         if folder in workbooks:
             report.problems.append(workbooks[folder])

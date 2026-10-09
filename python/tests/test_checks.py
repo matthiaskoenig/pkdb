@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 import socket
 
 import httpx2
@@ -500,3 +502,93 @@ def test_vocabulary_lock_is_used_when_present(tmp_path, monkeypatch):
     with pytest.raises(CheckError, match="missing.json"):
         vocabulary_for(root, tmp_path / "missing.json")
     assert not (tmp_path / "cache").exists()
+
+
+def test_a_file_name_that_is_not_utf_8_is_a_problem_of_its_study(
+    checkout, sf_vocabulary
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    bad = os.fsencode(studies["caffeine/A"]) + b"/caf\xe9.txt"
+    try:
+        with open(bad, "wb") as stream:
+            stream.write(b"x\n")
+    except OSError:
+        pytest.skip("the file system refuses a name that is not UTF-8")
+    report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
+    assert report.checked == ["caffeine/A", "caffeine/B"]
+    assert report.problems
+    assert {(p.study, p.code) for p in report.problems} == {
+        ("caffeine/A", "unreadable_study")
+    }
+    assert not report.ok
+
+
+def test_an_unexpected_error_of_one_study_does_not_stop_the_others(
+    checkout, sf_vocabulary, monkeypatch
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+
+    def broken(folder, vocabulary):
+        if folder.name == "A":
+            raise UnicodeEncodeError("utf-8", "\udce9", 0, 1, "surrogates not allowed")
+        return validate_folder(folder, vocabulary)
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    patch_study(studies["caffeine/B"], issue=3)
+    add_unused_intervention(studies["caffeine/B"])
+    report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
+    assert report.checked == ["caffeine/A", "caffeine/B"]
+    failed = [p for p in report.problems if p.code == "unreadable_study"]
+    assert [p.study for p in failed] == ["caffeine/A"]
+    assert "UnicodeEncodeError" in failed[0].message
+    assert any(p.study == "caffeine/B" for p in report.problems)
+    assert not report.ok
+
+
+def test_an_os_error_of_one_study_does_not_stop_the_others(
+    checkout, sf_vocabulary, monkeypatch
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+
+    def broken(folder, vocabulary):
+        if folder.name == "A":
+            raise OSError(5, "Input/output error")
+        return validate_folder(folder, vocabulary)
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
+    assert [(p.study, p.code) for p in report.problems] == [
+        ("caffeine/A", "unreadable_file")
+    ]
+    assert report.checked == ["caffeine/A", "caffeine/B"]
+
+
+def test_repository_checks_consider_only_studies_that_git_tracks(
+    checkout, sf_vocabulary
+):
+    root, studies = checkout("caffeine/A", "codeine/C")
+    patch_study(studies["caffeine/A"], issue=7)
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "Name the issue")
+    copy = root / "studies" / "caffeine" / "Copy"
+    shutil.copytree(studies["caffeine/A"], copy)
+    folders = [studies["codeine/C"]]
+    # An untracked copy is left out, as the commit and CI leave it out.
+    assert check(root, folders, sf_vocabulary, staged=True).ok
+    assert check(root, folders, sf_vocabulary).ok
+    git(root, "add", "studies/caffeine/Copy/study.json")
+    report = check(root, folders, sf_vocabulary, staged=True)
+    assert codes(report) == {(None, "duplicate_identifier")}
+    assert "caffeine/A, caffeine/Copy" in report.problems[0].message
+
+
+def test_outside_git_the_repository_checks_scan_every_study(tmp_path, valid_files):
+    from check_fixtures import format_2_study
+
+    root = tmp_path / "plain"
+    first = format_2_study(root, "caffeine/A", valid_files)
+    second = format_2_study(root, "caffeine/B", valid_files)
+    patch_study(first, issue=7)
+    patch_study(second, issue=7)
+    report = check(root, [], Vocabulary(version="v", measurements=()))
+    assert codes(report) == {(None, "duplicate_identifier")}
