@@ -13,10 +13,79 @@ def _date(text: str):
         raise argparse.ArgumentTypeError(f"{text!r} is not a date YYYY-MM-DD") from None
 
 
+def _add_root(command) -> None:
+    command.add_argument(
+        "--root",
+        type=Path,
+        help="Folder inside the repository with a studies folder (default: found by searching upward from the current folder)",
+    )
+
+
 def register(commands) -> None:
     """Add the lifecycle commands to the command line parser."""
     from pkdb.study_cli import add_format
     from pkdb.tables_cli import _vocabulary_options
+
+    new = commands.add_parser(
+        "new",
+        help="Create a study folder",
+        description=(
+            "Create the draft study studies/SUBSTANCE/NAME with study.json, "
+            "reference.json, subjects.tsv and review.json. The PDF NAME.pdf and the "
+            "images NAME_SOURCE.png of papers/SUBSTANCE/NAME/ move into the study."
+        ),
+    )
+    new.add_argument("location", metavar="SUBSTANCE/NAME")
+    publication = new.add_mutually_exclusive_group(required=True)
+    publication.add_argument("--pmid", help="PubMed ID of the paper")
+    publication.add_argument("--doi", help="DOI of the paper")
+    new.add_argument(
+        "--licence",
+        required=True,
+        choices=("open", "closed"),
+        help="Licence of the paper",
+    )
+    new.add_argument(
+        "--access",
+        required=True,
+        choices=("public", "private"),
+        help="Who may read the study in PK-DB",
+    )
+    new.add_argument(
+        "--user", help="PK-DB user who creates the study (default: PKDB_USER)"
+    )
+    new.add_argument(
+        "--agent", help="AI agent that curates the study (default: PKDB_AGENT)"
+    )
+    new.add_argument(
+        "--agent-version", help="Version of the agent; needed with --agent"
+    )
+    new.add_argument(
+        "--run-id", help="Identifier of the agent's run; needed with --agent"
+    )
+    new.add_argument(
+        "--asset",
+        action="append",
+        default=[],
+        type=Path,
+        metavar="FILE",
+        help="A file the agent read besides the PDF, recorded with its SHA-256; repeat for more",
+    )
+    _add_root(new)
+    new.add_argument(
+        "--offline",
+        action="store_true",
+        help="Create reference.json from cached metadata only",
+    )
+    new.add_argument(
+        "--cache-dir", type=Path, help="Cache folder of reference metadata"
+    )
+    new.add_argument(
+        "--no-issue",
+        action="store_true",
+        help="Leave the GitHub issue to pkdb issues sync --adopt",
+    )
+    add_format(new)
 
     release = commands.add_parser(
         "release",
@@ -39,11 +108,7 @@ def register(commands) -> None:
         help="List released studies by PKDB identifier",
         description="List released studies by PKDB identifier.",
     )
-    command.add_argument(
-        "--root",
-        type=Path,
-        help="Folder inside the repository with a studies folder (default: found by searching upward from the current folder)",
-    )
+    _add_root(command)
     command.add_argument(
         "--check",
         action="store_true",
@@ -59,6 +124,8 @@ def run(args) -> int:
     from pkdb.studyformat_cli import say
 
     try:
+        if args.command == "new":
+            return _new(args)
         if args.command == "release":
             return _release(args)
         if args.command == "registry":
@@ -67,6 +134,60 @@ def run(args) -> int:
         say(str(error), file=sys.stderr)
         return 2
     raise AssertionError(args.command)
+
+
+def _new(args) -> int:
+    import sys
+
+    from pkdb.identity import author_from
+    from pkdb.lifecycle.new import PAPERS, NewStudyRefused, create_study
+    from pkdb.references import ReferenceResolver
+    from pkdb.repository import STUDIES, location, repository_root
+    from pkdb.study_cli import emit, fail
+    from pkdb.studyformat_cli import say
+
+    # An IdentityError and a checkout without studies folder are usage errors.
+    author = author_from(args.user, args.agent)
+    root = repository_root(args.root or Path.cwd())
+    resolver = ReferenceResolver(args.cache_dir, offline=args.offline)
+    try:
+        created = create_study(
+            root,
+            args.location,
+            pmid=args.pmid,
+            doi=args.doi,
+            licence=args.licence,
+            access=args.access,
+            author=author,
+            resolver=resolver,
+            agent_version=args.agent_version,
+            run_id=args.run_id,
+            assets=args.asset,
+        )
+    except NewStudyRefused as refused:
+        message = str(refused)
+        return fail(
+            args,
+            {"location": args.location, "error": message},
+            lambda: say(message, file=sys.stderr),
+        )
+    place = location(created.folder)
+    data = {
+        "location": place,
+        "path": str(created.folder),
+        "moved": created.moved,
+        "left": created.left,
+        "reference": created.reference,
+    }
+    lines = [f"Created {STUDIES}/{place}"]
+    if created.moved:
+        lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
+    if created.left:
+        lines.append(f"Left in {PAPERS}/{place}: {', '.join(created.left)}")
+    if created.reference:
+        lines.append(created.reference)
+    emit(args, data, lines)
+    return 0
 
 
 def _registry(args) -> int:

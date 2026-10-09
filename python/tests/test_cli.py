@@ -181,6 +181,7 @@ def test_output_inside_study_is_rejected(study_folder, vocabulary, tmp_path, cap
         ["tables", "sync", "--help"],
         ["tables", "open", "--help"],
         ["tables", "add", "--help"],
+        ["new", "--help"],
     ],
 )
 def test_help_and_version_do_not_load_runtime_dependencies(arguments):
@@ -219,7 +220,7 @@ def test_help_describes_every_command_with_curate_first(capsys):
     assert error.value.code == 0
     output = capsys.readouterr().out
     assert (
-        "{curate,prepare,validate,upload,vocabulary,reference,import,format,schema,migrate,issues,release,registry,tables,study,review,digitize,plot,update}"
+        "{curate,prepare,validate,upload,vocabulary,reference,import,format,schema,migrate,issues,new,release,registry,tables,study,review,digitize,plot,update}"
         in output
     )
     for command in (
@@ -231,6 +232,7 @@ def test_help_describes_every_command_with_curate_first(capsys):
         "format",
         "migrate",
         "issues",
+        "new",
         "registry",
         "schema",
         "tables",
