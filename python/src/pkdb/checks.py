@@ -1,14 +1,15 @@
 """Check the format 2 studies of a pkdb_data checkout, without writing or contacting the network.
 
 `pkdb check` runs these checks in the pre-commit hook (`--staged`) and the CI
-(`--changed BASE`) of pkdb_data: the canonical form of `pkdb format --check`,
-offline validation, workbooks that git must not track, and the identifiers and
-issue numbers of `pkdb registry --check`. Format 1 studies are skipped.
+(`--changed BASE`) of pkdb_data: offline validation, which includes the
+canonical form of `pkdb format --check`, workbooks that git must not track, and
+the identifiers and issue numbers of `pkdb registry --check`. Format 1 studies
+are skipped.
 """
 
 import re
 import subprocess
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path, PurePosixPath
 from typing import Literal
 
@@ -19,8 +20,8 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.lifecycle.registry import duplicates, registry_problems, scan
 from pkdb.preparation import study_folders
 from pkdb.repository import STUDIES, location
+from pkdb.repository import study_folders as checkout_folders
 from pkdb.schemas.validation import ValidationIssue
-from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder, validate_folder
@@ -30,8 +31,10 @@ VOCABULARY_LOCK = "vocabulary.lock.json"
 # The changes that touch a study: added, copied, deleted, modified, renamed and
 # type changed files. Without rename detection a move is a deletion and an addition.
 CHANGES = ("--no-renames", "--diff-filter=ACDMRT")
-# Validation reports the files that formatting would change as well.
+# The validation issue of a file that pkdb format would change.
 NOT_FORMATTED = "not_formatted"
+# Paths per git call, so that the command line stays short on every system.
+BATCH = 200
 
 
 class CheckError(ValueError):
@@ -41,7 +44,7 @@ class CheckError(ValueError):
 class Problem(BaseModel):
     """A problem of the study at a location, or of the repository when `study` is None."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
+    model_config = ConfigDict(extra="forbid")
     study: str | None
     code: str
     message: str
@@ -65,8 +68,11 @@ class CheckReport(BaseModel):
         return not any(problem.severity == "error" for problem in self.problems)
 
 
-def _git(root: Path, *args: str) -> bytes:
-    """The output of git run in `root`, or a CheckError with git's error line."""
+def _git(root: Path, *args: str, silent: str | None = None) -> bytes:
+    """The output of git run in `root`, or a CheckError with git's error line.
+
+    `silent` is the message when git fails without printing an error.
+    """
     try:
         completed = subprocess.run(
             ["git", "-C", str(root), "--literal-pathspecs", *args],
@@ -77,6 +83,8 @@ def _git(root: Path, *args: str) -> bytes:
         raise CheckError(f"Cannot run git: {error.strerror or error}") from None
     if completed.returncode:
         lines = completed.stderr.decode("utf-8", "replace").strip().splitlines()
+        if not lines and silent:
+            raise CheckError(silent)
         line = next(
             (line for line in lines if line.startswith(("fatal:", "error:"))),
             lines[0] if lines else f"exit code {completed.returncode}",
@@ -91,6 +99,25 @@ def _names(output: bytes) -> list[str]:
     return [
         name.decode("utf-8", "surrogateescape") for name in output.split(b"\0") if name
     ]
+
+
+def _git_paths(root: Path, args: Sequence[str], paths: Sequence[str]) -> list[str]:
+    """The paths that git prints for `args -- paths`, in calls of at most BATCH paths.
+
+    No path means no call: git without paths would list the whole repository.
+    """
+    return [
+        name
+        for start in range(0, len(paths), BATCH)
+        for name in _names(_git(root, *args, "--", *paths[start : start + BATCH]))
+    ]
+
+
+def _relative(root: Path, path: Path) -> str:
+    """The path relative to the root, as git prints it."""
+    if not path.is_relative_to(root):
+        raise CheckError(f"{path} is outside the checkout {root}")
+    return path.relative_to(root).as_posix()
 
 
 def _study_of(root: Path, name: str) -> Path | None:
@@ -108,49 +135,78 @@ def _study_of(root: Path, name: str) -> Path | None:
     return root.joinpath(*parts[:3])
 
 
-def _is_study(folder: Path) -> bool:
-    """Whether a folder still holds a study, not only files that git leaves behind."""
+def _holds_study(folder: Path) -> bool:
+    """Whether a folder holds a study of either format."""
     return (folder / STUDY_JSON).is_file() or is_v2_folder(folder)
 
 
-def _in_order(folders) -> list[Path]:
+def _in_order(folders: Iterable[Path]) -> list[Path]:
     """Folders once each, in the natural order of their locations."""
     return sorted(
         set(folders), key=lambda folder: (natural_key(location(folder)), str(folder))
     )
 
 
-def _visible(studies: Path, folders: list[Path]) -> list[Path]:
-    """The folders that are not hidden and not below a hidden folder of the studies folder."""
-    return [
-        folder
-        for folder in folders
-        if not any(part.startswith(".") for part in folder.relative_to(studies).parts)
-    ]
-
-
 def _below(root: Path, path: Path) -> list[Path]:
-    """The study folders of a path inside the studies folder, without hidden folders."""
+    """The study folders `studies/<substance>/<name>` of a path inside the studies folder.
+
+    Hidden folders are skipped; a study.json at another depth is a CheckError.
+    """
     studies = root / STUDIES
     path = Path(path).resolve()
     if not path.is_relative_to(studies):
         raise CheckError(f"{path} is outside {studies}")
     try:
-        return _visible(studies, study_folders(path))
+        found = study_folders(path)
     except ValueError as error:
         raise CheckError(f"{path}: {error}") from None
+    folders = []
+    for folder in found:
+        parts = folder.relative_to(studies).parts
+        if any(part.startswith(".") for part in parts):
+            continue
+        if len(parts) != 2:
+            raise CheckError(
+                f"{folder} is not a study folder {STUDIES}/<substance>/<name>"
+            )
+        folders.append(folder)
+    return folders
 
 
-def _changed(root: Path, *, staged: bool, changed: str | None) -> list[Path]:
-    """The study folders of the staged files or of the files changed since a base."""
+def _verify_base(root: Path, base: str) -> None:
+    """A CheckError unless the base names a commit of the repository."""
+    if not base.strip():
+        raise CheckError("The base is empty; give a branch, tag or commit")
+    _git(
+        root,
+        *("rev-parse", "--verify", "--quiet", "--end-of-options", f"{base}^{{commit}}"),
+        silent=f"The base {base} is not a commit of the repository",
+    )
+
+
+def _changed(root: Path, base: str | None) -> tuple[list[Path], list[str]]:
+    """The study folders of the staged files (no base) or of the files changed since a base, and the deleted studies.
+
+    A study is deleted when its folder is gone or git tracks no file below it
+    any more (the index for staged files, HEAD for a base), so that files that
+    git rm leaves behind do not count, but a study that lost a file does.
+    """
     args = ["diff", "--name-only", "-z", "--relative", *CHANGES]
-    if staged:
+    if base is None:
         args.append("--cached")
+        listing = ["ls-files", "--cached", "-z"]
     else:
+        _verify_base(root, base)
         # A base is never read as an option, such as --output that writes a file.
-        args += ["--end-of-options", f"{changed}...HEAD", "--"]
-    found = (_study_of(root, name) for name in _names(_git(root, *args)))
-    return [folder for folder in found if folder is not None]
+        args += ["--end-of-options", f"{base}...HEAD", "--"]
+        listing = ["ls-tree", "-r", "--name-only", "-z", "HEAD"]
+    found = {_study_of(root, name) for name in _names(_git(root, *args))}
+    folders = _in_order(folder for folder in found if folder is not None)
+    paths = [_relative(root, folder) for folder in folders]
+    tracked = {_study_of(root, name) for name in _git_paths(root, listing, paths)}
+    existing = [f for f in folders if f in tracked and f.is_dir()]
+    deleted = [location(f) for f in folders if f not in existing]
+    return existing, deleted
 
 
 def select(
@@ -164,7 +220,8 @@ def select(
 
     The studies below `paths`, the studies of the staged files, the studies of
     the files changed since the base `changed`, or every study of the checkout.
-    A study whose folder is gone is deleted. Hidden folders are never selected.
+    A study folder is `studies/<substance>/<name>`; hidden folders are never
+    selected.
     """
     root = Path(root).resolve()
     if sum((bool(paths), staged, changed is not None)) > 1:
@@ -172,18 +229,10 @@ def select(
     if paths:
         return _in_order(folder for path in paths for folder in _below(root, path)), []
     if staged or changed is not None:
-        folders = set(_changed(root, staged=staged, changed=changed))
-        deleted = [location(folder) for folder in folders if not _is_study(folder)]
-        existing = [folder for folder in folders if _is_study(folder)]
-        return _in_order(existing), sorted(deleted, key=natural_key)
-    studies = root / STUDIES
-    if not studies.is_dir():
+        return _changed(root, None if staged else changed)
+    if not (root / STUDIES).is_dir():
         raise CheckError(f"{root} has no {STUDIES} folder")
-    try:
-        folders = study_folders(studies)
-    except ValueError:  # no study.json below the studies folder
-        return [], []
-    return _in_order(_visible(studies, folders)), []
+    return [folder for folder in checkout_folders(root) if _holds_study(folder)], []
 
 
 def vocabulary_for(root: Path, path: Path | None) -> Vocabulary:
@@ -202,11 +251,14 @@ def vocabulary_for(root: Path, path: Path | None) -> Vocabulary:
 
 
 def _issue_problem(study: str, issue: ValidationIssue) -> Problem:
-    """A validation issue as a problem of the study, at its file and row."""
+    """A validation issue as a problem of the study, at its file and row.
+
+    A file that pkdb format would change is `not_canonical`.
+    """
     source = issue.source
     return Problem(
         study=study,
-        code=issue.code,
+        code="not_canonical" if issue.code == NOT_FORMATTED else issue.code,
         message=issue.message,
         file=source.file if source else None,
         row=source.row if source else None,
@@ -214,40 +266,17 @@ def _issue_problem(study: str, issue: ValidationIssue) -> Problem:
     )
 
 
-def _form_problems(folder: Path, study: str) -> list[Problem]:
-    """The files that pkdb format would change, and the errors that keep it from reading them."""
-    result = format_folder(folder, check=True)
-    problems = [
-        Problem(
-            study=study,
-            code="not_canonical",
-            message=f"{change.file} is not in canonical form; run pkdb format",
-            file=change.file,
-        )
-        for change in result.changes
-    ]
-    problems += [
-        _issue_problem(study, issue)
-        for issue in result.issues
-        if issue.severity == "error"
-    ]
-    return problems
-
-
 def _validation_problems(
     folder: Path, study: str, vocabulary: Vocabulary
 ) -> list[Problem]:
     """The errors and warnings of offline validation, without acknowledged warnings.
 
-    The canonical form is left to the form check. A report that leaves out
-    errors or stopped early adds an error, so the check never passes it.
+    They include the files that pkdb format would change and the structural
+    errors that keep it from reading a file. A report that leaves out errors or
+    stopped early adds an error, so the check never passes it.
     """
     report = validate_folder(folder, vocabulary)
-    problems = [
-        _issue_problem(study, issue)
-        for issue in report.issues
-        if issue.code != NOT_FORMATTED
-    ]
+    problems = [_issue_problem(study, issue) for issue in report.issues]
     listed = sum(issue.severity == "error" for issue in report.issues)
     if report.error_count > listed or not report.complete:
         message = (
@@ -260,23 +289,71 @@ def _validation_problems(
     return problems
 
 
-def _workbook_problems(root: Path, folder: Path, study: str) -> list[Problem]:
-    """An error when git tracks or stages the workbook of the study or its state file."""
-    workbook = workbook_path(folder)
-    files = (workbook, state_path(workbook))
-    output = _git(root, "ls-files", "--cached", "-z", "--", *map(str, files))
-    listed = {PurePosixPath(name).name for name in _names(output)}
-    tracked = [file.name for file in files if file.name in listed]
-    if not tracked:
-        return []
-    one = len(tracked) == 1
-    message = (
-        f"{' and '.join(tracked)} {'is' if one else 'are'} generated; "
-        f"remove {'it' if one else 'them'} from git with git rm --cached"
-    )
-    return [
-        Problem(study=study, code="workbook_tracked", message=message, file=tracked[0])
-    ]
+def _workbook_problems(root: Path, folders: Sequence[Path]) -> dict[Path, Problem]:
+    """An error for each study whose workbook or its state file git tracks or stages."""
+    files = {
+        folder: (workbook, state_path(workbook))
+        for folder in folders
+        for workbook in [workbook_path(folder)]
+    }
+    paths = [_relative(root, file) for pair in files.values() for file in pair]
+    listed = set(_git_paths(root, ["ls-files", "--cached", "-z"], paths))
+    problems = {}
+    for folder, pair in files.items():
+        tracked = [file.name for file in pair if _relative(root, file) in listed]
+        if tracked:
+            one = len(tracked) == 1
+            message = (
+                f"{' and '.join(tracked)} {'is' if one else 'are'} generated; "
+                f"remove {'it' if one else 'them'} from git with git rm --cached"
+            )
+            problems[folder] = Problem(
+                study=location(folder),
+                code="workbook_tracked",
+                message=message,
+                file=tracked[0],
+            )
+    return problems
+
+
+def _untracked(root: Path, folders: Sequence[Path]) -> set[str]:
+    """The files below the folders that git does not track, relative to the root.
+
+    Ignored files count as well: a commit leaves them out like any untracked file.
+    """
+    paths = [_relative(root, folder) for folder in folders]
+    return set(_git_paths(root, ["ls-files", "--others", "-z"], paths))
+
+
+def _tracked_only(
+    root: Path, folder: Path, problems: list[Problem], untracked: set[str]
+) -> list[Problem]:
+    """The problems of a study without those of files that git does not track.
+
+    Errors of such files stop validation before its last step, so a warning
+    names them when any is left out.
+    """
+    prefix = _relative(root, folder)
+    kept: list[Problem] = []
+    names: set[str] = set()
+    for problem in problems:
+        if problem.file is None or f"{prefix}/{problem.file}" not in untracked:
+            kept.append(problem)
+        elif problem.severity == "error":
+            names.add(problem.file)
+    if names:
+        kept.append(
+            Problem(
+                study=location(folder),
+                code="untracked_errors",
+                message=(
+                    f"Errors in files that git does not track can hide other errors "
+                    f"of the study: {', '.join(sorted(names, key=natural_key))}; add the files with git add or remove them"
+                ),
+                severity="warning",
+            )
+        )
+    return kept
 
 
 def _unreadable(folder: Path, study: str, error: OSError) -> Problem:
@@ -310,32 +387,37 @@ def check(
     vocabulary: Vocabulary,
     *,
     deleted: Sequence[str] = (),
+    staged: bool = False,
 ) -> CheckReport:
     """Check the format 2 studies of `folders` and the repository; count format 1 studies.
 
-    It never writes a file and never contacts the network.
+    With `staged`, the problems of files that git does not track are left out,
+    because the commit leaves those files out: pre-commit sets aside the
+    unstaged changes of tracked files, but not untracked files. It never writes
+    a file and never contacts the network.
     """
     root = Path(root).resolve()
     if not (root / STUDIES).is_dir():
         raise CheckError(f"{root} has no {STUDIES} folder")
     report = CheckReport(deleted=list(deleted))
-    for folder in folders:
-        folder = Path(folder).resolve()
-        if not is_v2_folder(folder):
+    studies = []
+    for folder in map(Path, folders):
+        if is_v2_folder(folder := folder.resolve()):
+            studies.append(folder)
+        else:
             report.format_1 += 1
-            continue
+    # git runs first, so that a git failure stops the check before the slow part.
+    workbooks = _workbook_problems(root, studies)
+    untracked = _untracked(root, studies) if staged else set()
+    for folder in studies:
         study = location(folder)
         report.checked.append(study)
-        # git runs first, so that a git failure stops the check before the slow part.
-        workbook = _workbook_problems(root, folder, study)
         try:
-            found = [
-                *_form_problems(folder, study),
-                *_validation_problems(folder, study, vocabulary),
-            ]
+            found = _validation_problems(folder, study, vocabulary)
         except OSError as error:
             found = [_unreadable(folder, study, error)]
-        # Formatting and validation report the same structural errors.
-        report.problems += list(dict.fromkeys([*found, *workbook]))
+        report.problems += _tracked_only(root, folder, found, untracked)
+        if folder in workbooks:
+            report.problems.append(workbooks[folder])
     report.problems += _repository_problems(root)
     return report

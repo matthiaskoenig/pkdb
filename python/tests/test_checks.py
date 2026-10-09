@@ -13,6 +13,7 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.validation import ValidationReport
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json
+from pkdb.studyformat.validation import validate_folder
 
 
 @pytest.fixture
@@ -58,8 +59,9 @@ def files_below(root):
 
 def test_staged_files_select_their_studies(checkout):
     root, studies = checkout("caffeine/A", "caffeine/B", "codeine/C")
+    # An unstaged change selects nothing.
     (studies["caffeine/A"] / "subjects.tsv").write_text(
-        (studies["caffeine/A"] / "subjects.tsv").read_text() + "", encoding="utf-8"
+        (studies["caffeine/A"] / "subjects.tsv").read_text() + "\n", encoding="utf-8"
     )
     (studies["codeine/C"] / "notes.txt").write_text("x", encoding="utf-8")
     git(root, "add", "studies/codeine/C/notes.txt")
@@ -75,6 +77,39 @@ def test_changes_since_a_base_select_their_studies(checkout):
     git(root, "commit", "-m", "change B")
     folders, _ = select(root, changed="base")
     assert [f.name for f in folders] == ["B"]
+
+
+def test_changes_on_the_base_after_the_fork_are_not_selected(checkout):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    git(root, "checkout", "-q", "-b", "feature")
+    (studies["caffeine/B"] / "notes.txt").write_text("x", encoding="utf-8")
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "change B")
+    git(root, "checkout", "-q", "main")
+    (studies["caffeine/A"] / "notes.txt").write_text("x", encoding="utf-8")
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "change A")
+    git(root, "checkout", "-q", "feature")
+    # Only the changes since the merge base count: main...HEAD, not main..HEAD.
+    assert select(root, changed="main") == ([studies["caffeine/B"]], [])
+
+
+def test_a_shallow_clone_without_the_merge_base_is_a_usage_error(tmp_path, checkout):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    git(root, "checkout", "-q", "-b", "feature")
+    (studies["caffeine/B"] / "notes.txt").write_text("x", encoding="utf-8")
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "change B")
+    git(root, "checkout", "-q", "main")
+    (studies["caffeine/A"] / "notes.txt").write_text("x", encoding="utf-8")
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "change A")
+    clone = tmp_path / "clone"
+    url = root.as_uri()
+    git(tmp_path, "clone", "-q", "--depth", "1", "--branch", "feature", url, "clone")
+    git(clone, "fetch", "-q", "--depth", "1", "origin", "main:refs/remotes/origin/main")
+    with pytest.raises(CheckError, match="no merge base"):
+        select(clone, changed="origin/main")
 
 
 def test_a_moved_and_a_deleted_study_are_handled(checkout):
@@ -93,6 +128,20 @@ def test_a_deleted_study_with_files_left_behind_is_deleted(checkout):
     (studies["caffeine/B"]).mkdir(exist_ok=True)
     (studies["caffeine/B"] / "B.xlsx").write_bytes(b"x")
     assert select(root, staged=True) == ([], ["caffeine/B"])
+
+
+def test_a_study_that_lost_its_study_json_is_checked(checkout, sf_vocabulary):
+    root, studies = checkout("caffeine/A")
+    git(root, "rm", "-q", "studies/caffeine/A/study.json")
+    folders, deleted = select(root, staged=True)
+    assert folders == [studies["caffeine/A"]] and deleted == []
+    report = check(root, folders, sf_vocabulary, staged=True)
+    assert ("caffeine/A", "missing_file") in codes(report) and not report.ok
+    git(root, "commit", "-q", "-m", "Remove study.json")
+    assert select(root, changed="HEAD~1") == ([studies["caffeine/A"]], [])
+    git(root, "rm", "-r", "-q", "studies/caffeine/A")
+    git(root, "commit", "-q", "-m", "Remove the study")
+    assert select(root, changed="HEAD~2") == ([], ["caffeine/A"])
 
 
 def test_paths_with_spaces_and_umlauts_are_selected(checkout):
@@ -133,8 +182,15 @@ def test_without_a_selection_every_study_is_selected(checkout):
     hidden = root / "studies" / "caffeine" / ".A.new" / "A"
     hidden.mkdir(parents=True)
     (hidden / "study.json").write_text("{}", encoding="utf-8")
+    # A study.json deeper down is no study, and neither is a folder without one.
+    nested = studies["caffeine/A"] / "old"
+    nested.mkdir()
+    (nested / "study.json").write_text("{}", encoding="utf-8")
+    (root / "studies" / "caffeine" / "Empty").mkdir()
     folders, deleted = select(root)
     assert [f.name for f in folders] == ["A", "Old", "C"] and deleted == []
+    with pytest.raises(CheckError, match=r"A/old is not a study folder"):
+        select(root, paths=[root / "studies" / "caffeine"])
 
 
 def test_a_checkout_without_studies_has_nothing_to_check(tmp_path, sf_vocabulary):
@@ -156,8 +212,12 @@ def test_git_problems_are_usage_errors(tmp_path, checkout):
     with pytest.raises(CheckError, match="git"):
         select(tmp_path, staged=True)
     root, _ = checkout("caffeine/A")
-    with pytest.raises(CheckError, match="nosuchbase"):
+    with pytest.raises(CheckError, match="The base nosuchbase is not a commit"):
         select(root, changed="nosuchbase")
+    # An empty base would compare HEAD with itself and check nothing.
+    for empty in ("", "  "):
+        with pytest.raises(CheckError, match="The base is empty"):
+            select(root, changed=empty)
     # A base is never read as a git option, which could write a file.
     with pytest.raises(CheckError, match="--output"):
         select(root, changed=f"--output={tmp_path / 'diff.txt'}")
@@ -208,8 +268,25 @@ def test_problems_of_form_validation_workbooks_and_the_repository(
     assert form == Problem(
         study="caffeine/A",
         code="not_canonical",
-        message="subjects.tsv is not in canonical form; run pkdb format",
+        message="subjects.tsv is not in canonical form (first difference in line 1); run pkdb format",
         file="subjects.tsv",
+        row=1,
+    )
+
+
+def test_a_table_without_rows_is_not_canonical(checkout, sf_vocabulary):
+    root, studies = checkout("caffeine/A")
+    path = studies["caffeine/A"] / "scatters_Fig2.tsv"
+    path.write_text(path.read_text(encoding="utf-8").splitlines()[0] + "\n")
+    report = check(root, [studies["caffeine/A"]], sf_vocabulary)
+    assert (
+        Problem(
+            study="caffeine/A",
+            code="not_canonical",
+            message="scatters_Fig2.tsv has no rows; run pkdb format to remove it",
+            file="scatters_Fig2.tsv",
+        )
+        in report.problems
     )
 
 
@@ -220,10 +297,9 @@ def test_each_problem_is_listed_once(checkout, sf_vocabulary):
     (folder / "subjects.tsv").write_text("<<<<<<< HEAD\n" + subjects, encoding="utf-8")
     (folder / "review.json").write_text('{"status": "draft"}', encoding="utf-8")
     report = check(root, [folder], sf_vocabulary)
-    # Formatting and validation both find the conflict and the review.json form.
     assert sorted((p.code, p.file, p.row) for p in report.problems) == [
         ("merge_conflict", "subjects.tsv", 1),
-        ("not_canonical", "review.json", None),
+        ("not_canonical", "review.json", 1),
     ]
 
 
@@ -247,6 +323,41 @@ def test_a_tracked_workbook_and_state_file_are_problems(checkout, sf_vocabulary)
         )
     ]
     assert not report.ok
+
+
+def test_staged_checks_leave_out_files_that_git_does_not_track(checkout, sf_vocabulary):
+    root, studies = checkout("caffeine/A")
+    folder = studies["caffeine/A"]
+    (root / ".gitignore").write_text("Ignored.xlsx\n", encoding="utf-8")
+    add_unused_intervention(folder)
+    git(root, "add", "-A")
+    # Neither file goes into the commit, so pre-commit must not fail on them.
+    (folder / "Example.xlsx").write_bytes(b"x")
+    (folder / "Ignored.xlsx").write_bytes(b"x")
+    folders, _ = select(root, staged=True)
+    staged = check(root, folders, sf_vocabulary, staged=True)
+    assert staged.ok
+    assert [(p.code, p.file) for p in staged.problems] == [
+        ("unused_intervention", "interventions.tsv"),
+        ("untracked_errors", None),
+    ]
+    assert staged.problems[1].message == (
+        "Errors in files that git does not track can hide other errors of the study: "
+        "Example.xlsx, Ignored.xlsx; add the files with git add or remove them"
+    )
+    everything = check(root, folders, sf_vocabulary)
+    assert {(p.code, p.file) for p in everything.problems} == {
+        ("unknown_file", "Example.xlsx"),
+        ("unknown_file", "Ignored.xlsx"),
+        ("unused_intervention", "interventions.tsv"),
+    }
+    git(root, "add", "studies/caffeine/A/Example.xlsx")
+    tracked = check(root, folders, sf_vocabulary, staged=True)
+    assert [(p.code, p.file) for p in tracked.problems] == [
+        ("unknown_file", "Example.xlsx"),
+        ("unused_intervention", "interventions.tsv"),
+        ("untracked_errors", None),
+    ]
 
 
 def test_studies_with_one_issue_are_a_repository_problem(checkout, sf_vocabulary):
@@ -318,12 +429,12 @@ def test_an_unreadable_file_is_a_problem_of_its_study(
 ):
     root, studies = checkout("caffeine/A", "caffeine/B")
 
-    def unreadable(folder, *, check):
+    def unreadable(folder, vocabulary):
         if folder.name == "A":
             raise PermissionError(13, "Permission denied", str(folder / "subjects.tsv"))
-        return format_folder(folder, check=check)
+        return validate_folder(folder, vocabulary)
 
-    monkeypatch.setattr(pkdb.checks, "format_folder", unreadable)
+    monkeypatch.setattr(pkdb.checks, "validate_folder", unreadable)
     report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
     assert report.problems == [
         Problem(
