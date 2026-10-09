@@ -13,6 +13,13 @@ def _date(text: str):
         raise argparse.ArgumentTypeError(f"{text!r} is not a date YYYY-MM-DD") from None
 
 
+# pkdb release and pkdb move read the vocabulary without contacting PK-DB.
+OFFLINE_HELP = (
+    "Never contact PK-DB; release and move always use the pinned, cached or "
+    "bundled vocabulary"
+)
+
+
 def _add_root(command) -> None:
     command.add_argument(
         "--root",
@@ -103,7 +110,7 @@ def register(commands) -> None:
     move.add_argument("old", metavar="OLD", help="SUBSTANCE/NAME of the study")
     move.add_argument("new", metavar="NEW", help="New SUBSTANCE/NAME of the study")
     _add_root(move)
-    _vocabulary_options(move)
+    _vocabulary_options(move, offline_help=OFFLINE_HELP)
     add_format(move)
 
     release = commands.add_parser(
@@ -116,7 +123,16 @@ def register(commands) -> None:
             "Nothing is written when one study is refused."
         ),
     )
-    release.add_argument("studies", nargs="+", type=Path, metavar="STUDY")
+    release.add_argument(
+        "studies",
+        nargs="+",
+        type=Path,
+        metavar="STUDY",
+        help=(
+            "A study folder, or SUBSTANCE/NAME of the checkout that contains the "
+            "current folder or of --root"
+        ),
+    )
     release.add_argument(
         "--date", type=_date, help="Release date YYYY-MM-DD (default: today in UTC)"
     )
@@ -125,7 +141,8 @@ def register(commands) -> None:
         choices=("public", "private"),
         help="Set the access of the studies with their release (default: keep it)",
     )
-    _vocabulary_options(release)
+    _add_root(release)
+    _vocabulary_options(release, offline_help=OFFLINE_HELP)
     add_format(release)
 
     command = commands.add_parser(
@@ -468,30 +485,80 @@ def _registry(args) -> int:
     return 1 if args.check and (problems or result.errors) else 0
 
 
-def _release_folders(paths: list[Path]) -> tuple[Path, list[Path]]:
-    """The checkout and the study folders of the arguments, or a ValueError."""
+def _release_folders(
+    values: list[Path], root_option: Path | None
+) -> tuple[Path, list[Path]]:
+    """The checkout and the study folders of the arguments, or a ValueError.
+
+    An argument is the path of a study folder, or SUBSTANCE/NAME of the
+    checkout that contains the current folder or of --root.
+    """
     from pkdb.repository import STUDIES, repository_root
-    from pkdb.studyformat.validation import is_v2_folder
 
     folders: list[Path] = []
     roots: set[Path] = set()
-    for path in paths:
-        folder = path.resolve()
-        if not folder.is_dir() or not is_v2_folder(folder):
-            raise ValueError(f"{path} is not a study format 2 folder")
+    for value in values:
+        path = value.resolve()
+        as_path = path if _is_study(path) else None
+        as_location = _checkout_study(value, root_option)
+        if as_path and as_location and as_path != as_location:
+            raise ValueError(
+                f"{value} is the folder of another study than {STUDIES}/{value} of "
+                f"the checkout; give the path of the folder you mean, such as {path}"
+            )
+        folder = as_path or as_location
+        if folder is None:
+            if _is_location(value):
+                raise ValueError(
+                    f"Neither {value} nor {STUDIES}/{value} of the checkout is a "
+                    "study format 2 folder"
+                )
+            raise ValueError(f"{value} is not a study format 2 folder")
         if folder in folders:
-            raise ValueError(f"{path} is given twice")
+            raise ValueError(f"{value} is given twice")
         try:
             root = repository_root(folder)
         except ValueError as error:
-            raise ValueError(f"{path}: {error}") from None
+            raise ValueError(f"{value}: {error}") from None
         if folder.parent.parent != root / STUDIES:
-            raise ValueError(f"{path} is not a folder {STUDIES}/SUBSTANCE/NAME")
+            raise ValueError(f"{value} is not a folder {STUDIES}/SUBSTANCE/NAME")
         folders.append(folder)
         roots.add(root)
     if len(roots) > 1:
         raise ValueError("The studies lie in different checkouts")
     return roots.pop(), folders
+
+
+def _is_study(folder: Path) -> bool:
+    from pkdb.studyformat.validation import is_v2_folder
+
+    return folder.is_dir() and is_v2_folder(folder)
+
+
+def _is_location(value: Path) -> bool:
+    """Whether an argument has the form SUBSTANCE/NAME."""
+    parts = value.parts
+    return (
+        not value.is_absolute()
+        and len(parts) == 2
+        and not any(part.startswith(".") for part in parts)
+    )
+
+
+def _checkout_study(value: Path, root_option: Path | None) -> Path | None:
+    """The study folder SUBSTANCE/NAME of the checkout, or None."""
+    from pkdb.repository import STUDIES, repository_root
+
+    if not _is_location(value):
+        return None
+    try:
+        root = repository_root(root_option or Path.cwd())
+    except ValueError:
+        return None
+    folder = root / STUDIES / value
+    if folder.is_symlink() or not _is_study(folder):
+        return None
+    return folder.resolve()
 
 
 def _say_all(lines: list[str]) -> None:
@@ -510,7 +577,7 @@ def _release(args) -> int:
     from pkdb.study_cli import emit, fail
     from pkdb.tables_cli import _vocabulary
 
-    root, folders = _release_folders(args.studies)
+    root, folders = _release_folders(args.studies, args.root)
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 2

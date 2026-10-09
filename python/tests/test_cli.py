@@ -183,6 +183,8 @@ def test_output_inside_study_is_rejected(study_folder, vocabulary, tmp_path, cap
         ["tables", "add", "--help"],
         ["new", "--help"],
         ["move", "--help"],
+        ["release", "--help"],
+        ["registry", "--help"],
     ],
 )
 def test_help_and_version_do_not_load_runtime_dependencies(arguments):

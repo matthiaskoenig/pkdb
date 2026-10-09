@@ -236,6 +236,46 @@ def test_the_command_rejects_wrong_arguments(
     assert main([*base, str(first), str(second)]) == 2
 
 
+def test_the_command_takes_substance_and_name_of_the_checkout(
+    approved_studies, sf_vocabulary, capsys, monkeypatch
+):
+    root, first, second = approved_studies("caffeine/A", "caffeine/B")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    base = ["--no-update", "release", "--format", "json"]
+    monkeypatch.chdir(root / "studies" / "caffeine")
+    # A folder path and SUBSTANCE/NAME of the checkout that holds the current folder.
+    assert main([*base, "A", "caffeine/B"]) == 0
+    released = json.loads(capsys.readouterr().out)["released"]
+    assert [item["location"] for item in released] == ["caffeine/A", "caffeine/B"]
+    _, third = approved_studies("caffeine/C")
+    monkeypatch.chdir(root.parent)
+    assert main([*base, "caffeine/C", "--root", str(root)]) == 0
+    assert json.loads(capsys.readouterr().out)["released"][0]["pkdb_id"] == "PKDB00003"
+
+
+def test_the_command_refuses_unknown_and_ambiguous_locations(
+    approved_studies, sf_vocabulary, tmp_path, capsys, monkeypatch
+):
+    root, first = approved_studies("caffeine/A")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    base = ["--no-update", "release", "--root", str(root)]
+    monkeypatch.chdir(tmp_path)
+    assert main([*base, "caffeine/Missing"]) == 2
+    assert capsys.readouterr().err == (
+        "Neither caffeine/Missing nor studies/caffeine/Missing of the checkout is a "
+        "study format 2 folder\n"
+    )
+    # caffeine/A of the current folder is another study than that of the checkout.
+    other, _ = approved_studies("caffeine/A", base=tmp_path / "other")
+    monkeypatch.chdir(other / "studies")
+    assert main([*base, "caffeine/A"]) == 2
+    assert capsys.readouterr().err.startswith(
+        "caffeine/A is the folder of another study than studies/caffeine/A of the "
+        "checkout; give the path of the folder"
+    )
+    assert read_metadata(first).metadata.release is None
+
+
 def test_an_unreadable_study_json_elsewhere_stops_before_any_write(
     approved_studies, sf_vocabulary
 ):
