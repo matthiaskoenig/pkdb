@@ -524,6 +524,41 @@ def test_identity_requires_api_key(monkeypatch):
             client.identity()
 
 
+def test_curators_are_read_with_the_api_key():
+    seen = []
+
+    def handler(request):
+        seen.append(request)
+        assert request.url.path == "/api/v2/curators"
+        return httpx2.Response(
+            200,
+            json={
+                "curators": [
+                    {"username": "ana", "name": "Ana", "github": "ana-gh", "extra": 1},
+                    {"username": "bo", "name": "Bo", "github": None},
+                ]
+            },
+        )
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        with Client(
+            endpoint="https://example.test", api_key="pkdb_live_x", transport=transport
+        ) as client:
+            curators = client.curators()
+    assert [(c.username, c.github) for c in curators] == [
+        ("ana", "ana-gh"),
+        ("bo", None),
+    ]
+    assert seen[0].headers["authorization"] == "Bearer pkdb_live_x"
+
+
+def test_curators_need_an_api_key(monkeypatch):
+    monkeypatch.delenv("PKDB_API_KEY", raising=False)
+    with Client(endpoint="https://example.test", api_key=None) as client:
+        with pytest.raises(ClientError, match="PKDB_API_KEY"):
+            client.curators()
+
+
 def test_unreachable_server_has_stable_code():
     def handler(request):
         raise httpx2.ConnectError("refused", request=request)

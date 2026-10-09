@@ -764,7 +764,12 @@ class JobsMixin(EngineState):
                 self._save()
 
     def _safe(self, value):
-        for secret in (self.api_key, os.environ.get("GH_TOKEN")):
+        secrets = (
+            self.api_key,
+            os.environ.get("GH_TOKEN"),
+            os.environ.get("GITHUB_TOKEN"),
+        )
+        for secret in secrets:
             if secret:
                 value = value.replace(secret, "[redacted]")
         return value

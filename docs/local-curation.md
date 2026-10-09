@@ -78,7 +78,7 @@ The overview lists the study format 2 folders of the workspace by their identity
 | Problems | The errors and warnings of the last validation, or **valid**, and what the study is doing, such as **Validating**. |
 | Sync | The sync status of the workbook and the tables, see [Tables](#tables). |
 | Release | The PKDB identifier of the release in `study.json`. |
-| Issue | The GitHub issue of the study, from `issue` in `study.json`. |
+| Issue | The GitHub issue of the study, from `issue` in `study.json`. GitHub is read with `GH_TOKEN` or `GITHUB_TOKEN`, see the [environment table](python-client.md#environment-variables). |
 | Curators | The curators, with names and pictures from the curator roster that comes with `pkdb`, also offline. |
 | On save | What a save does, see [What happens on save](#what-happens-on-save). |
 | Last upload | The time of the last upload, with a link to the study on PK-DB. |

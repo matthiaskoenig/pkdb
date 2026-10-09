@@ -6,8 +6,6 @@ offline, github, github_user, repository, stop, wakeup, _connection_generation. 
 methods _save, snapshot and scan.
 """
 
-import os
-
 from pkdb.cache import (
     endpoint_root,
 )
@@ -19,6 +17,7 @@ from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.identity import Author, UserMismatch, resolve_author
+from pkdb.issues.github import token_from
 
 HEARTBEAT_SECONDS = 30
 INCOMPATIBLE = {"processing_version_mismatch", "unsupported_protocol"}
@@ -139,7 +138,7 @@ class ConnectionMixin(EngineState):
             )
             github = self.github
             if repository is not None and repository != self.repository:
-                github = GitHubAssignments(repository, os.environ.get("GH_TOKEN"))
+                github = GitHubAssignments(repository, token_from())
             if (
                 github_user is not None
                 and github_user

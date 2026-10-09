@@ -39,6 +39,8 @@ from pkdb.migration.model import (
 from pkdb.migration.registry import Registry
 from pkdb.migration.report import check_report_path, write_report
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
+from pkdb.repository import STUDIES, repository_root, subfolders
+from pkdb.repository import location as location_of
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
@@ -50,7 +52,6 @@ WORK = ".pkdb-migrate"
 NEW = "new"
 SOURCE = "source"
 BACKUP = "v1"
-STUDIES = "studies"
 PAPERS = "papers"
 PROVEN = ("identical", "intended")
 # The reason of a study whose worker process stopped before it gave a result.
@@ -78,20 +79,6 @@ class Task:
     resolver_factory: Callable[[], ReferenceResolver]
 
 
-def repository_root(path: Path) -> Path:
-    """The folder that contains `studies/`, found by walking up from `path`."""
-    path = Path(path).resolve()
-    for folder in (path, *path.parents):
-        if (folder / STUDIES).is_dir():
-            return folder
-    raise ValueError(f"No folder above {path} contains a studies folder")
-
-
-def _location(folder: Path) -> str:
-    """The `<substance>/<name>` of a study folder."""
-    return f"{folder.parent.name}/{folder.name}"
-
-
 def _sorted(locations: Iterable[str]) -> list[str]:
     return sorted(locations, key=natural_key)
 
@@ -111,22 +98,13 @@ def _remove(path: Path) -> None:
     shutil.rmtree(path, ignore_errors=True)
 
 
-def _subfolders(folder: Path) -> list[Path]:
-    """Folders below `folder`, without hidden folders and symbolic links."""
-    return [
-        path
-        for path in folder.iterdir()
-        if not path.name.startswith(".") and path.is_dir(follow_symlinks=False)
-    ]
-
-
 def _recover(root: Path, report: MigrationReport) -> None:
     """Finish or undo the swaps of an interrupted run, then delete its work folder."""
     work = root / WORK
     backups = work / BACKUP
     found = backups.glob("*/*") if backups.is_dir() else []
-    for backup in sorted(found, key=lambda path: natural_key(_location(path))):
-        location = _location(backup)
+    for backup in sorted(found, key=lambda path: natural_key(location_of(path))):
+        location = location_of(backup)
         folder = root / STUDIES / location
         if not _exists(folder):
             folder.parent.mkdir(parents=True, exist_ok=True)
@@ -153,17 +131,17 @@ def _discover(paths: list[Path], root: Path) -> list[Path]:
             raise ValueError(f"{path} is not a folder")
         match len(path.relative_to(studies).parts):
             case 0:
-                for substance in _subfolders(path):
-                    folders.update(_subfolders(substance))
+                for substance in subfolders(path):
+                    folders.update(subfolders(substance))
             case 1:
-                folders.update(_subfolders(path))
+                folders.update(subfolders(path))
             case 2:
                 folders.add(path)
             case _:
                 raise ValueError(
                     f"{path} is not the studies folder, a substance folder or a study folder"
                 )
-    return sorted(folders, key=lambda folder: natural_key(_location(folder)))
+    return sorted(folders, key=lambda folder: natural_key(location_of(folder)))
 
 
 def _check_paths(paths: list[Path], root: Path) -> None:
@@ -185,7 +163,7 @@ def _files(folder: Path) -> list[str]:
 
 def _paper(folder: Path, root: Path, report: MigrationReport, dry_run: bool) -> None:
     """Move a folder without study.json to `papers/`, unless that folder exists."""
-    location = _location(folder)
+    location = location_of(folder)
     target = root / PAPERS / location
     if _exists(target):
         report.studies.append(
@@ -220,11 +198,11 @@ def _triage(
     tasks = []
     for folder in folders:
         if not _files(folder):
-            report.removed_empty.append(_location(folder))
+            report.removed_empty.append(location_of(folder))
             if not dry_run:
                 shutil.rmtree(folder)
         elif is_v2_folder(folder):
-            report.skipped.append(_location(folder))
+            report.skipped.append(location_of(folder))
         elif not _exists(folder / STUDY_JSON):
             _paper(folder, root, report, dry_run)
         else:
@@ -240,7 +218,7 @@ def _attempt(task: Task, target: Path, copy: Path) -> StudyResult:
     """Convert and judge one study; the v1 folder is only read."""
     resolver = task.resolver_factory()
     v1 = task.v1
-    study = _location(v1)
+    study = location_of(v1)
     decisions: list[Decision] = []
     if not _exists(v1 / REFERENCE_JSON):
         # The v1 folder stays as it is: the reference is resolved in a copy.
@@ -276,7 +254,7 @@ def _one(task: Task) -> StudyResult:
     Never raises for a study: any error becomes `not_converted`. Only the
     folder of a proven study of a real run is kept, for its swap.
     """
-    location = _location(task.v1)
+    location = location_of(task.v1)
     target = task.work / NEW / location
     copy = task.work / SOURCE / location
     try:
@@ -293,7 +271,7 @@ def _one(task: Task) -> StudyResult:
 
 def _without_result(task: Task, error: Exception) -> StudyResult:
     """A study whose worker gave no result; its work folders are deleted."""
-    location = _location(task.v1)
+    location = location_of(task.v1)
     _remove(task.work / NEW / location)
     _remove(task.work / SOURCE / location)
     if isinstance(error, BrokenProcessPool):
@@ -342,7 +320,7 @@ def _swap(root: Path, folder: Path) -> None:
     Raises OSError when the v1 folder is in place, unchanged, and SwapError when
     it is left in `.pkdb-migrate/v1` for the next run to put back.
     """
-    location = _location(folder)
+    location = location_of(folder)
     new = root / WORK / NEW / location
     backup = root / WORK / BACKUP / location
     backup.parent.mkdir(parents=True, exist_ok=True)
@@ -365,8 +343,8 @@ def _swap(root: Path, folder: Path) -> None:
 def _released(root: Path) -> set[str]:
     """The `release.pkdb_id` of every format 2 study.json below root/studies."""
     released = set()
-    for substance in _subfolders(root / STUDIES):
-        for folder in _subfolders(substance):
+    for substance in subfolders(root / STUDIES):
+        for folder in subfolders(substance):
             if not is_v2_folder(folder):
                 continue
             try:

@@ -48,6 +48,8 @@ def category(path: str, method: str) -> str:
         return "Vocabulary"
     if path.startswith("/health/") or path == "/api/v2/capabilities":
         return "System"
+    if path == "/api/v2/curators":
+        return "Curation"
     if path.startswith("/api/v2/studies") and method in {"put", "post"}:
         return "Curation"
     if path.startswith("/api/v2/"):
