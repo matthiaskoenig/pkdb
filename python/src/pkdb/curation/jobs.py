@@ -17,6 +17,8 @@ from uuid import uuid4
 from pkdb.cache import (
     atomic_json,
     bundled_vocabulary,
+    load_vocabulary,
+    lock_file,
     select_vocabulary,
 )
 from pkdb.client import Client
@@ -383,13 +385,19 @@ class JobsMixin(EngineState):
         """The vocabulary of local work in `folder` (default: the workspace), as pkdb validate picks it.
 
         That is the lock file of the checkout, else the cached one of the endpoint, else the bundled one.
+        A broken lock file is an error that names it, never a fallback: the hook and CI would reject
+        what the bundled vocabulary accepts. Only a broken endpoint cache falls back to the bundled one.
         """
         with self.lock:
             endpoint = self.endpoint
+        where = folder if folder is not None else self.root
+        if lock := lock_file(where):
+            try:
+                return load_vocabulary(lock)
+            except (OSError, ValueError) as error:
+                raise ValueError(f"Cannot read {lock}: {error}") from None
         try:
-            return select_vocabulary(
-                None, endpoint, self.cache, folder if folder is not None else self.root
-            )
+            return select_vocabulary(None, endpoint, self.cache)
         except OSError, ValueError:
             return bundled_vocabulary()
 

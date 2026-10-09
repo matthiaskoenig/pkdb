@@ -93,3 +93,25 @@ def test_the_curation_app_uses_the_lock_of_the_checkout(setup, tmp_path_factory)
         assert engine._local_vocabulary(folder).version == "studyformat-test"
     finally:
         engine.close()
+
+
+def test_a_broken_lock_is_an_error_but_a_broken_cache_falls_back(
+    setup, tmp_path_factory
+):
+    root, folder, cache, _ = setup
+    engine = module.CurationEngine(
+        root, state_dir=tmp_path_factory.mktemp("state"), offline=True, start=False
+    )
+    try:
+        engine.endpoint = ENDPOINT
+        engine.cache = cache
+        (root / "vocabulary.lock.json").write_text("{", encoding="utf-8")
+        with pytest.raises(ValueError, match="vocabulary.lock.json"):
+            engine._local_vocabulary(folder)
+        (root / "vocabulary.lock.json").unlink()
+        for pointer in (cache.directory / "endpoints").iterdir():
+            pointer.write_text("{", encoding="utf-8")
+        version = engine._local_vocabulary(folder).version
+        assert version == bundled_vocabulary().version
+    finally:
+        engine.close()
