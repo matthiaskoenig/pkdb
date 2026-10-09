@@ -305,7 +305,7 @@ The same code runs on workbook save in the curation app, in `pkdb validate`, in 
 | `pkdb issues sync [--adopt] [--dry-run]` | Align GitHub issues with the repository (section 12). |
 | `pkdb plot <study> [--source S] [--out DIR]` | Render the raw extraction and mapped rows of a source on the figure image for comparison. |
 | `pkdb digitize import <study> <source> <file>` | Store a WebPlotDigitizer project as the raw extraction of a figure. |
-| `pkdb check --staged` | Pre-commit entry point: sync state, format check and offline validation for studies with staged files. |
+| `pkdb check [--staged \| --changed BASE]` | Pre-commit (`--staged`) and CI (`--changed`) entry point: format check, offline validation, tracked workbooks, shared identifiers and issue numbers. |
 | `pkdb schema export` | Write the JSON Schema files. |
 | `pkdb migrate <paths> --report <file>` | Convert v1 studies (section 15). |
 | `pkdb upload` | Sync, format, validate and upload. |
@@ -459,7 +459,7 @@ Workflow for a new study:
 2. The agent reads the PDF and saves the table and figure crops as `<name>_<source>.png`. It transcribes each table as printed into `<name>_<source>.tsv` and digitizes each figure into a WebPlotDigitizer project imported with `pkdb digitize import`, then maps the raw extractions into `subjects`, `characteristica`, `interventions`, `outputs_<Tab>` and `timecourses_<Fig>`. Every command runs with `--agent <model>`.
 3. It runs `pkdb format` and `pkdb validate --json` until there are no errors. Each warning is fixed or acknowledged with a review item. `pkdb plot` renders the digitized series on the axes of each figure, and the agent compares the rendering with the image and corrects the data.
 4. It records every assumption and every low-confidence value as a review item (`question` or `uncertainty`). Every digitized series gets an `uncertainty` item until a person has checked it. The status becomes `in_review`.
-5. It commits as the `pkdb-ai` identity on its own branch and opens one pull request per study that links the study's issue and lists the tables, the review items and the validation summary.
+5. It commits with the git identity of the responsible curator and the trailer `Agent: <model>` on its own branch, and opens one pull request per study that links the study's issue and lists the tables, the review items and the validation summary.
 6. A curator reviews in the curation app (review items with target rows, figure and plot comparison), resolves the items, edits through the workbook if needed, and sets `approved`. The pull request is merged, and the study is uploaded and later released.
 
 Corrections of existing studies follow the same loop.
@@ -468,10 +468,10 @@ Guardrails: JSON files are written only through `pkdb` commands, and the canonic
 
 ## 14. pkdb_data repository
 
-- `.gitignore`: `studies/**/*.xlsx`, spreadsheet lock files (`~$*`, `.~lock.*#`).
+- `.gitignore`: `studies/**/*.xlsx` from the cutover on, `.*.pkdb-base` before it, and spreadsheet lock files (`~$*`, `.~lock.*#`).
 - `.gitattributes`: `*.tsv text eol=lf`, `*.json text eol=lf`, `*.pdf binary`, `*.png binary`.
 - Pre-commit: a local hook runs `pkdb check --staged`. The existing generic hooks keep excluding `studies/`.
-- CI (required check on `develop`): `pkdb format --check` and `pkdb validate --offline` with the pinned vocabulary lock on changed studies; repository-wide uniqueness of PKDB identifiers and issue numbers.
+- CI (required check on `develop`): `pkdb check --changed <base>` with the pinned `vocabulary.lock.json`, which runs the format check and offline validation on the changed studies and the repository-wide uniqueness of PKDB identifiers and issue numbers.
 - Issue sync workflow (section 12) with `issues: write` permission.
 - Documentation: the curation guide is rewritten for the v2 workflow and links to the generated column reference. The upload and backend commands stay documented in `pkdb`.
 

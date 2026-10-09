@@ -130,6 +130,7 @@ def main(argv=None, *, client=None) -> int:
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
     from pkdb import (
+        checks_cli,
         figure_cli,
         import_cli,
         issues_cli,
@@ -147,6 +148,7 @@ def main(argv=None, *, client=None) -> int:
     migration_cli.register(commands)
     issues_cli.register(commands)
     lifecycle_cli.register(commands)
+    checks_cli.register(commands)
     tables_cli.register(commands)
     study_cli.register(commands)
     figure_cli.register(commands)
@@ -168,6 +170,8 @@ def main(argv=None, *, client=None) -> int:
         return reference_cli.run(args, client=client)
     if args.command == "issues":
         return issues_cli.run(args)
+    if args.command == "check":
+        return checks_cli.run(args)
     if args.command in {"new", "move", "release", "registry"}:
         return lifecycle_cli.run(args)
     if args.command == "migrate":
