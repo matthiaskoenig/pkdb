@@ -140,7 +140,13 @@ def test_adoption_creates_an_issue_without_a_match(tmp_path):
         result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
     assert result.ok and result.applied == 0
     assert result.adopted == [
-        AdoptionResult(study="caffeine/A", number=1, created=True)
+        AdoptionResult(
+            study="caffeine/A",
+            number=1,
+            created=True,
+            labels=["caffeine", "curate"],
+            assignees=["ana-gh"],
+        )
     ]
     assert number_of(folder) == 1
     assert github.issues[1]["title"] == "caffeine/A"
@@ -335,7 +341,13 @@ def test_a_dry_run_adoption_shows_what_would_happen_and_writes_nothing(tmp_path)
         AdoptionResult(
             study="caffeine/A", number=4, renamed=True, duplicates=[6], in_review=True
         ),
-        AdoptionResult(study="caffeine/B", number=None, created=True),
+        AdoptionResult(
+            study="caffeine/B",
+            number=None,
+            created=True,
+            labels=["caffeine", "curate"],
+            assignees=["ana-gh"],
+        ),
     ]
     changes = [
         (change.number, change.title, change.add_labels, change.assignees)
@@ -344,6 +356,53 @@ def test_a_dry_run_adoption_shows_what_would_happen_and_writes_nothing(tmp_path)
     assert changes == [(4, None, ["caffeine"], ["ana-gh"])]
     assert github.writes == []
     assert [path.read_bytes() for path in files] == before
+
+
+def test_a_dry_run_names_the_assignee_problems_of_new_issues(tmp_path):
+    study(tmp_path, "caffeine/A", curators=("ana", "dee"))
+    study(tmp_path, "caffeine/B", issue=1, curators=("dee",))
+    github = FakeGitHub(
+        issues=[{"number": 1, "title": "caffeine/B", "labels": ["caffeine", "curate"]}],
+        assignable=["ana-gh"],
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR, dry_run=True)
+    assert result.warnings == ["User dee is not in the PK-DB roster (2 studies)"]
+    assert result.adopted[0].assignees == ["ana-gh"]
+
+
+@pytest.mark.parametrize("dry_run", [True, False])
+def test_similar_titles_are_warnings(tmp_path, dry_run):
+    study(tmp_path, "caffeine/A")
+    github = FakeGitHub(
+        issues=[{"number": 3, "title": "curate Caffeine/A"}], assignable=["ana-gh"]
+    )
+    with github.client() as client:
+        result = sync(
+            tmp_path, client, ROSTER, adopt=True, author=AUTHOR, dry_run=dry_run
+        )
+    assert result.warnings == [
+        "caffeine/A: issue #3 has a similar title (curate Caffeine/A); "
+        "rename it to adopt it"
+    ]
+    assert result.adopted[0].created
+
+
+def test_an_issue_named_by_an_unreadable_study_is_not_adopted(tmp_path):
+    broken = study(tmp_path, "caffeine/A", issue=4)
+    (broken / "review.json").write_text("{", encoding="utf-8")
+    study(tmp_path, "caffeine/B")
+    github = FakeGitHub(
+        issues=[
+            {"number": 4, "title": "Curate caffeine/B"},
+            {"number": 5, "title": "caffeine/B"},
+        ],
+        assignable=["ana-gh"],
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.adopted == [AdoptionResult(study="caffeine/B", number=5)]
+    assert github.issues[4]["state"] == "open" and github.comments == []
 
 
 def test_an_interrupted_adoption_is_finished_by_the_rerun(tmp_path, monkeypatch):

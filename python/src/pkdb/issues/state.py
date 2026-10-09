@@ -14,6 +14,7 @@ from pkdb.issues import counted
 from pkdb.issues.github import Issue
 from pkdb.repository import location, study_folders
 from pkdb.schemas.curators import Curator
+from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.metadata import MetadataError, read_metadata
 from pkdb.studyformat.review_edit import ReviewError, read_review
 from pkdb.studyformat.tables import STUDY_JSON
@@ -44,11 +45,16 @@ class StudyState:
 
 @dataclass(frozen=True)
 class Studies:
-    """The readable format 2 studies, the unreadable ones, and the format 1 count."""
+    """The readable format 2 studies, the unreadable ones, and the format 1 count.
+
+    `claimed` holds the issue numbers that unreadable studies name in a
+    `study.json` that is JSON, so that no other study adopts their issue.
+    """
 
     states: list[StudyState]
     errors: list[str]
     format_1: int
+    claimed: frozenset[int] = frozenset()
 
 
 def read_studies(root: Path) -> Studies:
@@ -59,6 +65,7 @@ def read_studies(root: Path) -> Studies:
     """
     states: list[StudyState] = []
     errors: list[str] = []
+    claimed: set[int] = set()
     format_1 = 0
     for folder in study_folders(root):
         if not (folder / STUDY_JSON).is_file():
@@ -71,6 +78,8 @@ def read_studies(root: Path) -> Studies:
             review = read_review(folder)
         except (MetadataError, ReviewError) as error:
             errors.append(f"{location(folder)}: {error}")
+            if (number := _raw_issue(folder)) is not None:
+                claimed.add(number)
             continue
         users = [curator.user for curator in metadata.metadata.curators]
         users += review.review.reviewers
@@ -86,7 +95,19 @@ def read_studies(root: Path) -> Studies:
                 review_revision=review.revision,
             )
         )
-    return Studies(states, errors, format_1)
+    return Studies(states, errors, format_1, frozenset(claimed))
+
+
+def _raw_issue(folder: Path) -> int | None:
+    """The issue number in a `study.json` that is JSON, read without its schema."""
+    try:
+        data = load_json((folder / STUDY_JSON).read_bytes())
+    except OSError, JsonFileError:
+        return None
+    number = data.get("issue") if isinstance(data, dict) else None
+    if isinstance(number, int) and not isinstance(number, bool):
+        return number
+    return None
 
 
 @dataclass(frozen=True)
@@ -217,11 +238,14 @@ def plan(
     substance_names: list[str],
     label_names: list[str],
     repository: str,
+    problems: Problems | None = None,
 ) -> SyncPlan:
     """The changes that align the issue of each study with the study.
 
     Studies that name one issue together, or an issue the repository does not
     have, are errors and get no change; studies without issue are warnings.
+    `problems` found before, such as those of new issues in a dry run, are
+    counted together with the problems of the plan.
     """
     by_number = {issue.number: issue for issue in issues}
     substances = {name.casefold() for name in substance_names}
@@ -232,7 +256,9 @@ def plan(
     ]
     warnings: list[str] = []
     changes: list[IssueChange] = []
-    problems = Problems()
+    found = Problems()
+    if problems is not None:
+        found.extend(problems)
     for state in states:
         if state.issue is None:
             warnings.append(
@@ -246,9 +272,7 @@ def plan(
                 f"which is not an issue of {repository}"
             )
         else:
-            assignees = desired_assignees(
-                state, roster, problems, repository=repository
-            )
+            assignees = desired_assignees(state, roster, found, repository=repository)
             fields = (
                 _title(state, issue)
                 | _labels(state, issue, substances)
@@ -262,7 +286,7 @@ def plan(
     return SyncPlan(
         changes=changes,
         labels=_missing_labels(changes, label_names),
-        warnings=warnings + problems.rendered(),
+        warnings=warnings + found.rendered(),
         errors=errors,
     )
 

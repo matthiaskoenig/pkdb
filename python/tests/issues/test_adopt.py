@@ -37,3 +37,36 @@ def test_a_study_without_candidates_gets_a_new_issue():
         [state("caffeine/A")], [issue(1, "caffeine/AB"), issue(2, "Curate: caffeine/A")]
     )
     assert adoption.keep is None and adoption.duplicates == ()
+
+
+def test_issues_claimed_by_unreadable_studies_are_never_adopted():
+    issues = [issue(1, "caffeine/A"), issue(2, "Curate caffeine/A")]
+    [adoption] = match([state("caffeine/A")], issues, claimed={1})
+    assert adoption.keep is not None and adoption.keep.number == 2
+    assert adoption.duplicates == ()
+
+
+def test_similar_titles_of_a_study_without_match_are_listed():
+    issues = [
+        issue(1, "Caffeine/A"),
+        issue(2, "curate  caffeine/a "),
+        issue(3, "CHECK AND CURATE caffeine/A"),
+        issue(4, "Curate: caffeine/A"),
+        issue(5, "caffeine/AB"),
+        issue(6, "caffeine/a"),
+        issue(7, "CAFFEINE/A"),
+    ]
+    adoptions = match(
+        [state("caffeine/A"), state("caffeine/a"), state("caffeine/B", number=7)],
+        issues,
+    )
+    assert [i.number for i in adoptions[0].similar] == [1, 2, 3]
+    assert adoptions[0].keep is None
+    assert adoptions[1].keep is not None and adoptions[1].similar == ()
+
+
+def test_a_study_with_a_match_lists_no_similar_titles():
+    [adoption] = match(
+        [state("caffeine/A")], [issue(1, "caffeine/A"), issue(2, "Caffeine/A")]
+    )
+    assert adoption.similar == ()

@@ -267,3 +267,20 @@ def test_a_study_is_read_with_its_users_and_revisions(tmp_path):
     assert (state.status, state.released) == ("approved", True)
     assert state.users == ("ana", "bo", "cy")
     assert state.metadata_revision and state.review_revision
+
+
+def test_an_unreadable_study_claims_the_issue_it_names(tmp_path):
+    folder = study(tmp_path, "caffeine/A", issue=4)
+    text = (folder / "study.json").read_text(encoding="utf-8")
+    (folder / "study.json").write_text(
+        text.replace('"licence": "open"', '"licence": 5'), encoding="utf-8"
+    )
+    broken = study(tmp_path, "caffeine/B", issue=5)
+    (broken / "review.json").write_text("{", encoding="utf-8")
+    flag = study(tmp_path, "caffeine/C")
+    (flag / "study.json").write_text('{"format": 2, "issue": true}', encoding="utf-8")
+    syntax = study(tmp_path, "caffeine/D")
+    (syntax / "study.json").write_text('{"format": 2, "issue": 6', encoding="utf-8")
+    studies = read_studies(tmp_path)
+    assert studies.states == [] and len(studies.errors) == 4
+    assert studies.claimed == {4, 5}

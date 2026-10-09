@@ -236,7 +236,8 @@ def test_a_file_error_exits_1_after_naming_what_was_done(
         main(["issues", "sync", "--adopt", "--user", "ana", "--format", "human"]) == 1
     )
     assert capsys.readouterr().err.splitlines() == [
-        "caffeine/B: created #2",
+        "caffeine/B: created #2 titled caffeine/B, labels caffeine curate, "
+        "assignees ana-gh",
         "Cannot sync the issues: No space left on device",
     ]
 
@@ -252,10 +253,15 @@ def test_the_summary_counts_adoptions_changes_and_format_1(setup, tmp_path, caps
         setup.issues[number] = {**setup.issues[1], "number": number, "title": title}
     adopt = ["issues", "sync", "--adopt", "--user", "ana", "--format", "human"]
     assert main([*adopt, "--dry-run"]) == 0
-    assert capsys.readouterr().out.splitlines()[-1] == (
+    assert capsys.readouterr().out.splitlines() == [
+        "caffeine/B: adopt #2, rename, close #3 as duplicate",
+        "caffeine/C: new issue titled caffeine/C, labels caffeine curate, "
+        "assignees ana-gh",
+        "#1 caffeine/A: title, labels +caffeine +curate, assignees ana-gh",
+        "#2 caffeine/B: labels +caffeine +curate, assignees ana-gh",
         "Dry run: would adopt 1 issue, create 1 issue, close 1 duplicate and "
-        "change 2 issues. Skipped 2 format 1 studies."
-    )
+        "change 2 issues. Skipped 2 format 1 studies.",
+    ]
     assert main(adopt) == 0
     assert capsys.readouterr().out.splitlines()[-1] == (
         "Adopted 1 issue, created 1 issue, closed 1 duplicate and changed 2 issues. "

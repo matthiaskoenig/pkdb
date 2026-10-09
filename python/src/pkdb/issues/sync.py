@@ -5,14 +5,14 @@ no number on disk, and the rerun finds the renamed or created issue by its
 exact title.
 """
 
-from collections.abc import Callable
-from dataclasses import dataclass, replace
+from collections.abc import Callable, Set
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from pkdb.identity import Author
-from pkdb.issues.adopt import DUPLICATE, Adoption, match
+from pkdb.issues.adopt import DUPLICATE, SIMILAR, Adoption, match
 from pkdb.issues.github import GitHub, GitHubError, Issue
 from pkdb.issues.state import (
     LABEL_COLORS,
@@ -37,7 +37,11 @@ INTERRUPTED = "Interrupted."
 
 
 class AdoptionResult(BaseModel):
-    """The issue a study without one got; `number` is None for a new issue in a dry run."""
+    """The issue a study without one got; `number` is None for a new issue in a dry run.
+
+    `labels` and `assignees` are those of a new issue, which is titled with
+    the study.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
@@ -47,6 +51,8 @@ class AdoptionResult(BaseModel):
     renamed: bool = False
     duplicates: list[int] = Field(default_factory=list)
     in_review: bool = False
+    labels: list[str] = Field(default_factory=list)
+    assignees: list[str] = Field(default_factory=list)
 
 
 class SyncResult(BaseModel):
@@ -130,7 +136,7 @@ def _sync(
     )
     states = studies.states
     if author is not None:
-        states = _adopt(run, states, author)
+        states = _adopt(run, states, studies.claimed, author)
     result.plan = plan(
         states,
         list(run.issues.values()),
@@ -138,6 +144,7 @@ def _sync(
         substance_names=substances(root),
         label_names=run.label_names,
         repository=github.repository,
+        problems=run.problems,
     )
     result.warnings += result.plan.warnings
     result.errors += result.plan.errors
@@ -147,7 +154,11 @@ def _sync(
 
 @dataclass
 class _Run:
-    """The GitHub repository as the sync knows it, and the result so far."""
+    """The GitHub repository as the sync knows it, and the result so far.
+
+    `problems` holds the user problems of new issues in a dry run, which the
+    plan does not see.
+    """
 
     github: GitHub
     result: SyncResult
@@ -155,6 +166,7 @@ class _Run:
     roster: Roster
     label_names: list[str]
     progress: Callable[[str], None] | None
+    problems: Problems = field(default_factory=Problems)
 
     @property
     def dry_run(self) -> bool:
@@ -174,21 +186,30 @@ class _Run:
             self.progress(line)
 
 
-def _adopt(run: _Run, states: list[StudyState], author: Author) -> list[StudyState]:
+def _adopt(
+    run: _Run, states: list[StudyState], claimed: Set[int], author: Author
+) -> list[StudyState]:
     """Give each study without issue one; the states to plan.
 
-    A study whose adoption fails, or that gets a new issue in a dry run, is
-    left out of the plan.
+    The issues `claimed` by unreadable studies are left alone. A study whose
+    adoption fails, or that gets a new issue in a dry run, is left out of the
+    plan.
     """
     adoptions = {
         adoption.study.location: adoption
-        for adoption in match(states, list(run.issues.values()))
+        for adoption in match(states, list(run.issues.values()), claimed)
     }
     planned: list[StudyState] = []
     for state in states:
         if (adoption := adoptions.get(state.location)) is None:
             planned.append(state)
             continue
+        run.result.warnings += [
+            SIMILAR.format(
+                location=state.location, number=issue.number, title=issue.title
+            )
+            for issue in adoption.similar
+        ]
         try:
             result, adopted_state = _adopt_one(run, adoption, author)
         except GitHubError as error:
@@ -241,13 +262,20 @@ def _adopt_one(
         duplicates=duplicates,
         in_review=in_review,
     )
+    if keep is None:
+        # The plan repeats the problems of a new issue, except in a dry run.
+        problems = run.problems if run.dry_run else Problems()
+        result.labels = [state.location.partition("/")[0], WORKFLOW[state.status]]
+        result.assignees = desired_assignees(
+            state, run.roster, problems, repository=run.github.repository
+        )
     if run.dry_run:
         if keep is None:
             return result, None
         run.issues[keep.number] = replace(keep, title=state.location)
         return result, replace(state, issue=keep.number, status=status)
     if keep is None:
-        issue = _create(run, state)
+        issue = _create(run, state, result.labels, result.assignees)
     elif renamed:
         issue = run.github.update_issue(keep.number, title=state.location)
     else:
@@ -278,14 +306,12 @@ def _adopt_one(
     )
 
 
-def _create(run: _Run, state: StudyState) -> Issue:
+def _create(
+    run: _Run, state: StudyState, labels: list[str], assignees: list[str]
+) -> Issue:
     """A new issue titled with the location, with its labels and assignees."""
-    labels = [state.location.partition("/")[0], WORKFLOW[state.status]]
     for name in labels:
         _create_label(run, name)
-    assignees = desired_assignees(
-        state, run.roster, Problems(), repository=run.github.repository
-    )
     issue = run.github.create_issue(state.location, labels=labels, assignees=assignees)
     _check_applied(run, state.location, issue, labels, assignees)
     return issue
@@ -360,7 +386,13 @@ def adoption_line(item: AdoptionResult, *, dry_run: bool) -> str:
         ("adopt", "rename", "close") if dry_run else ("adopted", "renamed", "closed")
     )
     if item.created:
-        parts = ["new issue" if item.number is None else f"created #{item.number}"]
+        new = "new issue" if item.number is None else f"created #{item.number}"
+        assignees = " ".join(item.assignees)
+        parts = [
+            f"{new} titled {item.study}",
+            f"labels {' '.join(item.labels)}",
+            f"assignees {assignees}" if assignees else "no assignees",
+        ]
     else:
         parts = [f"{adopt} #{item.number}"]
         if item.renamed:
