@@ -63,7 +63,7 @@ A study without `reference.json` is resolved on a copy by the reference resolver
 
 ## Review and merge
 
-Tag `v1-final` on `develop` before the merge. In the migration pull request, add `studies/**/*.xlsx` to `.gitignore` (format 2 workbooks are generated), rename `docs/curation-v2.md` to `docs/curation_guide.md`, archive the format 1 guide as `docs/curation-guide-format-1.md`, and update the navigation. Review through `migration.md` (summary and manual decisions) and spot checks of converted studies. Merge one pull request with green CI.
+Tag `v1-final` on `develop` before the merge. In the migration pull request, add `studies/**/*.xlsx` to `.gitignore` (format 2 workbooks are generated), archive the format 1 guide as `docs/curation-guide-format-1.md` first, then rename `docs/curation-v2.md` to `docs/curation_guide.md`, update the navigation in `zensical.toml`, update every link to `curation-v2.md` (today in `AGENTS.md`, `CLAUDE.md`, `docs/development.md`, `docs/installation.md`, `.claude/skills/pkdb-curation/SKILL.md`; find them with `git grep -n curation-v2`), and remove the "applies after the cutover" note at the top of the guide. Review through `migration.md` (summary and manual decisions) and spot checks of converted studies. Merge one pull request with green CI.
 
 ## After the merge
 
