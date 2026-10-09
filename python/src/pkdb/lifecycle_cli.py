@@ -41,12 +41,13 @@ def run(args) -> int:
 
 
 def _registry(args) -> int:
-    from pkdb.lifecycle.registry import duplicates, scan
+    from pkdb.lifecycle.registry import duplicates, registry_problems, scan
     from pkdb.repository import repository_root
     from pkdb.study_cli import emit
 
-    result = scan(repository_root(args.root or Path.cwd()))
-    problems = duplicates(result)
+    root = repository_root(args.root or Path.cwd())
+    result = scan(root)
+    problems = duplicates(result) + registry_problems(result, root)
     data = {
         "released": [
             {

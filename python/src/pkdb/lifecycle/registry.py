@@ -1,5 +1,7 @@
 """Scan the format 2 studies of a checkout for release blocks and issue numbers."""
 
+import json
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import date
@@ -8,6 +10,8 @@ from pathlib import Path
 from pkdb.repository import STUDIES, location, study_folders
 
 REGISTRY_FILE = "study_identifiers.json"
+REGISTRY_PATH = f"{STUDIES}/{REGISTRY_FILE}"
+PKDB_ID = re.compile(r"PKDB([0-9]{5})")
 
 
 @dataclass(frozen=True)
@@ -26,6 +30,55 @@ class Scan:
 
 def identifier(number: int) -> str:
     return f"PKDB{number:05d}"
+
+
+def identifier_number(pkdb_id: str) -> int:
+    """The number of a PKDB identifier such as `PKDB00001`."""
+    match = PKDB_ID.fullmatch(pkdb_id)
+    if match is None:
+        raise ValueError(f"{pkdb_id!r} is not a PKDB identifier such as PKDB00001")
+    return int(match[1])
+
+
+def read_registry_file(root: Path) -> dict[str, str] | None:
+    """The identifier to location mapping of `studies/study_identifiers.json`, or None.
+
+    Raises a ValueError that names the file and the problem.
+    """
+    path = Path(root) / STUDIES / REGISTRY_FILE
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise ValueError(f"{REGISTRY_PATH}: cannot be read as JSON: {error}") from None
+    if not isinstance(data, dict):
+        raise ValueError(f"{REGISTRY_PATH}: must be a JSON object")
+    locations = {}
+    for key, value in data.items():
+        try:
+            identifier_number(key)
+        except ValueError as error:
+            raise ValueError(f"{REGISTRY_PATH}: {error}") from None
+        if not (isinstance(value, list) and value and isinstance(value[0], str)):
+            raise ValueError(
+                f"{REGISTRY_PATH}: {key} must map to [location, date], not {value!r}"
+            )
+        locations[key] = value[0]
+    return locations
+
+
+def registry_problems(scan: Scan, root: Path) -> list[str]:
+    """Release blocks that the registry file assigns to another location, or its read error."""
+    try:
+        registered = read_registry_file(root)
+    except ValueError as error:
+        return [str(error)]
+    return sorted(
+        f"{item.pkdb_id} is the identifier of {item.location}, but {REGISTRY_FILE} gives it to {registered[item.pkdb_id]}"
+        for item in scan.released
+        if registered and registered.get(item.pkdb_id, item.location) != item.location
+    )
 
 
 def scan(root: Path) -> Scan:
@@ -75,10 +128,6 @@ def duplicates(scan: Scan) -> list[str]:
 
 def next_identifier(scan: Scan, root: Path) -> int:
     """One more than the largest identifier number in the studies and the registry file."""
-    from pkdb.migration.registry import Registry
-
-    path = Path(root) / STUDIES / REGISTRY_FILE
     ids = [item.pkdb_id for item in scan.released]
-    if path.is_file():
-        ids += Registry.read(path).identifiers
-    return max((int(pkdb_id[4:]) for pkdb_id in ids), default=0) + 1
+    ids += read_registry_file(root) or {}
+    return max((identifier_number(pkdb_id) for pkdb_id in ids), default=0) + 1
