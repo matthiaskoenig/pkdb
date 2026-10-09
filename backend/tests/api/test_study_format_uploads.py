@@ -993,3 +993,28 @@ def test_a_study_released_after_its_move_takes_over_by_issue(
     assert response.json()["renamed_from"] == "caffeine/Before"
     [row] = stored(session_factory)
     assert (row.sid, row.pkdb_id, row.issue) == ("caffeine/After", "PKDB00198", 9)
+
+
+@pytest.mark.parametrize("release", ["PKDB00007", None], ids=["new", "none"])
+def test_issue_takeover_never_changes_a_pkdb_identifier(
+    client, creator_headers, other_headers, tmp_path, session_factory, release
+):
+    before = write_study(tmp_path / "a", "Before", release="PKDB00005", issue=9)
+    assert put_study(client, creator_headers, before).status_code == 201
+    after = write_study(tmp_path / "b", "After", release=release, issue=9)
+    url = "/api/v2/studies/caffeine/After"
+    for method, route in (("post", url + "/validate"), ("put", url)):
+        response = getattr(client, method)(
+            route, headers=creator_headers, **multipart(after)
+        )
+        assert response.status_code == 409, response.text
+        assert response.json()["detail"] == (
+            "The study caffeine/Before has issue #9 and is released as PKDB00005; "
+            "upload it with that release"
+        )
+    # Someone who cannot read the study does not learn which it is.
+    response = put_study(client, other_headers, after)
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == "A study already has this issue"
+    [row] = stored(session_factory)
+    assert (row.sid, row.pkdb_id, row.issue) == ("caffeine/Before", "PKDB00005", 9)

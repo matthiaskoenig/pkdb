@@ -168,8 +168,9 @@ def stored_study(
     caller renames it. Otherwise a study format 2 study not yet stored under its
     sid takes over the study format 2 study with its issue number (a moved
     folder), else the study format 1 study of the same publication and source,
-    when the principal may edit it. A PKDB identifier and an issue number name
-    at most one study each. Refusals name other studies only when the principal
+    when the principal may edit it; a takeover by issue number never changes a
+    stored PKDB identifier. A PKDB identifier and an issue number name at most
+    one study each. Refusals name other studies only when the principal
     may read them. With `locked`, the names that the caller locked,
     StudyChanged when a study taken over by issue number or a taken over study
     format 1 study is not among them.
@@ -232,6 +233,15 @@ def stored_study(
                 raise PublicationConflict(
                     f"The study {match.sid} has issue #{issue}; uploading it as "
                     f"{study.sid} needs edit rights on {match.sid}"
+                    if readable(match)
+                    else "A study already has this issue"
+                )
+            if match.pkdb_id is not None:
+                # A released study keeps its PKDB identifier, which the
+                # lookup above would have found.
+                raise PublicationConflict(
+                    f"The study {match.sid} has issue #{issue} and is released "
+                    f"as {match.pkdb_id}; upload it with that release"
                     if readable(match)
                     else "A study already has this issue"
                 )
