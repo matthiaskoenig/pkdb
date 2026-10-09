@@ -144,10 +144,27 @@ def github_client(repository: str, token: str | None):
 
 
 def _new(args) -> int:
+    from pkdb.issues.github import repository_from, token_from
+
+    # The client is built first: a bad token fails before anything is written.
+    github = None
+    if not args.no_issue:
+        token = token_from()
+        if token is None:
+            raise ValueError("Set GH_TOKEN or GITHUB_TOKEN, or pass --no-issue")
+        github = github_client(repository_from(), token)
+    try:
+        return _new_study(args, github)
+    finally:
+        if github is not None:
+            github.close()
+
+
+def _new_study(args, github) -> int:
     import sys
 
     from pkdb.identity import author_from
-    from pkdb.issues.github import GitHubError, repository_from, token_from
+    from pkdb.issues.github import GitHubError
     from pkdb.lifecycle.new import NewStudyRefused, citation, create_study
     from pkdb.references import ReferenceResolver
     from pkdb.repository import PAPERS, STUDIES, location, repository_root
@@ -160,10 +177,6 @@ def _new(args) -> int:
     author = author_from(args.user, args.agent)
     root = repository_root(args.root or Path.cwd())
     resolver = ReferenceResolver(args.cache_dir, offline=args.offline)
-    token = None if args.no_issue else token_from()
-    if token is None and not args.no_issue:
-        raise ValueError("Set GH_TOKEN or GITHUB_TOKEN, or pass --no-issue")
-    repository = None if args.no_issue else repository_from()
     try:
         created = create_study(
             root,
@@ -187,9 +200,9 @@ def _new(args) -> int:
         )
     place = location(created.folder)
     issue = None
-    if token is not None and repository is not None:
+    if github is not None:
         try:
-            issue = _record_issue(repository, token, place, created.folder)
+            issue = _record_issue(github, root, place, created.folder)
         except (GitHubError, RevisionConflict, MetadataError) as error:
             message = (
                 f"Created {STUDIES}/{place}, but its issue failed: {error}. "
@@ -213,6 +226,7 @@ def _new(args) -> int:
     }
     if issue is not None:
         data["issue"] = issue[0]
+        data["issue_closed"] = issue[2]
     lines = [f"Created {STUDIES}/{place}"]
     if created.moved:
         lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
@@ -229,7 +243,8 @@ def _new(args) -> int:
     if paper:
         lines.append(f"Paper: {paper}")
     if issue is not None:
-        lines.append(f"Issue #{issue[0]} ({'created' if issue[1] else 'adopted'})")
+        how = "created" if issue[1] else "adopted, closed" if issue[2] else "adopted"
+        lines.append(f"Issue #{issue[0]} ({how})")
     emit(args, data, lines)
     if is_human(args):
         for warning in created.warnings:
@@ -238,17 +253,24 @@ def _new(args) -> int:
 
 
 def _record_issue(
-    repository: str, token: str, place: str, folder: Path
-) -> tuple[int, bool]:
-    """Create or adopt the issue of a new study and write its number to study.json."""
+    github, root: Path, place: str, folder: Path
+) -> tuple[int, bool, bool]:
+    """Create or adopt the issue of a new study and write its number to study.json.
+
+    Returns the number, whether the issue was created, and whether it is closed.
+    """
     from pkdb.issues.single import issue_for_new_study
+    from pkdb.issues.state import read_studies
     from pkdb.studyformat.metadata import patch_metadata, read_metadata
 
     revision = read_metadata(folder).revision
-    with github_client(repository, token) as github:
-        issue, created = issue_for_new_study(github, place)
+    studies = read_studies(root)
+    claimed = {state.issue for state in studies.states if state.issue is not None}
+    issue, created = issue_for_new_study(
+        github, place, claimed=frozenset(claimed) | studies.claimed
+    )
     patch_metadata(folder, {"issue": issue.number}, revision)
-    return issue.number, created
+    return issue.number, created, issue.state == "closed"
 
 
 def _registry(args) -> int:

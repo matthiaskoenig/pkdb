@@ -1,15 +1,25 @@
 """The GitHub issue of one study, for the lifecycle commands."""
 
+from collections.abc import Set
+
 from pkdb.issues.github import GitHub, GitHubError, Issue
 from pkdb.issues.state import LABEL_COLORS, SUBSTANCE_COLOR, WORKFLOW
 
 
-def issue_for_new_study(github: GitHub, location: str) -> tuple[Issue, bool]:
+def issue_for_new_study(
+    github: GitHub, location: str, claimed: Set[int] = frozenset()
+) -> tuple[Issue, bool]:
     """The issue titled exactly `location`, or a new one; True when it was created.
+
+    Issues in `claimed`, which other studies name, are never taken.
 
     Of several issues with the title an open one wins, then the lowest number.
     """
-    matches = [issue for issue in github.issues() if issue.title == location]
+    matches = [
+        issue
+        for issue in github.issues()
+        if issue.title == location and issue.number not in claimed
+    ]
     if matches:
         best = min(matches, key=lambda issue: (issue.state != "open", issue.number))
         return best, False

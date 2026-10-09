@@ -661,3 +661,42 @@ def test_a_github_failure_after_writing_keeps_the_folder(
     assert read_metadata(folder).metadata.issue is None
     assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 1
     assert "exists" in capsys.readouterr().err
+
+
+def test_new_does_not_adopt_an_issue_of_another_study(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS]) == 0
+    github.issues[1]["title"] = "caffeine/Brown2022"
+    brown = ["new", "caffeine/Brown2022", *WITH_ISSUE[2:]]
+    capsys.readouterr()
+    assert main([*brown, *OPTIONS, "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["issue"] == 2
+    smith = checkout / "studies" / "caffeine" / "Smith2020"
+    assert read_metadata(smith).metadata.issue == 1
+
+
+def test_a_closed_adopted_issue_is_named(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    github.issues[7] = {
+        "number": 7,
+        "title": "caffeine/Smith2020",
+        "state": "closed",
+        "state_reason": "completed",
+        "labels": [],
+        "assignees": [],
+    }
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 0
+    assert capsys.readouterr().out.splitlines()[-1] == "Issue #7 (adopted, closed)"
+
+
+def test_a_bad_token_writes_nothing(checkout, resolver, monkeypatch, capsys):
+    monkeypatch.delenv("GH_TOKEN", raising=False)
+    monkeypatch.setenv("GITHUB_TOKEN", "bad token")
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS]) == 2
+    assert "whitespace" in capsys.readouterr().err
+    assert not (checkout / "studies" / "caffeine").exists()

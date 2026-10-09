@@ -1,5 +1,7 @@
+import pytest
 from fake_github import FakeGitHub
 
+from pkdb.issues.github import GitHubError
 from pkdb.issues.single import issue_for_new_study, rename_issue
 
 
@@ -49,12 +51,8 @@ def test_existing_labels_are_not_created_again():
 def test_a_token_without_push_access_is_an_error():
     github = FakeGitHub(push_access=False)
     with github.client() as client:
-        try:
+        with pytest.raises(GitHubError, match="did not apply the labels"):
             issue_for_new_study(client, "caffeine/A")
-        except Exception as error:
-            assert "did not apply the labels" in str(error)
-        else:
-            raise AssertionError("no error")
 
 
 def test_rename():
@@ -62,3 +60,10 @@ def test_rename():
     with github.client() as client:
         rename_issue(client, 2, "codeine/B")
     assert github.issues[2]["title"] == "codeine/B"
+
+
+def test_an_issue_that_another_study_names_is_not_taken():
+    github = FakeGitHub(issues=[{"number": 4, "title": "caffeine/A"}])
+    with github.client() as client:
+        issue, created = issue_for_new_study(client, "caffeine/A", claimed={4})
+    assert created and issue.number == 5
