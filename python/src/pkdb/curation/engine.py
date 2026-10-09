@@ -32,6 +32,7 @@ from pkdb.curation.workspace import (
     folder_kind,
 )
 from pkdb.identity import IdentityError
+from pkdb.issues.github import token_from
 from pkdb.update import newer
 
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
@@ -86,7 +87,7 @@ class CurationEngine(
         )
         self.github = GitHubAssignments(
             self.repository,
-            os.environ.get("GH_TOKEN"),
+            token_from(),
             saved.get("github") if saved.get("repository") == self.repository else None,
         )
         self.account = None

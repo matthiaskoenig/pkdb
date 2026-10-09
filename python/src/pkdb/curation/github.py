@@ -4,7 +4,7 @@ import re
 from datetime import UTC, datetime
 from typing import Any
 
-import httpx2
+from pkdb.issues.github import GitHub, GitHubError
 
 
 class GitHubAssignments:
@@ -33,33 +33,16 @@ class GitHubAssignments:
         return self._issues.get(number)
 
     def refresh(self):
-        headers = {"Accept": "application/vnd.github+json"}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
         try:
-            with httpx2.Client(
-                headers=headers, timeout=20, transport=self.transport
-            ) as client:
+            with GitHub(
+                self.repository,
+                self.token,
+                transport=self.transport,
+                write_interval=0,
+                max_wait=0,
+            ) as github:
                 users = {}
                 limited = False
-
-                def pages(resource):
-                    result = []
-                    for page in range(1, 101):
-                        response = client.get(
-                            f"https://api.github.com/repos/{self.repository}/{resource}",
-                            params={"state": "all", "per_page": 100, "page": page},
-                        )
-                        response.raise_for_status()
-                        values = response.json()
-                        if not isinstance(values, list):
-                            raise ValueError("Unexpected GitHub response")
-                        result.extend(values)
-                        if len(values) < 100:
-                            return result
-                    raise ValueError(
-                        "Repository exceeds the 10,000-item scan limit; narrow the repository"
-                    )
 
                 def add(user):
                     if user.get("type") != "Bot" and isinstance(user.get("login"), str):
@@ -71,14 +54,16 @@ class GitHubAssignments:
                         }
 
                 try:
-                    for user in pages("assignees"):
+                    for user in github.pages("assignees"):
                         add(user)
-                except httpx2.HTTPStatusError as error:
-                    if error.response.status_code not in {403, 404}:
+                except GitHubError as error:
+                    if error.rate_limited or error.status_code not in {403, 404}:
                         raise
                     limited = True
                 issues = []
-                for issue in pages("issues"):
+                # Oldest first: issues created while paging land on the last page.
+                params = {"state": "all", "sort": "created", "direction": "asc"}
+                for issue in github.pages("issues", params):
                     if "pull_request" in issue:
                         continue
                     for user in issue.get("assignees", []):
@@ -105,7 +90,7 @@ class GitHubAssignments:
                     "refreshed_at": datetime.now(UTC).isoformat(),
                     "error": None,
                 }
-        except httpx2.HTTPError, ValueError, KeyError, TypeError:
+        except GitHubError, ValueError, KeyError, TypeError:
             self.data = {
                 **self.data,
                 "status": "unavailable",

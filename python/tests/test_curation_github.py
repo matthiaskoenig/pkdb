@@ -82,3 +82,17 @@ def test_issues_are_found_by_number():
     provider.refresh()
     assert (provider.issue(9) or {}).get("state") == "closed"
     assert provider.issue(8) is None
+
+
+def test_a_rate_limit_is_unavailable_at_once_without_waiting():
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        return httpx2.Response(
+            403, headers={"retry-after": "60"}, json={"message": "limit"}
+        )
+
+    provider = GitHubAssignments("owner/data", transport=httpx2.MockTransport(handler))
+    assert provider.refresh()["status"] == "unavailable"
+    assert len(calls) == 1
