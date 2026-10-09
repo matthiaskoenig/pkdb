@@ -354,7 +354,8 @@ def _renames(folder: Path, new: str) -> list[tuple[str, str]]:
     for path in sorted(folder.iterdir(), key=lambda item: natural_key(item.name)):
         if path.is_dir(follow_symlinks=False):
             continue
-        if (renamed := _renamed(path.name, folder.name, new)) is not None:
+        renamed = _renamed(path.name, folder.name, new)
+        if renamed is not None and renamed != path.name:
             renames.append((path.name, renamed))
     return renames
 
@@ -363,23 +364,27 @@ def _refuse_collisions(folder: Path, renames: list[tuple[str, str]], new: str) -
     """Refuse a new file name that another file of the folder has, also ignoring case.
 
     A rename would replace that file, at least on the file systems of macOS
-    and Windows. A file named like the workbook of the new name, or its sync
-    state, would be taken for them.
+    and Windows. When the name changes, another file named like the workbook
+    of the new name, or its sync state, would be taken for them; the study's
+    own workbook and state file are checked and removed by the move.
     """
     names: dict[str, set[str]] = defaultdict(set)
     for path in folder.iterdir():
         names[path.name.casefold()].add(path.name)
-    workbook = workbook_path(folder.with_name(new))
-    for file in (workbook.name, state_path(workbook).name):
-        if others := sorted(names[file.casefold()]):
+    if new != folder.name:
+        own = workbook_path(folder)
+        own_files = {own.name, state_path(own).name}
+        workbook = workbook_path(folder.with_name(new))
+        for file in (workbook.name, state_path(workbook).name):
+            if others := sorted(names[file.casefold()] - own_files):
+                raise MoveRefused(
+                    f"{others[0]} in {_shown(folder)} would belong to the workbook "
+                    "of the moved study; remove it first"
+                )
+    for before, after in renames:
+        if others := sorted(names[after.casefold()] - {before}):
             raise MoveRefused(
-                f"{others[0]} in {_shown(folder)} would belong to the workbook of "
-                "the moved study; remove it first"
-            )
-    for old, new in renames:
-        if others := sorted(names[new.casefold()] - {old}):
-            raise MoveRefused(
-                f"{old} would become {new}, which collides with {others[0]} of "
+                f"{before} would become {after}, which collides with {others[0]} of "
                 f"{_shown(folder)}; rename or remove {others[0]} first"
             )
 
@@ -506,7 +511,11 @@ def _renamed_reference(folder: Path, new: str) -> _Write | None:
         reference = load_json(original)
     except ValueError as error:
         raise MoveRefused(f"{_shown(folder)}: {error}") from None
-    if not isinstance(reference, dict) or reference.get("name") != folder.name:
+    if (
+        new == folder.name
+        or not isinstance(reference, dict)
+        or reference.get("name") != folder.name
+    ):
         return None
     text = dump_json({**reference, "name": new})
     return _Write(REFERENCE_JSON, text, original, revision)

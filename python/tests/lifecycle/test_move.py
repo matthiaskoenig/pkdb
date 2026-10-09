@@ -425,6 +425,53 @@ def test_a_synced_workbook_is_removed(moved_checkout, sf_vocabulary):
     assert "\t4.5\t" in table.read_text(encoding="utf-8")
 
 
+def test_a_substance_only_move_removes_the_synced_workbook(
+    moved_checkout, sf_vocabulary
+):
+    folder = study_folder(moved_checkout)
+    assert sync_study(folder, sf_vocabulary).workbook_action == "created"
+    state_path(workbook_path(folder)).write_text("{}", encoding="utf-8")
+    before = {
+        name: content
+        for name, content in snapshot(folder).items()
+        if not name.endswith((".xlsx", ".pkdb-base"))
+    }
+    result = move_study(moved_checkout, OLD, "codeine/Example", sf_vocabulary)
+    assert result.folder == study_folder(moved_checkout, "codeine/Example")
+    assert result.workbook == "Example.xlsx"
+    # Nothing is named after another study, so nothing is renamed or rewritten.
+    assert (result.renamed, result.targets) == ([], 0)
+    assert (result.assets, result.reference) == (0, False)
+    assert snapshot(result.folder) == before
+    assert not (moved_checkout / "studies" / "caffeine").exists()
+
+
+def test_a_move_to_the_name_in_another_case_removes_the_synced_workbook(
+    moved_checkout, sf_vocabulary
+):
+    # The study's own workbook equals the workbook of the new name ignoring
+    # case; the move checks and removes it, so it is no stray file.
+    folder = study_folder(moved_checkout)
+    assert sync_study(folder, sf_vocabulary).workbook_action == "created"
+    result = move_study(moved_checkout, OLD, "codeine/example", sf_vocabulary)
+    assert result.workbook == "Example.xlsx"
+    assert ("Example.pdf", "example.pdf") in result.renamed
+    assert not [p for p in result.folder.iterdir() if p.suffix == ".xlsx"]
+
+
+def test_a_substance_only_move_of_a_workbook_with_unsynced_edits_is_refused(
+    moved_checkout, sf_vocabulary
+):
+    folder = study_folder(moved_checkout)
+    assert sync_study(folder, sf_vocabulary).workbook_action == "created"
+    set_cell(workbook_path(folder), "outputs_Tab2", 2, "mean", "3.5")
+    before = snapshot(folder)
+    with pytest.raises(MoveRefused, match="pkdb tables sync"):
+        move_study(moved_checkout, OLD, "codeine/Example", sf_vocabulary)
+    assert snapshot(folder) == before
+    assert not (moved_checkout / "studies" / "codeine").exists()
+
+
 @pytest.mark.parametrize("change", ["save", "open"])
 def test_a_workbook_changed_during_the_move_is_kept(
     moved_checkout, sf_vocabulary, monkeypatch, change
