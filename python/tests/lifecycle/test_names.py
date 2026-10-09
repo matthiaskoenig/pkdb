@@ -1,6 +1,6 @@
 import pytest
 
-from pkdb.lifecycle.names import parse_location
+from pkdb.lifecycle.names import case_twin, parse_location
 
 
 def test_valid_locations():
@@ -29,3 +29,11 @@ def test_valid_locations():
 def test_invalid_locations(value, message):
     with pytest.raises(ValueError, match=message):
         parse_location(value)
+
+
+def test_case_twin(tmp_path):
+    (tmp_path / "Smith2020").mkdir()
+    assert case_twin(tmp_path, "smith2020") == "Smith2020"
+    assert case_twin(tmp_path, "Smith2020") is None
+    assert case_twin(tmp_path, "Jones2021") is None
+    assert case_twin(tmp_path / "missing", "Smith2020") is None

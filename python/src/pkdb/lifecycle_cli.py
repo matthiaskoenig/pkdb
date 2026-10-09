@@ -87,6 +87,24 @@ def register(commands) -> None:
     )
     add_format(new)
 
+    move = commands.add_parser(
+        "move",
+        help="Rename or move a study",
+        description=(
+            "Move the study studies/OLD to studies/NEW and rename the files named "
+            "after it: the PDF, the images, the raw tables and the digitizations. "
+            "Review targets follow the files, pkdb format writes the new name into "
+            "the tables, and the GitHub issue gets the new title. A workbook that "
+            "holds edits that are not in the tables, or scratch sheets, refuses the "
+            "move; otherwise it is removed, and pkdb tables open creates it again."
+        ),
+    )
+    move.add_argument("old", metavar="OLD", help="SUBSTANCE/NAME of the study")
+    move.add_argument("new", metavar="NEW", help="New SUBSTANCE/NAME of the study")
+    _add_root(move)
+    _vocabulary_options(move)
+    add_format(move)
+
     release = commands.add_parser(
         "release",
         help="Give approved studies the next PKDB identifiers",
@@ -126,6 +144,8 @@ def run(args) -> int:
     try:
         if args.command == "new":
             return _new(args)
+        if args.command == "move":
+            return _move(args)
         if args.command == "release":
             return _release(args)
         if args.command == "registry":
@@ -271,6 +291,101 @@ def _record_issue(
     )
     patch_metadata(folder, {"issue": issue.number}, revision)
     return issue.number, created, issue.state == "closed"
+
+
+def _move(args) -> int:
+    from pkdb.issues.github import repository_from, token_from
+
+    # A bad token or repository fails before anything moves.
+    token = token_from()
+    github = None if token is None else github_client(repository_from(), token)
+    try:
+        return _move_study(args, github)
+    finally:
+        if github is not None:
+            github.close()
+
+
+def _move_study(args, github) -> int:
+    import sys
+
+    from pkdb.lifecycle.move import MoveIncomplete, MoveRefused, move_study
+    from pkdb.repository import STUDIES, location, repository_root
+    from pkdb.study_cli import emit, fail, is_human
+    from pkdb.studyformat_cli import say
+    from pkdb.tables_cli import _vocabulary
+
+    root = repository_root(args.root or Path.cwd())
+    vocabulary = _vocabulary(args)
+    if vocabulary is None:
+        return 2
+    old = args.old.removesuffix("/")
+    error = None
+    try:
+        moved = move_study(root, old, args.new, vocabulary)
+    except (MoveRefused, MoveIncomplete) as failure:
+        # A move that failed after the renames is reported with what it did.
+        done = failure.moved if isinstance(failure, MoveIncomplete) else None
+        if done is None:
+            message = str(failure)
+            return fail(
+                args,
+                {"from": old, "location": args.new, "error": message},
+                lambda: say(message, file=sys.stderr),
+            )
+        moved, error = done, str(failure)
+    place = location(moved.folder)
+    lines = [f"Moved {STUDIES}/{old} to {STUDIES}/{place}"]
+    lines += [f"Renamed {before} to {after}" for before, after in moved.renamed]
+    if moved.workbook is not None:
+        lines.append(
+            f"Removed {moved.workbook}; pkdb tables open creates the workbook again"
+        )
+    if moved.targets:
+        plural = "" if moved.targets == 1 else "s"
+        lines.append(f"Updated {moved.targets} review target{plural}")
+    warnings, renamed = _rename_issue(github, moved.issue, place)
+    if renamed:
+        lines.append(f"Issue #{moved.issue} renamed to {place}")
+    data = {
+        "from": old,
+        "location": place,
+        "path": str(moved.folder),
+        "renamed": [{"from": before, "to": after} for before, after in moved.renamed],
+        "targets": moved.targets,
+        "workbook": moved.workbook,
+        "issue": moved.issue,
+        "issue_renamed": renamed,
+        "warnings": warnings,
+    }
+    if error is not None:
+        data["error"] = error
+    emit(args, data, lines)
+    if is_human(args):
+        for warning in warnings:
+            say(f"Warning: {warning}", file=sys.stderr)
+        if error is not None:
+            say(error, file=sys.stderr)
+    return 0 if error is None else 1
+
+
+def _rename_issue(github, issue: int | None, place: str) -> tuple[list[str], bool]:
+    """Give the issue of a moved study its new title; the warnings and whether it was renamed."""
+    from pkdb.issues.github import GitHubError
+    from pkdb.issues.single import rename_issue
+
+    later = "pkdb issues sync renames it later"
+    if issue is None:
+        return [], False
+    if github is None:
+        return [
+            f"Set GH_TOKEN or GITHUB_TOKEN to rename issue #{issue} now; {later}"
+        ], False
+    try:
+        rename_issue(github, issue, place)
+    except GitHubError as error:
+        return [f"Issue #{issue} was not renamed: {error}; {later}"], False
+    return [], True
 
 
 def _registry(args) -> int:

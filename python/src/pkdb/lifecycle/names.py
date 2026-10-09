@@ -1,6 +1,7 @@
 """Rules for the `<substance>/<name>` location of a study."""
 
 import re
+from pathlib import Path
 
 from pkdb.studyformat.layout import RESERVED_NAMES
 
@@ -25,3 +26,16 @@ def parse_location(value: str) -> tuple[str, str]:
     if name in RESERVED_NAMES:
         raise ValueError(f"The name {name!r} is reserved")
     return substance, name
+
+
+def case_twin(folder: Path, name: str) -> str | None:
+    """The entry of `folder` whose name differs from `name` only in case, or None.
+
+    Such names collide on the file systems of macOS and Windows.
+    """
+    if not folder.is_dir():
+        return None
+    for entry in folder.iterdir():
+        if entry.name != name and entry.name.casefold() == name.casefold():
+            return entry.name
+    return None

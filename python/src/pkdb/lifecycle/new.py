@@ -10,7 +10,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from pkdb.identity import Author
-from pkdb.lifecycle.names import parse_location
+from pkdb.lifecycle.names import case_twin, parse_location
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
 from pkdb.repository import PAPERS, STUDIES
 from pkdb.schemas.review import Review
@@ -198,22 +198,16 @@ def _build(
         raise NewStudyRefused(str(error)) from None
     formatted = format_folder(folder)
     if not formatted.ok:
-        raise NewStudyRefused(_errors(formatted.issues))
+        raise NewStudyRefused(error_messages(formatted.issues))
     return reference
 
 
 def _refuse_case_twin(folder: Path, name: str, shown: str) -> None:
-    """Refuse a name that only differs in case from an entry of the folder.
-
-    Such names collide on the file systems of macOS and Windows.
-    """
-    if not folder.is_dir():
-        return
-    for entry in folder.iterdir():
-        if entry.name != name and entry.name.casefold() == name.casefold():
-            raise NewStudyRefused(
-                f"{shown}/{name} differs from {shown}/{entry.name} only in case"
-            )
+    """Refuse a name that only differs in case from an entry of the folder."""
+    if (twin := case_twin(folder, name)) is not None:
+        raise NewStudyRefused(
+            f"{shown}/{name} differs from {shown}/{twin} only in case"
+        )
 
 
 def _paper_name(file: str, study: str) -> str | None:
@@ -339,7 +333,7 @@ def _metadata(
         raise NewStudyRefused("; ".join(issue.message for issue in issues)) from None
 
 
-def _errors(issues: Iterable[ValidationIssue]) -> str:
+def error_messages(issues: Iterable[ValidationIssue]) -> str:
     """The error messages of issues, each with its file when it has one."""
     return "; ".join(
         f"{issue.source.file}: {issue.message}"
