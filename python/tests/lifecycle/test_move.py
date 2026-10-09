@@ -562,6 +562,21 @@ def test_a_workbook_with_a_scratch_sheet_refuses_the_move(
     assert snapshot(folder) == before
 
 
+def test_a_damaged_workbook_refuses_the_move(moved_checkout, sf_vocabulary):
+    folder = study_folder(moved_checkout)
+    (folder / "Example.xlsx").write_bytes(b"not a workbook")
+    before = snapshot(folder)
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    # A sync cannot read the workbook either.
+    assert str(error.value) == (
+        "Example.xlsx cannot be read: File is not a zip file. Repair it in a "
+        "spreadsheet program, or remove it when it holds no edits that are not in "
+        "the tables, and move again"
+    )
+    assert snapshot(folder) == before
+
+
 def test_a_synced_workbook_is_removed(moved_checkout, sf_vocabulary):
     folder = study_folder(moved_checkout)
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"

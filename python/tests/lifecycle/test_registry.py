@@ -109,3 +109,38 @@ def test_a_malformed_registry_file_fails_check_only(tmp_path, monkeypatch, capsy
     assert main(["registry", "--format", "human"]) == 0
     assert "study_identifiers.json: must be a JSON object" in capsys.readouterr().out
     assert main(["registry", "--check", "--format", "human"]) == 1
+
+
+def test_registry_command_without_released_studies(tmp_path, monkeypatch, capsys):
+    released_study(tmp_path, "caffeine/A", issue=7)
+    monkeypatch.chdir(tmp_path)
+    assert main(["registry", "--format", "human"]) == 0
+    assert capsys.readouterr().out == "No released studies.\n"
+    assert main(["registry", "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["released"] == []
+
+
+def test_scan_ignores_hidden_and_format_1_folders(tmp_path):
+    released_study(tmp_path, "caffeine/A", pkdb_id="PKDB00001", issue=7)
+    # The build folder of an interrupted pkdb new and a hidden substance folder.
+    released_study(tmp_path, "caffeine/.B.new", pkdb_id="PKDB00002", issue=8)
+    released_study(tmp_path, ".hidden/C", pkdb_id="PKDB00003", issue=9)
+    legacy = tmp_path / "studies" / "caffeine" / "Legacy1990"
+    legacy.mkdir()
+    (legacy / "study.json").write_text(
+        json.dumps({"sid": "PKDB00004", "issue": 10}), encoding="utf-8"
+    )
+    result = scan(tmp_path)
+    assert [item.location for item in result.released] == ["caffeine/A"]
+    assert result.issues == {7: ["caffeine/A"]} and result.errors == []
+    assert next_identifier(result, tmp_path) == 2
+
+
+def test_check_help_names_the_registry_file(capsys):
+    with pytest.raises(SystemExit):
+        main(["registry", "--help"])
+    help_text = " ".join(capsys.readouterr().out.split())
+    assert (
+        "studies/study_identifiers.json gives an identifier to another location"
+        in help_text
+    )

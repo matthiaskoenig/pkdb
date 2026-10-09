@@ -156,7 +156,11 @@ def register(commands) -> None:
     command.add_argument(
         "--check",
         action="store_true",
-        help="Exit with 1 when studies share an identifier or an issue number, or a study.json cannot be read",
+        help=(
+            "Exit with 1 when studies share an identifier or an issue number, a "
+            "study.json cannot be read, or studies/study_identifiers.json gives an "
+            "identifier to another location or cannot be read"
+        ),
     )
     add_format(command)
 
@@ -277,6 +281,7 @@ def _new_study(args, github) -> int:
         "misnamed": created.misnamed,
         "reference": created.reference,
         "paper": paper,
+        "new_substance": created.new_substance,
         "warnings": created.warnings,
     }
     if issue is not None:
@@ -286,6 +291,8 @@ def _new_study(args, github) -> int:
         error += " Run pkdb issues sync --adopt to give it one."
         data["error"] = error
     lines = [f"Created {STUDIES}/{place}"]
+    if created.new_substance:
+        lines.append(f"New substance folder {created.folder.parent.name}")
     if created.moved:
         lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
     if created.left:
@@ -484,7 +491,7 @@ def _registry(args) -> int:
     lines = [
         f"{item['pkdb_id']}  {item['location']}  {item['date']}"
         for item in data["released"]
-    ]
+    ] or ["No released studies."]
     lines += problems
     lines += [f"Error: {error}" for error in result.errors]
     emit(args, data, lines)
@@ -579,7 +586,12 @@ def _say_all(lines: list[str]) -> None:
 def _release(args) -> int:
     import datetime
 
-    from pkdb.lifecycle.release import ReleaseConflict, ReleaseRefused, release
+    from pkdb.lifecycle.release import (
+        LargestIdentifierUnknown,
+        ReleaseConflict,
+        ReleaseRefused,
+        release,
+    )
     from pkdb.study_cli import emit, fail
     from pkdb.tables_cli import _vocabulary
 
@@ -603,6 +615,9 @@ def _release(args) -> int:
             lines.append(f"{item.location}:")
             lines += [f"  {reason}" for reason in item.reasons]
         return fail(args, data, lambda: _say_all(lines))
+    except LargestIdentifierUnknown as unknown:
+        message = str(unknown)
+        return fail(args, {"error": message}, lambda: _say_all([message]))
     except ReleaseConflict as conflict:
         data = {
             "error": str(conflict),

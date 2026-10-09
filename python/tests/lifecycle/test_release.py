@@ -289,6 +289,27 @@ def test_an_unreadable_study_json_elsewhere_stops_before_any_write(
     assert read_metadata(first).metadata.release is None
 
 
+@pytest.mark.parametrize("output", ["human", "json"])
+def test_the_command_reports_an_unknown_largest_identifier(
+    approved_studies, sf_vocabulary, capsys, monkeypatch, output
+):
+    root, first = approved_studies("caffeine/A")
+    (root / "studies" / "study_identifiers.json").write_text("[]", encoding="utf-8")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+    argv = ["--no-update", "release", str(first), "--format", output]
+    assert main(argv) == 1
+    message = (
+        "Cannot find the largest identifier: studies/study_identifiers.json: must "
+        "be a JSON object; no study was released"
+    )
+    captured = capsys.readouterr()
+    if output == "json":
+        assert json.loads(captured.out) == {"error": message}
+    else:
+        assert captured.err == f"{message}\n"
+    assert read_metadata(first).metadata.release is None
+
+
 def test_the_registry_file_number_is_counted(approved_studies, sf_vocabulary):
     root, first = approved_studies("caffeine/A")
     (root / "studies" / "study_identifiers.json").write_text(

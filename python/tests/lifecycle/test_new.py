@@ -507,9 +507,25 @@ def test_new_command(checkout, resolver, monkeypatch, capsys):
         "misnamed": {},
         "reference": "Created reference.json from PubMed 123",
         "paper": "Smith (2020) Caffeine in healthy volunteers",
+        "new_substance": True,
         "warnings": [],
     }
     assert is_v2_folder(checkout / "studies" / "caffeine" / "Smith2020")
+
+
+def test_new_command_names_a_new_substance_folder(
+    checkout, resolver, monkeypatch, capsys
+):
+    monkeypatch.chdir(checkout)
+    assert main([*NEW, *OPTIONS, "--format", "human"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[:2] == [
+        "Created studies/caffeine/Smith2020",
+        "New substance folder caffeine",
+    ]
+    brown = ["new", "caffeine/Brown2022", *NEW[2:]]
+    assert main([*brown, *OPTIONS, "--format", "human"]) == 0
+    assert "New substance folder" not in capsys.readouterr().out
 
 
 def test_new_command_names_moved_and_left_files(
@@ -520,6 +536,7 @@ def test_new_command_names_moved_and_left_files(
     assert main([*NEW, *OPTIONS, "--format", "human"]) == 0
     assert capsys.readouterr().out.splitlines() == [
         "Created studies/caffeine/Smith2020",
+        "New substance folder caffeine",
         "Moved from papers/caffeine/Smith2020: Smith2020_Tab1.png",
         "Left in papers/caffeine/Smith2020: Smith2020.PDF (differs only in case "
         "from Smith2020.pdf), Smith2020.xlsx",

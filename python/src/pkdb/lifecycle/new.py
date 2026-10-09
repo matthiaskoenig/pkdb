@@ -49,8 +49,9 @@ class NewStudy:
 
     `moved` and `left` name the files taken from and left in the paper folder;
     `misnamed` maps a left file to the name it differs from only in case.
-    `reference` is the change of reference.json, and `warnings` name what
-    could not be cleaned up after the study was complete.
+    `reference` is the change of reference.json, `new_substance` tells
+    whether the substance folder was created for the study, and `warnings`
+    name what could not be cleaned up after the study was complete.
     """
 
     folder: Path
@@ -59,6 +60,7 @@ class NewStudy:
     reference: str | None
     misnamed: dict[str, str] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
+    new_substance: bool = False
 
 
 @dataclass(frozen=True)
@@ -175,6 +177,7 @@ def create_study(
         reference,
         found.misnamed,
         warnings,
+        new_substance,
     )
 
 

@@ -432,7 +432,11 @@ def _removable_workbook(folder: Path, vocabulary: Vocabulary) -> _Workbook | Non
     result = sync_study(folder, vocabulary, check=True)
     if result.changes or result.conflicts:
         raise MoveRefused(EDITS_IN_WORKBOOK)
-    if errors := [issue for issue in result.issues if issue.severity == "error"]:
+    errors = [issue for issue in result.issues if issue.severity == "error"]
+    for issue in errors:
+        if issue.code == "workbook_unreadable":
+            raise _unreadable(issue.message)
+    if errors:
         raise MoveRefused(
             f"{workbook.name} cannot be compared with the tables "
             f"({error_messages(errors)}); run pkdb tables sync first"
@@ -443,6 +447,14 @@ def _removable_workbook(folder: Path, vocabulary: Vocabulary) -> _Workbook | Non
             "move would remove with the workbook; copy what you need and delete them first"
         )
     return _Workbook(workbook.name, signature)
+
+
+def _unreadable(message: str) -> MoveRefused:
+    """The refusal of a workbook that cannot be read, which a sync cannot read either."""
+    return MoveRefused(
+        f"{message}. Repair it in a spreadsheet program, or remove it when it "
+        "holds no edits that are not in the tables, and move again"
+    )
 
 
 def _signature(path: Path) -> tuple[int, int] | None:
@@ -464,7 +476,7 @@ def _scratch_sheets(workbook: Path) -> list[str]:
             book = openpyxl.load_workbook(workbook, read_only=True)
     except Exception as error:
         # openpyxl raises many kinds of errors for a damaged or foreign file.
-        raise MoveRefused(f"{workbook.name} cannot be read: {error}") from None
+        raise _unreadable(f"{workbook.name} cannot be read: {error}") from None
     try:
         return [name for name in book.sheetnames if is_scratch_sheet(name)]
     finally:

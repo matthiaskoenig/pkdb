@@ -51,6 +51,15 @@ class ReleaseConflict(Exception):
         self.location, self.released = where, released
 
 
+class LargestIdentifierUnknown(ValueError):
+    """A study.json or the registry file cannot be read; nothing was written."""
+
+    def __init__(self, reason: str):
+        super().__init__(
+            f"Cannot find the largest identifier: {reason}; no study was released"
+        )
+
+
 def check(folder: Path, vocabulary) -> list[str]:
     """The reasons a study cannot be released; empty when it can."""
     reasons = []
@@ -104,10 +113,11 @@ def release(
         raise ReleaseRefused(refusals)
     found = scan(root)
     if found.errors:
-        raise ValueError(
-            "Cannot find the largest identifier: " + "; ".join(found.errors)
-        )
-    first = next_identifier(found, root)
+        raise LargestIdentifierUnknown("; ".join(found.errors))
+    try:
+        first = next_identifier(found, root)
+    except ValueError as error:
+        raise LargestIdentifierUnknown(str(error)) from None
     done: list[Numbered] = []
     for number, folder in enumerate(folders, first):
         pkdb_id = identifier(number)
