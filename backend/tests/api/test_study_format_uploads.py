@@ -849,14 +849,6 @@ def test_a_moved_study_takes_over_its_row_by_issue(
     before = write_study(tmp_path / "a", "Before", issue=4711)
     assert put_study(client, creator_headers, before).status_code == 201
     [row] = stored(session_factory)
-    # A stored study keeps its publication, also when it moves.
-    other = write_study(tmp_path / "c", "After", pmid="456", issue=4711)
-    response = put_study(client, creator_headers, other)
-    assert response.status_code == 409, response.text
-    assert response.json()["detail"] == (
-        "Publication identifier conflicts with the stored identity"
-    )
-    assert [study.sid for study in stored(session_factory)] == ["caffeine/Before"]
     after = write_study(tmp_path / "b", "After", issue=4711)
     url = "/api/v2/studies/caffeine/After"
     validation = client.post(
@@ -884,6 +876,12 @@ def test_a_moved_study_takes_over_its_row_by_issue(
     assert old.status_code == 404
     again = put_study(client, creator_headers, after)
     assert again.status_code == 200 and again.json()["renamed_from"] is None
+    # The old folder of a stale checkout moves the study back.
+    stale = put_study(client, creator_headers, before)
+    assert stale.status_code == 200 and stale.json()["renamed_from"] == (
+        "caffeine/After"
+    )
+    assert [study.sid for study in stored(session_factory)] == ["caffeine/Before"]
 
 
 def test_issue_takeover_needs_edit_rights(
@@ -891,7 +889,7 @@ def test_issue_takeover_needs_edit_rights(
 ):
     before = write_study(tmp_path / "a", "Before", issue=4711)
     assert put_study(client, creator_headers, before).status_code == 201
-    after = write_study(tmp_path / "b", "After", pmid="456", issue=4711)
+    after = write_study(tmp_path / "b", "After", issue=4711)
     # The private study is not named to someone who cannot read it.
     response = put_study(client, other_headers, after)
     assert response.status_code == 409, response.text
@@ -1018,3 +1016,101 @@ def test_issue_takeover_never_changes_a_pkdb_identifier(
     assert response.json()["detail"] == "A study already has this issue"
     [row] = stored(session_factory)
     assert (row.sid, row.pkdb_id, row.issue) == ("caffeine/Before", "PKDB00005", 9)
+
+
+def doi_only(folder, doi):
+    """The JSON files of `folder` with a reference that has only a DOI."""
+    study = json.loads((folder / "study.json").read_text())
+    study["reference"] = {"doi": doi}
+    reference = json.loads((folder / "reference.json").read_text())
+    reference.update(sid=doi, doi=doi)
+    del reference["pmid"]
+    return {
+        "study.json": dump_json(study).encode(),
+        "reference.json": dump_json(reference).encode(),
+    }
+
+
+def publication_aliases(session_factory):
+    from pkdb_server.db.models.studies import PublicationIdentifier
+
+    with session_factory() as session:
+        return sorted(
+            (alias.publication_id, alias.namespace, alias.value)
+            for alias in session.scalars(select(PublicationIdentifier))
+        )
+
+
+@pytest.mark.parametrize("reference", ["pmid", "doi"])
+def test_an_issue_copied_into_another_paper_is_refused(
+    client, creator_headers, tmp_path, session_factory, reference
+):
+    old = write_study(tmp_path / "a", "Old", issue=77)
+    json_files = doi_only(old, "10.1000/old") if reference == "doi" else None
+    response = client.put(
+        "/api/v2/studies/caffeine/Old",
+        headers=creator_headers,
+        **multipart(old, json_files=json_files),
+    )
+    assert response.status_code == 201, response.text
+    aliases = publication_aliases(session_factory)
+    # Another paper whose study.json was copied with the issue number.
+    new = write_study(tmp_path / "b", "New", pmid="999", issue=77)
+    url = "/api/v2/studies/caffeine/New"
+    for method, route in (("post", url + "/validate"), ("put", url)):
+        response = getattr(client, method)(
+            route, headers=creator_headers, **multipart(new)
+        )
+        assert response.status_code == 422, response.text
+        [issue] = response.json()["issues"]
+        assert (issue["code"], issue["message"]) == (
+            "duplicate_issue",
+            "Issue #77 belongs to the study caffeine/Old",
+        )
+    [row] = stored(session_factory)
+    assert (row.sid, row.issue) == ("caffeine/Old", 77)
+    assert publication_aliases(session_factory) == aliases
+
+
+def test_a_copied_issue_is_named_instead_of_a_takeover_by_publication(
+    client, creator_headers, tmp_path, legacy_row, session_factory
+):
+    other = write_study(tmp_path / "a", "Other", pmid="456", issue=77)
+    assert put_study(client, creator_headers, other).status_code == 201
+    folder = write_study(tmp_path / "b", issue=77)
+    response = put_study(client, creator_headers, folder)
+    assert response.status_code == 422, response.text
+    [issue] = response.json()["issues"]
+    assert (issue["code"], issue["message"]) == (
+        "duplicate_issue",
+        "Issue #77 belongs to the study caffeine/Other",
+    )
+    assert sorted(row.sid for row in stored(session_factory)) == [
+        LEGACY,
+        "caffeine/Other",
+    ]
+
+
+def test_an_issue_of_no_stored_study_keeps_the_publication_rules(
+    client, creator_headers, tmp_path, legacy_row, session_factory
+):
+    # The study format 1 study of the publication is taken over as before.
+    folder = write_study(tmp_path / "a", issue=5)
+    response = put_study(client, creator_headers, folder)
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == LEGACY
+    [row] = stored(session_factory)
+    assert (row.id, row.sid, row.legacy_sid, row.issue) == (
+        legacy_row.id,
+        "caffeine/Example",
+        LEGACY,
+        5,
+    )
+    # A second study format 2 study of the publication is refused as before.
+    second = write_study(tmp_path / "b", "Second", issue=6)
+    response = put_study(client, creator_headers, second)
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "A study already exists for this publication and source"
+    )
+    assert [row.sid for row in stored(session_factory)] == ["caffeine/Example"]

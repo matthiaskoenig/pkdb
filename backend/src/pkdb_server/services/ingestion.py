@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import NoReturn
 
-from sqlalchemy import func, or_, select, text, tuple_
+from sqlalchemy import or_, select, text, tuple_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -92,10 +92,6 @@ def is_located(sid: str) -> bool:
     return "/" in sid
 
 
-# The condition of is_located on stored studies.
-LOCATED = func.strpos(Study.sid, "/") > 0
-
-
 def publication_studies(
     session: Session, study: CanonicalStudy, *, lock: bool = False
 ) -> list[Study]:
@@ -121,9 +117,9 @@ def former_sids(session: Session, study: CanonicalStudy) -> set[str]:
     They are read before the publication locks them; stored_study checks the
     locked row again. A release may take over the study format 1 study of its
     PKDB identifier, and a study format 2 study the only study format 1 study
-    of its publication and source or the study format 2 study with its issue
-    number. A study format 2 study of the PKDB identifier is locked by the
-    identifier.
+    of its publication and source or the moved study of its publication and
+    source (issue_match). A study format 2 study of the PKDB identifier is
+    locked by the identifier.
     """
     names = set()
     release = study.metadata.release
@@ -139,17 +135,30 @@ def former_sids(session: Session, study: CanonicalStudy) -> set[str]:
                 )
             )
         )
-    if is_located(study.sid):
-        same = publication_studies(session, study)
-        if len(same) == 1:
-            names.add(same[0].sid)
+    same = publication_studies(session, study) if is_located(study.sid) else []
+    if len(same) == 1:
+        names.add(same[0].sid)
     former = {name for name in names if not is_located(name)}
-    issue = study.metadata.issue
-    if is_located(study.sid) and issue is not None:
-        former.update(
-            session.scalars(select(Study.sid).where(Study.issue == issue, LOCATED))
-        )
+    match = issue_match(study, same)
+    if match is not None:
+        former.add(match.sid)
     return former
+
+
+def issue_match(study: CanonicalStudy, same: list[Study]) -> Study | None:
+    """The study format 2 study that a moved study format 2 `study` takes over.
+
+    That is the study among `same`, the studies of its publication and source,
+    with its issue number. An issue number of a study of another publication
+    is no move but a copied or wrong number, which the upload must not take
+    over.
+    """
+    issue = study.metadata.issue
+    if issue is None or not is_located(study.sid):
+        return None
+    return next(
+        (row for row in same if row.issue == issue and is_located(row.sid)), None
+    )
 
 
 def stored_study(
@@ -166,14 +175,14 @@ def stored_study(
     its sid takes over the study stored under its PKDB identifier, as sid
     (study format 1), as `pkdb_id` (a renamed folder) or as `legacy_sid`; the
     caller renames it. Otherwise a study format 2 study not yet stored under its
-    sid takes over the study format 2 study with its issue number (a moved
-    folder), else the study format 1 study of the same publication and source,
-    when the principal may edit it; a takeover by issue number never changes a
-    stored PKDB identifier. A PKDB identifier and an issue number name at most
-    one study each. Refusals name other studies only when the principal
-    may read them. With `locked`, the names that the caller locked,
-    StudyChanged when a study taken over by issue number or a taken over study
-    format 1 study is not among them.
+    sid takes over the study format 2 study of the same publication and source
+    with its issue number (a moved folder), else the study format 1 study of
+    the same publication and source, when the principal may edit it; a
+    takeover by issue number never changes a stored PKDB identifier. A PKDB
+    identifier and an issue number name at most one study each. Refusals name
+    other studies only when the principal may read them. With `locked`, the
+    names that the caller locked, StudyChanged when a study taken over by issue
+    number or a taken over study format 1 study is not among them.
     """
 
     def rows(*conditions):
@@ -226,8 +235,8 @@ def stored_study(
     issue = study.metadata.issue
     issued = None
     if root is None and issue is not None and is_located(study.sid):
-        # A moved folder takes over the study with its issue number.
-        match = next(iter(rows(Study.issue == issue, LOCATED)), None)
+        # A moved folder takes over its study by publication and issue number.
+        match = issue_match(study, publication_studies(session, study, lock=lock))
         if match is not None:
             if not allowed("write", match):
                 raise PublicationConflict(
