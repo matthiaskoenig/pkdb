@@ -43,7 +43,7 @@ def count(session_factory):
 def test_upload_reads_back_with_identity_release_issue_and_review(
     client, creator_headers, tmp_path, session_factory
 ):
-    folder = write_study(tmp_path / "sources", release="PKDB00198")
+    folder = write_study(tmp_path / "sources", release="PKDB00198", issue=2158)
     response = client.put(URL, headers=creator_headers, **multipart(folder))
     assert response.status_code == 201, response.text
     body = response.json()
@@ -832,3 +832,164 @@ def test_format_1_upload_of_a_legacy_sid_is_refused(
     assert response.status_code == 409, response.text
     assert "caffeine/Example" not in response.text
     assert [row.sid for row in stored(session_factory)] == ["caffeine/Example"]
+
+
+def put_study(client, headers, folder):
+    """Upload the study folder <substance>/<name> under its own identifier."""
+    return client.put(
+        f"/api/v2/studies/{folder.parent.name}/{folder.name}",
+        headers=headers,
+        **multipart(folder),
+    )
+
+
+def test_a_moved_study_takes_over_its_row_by_issue(
+    client, creator_headers, tmp_path, session_factory
+):
+    before = write_study(tmp_path / "a", "Before", issue=4711)
+    assert put_study(client, creator_headers, before).status_code == 201
+    [row] = stored(session_factory)
+    # A stored study keeps its publication, also when it moves.
+    other = write_study(tmp_path / "c", "After", pmid="456", issue=4711)
+    response = put_study(client, creator_headers, other)
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "Publication identifier conflicts with the stored identity"
+    )
+    assert [study.sid for study in stored(session_factory)] == ["caffeine/Before"]
+    after = write_study(tmp_path / "b", "After", issue=4711)
+    url = "/api/v2/studies/caffeine/After"
+    validation = client.post(
+        url + "/validate", headers=creator_headers, **multipart(after)
+    )
+    assert validation.status_code == 200, validation.text
+    response = put_study(client, creator_headers, after)
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert (body["sid"], body["created"], body["renamed_from"]) == (
+        "caffeine/After",
+        False,
+        "caffeine/Before",
+    )
+    [moved] = stored(session_factory)
+    assert (moved.id, moved.sid, moved.name, moved.issue, moved.legacy_sid) == (
+        row.id,
+        "caffeine/After",
+        "After",
+        4711,
+        None,
+    )
+    # A located former identifier does not redirect.
+    old = client.get("/api/v2/studies/caffeine/Before", headers=creator_headers)
+    assert old.status_code == 404
+    again = put_study(client, creator_headers, after)
+    assert again.status_code == 200 and again.json()["renamed_from"] is None
+
+
+def test_issue_takeover_needs_edit_rights(
+    client, admin_headers, creator_headers, other_headers, tmp_path, session_factory
+):
+    before = write_study(tmp_path / "a", "Before", issue=4711)
+    assert put_study(client, creator_headers, before).status_code == 201
+    after = write_study(tmp_path / "b", "After", pmid="456", issue=4711)
+    # The private study is not named to someone who cannot read it.
+    response = put_study(client, other_headers, after)
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == "A study already has this issue"
+    assert "caffeine/Before" not in response.text
+    # A reader who may not edit the study learns which study it is.
+    access = "/api/v1/admin/studies/caffeine/Before/access"
+    state = client.get(access, headers=admin_headers).json()
+    changed = client.put(
+        access, headers=admin_headers, json={**state, "access": "public"}
+    )
+    assert changed.status_code == 200, changed.text
+    url = "/api/v2/studies/caffeine/After"
+    for method, route in (("post", url + "/validate"), ("put", url)):
+        response = getattr(client, method)(
+            route, headers=other_headers, **multipart(after)
+        )
+        assert response.status_code == 409, response.text
+        assert response.json()["detail"] == (
+            "The study caffeine/Before has issue #4711; uploading it as "
+            "caffeine/After needs edit rights on caffeine/Before"
+        )
+    assert [row.sid for row in stored(session_factory)] == ["caffeine/Before"]
+
+
+def test_an_issue_of_another_study_is_refused(
+    client, creator_headers, other_headers, tmp_path, session_factory
+):
+    first = write_study(tmp_path / "a", "First", issue=1)
+    second = write_study(tmp_path / "b", "Second", pmid="456", issue=2)
+    for folder in (first, second):
+        assert put_study(client, creator_headers, folder).status_code == 201
+    again = write_study(tmp_path / "c", "Second", pmid="456", issue=1)
+    url = "/api/v2/studies/caffeine/Second"
+    for method, route in (("post", url + "/validate"), ("put", url)):
+        response = getattr(client, method)(
+            route, headers=creator_headers, **multipart(again)
+        )
+        assert response.status_code == 422, response.text
+        [issue] = response.json()["issues"]
+        assert (issue["code"], issue["message"]) == (
+            "duplicate_issue",
+            "Issue #1 belongs to the study caffeine/First",
+        )
+        assert issue["source"]["file"] == "study.json"
+        assert issue["source"]["path"] == ["issue"]
+    negotiated = client.put(
+        url,
+        headers={**creator_headers, "X-PKDB-Report-Version": "2"},
+        **multipart(again),
+    )
+    [issue] = negotiated.json()["report"]["issues"]
+    assert issue["code"] == "duplicate_issue"
+    assert issue["suggestions"][0]["message"] == (
+        "Check the issue number in study.json: "
+        "each GitHub issue belongs to exactly one study."
+    )
+    # Someone who cannot read the other study does not learn which it is.
+    own = write_study(tmp_path / "d", "Own", pmid="789", issue=3)
+    assert put_study(client, other_headers, own).status_code == 201
+    claim = write_study(tmp_path / "e", "Own", pmid="789", issue=1)
+    response = put_study(client, other_headers, claim)
+    assert response.status_code == 422, response.text
+    [issue] = response.json()["issues"]
+    assert (issue["code"], issue["message"]) == (
+        "duplicate_issue",
+        "Issue #1 belongs to another study",
+    )
+    assert "caffeine/First" not in response.text
+    assert {row.sid: row.issue for row in stored(session_factory)} == {
+        "caffeine/First": 1,
+        "caffeine/Second": 2,
+        "caffeine/Own": 3,
+    }
+
+
+def test_a_released_study_still_takes_over_by_pkdb_id(
+    client, creator_headers, tmp_path, session_factory
+):
+    before = write_study(tmp_path / "a", "Before", release="PKDB00198", issue=9)
+    assert put_study(client, creator_headers, before).status_code == 201
+    after = write_study(tmp_path / "b", "After", release="PKDB00198", issue=9)
+    response = put_study(client, creator_headers, after)
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == "caffeine/Before"
+    [row] = stored(session_factory)
+    assert (row.sid, row.pkdb_id, row.issue) == ("caffeine/After", "PKDB00198", 9)
+
+
+def test_a_study_released_after_its_move_takes_over_by_issue(
+    client, creator_headers, tmp_path, session_factory
+):
+    # No stored study has the new PKDB identifier yet.
+    before = write_study(tmp_path / "a", "Before", issue=9)
+    assert put_study(client, creator_headers, before).status_code == 201
+    after = write_study(tmp_path / "b", "After", release="PKDB00198", issue=9)
+    response = put_study(client, creator_headers, after)
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == "caffeine/Before"
+    [row] = stored(session_factory)
+    assert (row.sid, row.pkdb_id, row.issue) == ("caffeine/After", "PKDB00198", 9)

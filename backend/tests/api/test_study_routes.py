@@ -14,7 +14,7 @@ from pkdb import Client
 from pkdb.studyformat.jsonio import dump_json
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.users import User
-from pkdb_server.services.ingestion import sid_lock
+from pkdb_server.services.ingestion import issue_lock, sid_lock
 from tests.fixtures.study_folders import multipart, write_study
 
 SID = "caffeine/Example"
@@ -83,7 +83,7 @@ def test_study_is_served_by_substance_and_name(
 def test_study_response_carries_identity_release_issue_and_review(
     client, creator_headers, tmp_path, valid_bundle
 ):
-    folder = write_study(tmp_path / "sources", release=PKDB_ID)
+    folder = write_study(tmp_path / "sources", release=PKDB_ID, issue=2158)
     review = json.loads((folder / "review.json").read_text())
     [item] = review["items"]
     review["items"].append(
@@ -596,3 +596,99 @@ def test_takeover_starts_again_when_its_study_changed_before_the_locks(
     assert response.status_code == 200, response.text
     assert response.json()["renamed_from"] == LEGACY
     assert first == [SID, SID]
+
+
+@pytest.fixture
+def moved(client, creator_headers, tmp_path):
+    """The study caffeine/Before with issue 4711, and its folder moved to caffeine/After."""
+    before = write_study(tmp_path / "before", "Before", issue=4711)
+    response = client.put(
+        "/api/v2/studies/caffeine/Before",
+        headers=creator_headers,
+        **multipart(before),
+    )
+    assert response.status_code == 201, response.text
+    return write_study(tmp_path / "after", "After", issue=4711)
+
+
+def start_upload(client, headers, folder):
+    responses = []
+    worker = threading.Thread(
+        target=lambda: responses.append(
+            client.put(
+                f"/api/v2/studies/{folder.parent.name}/{folder.name}",
+                headers=headers,
+                **multipart(folder),
+            )
+        )
+    )
+    worker.start()
+    return worker, responses
+
+
+def test_issue_takeover_waits_for_the_lock_of_the_former_sid(
+    client, creator_headers, moved, session_factory
+):
+    with lock_holder(session_factory) as other:
+        # An upload or access update of the moved study holds its sid.
+        advisory(other, "lock", "caffeine/Before")
+        worker, responses = start_upload(client, creator_headers, moved)
+        wait_for_waiter(other, "caffeine/Before")
+        assert not responses
+        advisory(other, "unlock", "caffeine/Before")
+    worker.join(timeout=30)
+    [response] = responses
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == "caffeine/Before"
+
+
+def test_uploads_that_set_one_issue_wait_for_each_other(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", issue=4711)
+    with lock_holder(session_factory) as other:
+        # Another upload that sets issue 4711 holds its lock.
+        advisory(other, "lock", issue_lock(4711))
+        worker, responses = start_upload(client, creator_headers, folder)
+        wait_for_waiter(other, issue_lock(4711))
+        assert not responses
+        advisory(other, "unlock", issue_lock(4711))
+    worker.join(timeout=30)
+    [response] = responses
+    assert response.status_code == 201, response.text
+
+
+def test_issue_takeover_starts_again_when_its_study_changed_before_the_locks(
+    client, creator_headers, moved, monkeypatch
+):
+    from pkdb_server.services import ingestion
+
+    calls = []
+
+    def unlocked(session, study):
+        # As if the study with the issue was moved after its sid was read.
+        calls.append(study.sid)
+        return set()
+
+    monkeypatch.setattr(ingestion, "former_sids", unlocked)
+    url = "/api/v2/studies/caffeine/After"
+    response = client.put(url, headers=creator_headers, **multipart(moved))
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "The study changed during the upload; upload again"
+    )
+    assert calls == ["caffeine/After"] * ingestion.LOCK_ATTEMPTS
+    monkeypatch.undo()
+    real = ingestion.former_sids
+    first = []
+
+    def once(session, study):
+        # Only the first attempt misses the sid of the study with the issue.
+        first.append(study.sid)
+        return set() if len(first) == 1 else real(session, study)
+
+    monkeypatch.setattr(ingestion, "former_sids", once)
+    response = client.put(url, headers=creator_headers, **multipart(moved))
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == "caffeine/Before"
+    assert first == ["caffeine/After"] * 2

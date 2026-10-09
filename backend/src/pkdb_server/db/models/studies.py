@@ -1,6 +1,13 @@
 from datetime import date as Date
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, String, UniqueConstraint
+from sqlalchemy import (
+    CheckConstraint,
+    ForeignKey,
+    Index,
+    String,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy import Identity as AutoIdentity
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -98,6 +105,13 @@ class Study(Identity, Timestamped, Base):
         ),
         CheckConstraint("(pkdb_id IS NULL) = (release_date IS NULL)", name="release"),
         CheckConstraint("issue IS NULL OR issue > 0", name="issue"),
+        # A GitHub issue belongs to one study.
+        Index(
+            "uq_studies_issue",
+            "issue",
+            unique=True,
+            postgresql_where=text("issue IS NOT NULL"),
+        ),
         CheckConstraint(
             "review_status IN ('draft', 'in_review', 'approved')", name="review_status"
         ),

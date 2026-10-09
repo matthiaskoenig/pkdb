@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import NoReturn
 
-from sqlalchemy import or_, select, text, tuple_
+from sqlalchemy import func, or_, select, text, tuple_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -57,18 +57,31 @@ def sid_lock(sid: str) -> int:
     return int.from_bytes(hashlib.sha256(sid.encode()).digest()[:8], "big", signed=True)
 
 
+def issue_lock(issue: int) -> str:
+    """The lock name of a GitHub issue number, which is no study identifier."""
+    return f"issue #{issue}"
+
+
 def lock_publication(
-    session: Session, sid: str, pkdb_id: str | None, former: Iterable[str] = ()
+    session: Session,
+    sid: str,
+    pkdb_id: str | None,
+    former: Iterable[str] = (),
+    issue: int | None = None,
 ) -> set[str]:
     """Take the advisory locks of a publication of `sid` released as `pkdb_id`.
 
     A release locks its PKDB identifier too, so a study format 1 upload under
     that sid and a rename of the released study serialize. A publication that
-    takes over study format 1 studies locks their sids (`former`) as well. The
+    takes over other studies locks their sids (`former`) as well. A publication
+    with an issue number locks the number, so publications that set the same
+    number serialize and the later one finds the study of the earlier one. The
     locks are taken in sorted order, which avoids deadlocks. Returns the
     locked names.
     """
     names = {name for name in (sid, pkdb_id, *former) if name}
+    if issue is not None:
+        names.add(issue_lock(issue))
     for key in sorted(sid_lock(name) for name in names):
         session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
     return names
@@ -77,6 +90,10 @@ def lock_publication(
 def is_located(sid: str) -> bool:
     """Whether `sid` is a study format 2 sid `<substance>/<name>`."""
     return "/" in sid
+
+
+# The condition of is_located on stored studies.
+LOCATED = func.strpos(Study.sid, "/") > 0
 
 
 def publication_studies(
@@ -99,11 +116,14 @@ def publication_studies(
 
 
 def former_sids(session: Session, study: CanonicalStudy) -> set[str]:
-    """The study format 1 sids of the stored studies that `study` may take over.
+    """The sids of the stored studies that `study` may take over.
 
     They are read before the publication locks them; stored_study checks the
-    locked row again. A release may take over the study of its PKDB identifier,
-    and a study format 2 study the only study of its publication and source.
+    locked row again. A release may take over the study format 1 study of its
+    PKDB identifier, and a study format 2 study the only study format 1 study
+    of its publication and source or the study format 2 study with its issue
+    number. A study format 2 study of the PKDB identifier is locked by the
+    identifier.
     """
     names = set()
     release = study.metadata.release
@@ -123,7 +143,13 @@ def former_sids(session: Session, study: CanonicalStudy) -> set[str]:
         same = publication_studies(session, study)
         if len(same) == 1:
             names.add(same[0].sid)
-    return {name for name in names if not is_located(name)}
+    former = {name for name in names if not is_located(name)}
+    issue = study.metadata.issue
+    if is_located(study.sid) and issue is not None:
+        former.update(
+            session.scalars(select(Study.sid).where(Study.issue == issue, LOCATED))
+        )
+    return former
 
 
 def stored_study(
@@ -140,11 +166,13 @@ def stored_study(
     its sid takes over the study stored under its PKDB identifier, as sid
     (study format 1), as `pkdb_id` (a renamed folder) or as `legacy_sid`; the
     caller renames it. Otherwise a study format 2 study not yet stored under its
-    sid takes over the study format 1 study of the same publication and source,
-    when the principal may edit it. A PKDB identifier names at most one study.
-    Refusals name other studies only when the principal may read them. With
-    `locked`, the names that the caller locked, StudyChanged when a taken over
-    study format 1 study is not among them.
+    sid takes over the study format 2 study with its issue number (a moved
+    folder), else the study format 1 study of the same publication and source,
+    when the principal may edit it. A PKDB identifier and an issue number name
+    at most one study each. Refusals name other studies only when the principal
+    may read them. With `locked`, the names that the caller locked,
+    StudyChanged when a study taken over by issue number or a taken over study
+    format 1 study is not among them.
     """
 
     def rows(*conditions):
@@ -161,9 +189,9 @@ def stored_study(
     def readable(row: Study) -> bool:
         return allowed("read", row)
 
-    def refuse(message: str, field: str) -> NoReturn:
+    def refuse(code: str, message: str, field: str) -> NoReturn:
         fail(
-            "duplicate_pkdb_id",
+            code,
             message,
             SourceLocation(file=STUDY_JSON, path=tuple(field.split("."))),
             field=field,
@@ -188,11 +216,26 @@ def stored_study(
                 else ""
             )
             refuse(
+                "duplicate_pkdb_id",
                 f"{pkdb_id} identifies more than one stored study{named}; "
                 "an administrator must remove one of them",
                 "release.pkdb_id",
             )
         root = released = next(iter(claimed), None)
+    issue = study.metadata.issue
+    issued = None
+    if root is None and issue is not None and is_located(study.sid):
+        # A moved folder takes over the study with its issue number.
+        match = next(iter(rows(Study.issue == issue, LOCATED)), None)
+        if match is not None:
+            if not allowed("write", match):
+                raise PublicationConflict(
+                    f"The study {match.sid} has issue #{issue}; uploading it as "
+                    f"{study.sid} needs edit rights on {match.sid}"
+                    if readable(match)
+                    else "A study already has this issue"
+                )
+            root = issued = match
     if is_located(study.sid) and root is released:
         same = publication_studies(session, study, lock=lock)
         if len(same) == 1 and same[0] is not root:
@@ -218,7 +261,7 @@ def stored_study(
         locked is not None
         and root is not None
         and root.sid not in locked
-        and not is_located(root.sid)
+        and (root is issued or not is_located(root.sid))
     ):
         raise StudyChanged
     others = [] if root is None else [Study.id != root.id]
@@ -235,6 +278,7 @@ def stored_study(
         )
         if other is not None:
             refuse(
+                "duplicate_pkdb_id",
                 (
                     f"{pkdb_id} already identifies the study {other.sid}"
                     if readable(other)
@@ -243,9 +287,20 @@ def stored_study(
                 + "; each release has its own PKDB identifier",
                 "release.pkdb_id",
             )
+    if issue is not None:
+        other = session.scalar(select(Study).where(Study.issue == issue, *others))
+        if other is not None:
+            refuse(
+                "duplicate_issue",
+                f"Issue #{issue} belongs to the study {other.sid}"
+                if readable(other)
+                else f"Issue #{issue} belongs to another study",
+                "issue",
+            )
     renamed = session.scalar(select(Study).where(Study.pkdb_id == study.sid, *others))
     if renamed is not None:
         refuse(
+            "duplicate_pkdb_id",
             f"{study.sid} is now the study {renamed.sid}; upload its study format 2 folder"
             if readable(renamed)
             else f"Another study already uses {study.sid} as its PKDB identifier",
@@ -475,7 +530,11 @@ class IngestionService:
                 release = study.metadata.release
                 pkdb_id = release.pkdb_id if release else None
                 locked = lock_publication(
-                    session, study.sid, pkdb_id, former_sids(session, study)
+                    session,
+                    study.sid,
+                    pkdb_id,
+                    former_sids(session, study),
+                    issue=study.metadata.issue,
                 )
                 self.check_compatibility(
                     expected_vocabulary_hash,

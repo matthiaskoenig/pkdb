@@ -17,7 +17,9 @@ def tsv(kind, *rows):
     )
 
 
-def write_study(root: Path, name="Example", *, pmid="123", release=None) -> Path:
+def write_study(
+    root: Path, name="Example", *, pmid="123", release=None, issue=None
+) -> Path:
     """A formatted study format 2 folder at <root>/caffeine/<name>."""
     folder = root / "caffeine" / name
     folder.mkdir(parents=True)
@@ -28,11 +30,12 @@ def write_study(root: Path, name="Example", *, pmid="123", release=None) -> Path
         "curators": [{"user": "curator", "rating": 3}],
         "licence": "closed",
         "access": "private",
-        "issue": 2158,
         "descriptions": ["Plasma levels in µg/l."],
     }
     if release:
         study["release"] = {"pkdb_id": release, "date": "2026-09-28"}
+    if issue is not None:
+        study["issue"] = issue
     files = {
         "study.json": dump_json(study),
         "reference.json": dump_json(
