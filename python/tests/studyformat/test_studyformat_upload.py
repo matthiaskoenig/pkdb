@@ -240,8 +240,9 @@ def no_network(request):
             "Duplicate study SID: caffeine/Example",
         ),
         (
+            # A study without provenance is a manual curation.
             [("a", "Example", "123"), ("a", "Other", "123")],
-            "Multiple studies claim reference 123",
+            "Multiple studies claim reference 123 with the source key pkdb.manual",
         ),
     ],
 )
@@ -261,6 +262,80 @@ def test_batch_checks_identities_before_uploading(
                 vocabulary=sf_vocabulary,
                 transport=transport,
             )
+
+
+def automatic_curation(folder):
+    """Give the study the provenance of `pkdb new --agent`, source key pkdb.ai."""
+    path = folder / "study.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["provenance"] = {
+        "kind": "automatic_curation",
+        "source_key": "pkdb.ai",
+        "method": "agent",
+        "version": "1",
+        "run_id": "run-1",
+        "assets": [{"url": f"{folder.name}.pdf", "sha256": "0" * 64}],
+    }
+    path.write_text(dump_json(data), encoding="utf-8", newline="")
+    return folder
+
+
+def test_batch_refuses_two_curations_of_one_paper_and_source(
+    study, sf_vocabulary, tmp_path
+):
+    folders = [
+        automatic_curation(copy_study(study, tmp_path / "copies", name))
+        for name in ("Example", "Exampleai")
+    ]
+    with httpx2.Client(transport=httpx2.MockTransport(no_network)) as transport:
+        with pytest.raises(
+            ValueError,
+            match="Multiple studies claim reference 123 with the source key pkdb.ai",
+        ):
+            upload_many(
+                folders,
+                endpoint=ENDPOINT,
+                api_key="secret",
+                vocabulary=sf_vocabulary,
+                transport=transport,
+            )
+
+
+def test_batch_uploads_a_manual_and_an_automatic_curation_of_one_paper(
+    study, sf_vocabulary, tmp_path
+):
+    from pkdb.studyformat.formatter import format_folder
+
+    # PK-DB stores one study per publication and source key.
+    manual = copy_study(study, tmp_path / "copies", "Example")
+    automatic = copy_study(study, tmp_path / "copies", "Exampleai")
+    for path in automatic.glob("Example[._]*"):
+        path.rename(automatic / path.name.replace("Example", "Exampleai", 1))
+    assert format_folder(automatic_curation(automatic)).ok
+    puts = []
+
+    def handler(request):
+        if request.url.path == "/api/v2/capabilities":
+            return httpx2.Response(200, json=capabilities(sf_vocabulary))
+        assert request.method == "PUT", request.url
+        puts.append(request.url.raw_path)
+        sid = request.url.path.removeprefix("/api/v2/studies/")
+        return httpx2.Response(201, json=confirmation(sid))
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        result = upload_many(
+            [manual, automatic],
+            endpoint=ENDPOINT,
+            api_key="secret",
+            vocabulary=sf_vocabulary,
+            options=BatchOptions(reference_cache=tmp_path / "refs"),
+            transport=transport,
+        )
+    assert [row.get("error") for row in result["results"]] == [None, None]
+    assert sorted(puts) == [
+        b"/api/v2/studies/caffeine/Example",
+        b"/api/v2/studies/caffeine/Exampleai",
+    ]
 
 
 def test_batch_reference_keys_compare_normalized_dois(study, sf_vocabulary, tmp_path):

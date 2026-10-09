@@ -189,6 +189,24 @@ def test_duplicate_sid_rejected_before_network(study_folder, vocabulary, tmp_pat
         )
 
 
+def test_format_1_studies_of_one_reference_rejected_before_network(
+    study_folder, vocabulary, tmp_path
+):
+    other = tmp_path / "other"
+    shutil.copytree(study_folder, other)
+    path = other / "study.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    path.write_text(json.dumps({**data, "sid": "TEST2"}), encoding="utf-8")
+    # A format 1 study has no source key to name.
+    with pytest.raises(ValueError, match="^Multiple studies claim reference 123$"):
+        upload_many(
+            [study_folder, other],
+            endpoint="https://example.test",
+            api_key="secret",
+            vocabulary=vocabulary,
+        )
+
+
 def test_checkpoint_failure_prevents_dispatch(
     study_folder, vocabulary, tmp_path, monkeypatch
 ):

@@ -26,6 +26,7 @@ from pkdb.references import (
     publication_identifier,
     sync_reference,
 )
+from pkdb.schemas.provenance import ManualCuration
 from pkdb.schemas.validation import (
     StudyValidationError,
     ValidationIssue,
@@ -35,6 +36,9 @@ from pkdb.studyformat.formatter import FileChange
 from pkdb.studyformat.pipeline import sync_and_format
 from pkdb.studyformat.validation import is_v2_folder, study_label, study_path
 from pkdb.tsv import sync_tsvs
+
+# The source key of a study without provenance, a manual curation.
+MANUAL_SOURCE_KEY = ManualCuration().source_key
 
 
 class StudyResult(TypedDict, total=False):
@@ -319,16 +323,18 @@ def _worker(
             events.put((slot, index, "result", redact(result, token)))
 
 
-def _identity(folder: Path) -> tuple[str | None, str | None]:
-    """The study sid and publication key of a folder, read leniently.
+def _identity(folder: Path) -> tuple[str | None, tuple[str, str | None] | None]:
+    """The study sid and the publication key of a folder, read leniently.
 
-    A study format 2 study is identified by its location `<substance>/<name>`
-    and its publication by the PubMed ID or the normalized DOI in study.json;
-    a format 1 study by the sid and reference in study.json. Unreadable values
-    are None; the upload reports them in full.
+    A study format 2 study is identified by its location `<substance>/<name>`,
+    and its publication key is the PubMed ID or the normalized DOI with the
+    source key of the provenance in study.json (default `pkdb.manual`), since
+    PK-DB stores one study per publication and source. A format 1 study is
+    identified by the sid and the reference in study.json, without a source
+    key. Unreadable values are None; the upload reports them in full.
     """
     try:
-        data = json.loads((folder / "study.json").read_text())
+        data = json.loads((folder / "study.json").read_text(encoding="utf-8"))
     except ValueError, OSError:
         data = None
     if not isinstance(data, dict):
@@ -343,12 +349,19 @@ def _identity(folder: Path) -> tuple[str | None, str | None]:
                 )
             except ReferenceError:
                 key = None
-        return study_label(folder), key
+        return study_label(folder), None if key is None else (key, _source_key(data))
     sid = data.get("sid")
     return (
         None if sid is None else str(sid),
-        None if reference is None else str(reference),
+        None if reference is None else (str(reference), None),
     )
+
+
+def _source_key(data: dict) -> str:
+    """The source key of the provenance of a format 2 study.json, read leniently."""
+    provenance = data.get("provenance")
+    source = provenance.get("source_key") if isinstance(provenance, dict) else None
+    return source if isinstance(source, str) and source else MANUAL_SOURCE_KEY
 
 
 def upload_many(
@@ -396,9 +409,15 @@ def upload_many(
             raise ValueError(f"Duplicate study SID: {sid}")
         sids.add(sid)
         if key is not None:
-            if key in references:
-                raise ValueError(f"Multiple studies claim reference {key}")
-            references.add(key)
+            # A format 1 folder has no source key; it claims its reference like a
+            # manual curation.
+            publication, source = key
+            if (publication, source or MANUAL_SOURCE_KEY) in references:
+                claimed = f" with the source key {source}" if source else ""
+                raise ValueError(
+                    f"Multiple studies claim reference {publication}{claimed}"
+                )
+            references.add((publication, source or MANUAL_SOURCE_KEY))
         rows.append(
             dict(
                 index=index,
