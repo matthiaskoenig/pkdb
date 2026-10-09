@@ -101,21 +101,20 @@ def _summary(result) -> str:
 
     adopted = sum(not item.created for item in result.adopted)
     duplicates = sum(len(item.duplicates) for item in result.adopted)
+    changed = len(result.plan.changes) if result.dry_run else result.applied
     counts = [
-        ("adopt", adopted, "issue"),
-        ("create", len(result.adopted) - adopted, "issue"),
-        ("close", duplicates, "duplicate"),
+        ("adopt", "adopted", adopted, "issue"),
+        ("create", "created", len(result.adopted) - adopted, "issue"),
+        ("close", "closed", duplicates, "duplicate"),
     ]
     actions = [
-        f"{verb if result.dry_run else verb.removesuffix('e') + 'ed'} "
-        f"{counted(count, noun)}"
-        for verb, count, noun in counts
+        f"{planned if result.dry_run else done} {counted(count, noun)}"
+        for planned, done, count, noun in counts
         if count
     ]
-    if result.dry_run:
-        actions.append(f"change {counted(len(result.plan.changes), 'issue')}")
-    else:
-        actions.append(f"changed {counted(result.applied, 'issue')}")
+    actions.append(
+        f"{'change' if result.dry_run else 'changed'} {counted(changed, 'issue')}"
+    )
     text = ", ".join(actions[:-1]) + (" and " if len(actions) > 1 else "") + actions[-1]
     summary = (
         f"Dry run: would {text}." if result.dry_run else f"{text[0].upper()}{text[1:]}."

@@ -192,32 +192,17 @@ def test_only_open_duplicates_are_closed(tmp_path):
 
 
 def test_sync_converges_on_legacy_closed_issues(tmp_path):
-    study(
-        tmp_path,
-        "caffeine/A",
-        issue=1,
-        status="approved",
-        reviewers=["ana"],
-        release=RELEASE,
-    )
-    study(
-        tmp_path,
-        "caffeine/B",
-        issue=2,
-        status="approved",
-        reviewers=["ana"],
-        release=RELEASE,
-    )
+    for name, number in (("A", 1), ("B", 2), ("E", 5)):
+        study(
+            tmp_path,
+            f"caffeine/{name}",
+            issue=number,
+            status="approved",
+            reviewers=["ana"],
+            release=RELEASE,
+        )
     study(tmp_path, "caffeine/C", issue=3)
     study(tmp_path, "caffeine/D", issue=4)
-    study(
-        tmp_path,
-        "caffeine/E",
-        issue=5,
-        status="approved",
-        reviewers=["ana"],
-        release=RELEASE,
-    )
     closed = {"state": "closed", "labels": ["caffeine"], "assignees": ["ana-gh"]}
     github = FakeGitHub(
         issues=[
