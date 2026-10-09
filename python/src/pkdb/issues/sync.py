@@ -5,6 +5,7 @@ no number on disk, and the rerun finds the renamed or created issue by its
 exact title.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from pkdb.issues.state import (
     LABEL_COLORS,
     SUBSTANCE_COLOR,
     WORKFLOW,
+    IssueChange,
     Problems,
     Roster,
     StudyState,
@@ -30,6 +32,8 @@ from pkdb.schemas.curators import Curator
 from pkdb.studyformat.metadata import MetadataError, patch_metadata
 from pkdb.studyformat.review_edit import ReviewError, set_status
 from pkdb.studyformat.revision import RevisionConflict
+
+INTERRUPTED = "Interrupted."
 
 
 class AdoptionResult(BaseModel):
@@ -46,22 +50,27 @@ class AdoptionResult(BaseModel):
 
 
 class SyncResult(BaseModel):
-    """What a sync adopted, planned and changed, with its warnings and errors."""
+    """What a sync adopted, planned and changed, with its warnings and errors.
+
+    `stopped` says why a run stopped early; the result then holds what was
+    done until then.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
     repository: str
     dry_run: bool
     adopted: list[AdoptionResult] = Field(default_factory=list)
-    plan: SyncPlan
+    plan: SyncPlan = Field(default_factory=SyncPlan)
     applied: int = 0
     warnings: list[str] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)
     format_1: int = 0
+    stopped: str | None = None
 
     @property
     def ok(self) -> bool:
-        return not self.errors
+        return not self.errors and self.stopped is None
 
 
 def sync(
@@ -72,29 +81,57 @@ def sync(
     adopt: bool = False,
     author: Author | None = None,
     dry_run: bool = False,
+    progress: Callable[[str], None] | None = None,
 ) -> SyncResult:
     """Align the issue of every format 2 study; with `adopt`, give studies an issue.
 
     Adoption is the only part that writes files, `study.json` and `review.json`
-    of the adopted studies. A dry run reads GitHub and writes nothing. A
-    GitHubError for the token, a permission or the rate limit stops the run;
-    any other failure is an error of its study, and the run goes on.
+    of the adopted studies. A dry run reads GitHub and writes nothing.
+    `progress` gets one line for each adoption and each changed issue as soon
+    as it is done.
+
+    A GitHub failure that every following request would hit (the token, a
+    permission, the rate limit, an unreachable GitHub), a failed read of the
+    issues, labels or assignees, and Ctrl-C stop the run: the result holds
+    what was done until then and names the reason in `stopped`. Any other
+    GitHub failure is an error of its study, and the run goes on.
     """
     if adopt and author is None:
         raise ValueError("Adoption writes study.json and needs a PK-DB user")
+    result = SyncResult(repository=github.repository, dry_run=dry_run)
+    try:
+        _sync(root, github, roster, result, author if adopt else None, progress)
+    except GitHubError as error:
+        result.stopped = str(error)
+    except KeyboardInterrupt:
+        result.stopped = INTERRUPTED
+    return result
+
+
+def _sync(
+    root: Path,
+    github: GitHub,
+    roster: list[Curator],
+    result: SyncResult,
+    author: Author | None,
+    progress: Callable[[str], None] | None,
+) -> None:
+    """Fill `result` step by step, so that a stopped run keeps what was done."""
     studies = read_studies(root)
+    result.errors += studies.errors
+    result.format_1 = studies.format_1
     run = _Run(
         github=github,
-        dry_run=dry_run,
+        result=result,
         issues={issue.number: issue for issue in github.issues()},
         roster=Roster.of(roster, github.assignable()),
         label_names=github.labels(),
-        errors=list(studies.errors),
+        progress=progress,
     )
-    states, adopted = studies.states, []
-    if adopt and author is not None:
-        states, adopted = _adopt(run, states, author)
-    changes = plan(
+    states = studies.states
+    if author is not None:
+        states = _adopt(run, states, author)
+    result.plan = plan(
         states,
         list(run.issues.values()),
         run.roster,
@@ -102,42 +139,43 @@ def sync(
         label_names=run.label_names,
         repository=github.repository,
     )
-    run.errors += changes.errors
-    applied = 0 if dry_run else _apply(run, changes)
-    return SyncResult(
-        repository=github.repository,
-        dry_run=dry_run,
-        adopted=adopted,
-        plan=changes,
-        applied=applied,
-        warnings=changes.warnings,
-        errors=run.errors,
-        format_1=studies.format_1,
-    )
+    result.warnings += result.plan.warnings
+    result.errors += result.plan.errors
+    if not result.dry_run:
+        _apply(run, result.plan)
 
 
 @dataclass
 class _Run:
-    """The GitHub repository as the sync knows it, and the errors so far."""
+    """The GitHub repository as the sync knows it, and the result so far."""
 
     github: GitHub
-    dry_run: bool
+    result: SyncResult
     issues: dict[int, Issue]
     roster: Roster
     label_names: list[str]
-    errors: list[str]
+    progress: Callable[[str], None] | None
+
+    @property
+    def dry_run(self) -> bool:
+        return self.result.dry_run
+
+    def error(self, message: str) -> None:
+        self.result.errors.append(message)
 
     def fail(self, where: str, error: GitHubError) -> None:
         """Record a failed GitHub request, or raise one that every request would hit."""
-        if error.rate_limited or error.status_code in (401, 403):
+        if error.rate_limited or error.unreachable or error.status_code in (401, 403):
             raise error
-        self.errors.append(f"{where}: {error}")
+        self.error(f"{where}: {error}")
+
+    def done(self, line: str) -> None:
+        if self.progress is not None:
+            self.progress(line)
 
 
-def _adopt(
-    run: _Run, states: list[StudyState], author: Author
-) -> tuple[list[StudyState], list[AdoptionResult]]:
-    """Give each study without issue one; the states to plan and the adoptions.
+def _adopt(run: _Run, states: list[StudyState], author: Author) -> list[StudyState]:
+    """Give each study without issue one; the states to plan.
 
     A study whose adoption fails, or that gets a new issue in a dry run, is
     left out of the plan.
@@ -147,7 +185,6 @@ def _adopt(
         for adoption in match(states, list(run.issues.values()))
     }
     planned: list[StudyState] = []
-    adopted: list[AdoptionResult] = []
     for state in states:
         if (adoption := adoptions.get(state.location)) is None:
             planned.append(state)
@@ -158,17 +195,19 @@ def _adopt(
             run.fail(state.location, error)
             continue
         except RevisionConflict as conflict:
-            run.errors.append(
+            run.error(
                 f"{state.location}: {conflict.file} changed on disk; run the sync again"
             )
             continue
         except (MetadataError, ReviewError) as error:
-            run.errors.append(f"{state.location}: {error}")
+            run.error(f"{state.location}: {error}")
             continue
-        adopted.append(result)
+        run.result.adopted.append(result)
+        if not run.dry_run:
+            run.done(adoption_line(result, dry_run=False))
         if adopted_state is not None:
             planned.append(adopted_state)
-    return planned, adopted
+    return planned
 
 
 def _adopt_one(
@@ -260,14 +299,13 @@ def _create_label(run: _Run, name: str) -> None:
     run.label_names.append(name)
 
 
-def _apply(run: _Run, changes: SyncPlan) -> int:
-    """Create the missing labels, then change the issues; the number changed."""
+def _apply(run: _Run, changes: SyncPlan) -> None:
+    """Create the missing labels, then change the issues."""
     for name in changes.labels:
         try:
             _create_label(run, name)
         except GitHubError as error:
             run.fail(f"Label {name}", error)
-    applied = 0
     for change in changes.changes:
         try:
             if change.reopen_first:
@@ -282,11 +320,10 @@ def _apply(run: _Run, changes: SyncPlan) -> int:
             )
         except GitHubError as error:
             run.fail(change.study, error)
-        else:
-            applied += _check_applied(
-                run, change.study, issue, change.labels, change.assignees
-            )
-    return applied
+            continue
+        if _check_applied(run, change.study, issue, change.labels, change.assignees):
+            run.result.applied += 1
+            run.done(change_line(change))
 
 
 def _check_applied(
@@ -303,7 +340,7 @@ def _check_applied(
     """
     if _folded(issue.labels, labels) and _folded(issue.assignees, assignees):
         return True
-    run.errors.append(
+    run.error(
         f"{where}: GitHub did not apply the labels or assignees of "
         f"#{issue.number}; the token may lack write access"
     )
@@ -315,3 +352,42 @@ def _folded(current: tuple[str, ...], sent: list[str] | None) -> bool:
     return sent is None or {name.casefold() for name in current} == {
         name.casefold() for name in sent
     }
+
+
+def adoption_line(item: AdoptionResult, *, dry_run: bool) -> str:
+    """One line about an adoption: what a dry run would do, or what was done."""
+    adopt, rename, close = (
+        ("adopt", "rename", "close") if dry_run else ("adopted", "renamed", "closed")
+    )
+    if item.created:
+        parts = ["new issue" if item.number is None else f"created #{item.number}"]
+    else:
+        parts = [f"{adopt} #{item.number}"]
+        if item.renamed:
+            parts.append(rename)
+        parts += [f"{close} #{number} as duplicate" for number in item.duplicates]
+        if item.in_review:
+            parts.append("set review status in_review")
+    return f"{item.study}: {', '.join(parts)}"
+
+
+def change_line(change: IssueChange) -> str:
+    """One line about the change of an issue."""
+    parts = []
+    if change.title is not None:
+        parts.append("title")
+    if change.add_labels or change.remove_labels:
+        labels = [f"+{name}" for name in change.add_labels]
+        labels += [f"-{name}" for name in change.remove_labels]
+        parts.append(f"labels {' '.join(labels)}")
+    if change.assignees is not None:
+        parts.append(
+            f"assignees {' '.join(change.assignees)}"
+            if change.assignees
+            else "no assignees"
+        )
+    if change.reopen_first:
+        parts.append("reopen and close as completed")
+    elif change.state is not None:
+        parts.append("close" if change.state == "closed" else "reopen")
+    return f"#{change.number} {change.study}: {', '.join(parts)}"

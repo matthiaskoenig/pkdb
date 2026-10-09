@@ -15,9 +15,10 @@ class FakeGitHub:
     """Issues, labels and assignable users of `owner/data`, served to the real client.
 
     `writes` records every request that is not a GET as (method, path, body);
-    `fail` maps (method, issue number or None) to the status of a refusal, and a
-    429 refusal carries Retry-After like a GitHub rate limit; `sleeps` records
-    the waits of the client, which never sleeps.
+    `fail` maps (method, issue number or None) to the status of a refusal, or
+    to a transport error to raise, and a 429 refusal carries Retry-After like a
+    GitHub rate limit; `sleeps` records the waits of the client, which never
+    sleeps.
 
     Like GitHub, a PATCH changes `state_reason` only together with `state`, and
     without `push_access` labels and assignees of a write are dropped silently.
@@ -38,7 +39,7 @@ class FakeGitHub:
         self.assignable = list(assignable)
         self.comments: list[tuple[int | None, str]] = []
         self.writes: list[tuple[str, str, dict[str, Any]]] = []
-        self.fail: dict[tuple[str, int | None], int] = {}
+        self.fail: dict[tuple[str, int | None], int | httpx2.TransportError] = {}
         self.sleeps: list[float] = []
         self.push_access = push_access
 
@@ -49,7 +50,9 @@ class FakeGitHub:
             self.writes.append((request.method, path, body))
         found = re.fullmatch(r"/issues/(\d+)(?:/comments)?", path)
         number = int(found[1]) if found else None
-        if (status := self.fail.get((request.method, number))) is not None:
+        if isinstance(status := self.fail.get((request.method, number)), Exception):
+            raise status
+        if status is not None:
             headers = {"retry-after": "60"} if status == 429 else {}
             return httpx2.Response(status, headers=headers, json={"message": "refused"})
         if request.method == "GET":
@@ -107,11 +110,12 @@ class FakeGitHub:
             "assignees": [{"login": login} for login in issue["assignees"]],
         }
 
-    def client(self):
+    def client(self, **options):
         return GitHub(
             "owner/data",
             "token",
             transport=httpx2.MockTransport(self.handler),
             sleep=self.sleeps.append,
             write_interval=0,
+            **options,
         )

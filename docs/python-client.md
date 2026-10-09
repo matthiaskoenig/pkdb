@@ -226,4 +226,6 @@ GitHub logins come from the PK-DB roster `GET /api/v2/curators`, which lists the
 
 `--root PATH` names a folder inside the repository with the `studies` folder; by default the command searches upward from the current folder. `--agent AGENT` (default `PKDB_AGENT`) names the AI agent that makes an adoption, next to `--user`.
 
-The exit code is 0 when the sync succeeded, 1 when GitHub, the PK-DB server or a study reported an error, 2 for missing settings or a wrong option, and 130 when you interrupt the command with Ctrl-C. `--format json` prints the full result.
+A dry run prints the planned adoptions and changes. A real run prints each adoption and each changed issue to the error stream as soon as it is done, and announces every wait of more than five seconds for a GitHub rate limit; at the end both print the warnings, the errors and a summary. A run stops when GitHub refuses the token or a permission, when the rate limit outlasts the waits, when GitHub cannot be reached, and when you press Ctrl-C; it then reports what it did until then, and a rerun finishes the work. `--format json` prints nothing until the end and then the full result, with `stopped` naming why a run stopped.
+
+The exit code is 0 when the sync succeeded, 1 when GitHub, the PK-DB server or a study reported an error or the run stopped, 2 for missing settings or a wrong option, and 130 when you interrupt the command with Ctrl-C.

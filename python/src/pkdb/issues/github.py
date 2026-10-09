@@ -22,19 +22,30 @@ MAX_WAITS = 5
 WRITE_INTERVAL = 1.0
 # GitHub documents one minute for a secondary rate limit without a Retry-After header.
 FALLBACK_WAIT = 60.0
+# Waits longer than this are announced to `on_wait`.
+ANNOUNCED_WAIT = 5.0
+RATE_LIMIT = "GitHub limits the requests"
 
 
 class GitHubError(RuntimeError):
+    """A failed GitHub request.
+
+    `rate_limited` marks a rate limit that outlasted the waits and
+    `unreachable` a request that never got an answer.
+    """
+
     def __init__(
         self,
         message: str,
         *,
         status_code: int | None = None,
         rate_limited: bool = False,
+        unreachable: bool = False,
     ):
         super().__init__(message)
         self.status_code = status_code
         self.rate_limited = rate_limited
+        self.unreachable = unreachable
 
 
 @dataclass(frozen=True)
@@ -97,7 +108,9 @@ class GitHub:
         clock: Callable[[], float] = time.time,
         write_interval: float = WRITE_INTERVAL,
         max_wait: float | None = None,
+        on_wait: Callable[[float, str], None] | None = None,
     ):
+        """`on_wait` is told the seconds and the reason of every wait over five seconds."""
         self.repository = repository_from(repository, environ={})
         if token and any(c.isspace() or not c.isprintable() for c in token):
             raise ValueError(
@@ -115,6 +128,7 @@ class GitHub:
         self._clock = clock
         self._write_interval = write_interval
         self._max_wait = max_wait
+        self._on_wait = on_wait
         self._last_write: float | None = None
 
     def __enter__(self) -> GitHub:
@@ -211,7 +225,7 @@ class GitHub:
         if self._last_write is not None:
             delay = self._last_write + self._write_interval - self._clock()
             if delay > 0:
-                self._sleep(delay)
+                self._pause(delay, "GitHub asks for a pause between writes")
         try:
             return self._send(method, path, json=body)
         finally:
@@ -224,7 +238,8 @@ class GitHub:
                 response = self._client.request(method, API + path, **kwargs)
             except httpx2.RequestError as error:
                 raise GitHubError(
-                    f"GitHub cannot be reached: {type(error).__name__}"
+                    f"GitHub cannot be reached: {type(error).__name__}",
+                    unreachable=True,
                 ) from None
             wait = self._wait(response)
             if wait is None:
@@ -238,7 +253,7 @@ class GitHub:
                     rate_limited=True,
                 )
             waits += 1
-            self._sleep(wait)
+            self._pause(wait, RATE_LIMIT)
         if 300 <= response.status_code < 400:
             location = response.headers.get("location", "unknown")
             raise GitHubError(
@@ -252,6 +267,11 @@ class GitHub:
                 status_code=response.status_code,
             )
         return response
+
+    def _pause(self, seconds: float, reason: str) -> None:
+        if self._on_wait is not None and seconds > ANNOUNCED_WAIT:
+            self._on_wait(seconds, reason)
+        self._sleep(seconds)
 
     def _wait(self, response: httpx2.Response) -> float | None:
         if response.status_code not in (403, 429):

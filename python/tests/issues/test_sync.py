@@ -1,10 +1,10 @@
+import httpx2
 import pytest
 from fake_github import FakeGitHub
 from issue_fixtures import study
 
 from pkdb.identity import Author
 from pkdb.issues import state as state_module
-from pkdb.issues.github import GitHubError
 from pkdb.issues.sync import AdoptionResult, sync
 from pkdb.schemas.curators import Curator
 from pkdb.studyformat.metadata import read_metadata
@@ -356,13 +356,92 @@ def test_an_interrupted_adoption_is_finished_by_the_rerun(tmp_path, monkeypatch)
         raise KeyboardInterrupt
 
     monkeypatch.setattr("pkdb.issues.sync.patch_metadata", stop)
-    with github.client() as client, pytest.raises(KeyboardInterrupt):
-        sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    with github.client() as client:
+        stopped = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert stopped.stopped == "Interrupted." and not stopped.ok
     assert github.issues[4]["title"] == "caffeine/A" and number_of(folder) is None
     monkeypatch.undo()
     with github.client() as client:
         result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
     assert result.ok and number_of(folder) == 4 and len(github.issues) == 1
+
+
+def test_an_interrupted_creation_is_adopted_without_a_second_issue(
+    tmp_path, monkeypatch
+):
+    folder = study(tmp_path, "caffeine/A")
+    github = FakeGitHub(assignable=["ana-gh"])
+
+    def stop(*args, **kwargs):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr("pkdb.issues.sync.patch_metadata", stop)
+    with github.client() as client:
+        stopped = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert stopped.stopped == "Interrupted." and number_of(folder) is None
+    monkeypatch.undo()
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.ok and result.adopted == [
+        AdoptionResult(study="caffeine/A", number=1)
+    ]
+    assert number_of(folder) == 1
+    assert [path for method, path, _ in github.writes if method == "POST"].count(
+        "/issues"
+    ) == 1
+
+
+def test_an_interruption_keeps_what_was_done(tmp_path):
+    first = study(tmp_path, "caffeine/A")
+    second = study(tmp_path, "caffeine/B")
+    github = FakeGitHub(
+        issues=[
+            {"number": 4, "title": "Curate caffeine/A"},
+            {"number": 5, "title": "caffeine/B"},
+        ],
+        assignable=["ana-gh"],
+    )
+    lines = []
+
+    def progress(line):
+        lines.append(line)
+        raise KeyboardInterrupt
+
+    with github.client() as client:
+        result = sync(
+            tmp_path, client, ROSTER, adopt=True, author=AUTHOR, progress=progress
+        )
+    assert result.stopped == "Interrupted."
+    assert result.adopted == [
+        AdoptionResult(study="caffeine/A", number=4, renamed=True)
+    ]
+    assert lines == ["caffeine/A: adopted #4, renamed"]
+    assert number_of(first) == 4 and number_of(second) is None
+
+
+def test_progress_names_each_adoption_and_change(tmp_path):
+    study(tmp_path, "caffeine/A", issue=1)
+    study(tmp_path, "caffeine/B")
+    github = FakeGitHub(
+        issues=[
+            {"number": 1, "title": "Curate caffeine/A"},
+            {"number": 2, "title": "Check caffeine/B", "labels": ["check"]},
+            {"number": 3, "title": "caffeine/B"},
+        ],
+        labels=["caffeine", "curate", "check"],
+        assignable=["ana-gh"],
+    )
+    lines = []
+    with github.client() as client:
+        result = sync(
+            tmp_path, client, ROSTER, adopt=True, author=AUTHOR, progress=lines.append
+        )
+    assert result.ok and result.applied == 2
+    assert lines == [
+        "caffeine/B: adopted #3, closed #2 as duplicate",
+        "#1 caffeine/A: title, labels +caffeine +curate, assignees ana-gh",
+        "#3 caffeine/B: labels +caffeine +curate, assignees ana-gh",
+    ]
 
 
 def test_a_changed_study_json_is_not_written_over(tmp_path, monkeypatch):
@@ -430,31 +509,42 @@ def test_a_failed_adoption_is_an_error_and_the_run_goes_on(tmp_path):
     assert github.issues[2]["title"] == "caffeine/B"
 
 
-def test_a_forbidden_write_stops_the_run(tmp_path):
-    study(tmp_path, "caffeine/A", issue=1)
-    study(tmp_path, "caffeine/B", issue=2)
+@pytest.mark.parametrize(
+    ("failure", "message"),
+    [
+        (403, "GitHub answered 403 for PATCH /repos/owner/data/issues/2: refused"),
+        (401, "GitHub answered 401 for PATCH /repos/owner/data/issues/2: refused"),
+        (429, "GitHub limits the requests; try again in 60 seconds"),
+        (httpx2.ConnectError("down"), "GitHub cannot be reached: ConnectError"),
+    ],
+)
+def test_a_failure_every_request_would_hit_stops_the_run(tmp_path, failure, message):
+    for number, name in enumerate("ABC", start=1):
+        study(tmp_path, f"caffeine/{name}", issue=number)
     github = FakeGitHub(
-        issues=[{"number": 1, "title": "x"}, {"number": 2, "title": "y"}],
+        issues=[{"number": n, "title": "x"} for n in (1, 2, 3)],
         assignable=["ana-gh"],
     )
-    github.fail[("PATCH", 1)] = 403
-    with github.client() as client, pytest.raises(GitHubError):
-        sync(tmp_path, client, ROSTER)
-    assert github.issues[2]["title"] == "y"
+    github.fail[("PATCH", 2)] = failure
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.stopped == message and not result.ok
+    assert result.applied == 1 and len(result.plan.changes) == 3
+    assert github.issues[1]["title"] == "caffeine/A"
+    assert github.issues[3]["title"] == "x"
+    assert [path for _, path, _ in github.writes].count("/issues/3") == 0
 
 
-def test_a_rate_limit_stops_the_run(tmp_path):
+def test_a_failed_read_stops_the_run_before_any_write(tmp_path):
     study(tmp_path, "caffeine/A", issue=1)
-    study(tmp_path, "caffeine/B", issue=2)
-    github = FakeGitHub(
-        issues=[{"number": 1, "title": "x"}, {"number": 2, "title": "y"}],
-        assignable=["ana-gh"],
+    github = FakeGitHub(issues=[{"number": 1, "title": "x"}])
+    github.fail[("GET", None)] = 401
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.stopped == (
+        "GitHub answered 401 for GET /repos/owner/data/issues: refused"
     )
-    github.fail[("PATCH", 1)] = 429
-    with github.client() as client, pytest.raises(GitHubError) as raised:
-        sync(tmp_path, client, ROSTER)
-    assert raised.value.rate_limited and github.sleeps
-    assert github.issues[2]["title"] == "y"
+    assert result.plan.changes == [] and github.writes == []
 
 
 def test_a_failed_issue_is_an_error_and_the_run_goes_on(tmp_path):

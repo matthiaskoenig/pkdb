@@ -1,16 +1,17 @@
 """The `issues` command: keep one GitHub issue per study format 2 study."""
 
 import json
+import math
 import os
 import sys
 from pathlib import Path
 
 
-def github_client(repository: str, token: str | None):
+def github_client(repository: str, token: str | None, **options):
     """The GitHub client of the sync; imported late to keep help fast."""
     from pkdb.issues.github import GitHub
 
-    return GitHub(repository, token)
+    return GitHub(repository, token, **options)
 
 
 def roster(endpoint: str, api_key: str):
@@ -63,60 +64,51 @@ def register(commands) -> None:
     )
 
 
-def _adoption_line(item) -> str:
-    if item.created:
-        return f"{item.study}: new issue"
-    parts = [f"adopt #{item.number}"]
-    if item.renamed:
-        parts.append("rename")
-    parts += [f"close #{number} as duplicate" for number in item.duplicates]
-    if item.in_review:
-        parts.append("set review status in_review")
-    return f"{item.study}: {', '.join(parts)}"
-
-
-def _change_line(change) -> str:
-    parts = []
-    if change.title is not None:
-        parts.append("title")
-    if change.add_labels or change.remove_labels:
-        labels = [f"+{name}" for name in change.add_labels]
-        labels += [f"-{name}" for name in change.remove_labels]
-        parts.append(f"labels {' '.join(labels)}")
-    if change.assignees is not None:
-        parts.append(
-            f"assignees {' '.join(change.assignees)}"
-            if change.assignees
-            else "no assignees"
-        )
-    if change.state is not None:
-        parts.append("close" if change.state == "closed" else "reopen")
-    return f"#{change.number} {change.study}: {', '.join(parts)}"
-
-
 def _print_human(result) -> None:
+    """The plan of a dry run, then the warnings, errors and the summary.
+
+    A real run has already printed each adoption and change as progress.
+    """
+    from pkdb.issues.sync import INTERRUPTED, adoption_line, change_line
     from pkdb.terminal import safe_text
 
-    for item in result.adopted:
-        print(safe_text(_adoption_line(item)))
-    for change in result.plan.changes:
-        print(safe_text(_change_line(change)))
+    if result.dry_run:
+        for item in result.adopted:
+            print(safe_text(adoption_line(item, dry_run=True)))
+        for change in result.plan.changes:
+            print(safe_text(change_line(change)))
     for warning in result.warnings:
         print(safe_text(f"Warning: {warning}"))
     for error in result.errors:
         print(safe_text(f"Error: {error}"), file=sys.stderr)
+    if result.stopped == INTERRUPTED:
+        print(INTERRUPTED, file=sys.stderr)
+    elif result.stopped is not None:
+        print(safe_text(f"Stopped: {result.stopped}"), file=sys.stderr)
     if result.dry_run:
         print(f"Dry run: {len(result.plan.changes)} changes.")
     else:
         print(f"Changed {result.applied} issues.")
 
 
+def _progress(line: str) -> None:
+    from pkdb.terminal import safe_text
+
+    print(safe_text(line), file=sys.stderr, flush=True)
+
+
+def _waiting(seconds: float, reason: str) -> None:
+    print(
+        f"Waiting {math.ceil(seconds)} seconds: {reason}.", file=sys.stderr, flush=True
+    )
+
+
 def run(args) -> int:
     """Run the `issues` command and return the exit code."""
     from pkdb.errors import ClientError
     from pkdb.identity import author_from
-    from pkdb.issues.github import GitHubError, repository_from, token_from
-    from pkdb.issues.sync import sync
+    from pkdb.issues.github import repository_from, token_from
+    from pkdb.issues.sync import INTERRUPTED, sync
     from pkdb.repository import repository_root
     from pkdb.terminal import safe_text
 
@@ -137,7 +129,9 @@ def run(args) -> int:
         curators = roster(args.endpoint, api_key)
         if author is not None and author.user not in {c.username for c in curators}:
             raise ValueError(f"User {author.user} is not in the PK-DB roster")
-        with github_client(repository, token) as github:
+        human = args.output == "human"
+        on_wait = _waiting if human else None
+        with github_client(repository, token, on_wait=on_wait) as github:
             result = sync(
                 root,
                 github,
@@ -145,6 +139,7 @@ def run(args) -> int:
                 adopt=args.adopt,
                 author=author,
                 dry_run=args.dry_run,
+                progress=_progress if human else None,
             )
     except KeyboardInterrupt:
         print("Interrupted.", file=sys.stderr)
@@ -152,7 +147,7 @@ def run(args) -> int:
     except ValueError as error:
         print(safe_text(str(error)), file=sys.stderr)
         return 2
-    except (ClientError, GitHubError) as error:
+    except ClientError as error:
         print(safe_text(str(error)), file=sys.stderr)
         return 1
     except OSError as error:
@@ -162,4 +157,6 @@ def run(args) -> int:
         print(json.dumps(result.model_dump(mode="json"), ensure_ascii=False, indent=2))
     else:
         _print_human(result)
+    if result.stopped == INTERRUPTED:
+        return 130
     return 0 if result.ok else 1

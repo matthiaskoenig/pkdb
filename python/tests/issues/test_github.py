@@ -307,3 +307,35 @@ def test_token_and_repository_are_validated():
         with pytest.raises(ValueError, match="owner/name"):
             repository_from(value, environ={})
     assert repository_from("a.b/c.d-e_f", environ={}) == "a.b/c.d-e_f"
+
+
+def test_waits_over_five_seconds_are_announced():
+    answers = [
+        httpx2.Response(429, headers={"retry-after": "7"}, json={"message": "m"}),
+        httpx2.Response(429, headers={"retry-after": "5"}, json={"message": "m"}),
+        httpx2.Response(200, json=[]),
+    ]
+    announced = []
+    clock = Clock()
+    with github(
+        lambda request: answers.pop(0),
+        clock,
+        on_wait=lambda seconds, reason: announced.append((seconds, reason)),
+    ) as client:
+        client.labels()
+    assert clock.slept == [7.0, 5.0]
+    assert announced == [(7.0, "GitHub limits the requests")]
+
+
+def test_an_unreachable_github_is_marked():
+    def handler(request):
+        raise httpx2.ConnectError("down", request=request)
+
+    with github(handler) as client:
+        with pytest.raises(GitHubError, match="cannot be reached") as error:
+            client.labels()
+    assert error.value.unreachable and error.value.status_code is None
+    with github(lambda request: httpx2.Response(200, content=b"<html>")) as client:
+        with pytest.raises(GitHubError) as error:
+            client.labels()
+    assert not error.value.unreachable
