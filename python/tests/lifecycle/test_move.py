@@ -285,6 +285,90 @@ def test_a_reference_name_other_than_the_study_name_stays(
     assert read_metadata(folder).metadata.provenance.kind == "manual_curation"
 
 
+REGISTRY = {
+    "PKDB00010": ["other/Study", "2020-01-01"],
+    "PKDB00009": ["caffeine/Example", "2026-09-28"],
+}
+
+
+def released(root, text):
+    """Release the study as PKDB00009 and write the registry file `text`."""
+    folder = study_folder(root)
+    release = {"release": {"pkdb_id": "PKDB00009", "date": "2026-09-28"}}
+    patch_metadata(folder, release, read_metadata(folder).revision)
+    path = root / "studies" / "study_identifiers.json"
+    path.write_text(text, encoding="utf-8", newline="")
+    return path
+
+
+@pytest.mark.parametrize("end", ["", "\n"])
+def test_a_move_updates_the_registry_file_entry(moved_checkout, sf_vocabulary, end):
+    from pkdb.lifecycle.registry import duplicates, registry_problems, scan
+
+    path = released(moved_checkout, json.dumps(REGISTRY, indent=2) + end)
+    moved = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert moved.registry and moved.pkdb_id == "PKDB00009"
+    entry = {"PKDB00009": [NEW, "2026-09-28"]}
+    # The file keeps its order and layout.
+    assert (
+        path.read_text(encoding="utf-8") == json.dumps(REGISTRY | entry, indent=2) + end
+    )
+    found = scan(moved_checkout)
+    assert duplicates(found) == registry_problems(found, moved_checkout) == []
+
+
+@pytest.mark.parametrize(
+    "registry",
+    [
+        {"PKDB00010": ["other/Study", "2020-01-01"]},
+        {"PKDB00009": ["caffeine/Another", "2026-09-28"]},
+    ],
+)
+def test_a_registry_file_without_the_old_location_stays(
+    moved_checkout, sf_vocabulary, registry
+):
+    path = released(moved_checkout, json.dumps(registry, indent=2))
+    before = path.read_bytes()
+    assert not move_study(moved_checkout, OLD, NEW, sf_vocabulary).registry
+    assert path.read_bytes() == before
+
+
+def test_a_malformed_registry_file_refuses_the_move_of_a_released_study(
+    moved_checkout, sf_vocabulary
+):
+    path = released(moved_checkout, "[]")
+    before = snapshot(study_folder(moved_checkout))
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert str(error.value) == (
+        "studies/study_identifiers.json: must be a JSON object; fix it before "
+        "moving a released study"
+    )
+    assert snapshot(study_folder(moved_checkout)) == before
+    assert path.read_text(encoding="utf-8") == "[]"
+
+
+def test_a_failed_registry_write_undoes_the_move(
+    moved_checkout, sf_vocabulary, monkeypatch
+):
+    from pkdb.lifecycle import move
+
+    path = released(moved_checkout, json.dumps(REGISTRY, indent=2))
+    folder = study_folder(moved_checkout)
+    before, registry = snapshot(folder), path.read_bytes()
+    write = move.write_checked
+
+    def flaky(target, text, expected):
+        if target.name == "study_identifiers.json":
+            raise PermissionError(13, "Permission denied", str(target))
+        return write(target, text, expected)
+
+    monkeypatch.setattr(move, "write_checked", flaky)
+    with pytest.raises(MoveRefused, match="Nothing was changed"):
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert snapshot(folder) == before and path.read_bytes() == registry
+
+
 @pytest.mark.parametrize("failing", ["study.json", "reference.json"])
 def test_a_failed_json_write_undoes_the_move(
     moved_checkout, sf_vocabulary, monkeypatch, failing
@@ -719,6 +803,7 @@ def test_move_command_json(with_issue, github, capsys):
     arguments = ["move", OLD, NEW, "--root", str(with_issue), "--format", "json"]
     assert main(arguments) == 0
     output = json.loads(capsys.readouterr().out)
+    assert output["registry"] is False
     assert output["from"] == OLD and output["location"] == NEW
     assert output["path"] == str(study_folder(with_issue, NEW))
     assert {"from": "Example.pdf", "to": "Renamed.pdf"} in output["renamed"]
@@ -726,6 +811,16 @@ def test_move_command_json(with_issue, github, capsys):
     assert output["assets"] == 0 and output["reference"] is True
     assert output["issue"] == 7 and output["issue_renamed"] is True
     assert output["warnings"] == []
+
+
+def test_move_command_names_the_registry_update(
+    with_issue, github, monkeypatch, capsys
+):
+    released(with_issue, json.dumps(REGISTRY, indent=2))
+    monkeypatch.chdir(with_issue)
+    assert main(["move", OLD, NEW, "--format", "human"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert "Updated PKDB00009 in studies/study_identifiers.json" in lines
 
 
 def test_move_command_without_a_token_warns(with_issue, monkeypatch, capsys):

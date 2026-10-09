@@ -1,5 +1,6 @@
 """Rename or move a study format 2 folder: `pkdb move`."""
 
+import json
 import warnings
 from collections import defaultdict
 from collections.abc import Callable
@@ -10,6 +11,7 @@ from pkdb.cache import atomic_bytes
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.lifecycle.names import case_twin, parse_location
 from pkdb.lifecycle.new import error_messages
+from pkdb.lifecycle.registry import REGISTRY_FILE, registry_locations
 from pkdb.repository import STUDIES, location
 from pkdb.schemas.review import Review
 from pkdb.studyformat.formatter import format_folder
@@ -57,8 +59,9 @@ class Moved:
     counts the review targets that now name a renamed file, `issue` and
     `pkdb_id` are the issue number and PKDB identifier of study.json, and
     `workbook` names the removed workbook. `assets` counts the provenance
-    assets of study.json that now name a renamed file, and `reference` tells
-    whether reference.json got the new name.
+    assets of study.json that now name a renamed file, `reference` tells
+    whether reference.json got the new name, and `registry` whether
+    studies/study_identifiers.json got the new location.
     """
 
     folder: Path
@@ -69,6 +72,7 @@ class Moved:
     assets: int = 0
     reference: bool = False
     pkdb_id: str | None = None
+    registry: bool = False
 
 
 class MoveRefused(ValueError):
@@ -111,7 +115,11 @@ class _Workbook:
 
 @dataclass(frozen=True)
 class _Plan:
-    """The checked move: folders, file renames and the JSON files that change."""
+    """The checked move: folders, file renames and the JSON files that change.
+
+    `writes` change files of the study, `registry` the registry file of the
+    released identifiers beside the substance folders.
+    """
 
     old: Path
     new: Path
@@ -122,6 +130,7 @@ class _Plan:
     issue: int | None
     pkdb_id: str | None
     workbook: _Workbook | None
+    registry: _Write | None = None
 
 
 # What undoes one done step, and how a failure to undo it is named.
@@ -170,6 +179,7 @@ def move_study(root: Path, old: str, new: str, vocabulary: Vocabulary) -> Moved:
         plan.assets,
         any(write.file == REFERENCE_JSON for write in plan.writes),
         plan.pkdb_id,
+        plan.registry is not None,
     )
     for path in removed:
         try:
@@ -258,6 +268,11 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
     if (reference := _renamed_reference(old_folder, name)) is not None:
         writes.append(reference)
     release = metadata.metadata.release
+    pkdb_id = None if release is None else release.pkdb_id
+    registry = None
+    if pkdb_id is not None:
+        moved_to = f"{substance}/{name}"
+        registry = _registry_write(studies, pkdb_id, location(old_folder), moved_to)
     return _Plan(
         old_folder,
         target,
@@ -266,8 +281,9 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
         targets,
         assets,
         metadata.metadata.issue,
-        None if release is None else release.pkdb_id,
+        pkdb_id,
         workbook,
+        registry,
     )
 
 
@@ -516,6 +532,29 @@ def _renamed_reference(folder: Path, new: str) -> _Write | None:
     return _Write(REFERENCE_JSON, text, original, revision)
 
 
+def _registry_write(studies: Path, pkdb_id: str, old: str, new: str) -> _Write | None:
+    """The registry file with the new location of a released study, or None.
+
+    While studies/study_identifiers.json exists, its entry of the PKDB
+    identifier that names the old location gets the new one, so that
+    pkdb registry --check stays clean. The file keeps its order and layout.
+    """
+    original, revision = read_revision(studies / REGISTRY_FILE)
+    if original is None:
+        return None
+    try:
+        if registry_locations(original).get(pkdb_id) != old:
+            return None
+    except ValueError as error:
+        raise MoveRefused(f"{error}; fix it before moving a released study") from None
+    data = json.loads(original.decode("utf-8"))
+    data[pkdb_id] = [new, *data[pkdb_id][1:]]
+    text = json.dumps(data, ensure_ascii=False, indent=2)
+    if original.endswith(b"\n"):
+        text += "\n"
+    return _Write(REGISTRY_FILE, text, original, revision)
+
+
 def _apply(plan: _Plan) -> None:
     """Rename the folder and its files and write the JSON files, or undo every step."""
     substances = plan.new.parent
@@ -532,6 +571,8 @@ def _apply(plan: _Plan) -> None:
             _rename(plan.new / old, plan.new / new, done)
         for write in plan.writes:
             _write(plan.new / write.file, write, done)
+        if plan.registry is not None:
+            _write(substances.parent / plan.registry.file, plan.registry, done)
     except BaseException as error:
         failures = _undo(done)
         if created:

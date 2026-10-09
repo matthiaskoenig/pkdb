@@ -102,8 +102,9 @@ def register(commands) -> None:
             "after it, NAME.* and NAME_*: the PDF, the images, the raw tables, the "
             "digitizations and other attachments such as NAME_Supp.pdf. "
             "Review targets and provenance assets follow the files, the tables get "
-            "the new name, also reference.json when it has the old name, and the "
-            "GitHub issue gets the new title. A workbook that "
+            "the new name, also reference.json when it has the old name, the entry "
+            "of a released study in studies/study_identifiers.json gets the new "
+            "location, and the GitHub issue gets the new title. A workbook that "
             "holds edits that are not in the tables, or scratch sheets, refuses the "
             "move; otherwise it is removed, and pkdb tables open creates it again."
         ),
@@ -351,6 +352,7 @@ def _move_study(args, github) -> int:
     import sys
 
     from pkdb.lifecycle.move import MoveIncomplete, MoveRefused, move_study
+    from pkdb.lifecycle.registry import REGISTRY_PATH
     from pkdb.repository import STUDIES, location, repository_root
     from pkdb.study_cli import emit, fail, is_human
     from pkdb.studyformat_cli import say
@@ -390,6 +392,8 @@ def _move_study(args, github) -> int:
         lines.append(f"Updated {moved.assets} provenance asset{plural} of study.json")
     if moved.reference:
         lines.append("Updated the name in reference.json")
+    if moved.registry:
+        lines.append(f"Updated {moved.pkdb_id} in {REGISTRY_PATH}")
     warnings, renamed, interrupted = _rename_issue(github, moved.issue, place)
     if moved.issue is None and moved.pkdb_id is None:
         # The server follows a move by the issue number or the PKDB identifier.
@@ -409,6 +413,7 @@ def _move_study(args, github) -> int:
         "targets": moved.targets,
         "assets": moved.assets,
         "reference": moved.reference,
+        "registry": moved.registry,
         "workbook": moved.workbook,
         "issue": moved.issue,
         "issue_renamed": renamed,

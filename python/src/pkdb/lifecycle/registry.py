@@ -49,8 +49,20 @@ def read_registry_file(root: Path) -> dict[str, str] | None:
     if not path.is_file():
         return None
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError) as error:
+        content = path.read_bytes()
+    except OSError as error:
+        raise ValueError(f"{REGISTRY_PATH}: cannot be read as JSON: {error}") from None
+    return registry_locations(content)
+
+
+def registry_locations(content: bytes) -> dict[str, str]:
+    """The identifier to location mapping of the content of the registry file.
+
+    Raises a ValueError that names the file and the problem.
+    """
+    try:
+        data = json.loads(content.decode("utf-8"))
+    except ValueError as error:
         raise ValueError(f"{REGISTRY_PATH}: cannot be read as JSON: {error}") from None
     if not isinstance(data, dict):
         raise ValueError(f"{REGISTRY_PATH}: must be a JSON object")
