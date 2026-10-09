@@ -204,6 +204,75 @@ def test_moved_counts_the_assets_and_the_reference_name(moved_checkout, sf_vocab
     assert moved.pkdb_id is None
 
 
+# Attachments named after the study that are no PDF, image, raw table or digitization.
+ATTACHMENTS = [
+    "Example_Supp.pdf",
+    "Example_data_p145.png",
+    "Example_Fig1.2.png",
+    "Example.docx",
+]
+
+
+def test_other_attachments_named_after_the_study_follow_the_move(
+    moved_checkout, sf_vocabulary
+):
+    folder = study_folder(moved_checkout)
+    for name in [*ATTACHMENTS, "Examples.pdf", "Example"]:
+        (folder / name).write_bytes(name.encode())
+    add_item(
+        folder,
+        Author("curator"),
+        kind="question",
+        text="Is the supplement complete?",
+        target=ReviewTarget(file="Example_Supp.pdf"),
+    )
+    provenance = {
+        "kind": "automatic_curation",
+        "source_key": "pkdb.ai",
+        "method": "claude",
+        "version": "5.5",
+        "run_id": "run-1",
+        "assets": [{"url": "Example_Supp.pdf", "sha256": "a" * 64}],
+    }
+    patch_metadata(folder, {"provenance": provenance}, read_metadata(folder).revision)
+    moved = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    for name in ATTACHMENTS:
+        renamed = "Renamed" + name.removeprefix("Example")
+        assert (name, renamed) in moved.renamed
+        assert (moved.folder / renamed).read_bytes() == name.encode()
+    # Only <name>.<extension> and <name>_<anything> are named after the study.
+    assert (moved.folder / "Examples.pdf").exists() and (
+        moved.folder / "Example"
+    ).exists()
+    targets = [
+        item.target.file
+        for item in read_review(moved.folder).review.items
+        if item.target
+    ]
+    assert "Renamed_Supp.pdf" in targets and "Example_Supp.pdf" not in targets
+    metadata = read_metadata(moved.folder).metadata
+    assert isinstance(metadata.provenance, AutomaticCuration)
+    assert [asset.url for asset in metadata.provenance.assets] == ["Renamed_Supp.pdf"]
+    assert (moved.targets, moved.assets) == (3, 1)
+
+
+def test_an_attachment_whose_new_name_is_taken_is_refused(
+    moved_checkout, sf_vocabulary
+):
+    folder = study_folder(moved_checkout)
+    (folder / "Example_Supp.pdf").write_bytes(b"supplement")
+    (folder / "renamed_supp.pdf").write_bytes(b"other")
+    before = snapshot(folder)
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert str(error.value) == (
+        "Example_Supp.pdf would become Renamed_Supp.pdf, which collides with "
+        "renamed_supp.pdf of studies/caffeine/Example; rename or remove "
+        "renamed_supp.pdf first"
+    )
+    assert snapshot(folder) == before
+
+
 def test_a_reference_name_other_than_the_study_name_stays(
     moved_checkout, sf_vocabulary
 ):

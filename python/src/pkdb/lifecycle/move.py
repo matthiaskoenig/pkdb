@@ -12,7 +12,6 @@ from pkdb.lifecycle.names import case_twin, parse_location
 from pkdb.lifecycle.new import error_messages
 from pkdb.repository import STUDIES, location
 from pkdb.schemas.review import Review
-from pkdb.studyformat.digitize import digitization_file, parse_digitization_file
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json, load_json
 from pkdb.studyformat.metadata import read_metadata
@@ -21,7 +20,7 @@ from pkdb.studyformat.models import (
     canonical_review_json,
     canonical_study_json,
 )
-from pkdb.studyformat.raw import parse_raw_file, raw_file
+from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.revision import (
     RevisionConflict,
@@ -33,9 +32,7 @@ from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
-    SOURCE_PATTERN,
     STUDY_JSON,
-    image_file,
 )
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
@@ -234,7 +231,7 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
 
     renames = _renames(old_folder, name)
     _refuse_collisions(old_folder, renames, name)
-    _refuse_long_sheets(renames)
+    _refuse_long_sheets(renames, name)
     # A study that pkdb format cannot read would stop the move half way.
     formatted = format_folder(old_folder, check=True)
     if not formatted.ok:
@@ -332,27 +329,25 @@ def _shown(folder: Path) -> str:
 def _renamed(file: str, old: str, new: str) -> str | None:
     """The name of a file of the study `old` in the study `new`, or None for a file not named after it.
 
-    These are the PDF, the images, the raw tables and the digitizations.
+    These are the files `<old>.<extension>` and `<old>_<anything>`: the PDF,
+    the images, the raw tables, the digitizations and other attachments such
+    as `<old>_Supp.pdf`. Hidden files, such as the sync state of the
+    workbook, are not: a study name never starts with a dot.
     """
-    if file == f"{old}.pdf":
-        return f"{new}.pdf"
-    if (source := parse_raw_file(file, old)) is not None:
-        return raw_file(new, source)
-    if (source := parse_digitization_file(file, old)) is not None:
-        return digitization_file(new, source)
-    prefix = f"{old}_"
-    if file.startswith(prefix) and file.endswith(".png"):
-        source = file[len(prefix) : -len(".png")]
-        if SOURCE_PATTERN.fullmatch(source):
-            return image_file(new, source)
+    if file.startswith((f"{old}.", f"{old}_")):
+        return new + file[len(old) :]
     return None
 
 
 def _renames(folder: Path, new: str) -> list[tuple[str, str]]:
-    """The old and new names of the files named after the study, in natural order."""
+    """The old and new names of the files named after the study, in natural order.
+
+    The workbook is not renamed: the move removes it.
+    """
     renames = []
+    workbook = workbook_path(folder).name
     for path in sorted(folder.iterdir(), key=lambda item: natural_key(item.name)):
-        if path.is_dir(follow_symlinks=False):
+        if path.is_dir(follow_symlinks=False) or path.name == workbook:
             continue
         renamed = _renamed(path.name, folder.name, new)
         if renamed is not None and renamed != path.name:
@@ -389,10 +384,10 @@ def _refuse_collisions(folder: Path, renames: list[tuple[str, str]], new: str) -
             )
 
 
-def _refuse_long_sheets(renames: list[tuple[str, str]]) -> None:
+def _refuse_long_sheets(renames: list[tuple[str, str]], name: str) -> None:
     """Refuse a raw table whose workbook sheet name the move makes too long for Excel."""
     for old, new in renames:
-        if not new.endswith(".tsv"):
+        if parse_raw_file(new, name) is None:
             continue
         sheet = new.removesuffix(".tsv")
         if len(sheet) > SHEET_NAME_LIMIT >= len(old.removesuffix(".tsv")):

@@ -99,7 +99,8 @@ def register(commands) -> None:
         help="Rename or move a study",
         description=(
             "Move the study studies/OLD to studies/NEW and rename the files named "
-            "after it: the PDF, the images, the raw tables and the digitizations. "
+            "after it, NAME.* and NAME_*: the PDF, the images, the raw tables, the "
+            "digitizations and other attachments such as NAME_Supp.pdf. "
             "Review targets and provenance assets follow the files, the tables get "
             "the new name, also reference.json when it has the old name, and the "
             "GitHub issue gets the new title. A workbook that "
