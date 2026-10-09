@@ -68,11 +68,12 @@ def new(checkout, resolver, location="caffeine/Smith2020", **options):
     return create_study(checkout, location, resolver=resolver, **arguments)
 
 
-def papers(checkout, *names, content=b"x"):
+def papers(checkout, *names, content=None):
+    """The paper folder of caffeine/Smith2020 with files whose content is their name."""
     folder = checkout / "papers" / "caffeine" / "Smith2020"
     folder.mkdir(parents=True)
     for name in names:
-        (folder / name).write_bytes(content)
+        (folder / name).write_bytes(name.encode() if content is None else content)
     return folder
 
 
@@ -159,6 +160,52 @@ def test_papers_move_into_the_study(checkout, resolver):
     assert (result.folder / "Smith2020_Tab1.png").exists()
     assert not (paper / "Smith2020.pdf").exists()
     assert sorted(path.name for path in paper.iterdir()) == result.left
+    for name in result.moved:
+        assert (result.folder / name).read_bytes() == name.encode()
+    assert (result.misnamed, result.warnings) == ({}, [])
+
+
+def test_paper_files_that_differ_only_in_case_stay(checkout, resolver):
+    paper = papers(
+        checkout,
+        "Smith2020.PDF",
+        "smith2020_tab1.png",
+        "Smith2020_Fig1.PNG",
+        "Smith2020_text.png",
+        "Smith2020_notes.PNG",
+    )
+    result = new(checkout, resolver)
+    assert result.moved == []
+    assert sorted(result.left) == sorted(path.name for path in paper.iterdir())
+    assert result.misnamed == {
+        "Smith2020.PDF": "Smith2020.pdf",
+        "smith2020_tab1.png": "Smith2020_Tab1.png",
+        "Smith2020_Fig1.PNG": "Smith2020_Fig1.png",
+        "Smith2020_text.png": "Smith2020_Text.png",
+    }
+
+
+def test_a_paper_file_that_cannot_be_removed_is_a_warning(
+    checkout, resolver, monkeypatch
+):
+    paper = papers(checkout, "Smith2020.pdf", "Smith2020_Tab1.png")
+    unlink = Path.unlink
+
+    def refuse(path, missing_ok=False):
+        if path.parent == paper and path.name == "Smith2020.pdf":
+            raise PermissionError(13, "Permission denied")
+        unlink(path, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", refuse)
+    result = new(checkout, resolver)
+    assert is_v2_folder(result.folder)
+    assert result.moved == ["Smith2020.pdf", "Smith2020_Tab1.png"]
+    assert result.warnings == [
+        "Smith2020.pdf is in the study but stays in papers/caffeine/Smith2020: "
+        "Permission denied. Remove it by hand."
+    ]
+    assert sorted(path.name for path in paper.iterdir()) == ["Smith2020.pdf"]
+    assert not list((checkout / "studies").rglob(".*.new"))
 
 
 def test_an_emptied_paper_folder_is_removed(checkout, resolver):
@@ -267,6 +314,10 @@ def test_an_agent_without_a_pdf_may_name_an_asset(checkout, resolver, tmp_path):
         ({"pmid": "123", "doi": None, "licence": "free"}, "licence"),
         ({"pmid": "123", "doi": None, "access": "everyone"}, "access"),
         ({"pmid": "999", "doi": None}, "No cached pubmed metadata for 999"),
+        (
+            {"pmid": None, "doi": "10.1234/missing"},
+            "No cached doi metadata for 10.1234/missing",
+        ),
     ],
 )
 def test_refusals_write_nothing(checkout, resolver, options, message):
@@ -307,6 +358,36 @@ def test_an_asset_must_be_a_file(checkout, resolver, tmp_path):
             run_id="run-1",
             assets=[tmp_path / "missing.pdf"],
         )
+    assert_nothing_written(checkout)
+
+
+def test_a_public_study_is_refused(checkout, resolver):
+    papers(checkout, "Smith2020.pdf")
+    before = files(checkout / "papers")
+    with pytest.raises(NewStudyRefused) as refused:
+        new(checkout, resolver, access="public")
+    assert str(refused.value) == (
+        "A new study is private until its release; create it with --access private "
+        "and set access to public when you release it."
+    )
+    assert files(checkout / "papers") == before
+    assert_nothing_written(checkout)
+
+
+def test_an_agent_is_told_about_a_pdf_that_differs_in_case(checkout, resolver):
+    papers(checkout, "Smith2020.PDF")
+    with pytest.raises(NewStudyRefused) as refused:
+        new(
+            checkout,
+            resolver,
+            author=Author("ana", agent="claude"),
+            agent_version="5.5",
+            run_id="run-1",
+        )
+    assert str(refused.value) == (
+        "An automatic curation names what it read: rename "
+        "papers/caffeine/Smith2020/Smith2020.PDF to Smith2020.pdf or pass --asset FILE"
+    )
     assert_nothing_written(checkout)
 
 
@@ -403,11 +484,13 @@ def test_a_leftover_of_an_interrupted_run_is_refused(checkout, resolver):
     leftover = checkout / "studies" / "caffeine" / ".Smith2020.new" / "Smith2020"
     leftover.mkdir(parents=True)
     (leftover / "study.json").write_text("{}", encoding="utf-8")
-    with pytest.raises(
-        NewStudyRefused,
-        match=r"studies/caffeine/\.Smith2020\.new is left from an interrupted pkdb new",
-    ):
+    with pytest.raises(NewStudyRefused) as refused:
         new(checkout, resolver)
+    assert str(refused.value) == (
+        "studies/caffeine/.Smith2020.new exists: another pkdb new of "
+        "caffeine/Smith2020 may be running, or one was interrupted. Remove the "
+        "folder only when no pkdb new is running."
+    )
     assert (leftover / "study.json").exists()
     assert not (checkout / "studies" / "caffeine" / "Smith2020").exists()
 
@@ -421,7 +504,10 @@ def test_new_command(checkout, resolver, monkeypatch, capsys):
         "path": str(checkout / "studies" / "caffeine" / "Smith2020"),
         "moved": [],
         "left": [],
+        "misnamed": {},
         "reference": "Created reference.json from PubMed 123",
+        "paper": "Smith (2020) Caffeine in healthy volunteers",
+        "warnings": [],
     }
     assert is_v2_folder(checkout / "studies" / "caffeine" / "Smith2020")
 
@@ -429,15 +515,39 @@ def test_new_command(checkout, resolver, monkeypatch, capsys):
 def test_new_command_names_moved_and_left_files(
     checkout, resolver, monkeypatch, capsys
 ):
-    papers(checkout, "Smith2020.pdf", "Smith2020_Tab1.png", "Smith2020.xlsx")
+    papers(checkout, "Smith2020.PDF", "Smith2020_Tab1.png", "Smith2020.xlsx")
     monkeypatch.chdir(checkout)
     assert main([*NEW, *OPTIONS, "--format", "human"]) == 0
     assert capsys.readouterr().out.splitlines() == [
         "Created studies/caffeine/Smith2020",
-        "Moved from papers/caffeine/Smith2020: Smith2020.pdf, Smith2020_Tab1.png",
-        "Left in papers/caffeine/Smith2020: Smith2020.xlsx",
+        "Moved from papers/caffeine/Smith2020: Smith2020_Tab1.png",
+        "Left in papers/caffeine/Smith2020: Smith2020.PDF (differs only in case "
+        "from Smith2020.pdf), Smith2020.xlsx",
         "Created reference.json from PubMed 123",
+        "Paper: Smith (2020) Caffeine in healthy volunteers",
     ]
+
+
+def test_new_command_warns_about_files_left_in_papers(
+    checkout, resolver, monkeypatch, capsys
+):
+    paper = papers(checkout, "Smith2020.pdf")
+    unlink = Path.unlink
+
+    def refuse(path, missing_ok=False):
+        if path.parent == paper:
+            raise PermissionError(13, "Permission denied")
+        unlink(path, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", refuse)
+    monkeypatch.chdir(checkout)
+    assert main([*NEW, *OPTIONS, "--format", "human"]) == 0
+    output = capsys.readouterr()
+    assert output.out.splitlines()[0] == "Created studies/caffeine/Smith2020"
+    assert output.err == (
+        "Warning: Smith2020.pdf is in the study but stays in papers/caffeine/Smith2020: "
+        "Permission denied. Remove it by hand.\n"
+    )
 
 
 def test_new_command_with_an_agent(checkout, resolver, monkeypatch, tmp_path):
@@ -464,6 +574,11 @@ def test_new_command_refusals_exit_1(checkout, resolver, monkeypatch, capsys):
     }
     assert main([*NEW, *OPTIONS, "--format", "human"]) == 1
     assert capsys.readouterr().err == "studies/caffeine/Smith2020 exists already\n"
+    public = [NEW[0], "caffeine/Jones2021", *NEW[2:]]
+    public += ["--licence", "open", "--access", "public", "--offline"]
+    assert main([*public, "--format", "human"]) == 1
+    assert "private until its release" in capsys.readouterr().err
+    assert not (checkout / "studies" / "caffeine" / "Jones2021").exists()
 
 
 def test_new_command_usage_errors_exit_2(checkout, resolver, monkeypatch, capsys):

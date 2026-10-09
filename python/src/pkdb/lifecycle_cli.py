@@ -140,10 +140,10 @@ def _new(args) -> int:
     import sys
 
     from pkdb.identity import author_from
-    from pkdb.lifecycle.new import PAPERS, NewStudyRefused, create_study
+    from pkdb.lifecycle.new import NewStudyRefused, citation, create_study
     from pkdb.references import ReferenceResolver
-    from pkdb.repository import STUDIES, location, repository_root
-    from pkdb.study_cli import emit, fail
+    from pkdb.repository import PAPERS, STUDIES, location, repository_root
+    from pkdb.study_cli import emit, fail, is_human
     from pkdb.studyformat_cli import say
 
     # An IdentityError and a checkout without studies folder are usage errors.
@@ -172,21 +172,36 @@ def _new(args) -> int:
             lambda: say(message, file=sys.stderr),
         )
     place = location(created.folder)
+    paper = citation(created.folder)
     data = {
         "location": place,
         "path": str(created.folder),
         "moved": created.moved,
         "left": created.left,
+        "misnamed": created.misnamed,
         "reference": created.reference,
+        "paper": paper,
+        "warnings": created.warnings,
     }
     lines = [f"Created {STUDIES}/{place}"]
     if created.moved:
         lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
     if created.left:
-        lines.append(f"Left in {PAPERS}/{place}: {', '.join(created.left)}")
+        left = [
+            f"{file} (differs only in case from {created.misnamed[file]})"
+            if file in created.misnamed
+            else file
+            for file in created.left
+        ]
+        lines.append(f"Left in {PAPERS}/{place}: {', '.join(left)}")
     if created.reference:
         lines.append(created.reference)
+    if paper:
+        lines.append(f"Paper: {paper}")
     emit(args, data, lines)
+    if is_human(args):
+        for warning in created.warnings:
+            say(f"Warning: {warning}", file=sys.stderr)
     return 0
 
 

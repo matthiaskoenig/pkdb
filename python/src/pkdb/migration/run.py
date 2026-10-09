@@ -39,7 +39,7 @@ from pkdb.migration.model import (
 from pkdb.migration.registry import Registry
 from pkdb.migration.report import check_report_path, write_report
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
-from pkdb.repository import STUDIES, repository_root, subfolders
+from pkdb.repository import PAPERS, STUDIES, repository_root, subfolders
 from pkdb.repository import location as location_of
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
@@ -52,7 +52,6 @@ WORK = ".pkdb-migrate"
 NEW = "new"
 SOURCE = "source"
 BACKUP = "v1"
-PAPERS = "papers"
 PROVEN = ("identical", "intended")
 # The reason of a study whose worker process stopped before it gave a result.
 STOPPED = "converter_error: the worker process stopped"

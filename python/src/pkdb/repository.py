@@ -5,6 +5,8 @@ from pathlib import Path
 from pkdb.studyformat.text import natural_key
 
 STUDIES = "studies"
+# Paper PDFs and images of studies not created yet, as `papers/<substance>/<name>/`.
+PAPERS = "papers"
 
 
 def repository_root(path: Path) -> Path:

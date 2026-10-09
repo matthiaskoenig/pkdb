@@ -1,9 +1,10 @@
 """Create a study format 2 folder: `pkdb new`."""
 
 import hashlib
+import json
 import shutil
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -11,7 +12,7 @@ from pydantic import ValidationError
 from pkdb.identity import Author
 from pkdb.lifecycle.names import parse_location
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
-from pkdb.repository import STUDIES
+from pkdb.repository import PAPERS, STUDIES
 from pkdb.schemas.review import Review
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.formatter import format_folder
@@ -22,6 +23,7 @@ from pkdb.studyformat.models import (
     canonical_study_json,
 )
 from pkdb.studyformat.tables import (
+    REFERENCE_JSON,
     REVIEW_JSON,
     ROOT,
     SOURCE_PATTERN,
@@ -30,10 +32,11 @@ from pkdb.studyformat.tables import (
 )
 from pkdb.studyformat.text import natural_key, render_tsv
 
-PAPERS = "papers"
 # Automatic curations are a source of their own: on the server such a study
 # stands beside a manual curation of the same paper.
 AUTOMATIC_SOURCE_KEY = "pkdb.ai"
+# The keywords of the sources of paper images, see SOURCE_PATTERN.
+SOURCE_KEYWORDS = ("Text", "Tab", "Fig")
 
 
 class NewStudyRefused(ValueError):
@@ -42,12 +45,29 @@ class NewStudyRefused(ValueError):
 
 @dataclass(frozen=True)
 class NewStudy:
-    """A created study: its folder, the files taken from and left in its paper folder, and the reference change."""
+    """A created study and what happened to its paper folder.
+
+    `moved` and `left` name the files taken from and left in the paper folder;
+    `misnamed` maps a left file to the name it differs from only in case.
+    `reference` is the change of reference.json, and `warnings` name what
+    could not be cleaned up after the study was complete.
+    """
 
     folder: Path
     moved: list[str]
     left: list[str]
     reference: str | None
+    misnamed: dict[str, str] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class _PaperFiles:
+    """The files of a paper folder: taken by the study, left, and left because of their case."""
+
+    taken: list[Path] = field(default_factory=list)
+    left: list[str] = field(default_factory=list)
+    misnamed: dict[str, str] = field(default_factory=dict)
 
 
 def create_study(
@@ -80,18 +100,24 @@ def create_study(
     target = substances / name
     if target.exists():
         raise NewStudyRefused(f"{STUDIES}/{substance}/{name} exists already")
+    if access == "public":
+        raise NewStudyRefused(
+            "A new study is private until its release; create it with --access "
+            "private and set access to public when you release it."
+        )
     if pmid is not None and doi is not None:
         raise NewStudyRefused("Give a PubMed ID or a DOI, not both")
     if pmid is None and doi is None:
         raise NewStudyRefused("Give a PubMed ID or a DOI")
     paper = Path(root) / PAPERS / substance / name
-    taken, left = _paper_files(paper, name)
-    pdf = [path for path in taken if path.name == f"{name}.pdf"]
+    shown = f"{PAPERS}/{substance}/{name}"
+    found = _paper_files(paper, name)
+    pdf = [path for path in found.taken if path.name == f"{name}.pdf"]
     provenance = _provenance(author, agent_version, run_id, pdf, assets)
     if author.agent is not None and provenance is None:
         raise NewStudyRefused(
-            f"An automatic curation names what it read: put {name}.pdf into "
-            f"{PAPERS}/{substance}/{name}/ or pass --asset FILE"
+            f"An automatic curation names what it read: {_pdf_hint(found, name, shown)} "
+            "or pass --asset FILE"
         )
     metadata = _metadata(pmid, doi, licence, access, author, provenance)
 
@@ -103,14 +129,15 @@ def create_study(
             staging.mkdir()
         except FileExistsError:
             raise NewStudyRefused(
-                f"{STUDIES}/{substance}/{staging.name} is left from an interrupted "
-                "pkdb new; remove it and try again"
+                f"{STUDIES}/{substance}/{staging.name} exists: another pkdb new of "
+                f"{substance}/{name} may be running, or one was interrupted. Remove "
+                "the folder only when no pkdb new is running."
             ) from None
         try:
             # The folder has the study's name: formatting writes it into the
             # tables and the reference takes it as its name.
             folder = staging / name
-            reference = _build(folder, metadata, taken, resolver)
+            reference = _build(folder, metadata, found.taken, resolver)
             if target.exists():
                 raise NewStudyRefused(f"{STUDIES}/{substance}/{name} exists already")
             folder.rename(target)
@@ -121,13 +148,34 @@ def create_study(
         # A substance folder made for a refused study goes again.
         if new_substance:
             _remove_if_empty(substances)
-    staging.rmdir()
-    for path in taken:
-        path.unlink(missing_ok=True)
+    # The study is complete: what cannot be cleaned up now is only a warning.
+    warnings = []
+    try:
+        staging.rmdir()
+    except OSError as error:
+        warnings.append(
+            f"{STUDIES}/{substance}/{staging.name} stays: {_reason(error)}. Remove "
+            "the empty folder by hand."
+        )
+    for path in found.taken:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as error:
+            warnings.append(
+                f"{path.name} is in the study but stays in {shown}: "
+                f"{_reason(error)}. Remove it by hand."
+            )
     if paper.is_dir():
         _remove_if_empty(paper)
         _remove_if_empty(paper.parent)
-    return NewStudy(target, [path.name for path in taken], left, reference)
+    return NewStudy(
+        target,
+        [path.name for path in found.taken],
+        found.left,
+        reference,
+        found.misnamed,
+        warnings,
+    )
 
 
 def _build(
@@ -168,28 +216,53 @@ def _refuse_case_twin(folder: Path, name: str, shown: str) -> None:
             )
 
 
-def _is_paper_file(file: str, study: str) -> bool:
-    """Whether `pkdb new` takes a file of the paper folder: the PDF or an image of a source."""
-    if file == f"{study}.pdf":
-        return True
-    source = file.removeprefix(f"{study}_").removesuffix(".png")
-    return (
-        file == f"{study}_{source}.png" and SOURCE_PATTERN.fullmatch(source) is not None
-    )
+def _paper_name(file: str, study: str) -> str | None:
+    """The name of a file that `pkdb new` takes that `file` equals ignoring case.
+
+    These are the PDF `<study>.pdf` and the images `<study>_<source>.png`
+    with a source as in SOURCE_PATTERN. None for any other file.
+    """
+    if file.casefold() == f"{study}.pdf".casefold():
+        return f"{study}.pdf"
+    head, source, suffix = file[: len(study) + 1], file[len(study) + 1 : -4], file[-4:]
+    if head.casefold() != f"{study}_".casefold() or suffix.casefold() != ".png":
+        return None
+    for keyword in SOURCE_KEYWORDS:
+        if source[: len(keyword)].casefold() == keyword.casefold():
+            source = keyword + source[len(keyword) :]
+            break
+    if SOURCE_PATTERN.fullmatch(source) is None:
+        return None
+    return f"{study}_{source}.png"
 
 
-def _paper_files(paper: Path, study: str) -> tuple[list[Path], list[str]]:
-    """The files of the paper folder that the study takes, and the names of the others."""
+def _paper_files(paper: Path, study: str) -> _PaperFiles:
+    """The files of a paper folder that the study takes, and the others."""
+    found = _PaperFiles()
     if not paper.is_dir():
-        return [], []
-    taken: list[Path] = []
-    left: list[str] = []
+        return found
     for path in sorted(paper.iterdir(), key=lambda item: natural_key(item.name)):
-        if path.is_file(follow_symlinks=False) and _is_paper_file(path.name, study):
-            taken.append(path)
-        else:
-            left.append(path.name)
-    return taken, left
+        expected = (
+            _paper_name(path.name, study)
+            if path.is_file(follow_symlinks=False)
+            else None
+        )
+        if expected == path.name:
+            found.taken.append(path)
+            continue
+        found.left.append(path.name)
+        if expected is not None:
+            found.misnamed[path.name] = expected
+    return found
+
+
+def _pdf_hint(found: _PaperFiles, study: str, shown: str) -> str:
+    """How to give an agent's study its PDF: rename one that differs in case, or add it."""
+    pdf = f"{study}.pdf"
+    for file, expected in found.misnamed.items():
+        if expected == pdf:
+            return f"rename {shown}/{file} to {pdf}"
+    return f"put {pdf} into {shown}/"
 
 
 def _provenance(
@@ -275,6 +348,32 @@ def _errors(issues: Iterable[ValidationIssue]) -> str:
         for issue in issues
         if issue.severity == "error"
     )
+
+
+def citation(folder: Path) -> str | None:
+    """First author, year and title of the paper in reference.json, such as `Smith et al. (2020) Title`.
+
+    None when reference.json cannot be read or names none of them.
+    """
+    try:
+        reference = json.loads((folder / REFERENCE_JSON).read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return None
+    if not isinstance(reference, dict):
+        return None
+    authors = reference.get("authors")
+    authors = authors if isinstance(authors, list) else []
+    first = authors[0] if authors and isinstance(authors[0], dict) else {}
+    author = first.get("last_name") or first.get("organization") or ""
+    if author and len(authors) > 1:
+        author += " et al."
+    year = str(reference.get("publication_date") or reference.get("date") or "")[:4]
+    parts = [author, f"({year})" if year else "", reference.get("title") or ""]
+    return " ".join(str(part) for part in parts if part) or None
+
+
+def _reason(error: OSError) -> str:
+    return error.strerror or str(error)
 
 
 def _write(path: Path, text: str) -> None:
