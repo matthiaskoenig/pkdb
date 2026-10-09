@@ -136,20 +136,34 @@ def run(args) -> int:
     raise AssertionError(args.command)
 
 
+def github_client(repository: str, token: str | None):
+    """The GitHub client of the lifecycle commands; imported late to keep help fast."""
+    from pkdb.issues.github import GitHub
+
+    return GitHub(repository, token)
+
+
 def _new(args) -> int:
     import sys
 
     from pkdb.identity import author_from
+    from pkdb.issues.github import GitHubError, repository_from, token_from
     from pkdb.lifecycle.new import NewStudyRefused, citation, create_study
     from pkdb.references import ReferenceResolver
     from pkdb.repository import PAPERS, STUDIES, location, repository_root
     from pkdb.study_cli import emit, fail, is_human
+    from pkdb.studyformat.metadata import MetadataError
+    from pkdb.studyformat.revision import RevisionConflict
     from pkdb.studyformat_cli import say
 
     # An IdentityError and a checkout without studies folder are usage errors.
     author = author_from(args.user, args.agent)
     root = repository_root(args.root or Path.cwd())
     resolver = ReferenceResolver(args.cache_dir, offline=args.offline)
+    token = None if args.no_issue else token_from()
+    if token is None and not args.no_issue:
+        raise ValueError("Set GH_TOKEN or GITHUB_TOKEN, or pass --no-issue")
+    repository = None if args.no_issue else repository_from()
     try:
         created = create_study(
             root,
@@ -172,6 +186,20 @@ def _new(args) -> int:
             lambda: say(message, file=sys.stderr),
         )
     place = location(created.folder)
+    issue = None
+    if token is not None and repository is not None:
+        try:
+            issue = _record_issue(repository, token, place, created.folder)
+        except (GitHubError, RevisionConflict, MetadataError) as error:
+            message = (
+                f"Created {STUDIES}/{place}, but its issue failed: {error}. "
+                "Run pkdb issues sync --adopt to give it one."
+            )
+            return fail(
+                args,
+                {"location": place, "path": str(created.folder), "error": message},
+                lambda: say(message, file=sys.stderr),
+            )
     paper = citation(created.folder)
     data = {
         "location": place,
@@ -183,6 +211,8 @@ def _new(args) -> int:
         "paper": paper,
         "warnings": created.warnings,
     }
+    if issue is not None:
+        data["issue"] = issue[0]
     lines = [f"Created {STUDIES}/{place}"]
     if created.moved:
         lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
@@ -198,11 +228,27 @@ def _new(args) -> int:
         lines.append(created.reference)
     if paper:
         lines.append(f"Paper: {paper}")
+    if issue is not None:
+        lines.append(f"Issue #{issue[0]} ({'created' if issue[1] else 'adopted'})")
     emit(args, data, lines)
     if is_human(args):
         for warning in created.warnings:
             say(f"Warning: {warning}", file=sys.stderr)
     return 0
+
+
+def _record_issue(
+    repository: str, token: str, place: str, folder: Path
+) -> tuple[int, bool]:
+    """Create or adopt the issue of a new study and write its number to study.json."""
+    from pkdb.issues.single import issue_for_new_study
+    from pkdb.studyformat.metadata import patch_metadata, read_metadata
+
+    revision = read_metadata(folder).revision
+    with github_client(repository, token) as github:
+        issue, created = issue_for_new_study(github, place)
+    patch_metadata(folder, {"issue": issue.number}, revision)
+    return issue.number, created
 
 
 def _registry(args) -> int:

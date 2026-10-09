@@ -597,3 +597,67 @@ def test_new_command_usage_errors_exit_2(checkout, resolver, monkeypatch, capsys
     assert main([*NEW, *OPTIONS]) == 2
     assert "studies folder" in capsys.readouterr().err
     assert not (checkout / "studies" / "caffeine").exists()
+
+
+WITH_ISSUE = [arg for arg in NEW if arg != "--no-issue"]
+
+
+@pytest.fixture
+def github(monkeypatch):
+    from fake_github import FakeGitHub
+
+    fake = FakeGitHub()
+    monkeypatch.setattr(
+        "pkdb.lifecycle_cli.github_client", lambda repository, token: fake.client()
+    )
+    monkeypatch.delenv("GH_TOKEN", raising=False)
+    monkeypatch.setenv("GITHUB_TOKEN", "token")
+    return fake
+
+
+def test_new_records_the_issue(checkout, resolver, github, monkeypatch, capsys):
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 0
+    assert capsys.readouterr().out.splitlines()[-1] == "Issue #1 (created)"
+    folder = checkout / "studies" / "caffeine" / "Smith2020"
+    assert read_metadata(folder).metadata.issue == 1
+    assert github.issues[1]["title"] == "caffeine/Smith2020"
+
+
+def test_new_adopts_an_existing_issue(checkout, resolver, github, monkeypatch, capsys):
+    github.issues[7] = {
+        "number": 7,
+        "title": "caffeine/Smith2020",
+        "state": "open",
+        "state_reason": None,
+        "labels": [],
+        "assignees": [],
+    }
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["issue"] == 7
+    assert github.writes == []
+
+
+def test_new_needs_a_token_unless_no_issue(checkout, resolver, monkeypatch, capsys):
+    monkeypatch.delenv("GH_TOKEN", raising=False)
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS]) == 2
+    assert "Set GH_TOKEN or GITHUB_TOKEN, or pass --no-issue" in capsys.readouterr().err
+    assert not (checkout / "studies" / "caffeine").exists()
+    assert main([*NEW, *OPTIONS]) == 0
+
+
+def test_a_github_failure_after_writing_keeps_the_folder(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    github.fail[("POST", None)] = 500
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 1
+    assert "pkdb issues sync --adopt" in capsys.readouterr().err
+    folder = checkout / "studies" / "caffeine" / "Smith2020"
+    assert is_v2_folder(folder)
+    assert read_metadata(folder).metadata.issue is None
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 1
+    assert "exists" in capsys.readouterr().err
