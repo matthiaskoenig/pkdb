@@ -70,6 +70,18 @@ def test_validate_offline_uses_the_lock_before_the_cache(setup, capsys):
     assert code == 0  # the cached vocabulary of the endpoint
 
 
+def test_prepare_uses_the_lock_before_the_cache(setup, capsys):
+    root, folder, cache, _ = setup
+    args = [
+        *("prepare", str(folder)),
+        *("--endpoint", ENDPOINT, "--cache-dir", str(cache.directory)),
+    ]
+    assert main(args) == 1  # the empty lock does not know the species
+    capsys.readouterr()
+    (root / "vocabulary.lock.json").unlink()
+    assert main(args) == 0  # the cached vocabulary of the endpoint
+
+
 def test_validate_offline_outside_a_checkout_keeps_the_cache(setup, tmp_path, capsys):
     _, folder, cache, _ = setup
     copy = tmp_path / "scratch" / "A"

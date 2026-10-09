@@ -276,7 +276,7 @@ def main(argv=None, *, client=None) -> int:
             args.vocabulary,
             args.endpoint,
             cache,
-            args.folder if args.command == "validate" else None,
+            None if args.command == "upload" else args.folder,
         )
         if args.command == "upload" and (not args.endpoint or not token):
             raise ValueError("Upload requires an endpoint and PKDB_API_KEY")
