@@ -21,10 +21,10 @@ APPROVED = {
 
 @pytest.fixture
 def approved_studies(tmp_path, valid_files):
-    def make(*locations, highest=None):
+    def make(*locations, highest=None, base=tmp_path):
         folders = []
         for place in locations:
-            folder = tmp_path / "studies" / place
+            folder = base / "studies" / place
             folder.mkdir(parents=True)
             for name, content in valid_files.items():
                 path = folder / name.replace("Example", folder.name, 1)
@@ -36,8 +36,8 @@ def approved_studies(tmp_path, valid_files):
             (folder / "review.json").write_text(dump_json(APPROVED), encoding="utf-8")
             folders.append(folder)
         if highest is not None:
-            released_study(tmp_path, "other/Old", pkdb_id=highest)
-        return tmp_path, *folders
+            released_study(base, "other/Old", pkdb_id=highest)
+        return base, *folders
 
     return make
 
@@ -154,12 +154,106 @@ def test_the_command_rejects_wrong_arguments(
     with pytest.raises(SystemExit) as bad:
         main([*base, str(first), "--date", "10.10.2026"])
     assert bad.value.code == 2
-    other = tmp_path / "other"
-    (other / "studies" / "caffeine").mkdir(parents=True)
-    (other / "studies" / "caffeine" / "A").symlink_to(first, target_is_directory=True)
-    # A symbolic link resolves into the first checkout, so use a copy instead.
-    (other / "studies" / "caffeine" / "A").unlink()
-    import shutil
+    link = first.parent / "Link"
+    link.symlink_to(first, target_is_directory=True)
+    assert main([*base, str(first), str(link)]) == 2
+    assert main([*base, str(first), str(first / "..") + "/A"]) == 2
+    _, second = approved_studies("caffeine/A", base=tmp_path / "other")
+    assert main([*base, str(first), str(second)]) == 2
 
-    shutil.copytree(first, other / "studies" / "caffeine" / "A")
-    assert main([*base, str(first), str(other / "studies" / "caffeine" / "A")]) == 2
+
+def test_an_unreadable_study_json_elsewhere_stops_before_any_write(
+    approved_studies, sf_vocabulary
+):
+    root, first = approved_studies("caffeine/A")
+    released_study(root, "other/Broken")
+    (root / "studies" / "other" / "Broken" / "study.json").write_text(
+        "{", encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="Broken"):
+        release(root, [first], sf_vocabulary, on=date(2026, 10, 10))
+    assert read_metadata(first).metadata.release is None
+
+
+def test_the_registry_file_number_is_counted(approved_studies, sf_vocabulary):
+    root, first = approved_studies("caffeine/A")
+    (root / "studies" / "study_identifiers.json").write_text(
+        dump_json({"PKDB00020": ["old/Study", "2020-01-01"]}), encoding="utf-8"
+    )
+    assert release(root, [first], sf_vocabulary, on=date(2026, 10, 10)) == [
+        ("caffeine/A", "PKDB00021")
+    ]
+
+
+def test_an_approved_study_with_only_warnings_is_released(
+    approved_studies, sf_vocabulary, monkeypatch
+):
+    from pkdb.studyformat import review_edit
+    from pkdb.studyformat.issues import make_issue
+
+    root, first = approved_studies("caffeine/A")
+    real = review_edit.validate_folder
+
+    def with_warning(folder, vocabulary):
+        report = real(folder, vocabulary)
+        warning = make_issue("unused_subject", "Subject all is not used")
+        assert warning.severity == "warning"
+        report.issues.append(warning)
+        return report
+
+    monkeypatch.setattr(review_edit, "validate_folder", with_warning)
+    assert check(first, sf_vocabulary) == []
+    assert release(root, [first], sf_vocabulary, on=date(2026, 10, 10)) == [
+        ("caffeine/A", "PKDB00001")
+    ]
+
+
+def test_the_command_exits_with_1_on_a_conflict(
+    approved_studies, sf_vocabulary, capsys, monkeypatch
+):
+    from pkdb.lifecycle import release as module
+    from pkdb.studyformat.revision import RevisionConflict
+
+    root, first = approved_studies("caffeine/A")
+    monkeypatch.setattr("pkdb.tables_cli._vocabulary", lambda args: sf_vocabulary)
+
+    def conflict(folder, patch, revision):
+        raise RevisionConflict("study.json", "a", "b", None)
+
+    monkeypatch.setattr(module, "patch_metadata", conflict)
+    assert main(["--no-update", "release", str(first), "--format", "json"]) == 1
+    assert "caffeine/A" in json.loads(capsys.readouterr().out)["error"]
+
+
+def test_a_later_write_error_names_the_studies_already_written(
+    approved_studies, sf_vocabulary, monkeypatch
+):
+    from pkdb.lifecycle import release as module
+
+    root, first, second = approved_studies("c/A", "c/B")
+    real = module.patch_metadata
+
+    def patch(folder, patch, revision):
+        if folder == second:
+            raise OSError("disk full")
+        return real(folder, patch, revision)
+
+    monkeypatch.setattr(module, "patch_metadata", patch)
+    with pytest.raises(ReleaseConflict, match="disk full.*c/A: PKDB00001"):
+        release(root, [first, second], sf_vocabulary, on=date(2026, 10, 10))
+
+
+def test_release_and_approval_refuse_the_same_study(approved_studies, sf_vocabulary):
+    from pkdb.studyformat.review_edit import ApprovalRefused, set_status
+
+    root, broken = approved_studies("caffeine/A")
+    (broken / "reference.json").unlink()
+    (broken / "review.json").write_text(
+        dump_json({"status": "in_review"}), encoding="utf-8"
+    )
+    with pytest.raises(ApprovalRefused) as refused:
+        set_status(broken, Author("bo"), "approved", vocabulary=sf_vocabulary)
+    assert check(broken, sf_vocabulary) == [
+        "The review status is in_review; a study must be approved",
+        str(refused.value),
+    ]

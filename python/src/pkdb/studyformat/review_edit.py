@@ -292,6 +292,29 @@ def reopen(
     return _update(folder, revision, change)[1]
 
 
+def approval_blockers(
+    folder: Path, review: Review, vocabulary
+) -> list[ApprovalRefused]:
+    """What keeps a study from being approved: open review items, then validation errors.
+
+    The `approved_with_open_items` error is left out, since the open items are reported already.
+    """
+    blockers = []
+    open_items = [item for item in review.items if item.state == "open"]
+    if open_items:
+        items = "review item is" if len(open_items) == 1 else "review items are"
+        blockers.append(ApprovalRefused(f"{len(open_items)} {items} open"))
+    errors = [
+        issue
+        for issue in validate_folder(folder, vocabulary).issues
+        if issue.severity == "error" and issue.code != "approved_with_open_items"
+    ]
+    if errors:
+        noun = "error" if len(errors) == 1 else "errors"
+        blockers.append(ApprovalRefused(f"Validation has {len(errors)} {noun}", errors))
+    return blockers
+
+
 def set_status(
     folder: Path,
     author: Author,
@@ -316,18 +339,8 @@ def set_status(
             return review.model_copy(update=changes)
         if review.status == "approved":
             return review
-        open_items = [item for item in review.items if item.state == "open"]
-        if open_items:
-            items = "review item is" if len(open_items) == 1 else "review items are"
-            raise ApprovalRefused(f"{len(open_items)} {items} open")
-        errors = [
-            issue
-            for issue in validate_folder(folder, vocabulary).issues
-            if issue.severity == "error"
-        ]
-        if errors:
-            noun = "error" if len(errors) == 1 else "errors"
-            raise ApprovalRefused(f"Validation has {len(errors)} {noun}", errors)
+        if blockers := approval_blockers(folder, review, vocabulary):
+            raise blockers[0]
         reviewers = review.reviewers
         if author.user not in reviewers:
             reviewers = [*reviewers, author.user]

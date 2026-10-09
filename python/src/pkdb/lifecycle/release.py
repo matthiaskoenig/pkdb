@@ -7,9 +7,8 @@ from pathlib import Path
 from pkdb.lifecycle.registry import identifier, next_identifier, scan
 from pkdb.repository import location
 from pkdb.studyformat.metadata import MetadataError, patch_metadata, read_metadata
-from pkdb.studyformat.review_edit import ReviewError, read_review
+from pkdb.studyformat.review_edit import ReviewError, approval_blockers, read_review
 from pkdb.studyformat.revision import RevisionConflict
-from pkdb.studyformat.validation import validate_folder
 
 
 @dataclass(frozen=True)
@@ -29,17 +28,18 @@ class ReleaseRefused(Exception):
 class ReleaseConflict(Exception):
     """A study.json changed during the release; `released` keeps its numbers."""
 
-    def __init__(self, where: str, released: list[tuple[str, str]]):
-        message = f"{where}: study.json changed on disk since it was read, nothing was written for it"
+    def __init__(
+        self,
+        where: str,
+        released: list[tuple[str, str]],
+        reason: str = "study.json changed on disk since it was read",
+    ):
+        message = f"{where}: {reason}; nothing was written for it"
         if released:
             done = ", ".join(f"{place}: {pkdb_id}" for place, pkdb_id in released)
             message += f"; these studies keep their identifiers: {done}"
         super().__init__(message)
         self.location, self.released = where, released
-
-
-def _plural(count: int, noun: str) -> str:
-    return f"{count} {noun}" if count == 1 else f"{count} {noun}s"
 
 
 def check(folder: Path, vocabulary) -> list[str]:
@@ -53,17 +53,9 @@ def check(folder: Path, vocabulary) -> list[str]:
         reasons.append(
             f"The review status is {review.status}; a study must be approved"
         )
-    open_items = sum(item.state == "open" for item in review.items)
-    if open_items:
-        verb = "is" if open_items == 1 else "are"
-        reasons.append(f"{_plural(open_items, 'review item')} {verb} open")
-    # An approved study with open items is reported by the item count above.
-    errors = sum(
-        issue.severity == "error" and issue.code != "approved_with_open_items"
-        for issue in validate_folder(folder, vocabulary).issues
-    )
-    if errors:
-        reasons.append(f"Validation has {_plural(errors, 'error')}")
+    reasons += [
+        str(blocker) for blocker in approval_blockers(folder, review, vocabulary)
+    ]
     try:
         released = read_metadata(folder).metadata.release
     except MetadataError as error:
@@ -106,5 +98,7 @@ def release(
             patch_metadata(folder, patch, revisions[folder])
         except RevisionConflict:
             raise ReleaseConflict(location(folder), done) from None
+        except (MetadataError, OSError) as error:
+            raise ReleaseConflict(location(folder), done, str(error)) from None
         done.append((location(folder), pkdb_id))
     return done

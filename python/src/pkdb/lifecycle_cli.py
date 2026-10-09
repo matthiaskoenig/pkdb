@@ -29,7 +29,7 @@ def register(commands) -> None:
     )
     release.add_argument("studies", nargs="+", type=Path, metavar="STUDY")
     release.add_argument(
-        "--date", type=_date, help="Release date YYYY-MM-DD (default: today)"
+        "--date", type=_date, help="Release date YYYY-MM-DD (default: today in UTC)"
     )
     _vocabulary_options(release)
     add_format(release)
@@ -145,7 +145,7 @@ def _release(args) -> int:
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 2
-    on = args.date or datetime.date.today()
+    on = args.date or datetime.datetime.now(datetime.UTC).date()
     try:
         done = release(root, folders, vocabulary, on=on)
     except ReleaseRefused as refused:
