@@ -11,6 +11,7 @@ from email.utils import parsedate_to_datetime
 import httpx2
 
 from pkdb import __version__
+from pkdb.issues import counted
 
 API = "https://api.github.com"
 DEFAULT_REPOSITORY = "matthiaskoenig/pkdb_data"
@@ -123,6 +124,7 @@ class GitHub:
         }
         if token:
             headers["Authorization"] = f"Bearer {token}"
+        self._authorized = bool(token)
         self._client = httpx2.Client(headers=headers, timeout=30, transport=transport)
         self._sleep = sleep
         self._clock = clock
@@ -248,7 +250,7 @@ class GitHub:
                 self._max_wait is not None and wait > self._max_wait
             ):
                 raise GitHubError(
-                    f"GitHub limits the requests; try again in {round(wait)} seconds",
+                    f"{RATE_LIMIT}; try again in {counted(math.ceil(wait), 'second')}",
                     status_code=response.status_code,
                     rate_limited=True,
                 )
@@ -262,8 +264,12 @@ class GitHub:
                 status_code=response.status_code,
             )
         if response.is_error:
+            hint = ""
+            if response.status_code == 404 and not self._authorized:
+                hint = "; a private repository needs GH_TOKEN or GITHUB_TOKEN"
             raise GitHubError(
-                f"GitHub answered {response.status_code} for {method} {path}: {_message(response)}",
+                f"GitHub answered {response.status_code} for {method} {path}: "
+                f"{_message(response)}{hint}",
                 status_code=response.status_code,
             )
         return response

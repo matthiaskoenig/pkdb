@@ -339,3 +339,49 @@ def test_an_unreachable_github_is_marked():
         with pytest.raises(GitHubError) as error:
             client.labels()
     assert not error.value.unreachable
+
+
+def test_a_not_found_without_token_names_the_token():
+    def handler(request):
+        assert "authorization" not in request.headers
+        return httpx2.Response(404, json={"message": "Not Found"})
+
+    with GitHub("owner/data", transport=httpx2.MockTransport(handler)) as client:
+        with pytest.raises(GitHubError) as error:
+            client.issues()
+    assert str(error.value) == (
+        "GitHub answered 404 for GET /repos/owner/data/issues: Not Found; "
+        "a private repository needs GH_TOKEN or GITHUB_TOKEN"
+    )
+    with github(
+        lambda request: httpx2.Response(404, json={"message": "Not Found"})
+    ) as client:
+        with pytest.raises(GitHubError) as error:
+            client.issues()
+    assert str(error.value).endswith(": Not Found")
+
+
+@pytest.mark.parametrize(
+    ("after", "message"),
+    [("1", "1 second"), ("0.2", "1 second"), ("30.5", "31 seconds")],
+)
+def test_an_exhausted_wait_names_the_last_wait(after, message):
+    response = httpx2.Response(
+        429, headers={"retry-after": after}, json={"message": "m"}
+    )
+    with github(lambda request: response) as client:
+        with pytest.raises(GitHubError) as error:
+            client.labels()
+    assert str(error.value) == f"GitHub limits the requests; try again in {message}"
+
+
+def test_an_empty_assignee_list_is_sent():
+    bodies = []
+
+    def handler(request):
+        bodies.append(json.loads(request.content))
+        return httpx2.Response(200, json=issue(5))
+
+    with github(handler) as client:
+        client.update_issue(5, assignees=[], labels=[])
+    assert bodies == [{"labels": [], "assignees": []}]

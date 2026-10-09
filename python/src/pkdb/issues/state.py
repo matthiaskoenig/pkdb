@@ -10,6 +10,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from pkdb.issues import counted
 from pkdb.issues.github import Issue
 from pkdb.repository import location, study_folders
 from pkdb.schemas.curators import Curator
@@ -134,7 +135,7 @@ class Problems:
     def rendered(self) -> list[str]:
         """Every message, the ones about users with their number of studies, sorted."""
         users = [
-            f"{message} ({count} {'study' if count == 1 else 'studies'})"
+            f"{message} ({counted(count, 'study', 'studies')})"
             for message, count in self._users.items()
         ]
         return sorted([*users, *self._studies])

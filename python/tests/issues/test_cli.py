@@ -39,7 +39,11 @@ def test_a_dry_run_without_token_writes_nothing(setup, monkeypatch, capsys):
     monkeypatch.delenv("GH_TOKEN")
     monkeypatch.delenv("GITHUB_TOKEN", raising=False)
     assert main(["issues", "sync", "--dry-run", "--format", "human"]) == 0
-    assert setup.writes == [] and "Dry run: 1 changes." in capsys.readouterr().out
+    assert setup.writes == []
+    assert capsys.readouterr().out.splitlines() == [
+        "#1 caffeine/A: title, labels +caffeine +curate, assignees ana-gh",
+        "Dry run: would change 1 issue.",
+    ]
 
 
 def test_changes_need_a_token(setup, monkeypatch, capsys):
@@ -85,7 +89,7 @@ def test_adoption_writes_the_issue_number(setup, tmp_path, capsys):
         "#1 caffeine/A: title, labels +caffeine +curate, assignees ana-gh",
         "#2 caffeine/B: labels +caffeine +curate, assignees ana-gh",
     ]
-    assert captured.out == "Changed 2 issues.\n"
+    assert captured.out == "Adopted 1 issue and changed 2 issues.\n"
 
 
 def test_json_output_has_no_progress(setup, capsys):
@@ -126,7 +130,7 @@ def test_a_stopped_run_reports_what_was_done(setup, tmp_path, capsys):
         "#1 caffeine/A: title, labels +caffeine +curate, assignees ana-gh",
         "Stopped: GitHub answered 403 for PATCH /repos/owner/data/issues/2: refused",
     ]
-    assert captured.out == "Changed 1 issues.\n"
+    assert captured.out == "Changed 1 issue.\n"
     assert main(["issues", "sync", "--format", "json"]) == 1
     data = json.loads(capsys.readouterr().out)
     assert data["stopped"].startswith("GitHub answered 403") and data["applied"] == 0
@@ -188,7 +192,7 @@ def test_ctrl_c_during_the_sync_reports_what_was_done(
         assert data["stopped"] == "Interrupted." and data["applied"] == 1
     else:
         assert captured.err.splitlines()[-1] == "Interrupted."
-        assert captured.out == "Changed 1 issues.\n"
+        assert captured.out == "Changed 1 issue.\n"
 
 
 @pytest.mark.parametrize("mode", ["success", "github", "roster"])
@@ -235,3 +239,46 @@ def test_a_file_error_exits_1_after_naming_what_was_done(
         "caffeine/B: created #2",
         "Cannot sync the issues: No space left on device",
     ]
+
+
+def test_the_summary_counts_adoptions_changes_and_format_1(setup, tmp_path, capsys):
+    for name in ("B", "C"):
+        study(tmp_path, f"caffeine/{name}")
+    for name in ("Old1", "Old2"):
+        legacy = tmp_path / "studies" / "caffeine" / name
+        legacy.mkdir()
+        (legacy / "study.json").write_text('{"sid": "1"}', encoding="utf-8")
+    for number, title in ((2, "Curate caffeine/B"), (3, "Check caffeine/B")):
+        setup.issues[number] = {**setup.issues[1], "number": number, "title": title}
+    adopt = ["issues", "sync", "--adopt", "--user", "ana", "--format", "human"]
+    assert main([*adopt, "--dry-run"]) == 0
+    assert capsys.readouterr().out.splitlines()[-1] == (
+        "Dry run: would adopt 1 issue, create 1 issue, close 1 duplicate and "
+        "change 2 issues. Skipped 2 format 1 studies."
+    )
+    assert main(adopt) == 0
+    assert capsys.readouterr().out.splitlines()[-1] == (
+        "Adopted 1 issue, created 1 issue, closed 1 duplicate and changed 2 issues. "
+        "Skipped 2 format 1 studies."
+    )
+    assert main(["issues", "sync", "--format", "human"]) == 0
+    assert capsys.readouterr().out == (
+        "Changed 0 issues. Skipped 2 format 1 studies.\n"
+    )
+
+
+def test_an_empty_roster_is_refused(setup, monkeypatch, capsys):
+    monkeypatch.setattr("pkdb.issues_cli.roster", lambda endpoint, api_key: [])
+    assert main(["issues", "sync", "--format", "human"]) == 2
+    assert capsys.readouterr().err == (
+        "The PK-DB roster is empty; check PKDB_ENDPOINT\n"
+    )
+    assert setup.writes == []
+
+
+def test_the_help_names_the_endpoint_and_the_written_files(capsys):
+    with pytest.raises(SystemExit):
+        main(["issues", "sync", "--help"])
+    out = " ".join(capsys.readouterr().out.split())
+    assert "PK-DB server of the roster (default: PKDB_ENDPOINT)" in out
+    assert "(writes study.json and review.json)" in out

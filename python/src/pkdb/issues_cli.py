@@ -47,11 +47,15 @@ def register(commands) -> None:
     sync.add_argument(
         "--adopt",
         action="store_true",
-        help="Give studies without an issue an existing or a new issue (writes study.json)",
+        help="Give studies without an issue an existing or a new issue (writes study.json and review.json)",
     )
     sync.add_argument("--user", help="PK-DB user of --adopt (default: PKDB_USER)")
     sync.add_argument("--agent", help="AI agent of --adopt (default: PKDB_AGENT)")
-    sync.add_argument("--endpoint", default=os.environ.get("PKDB_ENDPOINT"))
+    sync.add_argument(
+        "--endpoint",
+        default=os.environ.get("PKDB_ENDPOINT"),
+        help="PK-DB server of the roster (default: PKDB_ENDPOINT)",
+    )
     sync.add_argument(
         "--dry-run", action="store_true", help="Only show the plan; change nothing"
     )
@@ -85,10 +89,41 @@ def _print_human(result) -> None:
         print(INTERRUPTED, file=sys.stderr)
     elif result.stopped is not None:
         print(safe_text(f"Stopped: {result.stopped}"), file=sys.stderr)
+    print(_summary(result))
+
+
+def _summary(result) -> str:
+    """The counts of a run, such as `Adopted 3 issues and changed 12 issues.`
+
+    Adoption counts of zero are left out; a dry run says what it would do.
+    """
+    from pkdb.issues import counted
+
+    adopted = sum(not item.created for item in result.adopted)
+    duplicates = sum(len(item.duplicates) for item in result.adopted)
+    counts = [
+        ("adopt", adopted, "issue"),
+        ("create", len(result.adopted) - adopted, "issue"),
+        ("close", duplicates, "duplicate"),
+    ]
+    actions = [
+        f"{verb if result.dry_run else verb.removesuffix('e') + 'ed'} "
+        f"{counted(count, noun)}"
+        for verb, count, noun in counts
+        if count
+    ]
     if result.dry_run:
-        print(f"Dry run: {len(result.plan.changes)} changes.")
+        actions.append(f"change {counted(len(result.plan.changes), 'issue')}")
     else:
-        print(f"Changed {result.applied} issues.")
+        actions.append(f"changed {counted(result.applied, 'issue')}")
+    text = ", ".join(actions[:-1]) + (" and " if len(actions) > 1 else "") + actions[-1]
+    summary = (
+        f"Dry run: would {text}." if result.dry_run else f"{text[0].upper()}{text[1:]}."
+    )
+    if result.format_1:
+        skipped = counted(result.format_1, "format 1 study", "format 1 studies")
+        summary += f" Skipped {skipped}."
+    return summary
 
 
 def _progress(line: str) -> None:
@@ -98,9 +133,10 @@ def _progress(line: str) -> None:
 
 
 def _waiting(seconds: float, reason: str) -> None:
-    print(
-        f"Waiting {math.ceil(seconds)} seconds: {reason}.", file=sys.stderr, flush=True
-    )
+    from pkdb.issues import counted
+
+    waiting = counted(math.ceil(seconds), "second")
+    print(f"Waiting {waiting}: {reason}.", file=sys.stderr, flush=True)
 
 
 def run(args) -> int:
@@ -127,6 +163,9 @@ def run(args) -> int:
         if args.adopt:
             author = author_from(args.user, args.agent)
         curators = roster(args.endpoint, api_key)
+        if not curators:
+            # A wrong server would otherwise unassign every issue.
+            raise ValueError("The PK-DB roster is empty; check PKDB_ENDPOINT")
         if author is not None and author.user not in {c.username for c in curators}:
             raise ValueError(f"User {author.user} is not in the PK-DB roster")
         human = args.output == "human"
