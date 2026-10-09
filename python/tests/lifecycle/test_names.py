@@ -24,6 +24,8 @@ def test_valid_locations():
         ("caffeine/a/b", "<substance>/<name>"),
         ("caffeine/" + "A" * 25, "24 characters"),
         ("caffeine/outputs", "reserved"),
+        ("caffeine/Outputs", "reserved"),
+        ("caffeine/VALIDATE", "reserved"),
     ],
 )
 def test_invalid_locations(value, message):

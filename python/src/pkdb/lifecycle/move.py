@@ -2,9 +2,11 @@
 
 import warnings
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from pkdb.cache import atomic_bytes
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.lifecycle.names import case_twin, parse_location
 from pkdb.lifecycle.new import error_messages
@@ -12,13 +14,29 @@ from pkdb.repository import STUDIES, location
 from pkdb.schemas.review import Review
 from pkdb.studyformat.digitize import digitization_file, parse_digitization_file
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.jsonio import dump_json, load_json
 from pkdb.studyformat.metadata import read_metadata
-from pkdb.studyformat.models import canonical_review_json
+from pkdb.studyformat.models import (
+    StudyMetadata,
+    canonical_review_json,
+    canonical_study_json,
+)
 from pkdb.studyformat.raw import parse_raw_file, raw_file
 from pkdb.studyformat.review_edit import read_review
-from pkdb.studyformat.revision import RevisionConflict, write_checked
+from pkdb.studyformat.revision import (
+    RevisionConflict,
+    check_revision,
+    read_revision,
+    write_checked,
+)
 from pkdb.studyformat.sync import sync_study
-from pkdb.studyformat.tables import REVIEW_JSON, SOURCE_PATTERN, image_file
+from pkdb.studyformat.tables import (
+    REFERENCE_JSON,
+    REVIEW_JSON,
+    SOURCE_PATTERN,
+    STUDY_JSON,
+    image_file,
+)
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
 from pkdb.studyformat.workbook.base import (
@@ -67,25 +85,43 @@ class MoveIncomplete(RuntimeError):
 
 
 @dataclass(frozen=True)
+class _Write:
+    """A change of a JSON file that names a renamed file or the study.
+
+    `original` and `revision` are its content when it was checked, which an
+    undo writes back.
+    """
+
+    file: str
+    text: str
+    original: bytes
+    revision: str
+
+
+@dataclass(frozen=True)
 class _Plan:
-    """The checked move: folders, file renames and the new review.json text, if it changes."""
+    """The checked move: folders, file renames and the JSON files that change."""
 
     old: Path
     new: Path
     renames: list[tuple[str, str]]
-    review: str | None
-    revision: str
+    writes: list[_Write]
     targets: int
     issue: int | None
     workbook: Path | None
+
+
+# What undoes one done step, and how a failure to undo it is named.
+_Undo = tuple[str, Callable[[], object]]
 
 
 def move_study(root: Path, old: str, new: str, vocabulary: Vocabulary) -> Moved:
     """Move the study `studies/<old>` of a checkout to `studies/<new>`.
 
     Every check runs before the first change. The folder and file renames and
-    the review targets are undone together when one of them fails, so the move
-    either happens or leaves the study as it was. Steps after them, removing
+    the writes of the files that name them or the study (review targets,
+    provenance assets and the reference name) are undone together when one of
+    them fails, so the move either happens or leaves the study as it was. Steps after them, removing
     the workbook and formatting, raise MoveIncomplete with the study at its new
     place.
     """
@@ -142,13 +178,24 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
     studies = root / STUDIES
     if (substance, name) == (old_folder.parent.name, old_folder.name):
         raise MoveRefused(f"The study is at {new} already")
-    _refuse_case_twin(studies, substance, STUDIES)
+    if (twin := case_twin(studies, substance)) is not None:
+        raise MoveRefused(
+            f"{STUDIES}/{substance} differs from {STUDIES}/{twin} only in case"
+        )
     substances = studies / substance
     if substances.exists(follow_symlinks=False) and not substances.is_dir(
         follow_symlinks=False
     ):
         raise MoveRefused(f"{STUDIES}/{substance} is not a folder")
-    _refuse_case_twin(substances, name, f"{STUDIES}/{substance}")
+    if (twin := case_twin(substances, name)) is not None:
+        shown = f"{STUDIES}/{substance}"
+        message = f"{shown}/{name} differs from {shown}/{twin} only in case"
+        if substances / twin == old_folder:
+            message += (
+                "; to change only the case, move the study to a temporary name "
+                f"first and then to {new}"
+            )
+        raise MoveRefused(message)
     target = substances / name
     if target.exists(follow_symlinks=False):
         raise MoveRefused(f"{_shown(target)} exists already")
@@ -164,22 +211,39 @@ def _plan(root: Path, old: str, new: str, vocabulary: Vocabulary) -> _Plan:
             "fix them before the move"
         )
     workbook = _removable_workbook(old_folder, vocabulary)
+    renamed = dict(renames)
+    writes: list[_Write] = []
     try:
-        issue = read_metadata(old_folder).metadata.issue
         document = read_review(old_folder)
+        metadata = read_metadata(old_folder)
     except ValueError as error:
         raise MoveRefused(f"{_shown(old_folder)}: {error}") from None
-    review, targets = _retarget(document.review, dict(renames))
+    review, targets = _retarget(document.review, renamed)
+    if targets:
+        text = canonical_review_json(review)
+        writes.append(_write_of(old_folder, REVIEW_JSON, text, document.revision))
+    if (updated := _reassets(metadata.metadata, renamed)) is not None:
+        text = canonical_study_json(updated)
+        writes.append(_write_of(old_folder, STUDY_JSON, text, metadata.revision))
+    if (reference := _renamed_reference(old_folder, name)) is not None:
+        writes.append(reference)
     return _Plan(
         old_folder,
         target,
         renames,
-        canonical_review_json(review) if targets else None,
-        document.revision,
+        writes,
         targets,
-        issue,
+        metadata.metadata.issue,
         workbook,
     )
+
+
+def _write_of(folder: Path, file: str, text: str, revision: str) -> _Write:
+    """The write of a file read at `revision`, with that content kept for its undo."""
+    original, current = read_revision(folder / file)
+    if original is None or current != revision:
+        raise MoveRefused(f"{file} changed while the move was checked; move again")
+    return _Write(file, text, original, revision)
 
 
 def _old_location(value: str) -> str:
@@ -193,11 +257,6 @@ def _old_location(value: str) -> str:
 def _shown(folder: Path) -> str:
     """`studies/<substance>/<name>` of a study folder."""
     return f"{STUDIES}/{location(folder)}"
-
-
-def _refuse_case_twin(folder: Path, name: str, shown: str) -> None:
-    if (twin := case_twin(folder, name)) is not None:
-        raise MoveRefused(f"{shown}/{name} differs from {shown}/{twin} only in case")
 
 
 def _renamed(file: str, old: str, new: str) -> str | None:
@@ -323,11 +382,49 @@ def _retarget(review: Review, renamed: dict[str, str]) -> tuple[Review, int]:
     return review.model_copy(update={"items": items}), count
 
 
+def _reassets(metadata: StudyMetadata, renamed: dict[str, str]) -> StudyMetadata | None:
+    """study.json with the provenance assets that name a renamed file renamed, or None when none does.
+
+    An automatic curation or a data import names the files it read, such as the PDF.
+    """
+    provenance = metadata.provenance
+    assets = getattr(provenance, "assets", None)
+    if not assets or not any(asset.url in renamed for asset in assets):
+        return None
+    assets = [
+        asset.model_copy(update={"url": renamed[asset.url]})
+        if asset.url in renamed
+        else asset
+        for asset in assets
+    ]
+    provenance = provenance.model_copy(update={"assets": assets})
+    return metadata.model_copy(update={"provenance": provenance})
+
+
+def _renamed_reference(folder: Path, new: str) -> _Write | None:
+    """reference.json with the new study name, when its name is the old study name.
+
+    Another name, such as one with an umlaut or of a publication with several
+    studies, names the publication and stays.
+    """
+    original, revision = read_revision(folder / REFERENCE_JSON)
+    if original is None:
+        return None
+    try:
+        reference = load_json(original)
+    except ValueError as error:
+        raise MoveRefused(f"{_shown(folder)}: {error}") from None
+    if not isinstance(reference, dict) or reference.get("name") != folder.name:
+        return None
+    text = dump_json({**reference, "name": new})
+    return _Write(REFERENCE_JSON, text, original, revision)
+
+
 def _apply(plan: _Plan) -> None:
-    """Rename the folder and its files and write review.json, or undo every step."""
+    """Rename the folder and its files and write the JSON files, or undo every step."""
     substances = plan.new.parent
     created = False
-    done: list[tuple[Path, Path]] = []
+    done: list[_Undo] = []
     try:
         if not substances.exists():
             substances.mkdir()
@@ -337,8 +434,8 @@ def _apply(plan: _Plan) -> None:
         _rename(plan.old, plan.new, done)
         for old, new in plan.renames:
             _rename(plan.new / old, plan.new / new, done)
-        if plan.review is not None:
-            write_checked(plan.new / REVIEW_JSON, plan.review, plan.revision)
+        for write in plan.writes:
+            _write(plan.new / write.file, write, done)
     except BaseException as error:
         failures = _undo(done)
         if created:
@@ -357,19 +454,30 @@ def _apply(plan: _Plan) -> None:
         raise
 
 
-def _rename(source: Path, target: Path, done: list[tuple[Path, Path]]) -> None:
+def _rename(source: Path, target: Path, done: list[_Undo]) -> None:
     source.rename(target)
-    done.append((source, target))
+    done.append((f"{target.name} to {source.name}", lambda: target.rename(source)))
 
 
-def _undo(done: list[tuple[Path, Path]]) -> list[str]:
-    """Rename back in reverse order; the renames that failed."""
+def _write(path: Path, write: _Write, done: list[_Undo]) -> None:
+    written = write_checked(path, write.text, write.revision)
+
+    def undo() -> None:
+        # A change by another writer since is not overwritten.
+        check_revision(path, written)
+        atomic_bytes(path, write.original)
+
+    done.append((f"{path.name} back to its content", undo))
+
+
+def _undo(done: list[_Undo]) -> list[str]:
+    """Undo the done steps in reverse order; the steps that could not be undone."""
     failures = []
-    for source, target in reversed(done):
+    for name, undo in reversed(done):
         try:
-            target.rename(source)
-        except OSError as error:
-            failures.append(f"{target.name} to {source.name}: {_reason(error)}")
+            undo()
+        except (OSError, RevisionConflict) as error:
+            failures.append(f"{name}: {_reason(error)}")
     return failures
 
 

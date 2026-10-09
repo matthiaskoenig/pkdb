@@ -9,6 +9,7 @@ from openpyxl.utils import get_column_letter
 from pkdb.cli import main
 from pkdb.identity import Author
 from pkdb.lifecycle.move import MoveIncomplete, MoveRefused, move_study
+from pkdb.schemas.provenance import AutomaticCuration
 from pkdb.schemas.review import ReviewTarget
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.formatter import FormatResult, format_folder
@@ -150,6 +151,93 @@ def test_a_move_names_the_issue_of_the_study(moved_checkout, sf_vocabulary):
     folder = study_folder(moved_checkout)
     patch_metadata(folder, {"issue": 7}, read_metadata(folder).revision)
     assert move_study(moved_checkout, OLD, NEW, sf_vocabulary).issue == 7
+
+
+def automatic_curation(folder):
+    """Give the study the provenance of an agent that read the PDF and a file outside the study."""
+    provenance = {
+        "kind": "automatic_curation",
+        "source_key": "pkdb.ai",
+        "method": "claude",
+        "version": "5.5",
+        "run_id": "run-1",
+        "assets": [
+            {"url": "Example.pdf", "sha256": "a" * 64},
+            {"url": "supplement.pdf", "sha256": "b" * 64},
+        ],
+    }
+    patch_metadata(folder, {"provenance": provenance}, read_metadata(folder).revision)
+
+
+def test_provenance_assets_and_the_reference_name_follow_the_move(
+    moved_checkout, sf_vocabulary
+):
+    automatic_curation(study_folder(moved_checkout))
+    folder = move_study(moved_checkout, OLD, NEW, sf_vocabulary).folder
+    provenance = read_metadata(folder).metadata.provenance
+    assert isinstance(provenance, AutomaticCuration)
+    assert [asset.url for asset in provenance.assets] == [
+        "Renamed.pdf",
+        "supplement.pdf",
+    ]
+    assert [asset.sha256 for asset in provenance.assets] == ["a" * 64, "b" * 64]
+    reference = json.loads((folder / "reference.json").read_text(encoding="utf-8"))
+    assert reference == {
+        "sid": "123",
+        "name": "Renamed",
+        "pmid": "123",
+        "title": "Example study",
+    }
+    assert format_folder(folder, check=True).changes == []
+    assert not [
+        i
+        for i in validate_folder(folder, sf_vocabulary).issues
+        if i.severity == "error"
+    ]
+
+
+def test_a_reference_name_other_than_the_study_name_stays(
+    moved_checkout, sf_vocabulary
+):
+    path = study_folder(moved_checkout) / "reference.json"
+    path.write_text(path.read_text().replace('"Example"', '"Jönsson2015"'))
+    before = path.read_bytes()
+    folder = move_study(moved_checkout, OLD, NEW, sf_vocabulary).folder
+    assert (folder / "reference.json").read_bytes() == before
+    assert read_metadata(folder).metadata.provenance.kind == "manual_curation"
+
+
+@pytest.mark.parametrize("failing", ["study.json", "reference.json"])
+def test_a_failed_json_write_undoes_the_move(
+    moved_checkout, sf_vocabulary, monkeypatch, failing
+):
+    from pkdb.lifecycle import move
+
+    folder = study_folder(moved_checkout)
+    automatic_curation(folder)
+    before = snapshot(folder)
+    write = move.write_checked
+
+    def flaky(path, text, expected):
+        if path.name == failing:
+            raise PermissionError(13, "Permission denied", str(path))
+        return write(path, text, expected)
+
+    monkeypatch.setattr(move, "write_checked", flaky)
+    with pytest.raises(MoveRefused, match="Nothing was changed"):
+        move_study(moved_checkout, OLD, NEW, sf_vocabulary)
+    assert snapshot(folder) == before
+    assert not (moved_checkout / "studies" / "codeine").exists()
+
+
+def test_a_case_only_rename_suggests_a_temporary_name(moved_checkout, sf_vocabulary):
+    with pytest.raises(MoveRefused) as error:
+        move_study(moved_checkout, OLD, "caffeine/example", sf_vocabulary)
+    assert str(error.value) == (
+        "studies/caffeine/example differs from studies/caffeine/Example only in "
+        "case; to change only the case, move the study to a temporary name first "
+        "and then to caffeine/example"
+    )
 
 
 def test_an_existing_target_is_refused(moved_checkout, sf_vocabulary):

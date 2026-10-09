@@ -8,6 +8,7 @@ from pkdb.studyformat.layout import RESERVED_NAMES
 NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]*")
 MAX_STUDY_NAME = 24
 _RULE = "letters, digits, '_' and '-', starting with a letter or a digit"
+_RESERVED = frozenset(name.casefold() for name in RESERVED_NAMES)
 
 
 def parse_location(value: str) -> tuple[str, str]:
@@ -23,7 +24,9 @@ def parse_location(value: str) -> tuple[str, str]:
         raise ValueError(
             f"The name {name!r} is longer than {MAX_STUDY_NAME} characters"
         )
-    if name in RESERVED_NAMES:
+    # Ignoring case: Excel sheet names are case-insensitive, so the raw table
+    # `Outputs_Tab1` would collide with the table `outputs_Tab1`.
+    if name.casefold() in _RESERVED:
         raise ValueError(f"The name {name!r} is reserved")
     return substance, name
 

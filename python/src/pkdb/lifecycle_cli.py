@@ -93,8 +93,9 @@ def register(commands) -> None:
         description=(
             "Move the study studies/OLD to studies/NEW and rename the files named "
             "after it: the PDF, the images, the raw tables and the digitizations. "
-            "Review targets follow the files, pkdb format writes the new name into "
-            "the tables, and the GitHub issue gets the new title. A workbook that "
+            "Review targets and provenance assets follow the files, the tables get "
+            "the new name, also reference.json when it has the old name, and the "
+            "GitHub issue gets the new title. A workbook that "
             "holds edits that are not in the tables, or scratch sheets, refuses the "
             "move; otherwise it is removed, and pkdb tables open creates it again."
         ),
