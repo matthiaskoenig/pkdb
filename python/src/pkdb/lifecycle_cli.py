@@ -163,11 +163,19 @@ def run(args) -> int:
     raise AssertionError(args.command)
 
 
-def github_client(repository: str, token: str | None):
+def github_client(repository: str, token: str | None, **options):
     """The GitHub client of the lifecycle commands; imported late to keep help fast."""
     from pkdb.issues.github import GitHub
 
-    return GitHub(repository, token)
+    return GitHub(repository, token, **options)
+
+
+def _on_wait(args):
+    """What announces the waits for GitHub: stderr in human output, else nothing."""
+    from pkdb.issues_cli import announce_wait
+    from pkdb.study_cli import is_human
+
+    return announce_wait if is_human(args) else None
 
 
 def _new(args) -> int:
@@ -179,7 +187,7 @@ def _new(args) -> int:
         token = token_from()
         if token is None:
             raise ValueError("Set GH_TOKEN or GITHUB_TOKEN, or pass --no-issue")
-        github = github_client(repository_from(), token)
+        github = github_client(repository_from(), token, on_wait=_on_wait(args))
     try:
         return _new_study(args, github)
     finally:
@@ -227,19 +235,20 @@ def _new_study(args, github) -> int:
         )
     place = location(created.folder)
     issue = None
+    # The study is complete: a failed or interrupted issue step keeps it.
+    error, code = None, 0
     if github is not None:
         try:
             issue = _record_issue(github, root, place, created.folder)
-        except (GitHubError, RevisionConflict, MetadataError) as error:
-            message = (
-                f"Created {STUDIES}/{place}, but its issue failed: {error}. "
-                "Run pkdb issues sync --adopt to give it one."
+        except (GitHubError, RevisionConflict, MetadataError) as failure:
+            error = f"Created {STUDIES}/{place}, but its issue failed: {failure}."
+            code = 1
+        except KeyboardInterrupt:
+            error = (
+                f"Interrupted while giving {STUDIES}/{place} its issue; "
+                "the study is kept."
             )
-            return fail(
-                args,
-                {"location": place, "path": str(created.folder), "error": message},
-                lambda: say(message, file=sys.stderr),
-            )
+            code = 130
     paper = citation(created.folder)
     data = {
         "location": place,
@@ -254,6 +263,9 @@ def _new_study(args, github) -> int:
     if issue is not None:
         data["issue"] = issue[0]
         data["issue_closed"] = issue[2]
+    if error is not None:
+        error += " Run pkdb issues sync --adopt to give it one."
+        data["error"] = error
     lines = [f"Created {STUDIES}/{place}"]
     if created.moved:
         lines.append(f"Moved from {PAPERS}/{place}: {', '.join(created.moved)}")
@@ -276,7 +288,9 @@ def _new_study(args, github) -> int:
     if is_human(args):
         for warning in created.warnings:
             say(f"Warning: {warning}", file=sys.stderr)
-    return 0
+        if error is not None:
+            say(error, file=sys.stderr)
+    return code
 
 
 def _record_issue(
@@ -305,7 +319,9 @@ def _move(args) -> int:
 
     # A bad token or repository fails before anything moves.
     token = token_from()
-    github = None if token is None else github_client(repository_from(), token)
+    github = None
+    if token is not None:
+        github = github_client(repository_from(), token, on_wait=_on_wait(args))
     try:
         return _move_study(args, github)
     finally:
@@ -356,7 +372,7 @@ def _move_study(args, github) -> int:
         lines.append(f"Updated {moved.assets} provenance asset{plural} of study.json")
     if moved.reference:
         lines.append("Updated the name in reference.json")
-    warnings, renamed = _rename_issue(github, moved.issue, place)
+    warnings, renamed, interrupted = _rename_issue(github, moved.issue, place)
     if moved.issue is None and moved.pkdb_id is None:
         # The server follows a move by the issue number or the PKDB identifier.
         warnings.append(
@@ -388,26 +404,38 @@ def _move_study(args, github) -> int:
             say(f"Warning: {warning}", file=sys.stderr)
         if error is not None:
             say(error, file=sys.stderr)
+    if interrupted:
+        return 130
     return 0 if error is None else 1
 
 
-def _rename_issue(github, issue: int | None, place: str) -> tuple[list[str], bool]:
-    """Give the issue of a moved study its new title; the warnings and whether it was renamed."""
+def _rename_issue(
+    github, issue: int | None, place: str
+) -> tuple[list[str], bool, bool]:
+    """Give the issue of a moved study its new title.
+
+    Returns the warnings, whether the issue was renamed, and whether Ctrl+C
+    interrupted the rename; the move is complete either way.
+    """
     from pkdb.issues.github import GitHubError
     from pkdb.issues.single import rename_issue
 
     later = "pkdb issues sync renames it later"
     if issue is None:
-        return [], False
+        return [], False, False
     if github is None:
-        return [
-            f"Set GH_TOKEN or GITHUB_TOKEN to rename issue #{issue} now; {later}"
-        ], False
+        return (
+            [f"Set GH_TOKEN or GITHUB_TOKEN to rename issue #{issue} now; {later}"],
+            False,
+            False,
+        )
     try:
         rename_issue(github, issue, place)
     except GitHubError as error:
-        return [f"Issue #{issue} was not renamed: {error}; {later}"], False
-    return [], True
+        return [f"Issue #{issue} was not renamed: {error}; {later}"], False, False
+    except KeyboardInterrupt:
+        return [f"Renaming issue #{issue} was interrupted; {later}"], False, True
+    return [], True, False
 
 
 def _registry(args) -> int:

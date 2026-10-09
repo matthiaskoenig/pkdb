@@ -608,7 +608,8 @@ def github(monkeypatch):
 
     fake = FakeGitHub()
     monkeypatch.setattr(
-        "pkdb.lifecycle_cli.github_client", lambda repository, token: fake.client()
+        "pkdb.lifecycle_cli.github_client",
+        lambda repository, token, **options: fake.client(**options),
     )
     monkeypatch.delenv("GH_TOKEN", raising=False)
     monkeypatch.setenv("GITHUB_TOKEN", "token")
@@ -661,6 +662,67 @@ def test_a_github_failure_after_writing_keeps_the_folder(
     assert read_metadata(folder).metadata.issue is None
     assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 1
     assert "exists" in capsys.readouterr().err
+
+
+def test_a_github_failure_shows_the_created_study(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    github.fail[("POST", None)] = 500
+    papers(checkout, "Smith2020.pdf")
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "json"]) == 1
+    data = json.loads(capsys.readouterr().out)
+    assert data["location"] == "caffeine/Smith2020" and data["moved"] == [
+        "Smith2020.pdf"
+    ]
+    assert data["error"].startswith("Created studies/caffeine/Smith2020, but its ")
+    assert data["error"].endswith("Run pkdb issues sync --adopt to give it one.")
+    assert "issue" not in data
+
+
+def test_waits_for_github_are_announced(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    github.fail[("POST", None)] = 429
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", "human"]) == 1
+    err = capsys.readouterr().err.splitlines()
+    assert err[0] == "Waiting 60 seconds: GitHub limits the requests."
+    assert "pkdb issues sync --adopt" in err[-1]
+    assert (
+        main(["new", "caffeine/Other", *WITH_ISSUE[2:], *OPTIONS, "--format", "json"])
+        == 1
+    )
+    assert "Waiting" not in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("output", ["human", "json"])
+def test_an_interrupted_issue_step_keeps_the_study(
+    checkout, resolver, github, monkeypatch, capsys, output
+):
+    answer = github.handler
+
+    def handler(request):
+        if request.method == "POST":
+            raise KeyboardInterrupt
+        return answer(request)
+
+    monkeypatch.setattr(github, "handler", handler)
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS, "--format", output]) == 130
+    captured = capsys.readouterr()
+    hint = (
+        "Interrupted while giving studies/caffeine/Smith2020 its issue; the study "
+        "is kept. Run pkdb issues sync --adopt to give it one."
+    )
+    if output == "json":
+        data = json.loads(captured.out)
+        assert data["location"] == "caffeine/Smith2020" and data["error"] == hint
+    else:
+        assert captured.out.splitlines()[0] == "Created studies/caffeine/Smith2020"
+        assert captured.err.splitlines()[-1] == hint
+    folder = checkout / "studies" / "caffeine" / "Smith2020"
+    assert is_v2_folder(folder) and read_metadata(folder).metadata.issue is None
 
 
 def test_new_does_not_adopt_an_issue_of_another_study(

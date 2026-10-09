@@ -613,7 +613,8 @@ def github(monkeypatch):
 
     fake = FakeGitHub(issues=[{"number": 7, "title": OLD}])
     monkeypatch.setattr(
-        "pkdb.lifecycle_cli.github_client", lambda repository, token: fake.client()
+        "pkdb.lifecycle_cli.github_client",
+        lambda repository, token, **options: fake.client(**options),
     )
     monkeypatch.delenv("GH_TOKEN", raising=False)
     monkeypatch.setenv("GITHUB_TOKEN", "token")
@@ -685,6 +686,45 @@ def test_move_command_warns_when_github_fails(with_issue, github, monkeypatch, c
     assert warning.endswith("; pkdb issues sync renames it later")
     assert github.issues[7]["title"] == OLD
     assert study_folder(with_issue, NEW).is_dir()
+
+
+def test_move_command_announces_waits_for_github(
+    with_issue, github, monkeypatch, capsys
+):
+    github.fail[("PATCH", 7)] = 429
+    monkeypatch.chdir(with_issue)
+    assert main(["move", OLD, NEW, "--format", "human"]) == 0
+    err = capsys.readouterr().err.splitlines()
+    assert err[0] == "Waiting 60 seconds: GitHub limits the requests."
+    assert err[-1].startswith("Warning: Issue #7 was not renamed: ")
+
+
+@pytest.mark.parametrize("output", ["human", "json"])
+def test_an_interrupted_issue_rename_keeps_the_move(
+    with_issue, github, monkeypatch, capsys, output
+):
+    answer = github.handler
+
+    def handler(request):
+        if request.method == "PATCH":
+            raise KeyboardInterrupt
+        return answer(request)
+
+    monkeypatch.setattr(github, "handler", handler)
+    monkeypatch.chdir(with_issue)
+    assert main(["move", OLD, NEW, "--format", output]) == 130
+    captured = capsys.readouterr()
+    warning = "Renaming issue #7 was interrupted; pkdb issues sync renames it later"
+    if output == "json":
+        data = json.loads(captured.out)
+        assert data["location"] == NEW and data["issue_renamed"] is False
+        assert data["warnings"] == [warning]
+    else:
+        lines = captured.out.splitlines()
+        assert lines[0] == "Moved studies/caffeine/Example to studies/codeine/Renamed"
+        assert captured.err == f"Warning: {warning}\n"
+    assert study_folder(with_issue, NEW).is_dir()
+    assert github.issues[7]["title"] == OLD
 
 
 NOT_FOLLOWED = (

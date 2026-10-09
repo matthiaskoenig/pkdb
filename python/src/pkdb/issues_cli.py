@@ -131,7 +131,8 @@ def _progress(line: str) -> None:
     print(safe_text(line), file=sys.stderr, flush=True)
 
 
-def _waiting(seconds: float, reason: str) -> None:
+def announce_wait(seconds: float, reason: str) -> None:
+    """Print a wait for GitHub to stderr."""
     from pkdb.issues import counted
 
     waiting = counted(math.ceil(seconds), "second")
@@ -168,7 +169,7 @@ def run(args) -> int:
         if author is not None and author.user not in {c.username for c in curators}:
             raise ValueError(f"User {author.user} is not in the PK-DB roster")
         human = args.output == "human"
-        on_wait = _waiting if human else None
+        on_wait = announce_wait if human else None
         with github_client(repository, token, on_wait=on_wait) as github:
             result = sync(
                 root,
