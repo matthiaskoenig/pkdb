@@ -192,7 +192,7 @@ def _adopt_one(
     duplicates = [
         duplicate.number
         for duplicate in adoption.duplicates
-        if (duplicate.state, duplicate.state_reason) != ("closed", "not_planned")
+        if duplicate.state == "open"
     ]
     result = AdoptionResult(
         study=state.location,
@@ -247,7 +247,9 @@ def _create(run: _Run, state: StudyState) -> Issue:
     assignees = desired_assignees(
         state, run.roster, Problems(), repository=run.github.repository
     )
-    return run.github.create_issue(state.location, labels=labels, assignees=assignees)
+    issue = run.github.create_issue(state.location, labels=labels, assignees=assignees)
+    _check_applied(run, state.location, issue, labels, assignees)
+    return issue
 
 
 def _create_label(run: _Run, name: str) -> None:
@@ -268,7 +270,9 @@ def _apply(run: _Run, changes: SyncPlan) -> int:
     applied = 0
     for change in changes.changes:
         try:
-            run.github.update_issue(
+            if change.reopen_first:
+                run.github.update_issue(change.number, state="open")
+            issue = run.github.update_issue(
                 change.number,
                 title=change.title,
                 labels=change.labels,
@@ -279,5 +283,35 @@ def _apply(run: _Run, changes: SyncPlan) -> int:
         except GitHubError as error:
             run.fail(change.study, error)
         else:
-            applied += 1
+            applied += _check_applied(
+                run, change.study, issue, change.labels, change.assignees
+            )
     return applied
+
+
+def _check_applied(
+    run: _Run,
+    where: str,
+    issue: Issue,
+    labels: list[str] | None,
+    assignees: list[str] | None,
+) -> bool:
+    """Whether GitHub took the labels and assignees it was sent, ignoring case.
+
+    GitHub drops both silently for a token without push access; that is an
+    error of the study.
+    """
+    if _folded(issue.labels, labels) and _folded(issue.assignees, assignees):
+        return True
+    run.errors.append(
+        f"{where}: GitHub did not apply the labels or assignees of "
+        f"#{issue.number}; the token may lack write access"
+    )
+    return False
+
+
+def _folded(current: tuple[str, ...], sent: list[str] | None) -> bool:
+    """True when nothing was sent or GitHub has what was sent, ignoring case."""
+    return sent is None or {name.casefold() for name in current} == {
+        name.casefold() for name in sent
+    }

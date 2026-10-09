@@ -178,7 +178,9 @@ class IssueChange(BaseModel):
     """What to change on the issue of a study; None leaves a field as it is.
 
     `labels` is the complete new list; `add_labels` and `remove_labels` show
-    the difference.
+    the difference. GitHub changes `state_reason` only together with `state`:
+    `reopen_first` reopens an issue closed with another reason before it is
+    closed as completed.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -192,6 +194,7 @@ class IssueChange(BaseModel):
     assignees: list[str] | None = None
     state: Literal["open", "closed"] | None = None
     state_reason: str | None = None
+    reopen_first: bool = False
 
 
 class SyncPlan(BaseModel):
@@ -313,10 +316,20 @@ def _assignees(issue: Issue, assignees: list[str]) -> dict[str, Any]:
 
 
 def _state(state: StudyState, issue: Issue) -> dict[str, Any]:
-    """Closed as completed when the study is released and approved, else open."""
+    """Closed as completed when the study is released and approved, else open.
+
+    An issue closed without a reason, as GitHub closed issues before it had
+    reasons, counts as closed as completed.
+    """
     if state.released and state.status == "approved":
-        if issue.state != "closed" or issue.state_reason != "completed":
+        if issue.state != "closed":
             return {"state": "closed", "state_reason": "completed"}
+        if issue.state_reason not in (None, "completed"):
+            return {
+                "state": "closed",
+                "state_reason": "completed",
+                "reopen_first": True,
+            }
     elif issue.state == "closed":
         return {"state": "open", "state_reason": "reopened"}
     return {}

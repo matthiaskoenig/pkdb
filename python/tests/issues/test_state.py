@@ -101,7 +101,45 @@ def test_a_released_study_closed_as_not_planned_is_closed_as_completed(tmp_path)
         "number": 1,
         "state": "closed",
         "state_reason": "completed",
+        "reopen_first": True,
     }
+
+
+def test_an_issue_closed_without_reason_counts_as_completed(tmp_path):
+    study(
+        tmp_path,
+        "caffeine/A",
+        issue=1,
+        status="approved",
+        reviewers=["ana"],
+        release={"pkdb_id": "PKDB00001", "date": "2026-10-01"},
+    )
+    current = issue(
+        1,
+        "caffeine/A",
+        state="closed",
+        reason=None,
+        labels=["caffeine", "approved"],
+        assignees=["ana-gh"],
+    )
+    assert run(tmp_path, [current]).changes == []
+
+
+def test_an_open_issue_of_a_released_study_is_closed_in_one_write(tmp_path):
+    study(
+        tmp_path,
+        "caffeine/A",
+        issue=1,
+        status="approved",
+        reviewers=["ana"],
+        release={"pkdb_id": "PKDB00001", "date": "2026-10-01"},
+    )
+    current = issue(
+        1, "caffeine/A", labels=["caffeine", "approved"], assignees=["ana-gh"]
+    )
+    [change] = run(tmp_path, [current]).changes
+    assert (change.state, change.state_reason) == ("closed", "completed")
+    assert not change.reopen_first
 
 
 def test_an_approved_study_without_release_stays_open(tmp_path):

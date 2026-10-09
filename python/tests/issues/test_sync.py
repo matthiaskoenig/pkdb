@@ -149,7 +149,7 @@ def test_adoption_creates_an_issue_without_a_match(tmp_path):
     assert [path for _, path, _ in github.writes] == ["/labels", "/labels", "/issues"]
 
 
-def test_a_duplicate_closed_as_not_planned_is_left_alone(tmp_path):
+def test_only_open_duplicates_are_closed(tmp_path):
     folder = study(tmp_path, "caffeine/A")
     github = FakeGitHub(
         issues=[
@@ -166,18 +166,127 @@ def test_a_duplicate_closed_as_not_planned_is_left_alone(tmp_path):
                 "state": "closed",
                 "state_reason": "completed",
             },
+            {"number": 8, "title": "Check and curate caffeine/A"},
         ],
         assignable=["ana-gh"],
     )
     with github.client() as client:
         result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
     assert result.adopted == [
-        AdoptionResult(study="caffeine/A", number=4, duplicates=[7])
+        AdoptionResult(study="caffeine/A", number=4, duplicates=[8])
     ]
     assert number_of(folder) == 4
-    assert github.comments == [(7, "Duplicate of #4")]
-    assert github.issues[7]["state_reason"] == "not_planned"
-    assert all(path != "/issues/6" for _, path, _ in github.writes)
+    assert github.comments == [(8, "Duplicate of #4")]
+    assert (github.issues[8]["state"], github.issues[8]["state_reason"]) == (
+        "closed",
+        "not_planned",
+    )
+    assert github.issues[7]["state_reason"] == "completed"
+    assert all(path not in ("/issues/6", "/issues/7") for _, path, _ in github.writes)
+
+
+def test_sync_converges_on_legacy_closed_issues(tmp_path):
+    study(
+        tmp_path,
+        "caffeine/A",
+        issue=1,
+        status="approved",
+        reviewers=["ana"],
+        release=RELEASE,
+    )
+    study(
+        tmp_path,
+        "caffeine/B",
+        issue=2,
+        status="approved",
+        reviewers=["ana"],
+        release=RELEASE,
+    )
+    study(tmp_path, "caffeine/C", issue=3)
+    study(tmp_path, "caffeine/D", issue=4)
+    study(
+        tmp_path,
+        "caffeine/E",
+        issue=5,
+        status="approved",
+        reviewers=["ana"],
+        release=RELEASE,
+    )
+    closed = {"state": "closed", "labels": ["caffeine"], "assignees": ["ana-gh"]}
+    github = FakeGitHub(
+        issues=[
+            {"number": 1, "title": "caffeine/A", **closed, "state_reason": None},
+            {
+                "number": 2,
+                "title": "caffeine/B",
+                **closed,
+                "state_reason": "not_planned",
+            },
+            {"number": 3, "title": "caffeine/C", **closed, "state_reason": "completed"},
+            {
+                "number": 4,
+                "title": "caffeine/D",
+                "labels": ["curate"],
+                "assignees": ["zed"],
+            },
+            {"number": 5, "title": "Curate caffeine/E"},
+        ],
+        labels=["caffeine", "curate", "approved"],
+        assignable=["ana-gh", "zed"],
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.ok and result.applied == 5
+    states = {n: (i["state"], i["state_reason"]) for n, i in github.issues.items()}
+    assert states == {
+        1: ("closed", None),
+        2: ("closed", "completed"),
+        3: ("open", "reopened"),
+        4: ("open", None),
+        5: ("closed", "completed"),
+    }
+    assert [body for _, path, body in github.writes if path == "/issues/2"] == [
+        {"state": "open"},
+        {
+            "labels": ["caffeine", "approved"],
+            "state": "closed",
+            "state_reason": "completed",
+        },
+    ]
+    with github.client() as client:
+        again = sync(tmp_path, client, ROSTER)
+    assert again.ok and again.plan.changes == [] and again.applied == 0
+
+
+def test_labels_and_assignees_github_drops_are_errors(tmp_path):
+    study(tmp_path, "caffeine/A", issue=1)
+    github = FakeGitHub(
+        issues=[{"number": 1, "title": "caffeine/A"}],
+        labels=["caffeine", "curate"],
+        assignable=["ana-gh"],
+        push_access=False,
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.errors == [
+        "caffeine/A: GitHub did not apply the labels or assignees of #1; "
+        "the token may lack write access"
+    ]
+    assert result.applied == 0
+
+
+def test_a_new_issue_without_its_labels_and_assignees_is_an_error(tmp_path):
+    folder = study(tmp_path, "caffeine/A")
+    github = FakeGitHub(
+        labels=["caffeine", "curate"], assignable=["ana-gh"], push_access=False
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.errors[0] == (
+        "caffeine/A: GitHub did not apply the labels or assignees of #1; "
+        "the token may lack write access"
+    )
+    assert number_of(folder) == 1
 
 
 @pytest.mark.parametrize(

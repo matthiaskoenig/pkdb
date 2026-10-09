@@ -18,9 +18,12 @@ class FakeGitHub:
     `fail` maps (method, issue number or None) to the status of a refusal, and a
     429 refusal carries Retry-After like a GitHub rate limit; `sleeps` records
     the waits of the client, which never sleeps.
+
+    Like GitHub, a PATCH changes `state_reason` only together with `state`, and
+    without `push_access` labels and assignees of a write are dropped silently.
     """
 
-    def __init__(self, issues=(), labels=(), assignable=()):
+    def __init__(self, issues=(), labels=(), assignable=(), push_access=True):
         self.issues: dict[int, dict[str, Any]] = {
             issue["number"]: {
                 "state": "open",
@@ -37,6 +40,7 @@ class FakeGitHub:
         self.writes: list[tuple[str, str, dict[str, Any]]] = []
         self.fail: dict[tuple[str, int | None], int] = {}
         self.sleeps: list[float] = []
+        self.push_access = push_access
 
     def handler(self, request):
         path = request.url.path.removeprefix("/repos/owner/data")
@@ -53,12 +57,20 @@ class FakeGitHub:
         if path == "/labels":
             self.labels.append(body["name"])
             return httpx2.Response(201, json=body)
+        if not self.push_access:
+            body = {
+                key: value
+                for key, value in body.items()
+                if key not in ("labels", "assignees")
+            }
         if path == "/issues":
             number = max(self.issues, default=0) + 1
             self.issues[number] = {
                 "number": number,
                 "state": "open",
                 "state_reason": None,
+                "labels": [],
+                "assignees": [],
                 **body,
             }
             return httpx2.Response(201, json=self._api(self.issues[number]))
@@ -66,8 +78,15 @@ class FakeGitHub:
             self.comments.append((number, body["body"]))
             return httpx2.Response(201, json={"body": body["body"]})
         assert request.method == "PATCH" and number is not None
-        self.issues[number].update(body)
-        return httpx2.Response(200, json=self._api(self.issues[number]))
+        issue = self.issues[number]
+        state = body.get("state", issue["state"])
+        if state == issue["state"]:
+            body = {key: value for key, value in body.items() if key != "state_reason"}
+        else:
+            default = "completed" if state == "closed" else "reopened"
+            body = {"state_reason": default, **body}
+        issue.update(body)
+        return httpx2.Response(200, json=self._api(issue))
 
     def _page(self, path, page):
         # Query parameters other than the page (state, sort, direction) are ignored.
