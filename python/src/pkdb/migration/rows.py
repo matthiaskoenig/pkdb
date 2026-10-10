@@ -149,13 +149,13 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     """Keys of the characteristica, outputs and timecourse points without any value.
 
     Format 1 accepts a row of a measurement with values, such as cmax or age,
-    that holds neither a choice nor a statistic, not even a count. Format 2
-    refuses it (`missing_value`, and `duplicate_row` for its repeats). Such a
-    row carries no data, so the converter drops it and lists it. A row with a
-    statistic but no central value, such as only an sd or only a count, stays
-    for a curator, and so does a row of the `STATEMENTS`, whose existence is
-    the information. Scatter points stay too, since a scatter row pairs two
-    outputs.
+    that holds neither a choice nor a statistic, not even a count or an error
+    type. Format 2 refuses it (`missing_value`, and `duplicate_row` for its
+    repeats). Such a row carries no data, so the converter drops it and lists
+    it. A row with a statistic but no central value, such as only an sd, only
+    a count or only an error type, stays for a curator, and so does a row of
+    the `STATEMENTS`, whose existence is the information. Scatter points stay
+    too, since a scatter row pairs two outputs.
     """
     rules = vocabulary.measurement_map()
     scatters = _scatter_outputs(study)
@@ -176,7 +176,7 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
         and rule.dtype in VALUE_TYPES
         and not _statement(rule.name)
         and not text(record.choice)
-        and all(getattr(record.statistics, name) is None for name in STATISTICS)
+        and not record.statistics.model_dump(exclude_none=True)
     )
 
 

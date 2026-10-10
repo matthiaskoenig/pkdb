@@ -305,14 +305,16 @@ def test_only_an_empty_row_of_a_repeated_key_is_dropped(
     "row",
     [
         {"measurement_type": "age", "count": 2, "unit": "yr"},
+        {"measurement_type": "age", "error_type": "sd", "unit": "yr"},
         {"measurement_type": "abstinence"},
     ],
-    ids=["only a count", "a statement"],
+    ids=["only a count", "only an error type", "a statement"],
 )
 def test_rows_that_carry_information_without_value_stay_a_mismatch(
     tmp_path, sf_vocabulary, row
 ):
-    # A count, or the existence of an abstinence row, is information to curate.
+    # A count, an error type or the existence of an abstinence row is
+    # information to curate.
     group = STUDY["groupset"]["groups"][0]
     kept = {**row, "image": "Tab1"}
     groups = [{**group, "characteristica": [*group["characteristica"], kept]}]
@@ -320,7 +322,10 @@ def test_rows_that_carry_information_without_value_stay_a_mismatch(
         tmp_path / "v1", {**STUDY, "groupset": {"groups": groups}}, SHEETS, IMAGES
     )
     result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
-    assert (result.outcome, result.issues) == ("mismatch", ["missing_value"])
+    assert result.outcome == "mismatch"
+    # Format 2 also says that an error type without error bar is incomplete.
+    assert "missing_value" in result.issues
+    assert not [d for d in result.differences if not d.path.startswith("validation")]
 
 
 def test_labelled_array_outputs_with_a_dropped_row_are_an_intended_series(

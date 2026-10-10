@@ -209,7 +209,7 @@ def test_rows_without_any_value_are_dropped_and_listed(tmp_path):
     )
 
 
-def test_choice_rows_statements_and_unknown_measurements_are_kept(tmp_path):
+def test_rows_with_a_choice_an_error_type_or_a_statement_are_kept(tmp_path):
     group = {
         **STUDY["groupset"]["groups"][0],
         "characteristica": [
@@ -218,6 +218,7 @@ def test_choice_rows_statements_and_unknown_measurements_are_kept(tmp_path):
             {"measurement_type": "unknown"},
             # Its existence is the information: the group abstained.
             {"measurement_type": "abstinence"},
+            {"measurement_type": "age", "error_type": "sd", "unit": "yr"},
         ],
     }
     study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
@@ -228,7 +229,7 @@ def test_choice_rows_statements_and_unknown_measurements_are_kept(tmp_path):
         for row in tables["characteristica.tsv"]
         if row["subjects"] == "all"
     ]
-    assert measurements == ["sex", "kinetics", "unknown", "abstinence"]
+    assert measurements == ["sex", "kinetics", "unknown", "abstinence", "age"]
     assert "valueless_row" not in {d.kind for d in decisions}
 
 
