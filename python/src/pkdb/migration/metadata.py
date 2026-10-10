@@ -3,7 +3,7 @@
 import re
 from datetime import UTC, datetime, time
 
-from pkdb.migration.model import Decision
+from pkdb.migration.model import Decision, NotConverted
 from pkdb.schemas.provenance import ManualCuration
 from pkdb.schemas.review import Release, Review
 from pkdb.studyformat.models import (
@@ -30,32 +30,61 @@ def single_line(text: object) -> str:
     return " ".join(str(text).split())
 
 
-def _comments(values: list | None, user: str) -> list[Comment]:
+def _malformed(study: str, field: str, problem: str) -> NotConverted:
+    return NotConverted("study_json", f"{study}: study.json {field} {problem}")
+
+
+def _list(values: object, study: str, field: str) -> list:
+    """The list of a study.json field; absent is empty."""
+    if values is None:
+        return []
+    if not isinstance(values, list):
+        raise _malformed(study, field, f"must be a list, not {type(values).__name__}")
+    return values
+
+
+def _comments(values: object, user: str, study: str, field: str) -> list[Comment]:
     pairs = []
-    for value in values or []:
+    for index, value in enumerate(_list(values, study, field)):
         if isinstance(value, list) and len(value) == 2:
             pairs.append((str(value[0]), single_line(value[1])))
         elif isinstance(value, dict):
+            if "text" not in value:
+                raise _malformed(study, f"{field}[{index}]", "has no text")
             pairs.append((str(value.get("user") or user), single_line(value["text"])))
         else:
             pairs.append((user, single_line(value)))
     return [Comment(user=author, text=text) for author, text in pairs if text]
 
 
-def _descriptions(values: list | None) -> list[str]:
-    texts = [single_line(v["text"] if isinstance(v, dict) else v) for v in values or []]
+def _descriptions(values: object, study: str, field: str) -> list[str]:
+    texts = []
+    for index, value in enumerate(_list(values, study, field)):
+        if isinstance(value, dict):
+            if "text" not in value:
+                raise _malformed(study, f"{field}[{index}]", "has no text")
+            value = value["text"]
+        texts.append(single_line(value))
     return [text for text in texts if text]
 
 
-def _curators(values: list | None) -> list[Curator]:
+def _curators(values: object, study: str) -> list[Curator]:
     curators = []
-    for value in values or []:
+    for index, value in enumerate(_list(values, study, "curators")):
         if isinstance(value, str):
             curators.append(Curator(user=value))
         elif isinstance(value, list):
+            if len(value) != 2:
+                raise _malformed(
+                    study, f"curators[{index}]", "must be a pair [user, rating]"
+                )
             curators.append(Curator(user=value[0], rating=value[1]))
-        else:
+        elif isinstance(value, dict):
             curators.append(Curator.model_validate(value))
+        else:
+            raise _malformed(
+                study, f"curators[{index}]", "must be a name, a pair or an object"
+            )
     return curators
 
 
@@ -81,7 +110,12 @@ def _reference(v1: dict, reference: dict) -> StudyReference | None:
 
 
 def study_metadata(
-    v1: dict, reference: dict, release: Release | None, *, creator_fallback: str
+    v1: dict,
+    reference: dict,
+    release: Release | None,
+    *,
+    creator_fallback: str,
+    study: str,
 ) -> tuple[StudyMetadata, list[Decision]]:
     """The metadata of the converted study and what a person should check."""
     creator = str(v1.get("creator") or creator_fallback)
@@ -96,8 +130,14 @@ def study_metadata(
     notes: dict[str, Notes] = {}
     for section, kind in SECTION_KINDS.items():
         content = v1.get(section) or {}
-        descriptions = _descriptions(content.get("descriptions"))
-        comments = _comments(content.get("comments"), creator)
+        if not isinstance(content, dict):
+            raise _malformed(study, section, "must be an object")
+        descriptions = _descriptions(
+            content.get("descriptions"), study, f"{section}.descriptions"
+        )
+        comments = _comments(
+            content.get("comments"), creator, study, f"{section}.comments"
+        )
         if descriptions or comments:
             merged = notes.setdefault(kind, Notes())
             merged.descriptions.extend(descriptions)
@@ -129,14 +169,19 @@ def study_metadata(
             "format": 2,
             "reference": _reference(v1, reference),
             "creator": creator,
-            "curators": _curators(v1.get("curators")),
-            "collaborators": [single_line(c) for c in v1.get("collaborators") or []],
+            "curators": _curators(v1.get("curators"), study),
+            "collaborators": [
+                single_line(c)
+                for c in _list(v1.get("collaborators"), study, "collaborators")
+            ],
             "licence": v1.get("licence", "closed"),
             "access": access,
             "provenance": provenance if provenance else ManualCuration(),
             "release": release,
-            "descriptions": _descriptions(v1.get("descriptions")),
-            "comments": _comments(v1.get("comments"), creator),
+            "descriptions": _descriptions(
+                v1.get("descriptions"), study, "descriptions"
+            ),
+            "comments": _comments(v1.get("comments"), creator, study, "comments"),
             "notes": notes,
         }
     )

@@ -1,5 +1,6 @@
 """Synthetic format 1 studies for the migration tests."""
 
+import io
 import json
 import re
 import zipfile
@@ -8,6 +9,7 @@ from typing import Any, NamedTuple
 
 import openpyxl
 from openpyxl.utils import get_column_letter
+from PIL import Image
 
 # study.json of the twin; Any lets tests derive variants from its nested parts.
 STUDY: dict[str, Any] = {
@@ -217,6 +219,13 @@ def write_sheets(folder: Path, name: str, sheets: dict, *, workbook: bool) -> No
             (folder / f".{name}_{title}.tsv").write_text(text, encoding="utf-8")
 
 
+def tiny_png() -> bytes:
+    """A decodable PNG image."""
+    buffer = io.BytesIO()
+    Image.new("RGB", (2, 2), "white").save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
 def v1_study(
     root: Path,
     study: dict,
@@ -242,7 +251,7 @@ def v1_study(
     write_sheets(folder, name, sheets, workbook=workbook)
     (folder / f"{name}.pdf").write_bytes(b"%PDF")
     for source in images:
-        (folder / f"{name}_{source}.png").write_bytes(b"png")
+        (folder / f"{name}_{source}.png").write_bytes(tiny_png())
     return folder
 
 

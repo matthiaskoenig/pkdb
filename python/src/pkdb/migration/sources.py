@@ -3,7 +3,7 @@
 import shutil
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.schemas.source import SourceLocation
@@ -15,7 +15,11 @@ from pkdb.studyformat.tables import (
 )
 
 PNG_MODES = ("1", "L", "LA", "P", "RGB", "RGBA", "I", "I;16")
-IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg")
+PNG_SUFFIX = ".png"
+IMAGE_SUFFIXES = (PNG_SUFFIX, ".jpg", ".jpeg")
+EXIF_ORIENTATION = 0x0112
+# What PIL raises for a file that is no image or ends early.
+_UNREADABLE = (OSError, SyntaxError, ValueError, Image.DecompressionBombError)
 
 
 def sheet_of(location: SourceLocation, study: str) -> str | None:
@@ -102,10 +106,11 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
     decisions = []
     for source in sorted(used - {TEXT_SOURCE, ""}):
         name = image_file(study, source)
+        # Exact names: a study name may hold glob characters such as `[`.
         candidates = sorted(
             path
-            for path in v1.glob(f"{study}_{source}.*")
-            if path.stem == f"{study}_{source}"
+            for path in v1.iterdir()
+            if path.is_file() and path.stem == f"{study}_{source}" and path.suffix
         )
         images = [path for path in candidates if path.suffix.lower() in IMAGE_SUFFIXES]
         if len(images) > 1:
@@ -123,19 +128,54 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
                 )
             raise NotConverted("missing_image", f"No image {name} for source {source}")
         [image] = images
-        if image.suffix.lower() == ".png":
-            shutil.copyfile(image, target / name)
+        if image.suffix.lower() == PNG_SUFFIX:
+            _check_png(image)
+            _write(shutil.copyfile, image, target / name)
             continue
-        try:
-            with Image.open(image) as picture:
-                if picture.mode not in PNG_MODES:
-                    picture = picture.convert("RGB")
-                picture.save(target / name, format="PNG")
-        except OSError as error:
-            raise NotConverted(
-                "image_unreadable", f"The image {image.name} cannot be read: {error}"
-            ) from error
-        decisions.append(
-            Decision(kind="image_converted", detail=f"{image.name} to {name}")
-        )
+        decisions.append(_convert(image, target / name, name))
     return decisions
+
+
+def _check_png(image: Path) -> None:
+    """Refuse a PNG that does not decode completely."""
+    try:
+        with Image.open(image) as picture:
+            picture.load()
+    except _UNREADABLE as error:
+        raise NotConverted(
+            "image_unreadable", f"The image {image.name} cannot be read: {error}"
+        ) from error
+
+
+def _write(action, *args: Path) -> None:
+    """Run a file write; a failure is the target's, not the source image's."""
+    try:
+        action(*args)
+    except OSError as error:
+        raise NotConverted(
+            "image_write", f"The image could not be written: {error}"
+        ) from error
+
+
+def _convert(image: Path, destination: Path, name: str) -> Decision:
+    """Write the JPG `image` as PNG: upright by its EXIF orientation, with its ICC profile."""
+    try:
+        with Image.open(image) as picture:
+            picture.load()
+            profile = picture.info.get("icc_profile")
+            rotated = picture.getexif().get(EXIF_ORIENTATION, 1) != 1
+            upright = ImageOps.exif_transpose(picture)
+    except _UNREADABLE as error:
+        raise NotConverted(
+            "image_unreadable", f"The image {image.name} cannot be read: {error}"
+        ) from error
+    detail = f"{image.name} to {name}"
+    if rotated:
+        detail += " (rotated by its EXIF orientation)"
+    if upright.mode not in PNG_MODES:
+        # The profile describes the old color space, such as CMYK.
+        upright, profile = upright.convert("RGB"), None
+        upright.info.pop("icc_profile", None)
+    options = {"icc_profile": profile} if profile else {}
+    _write(lambda path: upright.save(path, format="PNG", **options), destination)
+    return Decision(kind="image_converted", detail=detail)

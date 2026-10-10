@@ -46,7 +46,8 @@ What to do for each `not_converted` reason:
 | --- | --- |
 | `missing_image` | A table or figure source of outputs, timecourses or scatters needs `<study>_<source>.png`. |
 | `image_type` | The image of a source is neither PNG nor JPG. Convert it to `<study>_<source>.png`. |
-| `image_unreadable` | A JPG image cannot be read. Replace it with a readable PNG or JPG. |
+| `image_unreadable` | A PNG or JPG image cannot be read or is corrupt; every image is decoded completely before it is copied. Replace it with a readable PNG or JPG. |
+| `image_write` | An image could not be written to the work folder, such as on a full disk. The source image is fine; fix the disk and run again. |
 | `image_conflict` | Two image files exist for one source, such as a PNG and a JPG. Keep one. |
 | `sheet_name`, `image_name` | Rename to the source pattern `Tab...` or `Fig...`. |
 | `subject_name` | Remove `,` `;` tabs and line breaks from names, and give a group and an individual different names. |
@@ -54,6 +55,7 @@ What to do for each `not_converted` reason:
 | `scatter_*` | For example `scatter_name`: two scatters with one subset name in different datasets, as in the caffeine studies Wood1979 and Roberts1976. Rename the subset. |
 | `registry_sid` | The `sid` of `study.json` is a PKDB identifier that the registry does not give to this folder. Fix the registry or the `sid`, see above. |
 | `double_identifier` | Fix the identifier registry. |
+| `study_json` | A list of `study.json` is malformed, such as a curator that is not a name or a `[user, rating]` pair; the message names the field. |
 | `no_subjects`, `metadata`, `reference` | Fix the study as named in the message. |
 | `format` | Format 2 refuses the written folder for the reason in the message. Fix the format 1 study when the message names its data, otherwise report a converter bug. |
 | `unreadable` | The format 1 parser refuses the folder, usually `invalid_v1`. |
@@ -61,7 +63,7 @@ What to do for each `not_converted` reason:
 | `swap` | The converted folder could not replace the format 1 folder, which is unchanged. Fix the file system problem named in the message and rerun. |
 | `converter_error` | The converter failed or its worker process stopped. Rerun, and report a converter bug when it fails again. |
 
-A study without `reference.json` is resolved on a copy by the reference resolver, which needs the network. The original format 1 folder is not written. Check the section Manual decisions in `migration.md`: dropped rows without any value, one line per study, table and format 1 file with the row ranges, for the studies that are written (a dropped row can be the symptom of another defect, such as `||` lists of different order in `study.json`; `migration.json` lists every dropped row with its comment), replaced reference snapshots (the PubMed ID of `study.json` wins over a `reference.json` of another publication), unreleased public studies written as private, studies without a creator (the approver, or `pkdb` without one, becomes the creator), renamed timecourse labels, dropped output labels (also of array outputs that form no timecourse series, such as correlation data of many subjects), converted JPG images, dropped data files (for example WebPlotDigitizer `.json` projects not named `.wpd.json`) and groups of one turned into individuals.
+A study without `reference.json` is resolved on a copy by the reference resolver, which needs the network. The original format 1 folder is not written. Check the section Manual decisions in `migration.md`: dropped rows without any value, one line per study, table and format 1 file with the row ranges, for the studies that are written (a dropped row can be the symptom of another defect, such as `||` lists of different order in `study.json`; `migration.json` lists every dropped row with its comment), replaced reference snapshots (the PubMed ID of `study.json` wins over a `reference.json` of another publication), unreleased public studies written as private, studies without a creator (the approver, or `pkdb` without one, becomes the creator), renamed timecourse labels, dropped output labels (also of array outputs that form no timecourse series, such as correlation data of many subjects), converted JPG images (turned upright by their EXIF orientation, with their ICC profile kept in the PNG), dropped data files (for example WebPlotDigitizer `.json` projects not named `.wpd.json`) and groups of one turned into individuals.
 
 ## Review and merge
 

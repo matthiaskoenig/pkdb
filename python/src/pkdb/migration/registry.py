@@ -5,6 +5,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date
+from functools import cached_property
 from pathlib import Path
 
 from pkdb.migration.model import NotConverted, RegistryFindings
@@ -23,18 +24,34 @@ class Registry:
     def read(cls, path: Path | None) -> Registry:
         if path is None:
             return cls()
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return cls(
-            {
-                pkdb_id: (location, date.fromisoformat(day))
-                for pkdb_id, (location, day) in sorted(data.items())
-            }
-        )
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as error:
+            raise ValueError(
+                f"The registry {path.as_posix()} is not JSON: {error}"
+            ) from error
+        if not isinstance(data, dict):
+            raise ValueError(
+                f"The registry {path.as_posix()} must map PKDB identifiers to "
+                "[location, date]"
+            )
+        entries = {}
+        for pkdb_id, entry in sorted(data.items()):
+            try:
+                location, day = entry
+                entries[pkdb_id] = (str(location), date.fromisoformat(day))
+            except (TypeError, ValueError) as error:
+                raise ValueError(
+                    f"The registry {path.as_posix()} entry {pkdb_id} must be "
+                    f"[location, YYYY-MM-DD], not {entry!r}"
+                ) from error
+        return cls(entries)
 
     @property
     def identifiers(self) -> dict[str, str]:
         return {pkdb_id: location for pkdb_id, (location, _) in self.entries.items()}
 
+    @cached_property
     def _by_location(self) -> dict[str, list[str]]:
         located = defaultdict(list)
         for pkdb_id, (location, _) in self.entries.items():
@@ -48,7 +65,7 @@ class Registry:
         registry must give that identifier to that location; otherwise the
         study is refused rather than written without its release.
         """
-        ids = self._by_location().get(location, [])
+        ids = self._by_location.get(location, [])
         if len(ids) > 1:
             raise NotConverted(
                 "double_identifier",
@@ -75,7 +92,7 @@ class Registry:
 
     def findings(self, root: Path) -> RegistryFindings:
         """Studies with two identifiers and locations without a folder below root/studies."""
-        located = self._by_location()
+        located = self._by_location
         return RegistryFindings(
             double_identifiers={
                 location: ids

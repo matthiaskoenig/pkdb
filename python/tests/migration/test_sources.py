@@ -1,4 +1,7 @@
+import io
+
 import pytest
+from migration_fixtures import tiny_png
 from PIL import Image
 
 from pkdb.migration.model import NotConverted
@@ -97,10 +100,10 @@ def test_images_are_copied_and_jpg_becomes_png(tmp_path):
     v1, target = tmp_path / "v1", tmp_path / "v2"
     v1.mkdir()
     target.mkdir()
-    (v1 / "Example_Fig1.png").write_bytes(b"\x89PNG data")
+    (v1 / "Example_Fig1.png").write_bytes(tiny_png())
     Image.new("RGB", (4, 3), "red").save(v1 / "Example_Tab1.jpg")
     decisions = copy_images(v1, target, "Example", {"Fig1", "Tab1", "Text"})
-    assert (target / "Example_Fig1.png").read_bytes() == b"\x89PNG data"
+    assert (target / "Example_Fig1.png").read_bytes() == tiny_png()
     with Image.open(target / "Example_Tab1.png") as image:
         assert (image.format, image.size) == ("PNG", (4, 3))
     assert [(d.kind, d.detail) for d in decisions] == [
@@ -131,7 +134,7 @@ def test_a_source_with_two_images_refuses_the_study(tmp_path, twin, request):
     v1, target = tmp_path / "v1", tmp_path / "v2"
     v1.mkdir()
     target.mkdir()
-    (v1 / "Example_Tab2.png").write_bytes(b"\x89PNG data")
+    (v1 / "Example_Tab2.png").write_bytes(tiny_png())
     Image.new("RGB", (4, 3), "red").save(v1 / twin, format="JPEG")
     assert image_sources(v1, "Example") == {"Tab2"}
     with pytest.raises(NotConverted) as error:
@@ -163,3 +166,99 @@ def test_a_corrupt_jpg_refuses_the_study(tmp_path):
         copy_images(v1, target, "Example", {"Fig1"})
     assert error.value.code == "image_unreadable"
     assert "Example_Fig1.jpg" in error.value.message
+
+
+def folders(tmp_path):
+    v1, target = tmp_path / "v1", tmp_path / "v2"
+    v1.mkdir()
+    target.mkdir()
+    return v1, target
+
+
+@pytest.mark.parametrize("study", ["Ex[ab]mple", "Ex*", "Ex?mple", "Ex[mple"])
+def test_a_study_name_with_glob_characters_matches_only_its_images(tmp_path, study):
+    v1, target = folders(tmp_path)
+    (v1 / f"{study}_Fig1.png").write_bytes(tiny_png())
+    # Other files that the name would match as a pattern.
+    for other in (
+        "Exa_Fig1.png",
+        "Exb_Fig1.jpg",
+        "Example_Fig1.png",
+        "Exmple_Fig1.png",
+    ):
+        (v1 / other).write_bytes(b"not an image")
+    decisions = copy_images(v1, target, study, {"Fig1"})
+    assert decisions == []
+    assert (target / f"{study}_Fig1.png").read_bytes() == tiny_png()
+    with pytest.raises(NotConverted) as missing:
+        copy_images(v1, target, study, {"Fig2"})
+    assert missing.value.code == "missing_image"
+
+
+def test_a_jpg_is_turned_upright_and_keeps_its_color_profile(tmp_path):
+    v1, target = folders(tmp_path)
+    picture = Image.new("RGB", (4, 2), "red")
+    exif = Image.Exif()
+    exif[0x0112] = 6  # rotated 90 degrees: the stored picture lies on its side
+    profile = b"profile-bytes"
+    picture.save(v1 / "Example_Fig1.jpg", exif=exif, icc_profile=profile)
+    decisions = copy_images(v1, target, "Example", {"Fig1"})
+    with Image.open(target / "Example_Fig1.png") as image:
+        assert image.size == (2, 4)
+        assert image.info["icc_profile"] == profile
+        assert 0x0112 not in image.getexif()
+    assert [d.detail for d in decisions] == [
+        "Example_Fig1.jpg to Example_Fig1.png (rotated by its EXIF orientation)"
+    ]
+
+
+def test_a_jpg_without_orientation_is_not_rotated(tmp_path):
+    v1, target = folders(tmp_path)
+    Image.new("RGB", (4, 2), "red").save(v1 / "Example_Fig1.jpg")
+    decisions = copy_images(v1, target, "Example", {"Fig1"})
+    with Image.open(target / "Example_Fig1.png") as image:
+        assert image.size == (4, 2)
+    assert decisions[0].detail == "Example_Fig1.jpg to Example_Fig1.png"
+
+
+def test_a_cmyk_jpg_becomes_rgb_without_its_profile(tmp_path):
+    v1, target = folders(tmp_path)
+    Image.new("CMYK", (4, 2)).save(v1 / "Example_Fig1.jpg", icc_profile=b"cmyk")
+    copy_images(v1, target, "Example", {"Fig1"})
+    with Image.open(target / "Example_Fig1.png") as image:
+        assert image.mode == "RGB"
+        assert "icc_profile" not in image.info
+
+
+@pytest.mark.parametrize("damage", ["garbage", "truncated"])
+def test_a_corrupt_png_refuses_the_study(tmp_path, damage):
+    v1, target = folders(tmp_path)
+    buffer = io.BytesIO()
+    Image.effect_noise((64, 64), 80).save(buffer, format="PNG")
+    data = b"garbage" if damage == "garbage" else buffer.getvalue()[:-40]
+    (v1 / "Example_Fig1.png").write_bytes(data)
+    with pytest.raises(NotConverted) as error:
+        copy_images(v1, target, "Example", {"Fig1"})
+    assert error.value.code == "image_unreadable"
+    assert "Example_Fig1.png" in error.value.message
+    assert not (target / "Example_Fig1.png").exists()
+
+
+@pytest.mark.parametrize("suffix", ["png", "jpg"])
+def test_a_write_failure_is_not_blamed_on_the_image(tmp_path, suffix, monkeypatch):
+    v1, target = folders(tmp_path)
+    if suffix == "png":
+        (v1 / "Example_Fig1.png").write_bytes(tiny_png())
+    else:
+        Image.new("RGB", (4, 2)).save(v1 / "Example_Fig1.jpg")
+
+    def full_disk(*args, **kwargs):
+        raise OSError(28, "No space left on device")
+
+    monkeypatch.setattr("shutil.copyfile", full_disk)
+    monkeypatch.setattr(Image.Image, "save", full_disk)
+    with pytest.raises(NotConverted) as error:
+        copy_images(v1, target, "Example", {"Fig1"})
+    assert error.value.code == "image_write"
+    assert "cannot be read" not in error.value.message
+    assert "No space left" in error.value.message

@@ -97,3 +97,29 @@ def test_findings_name_double_identifiers_and_missing_paths(tmp_path):
         "caffeine/Example": ["PKDB00001", "PKDB00002"]
     }
     assert findings.missing_paths == ["caffeine/Gone1999"]
+
+
+@pytest.mark.parametrize(
+    ("content", "problem"),
+    [
+        ("{", "is not JSON"),
+        ("[]", "must map"),
+        ('{"PKDB00001": ["a/B"]}', "entry PKDB00001"),
+        ('{"PKDB00001": "a/B"}', "entry PKDB00001"),
+        ('{"PKDB00001": ["a/B", "yesterday"]}', "entry PKDB00001"),
+        ('{"PKDB00001": ["a/B", 3]}', "entry PKDB00001"),
+    ],
+)
+def test_a_malformed_registry_names_the_file_and_entry(tmp_path, content, problem):
+    path = tmp_path / "ids.json"
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(ValueError, match=problem) as error:
+        Registry.read(path)
+    assert "ids.json" in str(error.value)
+
+
+def test_the_locations_are_indexed_once():
+    registry = Registry({"PKDB00001": ("a/B", date(2020, 1, 1))})
+    assert registry.release("a/B", "B") is not None
+    assert registry.release("a/C", "C") is None
+    assert registry._by_location is registry._by_location
