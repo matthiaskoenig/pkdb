@@ -331,14 +331,45 @@ def test_an_unreachable_github_is_marked():
     def handler(request):
         raise httpx2.ConnectError("down", request=request)
 
-    with github(handler) as client:
+    clock = Clock()
+    with github(handler, clock) as client:
         with pytest.raises(GitHubError, match="cannot be reached") as error:
             client.labels()
     assert error.value.unreachable and error.value.status_code is None
+    assert clock.slept == [2.0, 8.0, 30.0]
     with github(lambda request: httpx2.Response(200, content=b"<html>")) as client:
         with pytest.raises(GitHubError) as error:
             client.labels()
     assert not error.value.unreachable
+
+
+def test_a_lost_answer_repeats_a_read_or_an_edit_but_never_a_creation():
+    """A dropped connection may have lost the answer of a request that GitHub did.
+
+    Reading and editing an issue sets a state and is sent again; a new issue or
+    comment would be created twice, so the run stops instead.
+    """
+    sent = []
+    drops = {"GET": 1, "PATCH": 1, "POST": 1}
+
+    def handler(request):
+        sent.append(request.method)
+        if drops[request.method]:
+            drops[request.method] -= 1
+            raise httpx2.RemoteProtocolError("dropped", request=request)
+        if request.method == "GET":
+            return httpx2.Response(200, json=issue(7))
+        return httpx2.Response(200, json=issue(7, state="closed"))
+
+    clock = Clock()
+    with github(handler, clock, write_interval=0) as client:
+        assert client.issue(7).number == 7
+        client.update_issue(7, state="closed")
+        with pytest.raises(GitHubError, match="cannot be reached") as error:
+            client.comment(7, "Duplicate of #6")
+    assert error.value.unreachable
+    assert sent == ["GET", "GET", "PATCH", "PATCH", "POST"]
+    assert clock.slept == [2.0, 2.0]
 
 
 def test_a_not_found_without_token_names_the_token():
