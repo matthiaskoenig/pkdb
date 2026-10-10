@@ -128,6 +128,23 @@ def _scatter_outputs(study: CanonicalStudy) -> set[str]:
     }
 
 
+# Measurements whose rows state a fact even without a value, such as
+# abstinence from alcohol before the study: such a row is never dropped and
+# stays for a curator. In the bundled vocabulary these are the numeric
+# measurements abstinence, abstinence alcohol, abstinence marijuana,
+# abstinence medication, abstinence oral contraceptives, abstinence smoking
+# and fasting (duration); the others of these names, such as fasting and
+# overnight fast, take a choice and are never dropped anyway.
+STATEMENTS = ("abstinence", "fasting")
+
+
+def _statement(measurement: str) -> bool:
+    """Whether a measurement is one of `STATEMENTS` or one of its kinds."""
+    return any(
+        measurement == name or measurement.startswith(f"{name} ") for name in STATEMENTS
+    )
+
+
 def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     """Keys of the characteristica, outputs and timecourse points without any value.
 
@@ -136,7 +153,8 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     refuses it (`missing_value`, and `duplicate_row` for its repeats). Such a
     row carries no data, so the converter drops it and lists it. A row with a
     statistic but no central value, such as only an sd or only a count, stays
-    for a curator. Scatter points stay too, since a scatter row pairs two
+    for a curator, and so does a row of the `STATEMENTS`, whose existence is
+    the information. Scatter points stay too, since a scatter row pairs two
     outputs.
     """
     rules = vocabulary.measurement_map()
@@ -156,6 +174,7 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
         for record in records
         if (rule := rules.get(record.measurement_type)) is not None
         and rule.dtype in VALUE_TYPES
+        and not _statement(rule.name)
         and not text(record.choice)
         and all(getattr(record.statistics, name) is None for name in STATISTICS)
     )

@@ -13,6 +13,8 @@ def studyformat_vocabulary() -> Vocabulary:
             MeasurementRule(name="healthy", dtype="boolean", choices=("Y", "N")),
             MeasurementRule(name="sex", dtype="categorical", choices=("M", "F", "NR")),
             MeasurementRule(name="age", units=("yr",)),
+            # Numeric, but a row without a value states the abstinence.
+            MeasurementRule(name="abstinence", units=("day", "NO_UNIT")),
             MeasurementRule(name="concentration", units=("mg/l",), time_required=True),
             MeasurementRule(name="cmax", units=("mg/l",)),
             MeasurementRule(name="dosing", units=("mg",)),

@@ -282,6 +282,28 @@ def test_a_timecourse_without_any_value_is_an_intended_change(tmp_path, sf_vocab
     assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
 
 
+@pytest.mark.parametrize(
+    "row",
+    [
+        {"measurement_type": "age", "count": 2, "unit": "yr"},
+        {"measurement_type": "abstinence"},
+    ],
+    ids=["only a count", "a statement"],
+)
+def test_rows_that_carry_information_without_value_stay_a_mismatch(
+    tmp_path, sf_vocabulary, row
+):
+    # A count, or the existence of an abstinence row, is information to curate.
+    group = STUDY["groupset"]["groups"][0]
+    kept = {**row, "image": "Tab1"}
+    groups = [{**group, "characteristica": [*group["characteristica"], kept]}]
+    v1 = v1_study(
+        tmp_path / "v1", {**STUDY, "groupset": {"groups": groups}}, SHEETS, IMAGES
+    )
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert (result.outcome, result.issues) == ("mismatch", ["missing_value"])
+
+
 def test_a_dropped_record_with_data_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
