@@ -84,6 +84,8 @@ class StudyResult(Model):
     issues: list[str] = Field(default_factory=list)
     decisions: list[Decision] = Field(default_factory=list)
     written: bool = False
+    # The SHA-256 hash of the vocabulary that converted and judged the study.
+    vocabulary: str | None = None
 
 
 class PaperMove(Model):
