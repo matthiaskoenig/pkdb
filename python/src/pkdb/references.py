@@ -26,6 +26,9 @@ from pkdb.schemas.study import Reference
 
 _LOCK = threading.RLock()
 _LAST_REQUEST = 0.0
+# NCBI allows three requests per second without an API key.
+REQUEST_INTERVAL = 0.36
+_SHARED_CLOCK = None
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 FIELDS = {
     "pmid",
@@ -258,6 +261,37 @@ def merge_metadata(primary, secondary):
     return merged
 
 
+def share_request_clock(lock, last):
+    """Space the provider requests of this process with every process given the same clock.
+
+    `lock` and `last` (a double of the time of the latest request) come from one
+    multiprocessing context; a process pool passes them to each worker as
+    initializer arguments, so that its workers together keep REQUEST_INTERVAL.
+    """
+    global _SHARED_CLOCK
+    _SHARED_CLOCK = (lock, last)
+
+
+def _wait_turn():
+    """Wait until REQUEST_INTERVAL has passed since the latest request; return its time."""
+    global _LAST_REQUEST
+    if _SHARED_CLOCK is None:
+        _LAST_REQUEST = _turn(_LAST_REQUEST)
+        return _LAST_REQUEST
+    lock, last = _SHARED_CLOCK
+    with lock:
+        last.value = _turn(last.value)
+        return last.value
+
+
+def _turn(last):
+    # At most one interval, also when the clocks of two processes disagree.
+    time.sleep(
+        min(REQUEST_INTERVAL, max(0, REQUEST_INTERVAL - (time.monotonic() - last)))
+    )
+    return time.monotonic()
+
+
 class ReferenceResolver:
     def __init__(self, cache_dir=None, *, client=None, offline=False, refresh=False):
         if offline and refresh:
@@ -270,7 +304,6 @@ class ReferenceResolver:
         self.warnings = []
 
     def _get(self, provider, identifier, url, *, params=None, headers=None, parse=None):
-        global _LAST_REQUEST
         key = hashlib.sha256(json.dumps([provider, identifier, 1]).encode()).hexdigest()
         path = self.cache_dir / f"{key}.json"
         with _LOCK:
@@ -308,8 +341,7 @@ class ReferenceResolver:
             client = self.client or httpx2.Client(timeout=15, follow_redirects=True)
             try:
                 for attempt in range(3):
-                    time.sleep(max(0, 0.36 - (time.monotonic() - _LAST_REQUEST)))
-                    _LAST_REQUEST = time.monotonic()
+                    _wait_turn()
                     try:
                         response = client.get(
                             url, params=params, headers=headers or {}, timeout=15
