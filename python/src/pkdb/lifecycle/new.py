@@ -2,7 +2,9 @@
 
 import hashlib
 import json
+import os
 import shutil
+import time
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -72,6 +74,11 @@ class _PaperFiles:
     misnamed: dict[str, str] = field(default_factory=dict)
 
 
+# A hidden build folder untouched for this long is the leftover of a killed run:
+# a build takes seconds, so a younger folder may belong to a running pkdb new.
+STALE_AFTER = 10 * 60
+
+
 def create_study(
     root: Path,
     location: str,
@@ -135,7 +142,8 @@ def create_study(
             raise NewStudyRefused(
                 f"{STUDIES}/{substance}/{staging.name} exists: another pkdb new of "
                 f"{substance}/{name} may be running, or one was interrupted. Remove "
-                "the folder only when no pkdb new is running."
+                "the folder by hand when no pkdb new is running; the next run takes "
+                f"it over when nothing in it changed for {STALE_AFTER // 60} minutes."
             ) from None
         try:
             # The folder has the study's name: formatting writes it into the
@@ -187,12 +195,15 @@ def _remove_leftover(staging: Path, name: str, shown: str) -> list[str]:
 
     The study was not renamed into place (the caller refused a study that
     exists), so the folder never became a study. Only a folder that holds
-    nothing but the study folder is removed; anything else, a symbolic link
-    included, stays and is refused by the caller.
+    nothing but the study folder and that nothing changed in for STALE_AFTER
+    seconds is removed, since a younger one may belong to a running pkdb new;
+    anything else, a symbolic link included, stays and is refused by the caller.
     """
     if staging.is_symlink() or not staging.is_dir():
         return []
     try:
+        if time.time() - _newest_change(staging) < STALE_AFTER:
+            return []
         children = list(staging.iterdir())
         if any(
             child.name != name or child.is_symlink() or not child.is_dir()
@@ -209,6 +220,15 @@ def _remove_leftover(staging: Path, name: str, shown: str) -> list[str]:
         f"Removed {shown}/{staging.name}, left over from an interrupted pkdb new "
         f"of {name}."
     ]
+
+
+def _newest_change(folder: Path) -> float:
+    """The newest modification time of a folder and of everything in it, links not followed."""
+    newest = folder.lstat().st_mtime
+    for directory, folders, files in os.walk(folder):
+        for name in (*folders, *files):
+            newest = max(newest, os.lstat(os.path.join(directory, name)).st_mtime)
+    return newest
 
 
 def _build(

@@ -16,9 +16,9 @@ import pytest
 # so the check catches a quadratic regression on a slow or busy machine alike,
 # where an absolute budget fails or passes by chance. The limit lies at the
 # geometric mean of both, so that cache and memory effects of a busy machine
-# (a ratio of 7.5 was seen under load) do not fail linear work. Each size is measured up
-# to REPEATS times and its least CPU time counts, since a busy machine only
-# ever adds time. Repeats cost nothing while the first ones pass.
+# (a ratio of 7.5 was seen under load) do not fail linear work. Each size is
+# measured up to REPEATS times and its least CPU time counts, since a busy
+# machine only ever adds time. Repeats cost nothing while the first ones pass.
 SCALE = 4
 SCALING_LIMIT = 8
 REPEATS = 6

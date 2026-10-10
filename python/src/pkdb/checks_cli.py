@@ -70,11 +70,12 @@ def _lines(report) -> list[str]:
 
 
 def _usage_error(args, message: str) -> int:
-    """Report a usage error: a JSON object with `error` on stdout in JSON mode, else a line on stderr."""
+    """Report a usage error on stderr: a JSON object `{"ok": false, "error": ...}` in JSON mode, else a line."""
     if is_human(args):
         say(f"pkdb check: {message}", file=sys.stderr)
     else:
-        print(json.dumps({"error": message}, ensure_ascii=False, allow_nan=False))
+        data = {"ok": False, "error": message}
+        print(json.dumps(data, ensure_ascii=False, allow_nan=False), file=sys.stderr)
     return 2
 
 
@@ -88,6 +89,9 @@ def run(args) -> int:
             raise CheckError(
                 "Choose study paths, the staged files or a base, not several"
             )
+        for path in args.paths:
+            if not path.exists():
+                raise CheckError(f"{path.as_posix()} does not exist")
         start = args.root or (args.paths[0] if args.paths else Path.cwd())
         root = repository_root(start)
         folders, deleted = select(

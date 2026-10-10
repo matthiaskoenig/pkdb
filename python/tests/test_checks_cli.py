@@ -109,16 +109,25 @@ def test_a_path_that_does_not_exist_exits_2_saying_so(checkout, run):
     assert err.strip() == "pkdb check: studies/caffeine/Missing does not exist"
 
 
-def test_usage_errors_are_json_objects_in_json_mode(checkout, tmp_path, run):
+def test_usage_errors_are_json_objects_on_stderr_in_json_mode(checkout, run):
     root, _ = checkout("caffeine/A")
     code, out, err = run("studies/caffeine/Missing", "--format", "json", cwd=root)
     assert code == 2
-    assert err == ""
-    assert json.loads(out) == {"error": "studies/caffeine/Missing does not exist"}
+    assert out == ""
+    assert json.loads(err) == {
+        "ok": False,
+        "error": "studies/caffeine/Missing does not exist",
+    }
     code, out, err = run("--staged", "studies/caffeine/A", "--format", "json", cwd=root)
     assert code == 2
-    assert err == ""
-    assert "not several" in json.loads(out)["error"]
+    assert out == ""
+    assert "not several" in json.loads(err)["error"]
+
+
+def test_a_path_that_does_not_exist_outside_a_checkout_says_so(tmp_path, run):
+    code, _, err = run("nowhere", "--format", "human", cwd=tmp_path)
+    assert code == 2
+    assert err.strip() == "pkdb check: nowhere does not exist"
 
 
 def test_json_output_parses(checkout, run):

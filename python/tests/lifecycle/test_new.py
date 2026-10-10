@@ -1,5 +1,7 @@
 import hashlib
 import json
+import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -8,7 +10,7 @@ import pytest
 
 from pkdb.cli import main
 from pkdb.identity import Author
-from pkdb.lifecycle.new import NewStudyRefused, create_study
+from pkdb.lifecycle.new import STALE_AFTER, NewStudyRefused, create_study
 from pkdb.references import ReferenceResolver
 from pkdb.schemas.provenance import AutomaticCuration
 from pkdb.schemas.validation import ValidationIssue
@@ -480,11 +482,25 @@ def test_a_name_that_differs_only_in_case_is_refused(
     ]
 
 
-def test_a_leftover_of_a_killed_run_is_removed_and_reported(checkout, resolver):
+def age(folder, seconds):
+    """Set the modification time of a folder and everything in it back by seconds."""
+    then = time.time() - seconds
+    for directory, folders, files in os.walk(folder, topdown=False):
+        for name in (*files, *folders):
+            os.utime(os.path.join(directory, name), (then, then))
+    os.utime(folder, (then, then))
+
+
+def make_leftover(checkout):
+    staging = checkout / "studies" / "caffeine" / ".Smith2020.new"
+    (staging / "Smith2020").mkdir(parents=True)
+    (staging / "Smith2020" / "study.json").write_text("{}", encoding="utf-8")
+    return staging
+
+
+def test_a_stale_leftover_of_a_killed_run_is_removed_and_reported(checkout, resolver):
     substance = checkout / "studies" / "caffeine"
-    leftover = substance / ".Smith2020.new" / "Smith2020"
-    leftover.mkdir(parents=True)
-    (leftover / "study.json").write_text("{}", encoding="utf-8")
+    age(make_leftover(checkout), STALE_AFTER + 60)
     created = new(checkout, resolver)
     assert created.warnings == [
         "Removed studies/caffeine/.Smith2020.new, left over from an interrupted "
@@ -494,16 +510,32 @@ def test_a_leftover_of_a_killed_run_is_removed_and_reported(checkout, resolver):
     assert [path.name for path in substance.iterdir()] == ["Smith2020"]
 
 
+def test_a_young_leftover_may_belong_to_a_running_run_and_is_kept(checkout, resolver):
+    staging = make_leftover(checkout)
+    age(staging, STALE_AFTER - 60)
+    with pytest.raises(NewStudyRefused, match="another pkdb new .* may be running"):
+        new(checkout, resolver)
+    assert (staging / "Smith2020" / "study.json").exists()
+    # One young file inside keeps an old folder.
+    age(staging, STALE_AFTER + 60)
+    (staging / "Smith2020" / "study.json").touch()
+    with pytest.raises(NewStudyRefused, match="may be running"):
+        new(checkout, resolver)
+    assert (staging / "Smith2020" / "study.json").exists()
+
+
 def test_a_leftover_with_other_content_is_refused_and_kept(checkout, resolver):
     staging = checkout / "studies" / "caffeine" / ".Smith2020.new"
     (staging / "Smith2020").mkdir(parents=True)
     (staging / "notes.txt").write_text("mine", encoding="utf-8")
+    age(staging, STALE_AFTER + 60)
     with pytest.raises(NewStudyRefused) as refused:
         new(checkout, resolver)
     assert str(refused.value) == (
         "studies/caffeine/.Smith2020.new exists: another pkdb new of "
         "caffeine/Smith2020 may be running, or one was interrupted. Remove the "
-        "folder only when no pkdb new is running."
+        "folder by hand when no pkdb new is running; the next run takes it over "
+        "when nothing in it changed for 10 minutes."
     )
     assert (staging / "notes.txt").exists()
     assert (staging / "Smith2020").is_dir()
@@ -514,6 +546,7 @@ def test_a_leftover_beside_a_published_study_is_refused_and_kept(checkout, resol
     substance = checkout / "studies" / "caffeine"
     (substance / ".Smith2020.new" / "Smith2020").mkdir(parents=True)
     (substance / "Smith2020").mkdir()
+    age(substance / ".Smith2020.new", STALE_AFTER + 60)
     with pytest.raises(NewStudyRefused, match="exists already"):
         new(checkout, resolver)
     assert (substance / ".Smith2020.new" / "Smith2020").is_dir()

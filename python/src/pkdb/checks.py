@@ -7,6 +7,7 @@ the identifiers and issue numbers of `pkdb registry --check`. Format 1 studies
 are skipped.
 """
 
+import logging
 import os
 import re
 import subprocess
@@ -401,7 +402,7 @@ def _unencodable_file(folder: Path) -> str | None:
 
 def _failed(folder: Path, study: str, error: Exception) -> Problem:
     """An unexpected error of the check of a study, at the file that caused it where that is known."""
-    file = _unencodable_file(folder) if isinstance(error, UnicodeError) else None
+    file = _unencodable_file(folder) if isinstance(error, UnicodeEncodeError) else None
     message = f"Cannot check the study: {type(error).__name__}: {error}"
     if file is not None:
         message += f" (the name of {_printable(file)} is not valid UTF-8)"
@@ -424,7 +425,11 @@ def _tracked_studies(root: Path) -> set[Path] | None:
     except CheckError:
         return None
     # A copy inside an unrelated work tree is not tracked by that repository.
-    if Path(top.decode("utf-8", "surrogateescape").strip()).resolve() != root:
+    try:
+        same = os.path.samefile(top.decode("utf-8", "surrogateescape").strip(), root)
+    except OSError:
+        same = False
+    if not same:
         return None
     paths = [_relative(root, folder / STUDY_JSON) for folder in checkout_folders(root)]
     listed = _git_paths(root, ["ls-files", "--cached", "-z"], paths)
@@ -484,6 +489,9 @@ def check(
         except OSError as error:
             found = [_unreadable(folder, study, error)]
         except Exception as error:  # a defect must not hide the other studies
+            logging.getLogger(__name__).debug(
+                "Check of %s failed", study, exc_info=True
+            )
             found = [_failed(folder, study, error)]
         report.problems += _tracked_only(root, folder, found, untracked)
         if folder in workbooks:

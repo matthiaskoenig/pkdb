@@ -692,3 +692,66 @@ def test_a_copy_inside_another_work_tree_scans_every_study(tmp_path, valid_files
     patch_study(second, issue=7)
     report = check(root, [], Vocabulary(version="v", measurements=()))
     assert codes(report) == {(None, "duplicate_identifier")}
+
+
+def test_a_content_decoding_error_does_not_blame_a_file_name(
+    checkout, sf_vocabulary, monkeypatch
+):
+    root, studies = checkout("caffeine/A")
+    write_non_utf_8_file(studies["caffeine/A"])
+
+    def broken(folder, vocabulary):
+        raise UnicodeDecodeError("utf-8", b"\xe9", 0, 1, "invalid continuation byte")
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    report = check(root, [studies["caffeine/A"]], sf_vocabulary)
+    assert [(p.code, p.file) for p in report.problems] == [("unreadable_study", None)]
+
+
+def test_a_symlinked_or_differently_spelled_root_is_still_the_top_of_the_work_tree(
+    checkout, sf_vocabulary, tmp_path
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    patch_study(studies["caffeine/A"], issue=7)
+    patch_study(studies["caffeine/B"], issue=7)
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "Name the issue")
+    link = tmp_path / "link"
+    try:
+        link.symlink_to(root, target_is_directory=True)
+    except OSError, NotImplementedError:
+        pytest.skip("the platform refuses symbolic links")
+    # Tracked studies are found through the link, so the duplicate shows once.
+    report = check(link, [], sf_vocabulary, staged=True)
+    assert codes(report) == {(None, "duplicate_identifier")}
+    # An untracked copy is still left out through the link.
+    copy = root / "studies" / "caffeine" / "Copy"
+    shutil.copytree(studies["caffeine/A"], copy)
+    report = check(link, [], sf_vocabulary, staged=True)
+    assert "Copy" not in report.problems[0].message
+
+
+def test_the_top_of_the_work_tree_is_compared_by_identity(
+    checkout, sf_vocabulary, tmp_path, monkeypatch
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    patch_study(studies["caffeine/A"], issue=7)
+    patch_study(studies["caffeine/B"], issue=7)
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "Name the issue")
+    link = tmp_path / "link"
+    try:
+        link.symlink_to(root, target_is_directory=True)
+    except OSError, NotImplementedError:
+        pytest.skip("the platform refuses symbolic links")
+    git_call = pkdb.checks._git
+
+    def spelled_through_the_link(folder, *args, **options):
+        if args[:2] == ("rev-parse", "--show-toplevel"):
+            return f"{link}\n".encode()
+        return git_call(folder, *args, **options)
+
+    monkeypatch.setattr(pkdb.checks, "_git", spelled_through_the_link)
+    assert pkdb.checks._tracked_studies(root) is not None
+    report = check(root, [], sf_vocabulary, staged=True)
+    assert codes(report) == {(None, "duplicate_identifier")}
