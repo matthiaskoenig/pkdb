@@ -6,13 +6,14 @@ import time
 import pytest
 from migration_fixtures import IMAGES, SHEETS, STUDY, v1_full_example, v1_study
 
+from pkdb import references
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.migration import run as run_module
 from pkdb.migration.convert import convert_study
 from pkdb.migration.model import MigrationReport, NotConverted, VocabularyUsed
 from pkdb.migration.registry import Registry
 from pkdb.migration.run import migrate
-from pkdb.references import NotFound, ReferenceResolver
+from pkdb.references import REQUEST_INTERVAL, NotFound, ReferenceResolver
 from pkdb.studyformat.validation import is_v2_folder
 
 # pkdb migrate locks the repository with flock, which Windows lacks; there it
@@ -52,6 +53,10 @@ def dying(task):
         time.sleep(0.05)
     (task.work / "new" / "caffeine" / "Example").mkdir(parents=True)
     os._exit(1)
+
+
+def request_times(count):
+    return [references._wait_turn() for _ in range(count)]
 
 
 def go(root, vocabulary, **options):
@@ -539,6 +544,15 @@ def test_two_jobs_convert_studies_in_parallel(tmp_path, sf_vocabulary):
         ("caffeine/Example", "identical", True),
         ("codeine/Example", "identical", True),
     ]
+
+
+def test_worker_processes_space_their_reference_requests_together():
+    # Each worker keeping the interval alone sends PubMed more requests than it allows.
+    with run_module._pool(2) as pool:
+        futures = [pool.submit(request_times, 3) for _ in range(2)]
+        times = sorted(stamp for future in futures for stamp in future.result())
+    gaps = [later - earlier for earlier, later in zip(times, times[1:])]
+    assert min(gaps) >= REQUEST_INTERVAL * 0.99
 
 
 def test_a_stopped_worker_process_does_not_stop_the_run(

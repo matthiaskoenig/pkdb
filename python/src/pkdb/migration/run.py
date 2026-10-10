@@ -41,7 +41,12 @@ from pkdb.migration.model import (
 )
 from pkdb.migration.registry import Registry
 from pkdb.migration.report import check_report_path, write_report
-from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
+from pkdb.references import (
+    ReferenceError,
+    ReferenceResolver,
+    share_request_clock,
+    sync_reference,
+)
 from pkdb.repository import PAPERS, STUDIES, repository_root, subfolders
 from pkdb.repository import location as location_of
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
@@ -293,10 +298,7 @@ def _results(tasks: list[Task], jobs: int | None) -> Iterator[StudyResult]:
     if jobs == 1:
         yield from map(_one, tasks)
         return
-    executor = ProcessPoolExecutor(
-        max_workers=jobs or os.cpu_count(),
-        mp_context=multiprocessing.get_context("spawn"),
-    )
+    executor = _pool(jobs)
     try:
         futures: dict[Future[StudyResult], Task] = {}
         unsubmitted: list[tuple[Task, Exception]] = []
@@ -315,6 +317,17 @@ def _results(tasks: list[Task], jobs: int | None) -> Iterator[StudyResult]:
             yield _without_result(task, error)
     finally:
         executor.shutdown(cancel_futures=True)
+
+
+def _pool(jobs: int | None) -> ProcessPoolExecutor:
+    """Worker processes that space their reference requests as one process would."""
+    context = multiprocessing.get_context("spawn")
+    return ProcessPoolExecutor(
+        max_workers=jobs or os.cpu_count(),
+        mp_context=context,
+        initializer=share_request_clock,
+        initargs=(context.Lock(), context.Value("d", 0.0, lock=False)),
+    )
 
 
 def _swap(root: Path, folder: Path) -> None:
