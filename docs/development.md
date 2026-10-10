@@ -56,7 +56,7 @@ Keep Markdown prose paragraphs on one source line, using editor soft wrapping. S
 
 ## Continuous integration
 
-Pull requests, branch pushes, and manual runs test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) expand backend checks to Python 3.14 and 3.15 and test the client on Linux, macOS, and Windows with both versions. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
+Pull requests and branch pushes test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) and manual runs expand backend checks to Python 3.14 and 3.15 and test the client on Linux, macOS, and Windows with both versions; start a manual run of the `CI-CD` workflow on a branch to test it on every platform before tagging a release. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
 
 ## Python package releases
 

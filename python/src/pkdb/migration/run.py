@@ -17,6 +17,7 @@ import json
 import multiprocessing
 import os
 import shutil
+import sys
 import tempfile
 from collections import Counter
 from collections.abc import Callable, Iterable, Iterator
@@ -448,10 +449,13 @@ def _other_vocabularies(summary: MigrationReport) -> None:
 @contextmanager
 def _locked(root: Path) -> Iterator[None]:
     """Hold an exclusive lock on the repository root folder; refuse a second run."""
+    refused = RunRefused("pkdb migrate needs Linux or macOS.")
+    if sys.platform == "win32":
+        raise refused
     try:
         import fcntl
     except ImportError:
-        raise RunRefused("pkdb migrate needs Linux or macOS.") from None
+        raise refused from None
     descriptor = os.open(root, os.O_RDONLY)
     try:
         try:
