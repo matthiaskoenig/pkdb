@@ -1,5 +1,7 @@
 # Unreleased
 
+- `pkdb issues sync` sends a read or an edit of an issue again when GitHub drops the connection, after 2, 8 and 30 seconds (#900). The sync of the 849 converted pkdb_data studies stopped twice on such drops (`RemoteProtocolError`, `ReadTimeout`) and needed reruns; a new issue or comment is still never sent twice.
+
 - The backend scopes its advisory locks to the current schema (#899). PostgreSQL advisory locks belong to the whole database, so the parallel backend tests, each in a schema of one test database, blocked each other: `test_same_key_distinct_publications_overlap` failed at random when the vocabulary bootstrap of another test took the exclusive vocabulary lock between its two publications. With one schema, as in production, the locks behave as before; their keys change, so stop every backend process of a deployment before the new one starts.
 
 - The curator roster names the GitHub logins of 13 more accounts and fixes three, so that `pkdb issues sync` can assign the issues of their studies (#898): `FlorBar` (was the typo `FloBar`), `michelle-elias` for `mii-halina`, `beastemmt` for `stemllb`, `KathleenGreen` for `kgreen`, and the logins of `drosdekv`, `linafrolova`, `jonathanspeh` and six accounts of a 2022 student group. The group account `xresearch` is no longer in the roster or in the curation app; pkdb_data no longer names it. `pkdb-server import-users --apply` now also corrects a GitHub login or ORCID that an earlier import set, so a corrected roster reaches existing accounts; a value the user edited stays.

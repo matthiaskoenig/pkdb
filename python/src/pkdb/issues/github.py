@@ -26,6 +26,11 @@ FALLBACK_WAIT = 60.0
 # Waits longer than this are announced to `on_wait`.
 ANNOUNCED_WAIT = 5.0
 RATE_LIMIT = "GitHub limits the requests"
+# A dropped connection can lose the answer of a request that GitHub did. A read
+# or an edit sets a state and is sent again after these pauses; a POST creates an
+# issue, a comment or a label and is never repeated.
+REPEATABLE = frozenset({"GET", "PATCH"})
+LOST_ANSWER_WAITS = (2.0, 8.0, 30.0)
 
 
 class GitHubError(RuntimeError):
@@ -251,10 +256,15 @@ class GitHub:
 
     def _send(self, method: str, path: str, **kwargs) -> httpx2.Response:
         waits = 0
+        repeats = 0
         while True:
             try:
                 response = self._client.request(method, API + path, **kwargs)
             except httpx2.RequestError as error:
+                if method in REPEATABLE and repeats < len(LOST_ANSWER_WAITS):
+                    self._pause(LOST_ANSWER_WAITS[repeats], "GitHub did not answer")
+                    repeats += 1
+                    continue
                 raise GitHubError(
                     f"GitHub cannot be reached: {type(error).__name__}",
                     unreachable=True,
