@@ -1,13 +1,15 @@
 """A study folder is sufficient for the offline command-line workflow."""
 
+import io
 import json
+import os
 import subprocess
 import sys
 
 import httpx2
 import pytest
 
-from pkdb.cli import main
+from pkdb.cli import main, utf8_output
 
 
 @pytest.mark.parametrize("command", ["prepare", "validate"])
@@ -308,3 +310,73 @@ def test_update_check_reports_newer_release(monkeypatch, capsys):
     monkeypatch.setattr(update, "target_version", lambda state, force: None)
     assert main(["update"]) == 0
     assert "is the newest release" in capsys.readouterr().out
+
+
+def test_output_is_utf_8_when_piped(valid_study, tmp_path):
+    # Python on Windows writes a pipe in the ANSI code page, which has no Greek mu.
+    folder = tmp_path / "μ" / "caffeine" / "Example"
+    folder.parent.mkdir(parents=True)
+    valid_study.rename(folder)
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pkdb",
+            "study",
+            "show",
+            str(folder),
+            "--format",
+            "json",
+        ],
+        capture_output=True,
+        env={**os.environ, "PKDB_NO_UPDATE": "1"},
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert json.loads(completed.stdout.decode("utf-8"))["path"] == str(folder)
+
+
+@pytest.mark.parametrize("platform", ["win32", "linux"])
+def test_utf8_output_writes_utf_8_to_pipes_on_windows(platform):
+    code = (
+        "import sys; from pkdb.cli import utf8_output; utf8_output(sys.argv[1]); "
+        "print('\\u03bc'); print('\\u03bc', file=sys.stderr)"
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", code, platform],
+        capture_output=True,
+        # The pipes of Python on Windows, on every platform.
+        env={**os.environ, "PYTHONIOENCODING": "cp1252"},
+        check=False,
+    )
+    if platform == "win32":
+        assert completed.returncode == 0, completed.stderr
+        assert completed.stdout.splitlines() == ["μ".encode()]
+        assert completed.stderr.splitlines() == ["μ".encode()]
+    else:
+        assert b"UnicodeEncodeError" in completed.stderr
+
+
+def test_utf8_output_keeps_the_encoding_of_the_console(monkeypatch):
+    class Console(io.TextIOWrapper):
+        def isatty(self):
+            return True
+
+    stdout = Console(io.BytesIO(), encoding="cp1252")
+    stderr = Console(io.BytesIO(), encoding="cp1252", errors="backslashreplace")
+    monkeypatch.setattr(sys, "stdout", stdout)
+    monkeypatch.setattr(sys, "stderr", stderr)
+    utf8_output("win32")
+    assert (stdout.encoding, stderr.encoding) == ("cp1252", "cp1252")
+
+
+def test_utf8_output_keeps_the_error_handler_of_a_pipe(monkeypatch):
+    stdout = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    stderr = io.TextIOWrapper(
+        io.BytesIO(), encoding="cp1252", errors="backslashreplace"
+    )
+    monkeypatch.setattr(sys, "stdout", stdout)
+    monkeypatch.setattr(sys, "stderr", stderr)
+    utf8_output("win32")
+    assert (stdout.encoding, stdout.errors) == ("utf-8", "strict")
+    assert (stderr.encoding, stderr.errors) == ("utf-8", "backslashreplace")
