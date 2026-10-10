@@ -207,6 +207,7 @@ The curation commands read and edit a study folder with checked, atomic writes; 
 | `pkdb review resolve FOLDER ID` | Resolve an open item |
 | `pkdb review dismiss FOLDER ID` | Dismiss an open or resolved item; a dismissed item no longer acknowledges a warning |
 | `pkdb review reopen FOLDER ID` | Reopen a resolved or dismissed item |
+| `pkdb review assign FOLDER USER` | Name a reviewer in `review.json` without changing the status; `pkdb issues sync` assigns the reviewers, like the curators, to the issue of the study. |
 | `pkdb review status FOLDER draft\|in_review\|approved` | Set the review status; `approved` records `approved_by` and `approved`, and needs zero open items and zero validation errors |
 | `pkdb review acknowledge FOLDER CODE --file FILE --text TEXT` | Acknowledge one validation warning with a resolved item, told apart by `--line`, `--column` and `--key`; a warning of a whole file, such as `unknown_dataset` of a `.wpd.json` file, has the dataset name as its key |
 | `pkdb digitize import FOLDER SOURCE FILE` | Write `<study>_<source>.wpd.json` from a WebPlotDigitizer 4 `.json` or `.tar` project, after checking it against the figure image |

@@ -130,6 +130,11 @@ def register_review(commands) -> None:
         action.add_argument("id", help="Review item id")
         action.add_argument("--text", required=name == "reply")
         reviewed.append(action)
+    assign = actions.add_parser(
+        "assign", help="Name a reviewer, who is then assigned to the issue"
+    )
+    assign.add_argument("reviewer", help="PK-DB user name of the reviewer")
+    reviewed.append(assign)
     status = actions.add_parser(
         "status", help="Set the review status; approving needs a person"
     )
@@ -539,6 +544,13 @@ def _review_thread(args, folder: Path, author) -> int:
     return _written(args, folder, revision, f"{args.action} {args.id}")
 
 
+def _review_assign(args, folder: Path, author) -> int:
+    from pkdb.studyformat.review_edit import assign_reviewer
+
+    revision = assign_reviewer(folder, args.reviewer, revision=args.revision)
+    return _written(args, folder, revision, f"reviewer {args.reviewer}")
+
+
 def _review_status(args, folder: Path, author) -> int:
     from pkdb.studyformat.review_edit import set_status
     from pkdb.tables_cli import _vocabulary
@@ -637,6 +649,7 @@ _REVIEW_ACTIONS = {
     "resolve": _review_thread,
     "dismiss": _review_thread,
     "reopen": _review_thread,
+    "assign": _review_assign,
     "status": _review_status,
     "acknowledge": _review_acknowledge,
 }

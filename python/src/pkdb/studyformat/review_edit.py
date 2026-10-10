@@ -292,6 +292,20 @@ def reopen(
     return _update(folder, revision, change)[1]
 
 
+def assign_reviewer(folder: Path, reviewer: str, *, revision: str | None = None) -> str:
+    """Name `reviewer` among the reviewers; a named reviewer writes nothing.
+
+    The status stays; `pkdb issues sync` assigns the reviewers to the issue.
+    """
+
+    def change(review: Review) -> Review:
+        if reviewer in review.reviewers:
+            return review
+        return review.model_copy(update={"reviewers": [*review.reviewers, reviewer]})
+
+    return _update(folder, revision, change)[1]
+
+
 def approval_blockers(
     folder: Path, review: Review, vocabulary
 ) -> list[ApprovalRefused]:
