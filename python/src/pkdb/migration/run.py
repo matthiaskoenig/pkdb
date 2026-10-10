@@ -20,7 +20,7 @@ import shutil
 import sys
 import tempfile
 from collections import Counter
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Generator, Iterable, Iterator
 from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 from concurrent.futures.process import BrokenProcessPool
 from contextlib import contextmanager
@@ -447,7 +447,7 @@ def _other_vocabularies(summary: MigrationReport) -> None:
 
 
 @contextmanager
-def _locked(root: Path) -> Iterator[None]:
+def _locked(root: Path) -> Generator[None]:
     """Hold an exclusive lock on the repository root folder; refuse a second run."""
     refused = RunRefused("pkdb migrate needs Linux or macOS.")
     if sys.platform == "win32":
@@ -473,7 +473,7 @@ def _locked(root: Path) -> Iterator[None]:
 
 
 @contextmanager
-def _work_folder(root: Path, dry_run: bool) -> Iterator[Path]:
+def _work_folder(root: Path, dry_run: bool) -> Generator[Path]:
     """`.pkdb-migrate` for a real run, a temporary folder for a dry run.
 
     `.pkdb-migrate` stays after an error, so the next run can recover its swaps.

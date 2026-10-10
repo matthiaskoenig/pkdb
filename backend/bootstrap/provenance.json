@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
   "nodes": 2148,
-  "version": "f0fdebf75b1514808ad298c50ac00519f59c020c5e8e6ef8d9fad79d84509a45",
-  "inputs_sha256": "0b0687653d9397ac2d138a7b58af1c7da3b9977235c542f9c44f313c1e1ddc53",
+  "version": "a91ce1e8c2ebdc0b87f49dc0b9b625d21b445bf223bb69506f64223f5e92b3f4",
+  "inputs_sha256": "3682b3efdded087e5d03110d374dc21642b09862650084059212b295293fa572",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -24,7 +24,7 @@
     "backend/info_nodes/definitions/substance.py": "4fb298f7845bd7484323df49bff44985e4e9b365d6e016fc3ac1155ce529515a",
     "backend/info_nodes/definitions/tissue.py": "6c752f90574b9369f89a3fdbc26900d453af059a2708c828c312c78d269dd1ff",
     "backend/info_nodes/graph.py": "a0c9c8dcfd7b589541fe77b93768d9af660d16e677d069011e17bba8c0cdea33",
-    "backend/info_nodes/metadata_cache.py": "42b57f2b37370833dec40d96d3b876a80ac55fc32660435b92a2af0f30399a4b",
+    "backend/info_nodes/metadata_cache.py": "3d6851aff868656131f05f65dc3ff18c1f336891fb94098c0f852c5d04192f60",
     "backend/info_nodes/node.py": "2c2c7ad6f7cf98dab648fb09ddd76e39c64b5f9ca8e3dc4ea53ed45169617b5b",
     "backend/info_nodes/nodes.py": "7470ba80613b9a03d97a3ae32c312236a3db26bdca65bbb13ab679dc054a06dc",
     "backend/info_nodes/policies.py": "0c89c069002d08be48a7c86887bcc117eef7fa5cc7ecc041f4212c40803fd8e6",

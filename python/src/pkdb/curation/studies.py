@@ -12,7 +12,7 @@ import hashlib
 import json
 import os
 import stat
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
@@ -608,7 +608,7 @@ class StudiesMixin(EngineState):
             pass
 
     @contextmanager
-    def _rescanned_on_conflict(self) -> Iterator[None]:
+    def _rescanned_on_conflict(self) -> Generator[None]:
         """Rescan when a write finds its file changed on disk since the app read it.
 
         The study page loads the study after the conflict; without the scan, its ETag would

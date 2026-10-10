@@ -8,7 +8,7 @@ check, except in the instant between check and replace.
 
 import hashlib
 import threading
-from collections.abc import Iterator
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -45,7 +45,7 @@ def read_revision(path: Path) -> tuple[bytes | None, str]:
 
 
 @contextmanager
-def folder_lock(folder: Path) -> Iterator[None]:
+def folder_lock(folder: Path) -> Generator[None]:
     key = Path(folder).resolve()
     with _guard:
         lock = _locks.setdefault(key, threading.Lock())
