@@ -15,6 +15,8 @@ from migration_fixtures import (
 from PIL import Image
 from vocabulary_fixtures import studyformat_vocabulary
 
+from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration import gate, rows
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import MAX_DIFFERENCES, compare, judge
 from pkdb.migration.model import NotConverted
@@ -278,6 +280,46 @@ def test_a_timecourse_without_any_value_is_an_intended_change(tmp_path, sf_vocab
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "intended", result.differences
     assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
+
+
+def test_a_dropped_record_with_data_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    [cmax] = [
+        record
+        for record in parse_bundle(load_folder(v1)).measurements
+        if record.measurement_type == "cmax" and not record.label
+    ]
+    a = prepare(v1, vocabulary=sf_vocabulary).study
+    b = prepare(v2, vocabulary=sf_vocabulary).study
+    changes, differences = compare(a, b, dropped={cmax.key: cmax})
+    assert "valueless_row" not in [change.kind for change in changes]
+    assert (differences[0].a, differences[0].b) == (
+        "mean 2.5, sd 0.5",
+        "dropped record with data",
+    )
+    assert differences[0].path.startswith("measurements[Example_Tab2.png output")
+
+
+def test_the_gate_refuses_a_converter_rule_that_drops_data(
+    tmp_path, sf_vocabulary, monkeypatch
+):
+    # A wrong rule shared by the converter and the gate must still fail the gate.
+    def outputs(study, vocabulary):
+        return frozenset(
+            record.key
+            for record in study.measurements
+            if record.output_type == "output" and not record.label
+        )
+
+    monkeypatch.setattr(rows, "valueless", outputs)
+    monkeypatch.setattr(gate, "valueless", outputs)
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    assert not (v2 / "outputs_Tab2.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert [d.b for d in result.differences] == ["dropped record with data"]
 
 
 def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary):

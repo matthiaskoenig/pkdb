@@ -436,13 +436,32 @@ class _Conversion(NamedTuple):
     """What the converter did to A's records, besides the intended changes of keys.
 
     `arrays` are the array outputs that became timecourse points, `dropped`
-    the records without any value that it dropped, and `timed` the
-    measurements whose characteristica got time NR.
+    the parsed format 1 records that it dropped as rows without any value, by
+    key, and `timed` the measurements whose characteristica got time NR.
     """
 
     arrays: Collection[str] = frozenset()
-    dropped: Collection[str] = frozenset()
+    dropped: Mapping[str, Observation] = {}
     timed: Collection[str] = frozenset()
+
+
+DROPPED_WITH_DATA = "dropped record with data"
+
+
+def _data(record: Observation) -> str | None:
+    """The data of a parsed format 1 record, such as `choice M` or `mean 2, sd 1`.
+
+    The gate checks each row that the converter dropped by this rule of its
+    own, so that no rule of the converter can drop data unseen. A parsed
+    record has no inherited count yet, so any choice or statistic is data.
+    """
+    choice = (record.choice or "").strip()
+    statistics = record.statistics.model_dump(exclude_none=True)
+    if not choice and not statistics:
+        return None
+    parts = [f"choice {choice}"] if choice else []
+    parts += [f"{name} {shown(value)}" for name, value in statistics.items()]
+    return ", ".join(parts)
 
 
 def _records(
@@ -450,11 +469,13 @@ def _records(
     as_individuals: set[str],
     changes: Changes | None,
     conversion: _Conversion = _Conversion(),
-) -> tuple[dict[Key, list[Reported]], dict[str, Key]]:
-    """The reported records by key, and the key of each measurement.
+) -> tuple[dict[Key, list[Reported]], dict[str, Key], list[Difference]]:
+    """The reported records by key, the key of each measurement and refused drops.
 
     With `changes`, the records are A's, rewritten by the intended changes of
     the `conversion`, with the comment that the converter writes for them.
+    A record that the converter dropped is left out; when it holds data, the
+    drop is a difference.
     """
     normalize = (
         None
@@ -465,11 +486,18 @@ def _records(
     )
     scatter_comments = {} if changes is None else _scatter_comments(study)
     records: dict[Key, list[Reported]] = defaultdict(list)
+    refused: list[Difference] = []
 
     def add(key: Key, record: Observation) -> Key | None:
         if record.key in conversion.dropped:
             assert changes is not None
-            changes.add("valueless_row", described(key))
+            data = _data(conversion.dropped[record.key])
+            if data is None:
+                changes.add("valueless_row", described(key))
+            else:
+                refused.append(
+                    Difference(path=described(key), a=data, b=DROPPED_WITH_DATA)
+                )
             return None
         statistics = record.statistics
         if normalize is not None:
@@ -503,7 +531,7 @@ def _records(
                 keys[record.key] = key
     if normalize is not None:
         normalize.finish()
-    return records, keys
+    return records, keys, refused
 
 
 def _reported(
@@ -774,23 +802,24 @@ def compare(
     b: CanonicalStudy,
     arrays: Collection[str] = frozenset(),
     *,
-    dropped: Collection[str] = frozenset(),
+    dropped: Mapping[str, Observation] = {},
     timed: Collection[str] = frozenset(),
 ) -> tuple[list[Change], list[Difference]]:
     """The intended changes from A to B and every other difference between them.
 
     `arrays` are the keys of A's array outputs that become timecourse points
     (`rows.series_arrays`); other array outputs become outputs. `dropped` are
-    the keys of A's records without any value (`rows.valueless`), and `timed`
-    the measurements whose characteristica get time NR.
+    the parsed records of A that the converter dropped as rows without any
+    value (`rows.valueless`), by key, and `timed` the measurements whose
+    characteristica get time NR.
     """
     changes = Changes()
     as_individuals = _individuals(a, changes)
-    a_records, a_keys = _records(
+    a_records, a_keys, refused = _records(
         a, as_individuals, changes, _Conversion(arrays, dropped, timed)
     )
-    b_records, b_keys = _records(b, set(), None)
-    differences = _match(a_records, b_records, changes)
+    b_records, b_keys, _ = _records(b, set(), None)
+    differences = refused + _match(a_records, b_records, changes)
     # Timecourses and scatters hold records; their images are compared above.
     a_keys = {record: key._replace(image=None) for record, key in a_keys.items()}
     b_keys = {record: key._replace(image=None) for record, key in b_keys.items()}
@@ -829,11 +858,15 @@ def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
     study, whose calculation types and counts `prepare` has not filled yet.
     """
     parsed = parse_bundle(load_folder(v1))
-    dropped = valueless(parsed, vocabulary)
+    keys = valueless(parsed, vocabulary)
+    records: list[Observation] = [*parsed.measurements]
+    for subject in [*parsed.groups, *parsed.individuals]:
+        records += subject.characteristica
+    dropped = {record.key: record for record in records if record.key in keys}
     arrays: frozenset[str] = frozenset()
     if any(r.output_type == "array" and r.label for r in parsed.measurements):
         images = image_sources(v1, v1.name)
-        arrays = series_arrays(parsed, v1.name, images, dropped)
+        arrays = series_arrays(parsed, v1.name, images, keys)
     return _Conversion(arrays, dropped, timed_measurements(vocabulary))
 
 
