@@ -22,4 +22,4 @@ jobs:
           python-version: "3.14"
           enable-cache: true
       - run: uv sync --python 3.14 --locked --all-extras
-      - run: uv run --python 3.14 --locked --all-extras pytest -v --tb=short -rfE -p no:cacheprovider -o faulthandler_timeout=240 --deselect "tests/test_curation_rows.py::test_a_same_size_edit_with_a_preserved_mtime_reads_the_format_again"
+      - run: uv run --python 3.14 --locked --all-extras pytest -v --tb=short -rfE -p no:cacheprovider -o faulthandler_timeout=240
