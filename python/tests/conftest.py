@@ -6,6 +6,7 @@ from types import SimpleNamespace
 
 import openpyxl
 import pytest
+from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabulary
 from pkdb.studyformat.jsonio import dump_json
@@ -157,50 +158,7 @@ def study_folder(tmp_path, request):
 
 @pytest.fixture
 def sf_vocabulary():
-    return Vocabulary(
-        version="studyformat-test",
-        measurements=(
-            MeasurementRule(
-                name="species", dtype="categorical", choices=("Homo sapiens",)
-            ),
-            MeasurementRule(name="healthy", dtype="boolean", choices=("Y", "N")),
-            MeasurementRule(name="sex", dtype="categorical", choices=("M", "F", "NR")),
-            MeasurementRule(name="age", units=("yr",)),
-            MeasurementRule(name="concentration", units=("mg/l",), time_required=True),
-            MeasurementRule(name="cmax", units=("mg/l",)),
-            MeasurementRule(name="dosing", units=("mg",)),
-            # Numeric in the bundled vocabulary, but used without a dose.
-            MeasurementRule(name="qualitative dosing", units=("mg", "NO_UNIT")),
-            MeasurementRule(name="fasting", dtype="boolean", choices=("Y", "N")),
-            MeasurementRule(name="kinetics", dtype="abstract"),
-            MeasurementRule(
-                name="medication", dtype="boolean", choices=("Y", "N", "NR")
-            ),
-            MeasurementRule(name="change", units=("mg/l",), can_negative=True),
-            MeasurementRule(name="old_measure", units=("mg/l",), deprecated=True),
-            # Pharmacokinetic parameters that postprocessing derives from timecourses.
-            MeasurementRule(name="auc_end", units=("g/l*hr", "mol/l*hr")),
-            MeasurementRule(name="auc_inf", units=("g/l*hr", "mol/l*hr")),
-            MeasurementRule(name="clearance", units=("l/hr", "l/hr/kg")),
-            MeasurementRule(name="kel", units=("1/min",)),
-            MeasurementRule(name="thalf", units=("hr",)),
-            MeasurementRule(name="tmax", units=("hr",)),
-            MeasurementRule(name="vd", units=("l", "l/kg")),
-            MeasurementRule(name="vd_ss", units=("l", "l/kg")),
-        ),
-        substances=(SubstanceDefinition(name="drug", sid="drug", mass=500),),
-        tissues=("plasma",),
-        methods=("HPLC",),
-        routes=("oral",),
-        forms=("tablet",),
-        applications=(
-            "single dose",
-            "multiple dose",
-            "constant infusion",
-            "variable infusion",
-        ),
-        calculation_types=("calculation", "geometric mean", "sample mean"),
-    )
+    return studyformat_vocabulary()
 
 
 @pytest.fixture

@@ -10,6 +10,7 @@ from migration_fixtures import (
     v1_full_example,
     v1_study,
 )
+from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.model import NotConverted
@@ -25,7 +26,12 @@ X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
 def tables_of(folder):
     """The format 2 tables of the v1 study `Example` and the decisions to check."""
     study = parse_bundle(load_folder(folder))
-    return study_tables(study, "Example", images=image_sources(folder, "Example"))
+    return study_tables(
+        study,
+        "Example",
+        images=image_sources(folder, "Example"),
+        vocabulary=studyformat_vocabulary(),
+    )
 
 
 def cells(text):
@@ -95,6 +101,32 @@ def test_times_not_reported_are_written_as_nr(tmp_path):
     tables, _ = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert (row["time"], row["time_unit"]) == ("NR", "NR")
+
+
+def test_characteristica_of_measurements_with_a_time_have_time_nr(tmp_path):
+    # Format 1 characteristica have no time; format 2 needs one for concentration.
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {
+                "measurement_type": "concentration",
+                "substance": "drug",
+                "tissue": "plasma",
+                "mean": 5,
+                "unit": "mg/l",
+            },
+            {"measurement_type": "age", "mean": 30, "unit": "yr"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    times = {
+        row["measurement"]: (row["time"], row["time_unit"])
+        for row in tables["characteristica.tsv"]
+    }
+    assert times == {"concentration": ("NR", ""), "age": ("", "")}
+    assert decisions == []
 
 
 def test_schedules_and_dose_lists_are_decisions(tmp_path):

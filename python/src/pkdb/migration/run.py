@@ -236,6 +236,7 @@ def _attempt(task: Task, target: Path, copy: Path) -> StudyResult:
             registry=task.registry,
             approver=task.approver,
             resolver=resolver,
+            vocabulary=task.vocabulary,
         )
     except NotConverted as error:
         if error.code == "unreadable":

@@ -8,6 +8,7 @@ from pathlib import Path
 import openpyxl
 from pydantic import ValidationError
 
+from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.formulas import error_bars
 from pkdb.migration.metadata import review, study_metadata
@@ -149,10 +150,13 @@ def convert_study(
     registry: Registry,
     approver: str | None,
     resolver: ReferenceResolver,
+    vocabulary: Vocabulary,
 ) -> Conversion:
     """Write the format 2 study of the v1 folder into `target`, an empty or missing folder.
 
-    Raises NotConverted when format 2 cannot hold the study or a step fails.
+    The `vocabulary` is the one of the gate: it names the measurements that
+    need a time. Raises NotConverted when format 2 cannot hold the study or a
+    step fails.
     """
     name = v1.name
     if target.name != name:
@@ -164,7 +168,9 @@ def convert_study(
         raise NotConverted("unreadable", _issues(error.report.issues)) from error
     workbook = v1 / f"{name}.xlsx"
     bars = error_bars(workbook, study) if workbook.exists() else {}
-    tables, decisions = study_tables(study, name, bars, images=image_sources(v1, name))
+    tables, decisions = study_tables(
+        study, name, bars, images=image_sources(v1, name), vocabulary=vocabulary
+    )
     if "subjects.tsv" not in tables:
         raise NotConverted("no_subjects", "The study has no groups or individuals")
     release = registry.release(

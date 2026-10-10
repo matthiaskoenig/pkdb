@@ -17,7 +17,13 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Change, Difference, StudyResult
-from pkdb.migration.rows import comment, label_name, scatter_comment, series_arrays
+from pkdb.migration.rows import (
+    comment,
+    label_name,
+    scatter_comment,
+    series_arrays,
+    timed_measurements,
+)
 from pkdb.migration.sources import image_sources
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
@@ -264,11 +270,13 @@ class _Normalizer:
         as_individuals: set[str],
         changes: Changes,
         arrays: Collection[str],
+        timed: Collection[str],
     ):
         self.name = study.metadata.name
         self.as_individuals = as_individuals
         self.changes = changes
         self.arrays = arrays
+        self.timed = timed
         self.labels = _scatter_labels(study)
         self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
@@ -290,6 +298,18 @@ class _Normalizer:
             return key
         self.changes.add("whitespace", described(key))
         return key._replace(**updates)
+
+    def time(self, key: Key) -> Key:
+        """Format 1 characteristica have no time; those of `timed` measurements get NR."""
+        if (
+            key.table != "characteristica"
+            or key.measurement_type not in self.timed
+            or key.time is not None
+            or key.time_not_reported
+        ):
+            return key
+        self.changes.add("time_not_reported", described(key))
+        return key._replace(time_not_reported=True)
 
     def image(self, image: str | None) -> str | None:
         """The image file; format 1 keeps the image of a characteristic as written."""
@@ -370,7 +390,7 @@ class _Normalizer:
         key, statistics = self.geometric(
             key._replace(image=self.image(key.image)), statistics
         )
-        key = self.subject(key)
+        key = self.time(self.subject(key))
         if key.table == "measurements":
             key = self.output(key, record)
         return key, statistics
@@ -411,20 +431,34 @@ def _scatter_comments(study: CanonicalStudy) -> dict[str, str]:
     return comments
 
 
+class _Conversion(NamedTuple):
+    """What the converter did to A's records, besides the intended changes of keys.
+
+    `arrays` are the array outputs that became timecourse points, and `timed`
+    the measurements whose characteristica got time NR.
+    """
+
+    arrays: Collection[str] = frozenset()
+    timed: Collection[str] = frozenset()
+
+
 def _records(
     study: CanonicalStudy,
     as_individuals: set[str],
     changes: Changes | None,
-    arrays: Collection[str] = frozenset(),
+    conversion: _Conversion = _Conversion(),
 ) -> tuple[dict[Key, list[Reported]], dict[str, Key]]:
     """The reported records by key, and the key of each measurement.
 
-    With `changes`, the records are A's, rewritten by the intended changes,
-    with the comment that the converter writes for them; `arrays` are the
-    array outputs that become timecourse points.
+    With `changes`, the records are A's, rewritten by the intended changes of
+    the `conversion`, with the comment that the converter writes for them.
     """
     normalize = (
-        None if changes is None else _Normalizer(study, as_individuals, changes, arrays)
+        None
+        if changes is None
+        else _Normalizer(
+            study, as_individuals, changes, conversion.arrays, conversion.timed
+        )
     )
     scatter_comments = {} if changes is None else _scatter_comments(study)
     records: dict[Key, list[Reported]] = defaultdict(list)
@@ -716,16 +750,21 @@ def _points(points: object) -> str:
 
 
 def compare(
-    a: CanonicalStudy, b: CanonicalStudy, arrays: Collection[str] = frozenset()
+    a: CanonicalStudy,
+    b: CanonicalStudy,
+    arrays: Collection[str] = frozenset(),
+    *,
+    timed: Collection[str] = frozenset(),
 ) -> tuple[list[Change], list[Difference]]:
     """The intended changes from A to B and every other difference between them.
 
     `arrays` are the keys of A's array outputs that become timecourse points
-    (`rows.series_arrays`); other array outputs become outputs.
+    (`rows.series_arrays`); other array outputs become outputs. `timed` are
+    the measurements whose characteristica get time NR.
     """
     changes = Changes()
     as_individuals = _individuals(a, changes)
-    a_records, a_keys = _records(a, as_individuals, changes, arrays)
+    a_records, a_keys = _records(a, as_individuals, changes, _Conversion(arrays, timed))
     b_records, b_keys = _records(b, set(), None)
     differences = _match(a_records, b_records, changes)
     # Timecourses and scatters hold records; their images are compared above.
@@ -870,7 +909,12 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return _invalid(study, "validation", error.report.issues, converted)
     if _errors(b):
         return _invalid(study, "validation", b.report.issues, converted)
-    changes, differences = compare(a.study, b.study, _series_arrays(v1, a.study))
+    changes, differences = compare(
+        a.study,
+        b.study,
+        _series_arrays(v1, a.study),
+        timed=timed_measurements(vocabulary),
+    )
     if differences:
         return StudyResult(
             study=study,

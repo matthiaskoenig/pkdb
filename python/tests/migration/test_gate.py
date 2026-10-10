@@ -13,6 +13,7 @@ from migration_fixtures import (
     v1_study,
 )
 from PIL import Image
+from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import MAX_DIFFERENCES, compare, judge
@@ -33,6 +34,7 @@ def converted(tmp_path, v1):
         registry=Registry(),
         approver=None,
         resolver=ReferenceResolver(offline=True),
+        vocabulary=studyformat_vocabulary(),
     )
     return target
 
@@ -219,6 +221,33 @@ def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocab
     assert result.outcome == "mismatch"
     assert [d.path for d in result.differences] == [
         f"validation characteristica.tsv:{row} missing_value [subjects=S2 measurement=age]"
+    ]
+
+
+def test_a_characteristic_without_time_is_an_intended_change(tmp_path, sf_vocabulary):
+    # Format 1 characteristica have no time; format 2 needs one for concentration.
+    group = STUDY["groupset"]["groups"][0]
+    concentration = {
+        "measurement_type": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "mean": 5,
+        "unit": "mg/l",
+        "image": "Tab1",
+    }
+    groups = [{**group, "characteristica": [*group["characteristica"], concentration]}]
+    study = {**STUDY, "groupset": {"groups": groups}}
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.examples) for c in result.changes] == [
+        (
+            "time_not_reported",
+            [
+                "characteristica[Example_Tab1.png all concentration sample mean "
+                "drug plasma mg/l]"
+            ],
+        )
     ]
 
 

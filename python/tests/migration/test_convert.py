@@ -4,6 +4,7 @@ from datetime import date
 import openpyxl
 import pytest
 from migration_fixtures import SHEETS, STUDY, v1_full_example, v1_study, write_sheets
+from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.migration.convert import convert_study, is_v1_file
 from pkdb.migration.model import NotConverted
@@ -37,6 +38,7 @@ def convert(v1, tmp_path, *, resolver=None):
         registry=Registry(),
         approver=None,
         resolver=resolver or NoNetwork(offline=True),
+        vocabulary=studyformat_vocabulary(),
     )
 
 
@@ -55,7 +57,12 @@ def test_the_converted_folder_equals_the_format_2_twin(tmp_path, valid_study, wo
     v1 = v1_full_example(tmp_path / "v1", workbook=workbook)
     target = tmp_path / "v2" / "caffeine" / "Example"
     conversion = convert_study(
-        v1, target, registry=Registry(), approver=None, resolver=NoNetwork(offline=True)
+        v1,
+        target,
+        registry=Registry(),
+        approver=None,
+        resolver=NoNetwork(offline=True),
+        vocabulary=studyformat_vocabulary(),
     )
     assert conversion.folder == target
     assert files(target) == files(valid_study)
@@ -74,6 +81,7 @@ def test_a_registered_study_is_released_and_approved(tmp_path, sid):
         registry=registry,
         approver="mkoenig",
         resolver=NoNetwork(offline=True),
+        vocabulary=studyformat_vocabulary(),
     )
     metadata = json.loads((target / "study.json").read_text())
     assert metadata["release"] == {"pkdb_id": "PKDB00042", "date": "2020-01-02"}
@@ -97,6 +105,7 @@ def test_a_released_study_that_the_registry_does_not_release_is_not_converted(
             registry=Registry(registered),
             approver="mkoenig",
             resolver=NoNetwork(offline=True),
+            vocabulary=studyformat_vocabulary(),
         )
     assert error.value.code == "registry_sid"
     assert "PKDB00042" in error.value.message
@@ -319,5 +328,6 @@ def test_the_target_is_an_empty_folder_named_like_the_study(
             registry=Registry(),
             approver=None,
             resolver=NoNetwork(offline=True),
+            vocabulary=studyformat_vocabulary(),
         )
     assert not (tmp_path / "v2" / "caffeine" / "Other").exists()

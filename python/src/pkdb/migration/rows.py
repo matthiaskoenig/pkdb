@@ -7,6 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from pkdb.domain.datasets import STATISTICS_FIELDS
+from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.migration.sources import curator_source, observation_source
@@ -109,6 +110,13 @@ def observation(record: Observation, error_bars: ErrorBars) -> dict[str, str]:
     }
 
 
+def timed_measurements(vocabulary: Vocabulary) -> frozenset[str]:
+    """The measurements that format 2 records only with a time, which may be NR."""
+    return frozenset(
+        rule.name for rule in vocabulary.measurements if rule.time_required
+    )
+
+
 def label_name(label: str) -> str:
     """The format 2 name of a timecourse label: separators become `_`."""
     return label if NAME_PATTERN.fullmatch(label) else SEPARATORS.sub("_", label)
@@ -198,7 +206,14 @@ def _characteristica(
     images: frozenset[str],
     error_bars: ErrorBars,
     decisions: list[Decision],
+    *,
+    timed: frozenset[str],
 ) -> list[dict[str, str]]:
+    """Rows of characteristica.tsv.
+
+    Format 1 characteristica have no time, so those of a measurement that
+    format 2 records only with a time (`timed`) get time NR.
+    """
     rows = []
     subjects: list[Group | Individual] = [*study.groups, *study.individuals]
     for subject in subjects:
@@ -210,6 +225,8 @@ def _characteristica(
                 "subjects": subject.name,
                 "source": curator_source(record.source, image, name, images),
             }
+            if record.measurement_type in timed and not row["time"]:
+                row["time"] = NOT_REPORTED
             rows.append(_geometric(record, row, decisions))
     return rows
 
@@ -547,10 +564,12 @@ def study_tables(
     error_bars: ErrorBars = {},
     *,
     images: frozenset[str],
+    vocabulary: Vocabulary,
 ) -> tuple[Tables, list[Decision]]:
     """The format 2 tables of a parsed format 1 study and the decisions to check.
 
     `images` are the sources that have an image in the v1 folder (`image_sources`).
+    The `vocabulary` names the measurements that need a time.
     """
     decisions: list[Decision] = []
     scatters, used = _scatter_rows(study, name, images, decisions)
@@ -558,7 +577,12 @@ def study_tables(
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, images, decisions),
         "characteristica.tsv": _characteristica(
-            study, name, images, error_bars, decisions
+            study,
+            name,
+            images,
+            error_bars,
+            decisions,
+            timed=timed_measurements(vocabulary),
         ),
         "interventions.tsv": _interventions(study, name, images, error_bars, decisions),
     }
