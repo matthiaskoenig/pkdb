@@ -7,6 +7,7 @@ the identifiers and issue numbers of `pkdb registry --check`. Format 1 studies
 are skipped.
 """
 
+import os
 import re
 import subprocess
 from collections.abc import Iterable, Sequence
@@ -152,6 +153,8 @@ def _below(root: Path, path: Path) -> list[Path]:
     Hidden folders are skipped; a study.json at another depth is a CheckError.
     """
     studies = root / STUDIES
+    if not Path(path).exists():
+        raise CheckError(f"{Path(path).as_posix()} does not exist")
     path = Path(path).resolve()
     if not path.is_relative_to(studies):
         raise CheckError(f"{path} is outside {studies}")
@@ -159,6 +162,8 @@ def _below(root: Path, path: Path) -> list[Path]:
         found = study_folders(path)
     except ValueError as error:
         raise CheckError(f"{path}: {error}") from None
+    except OSError as error:
+        raise _listing_error(path, error) from None
     folders = []
     for folder in found:
         parts = folder.relative_to(studies).parts
@@ -171,6 +176,12 @@ def _below(root: Path, path: Path) -> list[Path]:
             )
         folders.append(folder)
     return folders
+
+
+def _listing_error(folder: Path, error: OSError) -> CheckError:
+    """The usage error for a folder of studies that cannot be listed."""
+    where = Path(str(error.filename)) if error.filename else folder
+    return CheckError(f"Cannot list {where.as_posix()}: {error.strerror or error}")
 
 
 def _verify_base(root: Path, base: str) -> None:
@@ -232,7 +243,10 @@ def select(
         return _changed(root, None if staged else changed)
     if not (root / STUDIES).is_dir():
         raise CheckError(f"{root} has no {STUDIES} folder")
-    return [folder for folder in checkout_folders(root) if _holds_study(folder)], []
+    try:
+        return [f for f in checkout_folders(root) if _holds_study(f)], []
+    except OSError as error:
+        raise _listing_error(root / STUDIES, error) from None
 
 
 def vocabulary_for(root: Path, path: Path | None) -> Vocabulary:
@@ -339,6 +353,8 @@ def _tracked_only(
     names: set[str] = set()
     for problem in problems:
         if problem.file is None or f"{prefix}/{problem.file}" not in untracked:
+            if problem.file is not None and _printable(problem.file) != problem.file:
+                problem = problem.model_copy(update={"file": _printable(problem.file)})
             kept.append(problem)
         elif problem.severity == "error":
             names.add(problem.file)
@@ -349,7 +365,7 @@ def _tracked_only(
                 code="untracked_errors",
                 message=(
                     f"Errors in files that git does not track can hide other errors "
-                    f"of the study: {', '.join(sorted(names, key=natural_key))}; add the files with git add or remove them"
+                    f"of the study: {', '.join(sorted(map(_printable, names), key=natural_key))}; add the files with git add or remove them"
                 ),
                 severity="warning",
             )
@@ -371,11 +387,44 @@ def _unreadable(folder: Path, study: str, error: OSError) -> Problem:
     )
 
 
+def _unencodable_file(folder: Path) -> str | None:
+    """The first file below the folder whose name is not valid UTF-8, relative to it, else None."""
+    for directory, folders, files in os.walk(folder):
+        folders.sort()
+        for name in sorted(files):
+            try:
+                name.encode("utf-8")
+            except UnicodeEncodeError:
+                return (Path(directory) / name).relative_to(folder).as_posix()
+    return None
+
+
+def _failed(folder: Path, study: str, error: Exception) -> Problem:
+    """An unexpected error of the check of a study, at the file that caused it where that is known."""
+    file = _unencodable_file(folder) if isinstance(error, UnicodeError) else None
+    message = f"Cannot check the study: {type(error).__name__}: {error}"
+    if file is not None:
+        message += f" (the name of {_printable(file)} is not valid UTF-8)"
+    return Problem(study=study, code="unreadable_study", message=message, file=file)
+
+
+def _printable(name: str) -> str:
+    """A file name with the bytes that are not valid UTF-8 written as escapes."""
+    return name.encode("utf-8", "backslashreplace").decode("utf-8")
+
+
 def _tracked_studies(root: Path) -> set[Path] | None:
-    """The study folders whose study.json git tracks or has staged, or None outside a git checkout."""
+    """The study folders whose study.json git tracks or has staged.
+
+    None outside a git checkout, and when the checkout is not the top of its git
+    work tree (a copy inside another repository), where every study counts.
+    """
     try:
-        _git(root, "rev-parse", "--is-inside-work-tree")
+        top = _git(root, "rev-parse", "--show-toplevel")
     except CheckError:
+        return None
+    # A copy inside an unrelated work tree is not tracked by that repository.
+    if Path(top.decode("utf-8", "surrogateescape").strip()).resolve() != root:
         return None
     paths = [_relative(root, folder / STUDY_JSON) for folder in checkout_folders(root)]
     listed = _git_paths(root, ["ls-files", "--cached", "-z"], paths)
@@ -434,14 +483,8 @@ def check(
             raise
         except OSError as error:
             found = [_unreadable(folder, study, error)]
-        except ValueError as error:  # also UnicodeError
-            found = [
-                Problem(
-                    study=study,
-                    code="unreadable_study",
-                    message=f"Cannot check the study: {type(error).__name__}: {error}",
-                )
-            ]
+        except Exception as error:  # a defect must not hide the other studies
+            found = [_failed(folder, study, error)]
         report.problems += _tracked_only(root, folder, found, untracked)
         if folder in workbooks:
             report.problems.append(workbooks[folder])

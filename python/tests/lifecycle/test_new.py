@@ -480,10 +480,24 @@ def test_a_name_that_differs_only_in_case_is_refused(
     ]
 
 
-def test_a_leftover_of_an_interrupted_run_is_refused(checkout, resolver):
-    leftover = checkout / "studies" / "caffeine" / ".Smith2020.new" / "Smith2020"
+def test_a_leftover_of_a_killed_run_is_removed_and_reported(checkout, resolver):
+    substance = checkout / "studies" / "caffeine"
+    leftover = substance / ".Smith2020.new" / "Smith2020"
     leftover.mkdir(parents=True)
     (leftover / "study.json").write_text("{}", encoding="utf-8")
+    created = new(checkout, resolver)
+    assert created.warnings == [
+        "Removed studies/caffeine/.Smith2020.new, left over from an interrupted "
+        "pkdb new of Smith2020."
+    ]
+    assert is_v2_folder(substance / "Smith2020")
+    assert [path.name for path in substance.iterdir()] == ["Smith2020"]
+
+
+def test_a_leftover_with_other_content_is_refused_and_kept(checkout, resolver):
+    staging = checkout / "studies" / "caffeine" / ".Smith2020.new"
+    (staging / "Smith2020").mkdir(parents=True)
+    (staging / "notes.txt").write_text("mine", encoding="utf-8")
     with pytest.raises(NewStudyRefused) as refused:
         new(checkout, resolver)
     assert str(refused.value) == (
@@ -491,8 +505,18 @@ def test_a_leftover_of_an_interrupted_run_is_refused(checkout, resolver):
         "caffeine/Smith2020 may be running, or one was interrupted. Remove the "
         "folder only when no pkdb new is running."
     )
-    assert (leftover / "study.json").exists()
+    assert (staging / "notes.txt").exists()
+    assert (staging / "Smith2020").is_dir()
     assert not (checkout / "studies" / "caffeine" / "Smith2020").exists()
+
+
+def test_a_leftover_beside_a_published_study_is_refused_and_kept(checkout, resolver):
+    substance = checkout / "studies" / "caffeine"
+    (substance / ".Smith2020.new" / "Smith2020").mkdir(parents=True)
+    (substance / "Smith2020").mkdir()
+    with pytest.raises(NewStudyRefused, match="exists already"):
+        new(checkout, resolver)
+    assert (substance / ".Smith2020.new" / "Smith2020").is_dir()
 
 
 def test_new_command(checkout, resolver, monkeypatch, capsys):

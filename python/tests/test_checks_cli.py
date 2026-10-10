@@ -77,29 +77,48 @@ def test_staged_and_changed_exclude_each_other(checkout, run):
 
 def test_a_selection_mode_excludes_paths(checkout, run):
     root, _ = checkout("caffeine/A")
-    code, _, err = run("--staged", "studies/caffeine/A", cwd=root)
+    code, _, err = run("--staged", "studies/caffeine/A", "--format", "human", cwd=root)
     assert code == 2
     assert "not several" in err
 
 
 def test_outside_a_git_repository_exits_2_naming_git(tmp_path, run):
     (tmp_path / "studies" / "caffeine" / "A").mkdir(parents=True)
-    code, _, err = run("--staged", cwd=tmp_path)
+    code, _, err = run("--staged", "--format", "human", cwd=tmp_path)
     assert code == 2
     assert "git" in err.lower()
 
 
 def test_no_checkout_exits_2(tmp_path, run):
-    code, _, err = run(cwd=tmp_path)
+    code, _, err = run("--format", "human", cwd=tmp_path)
     assert code == 2
     assert "studies" in err
 
 
 def test_unknown_base_exits_2(checkout, run):
     root, _ = checkout("caffeine/A")
-    code, _, err = run("--changed", "nope", cwd=root)
+    code, _, err = run("--changed", "nope", "--format", "human", cwd=root)
     assert code == 2
     assert err.strip()
+
+
+def test_a_path_that_does_not_exist_exits_2_saying_so(checkout, run):
+    root, _ = checkout("caffeine/A")
+    code, _, err = run("studies/caffeine/Missing", "--format", "human", cwd=root)
+    assert code == 2
+    assert err.strip() == "pkdb check: studies/caffeine/Missing does not exist"
+
+
+def test_usage_errors_are_json_objects_in_json_mode(checkout, tmp_path, run):
+    root, _ = checkout("caffeine/A")
+    code, out, err = run("studies/caffeine/Missing", "--format", "json", cwd=root)
+    assert code == 2
+    assert err == ""
+    assert json.loads(out) == {"error": "studies/caffeine/Missing does not exist"}
+    code, out, err = run("--staged", "studies/caffeine/A", "--format", "json", cwd=root)
+    assert code == 2
+    assert err == ""
+    assert "not several" in json.loads(out)["error"]
 
 
 def test_json_output_parses(checkout, run):

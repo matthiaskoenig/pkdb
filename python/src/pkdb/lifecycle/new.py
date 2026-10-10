@@ -126,7 +126,9 @@ def create_study(
     new_substance = not substances.exists()
     substances.mkdir(exist_ok=True)
     staging = substances / f".{name}.new"
+    warnings: list[str] = []
     try:
+        warnings += _remove_leftover(staging, name, f"{STUDIES}/{substance}")
         try:
             staging.mkdir()
         except FileExistsError:
@@ -151,7 +153,6 @@ def create_study(
         if new_substance:
             _remove_if_empty(substances)
     # The study is complete: what cannot be cleaned up now is only a warning.
-    warnings = []
     try:
         staging.rmdir()
     except OSError as error:
@@ -179,6 +180,35 @@ def create_study(
         warnings,
         new_substance,
     )
+
+
+def _remove_leftover(staging: Path, name: str, shown: str) -> list[str]:
+    """Remove the hidden folder of a pkdb new that was killed, and say so in a warning.
+
+    The study was not renamed into place (the caller refused a study that
+    exists), so the folder never became a study. Only a folder that holds
+    nothing but the study folder is removed; anything else, a symbolic link
+    included, stays and is refused by the caller.
+    """
+    if staging.is_symlink() or not staging.is_dir():
+        return []
+    try:
+        children = list(staging.iterdir())
+        if any(
+            child.name != name or child.is_symlink() or not child.is_dir()
+            for child in children
+        ):
+            return []
+        shutil.rmtree(staging)
+    except OSError as error:
+        raise NewStudyRefused(
+            f"{shown}/{staging.name} is left over from an interrupted pkdb new "
+            f"and cannot be removed: {_reason(error)}. Remove the folder by hand."
+        ) from None
+    return [
+        f"Removed {shown}/{staging.name}, left over from an interrupted pkdb new "
+        f"of {name}."
+    ]
 
 
 def _build(
