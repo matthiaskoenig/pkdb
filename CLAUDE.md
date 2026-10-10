@@ -4,7 +4,7 @@ The only backend is `backend/`, a Python 3.14 FastAPI application using PostgreS
 
 Run `docker compose --profile dev up --build --wait` for the local frontend, API, and database. Follow `docs/installation.md` to create an administrator with a chosen username and import the user roster. See `docs/local-upload-testing.md` for real study uploads. Use `compose.test.yaml` for a separate disposable test database. Never delete or reuse existing deployment data volumes as part of source cleanup.
 
-Follow `docs/installation.md` for tests, lint, types, migrations, and documentation. Commit Alembic migrations. Do not edit generated changelogs. Use topic branches and pull requests against `develop`; required checks are tests, ruff, ty, and docs.
+Follow `docs/installation.md` for tests, lint, types, migrations, and documentation. Commit Alembic migrations. Do not edit generated changelogs. Use topic branches and pull requests against `develop`; required checks are tests, ruff, ty, and docs. Continuous integration tests only Python 3.14 (the client on macOS and Windows only for release tags and manual runs), so run the Python 3.15 tests locally before opening a pull request, see `docs/development.md`.
 
 Historical migration reports are evidence, not current installation instructions. Do not claim unresolved corpus or compatibility gates passed merely because the previous implementation has been removed.
 

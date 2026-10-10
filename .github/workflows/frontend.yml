@@ -3,10 +3,15 @@ on:
   workflow_call:
 permissions:
   contents: read
+concurrency:
+  # a called workflow sees the name of its caller in `github.workflow`, the
+  # group of the caller would deadlock it, so it has a group of its own
+  group: frontend-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   frontend:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: frontend
@@ -27,7 +32,18 @@ jobs:
       - run: npm run lint
       - run: npm run test:unit -- --run
       - run: npm run build
-      - run: npx playwright install --with-deps
+      - name: Cache the Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+      - name: Install the Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+      - name: Install the system dependencies of the cached browsers
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v7
         if: failure()

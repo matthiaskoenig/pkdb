@@ -15,8 +15,8 @@ Branch: `backend/fastapi-replacement`. Original working copy: `/tmp/pkdb-backend
 
 Read these committed files first:
 
-1. `docs/superpowers/specs/2026-09-21-backend-replacement-design.md`.
-2. `docs/superpowers/plans/2026-09-21-backend-replacement.md` and its three phase plans.
+1. `docs/superpowers/specs/2026-09-21-backend-replacement-design.md` (no longer in the repository, see its git history).
+2. `docs/superpowers/plans/2026-09-21-backend-replacement.md` and its three phase plans (no longer in the repository, see their git history).
 3. `docs/backend-migration/execution-ledger.md` (including all decisions/rulings).
 4. `docs/backend-migration/acceptance.md` (chronological evidence; latest checkpoints supersede earlier counts), `contracts.json`, and `runbook.md`.
 

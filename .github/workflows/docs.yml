@@ -13,8 +13,9 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  # never cancel a running deployment, it would leave the site half published
-  cancel-in-progress: false
+  # a newer run supersedes the running one; a cancelled deployment leaves the
+  # published site as it was, the newer run deploys
+  cancel-in-progress: true
 
 jobs:
   docs:
@@ -27,12 +28,15 @@ jobs:
         with:
           persist-credentials: false
       - name: Configure GitHub Pages
+        # only the default branch deploys, a pull request only builds, see `deploy`
+        if: github.ref == 'refs/heads/develop'
         uses: actions/configure-pages@v6
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: "3.14"
           enable-cache: true
+          cache-python: true
       - name: Build the documentation
         # zensical and its plugins run standalone, the backend is not installed
         run: uvx --python 3.14 --with-requirements docs/requirements.txt zensical build --clean
@@ -40,6 +44,7 @@ jobs:
         # llms.txt, llms-full.txt and the markdown of every page
         run: uv run --no-project --python 3.14 python scripts/llms_txt.py
       - name: Upload the site
+        if: github.ref == 'refs/heads/develop'
         uses: actions/upload-pages-artifact@v5
         with:
           path: site

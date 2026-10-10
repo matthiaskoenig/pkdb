@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: public-dataset-release-checks
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:

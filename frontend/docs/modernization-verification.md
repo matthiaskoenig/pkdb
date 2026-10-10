@@ -6,7 +6,7 @@ Follow-up issue #794 removes frontend dataset and attachment downloads and the p
 
 ## Toolchain and dependency graph
 
-Node 24.21.0 and npm 12.1.0 were used. Exact packages and compatibility evidence are in `docs/superpowers/plans/2026-09-23-frontend-modernization-versions.json`; `package-lock.json` is the reproducible installed graph. Vue 3.5.43, Vuetify 4.2.1, Router 5.3.1, Pinia 4.0.3, Vite 8.3.0 and TypeScript 6.0.3 are pinned. TypeScript 7 is excluded by the selected ESLint peer range, rather than installed with a peer override.
+Node 24.21.0 and npm 12.1.0 were used. The exact packages and the compatibility evidence were recorded with the implementation plan, which is no longer in the repository (see its git history); `package-lock.json` is the reproducible installed graph. Vue 3.5.43, Vuetify 4.2.1, Router 5.3.1, Pinia 4.0.3, Vite 8.3.0 and TypeScript 6.0.3 are pinned. TypeScript 7 is excluded by the selected ESLint peer range, rather than installed with a peer override.
 
 `npm ci` succeeds inside the pinned production container, including strict type checking and the production build. `npm ls --all` passes. The npm advisory check reports zero vulnerabilities. No lockfile package has a `deprecated` marker. These are dated observations, not a guarantee about future advisories. npm 12 blocks the optional `@parcel/watcher` source-build install hook; the supported prebuilt dependencies suffice and installation/build succeed without approving that hook.
 

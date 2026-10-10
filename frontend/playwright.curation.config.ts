@@ -8,7 +8,8 @@ export default defineConfig({
   globalSetup: "./tests/curation-e2e/global-setup.ts",
   globalTeardown: "./tests/curation-e2e/global-teardown.ts",
   fullyParallel: false,
-  workers: 1,
+  // Spec files run in parallel, each against its own server; the tests of one file in order.
+  workers: "50%",
   forbidOnly: Boolean(process.env.CI),
   // The suite runs against a local server without shared state, so a retry would only hide flakiness.
   retries: 0,

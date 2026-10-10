@@ -1,11 +1,12 @@
 # Keep the GitHub Actions and python dependencies used in the project up to
-# date. See https://docs.github.com/code-security/dependabot/dependabot-version-updates
+# date, monthly, since every update pull request runs the checks.
+# See https://docs.github.com/code-security/dependabot/dependabot-version-updates
 version: 2
 updates:
   - package-ecosystem: "uv"
     directory: "/backend"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     # a single pull request for all dependency updates instead of one per package
     groups:
       python-packages:
@@ -18,7 +19,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/docs"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
       python-packages:
         patterns:
@@ -30,7 +31,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     # a single pull request for all action updates instead of one per action
     groups:
       github-actions:

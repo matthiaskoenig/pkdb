@@ -21,10 +21,10 @@ git clone --branch develop https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
 uv sync --project python --locked --python 3.14
 uv run --project python pkdb --help
-uv run --project python pytest python/tests -q
+uv run --project python pytest python/tests -q -n auto
 ```
 
-`uv sync` installs the local package in editable mode and includes its development dependencies. For an existing virtual environment, use `python -m pip install -e /absolute/path/to/pkdb/python`. To use this checkout as a standalone CLI, run `uv tool install --editable ./python`; to add it to another uv project, run `uv add --editable /absolute/path/to/pkdb/python` from that project.
+`uv sync` installs the local package in editable mode and includes its development dependencies. `-n auto` (pytest-xdist) runs the tests in parallel on every CPU core, as CI does. For an existing virtual environment, use `python -m pip install -e /absolute/path/to/pkdb/python`. To use this checkout as a standalone CLI, run `uv tool install --editable ./python`; to add it to another uv project, run `uv add --editable /absolute/path/to/pkdb/python` from that project.
 
 `pkdb curate` serves the local curation app from `python/src/pkdb/curation/static/`. Build it with `npm ci` and `npm run build:curation` in `frontend/` (Node **24.21.0** and npm **12.1.0**); `npm run dev:curation` serves it with live reload and forwards API requests to the `pkdb curate` origin in `PKDB_CURATION_URL`. Building a wheel or source distribution of `python/` fails without the built app.
 
@@ -56,11 +56,13 @@ Keep Markdown prose paragraphs on one source line, using editor soft wrapping. S
 
 ## Continuous integration
 
-Pull requests and branch pushes test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) and manual runs expand backend checks to Python 3.14 and 3.15 and test the client on Linux, macOS, and Windows with both versions; start a manual run of the `CI-CD` workflow on a branch to test it on every platform before tagging a release. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
+Pull requests and branch pushes test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) and manual runs also test the client on macOS and Windows, with Python 3.14; start a manual run of the `CI-CD` workflow on a branch to test it on every platform before tagging a release. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
+
+Continuous integration is kept small: every workflow cancels its running build when a newer commit of the same branch or pull request arrives, uv caches the packages and the interpreters, npm its packages and Playwright its browsers between runs (a release tag builds its distributions without a cache), the Python tests run in parallel with pytest-xdist and the curation app browser tests one spec file per worker, a pull request builds the documentation without preparing its deployment, dependabot proposes its updates once a month, and only Python 3.14 is tested. Python 3.15 is tested locally before a pull request is opened: the client with `uv run --project python --python 3.15 pytest python/tests -q`, the backend with the [backend tests and checks](installation.md#backend-tests-and-checks) run with `--python 3.15`.
 
 ## Python package releases
 
-The public `pkdb` package and `pkdb-server` use the same version and release tag. Bump versions with the repository's bump-my-version configuration, commit the generated lock updates, and release through a `vVERSION` tag. Before tagging, start a manual run of the `CI-CD` workflow on `develop` and wait until it passes: pull requests test the client only on Linux, and the manual run tests it on Linux, macOS and Windows with Python 3.14 and 3.15. The server wheel pins `pkdb==VERSION`; it is distributed as a GitHub release asset alongside the public wheel and source archive.
+The public `pkdb` package and `pkdb-server` use the same version and release tag. Bump versions with the repository's bump-my-version configuration, commit the generated lock updates, and release through a `vVERSION` tag. Before tagging, start a manual run of the `CI-CD` workflow on `develop` and wait until it passes: pull requests test the client only on Linux, and the manual run tests it on Linux, macOS and Windows with Python 3.14; Python 3.15 is tested locally, see [continuous integration](#continuous-integration). The server wheel pins `pkdb==VERSION`; it is distributed as a GitHub release asset alongside the public wheel and source archive.
 
 After all backend, frontend, container, and Python client checks pass, `.github/workflows/ci-cd.yml` publishes only the public `pkdb` wheel and source archive to PyPI. The workflow verifies that both filenames match the release tag. The GitHub release and `main` synchronization wait for successful PyPI publication. Publishing uses short-lived GitHub OIDC credentials, with no stored PyPI API token.
 

@@ -38,6 +38,7 @@ dev = [
     "bump-my-version>=1.5.1",
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
+    "pytest-xdist>=3.8.0",
     "ruff>=0.16.8",
     "ty>=0.0.83",
 ]
