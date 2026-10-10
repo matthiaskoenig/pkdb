@@ -40,7 +40,7 @@ The administrator signs in with the same username/password form. A valid adminis
 
 ## Existing curators and avatars
 
-The reviewed public manifest is `backend/bootstrap/curator-roster.json`. Its source is `backend/pkdb_data/management/users.py` at revision `632a8bb21a894e97e2a4f6df7173f0956ded09f5`, containing 69 historical accounts. Reviewer identities are:
+The reviewed public manifest is `backend/bootstrap/curator-roster.json`. Its source is `backend/pkdb_data/management/users.py` at revision `632a8bb21a894e97e2a4f6df7173f0956ded09f5`, containing 69 historical accounts; the roster keeps 68 of them and leaves out the group account `xresearch`, which pkdb_data no longer names. Reviewer identities are:
 
 - Mariia Myshkina: `MariiaMysh`.
 - Michelle Elias: `mii-halina`.
@@ -48,7 +48,9 @@ The reviewed public manifest is `backend/bootstrap/curator-roster.json`. Its sou
 
 The administrator is provisioned through administrator bootstrap with a chosen username. The historical administrator roster entry is skipped unless it matches that designated account. Other historical curators remain curators, including former administrator `janekg`. The historical `reviewer` test account is excluded. Review the separately preserved `deepa`/`DeepaMahm` and `long231a`/`lucialink30` accounts before assigning contacts; the import does not merge them.
 
-All roster members were checked against `livermetabolism-site`. There are 46 account-to-site-image mappings using 45 distinct images, plus existing PK-DB photos for `kgreen` and `xresearch`. The remaining 21 manifest entries have a local generic fallback, including the excluded test account. Site provenance is revision `6e13b9dff910434b9851296a073ff1642b277343`; the manifest records exact person mappings, source paths and checksums. Production uses copied assets and does not need the sibling checkout.
+All roster members were checked against `livermetabolism-site`. There are 46 account-to-site-image mappings using 45 distinct images, plus the existing PK-DB photo of `kgreen`. The remaining 21 manifest entries have a local generic fallback, including the excluded test account. Site provenance is revision `6e13b9dff910434b9851296a073ff1642b277343`; the manifest records exact person mappings, source paths and checksums. Production uses copied assets and does not need the sibling checkout.
+
+The GitHub login of an account is the `repository` of its `profile_references`, and `pkdb issues sync` assigns the issues of pkdb_data to it. `identity_match` records where the login comes from: `site_github_reference` (the GitHub link of `livermetabolism-site`), `explicit_name_mapping`, `maintainer_confirmed` (confirmed by the maintainer, such as `michelle-elias` for `mii-halina` and `KathleenGreen` for `kgreen`), `github_profile_name` (the name of the GitHub profile equals the name of the account, among the collaborators of pkdb_data where possible, such as `beastemmt` for `stemllb`) or `github_same_username` (a GitHub account of the same name, created in the same weeks as the account of a 2022 student group). `dimitra` and `Ahmed-fub` have no known GitHub login.
 
 Validate the manifest, then preview the import:
 
@@ -73,7 +75,7 @@ uv run --project backend pkdb-server import-users backend/bootstrap/curator-rost
 
 Changes to existing roles or explicit grants require `--update-existing`; add it to both preview and apply after reviewing the proposed differences. A conflicting primary address requires separate resolution. `--avatar-root` defaults to `frontend/public` and must contain the manifest's `assets/images/avatars/` paths. In a backend-only container, mount those assets and pass the corresponding root explicitly.
 
-Dry runs create no accounts or asset files. Applying preserves existing IDs, credentials, suspension and user edits. New imported identities remain disabled. Matching import digests become no-ops, so rerunning the same manifest does not undo a later demotion or cleared photo. Invitations are a separate authenticated administrator action in **User administration → Invite**, or through `POST /api/v1/admin/users/{id}/invitations` with a reviewed `email_id`. The dialog shows the reviewed primary contact and requires an explicit send; failures allow a retry. Unclaimed accounts cannot be activated instead of completing verification. Acceptance claims that identity without changing its assigned role. Imported GitHub/ORCID references are public metadata, not sign-in credentials.
+Dry runs create no accounts or asset files. Applying preserves existing IDs, credentials, suspension and user edits. It fills empty profile fields, and it corrects a GitHub login or ORCID that an earlier import set when the roster changes it; a value the user edited is kept. New imported identities remain disabled. Matching import digests become no-ops, so rerunning the same manifest does not undo a later demotion or cleared photo. Invitations are a separate authenticated administrator action in **User administration → Invite**, or through `POST /api/v1/admin/users/{id}/invitations` with a reviewed `email_id`. The dialog shows the reviewed primary contact and requires an explicit send; failures allow a retry. Unclaimed accounts cannot be activated instead of completing verification. Acceptance claims that identity without changing its assigned role. Imported GitHub/ORCID references are public metadata, not sign-in credentials.
 
 
 ### Refresh imported title and affiliation

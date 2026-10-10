@@ -74,7 +74,11 @@
         "source_path": "frontend/public/assets/images/avatars/kgreen_128.png",
         "source_repository": "pkdb"
       },
-      "avatar_note": "No site image found; retain existing PK-DB asset."
+      "avatar_note": "No site image found; retain existing PK-DB asset.",
+      "profile_references": {
+        "repository": "https://github.com/KathleenGreen"
+      },
+      "identity_match": "maintainer_confirmed"
     },
     {
       "username": "jbrandhorst",
@@ -104,7 +108,7 @@
         "source_path": "public/assets/image/people/128/florian_bartsch.webp"
       },
       "profile_references": {
-        "repository": "https://github.com/FloBar"
+        "repository": "https://github.com/FlorBar"
       },
       "identity_match": "explicit_name_mapping"
     },
@@ -249,9 +253,9 @@
         "source_path": "public/assets/image/people/128/beatrice_mallol.webp"
       },
       "profile_references": {
-        "repository": "https://github.com/stemllb"
+        "repository": "https://github.com/beastemmt"
       },
-      "identity_match": "site_github_reference"
+      "identity_match": "github_profile_name"
     },
     {
       "username": "jonaspk98",
@@ -279,19 +283,6 @@
       "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
     },
     {
-      "username": "xresearch",
-      "display_name": "XResearch Group",
-      "role": "curator",
-      "import_policy": "reviewed_invitation",
-      "avatar": {
-        "url": "/assets/images/avatars/xresearch_128.png",
-        "sha256": "34417556a7a24fb26a23f9d7e00288f1cdd25707adcbe479b62253afe53c237a",
-        "source_path": "frontend/public/assets/images/avatars/xresearch_128.png",
-        "source_repository": "pkdb"
-      },
-      "avatar_note": "No site image found; retain existing PK-DB asset."
-    },
-    {
       "username": "Ahmed-fub",
       "display_name": "Ahmed Atta",
       "role": "curator",
@@ -305,7 +296,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/DaryaChb"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "DaryaLigay",
@@ -313,7 +308,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/DaryaLigay"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "drosdekv",
@@ -321,7 +320,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/drosdekv"
+      },
+      "identity_match": "github_profile_name"
     },
     {
       "username": "long231a",
@@ -330,7 +333,11 @@
       "import_policy": "reviewed_invitation",
       "avatar": null,
       "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
-      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically.",
+      "profile_references": {
+        "repository": "https://github.com/long231a"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "lucialink30",
@@ -339,7 +346,11 @@
       "import_policy": "reviewed_invitation",
       "avatar": null,
       "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
-      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically.",
+      "profile_references": {
+        "repository": "https://github.com/lucialink30"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "Mattimatti1",
@@ -347,7 +358,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/Mattimatti1"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "Ming-Yuen",
@@ -411,7 +426,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/DariusSchulze"
+      },
+      "identity_match": "github_same_username"
     },
     {
       "username": "fuokibedi",
@@ -500,7 +519,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/linafrolova"
+      },
+      "identity_match": "github_profile_name"
     },
     {
       "username": "gozdemkarapinar",
@@ -516,7 +539,11 @@
       "role": "curator",
       "import_policy": "reviewed_invitation",
       "avatar": null,
-      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "profile_references": {
+        "repository": "https://github.com/jonathanspeh"
+      },
+      "identity_match": "github_profile_name"
     },
     {
       "username": "Raj-codes",
@@ -750,9 +777,9 @@
       },
       "profile_references": {
         "orcid": "0009-0005-7959-3164",
-        "repository": "https://github.com/mii-halina"
+        "repository": "https://github.com/michelle-elias"
       },
-      "identity_match": "site_github_reference"
+      "identity_match": "maintainer_confirmed"
     },
     {
       "username": "bibymaths",

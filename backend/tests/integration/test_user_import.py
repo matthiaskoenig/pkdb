@@ -179,7 +179,7 @@ def test_public_roster_imports_named_reviewers_and_skips_admin_and_test(
             )
             is None
         )
-        assert session.scalar(select(func.count()).select_from(User)) == 67
+        assert session.scalar(select(func.count()).select_from(User)) == 66
         assert session.scalar(
             select(User).where(User.username == "MariiaMysh")
         ).avatar_initialized
@@ -357,3 +357,44 @@ def test_bundled_admin_profile_reaches_account_api(session_factory, tmp_path):
             "Humboldt-Universität zu Berlin, Institute for Biology, ITB; "
             "University Hospital Schleswig-Holstein, Campus Lübeck, First Department of Medicine"
         )
+
+
+def test_reimport_corrects_imported_logins_but_keeps_other_values(
+    session_factory, tmp_path
+):
+    def roster(logins):
+        return write_roster(
+            tmp_path,
+            [
+                {
+                    "username": name,
+                    "role": "curator",
+                    "profile_references": {"repository": f"https://github.com/{login}"},
+                }
+                for name, login in logins.items()
+            ],
+        )
+
+    names = ("imported", "edited", "manual")
+    options = {"apply": True, "file_root": tmp_path / "files"}
+    assert import_roster(
+        roster({name: f"{name}-typo" for name in names}), session_factory, **options
+    )["applied"]
+    with session_factory.begin() as session:
+        users = {user.username: user for user in session.scalars(select(User))}
+        assert users["imported"].github_provenance == "imported"
+        users["edited"].github = "edited-own"
+        users["edited"].github_provenance = "self_asserted"
+        users["edited"].profile_edited_fields = ["github"]
+        users["manual"].github = "manual-set"
+        users["manual"].github_provenance = None
+    assert import_roster(
+        roster({name: f"{name}-fixed" for name in names}), session_factory, **options
+    )["applied"]
+    with session_factory() as session:
+        logins = {user.username: user.github for user in session.scalars(select(User))}
+    assert logins == {
+        "imported": "imported-fixed",
+        "edited": "edited-own",
+        "manual": "manual-set",
+    }
