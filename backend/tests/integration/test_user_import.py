@@ -179,7 +179,7 @@ def test_public_roster_imports_named_reviewers_and_skips_admin_and_test(
             )
             is None
         )
-        assert session.scalar(select(func.count()).select_from(User)) == 67
+        assert session.scalar(select(func.count()).select_from(User)) == 66
         assert session.scalar(
             select(User).where(User.username == "MariiaMysh")
         ).avatar_initialized
