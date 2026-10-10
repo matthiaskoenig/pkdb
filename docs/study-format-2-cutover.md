@@ -2,6 +2,39 @@
 
 The cutover converts every study folder of pkdb_data from study format 1 to study format 2 with `pkdb migrate`. Each study is converted from the entities that the format 1 parser resolved and is checked by an equivalence gate against that parser. Only studies whose data is identical, or differs only by intended changes, replace their format 1 folder. Run the cutover after the pkdb_data tooling (pre-commit, CI and the issue sync workflow) exists. The command needs Linux or macOS.
 
+## State on 2026-10-10
+
+pkdb 0.12.1 on PyPI has every command of the cutover (`pkdb migrate`, `pkdb check`, `pkdb issues sync`, `pkdb new`, `pkdb move`, `pkdb release`, `pkdb registry`, `pkdb curate`). `develop` of pkdb has more fixes since the release (#890 to #893): use a source checkout of `develop` for the migration until the next release. pkdb_data `develop` has the format 2 tooling (#2175: `pkdb check` in pre-commit and the required `studies` workflow, the `issues` and `vocabulary` workflows, `AGENTS.md`, the Claude skill, the format 2 guide `docs/curation-v2.md`, pins `requirements/pkdb.txt` and `vocabulary.lock.json`) and the mechanical format 1 fixes #2176 to #2183 and #2185 (JSON syntax, obsolete keys, identifier registry, `oral-clearance`, `circadian status`, KorthBradley2012, the template folder, Theodorakis2004).
+
+A dry run on pkdb_data `develop` with pkdb 0.12.1 gives 1582 studies: 303 `identical` and 545 `intended` (848 convert), 176 `mismatch`, 396 `invalid_v1`, 162 `not_converted`, and 179 folders without `study.json` move to `papers/`. The largest groups of the studies that stay format 1, all format 1 data defects for curators:
+
+| Class | Largest groups (studies) |
+| --- | --- |
+| `mismatch` | `missing_value` 73 (an sd, se or count without a central value; rows of `abstinence ...` and `fasting (duration)` without a value), `duplicate_row` 52, `choice_statistics` 24, `parent_not_group` 12, `reversed_range` 9 |
+| `invalid_v1` | `timecourse_points` 68 (repeated times in a series), `unknown_image` 57, `unknown_column` 27, `missing_sheet` 26, `missing` 25, `invalid_choice` 20, `unknown_measurement` 20, `unit_dimension` 19, `invalid_expression` 17, `unknown_substance` 17 |
+| `not_converted` | `missing_image` 58, `no_subjects` 55 (metadata-only stubs: curate or move to `papers/`), `metadata` 16, `scatter_dimensions` 13, `subject_name` 5, `registry_sid` 3 |
+
+Known open items of the data: `caffeine/Desmond1980` has two identifiers in the registry; Simon2001, Seeringer2008, Dickstein1987a and the two regorafenib Bayer folders carry a copied sid without an identifier of their own and `simvastatin/Chung2006`, a copy of `midazolam/Chung2006`; the registry path of dulaglutide points at the misspelled folder `Teraruchi2014`; the empty `study.json` of `acetaminophen_mice/Kim2017`, `acetaminophen_mice/Liu1996` and `dextromethorphan/Gaedigk2018`; `regorafenib/Renouf2016` needs the PMID of its paper; `edoxaban/Mendell2015a/study.json` has a lone carriage return.
+
+Open settings of pkdb_data, for a maintainer: apply the rulesets with `.github/rulesets/apply.sh` (makes `studies` a required check), set the secret `PKDB_API_KEY` and the variable `PKDB_ENDPOINT` (until then the `issues` and `vocabulary` workflows are skipped), and allow GitHub Actions to create pull requests. `vocabulary.lock.json` is still the vocabulary bundled with pkdb; the `vocabulary` workflow refreshes it from `PKDB_ENDPOINT`. Dependabot cannot update pkdb_data (`Dependabot::OutOfDisk`: it clones the whole repository), so bump `requirements/pkdb.txt` by hand as `docs/development.md` of pkdb_data describes.
+
+The cutover can be partial: merge the studies that convert, curate them in study format 2 at once, and convert the others later. The tooling handles a repository with both formats (`pkdb check` and the curation app skip format 1 folders), a later `pkdb migrate` converts only the folders still in format 1, and the identifier registry stays until every identifier belongs to a format 2 study. Curation of format 1 studies then continues only to make them convert.
+
+## Prepare a machine
+
+1. Clone pkdb and pkdb_data. In pkdb, on `develop`, start the local server and create the administrator as [Local setup and development](installation.md) describes (`docker compose --profile dev up --build --wait`); an existing database volume is kept and migrated at startup. Sign in at <http://localhost:8080> and create a personal API key.
+2. Install pkdb: the release pinned by pkdb_data with `uv tool install --python 3.14 --force pkdb --with-requirements requirements/pkdb.txt` from the pkdb_data checkout, or the newer `develop` from the pkdb checkout with `uv tool install --python 3.14 --force --editable ./python`.
+3. Set the environment: `PKDB_ENDPOINT=http://localhost:18083`, `PKDB_USER` and `PKDB_API_KEY` of your local account, `PKDB_NO_UPDATE=1`, and `GH_TOKEN` (for example `gh auth token`) for `pkdb new`, `pkdb move` and `pkdb issues sync`.
+4. In pkdb_data, install the hooks with `uvx pre-commit install` and work on branches of `develop`.
+
+## Next steps
+
+1. Merge open format 1 curation into pkdb_data `develop` (the `merge-final` work of albuterol Guo2016 and Lipworth1989 and apixaban Bashir2018 is a pull request), so the migration converts it.
+2. On a branch of pkdb_data `develop`, run the migration of [Convert](#convert) as a dry run, read `migration.md`, then run it for real; add `.pkdb-migrate/` and `studies/**/*.xlsx` to `.gitignore` and rename the guide as [Review and merge](#review-and-merge) says; tag `v1-final` on `develop` and merge the pull request.
+3. Give every study its issue as [After the merge](#after-the-merge) describes.
+4. Curate the converted studies with `pkdb curate` ([Local curation app](local-curation.md)), one branch and pull request per study.
+5. Fix the format 1 studies by the groups above and rerun `pkdb migrate` until it exits with 0.
+
 ## Before the run
 
 Fix the 20 invalid `study.json` files and the studies that are invalid in format 1 by normal pull requests. Merge or pause open curation pull requests, because they are written against format 1.

@@ -6,6 +6,8 @@ Run `docker compose --profile dev up --build --wait` for the local frontend, API
 
 Follow `docs/installation.md` for tests, lint, types, migrations, and documentation. Commit Alembic migrations. Do not edit generated changelogs. Use topic branches and pull requests against `develop`; required checks are tests, ruff, ty, and docs. Continuous integration tests only Python 3.14 (the client on macOS and Windows only for release tags and manual runs), so run the Python 3.15 tests locally before opening a pull request, see `docs/development.md`.
 
+The study format 2 cutover of pkdb_data is in progress: `docs/study-format-2-cutover.md` has its state, the open items, how to prepare a machine and the next steps; read it before working on the migration, the curation tooling or pkdb_data.
+
 Historical migration reports are evidence, not current installation instructions. Do not claim unresolved corpus or compatibility gates passed merely because the previous implementation has been removed.
 
 Write Markdown paragraphs on a single source line. Use editor soft wrapping instead of inserting line breaks for visual width. Preserve structural line breaks for headings, lists, tables, and code blocks.
