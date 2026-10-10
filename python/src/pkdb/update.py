@@ -9,6 +9,7 @@ system-managed interpreters are never modified.
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -49,7 +50,9 @@ class Installation:
     @property
     def manual(self) -> str:
         if self.command:
-            return " ".join(self.command)
+            # Quoted as the shell of the platform reads it, for paths with spaces.
+            join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+            return join(self.command)
         if self.kind == "development":
             return "update the development checkout"
         return "pip install --upgrade pkdb"
