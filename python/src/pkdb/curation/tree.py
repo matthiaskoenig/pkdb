@@ -28,10 +28,13 @@ Only scans use a tree, one at a time, so it needs no lock.
 """
 
 import os
-import stat
 import time
 from collections.abc import Callable
+
+# The tests change what the tree reads through these names, not in the os module.
+from os import scandir, stat
 from pathlib import Path
+from stat import S_ISLNK, S_ISREG
 from typing import NamedTuple
 
 from pkdb.source_files import ignored_name
@@ -98,7 +101,7 @@ class _Listing:
         # Whether a study.json that is no symbolic link exists, and whether it is a file.
         self.study = False
         self.study_file = False
-        # Decided when a scan first asks; they depend on the entries only.
+        # Decided when a scan first asks for them in this listing.
         self.format_2_file: bool | None = None
         self.workbook_open: bool | None = None
         # The path object of a study folder, kept to compare and hash it cheaply.
@@ -108,10 +111,20 @@ class _Listing:
 def _status(path: str) -> tuple | None:
     """What changes when an entry of the folder is added, removed or renamed, or None."""
     try:
-        status = os.stat(path)
+        status = stat(path)
     except OSError, ValueError:
         return None
     return (status.st_mtime_ns, status.st_ctime_ns, status.st_ino, status.st_dev)
+
+
+def _find_study(listing: _Listing, path: str) -> None:
+    """Whether the folder has a study.json that is no symbolic link, as `os.path.lexists` tells."""
+    try:
+        status = os.lstat(os.path.join(path, STUDY_JSON))
+    except OSError, ValueError:
+        return
+    listing.study = not S_ISLNK(status.st_mode)
+    listing.study_file = S_ISREG(status.st_mode)
 
 
 def _kind(entry: os.DirEntry) -> int:
@@ -139,7 +152,6 @@ class SourceTree:
         # The listings of the last scan, and those that this scan used so far.
         self._listings: dict[str, _Listing] = {}
         self._seen: dict[str, _Listing] = {}
-        self._now = clock()
         # The folders that the last scan sorted, which it keeps alive, and their order.
         self._identities: set[int] = set()
         self._order: list[Path] = []
@@ -152,7 +164,6 @@ class SourceTree:
         use is forgotten.
         """
         self._listings, self._seen = self._seen, {}
-        self._now = self.clock()
         found: dict[Path, StudyFolder] = {}
         stack = [(str(self.root), ".", False)]
         while stack:
@@ -195,10 +206,10 @@ class SourceTree:
                 ]
             for name, file in listing.files:
                 try:
-                    status = os.stat(file)
+                    status = stat(file)
                 except OSError, ValueError:
                     continue
-                if stat.S_ISREG(status.st_mode):
+                if S_ISREG(status.st_mode):
                     files.append((prefix + name, status.st_size, status.st_mtime_ns))
             if listing.folders:
                 stack.extend(
@@ -245,15 +256,17 @@ class SourceTree:
         key = _status(path)
         if key is None:
             return None
+        # The time of this status, not of the start of the scan, which can be long ago.
+        now = self.clock()
         old = self._listings.get(path)
         if old is not None and old.key == key:
-            if self.reliable and old.trusted and self._now - old.listed < RECHECK:
+            if self.reliable and old.trusted and now - old.listed < RECHECK:
                 self._seen[path] = old
                 return old
             since = old.since
         else:
-            since = self._now
-        listing = self._read(path, key, since, old)
+            since = now
+        listing = self._read(path, key, since, now, old)
         if (
             old is not None
             and old.trusted
@@ -269,21 +282,22 @@ class SourceTree:
         return listing
 
     def _read(
-        self, path: str, key: tuple, since: float, old: _Listing | None
+        self, path: str, key: tuple, since: float, now: float, old: _Listing | None
     ) -> _Listing:
-        listing = _Listing(key, since, self._now)
+        listing = _Listing(key, since, now)
         if old is not None:
             listing.folder = old.folder
         try:
-            with os.scandir(path) as iterator:
+            with scandir(path) as iterator:
                 listing.entries = sorted(
                     (entry.name, _kind(entry)) for entry in iterator
                 )
         except OSError:
-            # As for Path.rglob, a folder that cannot be read has no entries; the next scan
-            # reads it again.
+            # As for Path.rglob, a folder that cannot be listed has no entries, but its
+            # study.json counts when the folder can be entered. The next scan reads it again.
+            _find_study(listing, path)
             return listing
-        listing.trusted = self._now - since >= STABLE
+        listing.trusted = now - since >= STABLE
         for name, kind in listing.entries:
             if (kind == _FOLDER or kind == _JUNCTION) and name != ".git":
                 folder = (name, os.path.join(path, name), kind == _JUNCTION)
@@ -291,17 +305,11 @@ class SourceTree:
                 if not name.startswith("."):
                     listing.visible.append(folder)
         if old is not None and old.key == key and old.entries == listing.entries:
-            # The same entries: what depends on them only holds still.
+            # The same entries: what the listing told of them holds still. The format 2
+            # files and the lock files are looked up again, as they were looked up after
+            # the old listing was read and may have changed in between.
             listing.study, listing.study_file = old.study, old.study_file
-            listing.format_2_file = old.format_2_file
-            listing.workbook_open = old.workbook_open
             listing.files = old.files
-            return listing
-        try:
-            status = os.lstat(os.path.join(path, STUDY_JSON))
-        except OSError, ValueError:
-            pass
         else:
-            listing.study = not stat.S_ISLNK(status.st_mode)
-            listing.study_file = stat.S_ISREG(status.st_mode)
+            _find_study(listing, path)
         return listing

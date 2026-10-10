@@ -2,7 +2,9 @@
 
 import os
 import shutil
+import sys
 import time
+from pathlib import Path
 
 import pytest
 
@@ -52,14 +54,19 @@ def settle(engine, clock):
 def listed(monkeypatch):
     """The folders that the scans list."""
     folders = []
-    real = os.scandir
+    real = tree_module.scandir
 
     def scandir(path):
         folders.append(path)
         return real(path)
 
-    monkeypatch.setattr(tree_module.os, "scandir", scandir)
+    monkeypatch.setattr(tree_module, "scandir", scandir)
     return folders
+
+
+def write(path, text="x"):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8", newline="")
 
 
 def files(engine, key="caffeine/Example"):
@@ -203,3 +210,213 @@ def test_a_workspace_switch_starts_a_new_tree(workspace, tmp_path, tmp_path_fact
     engine.select_workspace(other)
     assert engine._tree is not tree and engine._tree.root == other.resolve()
     assert list(engine.studies) == ["caffeine/Other"]
+
+
+def test_the_stable_time_counts_from_when_a_scan_reached_the_folder(
+    workspace, monkeypatch
+):
+    engine, folder, clock = workspace
+    real = tree_module._status
+    frozen = {}
+
+    def status(path):
+        if path == str(folder) and path not in frozen:
+            # A long scan reaches the study folder shortly before the stable time is over.
+            clock.now += STABLE - 1
+        return frozen.setdefault(path, real(path))
+
+    # As with coarse timestamps: a change right after a listing keeps the status.
+    monkeypatch.setattr(tree_module, "_status", status)
+    engine.scan()
+    # The stable time after the start of the first scan, a second after the folder.
+    clock.now += 1
+    engine.scan()
+    write(folder / "notes.txt")
+    engine.scan()
+    assert "notes.txt" in files(engine)
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32" or os.geteuid() == 0,
+    reason="Windows ignores the folder mode, and root lists any folder",
+)
+def test_a_study_folder_that_can_be_entered_but_not_listed(workspace):
+    engine, folder, clock = workspace
+    locked = shutil.copytree(folder, folder.with_name("Locked"))
+    locked.chmod(0o311)
+    try:
+        engine.scan()
+        # As for Path.rglob: study.json counts, and the folder has no files to list.
+        assert files(engine, "caffeine/Locked") == []
+    finally:
+        locked.chmod(0o755)
+
+
+def test_a_lock_file_seen_between_two_listings_counts_only_once(workspace, monkeypatch):
+    engine, folder, clock = workspace
+    # The listings are read on each scan, with the same entries each time.
+    engine.scan()
+    with monkeypatch.context() as patch:
+        # A lock file that exists only while the scan looks for it.
+        patch.setattr(tree_module, "open_lock", lambda workbook: workbook)
+        engine.scan()
+    assert engine.studies["caffeine/Example"]["_signature"][1] is True
+    engine.scan()
+    assert engine.studies["caffeine/Example"]["_signature"][1] is False
+
+
+def test_a_format_2_file_seen_between_two_listings_counts_only_once(
+    workspace, monkeypatch
+):
+    engine, folder, clock = workspace
+    legacy = folder.with_name("Legacy1990")
+    write(legacy / "study.json", '{"sid": "Legacy1990", "name": "Legacy1990"}')
+    engine.scan()
+    assert "caffeine/Legacy1990" not in engine.studies
+    real = os.path.lexists
+    review = str(legacy / "review.json")
+    with monkeypatch.context() as patch:
+        # A review.json that exists only while the scan looks for it.
+        patch.setattr(
+            tree_module.os.path,
+            "lexists",
+            lambda path: str(path) == review or real(path),
+        )
+        engine.scan()
+    assert "caffeine/Legacy1990" in engine.studies
+    engine.scan()
+    assert "caffeine/Legacy1990" not in engine.studies
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="Windows reports the creation time as st_ctime"
+)
+def test_a_folder_whose_modification_time_was_set_back(workspace):
+    engine, folder, clock = workspace
+    settle(engine, clock)
+    before = folder.stat()
+    write(folder / "notes.txt")
+    # As tar x and rsync -t leave a folder: its old modification time, a new status
+    # change time, which changes within its resolution, a clock tick at most.
+    os.utime(folder, ns=(before.st_atime_ns, before.st_mtime_ns))
+    deadline = time.monotonic() + 5
+    while folder.stat().st_ctime_ns == before.st_ctime_ns:
+        assert time.monotonic() < deadline, "The status change time stayed"
+        time.sleep(0.001)
+        os.utime(folder, ns=(before.st_atime_ns, before.st_mtime_ns))
+    assert folder.stat().st_mtime_ns == before.st_mtime_ns
+    engine.scan()
+    assert "notes.txt" in files(engine)
+
+
+class _Status:
+    """The status of a folder with some fields of another one."""
+
+    def __init__(self, status, **fields):
+        self._status = status
+        self.__dict__.update(fields)
+
+    def __getattr__(self, name):
+        return getattr(self._status, name)
+
+
+@pytest.mark.parametrize("field", ["st_ino", "st_dev"])
+def test_a_folder_replaced_by_one_with_the_same_times(workspace, monkeypatch, field):
+    engine, folder, clock = workspace
+    settle(engine, clock)
+    before = os.stat(folder)
+    replacement = shutil.copytree(folder, folder.with_name("Replacement"))
+    write(replacement / "notes.txt")
+    folder.rename(folder.with_name("Old"))
+    replacement.rename(folder)
+    real = tree_module.stat
+
+    def stat(path):
+        status = real(path)
+        if path != str(folder):
+            return status
+        # The times of the old folder: only the inode, or the device, tells it apart.
+        fields = {
+            name: getattr(before, name)
+            for name in ("st_mtime_ns", "st_ctime_ns", "st_ino", "st_dev")
+        }
+        fields[field] = status.st_ino if field == "st_ino" else before.st_dev + 1
+        return _Status(status, **fields)
+
+    monkeypatch.setattr(tree_module, "stat", stat)
+    engine.scan()
+    assert "notes.txt" in files(engine)
+
+
+def test_a_study_json_created_in_a_listed_folder(workspace):
+    engine, folder, clock = workspace
+    draft = shutil.copytree(folder, folder.with_name("Draft"))
+    (draft / "study.json").unlink()
+    settle(engine, clock)
+    assert "caffeine/Draft" not in engine.studies
+    shutil.copy(folder / "study.json", draft / "study.json")
+    engine.scan()
+    assert "caffeine/Draft" in engine.studies
+
+
+def test_a_symlinked_study_json_is_no_study(workspace):
+    engine, folder, clock = workspace
+    linked = shutil.copytree(folder, folder.with_name("Linked"))
+    (linked / "study.json").unlink()
+    try:
+        os.symlink(folder / "study.json", linked / "study.json")
+    except OSError:
+        pytest.skip("Creating symbolic links needs a privilege on this system")
+    settle(engine, clock)
+    assert "caffeine/Linked" not in engine.studies
+
+
+def test_a_folder_named_study_json_makes_a_study_folder(workspace):
+    engine, folder, clock = workspace
+    odd = shutil.copytree(folder, folder.with_name("Odd"))
+    (odd / "study.json").unlink()
+    (odd / "study.json").mkdir()
+    settle(engine, clock)
+    # As for Path.rglob("study.json"): the name counts, not the kind of entry.
+    assert "caffeine/Odd" in engine.studies
+
+
+def test_the_listings_of_removed_folders_are_forgotten(workspace):
+    engine, folder, clock = workspace
+    copy = shutil.copytree(folder, folder.with_name("Copy"))
+    write(copy / "figures" / "Fig1.png")
+    settle(engine, clock)
+    tree = engine._tree
+    assert {str(copy), str(copy / "figures")} <= set(tree._seen)
+    shutil.rmtree(copy)
+    engine.scan()
+    engine.scan()
+    remembered = {*tree._seen, *tree._listings}
+    assert not {str(copy), str(copy / "figures")} & remembered
+    assert str(folder) in remembered
+
+
+def test_git_folders_are_never_listed(workspace, listed):
+    engine, folder, clock = workspace
+    write(engine.root / ".git" / "objects" / "ab" / "cdef")
+    write(folder / ".git" / "config")
+    write(folder / "sub" / ".git" / "HEAD")
+    settle(engine, clock)
+    assert listed
+    assert not [path for path in listed if ".git" in Path(path).parts]
+    assert not [name for name in files(engine) if ".git" in name]
+
+
+def test_a_study_behind_a_junction_counts_only_inside_the_workspace(
+    workspace, tmp_path_factory
+):
+    winapi = pytest.importorskip("_winapi", reason="Junctions exist on Windows only")
+    engine, folder, clock = workspace
+    outside = tmp_path_factory.mktemp("outside")
+    shutil.copytree(folder, outside / "Outside")
+    winapi.CreateJunction(str(outside), str(engine.root / "elsewhere"))
+    winapi.CreateJunction(str(folder.parent), str(engine.root / "again"))
+    settle(engine, clock)
+    # The scan resolves a folder behind a junction, as before: a study outside the
+    # workspace does not count.
+    assert sorted(engine.studies) == ["again/Example", "caffeine/Example"]

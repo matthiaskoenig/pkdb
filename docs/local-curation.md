@@ -176,7 +176,7 @@ The app keeps the last 100 finished jobs of all workspaces. **Clear finished his
 
 The app scans the workspace every second. When the files of a study have not changed for a second, it queues a job for the study, unless On save is Off. Several file events of one save make one job, and quick saves in a row make one job for the newest version. Changes made in the app, such as **Save** in the Metadata section, count as saves.
 
-Each scan reads the size and modification time of every file of a study, but it lists the entries of a folder only when the folder changed in the last 30 seconds, and otherwise once every 30 seconds, so even a large workspace takes little processor time. On a file system that leaves the modification time of a folder as it was when files are added, removed or renamed in it, such as some network drives, the listing every 30 seconds notices this, and from then on the app lists every folder on each scan until it restarts or you choose another workspace.
+Each scan reads the size and modification time of every file of a study, but it lists the entries of a folder only when the folder changed in the last 30 seconds, and otherwise once every 30 seconds, so even a large workspace takes little processor time. Some file systems, such as some network drives, leave the modification time of a folder as it was when files are added, removed or renamed in it. There, such a change can show up to 30 seconds late, until the listing every 30 seconds notices it; from then on the app lists every folder on each scan until it restarts or you choose another workspace.
 
 A job:
 
