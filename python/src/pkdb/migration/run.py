@@ -18,6 +18,7 @@ import multiprocessing
 import os
 import shutil
 import tempfile
+from collections import Counter
 from collections.abc import Callable, Iterable, Iterator
 from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 from concurrent.futures.process import BrokenProcessPool
@@ -26,7 +27,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from pkdb.cache import bundled_vocabulary
-from pkdb.domain.vocabulary import Vocabulary
+from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import judge
 from pkdb.migration.model import (
@@ -35,6 +36,7 @@ from pkdb.migration.model import (
     NotConverted,
     PaperMove,
     StudyResult,
+    VocabularyUsed,
 )
 from pkdb.migration.registry import Registry
 from pkdb.migration.report import check_report_path, write_report
@@ -236,6 +238,7 @@ def _attempt(task: Task, target: Path, copy: Path) -> StudyResult:
             registry=task.registry,
             approver=task.approver,
             resolver=resolver,
+            vocabulary=task.vocabulary,
         )
     except NotConverted as error:
         if error.code == "unreadable":
@@ -378,7 +381,8 @@ def _registry(
 def _earlier(path: Path, summary: MigrationReport) -> list[StudyResult]:
     """The written results of the report of earlier runs at `path`.
 
-    A report that cannot be read is replaced; the new report says so.
+    A report that cannot be read is replaced; the new report says so. A study
+    without its vocabulary takes the vocabulary of the earlier report.
     """
     if not _exists(path):
         return []
@@ -390,7 +394,12 @@ def _earlier(path: Path, summary: MigrationReport) -> list[StudyResult]:
             "so this report lists only this run."
         )
         return []
-    return [study for study in earlier.studies if study.written]
+    known = earlier.vocabulary.hash if earlier.vocabulary is not None else None
+    return [
+        study.model_copy(update={"vocabulary": study.vocabulary or known})
+        for study in earlier.studies
+        if study.written
+    ]
 
 
 def _finish(summary: MigrationReport, written: list[StudyResult], root: Path) -> None:
@@ -409,10 +418,31 @@ def _finish(summary: MigrationReport, written: list[StudyResult], root: Path) ->
     names = {study.study for study in carried}
     summary.skipped = [name for name in summary.skipped if name not in names]
     summary.studies.sort(key=lambda study: natural_key(study.study))
+    _other_vocabularies(summary)
     summary.skipped = _sorted(summary.skipped)
     summary.removed_empty = _sorted(summary.removed_empty)
     summary.recovered = _sorted(summary.recovered)
     summary.papers.sort(key=lambda move: natural_key(move.source))
+
+
+def _other_vocabularies(summary: MigrationReport) -> None:
+    """Warn while the report holds written studies of another vocabulary than the run's.
+
+    The conversion depends on the vocabulary, and a written study is not
+    converted again.
+    """
+    current = summary.vocabulary.hash if summary.vocabulary is not None else None
+    other = Counter(
+        study.vocabulary
+        for study in summary.studies
+        if study.written and study.vocabulary and study.vocabulary != current
+    )
+    for vocabulary, count in sorted(other.items()):
+        studies = "study was" if count == 1 else "studies were"
+        summary.warnings.append(
+            f"{count} written {studies} converted with the vocabulary sha256 "
+            f"{vocabulary}, not with the vocabulary of this run."
+        )
 
 
 @contextmanager
@@ -493,8 +523,9 @@ def migrate(
     _check_paths(paths, root)
     known = Registry.read(registry)
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
+    used = VocabularyUsed(version=vocabulary.version, hash=vocabulary_hash(vocabulary))
     with _locked(root):
-        summary = MigrationReport(dry_run=dry_run)
+        summary = MigrationReport(dry_run=dry_run, vocabulary=used)
         if dry_run and _exists(root / WORK):
             raise RunRefused(
                 f"An interrupted run left {WORK} in {root}; run pkdb migrate "
@@ -521,6 +552,7 @@ def migrate(
                     for folder in folders
                 ]
                 for study in _results(tasks, jobs):
+                    study = study.model_copy(update={"vocabulary": used.hash})
                     if not dry_run and study.outcome in PROVEN:
                         study = _written(root, study)
                     summary.studies.append(study)

@@ -10,9 +10,10 @@ from migration_fixtures import (
     v1_full_example,
     v1_study,
 )
+from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.importers.folder import load_folder, parse_bundle
-from pkdb.migration.model import NotConverted
+from pkdb.migration.model import DroppedRow, NotConverted
 from pkdb.migration.rows import render, study_tables, used_sources
 from pkdb.migration.sources import image_sources
 from pkdb.preparation import prepare
@@ -25,7 +26,12 @@ X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
 def tables_of(folder):
     """The format 2 tables of the v1 study `Example` and the decisions to check."""
     study = parse_bundle(load_folder(folder))
-    return study_tables(study, "Example", images=image_sources(folder, "Example"))
+    return study_tables(
+        study,
+        "Example",
+        images=image_sources(folder, "Example"),
+        vocabulary=studyformat_vocabulary(),
+    )
 
 
 def cells(text):
@@ -95,6 +101,184 @@ def test_times_not_reported_are_written_as_nr(tmp_path):
     tables, _ = tables_of(folder)
     [row] = tables["outputs_Tab2.tsv"]
     assert (row["time"], row["time_unit"]) == ("NR", "NR")
+
+
+def test_characteristica_of_measurements_with_a_time_have_time_nr(tmp_path):
+    # Format 1 characteristica have no time; format 2 needs one for concentration.
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {
+                "measurement_type": "concentration",
+                "substance": "drug",
+                "tissue": "plasma",
+                "mean": 5,
+                "unit": "mg/l",
+            },
+            {"measurement_type": "age", "mean": 30, "unit": "yr"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    times = {
+        row["measurement"]: (row["time"], row["time_unit"])
+        for row in tables["characteristica.tsv"]
+    }
+    assert times == {"concentration": ("NR", ""), "age": ("", "")}
+    assert decisions == []
+
+
+# Tab2 rows 3 to 6 of the workbook: a value, a row without any value, its
+# repeat, and a row with only an sd. The parser skips rows without any cell.
+VALUELESS_TAB2 = [
+    ["group", "mean", "sd"],
+    ["all", 2.5, 0.5],
+    ["all", "NA", "NA"],
+    ["all", "NA", "NA"],
+    ["all", "NA", 0.3],
+]
+# Fig1 rows 3 to 6: three points and a point without any value.
+VALUELESS_FIG1 = [["time", "mean"], [0, 0], [1, 2], [2, 1], [3, "NA"]]
+
+
+def valueless_study(root):
+    """The twin with rows without any value in Tab2, Fig1 and a characteristic.
+
+    Individual S2 has an age without value, individual S1 an age with only a
+    count, and the group a choice without statistics.
+    """
+    s1, s2 = STUDY["individualset"]["individuals"]
+    individuals = [
+        {**s1, "characteristica": [{"measurement_type": "age", "count": 1}]},
+        {
+            **s2,
+            "characteristica": [
+                {
+                    "measurement_type": "age",
+                    "unit": "yr",
+                    "comments": [["curator", "Age not given"]],
+                }
+            ],
+        },
+    ]
+    study = {
+        **STUDY,
+        "individualset": {"individuals": individuals},
+        "outputset": {"outputs": [{**OUTPUT, "group": "col==group"}, TIMECOURSE]},
+    }
+    sheets = {"Tab2": VALUELESS_TAB2, "Fig1": VALUELESS_FIG1}
+    return v1_study(root, study, sheets, IMAGES)
+
+
+def test_rows_without_any_value_are_dropped_and_listed(tmp_path):
+    folder = valueless_study(tmp_path)
+    tables, decisions = tables_of(folder)
+    assert [(row["mean"], row["sd"]) for row in tables["outputs_Tab2.tsv"]] == [
+        ("2.5", "0.5"),
+        ("", "0.3"),
+    ]
+    assert [row["time"] for row in tables["timecourses_Fig1.tsv"]] == ["0", "1", "2"]
+    ages = [
+        (row["subjects"], row["count"])
+        for row in tables["characteristica.tsv"]
+        if row["measurement"] == "age"
+    ]
+    assert ages == [("S1", "1")]
+    assert {d.kind for d in decisions} == {"valueless_row"}
+    assert [d.detail for d in decisions] == [
+        "characteristica.tsv: study.json individualset.individuals.1, subject S2, age, "
+        "comment curator: Age not given",
+        "outputs_Tab2.tsv: Example.xlsx Tab2 row 4, subject all, cmax, "
+        "substance drug, tissue plasma",
+        "outputs_Tab2.tsv: Example.xlsx Tab2 row 5, subject all, cmax, "
+        "substance drug, tissue plasma",
+        "timecourses_Fig1.tsv: Example.xlsx Fig1 row 6, label drug_plasma, "
+        "subject all, concentration, substance drug, tissue plasma",
+    ]
+    # The place of each row, from which the Markdown report lists row ranges.
+    assert decisions[1].dropped == DroppedRow(
+        table="outputs_Tab2.tsv",
+        file="Example.xlsx",
+        sheet="Tab2",
+        row=4,
+        subject="all",
+        measurement="cmax",
+        substance="drug",
+        tissue="plasma",
+    )
+
+
+def test_rows_with_a_choice_an_error_type_or_a_statement_are_kept(tmp_path):
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {"measurement_type": "sex", "choice": "M"},
+            {"measurement_type": "kinetics"},
+            {"measurement_type": "unknown"},
+            # Its existence is the information: the group abstained.
+            {"measurement_type": "abstinence"},
+            {"measurement_type": "age", "error_type": "sd", "unit": "yr"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    measurements = [
+        row["measurement"]
+        for row in tables["characteristica.tsv"]
+        if row["subjects"] == "all"
+    ]
+    assert measurements == ["sex", "kinetics", "unknown", "abstinence", "age"]
+    assert "valueless_row" not in {d.kind for d in decisions}
+
+
+def test_a_numeric_categorical_row_is_dropped_only_without_a_choice(tmp_path):
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {"measurement_type": "disease", "choice": "t2dm"},
+            {"measurement_type": "disease", "mean": 4, "unit": "yr"},
+            {"measurement_type": "disease"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    kept = [
+        (row["choice"], row["mean"])
+        for row in tables["characteristica.tsv"]
+        if row["measurement"] == "disease"
+    ]
+    assert kept == [("t2dm", ""), ("", "4")]
+    assert [d.detail for d in decisions] == [
+        "characteristica.tsv: study.json groupset.groups.0, subject all, disease"
+    ]
+
+
+def test_a_scatter_point_without_value_is_kept(tmp_path):
+    # A scatter row pairs two outputs, so a point without value stays for curators.
+    sheets = {"Fig2": [["subject", "age", "cmax"], ["S1", 30, 2], ["S2", 40, "NA"]]}
+    folder = scatter_study(tmp_path, sheets=sheets)
+    tables, decisions = tables_of(folder)
+    assert [row["y_mean"] for row in tables["scatters_Fig2.tsv"]] == ["2", ""]
+    assert decisions == []
+
+
+def test_labelled_array_outputs_form_a_series_without_their_dropped_rows(tmp_path):
+    # Without the empty row, time 1 appears once and the rows form a series.
+    array = {**ARRAY, "time": "col==time", "time_unit": "h"}
+    study = {**STUDY, "outputset": {"outputs": [array]}}
+    sheet = [["subject", "time", "mean"], ["S1", 0, 1], ["S1", 1, 2], ["S1", 1, "NA"]]
+    folder = v1_study(tmp_path, study, {"Tab3": sheet}, (*IMAGES, "Tab3"))
+    tables, decisions = tables_of(folder)
+    assert [row["time"] for row in tables["timecourses_Tab3.tsv"]] == ["0", "1"]
+    assert "outputs_Tab3.tsv" not in tables
+    assert [d.detail for d in decisions] == [
+        "timecourses_Tab3.tsv: Example.xlsx Tab3 row 5, label drug_individuals, "
+        "subject S1, concentration, substance drug, tissue plasma",
+        "2 array outputs in timecourses_Tab3.tsv",
+    ]
 
 
 def test_schedules_and_dose_lists_are_decisions(tmp_path):

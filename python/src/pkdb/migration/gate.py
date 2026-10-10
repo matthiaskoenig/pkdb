@@ -11,12 +11,20 @@ from collections import Counter, defaultdict
 from collections.abc import Callable, Collection, Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Change, Difference, StudyResult
-from pkdb.migration.rows import comment, label_name, scatter_comment, series_arrays
+from pkdb.migration.rows import (
+    comment,
+    label_name,
+    scatter_comment,
+    series_arrays,
+    timed_measurements,
+    valueless,
+)
 from pkdb.migration.sources import image_sources
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
@@ -38,6 +46,20 @@ JPG_SUFFIXES = (".jpg", ".jpeg")
 GENERATED_DATASET = "dataset:auto"
 # Fields of a key that are shown with their name, such as `time 1`.
 NAMED = frozenset({"time", "time_end", "interval", "doses"})
+# Fields of a key that the converter writes as text cells on one line.
+TEXT = (
+    "measurement_type",
+    "calculation_type",
+    "choice",
+    "substance",
+    "tissue",
+    "method",
+    "route",
+    "form",
+    "application",
+    "time_unit",
+    "unit",
+)
 NO_COMMENT = "no comment"
 # Cells that identify a row of a converted table, shown with a validation issue.
 IDENTIFYING = (
@@ -249,15 +271,46 @@ class _Normalizer:
         as_individuals: set[str],
         changes: Changes,
         arrays: Collection[str],
+        timed: Collection[str],
     ):
         self.name = study.metadata.name
         self.as_individuals = as_individuals
         self.changes = changes
         self.arrays = arrays
+        self.timed = timed
         self.labels = _scatter_labels(study)
         self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
         self.renamed: dict[str, str] = {}
+
+    def whitespace(self, key: Key) -> Key:
+        """Text as the converter writes it: on one line, and a blank cell is empty.
+
+        Format 1 keeps text such as the unit `ng  hr/ml` or a substance cell
+        holding a space as read.
+        """
+        # Any: ty checks keyword arguments of _replace against every field type.
+        updates: dict[str, Any] = {}
+        for name in TEXT:
+            value = getattr(key, name)
+            if isinstance(value, str) and (single_line(value) or None) != value:
+                updates[name] = single_line(value) or None
+        if not updates:
+            return key
+        self.changes.add("whitespace", described(key))
+        return key._replace(**updates)
+
+    def time(self, key: Key) -> Key:
+        """Format 1 characteristica have no time; those of `timed` measurements get NR."""
+        if (
+            key.table != "characteristica"
+            or key.measurement_type not in self.timed
+            or key.time is not None
+            or key.time_not_reported
+        ):
+            return key
+        self.changes.add("time_not_reported", described(key))
+        return key._replace(time_not_reported=True)
 
     def image(self, image: str | None) -> str | None:
         """The image file; format 1 keeps the image of a characteristic as written."""
@@ -334,10 +387,11 @@ class _Normalizer:
     def __call__(
         self, key: Key, statistics: Statistics, record: str
     ) -> tuple[Key, Statistics]:
+        key = self.whitespace(key)
         key, statistics = self.geometric(
             key._replace(image=self.image(key.image)), statistics
         )
-        key = self.subject(key)
+        key = self.time(self.subject(key))
         if key.table == "measurements":
             key = self.output(key, record)
         return key, statistics
@@ -378,25 +432,73 @@ def _scatter_comments(study: CanonicalStudy) -> dict[str, str]:
     return comments
 
 
+class _Conversion(NamedTuple):
+    """What the converter did to A's records, besides the intended changes of keys.
+
+    `arrays` are the array outputs that became timecourse points, `dropped`
+    the parsed format 1 records that it dropped as rows without any value, by
+    key, and `timed` the measurements whose characteristica got time NR.
+    """
+
+    arrays: Collection[str] = frozenset()
+    dropped: Mapping[str, Observation] = {}
+    timed: Collection[str] = frozenset()
+
+
+DROPPED_WITH_DATA = "dropped record with data"
+
+
+def _data(record: Observation) -> str | None:
+    """The data of a parsed format 1 record, such as `choice M` or `mean 2, sd 1`.
+
+    The gate checks each row that the converter dropped by this rule of its
+    own, so that no rule of the converter can drop data unseen. A parsed
+    record has no inherited count yet, so any choice or statistic is data.
+    """
+    choice = (record.choice or "").strip()
+    statistics = record.statistics.model_dump(exclude_none=True)
+    if not choice and not statistics:
+        return None
+    parts = [f"choice {choice}"] if choice else []
+    parts += [f"{name} {shown(value)}" for name, value in statistics.items()]
+    return ", ".join(parts)
+
+
 def _records(
     study: CanonicalStudy,
     as_individuals: set[str],
     changes: Changes | None,
-    arrays: Collection[str] = frozenset(),
-) -> tuple[dict[Key, list[Reported]], dict[str, Key]]:
-    """The reported records by key, and the key of each measurement.
+    conversion: _Conversion = _Conversion(),
+) -> tuple[dict[Key, list[Reported]], dict[str, Key], list[Difference]]:
+    """The reported records by key, the key of each measurement and refused drops.
 
-    With `changes`, the records are A's, rewritten by the intended changes,
-    with the comment that the converter writes for them; `arrays` are the
-    array outputs that become timecourse points.
+    With `changes`, the records are A's, rewritten by the intended changes of
+    the `conversion`, with the comment that the converter writes for them.
+    A record that the converter dropped is left out; when it holds data, the
+    drop is a difference.
     """
     normalize = (
-        None if changes is None else _Normalizer(study, as_individuals, changes, arrays)
+        None
+        if changes is None
+        else _Normalizer(
+            study, as_individuals, changes, conversion.arrays, conversion.timed
+        )
     )
     scatter_comments = {} if changes is None else _scatter_comments(study)
     records: dict[Key, list[Reported]] = defaultdict(list)
+    refused: list[Difference] = []
 
-    def add(key: Key, record: Observation) -> Key:
+    def add(key: Key, record: Observation) -> Key | None:
+        if record.key in conversion.dropped:
+            assert changes is not None
+            data = _data(conversion.dropped[record.key])
+            if data is None:
+                changes.add("valueless_row", described(key))
+            else:
+                refused.append(
+                    Difference(path=described(key), a=data, b=DROPPED_WITH_DATA)
+                )
+            return None
         statistics = record.statistics
         if normalize is not None:
             key, statistics = normalize(key, statistics, record.key)
@@ -416,30 +518,39 @@ def _records(
     keys: dict[str, Key] = {}
     for record in study.measurements:
         if record.origin == "reported":
-            key = _key(
-                "measurements",
+            key = add(
+                _key(
+                    "measurements",
+                    record,
+                    MEASUREMENT,
+                    interventions=tuple(sorted(record.interventions)),
+                ),
                 record,
-                MEASUREMENT,
-                interventions=tuple(sorted(record.interventions)),
             )
-            keys[record.key] = add(key, record)
+            if key is not None:
+                keys[record.key] = key
     if normalize is not None:
         normalize.finish()
-    return records, keys
+    return records, keys, refused
 
 
 def _reported(
-    study: CanonicalStudy, keys: Mapping[str, Key]
+    study: CanonicalStudy,
+    keys: Mapping[str, Key],
+    dropped: Collection[str] = frozenset(),
 ) -> Callable[[str], object]:
     """The key of the reported record that a measurement derives from.
 
     A record that leads to no reported record keeps its own record key, which
-    differs between the two formats, so it never matches.
+    differs between the two formats, so it never matches. A record that
+    derives from a `dropped` record is None.
     """
     by_key = {record.key: record for record in study.measurements}
 
     def reported(record_key: str) -> object:
         record = _origin(by_key, record_key)
+        if record is not None and record.key in dropped:
+            return None
         if record is None or record.key not in keys:
             return f"unknown record {record_key}"
         return keys[record.key]
@@ -448,25 +559,29 @@ def _reported(
 
 
 def _timecourses(
-    study: CanonicalStudy, keys: Mapping[str, Key]
+    study: CanonicalStudy,
+    keys: Mapping[str, Key],
+    dropped: Collection[str] = frozenset(),
 ) -> dict[str, frozenset]:
     """The points of each timecourse by label, as reported records.
 
     The reported and the normalized timecourse of a label hold the same
     reported records. Format 1 array outputs that become timecourses join the
     timecourse of their label, as format 2 groups timecourse points by label.
+    Points of `dropped` records are left out, and so is a timecourse that
+    holds only such points.
     """
-    reported = _reported(study, keys)
+    reported = _reported(study, keys, dropped)
     courses: dict[str, set] = defaultdict(set)
     for course in study.timecourses:
-        points = {reported(point.key) for point in course.points}
+        points = {reported(point.key) for point in course.points} - {None}
         labels = {point.label for point in points if isinstance(point, Key)}
         courses[" ".join(sorted(str(label) for label in labels))] |= points
     for record in study.measurements:
         key = keys.get(record.key)
         if record.output_type == "array" and key and key.output_type == "timecourse":
             courses[str(key.label)].add(key)
-    return {label: frozenset(points) for label, points in courses.items()}
+    return {label: frozenset(points) for label, points in courses.items() if points}
 
 
 def _scatters(study: CanonicalStudy, keys: Mapping[str, Key]) -> dict[str, Counter]:
@@ -683,18 +798,28 @@ def _points(points: object) -> str:
 
 
 def compare(
-    a: CanonicalStudy, b: CanonicalStudy, arrays: Collection[str] = frozenset()
+    a: CanonicalStudy,
+    b: CanonicalStudy,
+    arrays: Collection[str] = frozenset(),
+    *,
+    dropped: Mapping[str, Observation] = {},
+    timed: Collection[str] = frozenset(),
 ) -> tuple[list[Change], list[Difference]]:
     """The intended changes from A to B and every other difference between them.
 
     `arrays` are the keys of A's array outputs that become timecourse points
-    (`rows.series_arrays`); other array outputs become outputs.
+    (`rows.series_arrays`); other array outputs become outputs. `dropped` are
+    the parsed records of A that the converter dropped as rows without any
+    value (`rows.valueless`), by key, and `timed` the measurements whose
+    characteristica get time NR.
     """
     changes = Changes()
     as_individuals = _individuals(a, changes)
-    a_records, a_keys = _records(a, as_individuals, changes, arrays)
-    b_records, b_keys = _records(b, set(), None)
-    differences = _match(a_records, b_records, changes)
+    a_records, a_keys, refused = _records(
+        a, as_individuals, changes, _Conversion(arrays, dropped, timed)
+    )
+    b_records, b_keys, _ = _records(b, set(), None)
+    differences = refused + _match(a_records, b_records, changes)
     # Timecourses and scatters hold records; their images are compared above.
     a_keys = {record: key._replace(image=None) for record, key in a_keys.items()}
     b_keys = {record: key._replace(image=None) for record, key in b_keys.items()}
@@ -715,7 +840,10 @@ def compare(
         if name in b_comments and a_comments[name] != b_comments[name]
     ]
     differences += _differences(
-        "timecourses", _timecourses(a, a_keys), _timecourses(b, b_keys), _points
+        "timecourses",
+        _timecourses(a, a_keys, dropped),
+        _timecourses(b, b_keys),
+        _points,
     )
     differences += _differences(
         "scatters", _scatters(a, a_keys), _scatters(b, b_keys), _points
@@ -723,16 +851,23 @@ def compare(
     return changes.listed(), differences
 
 
-def _series_arrays(v1: Path, study: CanonicalStudy) -> frozenset[str]:
-    """The array outputs of A that the converter writes as timecourse points.
+def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
+    """What the converter does to the records of A, besides the changes of keys.
 
     The converter decides this on the parsed, not the prepared, format 1
-    study, whose calculation types `prepare` has not filled yet.
+    study, whose calculation types and counts `prepare` has not filled yet.
     """
-    if not any(r.output_type == "array" and r.label for r in study.measurements):
-        return frozenset()
     parsed = parse_bundle(load_folder(v1))
-    return series_arrays(parsed, v1.name, image_sources(v1, v1.name))
+    keys = valueless(parsed, vocabulary)
+    records: list[Observation] = [*parsed.measurements]
+    for subject in [*parsed.groups, *parsed.individuals]:
+        records += subject.characteristica
+    dropped = {record.key: record for record in records if record.key in keys}
+    arrays: frozenset[str] = frozenset()
+    if any(r.output_type == "array" and r.label for r in parsed.measurements):
+        images = image_sources(v1, v1.name)
+        arrays = series_arrays(parsed, v1.name, images, keys)
+    return _Conversion(arrays, dropped, timed_measurements(vocabulary))
 
 
 def _errors(bundle: PreparedBundle) -> list[str]:
@@ -837,7 +972,14 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return _invalid(study, "validation", error.report.issues, converted)
     if _errors(b):
         return _invalid(study, "validation", b.report.issues, converted)
-    changes, differences = compare(a.study, b.study, _series_arrays(v1, a.study))
+    conversion = _conversion(v1, vocabulary)
+    changes, differences = compare(
+        a.study,
+        b.study,
+        conversion.arrays,
+        dropped=conversion.dropped,
+        timed=conversion.timed,
+    )
     if differences:
         return StudyResult(
             study=study,

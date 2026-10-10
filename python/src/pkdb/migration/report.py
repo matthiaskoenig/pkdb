@@ -3,10 +3,17 @@
 import json
 import os
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
 
 from pkdb.cache import atomic_text
-from pkdb.migration.model import MigrationReport, Outcome, StudyResult
+from pkdb.migration.model import (
+    Decision,
+    DroppedRow,
+    MigrationReport,
+    Outcome,
+    StudyResult,
+)
 from pkdb.studyformat.text import natural_key
 
 CLASS_ORDER: tuple[Outcome, ...] = (
@@ -28,12 +35,17 @@ DECISION_HEADINGS = {
     "removed_file": "Removed data files",
     "scatter_label": "Renamed scatter outputs",
     "output_label": "Dropped output labels",
+    "valueless_row": "Dropped rows without any value",
     "access_private": "Public studies without a release (now private)",
     "label_renamed": "Renamed timecourse labels",
     "reference_replaced": "Replaced reference snapshots",
     "reference_resolved": "Resolved missing references",
     "creator_fallback": "Studies without a creator",
 }
+# Rows without any value that the converter dropped: thousands, so migration.md
+# lists them per sheet, and only for studies that replace their format 1 folder.
+VALUELESS = "valueless_row"
+PROVEN: tuple[Outcome, ...] = ("identical", "intended")
 # Reasons of studies that are not converted, listed again under manual decisions.
 REASON_HEADINGS = {
     "registry_sid": "Identifiers that differ from the registry",
@@ -129,7 +141,9 @@ def _decisions(
             by_kind[decision.kind].append([study.study, decision.detail, written])
     unknown = sorted(kind for kind in by_kind if kind not in DECISION_HEADINGS)
     for kind in [*DECISION_HEADINGS, *unknown]:
-        if kind in by_kind:
+        if kind == VALUELESS:
+            lines += _valueless(report)
+        elif kind in by_kind:
             heading = DECISION_HEADINGS.get(kind, kind)
             lines += [
                 f"### {heading}",
@@ -150,6 +164,89 @@ def _decisions(
     if lines[-2:] == ["## Manual decisions", ""]:
         lines += ["None.", ""]
     return lines
+
+
+def _count(number: int, noun: str, plural: str | None = None) -> str:
+    return f"{number} {noun if number == 1 else plural or noun + 's'}"
+
+
+def _ranges(numbers: Iterable[int]) -> str:
+    """Sorted numbers with runs as ranges, such as `3-5, 8, 11-12`."""
+    runs: list[list[int]] = []
+    for number in sorted(set(numbers)):
+        if runs and number == runs[-1][1] + 1:
+            runs[-1][1] = number
+        else:
+            runs.append([number, number])
+    return ", ".join(str(a) if a == b else f"{a}-{b}" for a, b in runs)
+
+
+def _valueless_rows(study: StudyResult, decisions: list[Decision]) -> list[list[str]]:
+    """The dropped rows of a study: one table row per table and format 1 file.
+
+    Each lists the rows as ranges, or the places in study.json, the count and
+    the measurements. A decision without its place shows its detail.
+    """
+    written = "yes" if study.written else "no"
+    groups: dict[tuple[str, str], list[DroppedRow]] = defaultdict(list)
+    lines = []
+    for decision in decisions:
+        row = decision.dropped
+        if row is None:
+            lines.append([study.study, "", "", decision.detail, "1", "", written])
+        else:
+            file = " ".join(filter(None, (row.file, row.sheet)))
+            groups[row.table, file].append(row)
+    for (table, file), rows in groups.items():
+        numbers = _ranges(row.row for row in rows if row.row is not None)
+        paths = dict.fromkeys(row.path for row in rows if row.row is None and row.path)
+        measurements = dict.fromkeys(row.measurement for row in rows)
+        places = ", ".join(filter(None, (numbers, *paths)))
+        lines.append(
+            [
+                study.study,
+                table,
+                file,
+                places,
+                str(len(rows)),
+                ", ".join(measurements),
+                written,
+            ]
+        )
+    return lines
+
+
+def _valueless(report: MigrationReport) -> list[str]:
+    """Dropped rows without any value, per study, table and format 1 file.
+
+    Only studies that replace their format 1 folder are listed, in a dry run
+    those that would; migration.json lists every dropped row of every study.
+    """
+    lines: list[list[str]] = []
+    left = 0
+    studies = 0
+    for study in report.studies:
+        decisions = [d for d in study.decisions if d.kind == VALUELESS]
+        if not decisions:
+            continue
+        if study.outcome in PROVEN:
+            lines += _valueless_rows(study, decisions)
+        else:
+            left += len(decisions)
+            studies += 1
+    if not lines and not left:
+        return []
+    text = [f"### {DECISION_HEADINGS[VALUELESS]}", ""]
+    if lines:
+        header = ["Study", "Table", "Format 1 file", "Rows", "Count", "Measurements"]
+        text += [*_table([*header, "Written"], lines), ""]
+    if left:
+        text += [
+            f"Studies that stay format 1 are listed in migration.json only: "
+            f"{_count(left, 'row')} of {_count(studies, 'study', 'studies')}.",
+            "",
+        ]
+    return text
 
 
 def _registry(report: MigrationReport) -> list[str]:
@@ -203,6 +300,14 @@ def _status(report: MigrationReport) -> str:
     return f"Interrupted. {status}" if report.interrupted else status
 
 
+def _vocabulary(report: MigrationReport) -> list[str]:
+    """The vocabulary of the run, which decides how studies are converted."""
+    used = report.vocabulary
+    if used is None:
+        return []
+    return [f"Vocabulary: {used.version} (sha256 {used.hash}).", ""]
+
+
 def markdown(report: MigrationReport) -> str:
     report = _sorted(report)
     grouped = _by_outcome(report)
@@ -211,6 +316,7 @@ def markdown(report: MigrationReport) -> str:
         "",
         _status(report),
         "",
+        *_vocabulary(report),
         *(line for warning in report.warnings for line in (f"Warning: {warning}", "")),
         *_summary(report, grouped),
         *_classes(grouped),

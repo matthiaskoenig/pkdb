@@ -7,9 +7,10 @@ import time
 import pytest
 from migration_fixtures import IMAGES, SHEETS, STUDY, v1_full_example, v1_study
 
+from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.migration import run as run_module
 from pkdb.migration.convert import convert_study
-from pkdb.migration.model import MigrationReport, NotConverted
+from pkdb.migration.model import MigrationReport, NotConverted, VocabularyUsed
 from pkdb.migration.registry import Registry
 from pkdb.migration.run import migrate
 from pkdb.references import NotFound, ReferenceResolver
@@ -655,6 +656,41 @@ def test_an_unreadable_earlier_report_is_replaced_with_a_warning(
     assert [s.study for s in written_report(tmp_path).studies] == ["caffeine/Example"]
     text = (tmp_path / "migration.md").read_text()
     assert "\nWarning: The earlier report migration.json could not be read" in text
+
+
+def test_the_report_warns_while_it_holds_studies_of_another_vocabulary(
+    tmp_path, sf_vocabulary
+):
+    two_studies(tmp_path)
+    v1_full_example(tmp_path / "third")
+    (tmp_path / "third" / "studies" / "caffeine").rename(
+        tmp_path / "studies" / "morphine"
+    )
+    first = vocabulary_hash(sf_vocabulary)
+    report = go(tmp_path, sf_vocabulary, paths=[tmp_path / "studies" / "caffeine"])
+    assert report.vocabulary == VocabularyUsed(version="studyformat-test", hash=first)
+    assert [(s.study, s.vocabulary) for s in report.studies] == [
+        ("caffeine/Example", first)
+    ]
+    assert report.warnings == []
+    other = sf_vocabulary.model_copy(update={"version": "other"})
+    warning = (
+        f"1 written study was converted with the vocabulary sha256 {first}, "
+        "not with the vocabulary of this run."
+    )
+    # The warning stays while the report holds the study of the first vocabulary.
+    for substance in ("codeine", "morphine"):
+        report = go(tmp_path, other, paths=[tmp_path / "studies" / substance])
+        assert report.warnings == [warning]
+        assert written_report(tmp_path).warnings == [warning]
+    assert [(s.study, s.vocabulary) for s in report.studies] == [
+        ("caffeine/Example", first),
+        ("codeine/Example", vocabulary_hash(other)),
+        ("morphine/Example", vocabulary_hash(other)),
+    ]
+    text = (tmp_path / "migration.md").read_text()
+    assert f"\nWarning: {warning}\n" in text
+    assert f"\nVocabulary: other (sha256 {vocabulary_hash(other)}).\n" in text
 
 
 def test_a_refused_path_leaves_the_report_as_it_was(tmp_path, sf_vocabulary):

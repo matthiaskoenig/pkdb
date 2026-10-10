@@ -13,7 +13,10 @@ from migration_fixtures import (
     v1_study,
 )
 from PIL import Image
+from vocabulary_fixtures import studyformat_vocabulary
 
+from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration import gate, rows
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import MAX_DIFFERENCES, compare, judge
 from pkdb.migration.model import NotConverted
@@ -33,6 +36,7 @@ def converted(tmp_path, v1):
         registry=Registry(),
         approver=None,
         resolver=ReferenceResolver(offline=True),
+        vocabulary=studyformat_vocabulary(),
     )
     return target
 
@@ -205,21 +209,205 @@ def test_an_invalid_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
 
 
 def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocabulary):
-    individuals = STUDY["individualset"]["individuals"]
-    without_age = {
-        **individuals[1],
-        "characteristica": [{"measurement_type": "age", "unit": "yr", "image": "TabA"}],
-    }
-    study = {**STUDY, "individualset": {"individuals": [individuals[0], without_age]}}
+    # A spread without a value stays for the curator, unlike a row without any value.
+    group = STUDY["groupset"]["groups"][0]
+    sd_only = {"measurement_type": "age", "sd": 2, "unit": "yr", "image": "Tab1"}
+    groups = [{**group, "characteristica": [*group["characteristica"], sd_only]}]
+    study = {**STUDY, "groupset": {"groups": groups}}
     v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
     v2 = converted(tmp_path, v1)
     lines = (v2 / "characteristica.tsv").read_text().splitlines()
-    [row] = [n for n, line in enumerate(lines, 1) if "\tS2\t" in line]
+    [row] = [n for n, line in enumerate(lines, 1) if "\tall\tage\t" in line]
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert [d.path for d in result.differences] == [
-        f"validation characteristica.tsv:{row} missing_value [subjects=S2 measurement=age]"
+        f"validation characteristica.tsv:{row} missing_value [subjects=all measurement=age]"
     ]
+
+
+def test_a_characteristic_without_time_is_an_intended_change(tmp_path, sf_vocabulary):
+    # Format 1 characteristica have no time; format 2 needs one for concentration.
+    group = STUDY["groupset"]["groups"][0]
+    concentration = {
+        "measurement_type": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "mean": 5,
+        "unit": "mg/l",
+        "image": "Tab1",
+    }
+    groups = [{**group, "characteristica": [*group["characteristica"], concentration]}]
+    study = {**STUDY, "groupset": {"groups": groups}}
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.examples) for c in result.changes] == [
+        (
+            "time_not_reported",
+            [
+                "characteristica[Example_Tab1.png all concentration sample mean "
+                "drug plasma mg/l]"
+            ],
+        )
+    ]
+
+
+def test_rows_without_any_value_are_an_intended_change(tmp_path, sf_vocabulary):
+    individuals = [
+        STUDY["individualset"]["individuals"][0],
+        {
+            **STUDY["individualset"]["individuals"][1],
+            "characteristica": [{"measurement_type": "age", "unit": "yr"}],
+        },
+    ]
+    study = {
+        **with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE),
+        "individualset": {"individuals": individuals},
+    }
+    tab2 = [["group", "mean", "sd"], ["all", 2.5, 0.5], *[["all", "NA", "NA"]] * 2]
+    sheets = {"Tab2": tab2, "Fig1": [*SHEETS["Fig1"], [3, "NA"]]}
+    v1 = v1_study(tmp_path / "v1", study, sheets, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 4)]
+
+
+def test_a_timecourse_without_any_value_is_an_intended_change(tmp_path, sf_vocabulary):
+    sheets = {**SHEETS, "Fig1": [["time", "mean"], [0, "NA"], [1, "NA"]]}
+    v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert not (v2 / "timecourses_Fig1.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
+
+
+@pytest.mark.parametrize(
+    ("repeat", "outcome", "found"),
+    [
+        (["all", 2.5, 0.5], "mismatch", ["duplicate_row"]),
+        (["all", "NA", "NA"], "intended", ["valueless_row"]),
+    ],
+    ids=["repeat with data", "empty row"],
+)
+def test_only_an_empty_row_of_a_repeated_key_is_dropped(
+    tmp_path, sf_vocabulary, repeat, outcome, found
+):
+    study = with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE)
+    tab2 = [["group", "mean", "sd"], ["all", 2.5, 0.5], repeat]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == outcome
+    assert (result.issues or [c.kind for c in result.changes]) == found
+
+
+@pytest.mark.parametrize(
+    "row",
+    [
+        {"measurement_type": "age", "count": 2, "unit": "yr"},
+        {"measurement_type": "age", "error_type": "sd", "unit": "yr"},
+        {"measurement_type": "abstinence"},
+    ],
+    ids=["only a count", "only an error type", "a statement"],
+)
+def test_rows_that_carry_information_without_value_stay_a_mismatch(
+    tmp_path, sf_vocabulary, row
+):
+    # A count, an error type or the existence of an abstinence row is
+    # information to curate.
+    group = STUDY["groupset"]["groups"][0]
+    kept = {**row, "image": "Tab1"}
+    groups = [{**group, "characteristica": [*group["characteristica"], kept]}]
+    v1 = v1_study(
+        tmp_path / "v1", {**STUDY, "groupset": {"groups": groups}}, SHEETS, IMAGES
+    )
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    # Format 2 also says that an error type without error bar is incomplete.
+    assert "missing_value" in result.issues
+    assert not [d for d in result.differences if not d.path.startswith("validation")]
+
+
+def test_labelled_array_outputs_with_a_dropped_row_are_an_intended_series(
+    tmp_path, sf_vocabulary
+):
+    # Without the empty row, time 1 appears once and the rows form a series.
+    array = {
+        **TIMECOURSE,
+        "source": "Tab3",
+        "image": "Tab3",
+        "output_type": "array",
+        "label": "drug_individuals",
+        "group": None,
+        "individual": "col==subject",
+    }
+    array = {key: value for key, value in array.items() if value is not None}
+    study = with_outputs(OUTPUT, TIMECOURSE, array)
+    tab3 = [["subject", "time", "mean"], ["S1", 0, 1], ["S1", 1, 2], ["S1", 1, "NA"]]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab3": tab3}, (*IMAGES, "Tab3"))
+    v2 = converted(tmp_path, v1)
+    assert (v2 / "timecourses_Tab3.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [
+        ("array_output", 2),
+        ("valueless_row", 1),
+    ]
+
+
+def test_a_dropped_record_with_data_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    [cmax] = [
+        record
+        for record in parse_bundle(load_folder(v1)).measurements
+        if record.measurement_type == "cmax" and not record.label
+    ]
+    a = prepare(v1, vocabulary=sf_vocabulary).study
+    b = prepare(v2, vocabulary=sf_vocabulary).study
+    changes, differences = compare(a, b, dropped={cmax.key: cmax})
+    assert "valueless_row" not in [change.kind for change in changes]
+    assert (differences[0].a, differences[0].b) == (
+        "mean 2.5, sd 0.5",
+        "dropped record with data",
+    )
+    assert differences[0].path.startswith("measurements[Example_Tab2.png output")
+
+
+def test_the_gate_refuses_a_converter_rule_that_drops_data(
+    tmp_path, sf_vocabulary, monkeypatch
+):
+    # A wrong rule shared by the converter and the gate must still fail the gate.
+    def outputs(study, vocabulary):
+        return frozenset(
+            record.key
+            for record in study.measurements
+            if record.output_type == "output" and not record.label
+        )
+
+    monkeypatch.setattr(rows, "valueless", outputs)
+    monkeypatch.setattr(gate, "valueless", outputs)
+    v1 = v1_full_example(tmp_path / "v1")
+    v2 = converted(tmp_path, v1)
+    assert not (v2 / "outputs_Tab2.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert [d.b for d in result.differences] == ["dropped record with data"]
+
+
+def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary):
+    # The converter writes text cells on one line; a blank cell is no value.
+    output = {**OUTPUT, "unit": "col==unit", "method": "col==method"}
+    sheets = {
+        **SHEETS,
+        "Tab2": [["mean", "sd", "unit", "method"], [2.5, 0.5, "mg  / l", " "]],
+    }
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert "\tmg / l\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("whitespace", 1)]
 
 
 def test_a_v1_study_that_cannot_be_prepared_is_invalid_v1(tmp_path, sf_vocabulary):

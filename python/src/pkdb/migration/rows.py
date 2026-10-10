@@ -7,8 +7,9 @@ from decimal import Decimal
 from pathlib import Path
 
 from pkdb.domain.datasets import STATISTICS_FIELDS
+from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.metadata import single_line
-from pkdb.migration.model import Decision, NotConverted
+from pkdb.migration.model import Decision, DroppedRow, NotConverted
 from pkdb.migration.sources import curator_source, observation_source
 from pkdb.schemas.study import (
     CanonicalStudy,
@@ -23,6 +24,7 @@ from pkdb.schemas.study import (
 from pkdb.studyformat.cells import NAME_PATTERN, NOT_REPORTED
 from pkdb.studyformat.relations import SERIES_COLUMNS
 from pkdb.studyformat.tables import TABLES, TEXT_SOURCE, table_file
+from pkdb.studyformat.terms import VALUE_TYPES
 from pkdb.studyformat.text import format_number, render_tsv
 
 Tables = dict[str, list[dict[str, str]]]
@@ -107,6 +109,109 @@ def observation(record: Observation, error_bars: ErrorBars) -> dict[str, str]:
         "comment": comment(record),
         **statistics(record, error_bars),
     }
+
+
+def timed_measurements(vocabulary: Vocabulary) -> frozenset[str]:
+    """The measurements that format 2 records only with a time, which may be NR."""
+    return frozenset(
+        rule.name for rule in vocabulary.measurements if rule.time_required
+    )
+
+
+def _scatter_outputs(study: CanonicalStudy) -> set[str]:
+    """The output labels that are scatter dimensions."""
+    return {
+        dimension.output
+        for dataset in study.scatters
+        for subset in dataset.subsets
+        for dimension in subset.dimensions
+    }
+
+
+# Measurements whose rows state a fact even without a value, such as
+# abstinence from alcohol before the study: such a row is never dropped and
+# stays for a curator. In the bundled vocabulary these are the numeric
+# measurements abstinence, abstinence alcohol, abstinence marijuana,
+# abstinence medication, abstinence oral contraceptives, abstinence smoking
+# and fasting (duration); the others of these names, such as fasting and
+# overnight fast, take a choice and are never dropped anyway.
+STATEMENTS = ("abstinence", "fasting")
+
+
+def _statement(measurement: str) -> bool:
+    """Whether a measurement is one of `STATEMENTS` or one of its kinds."""
+    return any(
+        measurement == name or measurement.startswith(f"{name} ") for name in STATEMENTS
+    )
+
+
+def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
+    """Keys of the characteristica, outputs and timecourse points without any value.
+
+    Format 1 accepts a row of a measurement with values, such as cmax or age,
+    that holds neither a choice nor a statistic, not even a count or an error
+    type. Format 2 refuses it (`missing_value`, and `duplicate_row` for its
+    repeats). Such a row carries no data, so the converter drops it and lists
+    it. A row with a statistic but no central value, such as only an sd, only
+    a count or only an error type, stays for a curator, and so does a row of
+    the `STATEMENTS`, whose existence is the information. Scatter points stay
+    too, since a scatter row pairs two outputs.
+    """
+    rules = vocabulary.measurement_map()
+    scatters = _scatter_outputs(study)
+    records: list[Observation] = [
+        record
+        for subject in [*study.groups, *study.individuals]
+        for record in subject.characteristica
+    ]
+    records += [
+        record
+        for record in study.measurements
+        if not (record.label and record.label in scatters)
+    ]
+    return frozenset(
+        record.key
+        for record in records
+        if (rule := rules.get(record.measurement_type)) is not None
+        and rule.dtype in VALUE_TYPES
+        and not _statement(rule.name)
+        and not text(record.choice)
+        and not record.statistics.model_dump(exclude_none=True)
+    )
+
+
+def _dropped(
+    file: str, record: Observation, subject: str | None, label: str | None = None
+) -> Decision:
+    """The decision that lists a dropped row by its place in format 1.
+
+    It keeps the comment of the row, so that nothing a curator wrote is lost.
+    """
+    source = record.source
+    assert source is not None
+    row = DroppedRow(
+        table=file,
+        file=source.file,
+        sheet=source.sheet,
+        row=source.row,
+        path=".".join(str(part) for part in source.path) or None,
+        label=label or None,
+        subject=subject or None,
+        measurement=record.measurement_type,
+        substance=text(record.substance) or None,
+        tissue=text(record.tissue) or None,
+        comment=comment(record) or None,
+    )
+    parts = [row.place()]
+    parts += [f"label {label}"] if label else []
+    parts += [f"subject {subject}"] if subject else []
+    parts.append(record.measurement_type)
+    parts += [f"substance {row.substance}"] if row.substance else []
+    parts += [f"tissue {row.tissue}"] if row.tissue else []
+    parts += [f"comment {row.comment}"] if row.comment else []
+    return Decision(
+        kind="valueless_row", detail=f"{file}: {', '.join(parts)}", dropped=row
+    )
 
 
 def label_name(label: str) -> str:
@@ -198,11 +303,24 @@ def _characteristica(
     images: frozenset[str],
     error_bars: ErrorBars,
     decisions: list[Decision],
+    *,
+    timed: frozenset[str],
+    dropped: frozenset[str],
 ) -> list[dict[str, str]]:
+    """Rows of characteristica.tsv.
+
+    Format 1 characteristica have no time, so those of a measurement that
+    format 2 records only with a time (`timed`) get time NR. Characteristica
+    without any value (`dropped`) are listed instead.
+    """
+    file = "characteristica.tsv"
     rows = []
     subjects: list[Group | Individual] = [*study.groups, *study.individuals]
     for subject in subjects:
         for record in subject.characteristica:
+            if record.key in dropped:
+                decisions.append(_dropped(file, record, subject.name))
+                continue
             assert record.source is not None
             image = _characteristic_image(record, subject, name)
             row = {
@@ -210,6 +328,8 @@ def _characteristica(
                 "subjects": subject.name,
                 "source": curator_source(record.source, image, name, images),
             }
+            if record.measurement_type in timed and not row["time"]:
+                row["time"] = NOT_REPORTED
             rows.append(_geometric(record, row, decisions))
     return rows
 
@@ -462,7 +582,10 @@ def _is_series(rows: list[tuple[Measurement, dict[str, str]]]) -> bool:
 
 
 def series_arrays(
-    study: CanonicalStudy, name: str, images: frozenset[str]
+    study: CanonicalStudy,
+    name: str,
+    images: frozenset[str],
+    dropped: frozenset[str] = frozenset(),
 ) -> frozenset[str]:
     """Keys of the labelled array outputs that become timecourse points.
 
@@ -470,20 +593,17 @@ def series_arrays(
     series. Labelled array outputs become timecourse points only where their
     rows, with the timecourse rows of their label, form a valid series.
     Others, such as correlation data of many subjects without time, stay
-    outputs. Scatter points are neither.
+    outputs. Scatter points are neither. Rows without any value (`dropped`)
+    are not written, so they are no part of a series.
     """
-    points = {
-        dimension.output
-        for dataset in study.scatters
-        for subset in dataset.subsets
-        for dimension in subset.dimensions
-    }
+    points = _scatter_outputs(study)
     series: dict[tuple[str, str], list[tuple[Measurement, dict[str, str]]]]
     series = defaultdict(list)
     for record in study.measurements:
         if (
             record.label
             and record.label not in points
+            and record.key not in dropped
             and record.output_type in ("timecourse", "array")
         ):
             source, row = _measurement(record, name, {}, images)
@@ -547,18 +667,29 @@ def study_tables(
     error_bars: ErrorBars = {},
     *,
     images: frozenset[str],
+    vocabulary: Vocabulary,
 ) -> tuple[Tables, list[Decision]]:
     """The format 2 tables of a parsed format 1 study and the decisions to check.
 
     `images` are the sources that have an image in the v1 folder (`image_sources`).
+    The `vocabulary` names the measurements that need a value or a time.
     """
     decisions: list[Decision] = []
+    dropped = valueless(study, vocabulary)
     scatters, used = _scatter_rows(study, name, images, decisions)
-    arrays = series_arrays(study, name, images)
+    arrays = series_arrays(study, name, images, dropped)
+    # A dropped array output is listed in the timecourses of its label's series.
+    series = {record.label for record in study.measurements if record.key in arrays}
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, images, decisions),
         "characteristica.tsv": _characteristica(
-            study, name, images, error_bars, decisions
+            study,
+            name,
+            images,
+            error_bars,
+            decisions,
+            timed=timed_measurements(vocabulary),
+            dropped=dropped,
         ),
         "interventions.tsv": _interventions(study, name, images, error_bars, decisions),
     }
@@ -570,17 +701,27 @@ def study_tables(
             file = used[record.key]
         else:
             source, row = _measurement(record, name, error_bars, images)
+            timecourse = bool(record.label) and (
+                record.output_type == "timecourse"
+                or record.key in arrays
+                or (
+                    record.output_type == "array"
+                    and record.key in dropped
+                    and record.label in series
+                )
+            )
+            file = table_file("timecourses" if timecourse else "outputs", source)
+            if record.key in dropped:
+                subject = record.group or record.individual
+                decisions.append(_dropped(file, record, subject, record.label))
+                continue
             row = _geometric(record, row, decisions)
-            if record.label and (
-                record.output_type == "timecourse" or record.key in arrays
-            ):
-                file = table_file("timecourses", source)
+            if timecourse:
+                assert record.label is not None
                 row = {**row, "label": names(record.label, file)}
-            else:
-                file = table_file("outputs", source)
-                if record.label:
-                    # The outputs table has no label column.
-                    labels[file] += 1
+            elif record.label:
+                # The outputs table has no label column.
+                labels[file] += 1
             tables.setdefault(file, []).append(row)
         if record.output_type == "array":
             array_files[file] += 1
