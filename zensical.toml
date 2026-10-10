@@ -89,6 +89,11 @@ toggle.name = "Switch to system preference"
 icon = "fontawesome/brands/github"
 link = "https://github.com/matthiaskoenig/pkdb"
 
+# coding agents write their design documents and plans to `docs/superpowers`
+# and `docs/plans`, gitignored and no pages; the benchmarks stay
+[project.plugins.exclude]
+glob = ["superpowers/specs/*", "superpowers/plans/*", "plans/*"]
+
 [project.markdown_extensions]
 abbr = {}
 admonition = {}

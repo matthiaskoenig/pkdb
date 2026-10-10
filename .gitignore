@@ -18,6 +18,13 @@ dist/
 .ipynb_checkpoints/
 .idea/
 /site/
+
+# working files of coding agents, their design documents and plans are not committed
+.superpowers/
+superpowers/
+docs/superpowers/specs/
+docs/superpowers/plans/
+docs/plans/
 node_modules/
 # Built by npm run build:curation in frontend/.
 python/src/pkdb/curation/static/

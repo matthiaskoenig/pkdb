@@ -3,6 +3,11 @@ on:
   workflow_call:
 permissions:
   contents: read
+concurrency:
+  # a called workflow sees the name of its caller in `github.workflow`, the
+  # group of the caller would deadlock it, so it has a group of its own
+  group: frontend-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   frontend:
     runs-on: ubuntu-latest

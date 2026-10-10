@@ -30,6 +30,7 @@ jobs:
         with:
           python-version: "3.14"
           enable-cache: true
+          cache-python: true
       - name: Install the backend
         working-directory: backend
         run: uv sync --locked --python 3.14

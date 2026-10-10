@@ -197,7 +197,7 @@ uv run --project backend ty check --project backend
 
 The test database uses temporary container storage. Tests create isolated schemas. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
 
-Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14 and 3.15. Corpus tests require explicitly configured source data and are not part of the default suite.
+Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14; for Python 3.15 run them locally against the Python 3.15 runtime image above, with `PKDB_TEST_IMAGE_PYTHON=3.15`. Corpus tests require explicitly configured source data and are not part of the default suite.
 
 `PKDB_STUDY_CORPUS=<pkdb_data>/studies uv run --locked pytest -q tests/test_migration_corpus.py` converts named studies of pkdb_data in a dry run on copies, and `PKDB_MIGRATION_FULL=1` adds the whole corpus.
 

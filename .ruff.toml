@@ -1,6 +1,6 @@
 line-length = 88
 target-version = "py314"
-extend-exclude = ["frontend", "docs", "superpowers"]
+extend-exclude = ["frontend", "docs"]
 
 [lint]
 select = ["E4", "E7", "E9", "F", "I", "UP"]
