@@ -6,6 +6,7 @@ from pkdb.migration.model import (
     Change,
     Decision,
     Difference,
+    DroppedRow,
     MigrationReport,
     PaperMove,
     RegistryFindings,
@@ -174,3 +175,84 @@ def test_every_decision_kind_appears_under_a_heading():
         assert f"### {heading}\n" in text
     assert "| x/Y | detail future_kind | yes |" in text
     assert "### Studies without a creator\n" in text
+
+
+def dropped(table, file, measurement, *, sheet=None, row=None, path=None):
+    place = DroppedRow(
+        table=table,
+        file=file,
+        sheet=sheet,
+        row=row,
+        path=path,
+        measurement=measurement,
+    )
+    detail = f"{table}: {place.place()}, {measurement}"
+    return Decision(kind="valueless_row", detail=detail, dropped=place)
+
+
+DROPPED = MigrationReport(
+    dry_run=True,
+    studies=[
+        StudyResult(
+            study="x/A",
+            outcome="intended",
+            decisions=[
+                *(
+                    dropped("outputs_Tab1.tsv", "A.xlsx", m, sheet="Tab1", row=row)
+                    for row, m in ((8, "cmax"), (3, "tmax"), (4, "tmax"), (5, "cmax"))
+                ),
+                dropped("outputs_Tab2.tsv", ".A_Tab2.tsv", "auc_end", row=2),
+                dropped(
+                    "characteristica.tsv", "study.json", "age", path="groupset.groups.0"
+                ),
+                Decision(kind="schedule", detail="D1: time 0, interval 12, doses 3"),
+            ],
+        ),
+        StudyResult(
+            study="x/B",
+            outcome="mismatch",
+            decisions=[
+                dropped("outputs_Tab1.tsv", "B.xlsx", "tmax", sheet="Tab1", row=3),
+                dropped("outputs_Tab1.tsv", "B.xlsx", "tmax", sheet="Tab1", row=4),
+            ],
+        ),
+    ],
+)
+
+
+def test_dropped_rows_are_listed_per_file_for_studies_that_are_written():
+    text = markdown(DROPPED)
+    section = text.split("### Dropped rows without any value\n\n")[1].split("###")[0]
+    assert section.splitlines() == [
+        "| Study | Table | Format 1 file | Rows | Count | Measurements | Written |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+        "| x/A | outputs_Tab1.tsv | A.xlsx Tab1 | 3-5, 8 | 4 | cmax, tmax | no |",
+        "| x/A | outputs_Tab2.tsv | .A_Tab2.tsv | 2 | 1 | auc_end | no |",
+        "| x/A | characteristica.tsv | study.json | groupset.groups.0 | 1 | age | no |",
+        "",
+        "Studies that stay format 1 are listed in migration.json only: "
+        "2 rows of 1 study.",
+    ]
+
+
+def test_the_json_report_lists_every_dropped_row(tmp_path):
+    write_report(DROPPED, tmp_path / "migration.json")
+    data = json.loads((tmp_path / "migration.json").read_text())
+    decisions = [d for study in data["studies"] for d in study["decisions"]]
+    assert [d["kind"] for d in decisions].count("valueless_row") == 8
+    assert decisions[0]["dropped"] == {
+        "table": "outputs_Tab1.tsv",
+        "file": "A.xlsx",
+        "sheet": "Tab1",
+        "row": 8,
+        "path": None,
+        "label": None,
+        "subject": None,
+        "measurement": "cmax",
+        "substance": None,
+        "tissue": None,
+        "comment": None,
+    }
+    # Other decisions have no place.
+    assert "dropped" not in decisions[6]
+    assert MigrationReport.model_validate(data) == DROPPED

@@ -20,11 +20,43 @@ class Model(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class DroppedRow(Model):
+    """A format 1 row without any value that the converter dropped, by its place.
+
+    `table` is the format 2 table the row would be in; `file`, `sheet` and
+    `row` locate it in format 1, or `path` in study.json.
+    """
+
+    table: str
+    file: str
+    sheet: str | None = None
+    row: int | None = None
+    path: str | None = None
+    label: str | None = None
+    subject: str | None = None
+    measurement: str
+    substance: str | None = None
+    tissue: str | None = None
+    comment: str | None = None
+
+    def place(self) -> str:
+        """Such as `Example.xlsx Tab2 row 4`, or `study.json groupset.groups.0`."""
+        where = f"row {self.row}" if self.row is not None else self.path
+        return " ".join(part for part in (self.file, self.sheet, where) if part)
+
+
 class Decision(Model):
-    """Something a person should check by hand, such as a converted dosing schedule."""
+    """Something a person should check by hand, such as a converted dosing schedule.
+
+    A dropped row without any value (`valueless_row`) also has its place, so
+    that the Markdown report can list the rows of a sheet as ranges.
+    """
 
     kind: str
     detail: str
+    dropped: DroppedRow | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
 
 class Change(Model):

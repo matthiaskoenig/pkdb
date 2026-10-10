@@ -9,8 +9,8 @@ from pathlib import Path
 from pkdb.domain.datasets import STATISTICS_FIELDS
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.metadata import single_line
-from pkdb.migration.model import Decision, NotConverted
-from pkdb.migration.sources import curator_source, observation_source, place_of
+from pkdb.migration.model import Decision, DroppedRow, NotConverted
+from pkdb.migration.sources import curator_source, observation_source
 from pkdb.schemas.study import (
     CanonicalStudy,
     Group,
@@ -135,8 +135,9 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     that holds neither a choice nor a statistic, not even a count. Format 2
     refuses it (`missing_value`, and `duplicate_row` for its repeats). Such a
     row carries no data, so the converter drops it and lists it. A row with a
-    statistic but no central value, such as only an sd, stays for a curator.
-    Scatter points stay too, since a scatter row pairs two outputs.
+    statistic but no central value, such as only an sd or only a count, stays
+    for a curator. Scatter points stay too, since a scatter row pairs two
+    outputs.
     """
     rules = vocabulary.measurement_map()
     scatters = _scatter_outputs(study)
@@ -163,15 +164,35 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
 def _dropped(
     file: str, record: Observation, subject: str | None, label: str | None = None
 ) -> Decision:
-    """The decision that lists a dropped row by its place in format 1."""
-    assert record.source is not None
-    parts = [place_of(record.source)]
-    if label:
-        parts.append(f"label {label}")
-    if subject:
-        parts.append(f"subject {subject}")
+    """The decision that lists a dropped row by its place in format 1.
+
+    It keeps the comment of the row, so that nothing a curator wrote is lost.
+    """
+    source = record.source
+    assert source is not None
+    row = DroppedRow(
+        table=file,
+        file=source.file,
+        sheet=source.sheet,
+        row=source.row,
+        path=".".join(str(part) for part in source.path) or None,
+        label=label or None,
+        subject=subject or None,
+        measurement=record.measurement_type,
+        substance=text(record.substance) or None,
+        tissue=text(record.tissue) or None,
+        comment=comment(record) or None,
+    )
+    parts = [row.place()]
+    parts += [f"label {label}"] if label else []
+    parts += [f"subject {subject}"] if subject else []
     parts.append(record.measurement_type)
-    return Decision(kind="valueless_row", detail=f"{file}: {', '.join(parts)}")
+    parts += [f"substance {row.substance}"] if row.substance else []
+    parts += [f"tissue {row.tissue}"] if row.tissue else []
+    parts += [f"comment {row.comment}"] if row.comment else []
+    return Decision(
+        kind="valueless_row", detail=f"{file}: {', '.join(parts)}", dropped=row
+    )
 
 
 def label_name(label: str) -> str:

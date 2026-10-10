@@ -13,7 +13,7 @@ from migration_fixtures import (
 from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.importers.folder import load_folder, parse_bundle
-from pkdb.migration.model import NotConverted
+from pkdb.migration.model import DroppedRow, NotConverted
 from pkdb.migration.rows import render, study_tables, used_sources
 from pkdb.migration.sources import image_sources
 from pkdb.preparation import prepare
@@ -151,7 +151,16 @@ def valueless_study(root):
     s1, s2 = STUDY["individualset"]["individuals"]
     individuals = [
         {**s1, "characteristica": [{"measurement_type": "age", "count": 1}]},
-        {**s2, "characteristica": [{"measurement_type": "age", "unit": "yr"}]},
+        {
+            **s2,
+            "characteristica": [
+                {
+                    "measurement_type": "age",
+                    "unit": "yr",
+                    "comments": [["curator", "Age not given"]],
+                }
+            ],
+        },
     ]
     study = {
         **STUDY,
@@ -176,26 +185,28 @@ def test_rows_without_any_value_are_dropped_and_listed(tmp_path):
         if row["measurement"] == "age"
     ]
     assert ages == [("S1", "1")]
-    assert [(d.kind, d.detail) for d in decisions] == [
-        (
-            "valueless_row",
-            "characteristica.tsv: study.json individualset.individuals.1, "
-            "subject S2, age",
-        ),
-        (
-            "valueless_row",
-            "outputs_Tab2.tsv: Example.xlsx Tab2 row 4, subject all, cmax",
-        ),
-        (
-            "valueless_row",
-            "outputs_Tab2.tsv: Example.xlsx Tab2 row 5, subject all, cmax",
-        ),
-        (
-            "valueless_row",
-            "timecourses_Fig1.tsv: Example.xlsx Fig1 row 6, label drug_plasma, "
-            "subject all, concentration",
-        ),
+    assert {d.kind for d in decisions} == {"valueless_row"}
+    assert [d.detail for d in decisions] == [
+        "characteristica.tsv: study.json individualset.individuals.1, subject S2, age, "
+        "comment curator: Age not given",
+        "outputs_Tab2.tsv: Example.xlsx Tab2 row 4, subject all, cmax, "
+        "substance drug, tissue plasma",
+        "outputs_Tab2.tsv: Example.xlsx Tab2 row 5, subject all, cmax, "
+        "substance drug, tissue plasma",
+        "timecourses_Fig1.tsv: Example.xlsx Fig1 row 6, label drug_plasma, "
+        "subject all, concentration, substance drug, tissue plasma",
     ]
+    # The place of each row, from which the Markdown report lists row ranges.
+    assert decisions[1].dropped == DroppedRow(
+        table="outputs_Tab2.tsv",
+        file="Example.xlsx",
+        sheet="Tab2",
+        row=4,
+        subject="all",
+        measurement="cmax",
+        substance="drug",
+        tissue="plasma",
+    )
 
 
 def test_choice_rows_and_unknown_measurements_without_statistics_are_kept(tmp_path):
