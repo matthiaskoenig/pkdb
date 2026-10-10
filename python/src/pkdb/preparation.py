@@ -49,14 +49,15 @@ def study_folders(path: str | Path) -> list[Path]:
         raise ValueError("Study path must be a directory")
     if (root / "study.json").is_file():
         return [root]
-    # Sorted as text, since Windows paths sort without regard to case.
+    # Sorted by the text of each part, since Windows paths sort without regard
+    # to case; part by part keeps `caffeine/B` before `caffeine-citrate/A`.
     folders = sorted(
         (
             file.parent
             for file in root.rglob("study.json")
             if not below_hidden_folder(file.relative_to(root))
         ),
-        key=Path.as_posix,
+        key=lambda folder: folder.as_posix().split("/"),
     )
     if not folders:
         raise ValueError("No study.json files found")

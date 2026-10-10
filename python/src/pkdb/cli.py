@@ -48,8 +48,15 @@ def utf8_output(platform: str = sys.platform) -> None:
     if platform != "win32":
         return
     for stream in (sys.stdout, sys.stderr):
-        if isinstance(stream, io.TextIOWrapper) and not stream.isatty():
-            stream.reconfigure(encoding="utf-8", errors=stream.errors)
+        if not isinstance(stream, io.TextIOWrapper):
+            continue
+        try:
+            if not stream.isatty():
+                stream.reconfigure(encoding="utf-8", errors=stream.errors)
+        except OSError, ValueError:
+            # A closed or detached stream keeps its state; writing to it fails
+            # later with the usual message.
+            continue
 
 
 def entry() -> int:

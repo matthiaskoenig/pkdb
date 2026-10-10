@@ -69,6 +69,19 @@ def test_serialized_hashes_do_not_mutate_preparation(study_folder, vocabulary):
     assert prepared.file_hashes == before
 
 
+def test_study_folders_are_ordered_part_by_part(tmp_path):
+    from pkdb.preparation import study_folders
+
+    # As text "caffeine-citrate/A" sorts before "caffeine/B", since "-" < "/".
+    for folder in ("caffeine-citrate/A", "caffeine/B"):
+        (tmp_path / folder).mkdir(parents=True)
+        (tmp_path / folder / "study.json").write_text("{}", encoding="utf-8")
+    found = [
+        folder.relative_to(tmp_path).as_posix() for folder in study_folders(tmp_path)
+    ]
+    assert found == ["caffeine/B", "caffeine-citrate/A"]
+
+
 def test_study_folders_skip_folders_below_hidden_folders(tmp_path):
     from pkdb.preparation import study_folders
 

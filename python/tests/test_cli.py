@@ -380,3 +380,13 @@ def test_utf8_output_keeps_the_error_handler_of_a_pipe(monkeypatch):
     utf8_output("win32")
     assert (stdout.encoding, stdout.errors) == ("utf-8", "strict")
     assert (stderr.encoding, stderr.errors) == ("utf-8", "backslashreplace")
+
+
+def test_utf8_output_leaves_a_closed_stream_alone(monkeypatch):
+    stdout = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    stdout.close()
+    stderr = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    monkeypatch.setattr(sys, "stdout", stdout)
+    monkeypatch.setattr(sys, "stderr", stderr)
+    utf8_output("win32")
+    assert stderr.encoding == "utf-8"
