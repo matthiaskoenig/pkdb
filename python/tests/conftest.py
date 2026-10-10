@@ -26,6 +26,21 @@ def isolated_environment(tmp_path_factory, monkeypatch):
 
 
 @pytest.fixture
+def case_sensitive(tmp_path):
+    """Skip a test that needs two file names differing only in case.
+
+    APFS on macOS and NTFS on Windows ignore the case of file names, so the
+    second file would overwrite the first.
+    """
+    probe = tmp_path / "case-probe"
+    probe.write_text("")
+    folded = (tmp_path / "CASE-PROBE").exists()
+    probe.unlink()
+    if folded:
+        pytest.skip("the file system ignores the case of file names")
+
+
+@pytest.fixture
 def account_server(monkeypatch):
     """A fake PK-DB server whose API key belongs to `server.username`.
 

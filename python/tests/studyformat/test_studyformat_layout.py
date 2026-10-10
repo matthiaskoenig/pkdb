@@ -172,7 +172,9 @@ def test_long_table_names_are_reported(make_study, valid_files):
     assert "shorter source" in issue.suggestions[0].message
 
 
-def test_table_names_equal_ignoring_case_are_duplicates(make_study, valid_files):
+def test_table_names_equal_ignoring_case_are_duplicates(
+    make_study, valid_files, case_sensitive
+):
     folder = make_study(
         {**valid_files, "outputs_TabA.tsv": "a\n", "outputs_Taba.tsv": "a\n"}
     )

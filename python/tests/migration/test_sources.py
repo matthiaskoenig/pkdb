@@ -124,8 +124,10 @@ def test_a_missing_or_unsupported_image_refuses_the_study(tmp_path):
 @pytest.mark.parametrize(
     "twin", ["Example_Tab2.jpg", "Example_Tab2.JPEG", "Example_Tab2.PNG"]
 )
-def test_a_source_with_two_images_refuses_the_study(tmp_path, twin):
+def test_a_source_with_two_images_refuses_the_study(tmp_path, twin, request):
     # Neither image may silently replace the other.
+    if twin.lower() == "example_tab2.png":
+        request.getfixturevalue("case_sensitive")
     v1, target = tmp_path / "v1", tmp_path / "v2"
     v1.mkdir()
     target.mkdir()
