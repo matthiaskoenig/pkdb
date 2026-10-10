@@ -1,8 +1,10 @@
 """Exercise the actual local HTTP boundary without launching desktop apps."""
 
 import json
+import os
 import re
 import shlex
+import subprocess
 import sys
 import threading
 from pathlib import Path
@@ -418,16 +420,17 @@ def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     record = tmp_path / "record.txt"
-    monkeypatch.setenv(
-        "PKDB_OPEN_COMMAND",
-        f"{shlex.quote(sys.executable)} -c "
-        + shlex.quote(
-            "import sys, pathlib; "
-            f"pathlib.Path({str(record)!r}).write_text(sys.argv[1])"
-        ),
-    )
+    command = [
+        sys.executable,
+        "-c",
+        "import sys, pathlib; "
+        f"pathlib.Path({str(record)!r}).write_text(sys.argv[1], encoding='utf-8')",
+    ]
+    # Quoted as the shell of the platform quotes it.
+    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", join(command))
     open_path(file)
-    assert record.read_text() == str(file)
+    assert record.read_text(encoding="utf-8") == str(file.resolve())
 
 
 def test_folder_browsing_and_recent_workspace_actions(local_server):
@@ -518,23 +521,43 @@ def test_assignment_mapping_route_is_gone(local_server):
 
 
 @pytest.mark.parametrize(
-    ("platform", "command", "expected"),
+    ("command", "expected"),
     [
-        ("posix", "'/opt/my tools/rec' --flag", ["/opt/my tools/rec", "--flag"]),
-        # Windows paths keep their backslashes.
-        ("nt", r"C:\Tools\rec.exe --flag", [r"C:\Tools\rec.exe", "--flag"]),
+        ("'/opt/my tools/rec' --flag", ["/opt/my tools/rec", "--flag", "{file}"]),
+        ("rec", ["rec", "{file}"]),
     ],
 )
-def test_open_command_is_split_for_the_platform(
-    tmp_path, monkeypatch, platform, command, expected
+def test_open_command_is_split_like_a_shell_command_on_posix(
+    tmp_path, monkeypatch, command, expected
 ):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     runner = Mock()
     monkeypatch.setattr(
         "pkdb.curation.launch.os",
-        SimpleNamespace(name=platform, environ={"PKDB_OPEN_COMMAND": command}),
+        SimpleNamespace(name="posix", environ={"PKDB_OPEN_COMMAND": command}),
     )
     monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
     open_path(file)
-    assert runner.call_args.args[0] == [*expected, str(file)]
+    path = str(file.resolve())
+    assert runner.call_args.args[0] == [a.format(file=path) for a in expected]
+
+
+@pytest.mark.parametrize(
+    "command",
+    [r"C:\Tools\rec.exe --flag", r'"C:\Program Files\Rec\rec.exe" --flag'],
+)
+def test_open_command_is_a_command_line_on_windows(tmp_path, monkeypatch, command):
+    # Windows splits the command line itself, so backslashes and double quotes stay.
+    folder = tmp_path / "my study"
+    folder.mkdir()
+    file = folder / "outputs.xlsx"
+    file.write_text("x")
+    runner = Mock()
+    monkeypatch.setattr(
+        "pkdb.curation.launch.os",
+        SimpleNamespace(name="nt", environ={"PKDB_OPEN_COMMAND": command}),
+    )
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    open_path(file)
+    assert runner.call_args.args[0] == f'{command} "{file.resolve()}"'

@@ -13,13 +13,13 @@ def open_path(path: Path, *, reveal=False):
     if reveal and path.is_file():
         path = path.parent
     if command := os.environ.get("PKDB_OPEN_COMMAND"):
-        subprocess.run(
-            # Windows paths keep their backslashes.
-            [*shlex.split(command, posix=os.name != "nt"), str(path)],
-            check=True,
-            timeout=15,
-            capture_output=True,
-        )
+        if os.name == "nt":
+            # A command line as Command Prompt takes it, which Windows splits itself: a
+            # program path in double quotes may hold spaces, and backslashes stay.
+            arguments = f"{command} {subprocess.list2cmdline([str(path)])}"
+        else:
+            arguments = [*shlex.split(command), str(path)]
+        subprocess.run(arguments, check=True, timeout=15, capture_output=True)
     elif sys.platform == "win32":
         os.startfile(str(path))
     else:
