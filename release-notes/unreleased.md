@@ -1,6 +1,6 @@
 # Unreleased
 
-- `pkdb review assign FOLDER USER` names a reviewer of a study in `review.json` without changing its status (#PR). Before, a reviewer was named only by approving the study, so a study under review had no reviewer and its issue no reviewer as assignee.
+- `pkdb review assign FOLDER USER` names a reviewer of a study in `review.json` without changing its status (#901). Before, a reviewer was named only by approving the study, so a study under review had no reviewer and its issue no reviewer as assignee.
 
 - `pkdb issues sync` sends a read or an edit of an issue again when GitHub drops the connection, after 2, 8 and 30 seconds (#900). The sync of the 849 converted pkdb_data studies stopped twice on such drops (`RemoteProtocolError`, `ReadTimeout`) and needed reruns; a new issue or comment is still never sent twice.
 
