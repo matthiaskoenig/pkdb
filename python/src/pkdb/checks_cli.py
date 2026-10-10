@@ -1,9 +1,10 @@
 """The `pkdb check` command: the checks of pre-commit and CI for a pkdb_data checkout."""
 
+import json
 import sys
 from pathlib import Path
 
-from pkdb.study_cli import add_format, emit
+from pkdb.study_cli import add_format, emit, is_human
 from pkdb.studyformat_cli import say
 
 
@@ -68,6 +69,16 @@ def _lines(report) -> list[str]:
     ]
 
 
+def _usage_error(args, message: str) -> int:
+    """Report a usage error on stderr: a JSON object `{"ok": false, "error": ...}` in JSON mode, else a line."""
+    if is_human(args):
+        say(f"pkdb check: {message}", file=sys.stderr)
+    else:
+        data = {"ok": False, "error": message}
+        print(json.dumps(data, ensure_ascii=False, allow_nan=False), file=sys.stderr)
+    return 2
+
+
 def run(args) -> int:
     """Run `pkdb check`: exit 0 when no problem is an error, 1 otherwise, 2 for usage errors."""
     from pkdb.checks import CheckError, check, select, vocabulary_for
@@ -78,6 +89,9 @@ def run(args) -> int:
             raise CheckError(
                 "Choose study paths, the staged files or a base, not several"
             )
+        for path in args.paths:
+            if not path.exists():
+                raise CheckError(f"{path.as_posix()} does not exist")
         start = args.root or (args.paths[0] if args.paths else Path.cwd())
         root = repository_root(start)
         folders, deleted = select(
@@ -86,7 +100,6 @@ def run(args) -> int:
         vocabulary = vocabulary_for(root, args.vocabulary)
         report = check(root, folders, vocabulary, deleted=deleted, staged=args.staged)
     except ValueError as error:
-        say(f"pkdb check: {error}", file=sys.stderr)
-        return 2
+        return _usage_error(args, str(error))
     emit(args, report.model_dump(mode="json"), _lines(report))
     return 0 if report.ok else 1

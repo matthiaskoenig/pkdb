@@ -175,7 +175,7 @@ def test_paths_select_the_studies_below_them(checkout):
     assert deleted == []
     with pytest.raises(CheckError, match="outside"):
         select(root, paths=[root])
-    with pytest.raises(CheckError, match="directory"):
+    with pytest.raises(CheckError, match="does not exist"):
         select(root, paths=[caffeine / "Missing"])
 
 
@@ -593,4 +593,165 @@ def test_outside_git_the_repository_checks_scan_every_study(tmp_path, valid_file
     patch_study(first, issue=7)
     patch_study(second, issue=7)
     report = check(root, [], Vocabulary(version="v", measurements=()))
+    assert codes(report) == {(None, "duplicate_identifier")}
+
+
+def write_non_utf_8_file(folder):
+    bad = os.fsencode(folder) + b"/caf\xe9.txt"
+    try:
+        with open(bad, "wb") as stream:
+            stream.write(b"x\n")
+    except OSError, UnicodeDecodeError:
+        pytest.skip("the platform refuses a file name that is not UTF-8")
+
+
+def test_staged_checks_leave_out_an_untracked_file_that_is_not_utf_8(
+    checkout, sf_vocabulary
+):
+    root, studies = checkout("caffeine/A")
+    write_non_utf_8_file(studies["caffeine/A"])
+    folders = [studies["caffeine/A"]]
+    staged = check(root, folders, sf_vocabulary, staged=True)
+    assert staged.ok
+    assert [(p.code, p.severity) for p in staged.problems] == [
+        ("untracked_errors", "warning")
+    ]
+    assert "caf\\udce9.txt" in staged.problems[0].message
+    # CI sees the file when it is tracked, and names it.
+    git(root, "add", "-A")
+    tracked = check(root, folders, sf_vocabulary, staged=True)
+    assert [(p.code, p.file) for p in tracked.problems] == [
+        ("unreadable_study", "caf\\udce9.txt")
+    ]
+    assert "caf\\udce9.txt" in tracked.problems[0].message
+    json.dumps(tracked.model_dump(mode="json"), ensure_ascii=False).encode("utf-8")
+
+
+def test_a_key_error_of_one_study_is_reported_and_the_others_are_checked(
+    checkout, sf_vocabulary, monkeypatch
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+
+    def broken(folder, vocabulary):
+        if folder.name == "A":
+            raise KeyError("measurement")
+        return validate_folder(folder, vocabulary)
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    patch_study(studies["caffeine/B"], issue=3)
+    add_unused_intervention(studies["caffeine/B"])
+    report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
+    failed = [p for p in report.problems if p.study == "caffeine/A"]
+    assert [(p.code, p.severity) for p in failed] == [("unreadable_study", "error")]
+    assert "KeyError" in failed[0].message
+    assert any(p.study == "caffeine/B" for p in report.problems)
+    assert not report.ok
+
+
+@pytest.mark.parametrize("error", [CheckError("git failed"), KeyboardInterrupt()])
+def test_a_usage_error_and_an_interrupt_stop_the_check(
+    checkout, sf_vocabulary, monkeypatch, error
+):
+    root, studies = checkout("caffeine/A")
+
+    def broken(folder, vocabulary):
+        raise error
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    with pytest.raises(type(error)):
+        check(root, [studies["caffeine/A"]], sf_vocabulary)
+
+
+def test_a_path_that_does_not_exist_is_named(checkout):
+    root, _ = checkout("caffeine/A")
+    with pytest.raises(CheckError, match="Missing does not exist"):
+        select(root, paths=[root / "studies" / "caffeine" / "Missing"])
+
+
+def test_a_studies_folder_that_cannot_be_listed_is_a_usage_error(checkout, monkeypatch):
+    root, _ = checkout("caffeine/A")
+
+    def denied(root):
+        raise PermissionError(13, "Permission denied", str(root / "studies"))
+
+    monkeypatch.setattr(pkdb.checks, "checkout_folders", denied)
+    with pytest.raises(CheckError, match="Cannot list .*studies: Permission denied"):
+        select(root)
+
+
+def test_a_copy_inside_another_work_tree_scans_every_study(tmp_path, valid_files):
+    from check_fixtures import format_2_study
+
+    outer = tmp_path / "outer"
+    outer.mkdir()
+    git(outer, "init", "-q")
+    root = outer / "pkdb_data"
+    first = format_2_study(root, "caffeine/A", valid_files)
+    second = format_2_study(root, "caffeine/B", valid_files)
+    patch_study(first, issue=7)
+    patch_study(second, issue=7)
+    report = check(root, [], Vocabulary(version="v", measurements=()))
+    assert codes(report) == {(None, "duplicate_identifier")}
+
+
+def test_a_content_decoding_error_does_not_blame_a_file_name(
+    checkout, sf_vocabulary, monkeypatch
+):
+    root, studies = checkout("caffeine/A")
+    write_non_utf_8_file(studies["caffeine/A"])
+
+    def broken(folder, vocabulary):
+        raise UnicodeDecodeError("utf-8", b"\xe9", 0, 1, "invalid continuation byte")
+
+    monkeypatch.setattr(pkdb.checks, "validate_folder", broken)
+    report = check(root, [studies["caffeine/A"]], sf_vocabulary)
+    assert [(p.code, p.file) for p in report.problems] == [("unreadable_study", None)]
+
+
+def test_a_symlinked_or_differently_spelled_root_is_still_the_top_of_the_work_tree(
+    checkout, sf_vocabulary, tmp_path
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    patch_study(studies["caffeine/A"], issue=7)
+    patch_study(studies["caffeine/B"], issue=7)
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "Name the issue")
+    link = tmp_path / "link"
+    try:
+        link.symlink_to(root, target_is_directory=True)
+    except OSError, NotImplementedError:
+        pytest.skip("the platform refuses symbolic links")
+    # Tracked studies are found through the link, so the duplicate shows once.
+    report = check(link, [], sf_vocabulary, staged=True)
+    assert codes(report) == {(None, "duplicate_identifier")}
+    # An untracked copy is still left out through the link.
+    copy = root / "studies" / "caffeine" / "Copy"
+    shutil.copytree(studies["caffeine/A"], copy)
+    report = check(link, [], sf_vocabulary, staged=True)
+    assert "Copy" not in report.problems[0].message
+
+
+def test_the_top_of_the_work_tree_is_compared_by_identity(
+    checkout, sf_vocabulary, tmp_path, monkeypatch
+):
+    root, studies = checkout("caffeine/A", "caffeine/B")
+    patch_study(studies["caffeine/A"], issue=7)
+    patch_study(studies["caffeine/B"], issue=7)
+    git(root, "add", "-A")
+    git(root, "commit", "-q", "-m", "Name the issue")
+    link = tmp_path / "link"
+    try:
+        link.symlink_to(root, target_is_directory=True)
+    except OSError, NotImplementedError:
+        pytest.skip("the platform refuses symbolic links")
+    git_call = pkdb.checks._git
+
+    def spelled_through_the_link(folder, *args, **options):
+        if args[:2] == ("rev-parse", "--show-toplevel"):
+            return f"{link}\n".encode()
+        return git_call(folder, *args, **options)
+
+    monkeypatch.setattr(pkdb.checks, "_git", spelled_through_the_link)
+    assert pkdb.checks._tracked_studies(root) is not None
+    report = check(root, [], sf_vocabulary, staged=True)
     assert codes(report) == {(None, "duplicate_identifier")}
