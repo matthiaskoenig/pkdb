@@ -233,7 +233,9 @@ def test_validate_reports_format_1_and_format_2_studies_together(
         "json",
     ]
     assert main(args) == 0
-    old, new = lines(capsys)[:2]
+    # Folders are sorted as paths, which ignore case on Windows.
+    results = {result["sid"]: result for result in lines(capsys)[:2]}
+    old, new = results["TEST1"], results["caffeine/Example"]
     assert old["sid"] == "TEST1" and "study_format" not in old
     assert old["ok"] and old["relative_path"] == "Example"
     assert old["report"]["issues"] == [] and old["vocabulary_version"]
