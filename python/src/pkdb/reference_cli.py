@@ -51,7 +51,9 @@ def run(args, *, client=None):
         if args.action == "search":
             result = {"candidates": resolver.search(args.citation)}
         else:
-            seed = json.loads(args.input.read_text()) if args.input else {}
+            seed = (
+                json.loads(args.input.read_text(encoding="utf-8")) if args.input else {}
+            )
             if not isinstance(seed, dict):
                 raise ValueError("Reference input must be a JSON object")
             for key in ("pmid", "doi", "title", "publication_date"):

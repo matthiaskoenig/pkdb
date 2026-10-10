@@ -98,7 +98,7 @@ class UpdateState:
 
     def load(self) -> dict:
         try:
-            value = json.loads(self.path.read_text())
+            value = json.loads(self.path.read_text(encoding="utf-8"))
         except OSError, ValueError:
             return {}
         return value if isinstance(value, dict) else {}

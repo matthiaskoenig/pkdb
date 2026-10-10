@@ -539,7 +539,9 @@ class WorkspaceMixin(EngineState):
                 if path.is_symlink():
                     raise ReferenceError("Reference source must not be a symlink")
                 return {
-                    "reference": json.loads(path.read_text()) if path.exists() else {}
+                    "reference": json.loads(path.read_text(encoding="utf-8"))
+                    if path.exists()
+                    else {}
                 }
             if action == "save":
                 token = body["token"]
