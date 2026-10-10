@@ -8,11 +8,16 @@ FAILING = ("mismatch", "invalid_v1", "not_converted")
 CLASSES = ("identical", "intended", *FAILING)
 
 
-def bundled_vocabulary():
-    """The vocabulary shipped with the package; imported late to keep help fast."""
-    from pkdb.cache import bundled_vocabulary as load
+def migration_vocabulary(path: Path | None, study: Path):
+    """The vocabulary of `path`, else the lock file of the checkout of `study`, else the bundled one.
 
-    return load()
+    This is the rule of `pkdb check`, so pkdb_data CI checks the converted
+    studies with the vocabulary that converted them. Imported late to keep
+    help fast.
+    """
+    from pkdb.checks import vocabulary_for
+
+    return vocabulary_for(study, path)
 
 
 def register(commands) -> None:
@@ -43,6 +48,12 @@ def register(commands) -> None:
         type=Path,
         default=Path("migration.json"),
         help="Report file; migration.md is written next to it (default: migration.json)",
+    )
+    command.add_argument(
+        "--vocabulary",
+        type=Path,
+        metavar="FILE",
+        help="Vocabulary snapshot (default: vocabulary.lock.json of the checkout, else the vocabulary bundled with pkdb)",
     )
     command.add_argument(
         "--dry-run",
@@ -83,7 +94,7 @@ def run(args) -> int:
             approver=args.approver,
             dry_run=args.dry_run,
             jobs=args.jobs,
-            vocabulary=bundled_vocabulary(),
+            vocabulary=migration_vocabulary(args.vocabulary, args.paths[0]),
         )
     except KeyboardInterrupt:
         print(
