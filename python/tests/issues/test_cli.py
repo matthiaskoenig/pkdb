@@ -242,6 +242,17 @@ def test_a_file_error_exits_1_after_naming_what_was_done(
     ]
 
 
+def test_a_value_error_during_the_sync_exits_1(setup, monkeypatch, capsys):
+    def broken(root):
+        raise ValueError("Substance folder names clash")
+
+    monkeypatch.setattr("pkdb.issues.sync.substances", broken)
+    assert main(["issues", "sync", "--format", "human"]) == 1
+    assert capsys.readouterr().err == (
+        "Cannot sync the issues: Substance folder names clash\n"
+    )
+
+
 def test_the_summary_counts_adoptions_changes_and_format_1(setup, tmp_path, capsys):
     for name in ("B", "C"):
         study(tmp_path, f"caffeine/{name}")

@@ -11,6 +11,10 @@ DUPLICATE = "Duplicate of #{number}"
 SIMILAR = (
     "{location}: issue #{number} has a similar title ({title}); rename it to adopt it"
 )
+SIMILAR_CREATED = (
+    "{location}: created #{created} although issue #{number} has a similar title "
+    "({title}); close #{number} if it is a duplicate"
+)
 
 
 @dataclass(frozen=True)

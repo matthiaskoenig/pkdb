@@ -77,7 +77,7 @@ export PKDB_ENDPOINT=https://beta.pk-db.com PKDB_API_KEY=<key> GH_TOKEN=<token>
 pkdb issues sync --adopt --user <maintainer> --dry-run
 ```
 
-Compare the number of new issues in the dry run (`create N issues` in the summary, the adoptions with `created` in `--format json`) with the number of studies: a large count means that the titles of the existing issues do not follow `<substance>/<name>`. Rename the issues named in the warnings about similar titles. Then run the command without `--dry-run`; it prints each adoption and change as it goes, and a rerun finishes a stopped run. Commit the changed `study.json` and `review.json` files and merge them through a pull request.
+Compare the number of new issues in the dry run (`create N issues` in the summary, the adoptions with `created` in `--format json`) with the number of studies: a large count means that the titles of the existing issues do not follow `<substance>/<name>`. Rename the issues named in the warnings about similar titles. Then run the command without `--dry-run`; it prints each adoption and change as it goes, and a rerun finishes a stopped run. A study that names the same issue as a study that cannot be read gets an error and no change: fix the unreadable study and run the command again. A warning `created #N although issue #M has a similar title` names an issue that the run did not adopt; close it if it duplicates the new issue. Commit the changed `study.json` and `review.json` files and merge them through a pull request.
 
 Re-upload all studies with processing version 9 to staging and compare counts and API output with production. Delete the format 1 code once no format 1 branch is open.
 

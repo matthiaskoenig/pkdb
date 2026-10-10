@@ -148,29 +148,36 @@ def run(args) -> int:
     from pkdb.repository import repository_root
     from pkdb.terminal import safe_text
 
+    human = args.output == "human"
     try:
-        api_key = os.environ.get("PKDB_API_KEY")
-        if not args.endpoint or not api_key:
-            raise ValueError(
-                "Set PKDB_ENDPOINT and PKDB_API_KEY: the sync reads GitHub logins from the PK-DB roster"
+        try:
+            api_key = os.environ.get("PKDB_API_KEY")
+            if not args.endpoint or not api_key:
+                raise ValueError(
+                    "Set PKDB_ENDPOINT and PKDB_API_KEY: the sync reads GitHub logins from the PK-DB roster"
+                )
+            token = token_from()
+            if token is None and not args.dry_run:
+                raise ValueError("Set GH_TOKEN or GITHUB_TOKEN to change GitHub issues")
+            repository = repository_from(args.repository)
+            root = repository_root(args.root or Path.cwd())
+            author = None  # an IdentityError is a ValueError: a usage error
+            if args.adopt:
+                author = author_from(args.user, args.agent)
+            curators = roster(args.endpoint, api_key)
+            if not curators:
+                # A wrong server would otherwise unassign every issue.
+                raise ValueError("The PK-DB roster is empty; check PKDB_ENDPOINT")
+            if author is not None and author.user not in {c.username for c in curators}:
+                raise ValueError(f"User {author.user} is not in the PK-DB roster")
+            github = github_client(
+                repository, token, on_wait=announce_wait if human else None
             )
-        token = token_from()
-        if token is None and not args.dry_run:
-            raise ValueError("Set GH_TOKEN or GITHUB_TOKEN to change GitHub issues")
-        repository = repository_from(args.repository)
-        root = repository_root(args.root or Path.cwd())
-        author = None  # an IdentityError is a ValueError: a usage error
-        if args.adopt:
-            author = author_from(args.user, args.agent)
-        curators = roster(args.endpoint, api_key)
-        if not curators:
-            # A wrong server would otherwise unassign every issue.
-            raise ValueError("The PK-DB roster is empty; check PKDB_ENDPOINT")
-        if author is not None and author.user not in {c.username for c in curators}:
-            raise ValueError(f"User {author.user} is not in the PK-DB roster")
-        human = args.output == "human"
-        on_wait = announce_wait if human else None
-        with github_client(repository, token, on_wait=on_wait) as github:
+        except ValueError as error:
+            print(safe_text(str(error)), file=sys.stderr)
+            return 2
+        # A ValueError from here on is a failed sync, not a usage error.
+        with github:
             result = sync(
                 root,
                 github,
@@ -183,13 +190,10 @@ def run(args) -> int:
     except KeyboardInterrupt:
         print("Interrupted.", file=sys.stderr)
         return 130
-    except ValueError as error:
-        print(safe_text(str(error)), file=sys.stderr)
-        return 2
     except ClientError as error:
         print(safe_text(str(error)), file=sys.stderr)
         return 1
-    except OSError as error:
+    except (OSError, ValueError) as error:
         print(safe_text(f"Cannot sync the issues: {error}"), file=sys.stderr)
         return 1
     if args.output == "json":

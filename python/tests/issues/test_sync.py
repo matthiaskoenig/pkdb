@@ -1,3 +1,5 @@
+import json
+
 import httpx2
 import pytest
 from fake_github import FakeGitHub
@@ -237,12 +239,8 @@ def test_sync_converges_on_legacy_closed_issues(tmp_path):
         5: ("closed", "completed"),
     }
     assert [body for _, path, body in github.writes if path == "/issues/2"] == [
-        {"state": "open"},
-        {
-            "labels": ["caffeine", "approved"],
-            "state": "closed",
-            "state_reason": "completed",
-        },
+        {"labels": ["caffeine", "approved"], "state": "open"},
+        {"state": "closed", "state_reason": "completed"},
     ]
     with github.client() as client:
         again = sync(tmp_path, client, ROSTER)
@@ -266,18 +264,27 @@ def test_labels_and_assignees_github_drops_are_errors(tmp_path):
     assert result.applied == 0
 
 
-def test_a_new_issue_without_its_labels_and_assignees_is_an_error(tmp_path):
+def test_a_new_issue_without_its_labels_and_assignees_is_reported_once(tmp_path):
     folder = study(tmp_path, "caffeine/A")
     github = FakeGitHub(
         labels=["caffeine", "curate"], assignable=["ana-gh"], push_access=False
     )
+    lines = []
     with github.client() as client:
-        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
-    assert result.errors[0] == (
+        result = sync(
+            tmp_path, client, ROSTER, adopt=True, author=AUTHOR, progress=lines.append
+        )
+    assert result.errors == [
         "caffeine/A: GitHub did not apply the labels or assignees of #1; "
         "the token may lack write access"
-    )
-    assert number_of(folder) == 1
+    ]
+    assert result.adopted == [
+        AdoptionResult(study="caffeine/A", number=1, created=True)
+    ]
+    assert lines == [
+        "caffeine/A: created #1 titled caffeine/A, no labels, no assignees"
+    ]
+    assert number_of(folder) == 1 and result.applied == 0
 
 
 @pytest.mark.parametrize(
@@ -356,21 +363,41 @@ def test_a_dry_run_names_the_assignee_problems_of_new_issues(tmp_path):
     assert result.adopted[0].assignees == ["ana-gh"]
 
 
-@pytest.mark.parametrize("dry_run", [True, False])
-def test_similar_titles_are_warnings(tmp_path, dry_run):
-    study(tmp_path, "caffeine/A")
+RENAME = (
+    "caffeine/A: issue #3 has a similar title (curate Caffeine/A); "
+    "rename it to adopt it"
+)
+
+
+@pytest.mark.parametrize(
+    ("dry_run", "refused", "warning"),
+    [
+        (True, False, RENAME),
+        (False, True, RENAME),
+        (
+            False,
+            False,
+            "caffeine/A: created #4 although issue #3 has a similar title "
+            "(curate Caffeine/A); close #3 if it is a duplicate",
+        ),
+    ],
+)
+def test_similar_titles_are_warnings(tmp_path, dry_run, refused, warning):
+    folder = study(tmp_path, "caffeine/A")
     github = FakeGitHub(
-        issues=[{"number": 3, "title": "curate Caffeine/A"}], assignable=["ana-gh"]
+        issues=[{"number": 3, "title": "curate Caffeine/A"}],
+        labels=["caffeine", "curate"],
+        assignable=["ana-gh"],
     )
+    if refused:
+        github.fail[("POST", None)] = 422
     with github.client() as client:
         result = sync(
             tmp_path, client, ROSTER, adopt=True, author=AUTHOR, dry_run=dry_run
         )
-    assert result.warnings == [
-        "caffeine/A: issue #3 has a similar title (curate Caffeine/A); "
-        "rename it to adopt it"
-    ]
-    assert result.adopted[0].created
+    assert result.warnings == [warning]
+    assert [item.created for item in result.adopted] == ([] if refused else [True])
+    assert number_of(folder) == (4 if not dry_run and not refused else None)
 
 
 def test_an_issue_named_by_an_unreadable_study_is_not_adopted(tmp_path):
@@ -605,3 +632,220 @@ def test_a_failed_issue_is_an_error_and_the_run_goes_on(tmp_path):
         "caffeine/A: GitHub answered 422"
     )
     assert github.issues[2]["title"] == "caffeine/B"
+
+
+def test_an_issue_named_by_an_unreadable_study_is_not_changed(tmp_path):
+    study(tmp_path, "caffeine/A", issue=4)
+    broken = study(tmp_path, "caffeine/B", issue=4)
+    (broken / "review.json").write_text("{", encoding="utf-8")
+    github = FakeGitHub(
+        issues=[{"number": 4, "title": "caffeine/B"}], assignable=["ana-gh"]
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert [error.partition(":")[0] for error in result.errors] == [
+        "caffeine/B",
+        "Issue #4 is named by several studies",
+    ]
+    assert result.errors[1].endswith(": caffeine/A, caffeine/B")
+    assert result.plan.changes == [] and github.writes == []
+
+
+def test_a_duplicate_is_commented_once_while_its_close_fails(tmp_path):
+    folder = study(tmp_path, "caffeine/A")
+    github = FakeGitHub(
+        issues=[
+            {"number": 4, "title": "Check caffeine/A"},
+            {"number": 6, "title": "Curate caffeine/A"},
+        ],
+        assignable=["ana-gh"],
+    )
+    github.fail[("PATCH", 6)] = 422
+    for _ in range(2):
+        with github.client() as client:
+            result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+        assert result.errors[0].startswith("caffeine/A: GitHub answered 422")
+        assert number_of(folder) is None
+    assert github.comments == [(6, "Duplicate of #4")]
+    del github.fail[("PATCH", 6)]
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.ok and result.adopted[0].duplicates == [6]
+    assert github.comments == [(6, "Duplicate of #4")]
+    assert github.issues[6]["state"] == "closed" and number_of(folder) == 4
+
+
+LEGACY = {
+    "number": 2,
+    "title": "Curate caffeine/A",
+    "state": "closed",
+    "state_reason": "not_planned",
+    "labels": ["caffeine"],
+    "assignees": ["ana-gh"],
+}
+REFUSED = "caffeine/A: GitHub answered {status} for PATCH /repos/owner/data/issues/2: "
+
+
+def released(tmp_path):
+    study(
+        tmp_path,
+        "caffeine/A",
+        issue=2,
+        status="approved",
+        reviewers=["ana"],
+        release=RELEASE,
+    )
+
+
+def legacy_github():
+    return FakeGitHub(
+        issues=[LEGACY], labels=["caffeine", "approved"], assignable=["ana-gh"]
+    )
+
+
+def close_as_completed_refused(method, number, body):
+    return 422 if body.get("state_reason") == "completed" else None
+
+
+def every_close_refused(method, number, body):
+    return 422 if body.get("state") == "closed" else None
+
+
+@pytest.mark.parametrize(
+    ("refuse", "state", "end"),
+    [
+        (
+            close_as_completed_refused,
+            ("closed", "not_planned"),
+            "#2 is closed as not planned",
+        ),
+        (every_close_refused, ("open", "reopened"), "#2 was reopened and is left open"),
+    ],
+)
+def test_a_refused_close_after_a_reopen_restores_the_issue(
+    tmp_path, refuse, state, end
+):
+    released(tmp_path)
+    github = legacy_github()
+    github.refuse = refuse
+    lines = []
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, progress=lines.append)
+    assert result.errors == [REFUSED.format(status=422) + f"refused; {end}"]
+    assert result.applied == 0 and lines == [] and result.stopped is None
+    assert [body for _, _, body in github.writes] == [
+        {"title": "caffeine/A", "labels": ["caffeine", "approved"], "state": "open"},
+        {"state": "closed", "state_reason": "completed"},
+        {"state": "closed", "state_reason": "not_planned"},
+    ]
+    assert (github.issues[2]["state"], github.issues[2]["state_reason"]) == state
+    assert github.issues[2]["title"] == "caffeine/A"
+
+
+def test_a_failed_close_that_github_applied_is_reported_as_it_is(tmp_path, monkeypatch):
+    released(tmp_path)
+    github = legacy_github()
+    answer = github.handler
+
+    def handler(request):
+        response = answer(request)
+        if b'"completed"' in request.content:
+            return httpx2.Response(502, json={"message": "Bad Gateway"})
+        return response
+
+    monkeypatch.setattr(github, "handler", handler)
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.errors == [
+        REFUSED.format(status=502) + "Bad Gateway; #2 is closed as completed"
+    ]
+    assert (github.issues[2]["state"], github.issues[2]["state_reason"]) == (
+        "closed",
+        "completed",
+    )
+
+
+def test_an_unknown_state_after_a_failed_close_is_named_as_uncertain(tmp_path):
+    released(tmp_path)
+    github = legacy_github()
+    github.refuse = close_as_completed_refused
+    github.fail[("GET", 2)] = 500
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.errors == [
+        REFUSED.format(status=422) + "refused; #2 was reopened and may be left open"
+    ]
+    assert result.stopped is None
+
+
+@pytest.mark.parametrize(
+    ("refuse", "error"),
+    [
+        (
+            lambda method, number, body: 403 if body.get("state") == "closed" else None,
+            "caffeine/A: #2 was reopened and may be left open",
+        ),
+        (
+            lambda method, number, body: {"completed": 422, "not_planned": 403}.get(
+                body.get("state_reason")
+            ),
+            REFUSED.format(status=422)
+            + "refused; #2 was reopened and may be left open",
+        ),
+    ],
+)
+def test_a_failure_that_stops_the_run_after_a_reopen_names_the_issue(
+    tmp_path, refuse, error
+):
+    released(tmp_path)
+    github = legacy_github()
+    github.refuse = refuse
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.stopped == (
+        "GitHub answered 403 for PATCH /repos/owner/data/issues/2: refused"
+    )
+    assert result.errors == [error]
+    assert github.issues[2]["state"] == "open"
+
+
+@pytest.mark.parametrize("state", ["open", "closed"])
+def test_ctrl_c_around_a_reopen_names_the_issue(tmp_path, monkeypatch, state):
+    released(tmp_path)
+    github = legacy_github()
+    answer = github.handler
+
+    def handler(request):
+        if request.content and json.loads(request.content).get("state") == state:
+            raise KeyboardInterrupt
+        return answer(request)
+
+    monkeypatch.setattr(github, "handler", handler)
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER)
+    assert result.stopped == "Interrupted."
+    assert result.errors == ["caffeine/A: #2 was reopened and may be left open"]
+
+
+def test_a_new_issue_of_a_failed_adoption_is_named_in_the_similar_warning(
+    tmp_path, monkeypatch
+):
+    folder = study(tmp_path, "caffeine/A")
+    github = FakeGitHub(
+        issues=[{"number": 3, "title": "curate Caffeine/A"}],
+        labels=["caffeine", "curate"],
+        assignable=["ana-gh"],
+    )
+    edit_after_reading(
+        monkeypatch, folder / "study.json", '"licence": "open"', '"licence": "closed"'
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.errors == [
+        "caffeine/A: study.json changed on disk; run the sync again"
+    ]
+    assert result.warnings == [
+        "caffeine/A: created #4 although issue #3 has a similar title "
+        "(curate Caffeine/A); close #3 if it is a duplicate"
+    ]
+    assert result.adopted == [] and number_of(folder) is None

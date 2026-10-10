@@ -4,7 +4,8 @@ Everything here is pure except `read_studies`, which only reads the checkout.
 """
 
 from collections import Counter
-from dataclasses import dataclass
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
@@ -18,6 +19,7 @@ from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.metadata import MetadataError, read_metadata
 from pkdb.studyformat.review_edit import ReviewError, read_review
 from pkdb.studyformat.tables import STUDY_JSON
+from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
 
 WORKFLOW = {"draft": "curate", "in_review": "check", "approved": "approved"}
@@ -47,14 +49,15 @@ class StudyState:
 class Studies:
     """The readable format 2 studies, the unreadable ones, and the format 1 count.
 
-    `claimed` holds the issue numbers that unreadable studies name in a
-    `study.json` that is JSON, so that no other study adopts their issue.
+    `claimed` maps the issue numbers that unreadable studies name in a
+    `study.json` that is JSON to their locations, so that no other study adopts
+    or changes their issue.
     """
 
     states: list[StudyState]
     errors: list[str]
     format_1: int
-    claimed: frozenset[int] = frozenset()
+    claimed: dict[int, list[str]] = field(default_factory=dict)
 
 
 def read_studies(root: Path) -> Studies:
@@ -65,7 +68,7 @@ def read_studies(root: Path) -> Studies:
     """
     states: list[StudyState] = []
     errors: list[str] = []
-    claimed: set[int] = set()
+    claimed: dict[int, list[str]] = {}
     format_1 = 0
     for folder in study_folders(root):
         if not (folder / STUDY_JSON).is_file():
@@ -79,7 +82,7 @@ def read_studies(root: Path) -> Studies:
         except (MetadataError, ReviewError) as error:
             errors.append(f"{location(folder)}: {error}")
             if (number := _raw_issue(folder)) is not None:
-                claimed.add(number)
+                claimed.setdefault(number, []).append(location(folder))
             continue
         users = [curator.user for curator in metadata.metadata.curators]
         users += review.review.reviewers
@@ -95,7 +98,7 @@ def read_studies(root: Path) -> Studies:
                 review_revision=review.revision,
             )
         )
-    return Studies(states, errors, format_1, frozenset(claimed))
+    return Studies(states, errors, format_1, claimed)
 
 
 def _raw_issue(folder: Path) -> int | None:
@@ -201,8 +204,8 @@ class IssueChange(BaseModel):
 
     `labels` is the complete new list; `add_labels` and `remove_labels` show
     the difference. GitHub changes `state_reason` only together with `state`:
-    `reopen_first` reopens an issue closed with another reason before it is
-    closed as completed.
+    `reopen_first` reopens an issue closed with another reason, together with
+    the other changes, and then closes it as completed.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -239,17 +242,19 @@ def plan(
     label_names: list[str],
     repository: str,
     problems: Problems | None = None,
+    claimed: Mapping[int, Sequence[str]] | None = None,
 ) -> SyncPlan:
     """The changes that align the issue of each study with the study.
 
-    Studies that name one issue together, or an issue the repository does not
+    Studies that name one issue together, also with an unreadable study of
+    `claimed` (issue number to locations), or an issue the repository does not
     have, are errors and get no change; studies without issue are warnings.
     `problems` found before, such as those of new issues in a dry run, are
     counted together with the problems of the plan.
     """
     by_number = {issue.number: issue for issue in issues}
     substances = {name.casefold() for name in substance_names}
-    shared = _duplicates(states)
+    shared = _duplicates(states, claimed or {})
     errors = [
         f"Issue #{number} is named by several studies: {', '.join(locations)}"
         for number, locations in shared.items()
@@ -291,14 +296,22 @@ def plan(
     )
 
 
-def _duplicates(states: list[StudyState]) -> dict[int, list[str]]:
-    """The issue numbers named by several studies, with their locations."""
+def _duplicates(
+    states: list[StudyState], claimed: Mapping[int, Sequence[str]]
+) -> dict[int, list[str]]:
+    """The issue numbers named by several studies, with their locations.
+
+    Only an issue that a readable study names counts: unreadable studies are
+    errors of their own.
+    """
     named: dict[int, list[str]] = {}
     for state in states:
         if state.issue is not None:
             named.setdefault(state.issue, []).append(state.location)
+    for number, locations in named.items():
+        locations += claimed.get(number, ())
     return {
-        number: locations
+        number: sorted(locations, key=natural_key)
         for number, locations in sorted(named.items())
         if len(locations) > 1
     }

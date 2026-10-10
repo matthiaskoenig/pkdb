@@ -218,6 +218,22 @@ class GitHub:
             )
         )
 
+    def issue(self, number: int) -> Issue:
+        """The issue `number` as GitHub has it now."""
+        response = self._send("GET", f"/repos/{self.repository}/issues/{number}")
+        return Issue.from_api(_object(response))
+
+    def comments(self, number: int) -> list[str]:
+        """The bodies of the comments of an issue, oldest first.
+
+        A comment without a text body is left out.
+        """
+        return [
+            item["body"]
+            for item in self.pages(f"issues/{number}/comments")
+            if isinstance(item.get("body"), str)
+        ]
+
     def comment(self, number: int, body: str) -> None:
         self._write(
             "POST", f"/repos/{self.repository}/issues/{number}/comments", {"body": body}

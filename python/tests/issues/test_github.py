@@ -385,3 +385,46 @@ def test_an_empty_assignee_list_is_sent():
     with github(handler) as client:
         client.update_issue(5, assignees=[], labels=[])
     assert bodies == [{"labels": [], "assignees": []}]
+
+
+def test_the_comments_of_an_issue_are_read_from_every_page():
+    requests = []
+
+    def handler(request):
+        requests.append((request.url.path, request.url.params["page"]))
+        page = int(request.url.params["page"])
+        count = 100 if page == 1 else 1
+        return httpx2.Response(200, json=[{"body": f"{page}"}] * count)
+
+    with github(handler) as client:
+        bodies = client.comments(5)
+    assert bodies == ["1"] * 100 + ["2"]
+    assert requests == [
+        ("/repos/owner/data/issues/5/comments", "1"),
+        ("/repos/owner/data/issues/5/comments", "2"),
+    ]
+
+
+def test_comments_without_a_text_body_are_left_out():
+    comments = [{"body": "Duplicate of #4"}, {"body": None}, {"id": 3}, {"body": 5}]
+    with github(lambda request: httpx2.Response(200, json=comments)) as client:
+        assert client.comments(5) == ["Duplicate of #4"]
+    for body in (b"<html>", b'{"a": 1}', b"[1]"):
+        with github(
+            lambda request, body=body: httpx2.Response(200, content=body)
+        ) as client:
+            with pytest.raises(GitHubError):
+                client.comments(5)
+
+
+def test_one_issue_is_read():
+    paths = []
+
+    def handler(request):
+        paths.append((request.method, request.url.path))
+        return httpx2.Response(200, json=issue(5, state="closed"))
+
+    with github(handler) as client:
+        found = client.issue(5)
+    assert (found.number, found.state) == (5, "closed")
+    assert paths == [("GET", "/repos/owner/data/issues/5")]
