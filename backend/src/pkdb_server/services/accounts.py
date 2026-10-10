@@ -7,11 +7,12 @@ from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from typing import Protocol
 
-from sqlalchemy import delete, func, select, text, update
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
 from pkdb.schemas.security import Principal
+from pkdb_server.db.locks import advisory_xact_lock
 from pkdb_server.db.models.users import AccountThrottle, EmailAddress, Token, User
 from pkdb_server.services.authentication import (
     AuthenticationFailed,
@@ -51,7 +52,7 @@ class AccountService:
         lock = int.from_bytes(bytes.fromhex(key)[:8], "big", signed=True)
         now = self.clock()
         with self.session_factory.begin() as session:
-            session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock})
+            advisory_xact_lock(session, lock)
             session.execute(
                 delete(AccountThrottle).where(AccountThrottle.expires_at <= now)
             )
@@ -205,9 +206,7 @@ class AccountService:
                     "big",
                     signed=True,
                 )
-                session.execute(
-                    text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock}
-                )
+                advisory_xact_lock(session, lock)
                 if (
                     session.scalar(
                         select(User.id).where(
