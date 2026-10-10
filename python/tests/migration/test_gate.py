@@ -207,20 +207,19 @@ def test_an_invalid_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
 
 
 def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocabulary):
-    individuals = STUDY["individualset"]["individuals"]
-    without_age = {
-        **individuals[1],
-        "characteristica": [{"measurement_type": "age", "unit": "yr", "image": "TabA"}],
-    }
-    study = {**STUDY, "individualset": {"individuals": [individuals[0], without_age]}}
+    # A spread without a value stays for the curator, unlike a row without any value.
+    group = STUDY["groupset"]["groups"][0]
+    sd_only = {"measurement_type": "age", "sd": 2, "unit": "yr", "image": "Tab1"}
+    groups = [{**group, "characteristica": [*group["characteristica"], sd_only]}]
+    study = {**STUDY, "groupset": {"groups": groups}}
     v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
     v2 = converted(tmp_path, v1)
     lines = (v2 / "characteristica.tsv").read_text().splitlines()
-    [row] = [n for n, line in enumerate(lines, 1) if "\tS2\t" in line]
+    [row] = [n for n, line in enumerate(lines, 1) if "\tall\tage\t" in line]
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert [d.path for d in result.differences] == [
-        f"validation characteristica.tsv:{row} missing_value [subjects=S2 measurement=age]"
+        f"validation characteristica.tsv:{row} missing_value [subjects=all measurement=age]"
     ]
 
 
@@ -249,6 +248,36 @@ def test_a_characteristic_without_time_is_an_intended_change(tmp_path, sf_vocabu
             ],
         )
     ]
+
+
+def test_rows_without_any_value_are_an_intended_change(tmp_path, sf_vocabulary):
+    individuals = [
+        STUDY["individualset"]["individuals"][0],
+        {
+            **STUDY["individualset"]["individuals"][1],
+            "characteristica": [{"measurement_type": "age", "unit": "yr"}],
+        },
+    ]
+    study = {
+        **with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE),
+        "individualset": {"individuals": individuals},
+    }
+    tab2 = [["group", "mean", "sd"], ["all", 2.5, 0.5], *[["all", "NA", "NA"]] * 2]
+    sheets = {"Tab2": tab2, "Fig1": [*SHEETS["Fig1"], [3, "NA"]]}
+    v1 = v1_study(tmp_path / "v1", study, sheets, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 4)]
+
+
+def test_a_timecourse_without_any_value_is_an_intended_change(tmp_path, sf_vocabulary):
+    sheets = {**SHEETS, "Fig1": [["time", "mean"], [0, "NA"], [1, "NA"]]}
+    v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert not (v2 / "timecourses_Fig1.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
 
 
 def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary):

@@ -147,6 +147,7 @@ def test_every_decision_kind_appears_under_a_heading():
         "reference_replaced",
         "reference_resolved",
         "creator_fallback",
+        "valueless_row",
         "future_kind",
     ]
     report = MigrationReport(
@@ -167,6 +168,7 @@ def test_every_decision_kind_appears_under_a_heading():
         "Renamed timecourse labels",
         "Replaced reference snapshots",
         "Resolved missing references",
+        "Dropped rows without any value",
         "future_kind",
     ]:
         assert f"### {heading}\n" in text

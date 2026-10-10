@@ -129,6 +129,96 @@ def test_characteristica_of_measurements_with_a_time_have_time_nr(tmp_path):
     assert decisions == []
 
 
+# Tab2 rows 3 to 6 of the workbook: a value, a row without any value, its
+# repeat, and a row with only an sd. The parser skips rows without any cell.
+VALUELESS_TAB2 = [
+    ["group", "mean", "sd"],
+    ["all", 2.5, 0.5],
+    ["all", "NA", "NA"],
+    ["all", "NA", "NA"],
+    ["all", "NA", 0.3],
+]
+# Fig1 rows 3 to 6: three points and a point without any value.
+VALUELESS_FIG1 = [["time", "mean"], [0, 0], [1, 2], [2, 1], [3, "NA"]]
+
+
+def valueless_study(root):
+    """The twin with rows without any value in Tab2, Fig1 and a characteristic.
+
+    Individual S2 has an age without value, individual S1 an age with only a
+    count, and the group a choice without statistics.
+    """
+    s1, s2 = STUDY["individualset"]["individuals"]
+    individuals = [
+        {**s1, "characteristica": [{"measurement_type": "age", "count": 1}]},
+        {**s2, "characteristica": [{"measurement_type": "age", "unit": "yr"}]},
+    ]
+    study = {
+        **STUDY,
+        "individualset": {"individuals": individuals},
+        "outputset": {"outputs": [{**OUTPUT, "group": "col==group"}, TIMECOURSE]},
+    }
+    sheets = {"Tab2": VALUELESS_TAB2, "Fig1": VALUELESS_FIG1}
+    return v1_study(root, study, sheets, IMAGES)
+
+
+def test_rows_without_any_value_are_dropped_and_listed(tmp_path):
+    folder = valueless_study(tmp_path)
+    tables, decisions = tables_of(folder)
+    assert [(row["mean"], row["sd"]) for row in tables["outputs_Tab2.tsv"]] == [
+        ("2.5", "0.5"),
+        ("", "0.3"),
+    ]
+    assert [row["time"] for row in tables["timecourses_Fig1.tsv"]] == ["0", "1", "2"]
+    ages = [
+        (row["subjects"], row["count"])
+        for row in tables["characteristica.tsv"]
+        if row["measurement"] == "age"
+    ]
+    assert ages == [("S1", "1")]
+    assert [(d.kind, d.detail) for d in decisions] == [
+        (
+            "valueless_row",
+            "characteristica.tsv: study.json individualset.individuals.1, "
+            "subject S2, age",
+        ),
+        (
+            "valueless_row",
+            "outputs_Tab2.tsv: Example.xlsx Tab2 row 4, subject all, cmax",
+        ),
+        (
+            "valueless_row",
+            "outputs_Tab2.tsv: Example.xlsx Tab2 row 5, subject all, cmax",
+        ),
+        (
+            "valueless_row",
+            "timecourses_Fig1.tsv: Example.xlsx Fig1 row 6, label drug_plasma, "
+            "subject all, concentration",
+        ),
+    ]
+
+
+def test_choice_rows_and_unknown_measurements_without_statistics_are_kept(tmp_path):
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {"measurement_type": "sex", "choice": "M"},
+            {"measurement_type": "kinetics"},
+            {"measurement_type": "unknown"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    measurements = [
+        row["measurement"]
+        for row in tables["characteristica.tsv"]
+        if row["subjects"] == "all"
+    ]
+    assert measurements == ["sex", "kinetics", "unknown"]
+    assert "valueless_row" not in {d.kind for d in decisions}
+
+
 def test_schedules_and_dose_lists_are_decisions(tmp_path):
     intervention = {
         **INTERVENTION,

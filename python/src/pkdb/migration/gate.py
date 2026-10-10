@@ -23,6 +23,7 @@ from pkdb.migration.rows import (
     scatter_comment,
     series_arrays,
     timed_measurements,
+    valueless,
 )
 from pkdb.migration.sources import image_sources
 from pkdb.preparation import PreparedBundle, prepare
@@ -434,11 +435,13 @@ def _scatter_comments(study: CanonicalStudy) -> dict[str, str]:
 class _Conversion(NamedTuple):
     """What the converter did to A's records, besides the intended changes of keys.
 
-    `arrays` are the array outputs that became timecourse points, and `timed`
-    the measurements whose characteristica got time NR.
+    `arrays` are the array outputs that became timecourse points, `dropped`
+    the records without any value that it dropped, and `timed` the
+    measurements whose characteristica got time NR.
     """
 
     arrays: Collection[str] = frozenset()
+    dropped: Collection[str] = frozenset()
     timed: Collection[str] = frozenset()
 
 
@@ -463,7 +466,11 @@ def _records(
     scatter_comments = {} if changes is None else _scatter_comments(study)
     records: dict[Key, list[Reported]] = defaultdict(list)
 
-    def add(key: Key, record: Observation) -> Key:
+    def add(key: Key, record: Observation) -> Key | None:
+        if record.key in conversion.dropped:
+            assert changes is not None
+            changes.add("valueless_row", described(key))
+            return None
         statistics = record.statistics
         if normalize is not None:
             key, statistics = normalize(key, statistics, record.key)
@@ -483,30 +490,39 @@ def _records(
     keys: dict[str, Key] = {}
     for record in study.measurements:
         if record.origin == "reported":
-            key = _key(
-                "measurements",
+            key = add(
+                _key(
+                    "measurements",
+                    record,
+                    MEASUREMENT,
+                    interventions=tuple(sorted(record.interventions)),
+                ),
                 record,
-                MEASUREMENT,
-                interventions=tuple(sorted(record.interventions)),
             )
-            keys[record.key] = add(key, record)
+            if key is not None:
+                keys[record.key] = key
     if normalize is not None:
         normalize.finish()
     return records, keys
 
 
 def _reported(
-    study: CanonicalStudy, keys: Mapping[str, Key]
+    study: CanonicalStudy,
+    keys: Mapping[str, Key],
+    dropped: Collection[str] = frozenset(),
 ) -> Callable[[str], object]:
     """The key of the reported record that a measurement derives from.
 
     A record that leads to no reported record keeps its own record key, which
-    differs between the two formats, so it never matches.
+    differs between the two formats, so it never matches. A record that
+    derives from a `dropped` record is None.
     """
     by_key = {record.key: record for record in study.measurements}
 
     def reported(record_key: str) -> object:
         record = _origin(by_key, record_key)
+        if record is not None and record.key in dropped:
+            return None
         if record is None or record.key not in keys:
             return f"unknown record {record_key}"
         return keys[record.key]
@@ -515,25 +531,29 @@ def _reported(
 
 
 def _timecourses(
-    study: CanonicalStudy, keys: Mapping[str, Key]
+    study: CanonicalStudy,
+    keys: Mapping[str, Key],
+    dropped: Collection[str] = frozenset(),
 ) -> dict[str, frozenset]:
     """The points of each timecourse by label, as reported records.
 
     The reported and the normalized timecourse of a label hold the same
     reported records. Format 1 array outputs that become timecourses join the
     timecourse of their label, as format 2 groups timecourse points by label.
+    Points of `dropped` records are left out, and so is a timecourse that
+    holds only such points.
     """
-    reported = _reported(study, keys)
+    reported = _reported(study, keys, dropped)
     courses: dict[str, set] = defaultdict(set)
     for course in study.timecourses:
-        points = {reported(point.key) for point in course.points}
+        points = {reported(point.key) for point in course.points} - {None}
         labels = {point.label for point in points if isinstance(point, Key)}
         courses[" ".join(sorted(str(label) for label in labels))] |= points
     for record in study.measurements:
         key = keys.get(record.key)
         if record.output_type == "array" and key and key.output_type == "timecourse":
             courses[str(key.label)].add(key)
-    return {label: frozenset(points) for label, points in courses.items()}
+    return {label: frozenset(points) for label, points in courses.items() if points}
 
 
 def _scatters(study: CanonicalStudy, keys: Mapping[str, Key]) -> dict[str, Counter]:
@@ -754,17 +774,21 @@ def compare(
     b: CanonicalStudy,
     arrays: Collection[str] = frozenset(),
     *,
+    dropped: Collection[str] = frozenset(),
     timed: Collection[str] = frozenset(),
 ) -> tuple[list[Change], list[Difference]]:
     """The intended changes from A to B and every other difference between them.
 
     `arrays` are the keys of A's array outputs that become timecourse points
-    (`rows.series_arrays`); other array outputs become outputs. `timed` are
+    (`rows.series_arrays`); other array outputs become outputs. `dropped` are
+    the keys of A's records without any value (`rows.valueless`), and `timed`
     the measurements whose characteristica get time NR.
     """
     changes = Changes()
     as_individuals = _individuals(a, changes)
-    a_records, a_keys = _records(a, as_individuals, changes, _Conversion(arrays, timed))
+    a_records, a_keys = _records(
+        a, as_individuals, changes, _Conversion(arrays, dropped, timed)
+    )
     b_records, b_keys = _records(b, set(), None)
     differences = _match(a_records, b_records, changes)
     # Timecourses and scatters hold records; their images are compared above.
@@ -787,7 +811,10 @@ def compare(
         if name in b_comments and a_comments[name] != b_comments[name]
     ]
     differences += _differences(
-        "timecourses", _timecourses(a, a_keys), _timecourses(b, b_keys), _points
+        "timecourses",
+        _timecourses(a, a_keys, dropped),
+        _timecourses(b, b_keys),
+        _points,
     )
     differences += _differences(
         "scatters", _scatters(a, a_keys), _scatters(b, b_keys), _points
@@ -795,16 +822,19 @@ def compare(
     return changes.listed(), differences
 
 
-def _series_arrays(v1: Path, study: CanonicalStudy) -> frozenset[str]:
-    """The array outputs of A that the converter writes as timecourse points.
+def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
+    """What the converter does to the records of A, besides the changes of keys.
 
     The converter decides this on the parsed, not the prepared, format 1
-    study, whose calculation types `prepare` has not filled yet.
+    study, whose calculation types and counts `prepare` has not filled yet.
     """
-    if not any(r.output_type == "array" and r.label for r in study.measurements):
-        return frozenset()
     parsed = parse_bundle(load_folder(v1))
-    return series_arrays(parsed, v1.name, image_sources(v1, v1.name))
+    dropped = valueless(parsed, vocabulary)
+    arrays: frozenset[str] = frozenset()
+    if any(r.output_type == "array" and r.label for r in parsed.measurements):
+        images = image_sources(v1, v1.name)
+        arrays = series_arrays(parsed, v1.name, images, dropped)
+    return _Conversion(arrays, dropped, timed_measurements(vocabulary))
 
 
 def _errors(bundle: PreparedBundle) -> list[str]:
@@ -909,11 +939,13 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return _invalid(study, "validation", error.report.issues, converted)
     if _errors(b):
         return _invalid(study, "validation", b.report.issues, converted)
+    conversion = _conversion(v1, vocabulary)
     changes, differences = compare(
         a.study,
         b.study,
-        _series_arrays(v1, a.study),
-        timed=timed_measurements(vocabulary),
+        conversion.arrays,
+        dropped=conversion.dropped,
+        timed=conversion.timed,
     )
     if differences:
         return StudyResult(

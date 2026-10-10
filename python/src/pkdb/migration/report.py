@@ -28,6 +28,7 @@ DECISION_HEADINGS = {
     "removed_file": "Removed data files",
     "scatter_label": "Renamed scatter outputs",
     "output_label": "Dropped output labels",
+    "valueless_row": "Dropped rows without any value",
     "access_private": "Public studies without a release (now private)",
     "label_renamed": "Renamed timecourse labels",
     "reference_replaced": "Replaced reference snapshots",

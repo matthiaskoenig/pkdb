@@ -155,8 +155,8 @@ def convert_study(
     """Write the format 2 study of the v1 folder into `target`, an empty or missing folder.
 
     The `vocabulary` is the one of the gate: it names the measurements that
-    need a time. Raises NotConverted when format 2 cannot hold the study or a
-    step fails.
+    need a value or a time. Raises NotConverted when format 2 cannot hold the
+    study or a step fails.
     """
     name = v1.name
     if target.name != name:

@@ -29,6 +29,18 @@ def sheet_of(location: SourceLocation, study: str) -> str | None:
     return stem.removeprefix(hidden) if stem.startswith(hidden) else stem
 
 
+def place_of(location: SourceLocation) -> str:
+    """Where a format 1 row is: `<file> <sheet> row <row>`, or the path in study.json."""
+    parts = [location.file]
+    if location.sheet is not None:
+        parts.append(location.sheet)
+    if location.row is not None:
+        parts.append(f"row {location.row}")
+    elif location.path:
+        parts.append(".".join(str(part) for part in location.path))
+    return " ".join(parts)
+
+
 def image_source(image: str | None, study: str) -> str | None:
     """`Fig1` of `<study>_Fig1.png`; None for another name."""
     if not image:
