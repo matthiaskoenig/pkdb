@@ -452,7 +452,7 @@ def _shell_path(folder: Path) -> str:
         path = os.path.relpath(folder)
     except ValueError:
         path = str(folder)
-    # Forward slashes work on every platform and need no quotes.
+    # Forward slashes work on every platform; a path with spaces is still quoted.
     return shlex.quote(Path(path).as_posix())
 
 

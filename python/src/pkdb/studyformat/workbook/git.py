@@ -71,7 +71,7 @@ def _untrack(path: Path, cwd: Path | None) -> str:
         folder = folder.relative_to((cwd or Path.cwd()).absolute())
     except ValueError:
         pass
-    # Forward slashes work on every platform and need no quotes.
+    # Forward slashes work on every platform; a path with spaces is still quoted.
     return f"git -C {_shell(folder.as_posix())} rm --cached {_shell(path.name)}"
 
 
