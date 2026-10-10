@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from pkdb.cache import bundled_vocabulary
-from pkdb.domain.vocabulary import Vocabulary
+from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.migration.convert import convert_study
 from pkdb.migration.gate import judge
 from pkdb.migration.model import (
@@ -35,6 +35,7 @@ from pkdb.migration.model import (
     NotConverted,
     PaperMove,
     StudyResult,
+    VocabularyUsed,
 )
 from pkdb.migration.registry import Registry
 from pkdb.migration.report import check_report_path, write_report
@@ -379,7 +380,8 @@ def _registry(
 def _earlier(path: Path, summary: MigrationReport) -> list[StudyResult]:
     """The written results of the report of earlier runs at `path`.
 
-    A report that cannot be read is replaced; the new report says so.
+    A report that cannot be read is replaced; the new report says so, and so
+    it does when the earlier runs used another vocabulary.
     """
     if not _exists(path):
         return []
@@ -391,6 +393,12 @@ def _earlier(path: Path, summary: MigrationReport) -> list[StudyResult]:
             "so this report lists only this run."
         )
         return []
+    if earlier.vocabulary is not None and earlier.vocabulary != summary.vocabulary:
+        summary.warnings.append(
+            f"Earlier runs used the vocabulary {earlier.vocabulary.version} "
+            f"({earlier.vocabulary.hash}); the studies they wrote are not "
+            "converted again with this one."
+        )
     return [study for study in earlier.studies if study.written]
 
 
@@ -494,8 +502,9 @@ def migrate(
     _check_paths(paths, root)
     known = Registry.read(registry)
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
+    used = VocabularyUsed(version=vocabulary.version, hash=vocabulary_hash(vocabulary))
     with _locked(root):
-        summary = MigrationReport(dry_run=dry_run)
+        summary = MigrationReport(dry_run=dry_run, vocabulary=used)
         if dry_run and _exists(root / WORK):
             raise RunRefused(
                 f"An interrupted run left {WORK} in {root}; run pkdb migrate "

@@ -95,6 +95,13 @@ class PaperMove(Model):
     workbook: bool
 
 
+class VocabularyUsed(Model):
+    """The vocabulary that the converter and the gate used, which decides conversions."""
+
+    version: str
+    hash: str
+
+
 class RegistryFindings(Model):
     double_identifiers: dict[str, list[str]] = Field(default_factory=dict)
     missing_paths: list[str] = Field(default_factory=list)
@@ -103,6 +110,7 @@ class RegistryFindings(Model):
 
 class MigrationReport(Model):
     dry_run: bool
+    vocabulary: VocabularyUsed | None = None
     # The run stopped before it finished, for example by Ctrl-C or a failed swap.
     interrupted: bool = False
     warnings: list[str] = Field(default_factory=list)

@@ -7,9 +7,10 @@ import time
 import pytest
 from migration_fixtures import IMAGES, SHEETS, STUDY, v1_full_example, v1_study
 
+from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.migration import run as run_module
 from pkdb.migration.convert import convert_study
-from pkdb.migration.model import MigrationReport, NotConverted
+from pkdb.migration.model import MigrationReport, NotConverted, VocabularyUsed
 from pkdb.migration.registry import Registry
 from pkdb.migration.run import migrate
 from pkdb.references import NotFound, ReferenceResolver
@@ -655,6 +656,24 @@ def test_an_unreadable_earlier_report_is_replaced_with_a_warning(
     assert [s.study for s in written_report(tmp_path).studies] == ["caffeine/Example"]
     text = (tmp_path / "migration.md").read_text()
     assert "\nWarning: The earlier report migration.json could not be read" in text
+
+
+def test_the_report_names_the_vocabulary_and_a_change_of_it(tmp_path, sf_vocabulary):
+    two_studies(tmp_path)
+    go(tmp_path, sf_vocabulary, paths=[tmp_path / "studies" / "caffeine"])
+    used = VocabularyUsed(
+        version="studyformat-test", hash=vocabulary_hash(sf_vocabulary)
+    )
+    assert written_report(tmp_path).vocabulary == used
+    other = sf_vocabulary.model_copy(update={"version": "other"})
+    report = go(tmp_path, other, paths=[tmp_path / "studies" / "codeine"])
+    assert report.vocabulary == VocabularyUsed(
+        version="other", hash=vocabulary_hash(other)
+    )
+    assert report.warnings == [
+        f"Earlier runs used the vocabulary studyformat-test ({used.hash}); "
+        "the studies they wrote are not converted again with this one."
+    ]
 
 
 def test_a_refused_path_leaves_the_report_as_it_was(tmp_path, sf_vocabulary):

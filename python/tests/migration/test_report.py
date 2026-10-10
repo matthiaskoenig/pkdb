@@ -11,6 +11,7 @@ from pkdb.migration.model import (
     PaperMove,
     RegistryFindings,
     StudyResult,
+    VocabularyUsed,
 )
 from pkdb.migration.report import markdown, write_report
 
@@ -192,6 +193,7 @@ def dropped(table, file, measurement, *, sheet=None, row=None, path=None):
 
 DROPPED = MigrationReport(
     dry_run=True,
+    vocabulary=VocabularyUsed(version="1.2.3", hash="abc"),
     studies=[
         StudyResult(
             study="x/A",
@@ -235,9 +237,10 @@ def test_dropped_rows_are_listed_per_file_for_studies_that_are_written():
     ]
 
 
-def test_the_json_report_lists_every_dropped_row(tmp_path):
+def test_the_json_report_lists_every_dropped_row_and_the_vocabulary(tmp_path):
     write_report(DROPPED, tmp_path / "migration.json")
     data = json.loads((tmp_path / "migration.json").read_text())
+    assert data["vocabulary"] == {"version": "1.2.3", "hash": "abc"}
     decisions = [d for study in data["studies"] for d in study["decisions"]]
     assert [d["kind"] for d in decisions].count("valueless_row") == 8
     assert decisions[0]["dropped"] == {
@@ -256,3 +259,7 @@ def test_the_json_report_lists_every_dropped_row(tmp_path):
     # Other decisions have no place.
     assert "dropped" not in decisions[6]
     assert MigrationReport.model_validate(data) == DROPPED
+    text = (tmp_path / "migration.md").read_text()
+    assert text.startswith(
+        "# Study format 2 migration\n\nDry run.\n\nVocabulary: 1.2.3 (sha256 abc).\n"
+    )

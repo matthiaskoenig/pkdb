@@ -300,6 +300,14 @@ def _status(report: MigrationReport) -> str:
     return f"Interrupted. {status}" if report.interrupted else status
 
 
+def _vocabulary(report: MigrationReport) -> list[str]:
+    """The vocabulary of the run, which decides how studies are converted."""
+    used = report.vocabulary
+    if used is None:
+        return []
+    return [f"Vocabulary: {used.version} (sha256 {used.hash}).", ""]
+
+
 def markdown(report: MigrationReport) -> str:
     report = _sorted(report)
     grouped = _by_outcome(report)
@@ -308,6 +316,7 @@ def markdown(report: MigrationReport) -> str:
         "",
         _status(report),
         "",
+        *_vocabulary(report),
         *(line for warning in report.warnings for line in (f"Warning: {warning}", "")),
         *_summary(report, grouped),
         *_classes(grouped),
