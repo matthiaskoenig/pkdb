@@ -1,6 +1,6 @@
 # Unreleased
 
-- `pkdb issues sync` sends a read or an edit of an issue again when GitHub drops the connection, after 2, 8 and 30 seconds (#PR). The sync of the 849 converted pkdb_data studies stopped twice on such drops (`RemoteProtocolError`, `ReadTimeout`) and needed reruns; a new issue or comment is still never sent twice.
+- `pkdb issues sync` sends a read or an edit of an issue again when GitHub drops the connection, after 2, 8 and 30 seconds (#900). The sync of the 849 converted pkdb_data studies stopped twice on such drops (`RemoteProtocolError`, `ReadTimeout`) and needed reruns; a new issue or comment is still never sent twice.
 
 - The backend scopes its advisory locks to the current schema (#899). PostgreSQL advisory locks belong to the whole database, so the parallel backend tests, each in a schema of one test database, blocked each other: `test_same_key_distinct_publications_overlap` failed at random when the vocabulary bootstrap of another test took the exclusive vocabulary lock between its two publications. With one schema, as in production, the locks behave as before; their keys change, so stop every backend process of a deployment before the new one starts.
 
