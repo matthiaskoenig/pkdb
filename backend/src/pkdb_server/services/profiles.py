@@ -142,6 +142,9 @@ class ProfileService:
     ):
         """Fill untouched fields from a reviewed roster in the caller's transaction.
 
+        A GitHub login or ORCID that an earlier import set follows the roster when it
+        changes; a value the user edited or that came from elsewhere is kept.
+
         A failed caller transaction can leave an unreferenced file; cleanup_orphans
         removes these after a grace period. No database reference is committed early.
         """
@@ -149,7 +152,14 @@ class ProfileService:
         edited = set(user.profile_edited_fields or [])
         changed = []
         for field, value in values.items():
-            if value and field not in edited and not getattr(user, field):
+            current = getattr(user, field)
+            # A login set by an earlier import follows a corrected roster.
+            reimported = (
+                field in {"github", "orcid"}
+                and getattr(user, f"{field}_provenance") == "imported"
+                and current != value
+            )
+            if value and field not in edited and (not current or reimported):
                 setattr(user, field, value)
                 if field in {"github", "orcid"}:
                     setattr(user, f"{field}_provenance", "imported")
