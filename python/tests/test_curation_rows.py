@@ -1,7 +1,6 @@
 import json
 import os
 import threading
-import time
 
 import pytest
 
@@ -282,9 +281,6 @@ def test_a_same_size_edit_with_a_preserved_mtime_reads_the_format_again(
         # As cp -p writes a file: the same inode, a new status change time.
         path.write_bytes(new)
     os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
-    while path.stat().st_ctime_ns == before.st_ctime_ns:
-        time.sleep(0.001)
-        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
     after = path.stat()
     assert (after.st_size, after.st_mtime_ns) == (before.st_size, before.st_mtime_ns)
     assert (after.st_ino != before.st_ino) is replace

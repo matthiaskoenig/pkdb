@@ -5,6 +5,7 @@ reference_previews, paused, queue, stop, wakeup, state_dir, _formats. Uses engin
 _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
 
+import hashlib
 import json
 import os
 import time
@@ -318,18 +319,17 @@ class WorkspaceMixin(EngineState):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
 
         Only scans call it, one at a time, so the remembered decisions need no lock. The
-        inode and the status change time tell a same-size edit that kept the modification
-        time, as `cp -p`, `rsync -t` and `tar x` write it.
+        content of study.json tells whether it changed, not its size and times: an edit
+        that keeps the size and the modification time, as `cp -p`, `rsync -t` and `tar x`
+        write it, leaves no other trace on Windows, whose `os.stat` reports the creation
+        time as the status change time.
         """
         try:
-            stat = (folder / STUDY_JSON).stat()
+            content = (folder / STUDY_JSON).read_bytes()
         except OSError:
             return is_v2_folder(folder)
         key = (
-            stat.st_size,
-            stat.st_mtime_ns,
-            stat.st_ino,
-            stat.st_ctime_ns,
+            hashlib.sha256(content).digest(),
             *(os.path.lexists(folder / name) for name in FORMAT_2_FILES),
         )
         remembered = self._formats.get(folder)
