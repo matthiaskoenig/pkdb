@@ -3,7 +3,14 @@ from datetime import date
 
 import openpyxl
 import pytest
-from migration_fixtures import SHEETS, STUDY, v1_full_example, v1_study, write_sheets
+from migration_fixtures import (
+    SHEETS,
+    STUDY,
+    tiny_png,
+    v1_full_example,
+    v1_study,
+    write_sheets,
+)
 from vocabulary_fixtures import studyformat_vocabulary
 
 from pkdb.migration.convert import convert_study, is_v1_file
@@ -65,6 +72,9 @@ def test_the_converted_folder_equals_the_format_2_twin(tmp_path, valid_study, wo
         vocabulary=studyformat_vocabulary(),
     )
     assert conversion.folder == target
+    # The v1 images must decode, so the twin holds the same real images.
+    for image in valid_study.glob("*.png"):
+        image.write_bytes(tiny_png())
     assert files(target) == files(valid_study)
     assert conversion.decisions == []
 
@@ -331,3 +341,11 @@ def test_the_target_is_an_empty_folder_named_like_the_study(
             vocabulary=studyformat_vocabulary(),
         )
     assert not (tmp_path / "v2" / "caffeine" / "Other").exists()
+
+
+def test_a_corrupt_png_is_not_converted(tmp_path):
+    v1 = v1_full_example(tmp_path / "v1")
+    (v1 / "Example_Fig1.png").write_bytes(b"png")
+    with pytest.raises(NotConverted) as error:
+        convert(v1, tmp_path)
+    assert error.value.code == "image_unreadable"

@@ -1,9 +1,10 @@
 """The source of each converted row, and the images of the sources."""
 
 import shutil
+from collections.abc import Callable
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.schemas.source import SourceLocation
@@ -15,7 +16,11 @@ from pkdb.studyformat.tables import (
 )
 
 PNG_MODES = ("1", "L", "LA", "P", "RGB", "RGBA", "I", "I;16")
-IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg")
+PNG_SUFFIX = ".png"
+IMAGE_SUFFIXES = (PNG_SUFFIX, ".jpg", ".jpeg")
+EXIF_ORIENTATION = 0x0112
+# What PIL raises for a file that is no image or ends early.
+_UNREADABLE = (OSError, SyntaxError, ValueError, Image.DecompressionBombError)
 
 
 def sheet_of(location: SourceLocation, study: str) -> str | None:
@@ -102,10 +107,11 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
     decisions = []
     for source in sorted(used - {TEXT_SOURCE, ""}):
         name = image_file(study, source)
+        # Exact names: a study name may hold glob characters such as `[`.
         candidates = sorted(
             path
-            for path in v1.glob(f"{study}_{source}.*")
-            if path.stem == f"{study}_{source}"
+            for path in v1.iterdir()
+            if path.stem == f"{study}_{source}" and path.suffix and path.is_file()
         )
         images = [path for path in candidates if path.suffix.lower() in IMAGE_SUFFIXES]
         if len(images) > 1:
@@ -123,19 +129,63 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
                 )
             raise NotConverted("missing_image", f"No image {name} for source {source}")
         [image] = images
-        if image.suffix.lower() == ".png":
-            shutil.copyfile(image, target / name)
-            continue
-        try:
-            with Image.open(image) as picture:
-                if picture.mode not in PNG_MODES:
-                    picture = picture.convert("RGB")
-                picture.save(target / name, format="PNG")
-        except OSError as error:
-            raise NotConverted(
-                "image_unreadable", f"The image {image.name} cannot be read: {error}"
-            ) from error
-        decisions.append(
-            Decision(kind="image_converted", detail=f"{image.name} to {name}")
-        )
+        decision = _copy(image, target / name, name)
+        if decision is not None:
+            decisions.append(decision)
     return decisions
+
+
+def _reason(error: Exception) -> str:
+    """Why an image cannot be read, without the absolute path that Pillow may name."""
+    if isinstance(error, UnidentifiedImageError):
+        return "it is not an image file"
+    if isinstance(error, OSError) and error.filename is not None:
+        return error.strerror or type(error).__name__
+    return str(error)
+
+
+def _write(action: Callable[..., object], *args: Path) -> None:
+    """Run a file write; a failure is the target's, not the source image's."""
+    try:
+        action(*args)
+    except OSError as error:
+        raise NotConverted(
+            "image_write", f"The image could not be written: {_reason(error)}"
+        ) from error
+
+
+def _copy(image: Path, destination: Path, name: str) -> Decision | None:
+    """Write `image` as the PNG `destination`; a decision when it was converted.
+
+    The image is decoded completely first. A PNG is copied as it is. Another
+    readable format, such as a JPG or a JPEG named `.png`, is written as PNG,
+    turned upright by its EXIF orientation and with its ICC profile.
+    """
+    try:
+        with Image.open(image) as picture:
+            picture.load()
+            if picture.format == "PNG" and image.suffix.lower() == PNG_SUFFIX:
+                is_png = True
+            else:
+                is_png = False
+                profile = picture.info.get("icc_profile")
+                turned = picture.getexif().get(EXIF_ORIENTATION, 1) in range(2, 9)
+                upright = ImageOps.exif_transpose(picture)
+    except _UNREADABLE as error:
+        raise NotConverted(
+            "image_unreadable",
+            f"The image {image.name} cannot be read: {_reason(error)}",
+        ) from error
+    if is_png:
+        _write(shutil.copyfile, image, destination)
+        return None
+    detail = f"{image.name} to {name}"
+    if turned:
+        detail += " (turned upright by its EXIF orientation)"
+    if upright.mode not in PNG_MODES:
+        # The profile describes the old color space, such as CMYK.
+        upright, profile = upright.convert("RGB"), None
+        upright.info.pop("icc_profile", None)
+    options = {"icc_profile": profile} if profile else {}
+    _write(lambda path: upright.save(path, format="PNG", **options), destination)
+    return Decision(kind="image_converted", detail=detail)

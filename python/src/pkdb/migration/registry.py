@@ -18,28 +18,53 @@ class Registry:
     """PKDB identifiers with the `<substance>/<name>` location and the release date."""
 
     entries: dict[str, tuple[str, date]] = field(default_factory=dict)
+    _by_location: dict[str, list[str]] = field(
+        init=False, repr=False, compare=False, default_factory=dict
+    )
 
     @classmethod
     def read(cls, path: Path | None) -> Registry:
         if path is None:
             return cls()
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return cls(
-            {
-                pkdb_id: (location, date.fromisoformat(day))
-                for pkdb_id, (location, day) in sorted(data.items())
-            }
-        )
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError as error:
+            raise ValueError(
+                f"The registry {path.as_posix()} is not UTF-8 text: {error}"
+            ) from error
+        except json.JSONDecodeError as error:
+            raise ValueError(
+                f"The registry {path.as_posix()} is not JSON: {error}"
+            ) from error
+        if not isinstance(data, dict):
+            raise ValueError(
+                f"The registry {path.as_posix()} must map PKDB identifiers to "
+                "[location, date]"
+            )
+        entries = {}
+        for pkdb_id, entry in sorted(data.items()):
+            try:
+                location, day = entry
+                if not isinstance(location, str):
+                    raise TypeError("the location must be text")
+                entries[pkdb_id] = (location, date.fromisoformat(day))
+            except (TypeError, ValueError) as error:
+                raise ValueError(
+                    f"The registry {path.as_posix()} entry {pkdb_id} must be "
+                    f"[location, YYYY-MM-DD], not {entry!r}"
+                ) from error
+        return cls(entries)
 
     @property
     def identifiers(self) -> dict[str, str]:
         return {pkdb_id: location for pkdb_id, (location, _) in self.entries.items()}
 
-    def _by_location(self) -> dict[str, list[str]]:
+    def __post_init__(self) -> None:
+        # Built once and eagerly: it is part of the state that a parallel run pickles.
         located = defaultdict(list)
         for pkdb_id, (location, _) in self.entries.items():
             located[location].append(pkdb_id)
-        return located
+        object.__setattr__(self, "_by_location", located)
 
     def release(self, location: str, sid: str) -> Release | None:
         """The release of the study at `location` whose v1 study.json has `sid`.
@@ -48,7 +73,7 @@ class Registry:
         registry must give that identifier to that location; otherwise the
         study is refused rather than written without its release.
         """
-        ids = self._by_location().get(location, [])
+        ids = self._by_location.get(location, [])
         if len(ids) > 1:
             raise NotConverted(
                 "double_identifier",
@@ -75,7 +100,7 @@ class Registry:
 
     def findings(self, root: Path) -> RegistryFindings:
         """Studies with two identifiers and locations without a folder below root/studies."""
-        located = self._by_location()
+        located = self._by_location
         return RegistryFindings(
             double_identifiers={
                 location: ids
