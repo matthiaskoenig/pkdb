@@ -211,7 +211,7 @@ def test_a_study_that_cannot_be_read_is_not_beyond_the_limits(api, monkeypatch):
 def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
     # The bundled vocabulary lacks the substance of the test study.
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     headers = authenticate(server)
     assert (
         json.loads(request(server, "GET", DETAIL, headers=headers)[2])["conflicts"]
@@ -951,7 +951,7 @@ def test_a_write_changes_the_detail_etag(api):
 
 def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     timecourses = folder / "timecourses_Fig1.tsv"
     lines = timecourses.read_text().splitlines()
     header = lines[0].split("\t")
@@ -1009,7 +1009,7 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
 
 def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     (folder / "Example_Fig1.wpd.json").write_text(
         json.dumps(project(GOOD, extra=("legend", "axis labels")))
     )
@@ -1061,7 +1061,7 @@ def test_a_warning_without_a_row_or_a_key_is_refused_plainly(
     api, sf_vocabulary, monkeypatch
 ):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     unkeyed = make_issue("unknown_dataset", "Old.", file="Example_Fig1.wpd.json")
     monkeypatch.setattr(
         studies,
@@ -1110,7 +1110,7 @@ def test_tables_open_uses_the_opener(api, monkeypatch):
 
 def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     headers = authenticate(server)
 
     def tables(**body):
@@ -1165,7 +1165,7 @@ def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
 
 def test_table_preview_and_add_by_kind_and_source(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     headers = authenticate(server)
     preview = "/local/studies/tables/preview"
     body = {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"}
@@ -1323,7 +1323,7 @@ def test_detail_has_the_people_with_their_profiles(api):
 
 def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
-    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     monkeypatch.setattr("pkdb.curation.studies.open_path", lambda path, **kw: None)
     headers = authenticate(server)
     detail = _detail(server, headers)

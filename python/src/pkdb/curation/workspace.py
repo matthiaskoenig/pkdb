@@ -365,7 +365,7 @@ class WorkspaceMixin(EngineState):
         try:
             if not workbook_path(folder).exists():
                 return state
-            check = workbook_check(folder, self._local_vocabulary())
+            check = workbook_check(folder, self._local_vocabulary(folder))
         except Exception:
             return dict(UNKNOWN_SYNC)
         if check is None:

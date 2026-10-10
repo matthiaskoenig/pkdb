@@ -63,7 +63,7 @@ A study without `reference.json` is resolved on a copy by the reference resolver
 
 ## Review and merge
 
-Tag `v1-final` on `develop` before the merge. Review through `migration.md` (summary and manual decisions) and spot checks of converted studies. Merge one pull request with green CI.
+Tag `v1-final` on `develop` before the merge. In the migration pull request, add `studies/**/*.xlsx` to `.gitignore` (format 2 workbooks are generated), archive the format 1 guide as `docs/curation-guide-format-1.md` first, then rename `docs/curation-v2.md` to `docs/curation_guide.md`, update the navigation in `zensical.toml`, update every link to `curation-v2.md` (today in `AGENTS.md`, `CLAUDE.md`, `docs/development.md`, `docs/installation.md`; find them with `git grep -n curation-v2`), remove the "applies after the cutover" note at the top of the guide, and revisit the install and update instructions in `docs/installation.md` of pkdb_data (they still say `uv tool upgrade pkdb`): after the cutover they must install the pinned pkdb with `uv tool install --python 3.14 --force pkdb --with-requirements requirements/pkdb.txt`, like the format 2 guide. Review through `migration.md` (summary and manual decisions) and spot checks of converted studies. Merge one pull request with green CI.
 
 ## After the merge
 

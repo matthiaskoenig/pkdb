@@ -143,13 +143,13 @@ def run(args) -> int:
     return actions[args.action](args)
 
 
-def _vocabulary(args):
-    """The vocabulary chosen as pkdb validate does, or None after an error."""
+def _vocabulary(args, study=None):
+    """The vocabulary chosen as pkdb validate does for `study` (a folder or a checkout), or None after an error."""
     from pkdb.cache import VocabularyCache, select_vocabulary
 
     try:
         return select_vocabulary(
-            args.vocabulary, args.endpoint, VocabularyCache(args.cache_dir)
+            args.vocabulary, args.endpoint, VocabularyCache(args.cache_dir), study
         )
     except (ValueError, OSError) as error:
         say(f"Cannot load the vocabulary: {error}", file=sys.stderr)
@@ -288,7 +288,7 @@ def _sync(args) -> int:
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 1
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, args.folder)
     if vocabulary is None:
         return 1
     failed = False
@@ -331,7 +331,7 @@ def _open(args) -> int:
     folder = study_folder(args.study, "tables")
     if folder is None:
         return 1
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, folder)
     if vocabulary is None:
         return 1
     label = study_label(folder)
@@ -367,7 +367,7 @@ def _add(args) -> int:
         return 1
     # The raw table is named after the study folder, also when it is given as `.`.
     table = args.table if args.raw is None else f"{folder.resolve().name}_{args.raw}"
-    vocabulary = _vocabulary(args)
+    vocabulary = _vocabulary(args, folder)
     if vocabulary is None:
         return 1
     try:

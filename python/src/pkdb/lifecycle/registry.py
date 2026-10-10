@@ -3,6 +3,7 @@
 import json
 import re
 from collections import defaultdict
+from collections.abc import Collection
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -93,8 +94,8 @@ def registry_problems(scan: Scan, root: Path) -> list[str]:
     )
 
 
-def scan(root: Path) -> Scan:
-    """The release blocks and issue numbers of every format 2 study."""
+def scan(root: Path, only: Collection[Path] | None = None) -> Scan:
+    """The release blocks and issue numbers of every format 2 study, or of the study folders in `only`."""
     from pkdb.studyformat.metadata import MetadataError, read_metadata
     from pkdb.studyformat.validation import is_v2_folder
 
@@ -102,7 +103,7 @@ def scan(root: Path) -> Scan:
     issues: dict[int, list[str]] = defaultdict(list)
     errors: list[str] = []
     for folder in study_folders(root):
-        if not is_v2_folder(folder):
+        if (only is not None and folder not in only) or not is_v2_folder(folder):
             continue
         where = location(folder)
         try:

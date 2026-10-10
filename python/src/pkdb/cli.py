@@ -130,6 +130,7 @@ def main(argv=None, *, client=None) -> int:
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
     from pkdb import (
+        checks_cli,
         figure_cli,
         import_cli,
         issues_cli,
@@ -147,6 +148,7 @@ def main(argv=None, *, client=None) -> int:
     migration_cli.register(commands)
     issues_cli.register(commands)
     lifecycle_cli.register(commands)
+    checks_cli.register(commands)
     tables_cli.register(commands)
     study_cli.register(commands)
     figure_cli.register(commands)
@@ -168,6 +170,8 @@ def main(argv=None, *, client=None) -> int:
         return reference_cli.run(args, client=client)
     if args.command == "issues":
         return issues_cli.run(args)
+    if args.command == "check":
+        return checks_cli.run(args)
     if args.command in {"new", "move", "release", "registry"}:
         return lifecycle_cli.run(args)
     if args.command == "migrate":
@@ -267,7 +271,13 @@ def main(argv=None, *, client=None) -> int:
                 raise ValueError(
                     "Write --output outside the study folder to keep source files unchanged"
                 )
-        snapshot = select_vocabulary(args.vocabulary, args.endpoint, cache)
+        # Upload checks against the server's cached vocabulary; validation is offline work.
+        snapshot = select_vocabulary(
+            args.vocabulary,
+            args.endpoint,
+            cache,
+            None if args.command == "upload" else args.folder,
+        )
         if args.command == "upload" and (not args.endpoint or not token):
             raise ValueError("Upload requires an endpoint and PKDB_API_KEY")
     except (ValueError, OSError, ClientError) as error:

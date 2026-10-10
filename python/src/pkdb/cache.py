@@ -175,16 +175,42 @@ class VocabularyCache:
         return vocabulary
 
 
-def select_vocabulary(
-    path: str | Path | None, endpoint: str | None, cache: VocabularyCache
-) -> Vocabulary:
-    """The vocabulary that validates studies, without contacting a server.
+VOCABULARY_LOCK = "vocabulary.lock.json"
 
-    A pinned snapshot file comes first, then the cached vocabulary of the
-    endpoint, and otherwise the vocabulary bundled with the client.
+
+def lock_file(study: str | Path | None) -> Path | None:
+    """The `vocabulary.lock.json` at the root of the pkdb_data checkout that contains `study`.
+
+    There is none outside a checkout, or when the checkout has no lock file.
+    """
+    if study is None:
+        return None
+    from pkdb.repository import repository_root
+
+    try:
+        lock = repository_root(Path(study)) / VOCABULARY_LOCK
+    except ValueError, OSError:
+        return None
+    return lock if lock.is_file() else None
+
+
+def select_vocabulary(
+    path: str | Path | None,
+    endpoint: str | None,
+    cache: VocabularyCache,
+    study: str | Path | None = None,
+) -> Vocabulary:
+    """The vocabulary that validates studies offline, without contacting a server.
+
+    This is the one rule of every offline validation: the explicit snapshot file,
+    then the lock file of the checkout that contains `study`, then the cached
+    vocabulary of the endpoint, and otherwise the vocabulary bundled with the
+    client. Without a `study`, or outside a checkout, there is no lock file.
     """
     if path:
         return load_vocabulary(path)
+    if lock := lock_file(study):
+        return load_vocabulary(lock)
     if endpoint:
         try:
             return cache.load(endpoint)
