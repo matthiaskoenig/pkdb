@@ -1,6 +1,6 @@
 # Unreleased
 
-- The curator roster names the GitHub logins of 13 more accounts and fixes three, so that `pkdb issues sync` can assign the issues of their studies (#PR): `FlorBar` (was the typo `FloBar`), `michelle-elias` for `mii-halina`, `beastemmt` for `stemllb`, `KathleenGreen` for `kgreen`, and the logins of `drosdekv`, `linafrolova`, `jonathanspeh` and six accounts of a 2022 student group. The group account `xresearch` is no longer in the roster or in the curation app; pkdb_data no longer names it.
+- The curator roster names the GitHub logins of 13 more accounts and fixes three, so that `pkdb issues sync` can assign the issues of their studies (#898): `FlorBar` (was the typo `FloBar`), `michelle-elias` for `mii-halina`, `beastemmt` for `stemllb`, `KathleenGreen` for `kgreen`, and the logins of `drosdekv`, `linafrolova`, `jonathanspeh` and six accounts of a 2022 student group. The group account `xresearch` is no longer in the roster or in the curation app; pkdb_data no longer names it.
 
 - The worker processes of `pkdb migrate` space their PubMed and DOI requests together (#895). Each worker kept the interval of 0.36 seconds that PubMed allows only for itself, so a run with many workers sent PubMed many times more requests than it allows; studies whose `reference.json` had to be created or replaced then failed at random with `pubmed unavailable (HTTP 429)` as `not_converted`.
 
