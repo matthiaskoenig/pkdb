@@ -1,4 +1,3 @@
-import fcntl
 import json
 import os
 import sys
@@ -15,6 +14,10 @@ from pkdb.migration.registry import Registry
 from pkdb.migration.run import migrate
 from pkdb.references import NotFound, ReferenceResolver
 from pkdb.studyformat.validation import is_v2_folder
+
+# pkdb migrate locks the repository with flock, which Windows lacks; there it
+# refuses to run (see test_cli.py).
+fcntl = pytest.importorskip("fcntl", reason="pkdb migrate needs Linux or macOS")
 
 
 class Resolved(ReferenceResolver):

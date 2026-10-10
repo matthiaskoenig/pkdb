@@ -1,7 +1,10 @@
 import json
 import os
+import sys
 import threading
 import time
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -240,6 +243,29 @@ def test_issue_comes_from_the_number_in_study_json(workspace):
     assert engine.snapshot()["studies"][0]["issue"]["state"] is None
 
 
+class _CreationTime:
+    """A status as Windows reports it: st_ctime_ns is the creation time, which stays."""
+
+    def __init__(self, status, ctime_ns):
+        self._status, self.st_ctime_ns = status, ctime_ns
+
+    def __getattr__(self, name):
+        return getattr(self._status, name)
+
+
+def _as_on_windows(monkeypatch, path):
+    """Let the curation app see `path` as on Windows: a status change time that stays."""
+    ctime_ns = path.stat().st_ctime_ns
+    real = Path.stat
+
+    def stat(self, *, follow_symlinks=True):
+        status = real(self, follow_symlinks=follow_symlinks)
+        return _CreationTime(status, ctime_ns) if self == path else status
+
+    monkeypatch.setattr(workspace_module, "sys", SimpleNamespace(platform="win32"))
+    monkeypatch.setattr(Path, "stat", stat)
+
+
 def test_the_format_is_read_again_only_after_study_json_changes(workspace, monkeypatch):
     engine, folder, legacy = workspace
     decisions = []
@@ -253,23 +279,59 @@ def test_the_format_is_read_again_only_after_study_json_changes(workspace, monke
     engine.scan()
     engine.scan()
     assert decisions == []
-    (legacy / "study.json").write_text(json.dumps({"sid": "Legacy1990", "name": "L"}))
+    (legacy / "study.json").write_text(
+        json.dumps({"sid": "Legacy1990", "name": "L"}), encoding="utf-8", newline=""
+    )
     engine.scan()
     engine.scan()
     assert decisions == ["Legacy1990"]
     assert engine.snapshot()["format1_folders"] == 1
-    (legacy / "review.json").write_text(dump_json({"status": "draft"}))
+    # A format 2 file decides without study.json.
+    (legacy / "review.json").write_text(
+        dump_json({"status": "draft"}), encoding="utf-8", newline=""
+    )
     engine.scan()
-    assert decisions == ["Legacy1990", "Legacy1990"]
+    assert decisions == ["Legacy1990"]
     assert engine.snapshot()["format1_folders"] == 0
 
 
+@pytest.mark.parametrize(
+    ("windows", "reads"), [(False, []), (True, ["Legacy1990"])], ids=["posix", "win32"]
+)
+def test_a_scan_without_changes_reads_study_json_only_on_windows(
+    workspace, monkeypatch, windows, reads
+):
+    engine, folder, legacy = workspace
+    if windows:
+        _as_on_windows(monkeypatch, legacy / "study.json")
+    elif sys.platform == "win32":
+        pytest.skip("os.stat on Windows has no status change time")
+    engine.scan()
+    read = []
+    real = Path.read_bytes
+
+    def read_bytes(self):
+        if self.name == "study.json":
+            read.append(self.parent.name)
+        return real(self)
+
+    monkeypatch.setattr(Path, "read_bytes", read_bytes)
+    engine.scan()
+    # The format 2 study has format 2 files; only the format 1 folder has study.json read.
+    assert read == reads
+
+
+@pytest.mark.parametrize("windows", [False, True], ids=["posix", "win32"])
 @pytest.mark.parametrize("replace", [False, True], ids=["in place", "replaced"])
 def test_a_same_size_edit_with_a_preserved_mtime_reads_the_format_again(
-    workspace, replace
+    workspace, monkeypatch, replace, windows
 ):
     engine, folder, legacy = workspace
     path = legacy / "study.json"
+    if windows:
+        _as_on_windows(monkeypatch, path)
+    elif sys.platform == "win32":
+        pytest.skip("os.stat on Windows has no status change time")
     before = path.stat()
     old = path.read_bytes()
     new = b'{"format": 2}'.ljust(len(old))
@@ -282,9 +344,13 @@ def test_a_same_size_edit_with_a_preserved_mtime_reads_the_format_again(
         # As cp -p writes a file: the same inode, a new status change time.
         path.write_bytes(new)
     os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
-    while path.stat().st_ctime_ns == before.st_ctime_ns:
-        time.sleep(0.001)
-        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+    if not windows:
+        # The status change time changes within its resolution, a clock tick at most.
+        deadline = time.monotonic() + 5
+        while path.stat().st_ctime_ns == before.st_ctime_ns:
+            assert time.monotonic() < deadline, "The status change time stayed"
+            time.sleep(0.001)
+            os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
     after = path.stat()
     assert (after.st_size, after.st_mtime_ns) == (before.st_size, before.st_mtime_ns)
     assert (after.st_ino != before.st_ino) is replace

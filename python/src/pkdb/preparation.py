@@ -49,10 +49,15 @@ def study_folders(path: str | Path) -> list[Path]:
         raise ValueError("Study path must be a directory")
     if (root / "study.json").is_file():
         return [root]
+    # Sorted by the text of each part, since Windows paths sort without regard
+    # to case; part by part keeps `caffeine/B` before `caffeine-citrate/A`.
     folders = sorted(
-        file.parent
-        for file in root.rglob("study.json")
-        if not below_hidden_folder(file.relative_to(root))
+        (
+            file.parent
+            for file in root.rglob("study.json")
+            if not below_hidden_folder(file.relative_to(root))
+        ),
+        key=lambda folder: folder.as_posix().split("/"),
     )
     if not folders:
         raise ValueError("No study.json files found")
@@ -68,7 +73,7 @@ def source_hashes(folder: Path) -> dict[str, str]:
             fail(
                 "symlink",
                 "Symlinks are not accepted",
-                SourceLocation(file=str(path.relative_to(folder))),
+                SourceLocation(file=path.relative_to(folder).as_posix()),
             )
         if path.is_file():
             with path.open("rb") as handle:

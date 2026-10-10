@@ -9,6 +9,7 @@ system-managed interpreters are never modified.
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -49,7 +50,9 @@ class Installation:
     @property
     def manual(self) -> str:
         if self.command:
-            return " ".join(self.command)
+            # Quoted as the shell of the platform reads it, for paths with spaces.
+            join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+            return join(self.command)
         if self.kind == "development":
             return "update the development checkout"
         return "pip install --upgrade pkdb"
@@ -98,7 +101,7 @@ class UpdateState:
 
     def load(self) -> dict:
         try:
-            value = json.loads(self.path.read_text())
+            value = json.loads(self.path.read_text(encoding="utf-8"))
         except OSError, ValueError:
             return {}
         return value if isinstance(value, dict) else {}
@@ -176,7 +179,7 @@ def installed_version() -> str | None:
             [sys.executable, "-P", "-c", "import pkdb; print(pkdb.__version__)"],
             check=True,
             capture_output=True,
-            text=True,
+            encoding="utf-8",
             timeout=60,
         )
     except OSError, subprocess.SubprocessError:

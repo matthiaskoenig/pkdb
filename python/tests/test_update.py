@@ -2,6 +2,7 @@
 
 import json
 import sys
+from types import SimpleNamespace
 
 import httpx2
 import pytest
@@ -180,3 +181,26 @@ def test_failed_upgrade_continues_with_installed_release(monkeypatch, tmp_path, 
 def test_unmanaged_installation_prints_instructions(capsys):
     assert not update.upgrade("99.0.0", install=update.Installation("unmanaged", None))
     assert "pip install --upgrade pkdb" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize(
+    ("platform", "python", "manual"),
+    [
+        (
+            "posix",
+            "/home/First Last/venv/bin/python",
+            "'/home/First Last/venv/bin/python' -m pip install --upgrade pkdb",
+        ),
+        (
+            "nt",
+            r"C:\Users\First Last\venv\Scripts\python.exe",
+            r'"C:\Users\First Last\venv\Scripts\python.exe" -m pip install --upgrade pkdb',
+        ),
+    ],
+)
+def test_the_manual_update_command_quotes_a_path_with_spaces(
+    monkeypatch, platform, python, manual
+):
+    monkeypatch.setattr(update, "os", SimpleNamespace(name=platform))
+    command = (python, "-m", "pip", "install", "--upgrade", "pkdb")
+    assert update.Installation("virtual environment", command).manual == manual

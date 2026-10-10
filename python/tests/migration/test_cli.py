@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -9,7 +10,13 @@ from pkdb.cache import bundled_vocabulary
 from pkdb.cli import main
 from pkdb.domain.vocabulary import Vocabulary
 
+# pkdb migrate locks the repository with flock, which Windows lacks.
+posix_only = pytest.mark.skipif(
+    sys.platform == "win32", reason="pkdb migrate needs Linux or macOS"
+)
 
+
+@posix_only
 def test_migrate_dry_run_prints_counts_and_exits_zero(
     tmp_path, monkeypatch, capsys, sf_vocabulary
 ):
@@ -25,6 +32,7 @@ def test_migrate_dry_run_prints_counts_and_exits_zero(
     assert "Report: " in out and (tmp_path / "migration.md").exists()
 
 
+@posix_only
 def test_json_output_is_the_report(tmp_path, monkeypatch, capsys, sf_vocabulary):
     v1_full_example(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -96,7 +104,10 @@ def test_a_report_path_that_cannot_be_written_is_refused_first(
     assert sorted(path.name for path in tmp_path.iterdir()) == before
 
 
-@pytest.mark.skipif(os.geteuid() == 0, reason="root writes into any folder")
+@pytest.mark.skipif(
+    sys.platform == "win32" or os.geteuid() == 0,
+    reason="Windows ignores the folder mode, and root writes into any folder",
+)
 def test_a_report_folder_that_is_not_writable_is_refused(tmp_path, monkeypatch, capsys):
     v1_full_example(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -153,3 +164,11 @@ def test_a_broken_lock_is_a_usage_error(tmp_path, monkeypatch, capsys):
     vocabulary, code = used_vocabulary(tmp_path, monkeypatch)
     assert code == 2 and vocabulary is None
     assert "Cannot read the vocabulary" in capsys.readouterr().err
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="flock exists here")
+def test_windows_refuses_to_migrate(tmp_path, monkeypatch, capsys):
+    v1_full_example(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    assert main(["migrate", "studies", "--dry-run"]) == 2
+    assert "pkdb migrate needs Linux or macOS." in capsys.readouterr().err

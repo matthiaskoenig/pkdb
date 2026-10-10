@@ -39,7 +39,9 @@ def approved_studies(tmp_path, valid_files):
                 else:
                     path.write_text(content, encoding="utf-8", newline="")
             assert format_folder(folder).ok
-            (folder / "review.json").write_text(dump_json(APPROVED), encoding="utf-8")
+            (folder / "review.json").write_text(
+                dump_json(APPROVED), encoding="utf-8", newline=""
+            )
             folders.append(folder)
         if highest is not None:
             released_study(base, "other/Old", pkdb_id=highest)
@@ -73,7 +75,7 @@ def test_the_first_study_gets_the_first_identifier(approved_studies, sf_vocabula
 def test_one_refused_study_stops_the_whole_release(approved_studies, sf_vocabulary):
     root, first, second = approved_studies("caffeine/A", "caffeine/B")
     (second / "review.json").write_text(
-        dump_json({"status": "in_review"}), encoding="utf-8"
+        dump_json({"status": "in_review"}), encoding="utf-8", newline=""
     )
     with pytest.raises(ReleaseRefused) as refused:
         release(root, [first, second], sf_vocabulary, on=date(2026, 10, 10))
@@ -87,11 +89,13 @@ def test_an_open_item_a_validation_error_and_a_release_refuse(
     approved_studies, sf_vocabulary
 ):
     root, item, broken, again = approved_studies("c/Item", "c/Broken", "c/Again")
-    (item / "review.json").write_text(dump_json({"status": "draft"}), encoding="utf-8")
+    (item / "review.json").write_text(
+        dump_json({"status": "draft"}), encoding="utf-8", newline=""
+    )
     add_item(item, Author("bo"), kind="question", text="Why?")
     review = json.loads((item / "review.json").read_text(encoding="utf-8"))
     review |= APPROVED
-    (item / "review.json").write_text(dump_json(review), encoding="utf-8")
+    (item / "review.json").write_text(dump_json(review), encoding="utf-8", newline="")
     assert format_folder(item).ok
     (broken / "reference.json").unlink()
     release(root, [again], sf_vocabulary, on=date(2026, 10, 10))
@@ -244,7 +248,7 @@ def test_the_command_writes_nothing_when_a_study_is_refused(
 ):
     root, first, second = approved_studies("caffeine/A", "caffeine/B")
     (second / "review.json").write_text(
-        dump_json({"status": "draft"}), encoding="utf-8"
+        dump_json({"status": "draft"}), encoding="utf-8", newline=""
     )
     monkeypatch.setattr(
         "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
@@ -326,7 +330,7 @@ def test_an_unreadable_study_json_elsewhere_stops_before_any_write(
     root, first = approved_studies("caffeine/A")
     released_study(root, "other/Broken")
     (root / "studies" / "other" / "Broken" / "study.json").write_text(
-        "{", encoding="utf-8"
+        "{", encoding="utf-8", newline=""
     )
     with pytest.raises(ValueError, match="Broken"):
         release(root, [first], sf_vocabulary, on=date(2026, 10, 10))
@@ -338,7 +342,9 @@ def test_the_command_reports_an_unknown_largest_identifier(
     approved_studies, sf_vocabulary, capsys, monkeypatch, output
 ):
     root, first = approved_studies("caffeine/A")
-    (root / "studies" / "study_identifiers.json").write_text("[]", encoding="utf-8")
+    (root / "studies" / "study_identifiers.json").write_text(
+        "[]", encoding="utf-8", newline=""
+    )
     monkeypatch.setattr(
         "pkdb.tables_cli._vocabulary", lambda args, study=None: sf_vocabulary
     )
@@ -359,7 +365,9 @@ def test_the_command_reports_an_unknown_largest_identifier(
 def test_the_registry_file_number_is_counted(approved_studies, sf_vocabulary):
     root, first = approved_studies("caffeine/A")
     (root / "studies" / "study_identifiers.json").write_text(
-        dump_json({"PKDB00020": ["old/Study", "2020-01-01"]}), encoding="utf-8"
+        dump_json({"PKDB00020": ["old/Study", "2020-01-01"]}),
+        encoding="utf-8",
+        newline="",
     )
     assert numbers(release(root, [first], sf_vocabulary, on=date(2026, 10, 10))) == [
         ("caffeine/A", "PKDB00021")
@@ -432,7 +440,7 @@ def test_release_and_approval_refuse_the_same_study(approved_studies, sf_vocabul
     root, broken = approved_studies("caffeine/A")
     (broken / "reference.json").unlink()
     (broken / "review.json").write_text(
-        dump_json({"status": "in_review"}), encoding="utf-8"
+        dump_json({"status": "in_review"}), encoding="utf-8", newline=""
     )
     with pytest.raises(ApprovalRefused) as refused:
         set_status(broken, Author("bo"), "approved", vocabulary=sf_vocabulary)

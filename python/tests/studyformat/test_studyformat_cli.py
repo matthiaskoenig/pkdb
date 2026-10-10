@@ -29,7 +29,7 @@ def test_format_command(make_study, valid_files, capsys):
 def test_format_skips_format_1(tmp_path, capsys):
     folder = tmp_path / "Old"
     folder.mkdir()
-    (folder / "study.json").write_text('{"sid": "X"}')
+    (folder / "study.json").write_text('{"sid": "X"}', encoding="utf-8", newline="")
     assert main(["format", str(folder), "--format", "json"]) == 0
     assert "format 1" in lines(capsys)[0]["skipped"]
 
@@ -63,7 +63,7 @@ def test_validate_format_2(valid_study, sf_vocabulary, tmp_path, capsys):
 
 
 def test_validate_format_2_failure(valid_study, sf_vocabulary, tmp_path, capsys):
-    (valid_study / "notes.csv").write_text("x\n")
+    (valid_study / "notes.csv").write_text("x\n", encoding="utf-8", newline="")
     lock = tmp_path / "vocabulary.json"
     sf_vocabulary.save(lock)
     args = [
@@ -99,7 +99,7 @@ def test_prepare_accepts_format_2(valid_study, sf_vocabulary, tmp_path, capsys):
 def test_prepare_reports_format_2_problems(
     valid_study, sf_vocabulary, tmp_path, capsys
 ):
-    (valid_study / "notes.csv").write_text("x\n")
+    (valid_study / "notes.csv").write_text("x\n", encoding="utf-8", newline="")
     lock = tmp_path / "vocabulary.json"
     sf_vocabulary.save(lock)
     args = ["prepare", str(valid_study), "--offline", "--vocabulary", str(lock)]
@@ -124,7 +124,7 @@ def test_format_walks_a_parent_directory(make_study, valid_files, capsys):
     folder = make_study(valid_files)
     old = folder.parent / "Old"
     old.mkdir()
-    (old / "study.json").write_text('{"sid": "X"}')
+    (old / "study.json").write_text('{"sid": "X"}', encoding="utf-8", newline="")
     assert main(["format", str(folder.parent), "--format", "json"]) == 0
     entries = {entry["path"]: entry for entry in lines(capsys)}
     assert "format 1" in entries[str(old)]["skipped"]
@@ -161,13 +161,15 @@ def test_format_reports_unwritable_folder(make_study, valid_files, capsys, monke
 
 def test_schema_export_reports_unwritable_output(tmp_path, capsys):
     target = tmp_path / "file"
-    target.write_text("x")
+    target.write_text("x", encoding="utf-8", newline="")
     assert main(["schema", "export", "--output", str(target)]) == 1
     assert "Cannot write" in capsys.readouterr().err
 
 
 def test_format_human_marks_unformatted_folder_with_problems(valid_study, capsys):
-    (valid_study / "outputs_Tab2.tsv").write_text("group\nall\n")
+    (valid_study / "outputs_Tab2.tsv").write_text(
+        "group\nall\n", encoding="utf-8", newline=""
+    )
     assert main(["format", str(valid_study), "--format", "human"]) == 1
     out = capsys.readouterr().out
     assert "caffeine/Example: not formatted, fix the problems below" in out
@@ -299,7 +301,7 @@ def test_broken_study_json_is_reported_as_format_2(
     valid_study, sf_vocabulary, tmp_path, capsys, text, code
 ):
     path = valid_study / "study.json"
-    path.write_text(text, encoding="utf-8")
+    path.write_text(text, encoding="utf-8", newline="")
     assert main(["format", str(valid_study), "--format", "json"]) == 1
     entry = lines(capsys)[0]
     assert "skipped" not in entry
@@ -406,7 +408,11 @@ def test_validate_counts_workbook_conflicts(
     assert sync_study(valid_study, sf_vocabulary).ok
     set_mean(workbook_path(valid_study), "outputs_Tab2", 2, 0.25)
     path = valid_study / "outputs_Tab2.tsv"
-    path.write_text(path.read_text(encoding="utf-8").replace("\t2.5\t", "\t0.75\t"))
+    path.write_text(
+        path.read_text(encoding="utf-8").replace("\t2.5\t", "\t0.75\t"),
+        encoding="utf-8",
+        newline="",
+    )
     before = file_state(valid_study)
 
     assert validate_json(valid_study, sf_vocabulary, tmp_path) == 0
@@ -451,7 +457,11 @@ def test_validate_leaves_broken_tables_to_validation(
 
     assert sync_study(valid_study, sf_vocabulary).ok
     path = valid_study / "outputs_Tab2.tsv"
-    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+    path.write_text(
+        path.read_text(encoding="utf-8").replace("mean", "average", 1),
+        encoding="utf-8",
+        newline="",
+    )
     lock = tmp_path / "vocabulary.json"
     sf_vocabulary.save(lock)
     args = ["validate", str(valid_study), "--offline", "--vocabulary", str(lock)]

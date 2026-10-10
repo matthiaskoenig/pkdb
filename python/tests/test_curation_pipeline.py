@@ -64,12 +64,12 @@ def owned(lock):
 def set_mean(folder, table, value):
     """Set the mean of the second data row of a table file."""
     path = folder / table
-    lines = path.read_text().splitlines()
+    lines = path.read_text(encoding="utf-8").splitlines()
     header = lines[0].split("\t")
     cells = lines[2].split("\t")
     cells[header.index("mean")] = value
     lines[2] = "\t".join(cells)
-    path.write_text("\n".join(lines) + "\n")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
 
 
 def set_workbook_mean(folder, sheet, value):
@@ -91,11 +91,13 @@ def workbook_mean(folder, sheet):
 def test_validation_formats_first(workspace):
     engine, folder = workspace
     table = folder / "timecourses_Fig1.tsv"
-    table.write_text(table.read_text() + "\n\n")  # not canonical
+    table.write_text(
+        table.read_text(encoding="utf-8") + "\n\n", encoding="utf-8", newline=""
+    )  # not canonical
     settle(engine)
     job = run_next(engine)
     assert job["status"] == "succeeded", job["message"]
-    assert not table.read_text().endswith("\n\n")
+    assert not table.read_text(encoding="utf-8").endswith("\n\n")
     assert row(engine)["counts"] == {"errors": 0, "warnings": 0}
     assert row(engine)["sync"]["status"] == "no_workbook"
     report = engine.report(job["report_id"])
@@ -132,9 +134,11 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
     assert format_folder(folder).ok
     assert sync_study(folder, sf_vocabulary).ok
     table = folder / "timecourses_Fig1.tsv"
-    header, *lines = table.read_text().splitlines()
+    header, *lines = table.read_text(encoding="utf-8").splitlines()
     table.write_text(
-        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n"
+        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n",
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
     settle(engine)
@@ -149,12 +153,12 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
 def outside_range(folder):
     """Give the second row of timecourses_Fig1.tsv a mean outside its range: a warning."""
     table = folder / "timecourses_Fig1.tsv"
-    lines = table.read_text().splitlines()
+    lines = table.read_text(encoding="utf-8").splitlines()
     header = lines[0].split("\t")
     cells = lines[2].split("\t")
     cells[header.index("min")], cells[header.index("max")] = "3", "4"
     lines[2] = "\t".join(cells)
-    table.write_text("\n".join(lines) + "\n")
+    table.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
 
 
 def test_only_warnings_of_the_validation_can_be_acknowledged(
@@ -218,15 +222,21 @@ def test_a_sync_stop_after_a_reference_update_is_invalid_in_the_same_job(
     assert format_folder(folder).ok
     assert sync_study(folder, sf_vocabulary).ok
     table = folder / "timecourses_Fig1.tsv"
-    header, *lines = table.read_text().splitlines()
+    header, *lines = table.read_text(encoding="utf-8").splitlines()
     table.write_text(
-        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n"
+        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n",
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
 
     def refresh(path, resolver):
         reference = path / "reference.json"
-        reference.write_text(reference.read_text().replace("Example study", "Study"))
+        reference.write_text(
+            reference.read_text(encoding="utf-8").replace("Example study", "Study"),
+            encoding="utf-8",
+            newline="",
+        )
         return "Updated reference.json"
 
     monkeypatch.setattr(references, "sync_reference", refresh)
@@ -275,7 +285,11 @@ def test_pipeline_runs_under_the_folder_lock(workspace, monkeypatch):
 def test_format_problems_fail_like_validation(workspace, monkeypatch):
     engine, folder = workspace
     table = folder / "timecourses_Fig1.tsv"
-    table.write_text(table.read_text() + "<<<<<<< HEAD\n")
+    table.write_text(
+        table.read_text(encoding="utf-8") + "<<<<<<< HEAD\n",
+        encoding="utf-8",
+        newline="",
+    )
     settle(engine)
     called = []
     monkeypatch.setattr(jobs, "prepare", lambda *a, **k: called.append(1))
@@ -300,9 +314,14 @@ def test_sync_status_follows_the_workbook(workspace, sf_vocabulary):
     settle(engine)
     job = run_next(engine)
     assert job["status"] == "succeeded", job["message"]
-    assert "\t5\t" in (folder / "timecourses_Fig1.tsv").read_text().splitlines()[2]
+    assert (
+        "\t5\t"
+        in (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8").splitlines()[2]
+    )
     assert row(engine)["sync"]["status"] == "in_sync"
-    (folder / f".~lock.{folder.name}.xlsx#").write_text("open")
+    (folder / f".~lock.{folder.name}.xlsx#").write_text(
+        "open", encoding="utf-8", newline=""
+    )
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     assert row(engine)["sync"]["status"] == "workbook_open"
@@ -383,7 +402,10 @@ def test_a_save_during_the_job_is_never_absorbed(
     assert engine.studies["caffeine/Example"]["_pending"] is True
     later = run_all(engine)
     assert [job["status"] for job in later] == ["succeeded"]
-    assert "\t9\t" in (folder / "timecourses_Fig1.tsv").read_text().splitlines()[2]
+    assert (
+        "\t9\t"
+        in (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8").splitlines()[2]
+    )
     assert row(engine)["sync"]["status"] == "in_sync"
 
 
@@ -394,7 +416,7 @@ def test_closing_the_workbook_regenerates_it(workspace, sf_vocabulary):
     engine.scan()
     assert [job["status"] for job in run_all(engine)] == ["succeeded"]
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     engine.scan()
     # Opening the workbook changes no source: no job.
     assert row(engine)["sync"]["status"] == "in_sync"
@@ -433,7 +455,7 @@ def test_a_workbook_closed_during_the_job_is_regenerated(
     # The tables are not formatted yet, so the job writes them and scans again.
     assert sync_study(folder, sf_vocabulary).ok
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     real_format = pipeline_module.format_folder
@@ -460,7 +482,10 @@ def test_a_failed_reference_lookup_still_syncs_the_workbook(workspace, sf_vocabu
     settle(engine)
     job = run_next(engine)
     assert job["status"] == "failed" and "reference.json" in job["message"]
-    assert "\t5\t" in (folder / "timecourses_Fig1.tsv").read_text().splitlines()[2]
+    assert (
+        "\t5\t"
+        in (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8").splitlines()[2]
+    )
     assert row(engine)["sync"]["status"] == "in_sync"
     settle(engine)
     assert not engine.queue
@@ -479,7 +504,7 @@ def test_closing_the_workbook_keeps_a_queued_upload(workspace, sf_vocabulary):
     engine.can_upload = True
     engine.set_mode(["caffeine/Example"], "upload")
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     settle(engine)
@@ -501,7 +526,7 @@ def test_a_workbook_closed_while_the_job_validates_is_regenerated(
     assert format_folder(folder).ok
     assert sync_study(folder, sf_vocabulary).ok
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     real_prepare = jobs.prepare
@@ -538,7 +563,7 @@ def test_a_workbook_closed_during_an_upload_keeps_the_upload_pending(
     engine.set_mode(["caffeine/Example"], "upload")
     monkeypatch.setattr(engine, "_vocabulary", lambda client, **kwargs: sf_vocabulary)
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     real_prepare = jobs.prepare
@@ -602,7 +627,7 @@ def test_a_workbook_closed_during_a_failed_job_is_regenerated(
     assert format_folder(folder).ok
     assert sync_study(folder, sf_vocabulary).ok
     lock = folder / f".~lock.{folder.name}.xlsx#"
-    lock.write_text("open")
+    lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
     engine.scan()
     assert row(engine)["sync"]["status"] == "workbook_open"
@@ -752,7 +777,9 @@ def test_the_rescan_of_a_job_plans_no_workbook_under_the_engine_lock(
 
     monkeypatch.setattr(workspace_module, "workbook_check", check)
     (folder / "timecourses_Fig1.tsv").write_text(
-        (folder / "timecourses_Fig1.tsv").read_text() + "\n"
+        (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8") + "\n",
+        encoding="utf-8",
+        newline="",
     )  # not canonical: the job formats it and scans again
     settle(engine)
     assert run_next(engine)["status"] == "succeeded"

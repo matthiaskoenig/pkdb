@@ -1,0 +1,3 @@
+# Check out text files with LF line endings on every platform: study files and the
+# test fixtures must be canonical, and git on Windows would otherwise write CRLF.
+* text=auto eol=lf

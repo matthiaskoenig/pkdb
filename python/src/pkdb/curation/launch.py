@@ -8,18 +8,29 @@ import webbrowser
 from pathlib import Path
 
 
+def windows_quoted(path: str) -> str:
+    """A Windows path in double quotes, as programs and `cmd /c` read an argument.
+
+    The quotes keep spaces and characters such as & in the argument. Backslashes before
+    the closing quote are doubled, so that a folder such as C:\\ keeps its backslash; a
+    Windows path holds no double quote.
+    """
+    trailing = len(path) - len(path.rstrip("\\"))
+    return f'"{path}{"\\" * trailing}"'
+
+
 def open_path(path: Path, *, reveal=False):
     path = Path(path).resolve(strict=True)
     if reveal and path.is_file():
         path = path.parent
     if command := os.environ.get("PKDB_OPEN_COMMAND"):
-        subprocess.run(
-            # Windows paths keep their backslashes.
-            [*shlex.split(command, posix=os.name != "nt"), str(path)],
-            check=True,
-            timeout=15,
-            capture_output=True,
-        )
+        if os.name == "nt":
+            # Windows gets the command line as written, so a program path in double
+            # quotes may hold spaces, and backslashes stay.
+            arguments = f"{command} {windows_quoted(str(path))}"
+        else:
+            arguments = [*shlex.split(command), str(path)]
+        subprocess.run(arguments, check=True, timeout=15, capture_output=True)
     elif sys.platform == "win32":
         os.startfile(str(path))
     else:

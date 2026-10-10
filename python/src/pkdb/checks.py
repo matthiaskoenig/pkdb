@@ -166,7 +166,8 @@ def _below(root: Path, path: Path) -> list[Path]:
             continue
         if len(parts) != 2:
             raise CheckError(
-                f"{folder} is not a study folder {STUDIES}/<substance>/<name>"
+                f"{folder.relative_to(root).as_posix()} is not a study folder "
+                f"{STUDIES}/<substance>/<name>"
             )
         folders.append(folder)
     return folders

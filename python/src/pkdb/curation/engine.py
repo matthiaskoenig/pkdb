@@ -67,7 +67,9 @@ class CurationEngine(
         )
         self.state_dir.mkdir(parents=True, exist_ok=True)
         try:
-            saved = json.loads((self.state_dir / "state.json").read_text())
+            saved = json.loads(
+                (self.state_dir / "state.json").read_text(encoding="utf-8")
+            )
         except OSError, ValueError:
             saved = {}
         self.api_key = api_key or os.environ.get("PKDB_API_KEY")
@@ -182,7 +184,7 @@ class CurationEngine(
         # The released format 1 app shares the default state directory: keep what it
         # saved and this version does not know, such as its issue mappings.
         try:
-            saved = json.loads(path.read_text())
+            saved = json.loads(path.read_text(encoding="utf-8"))
         except OSError, ValueError:
             saved = {}
         if isinstance(saved, dict):

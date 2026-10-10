@@ -47,12 +47,12 @@ def with_outputs(*outputs, **changes):
 
 def rewrite(table, column, value, row=0):
     """Set one cell of a converted table."""
-    header, *rows = table.read_text().splitlines()
+    header, *rows = table.read_text(encoding="utf-8").splitlines()
     names = header.split("\t")
     cells = rows[row].split("\t")
     cells[names.index(column)] = value
     rows[row] = "\t".join(cells)
-    table.write_text("\n".join([header, *rows]) + "\n")
+    table.write_text("\n".join([header, *rows]) + "\n", encoding="utf-8", newline="")
 
 
 def test_an_exact_conversion_is_identical(tmp_path, sf_vocabulary):
@@ -102,7 +102,11 @@ def test_a_changed_value_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     table = v2 / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t0.5\t", "\t0.6\t"))
+    table.write_text(
+        table.read_text(encoding="utf-8").replace("\t0.5\t", "\t0.6\t"),
+        encoding="utf-8",
+        newline="",
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     [difference] = result.differences
@@ -117,7 +121,11 @@ def test_a_difference_within_the_tolerance_is_identical(tmp_path, sf_vocabulary)
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     table = v2 / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t0.5\t", "\t0.5000000000001\t"))
+    table.write_text(
+        table.read_text(encoding="utf-8").replace("\t0.5\t", "\t0.5000000000001\t"),
+        encoding="utf-8",
+        newline="",
+    )
     assert judge(v1, v2, sf_vocabulary).outcome == "identical"
 
 
@@ -125,7 +133,11 @@ def test_a_difference_beyond_the_tolerance_is_a_mismatch(tmp_path, sf_vocabulary
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     table = v2 / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t0.5\t", "\t0.500000001\t"))
+    table.write_text(
+        table.read_text(encoding="utf-8").replace("\t0.5\t", "\t0.500000001\t"),
+        encoding="utf-8",
+        newline="",
+    )
     assert judge(v1, v2, sf_vocabulary).outcome == "mismatch"
 
 
@@ -133,8 +145,12 @@ def test_a_missing_record_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     table = v2 / "characteristica.tsv"
-    lines = table.read_text().splitlines()
-    table.write_text("\n".join(line for line in lines if "\tS2\t" not in line) + "\n")
+    lines = table.read_text(encoding="utf-8").splitlines()
+    table.write_text(
+        "\n".join(line for line in lines if "\tS2\t" not in line) + "\n",
+        encoding="utf-8",
+        newline="",
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     [difference] = result.differences
@@ -158,7 +174,11 @@ def test_a_changed_subject_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     subjects = v2 / "subjects.tsv"
-    subjects.write_text(subjects.read_text().replace("\tall\t\t2\t", "\tall\t\t3\t"))
+    subjects.write_text(
+        subjects.read_text(encoding="utf-8").replace("\tall\t\t2\t", "\tall\t\t3\t"),
+        encoding="utf-8",
+        newline="",
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert [(d.a, d.b) for d in result.differences if d.path == "subjects[all]"] == [
@@ -184,7 +204,11 @@ def test_a_changed_scatter_pairing_is_a_mismatch(tmp_path, sf_vocabulary):
 def test_an_unformatted_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
-    (v2 / "subjects.tsv").write_text((v2 / "subjects.tsv").read_text() + "\n")
+    (v2 / "subjects.tsv").write_text(
+        (v2 / "subjects.tsv").read_text(encoding="utf-8") + "\n",
+        encoding="utf-8",
+        newline="",
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert result.differences[0].path == "format"
@@ -216,7 +240,7 @@ def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocab
     study = {**STUDY, "groupset": {"groups": groups}}
     v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
     v2 = converted(tmp_path, v1)
-    lines = (v2 / "characteristica.tsv").read_text().splitlines()
+    lines = (v2 / "characteristica.tsv").read_text(encoding="utf-8").splitlines()
     [row] = [n for n, line in enumerate(lines, 1) if "\tall\tage\t" in line]
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
@@ -404,7 +428,7 @@ def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary)
     }
     v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), sheets, IMAGES)
     v2 = converted(tmp_path, v1)
-    assert "\tmg / l\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    assert "\tmg / l\t" in (v2 / "outputs_Tab2.tsv").read_text(encoding="utf-8")
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "intended", result.differences
     assert [(c.kind, c.count) for c in result.changes] == [("whitespace", 1)]
@@ -413,9 +437,9 @@ def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary)
 def test_a_v1_study_that_cannot_be_prepared_is_invalid_v1(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
-    study = json.loads((v1 / "study.json").read_text())
+    study = json.loads((v1 / "study.json").read_text(encoding="utf-8"))
     study["outputset"]["outputs"][0]["group"] = "nobody"
-    (v1 / "study.json").write_text(json.dumps(study))
+    (v1 / "study.json").write_text(json.dumps(study), encoding="utf-8", newline="")
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "invalid_v1"
     assert result.issues
@@ -425,12 +449,14 @@ def test_an_error_bar_formula_is_an_intended_change(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
     table = v2 / "outputs_Tab2.tsv"
-    header, row = table.read_text().splitlines()
+    header, row = table.read_text(encoding="utf-8").splitlines()
     names, cells = header.split("\t"), row.split("\t")
     cells[names.index("sd")] = ""
     cells[names.index("error_bar")] = "3"
     cells[names.index("error_type")] = "sd"
-    table.write_text("\t".join(names) + "\n" + "\t".join(cells) + "\n")
+    table.write_text(
+        "\t".join(names) + "\n" + "\t".join(cells) + "\n", encoding="utf-8", newline=""
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert (result.outcome, [c.kind for c in result.changes]) == (
         "intended",
@@ -445,7 +471,7 @@ def test_a_converted_abs_formula_is_an_intended_change(tmp_path, sf_vocabulary):
     }
     v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
     v2 = converted(tmp_path, v1)
-    assert "\t3.25\tsd\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    assert "\t3.25\tsd\t" in (v2 / "outputs_Tab2.tsv").read_text(encoding="utf-8")
     result = judge(v1, v2, sf_vocabulary)
     assert (result.outcome, [c.kind for c in result.changes]) == (
         "intended",
@@ -696,7 +722,7 @@ def test_curator_rows_of_a_sheet_without_image_are_identical(tmp_path, sf_vocabu
     sheets = {**SHEETS, "TabGroups": [["name", "count"], ["all", 2]]}
     v1 = v1_study(tmp_path / "v1", study, sheets, ("TabA", "Tab2", "Fig1"))
     v2 = converted(tmp_path, v1)
-    assert "\tText\t" in (v2 / "characteristica.tsv").read_text()
+    assert "\tText\t" in (v2 / "characteristica.tsv").read_text(encoding="utf-8")
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "identical", result.differences
 
@@ -708,7 +734,7 @@ def test_an_error_bar_below_zero_keeps_the_spread(tmp_path, sf_vocabulary):
     }
     v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
     v2 = converted(tmp_path, v1)
-    assert "\t2.75\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    assert "\t2.75\t" in (v2 / "outputs_Tab2.tsv").read_text(encoding="utf-8")
     assert judge(v1, v2, sf_vocabulary).outcome == "identical"
 
 
@@ -727,7 +753,11 @@ def test_differences_are_listed_up_to_the_maximum(tmp_path, sf_vocabulary):
     )
     v2 = converted(tmp_path, v1)
     table = v2 / "outputs_Tab2.tsv"
-    table.write_text(table.read_text().replace("\t0.5\t", "\t0.6\t"))
+    table.write_text(
+        table.read_text(encoding="utf-8").replace("\t0.5\t", "\t0.6\t"),
+        encoding="utf-8",
+        newline="",
+    )
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert len(result.differences) == MAX_DIFFERENCES
@@ -752,10 +782,10 @@ def test_a_comment_with_a_line_break_is_identical(tmp_path, sf_vocabulary):
     sheets = {**SHEETS, **SCATTER_SHEET}
     v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
     v2 = converted(tmp_path, v1)
-    assert (
-        "\tFasted. Men. / curator: From Tab2\n" in (v2 / "outputs_Tab2.tsv").read_text()
-    )
-    scatters = (v2 / "scatters_Fig2.tsv").read_text()
+    assert "\tFasted. Men. / curator: From Tab2\n" in (
+        v2 / "outputs_Tab2.tsv"
+    ).read_text(encoding="utf-8")
+    scatters = (v2 / "scatters_Fig2.tsv").read_text(encoding="utf-8")
     assert "\tcurator: Age at screening / curator: Cmax\n" in scatters
     result = judge(v1, v2, sf_vocabulary)
     assert (result.outcome, result.differences) == ("identical", [])

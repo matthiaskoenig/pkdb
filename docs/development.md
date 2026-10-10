@@ -56,11 +56,11 @@ Keep Markdown prose paragraphs on one source line, using editor soft wrapping. S
 
 ## Continuous integration
 
-Pull requests, branch pushes, and manual runs test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) expand backend checks to Python 3.14 and 3.15 and test the client on Linux, macOS, and Windows with both versions. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
+Pull requests and branch pushes test the backend and public Python client on Linux with Python 3.14. Release tag pushes (`v*`) and manual runs expand backend checks to Python 3.14 and 3.15 and test the client on Linux, macOS, and Windows with both versions; start a manual run of the `CI-CD` workflow on a branch to test it on every platform before tagging a release. Frontend, container, documentation, lint, and type checks still run for ordinary changes.
 
 ## Python package releases
 
-The public `pkdb` package and `pkdb-server` use the same version and release tag. Bump versions with the repository's bump-my-version configuration, commit the generated lock updates, and release through a `vVERSION` tag. The server wheel pins `pkdb==VERSION`; it is distributed as a GitHub release asset alongside the public wheel and source archive.
+The public `pkdb` package and `pkdb-server` use the same version and release tag. Bump versions with the repository's bump-my-version configuration, commit the generated lock updates, and release through a `vVERSION` tag. Before tagging, start a manual run of the `CI-CD` workflow on `develop` and wait until it passes: pull requests test the client only on Linux, and the manual run tests it on Linux, macOS and Windows with Python 3.14 and 3.15. The server wheel pins `pkdb==VERSION`; it is distributed as a GitHub release asset alongside the public wheel and source archive.
 
 After all backend, frontend, container, and Python client checks pass, `.github/workflows/ci-cd.yml` publishes only the public `pkdb` wheel and source archive to PyPI. The workflow verifies that both filenames match the release tag. The GitHub release and `main` synchronization wait for successful PyPI publication. Publishing uses short-lived GitHub OIDC credentials, with no stored PyPI API token.
 

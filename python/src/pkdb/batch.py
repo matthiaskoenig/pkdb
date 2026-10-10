@@ -454,7 +454,7 @@ def upload_many(
                 "Server rules differ; synchronize vocabulary and client"
             )
         if options.resume:
-            previous = json.loads(options.resume.read_text())
+            previous = json.loads(options.resume.read_text(encoding="utf-8"))
             for key in (
                 "report_version",
                 "endpoint",

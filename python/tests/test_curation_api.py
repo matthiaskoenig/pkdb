@@ -81,7 +81,11 @@ def test_study_detail(api):
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
     assert again[0] == 304 and again[2] == b"" and again[1]["ETag"] == etag
     (folder / "study.json").write_text(
-        (folder / "study.json").read_text().replace('"open"', '"closed"')
+        (folder / "study.json")
+        .read_text(encoding="utf-8")
+        .replace('"open"', '"closed"'),
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
     changed = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
@@ -109,7 +113,9 @@ def test_detail_etag_changes_with_a_job(api):
 
 def test_invalid_documents_keep_their_revision(api):
     server, engine, folder = api
-    (folder / "review.json").write_text('{"status": "finished"}')
+    (folder / "review.json").write_text(
+        '{"status": "finished"}', encoding="utf-8", newline=""
+    )
     detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
     assert detail["review"]["value"] is None and detail["review"]["revision"]
     assert detail["review"]["issues"][0]["code"] == "invalid_review_json"
@@ -121,7 +127,7 @@ def test_invalid_documents_keep_their_revision(api):
 def test_symlinked_review_json_is_not_read(api, tmp_path_factory):
     server, engine, folder = api
     outside = tmp_path_factory.mktemp("outside") / "review.json"
-    outside.write_text('{"status": "in_review"}')
+    outside.write_text('{"status": "in_review"}', encoding="utf-8", newline="")
     (folder / "review.json").unlink()
     (folder / "review.json").symlink_to(outside)
     status, _, data = request(server, "GET", DETAIL, headers=authenticate(server))
@@ -224,11 +230,11 @@ def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
     sheet.cell(3, header.index("mean") + 1).value = 5
     book.save(workbook_path(folder))
     table = folder / "timecourses_Fig1.tsv"
-    lines = table.read_text().splitlines()
+    lines = table.read_text(encoding="utf-8").splitlines()
     cells = lines[2].split("\t")
     cells[lines[0].split("\t").index("mean")] = "7"
     lines[2] = "\t".join(cells)
-    table.write_text("\n".join(lines) + "\n")
+    table.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
     engine.scan()
     detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
     assert detail["sync"]["status"] == "conflict"
@@ -278,7 +284,9 @@ def test_acknowledged_warnings_are_listed_until_dismissed(api):
             },
         ],
     }
-    (folder / "review.json").write_text(json.dumps(review))
+    (folder / "review.json").write_text(
+        json.dumps(review), encoding="utf-8", newline=""
+    )
     detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
     assert detail["acknowledged"] == [
         {
@@ -365,7 +373,9 @@ def test_table_etag_changes_with_the_table(api):
     headers = authenticate(server)
     path = f"{DETAIL}/tables/Example_Tab2.tsv"
     etag = request(server, "GET", path, headers=headers)[1]["ETag"]
-    (folder / "Example_Tab2.tsv").write_text("cmax\t3.5 ± 0.5\n")
+    (folder / "Example_Tab2.tsv").write_text(
+        "cmax\t3.5 ± 0.5\n", encoding="utf-8", newline=""
+    )
     engine.scan()
     status, response_headers, data = request(
         server, "GET", path, headers={**headers, "If-None-Match": etag}
@@ -549,9 +559,11 @@ def test_detail_and_preview_match_review_targets(api):
             },
         ],
     }
-    (folder / "review.json").write_text(json.dumps(review))
+    (folder / "review.json").write_text(
+        json.dumps(review), encoding="utf-8", newline=""
+    )
     # The TSV line of each time point of the formatted table.
-    lines = (folder / "timecourses_Fig1.tsv").read_text().splitlines()
+    lines = (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8").splitlines()
     time = lines[0].split("\t").index("time")
     at = {
         row.split("\t")[time]: number for number, row in enumerate(lines[1:], start=2)
@@ -583,7 +595,7 @@ def test_detail_and_preview_match_review_targets(api):
     engine.user = ""
     assert request(server, "POST", preview, body, headers)[0] == 200
     assert _detail(server, headers)["jobs"] == []
-    assert json.loads((folder / "review.json").read_text()) == review
+    assert json.loads((folder / "review.json").read_text(encoding="utf-8")) == review
 
 
 def test_files_version_changes_with_the_files_only(api):
@@ -598,7 +610,11 @@ def test_files_version_changes_with_the_files_only(api):
     assert changed["ETag"] != response_headers["ETag"]
     assert json.loads(data)["files_version"] == version
     timecourses = folder / "timecourses_Fig1.tsv"
-    timecourses.write_text(timecourses.read_text().replace("drug_plasma", "drug_urine"))
+    timecourses.write_text(
+        timecourses.read_text(encoding="utf-8").replace("drug_plasma", "drug_urine"),
+        encoding="utf-8",
+        newline="",
+    )
     engine.scan()
     assert _detail(server, headers)["files_version"] != version
 
@@ -615,7 +631,10 @@ def test_metadata_write_and_conflict(api):
     }
     status, _, data = request(server, "POST", "/local/studies/metadata", body, headers)
     assert status == 200
-    assert json.loads((folder / "study.json").read_text())["licence"] == "closed"
+    assert (
+        json.loads((folder / "study.json").read_text(encoding="utf-8"))["licence"]
+        == "closed"
+    )
     written = json.loads(data)
     assert written == {
         "revision": written["revision"],
@@ -637,7 +656,10 @@ def test_metadata_write_and_conflict(api):
     assert rejected[0] == 422
     issues = json.loads(rejected[2])["issues"]
     assert issues and issues[0]["code"] == "invalid_study_json"
-    assert json.loads((folder / "study.json").read_text())["licence"] == "closed"
+    assert (
+        json.loads((folder / "study.json").read_text(encoding="utf-8"))["licence"]
+        == "closed"
+    )
 
 
 def test_review_actions_and_approval_refusal(api):
@@ -772,7 +794,9 @@ def test_a_stale_write_shows_the_file_on_disk_at_once(api, key, change, action):
     document = json.loads(data)[key]
     on_disk = {**document["value"], **change}
     name = "review.json" if key == "review" else "study.json"
-    (folder / name).write_text(json.dumps(on_disk, indent=2) + "\n")
+    (folder / name).write_text(
+        json.dumps(on_disk, indent=2) + "\n", encoding="utf-8", newline=""
+    )
     body = action or {"metadata": document["value"]}
     route = f"/local/studies/{key}"
     write = {"study": "caffeine/Example", "revision": document["revision"], **body}
@@ -900,10 +924,12 @@ def test_write_after_the_job_formatted_the_file_conflicts(api):
     server, engine, folder = api
     headers = authenticate(server)
     revision = _detail(server, headers)["metadata"]["revision"]
-    study = json.loads((folder / "study.json").read_text())
+    study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
     # An external edit, which the watcher job then formats.
     (folder / "study.json").write_text(
-        dump_json({**study, "descriptions": ["Edited outside the app."]})
+        dump_json({**study, "descriptions": ["Edited outside the app."]}),
+        encoding="utf-8",
+        newline="",
     )
     format_folder(folder)
     response = request(
@@ -918,9 +944,9 @@ def test_write_after_the_job_formatted_the_file_conflicts(api):
         headers,
     )
     assert response[0] == 409
-    assert json.loads((folder / "study.json").read_text())["descriptions"] == [
-        "Edited outside the app."
-    ]
+    assert json.loads((folder / "study.json").read_text(encoding="utf-8"))[
+        "descriptions"
+    ] == ["Edited outside the app."]
 
 
 def test_a_write_changes_the_detail_etag(api):
@@ -953,13 +979,13 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
     monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     timecourses = folder / "timecourses_Fig1.tsv"
-    lines = timecourses.read_text().splitlines()
+    lines = timecourses.read_text(encoding="utf-8").splitlines()
     header = lines[0].split("\t")
     for index in (2, 3):  # the means at times 1 and 2 lie outside their range
         row = lines[index].split("\t")
         row[header.index("min")], row[header.index("max")] = "3", "4"
         lines[index] = "\t".join(row)
-    timecourses.write_text("\n".join(lines) + "\n")
+    timecourses.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
     headers = authenticate(server)
     body = {
         "study": "caffeine/Example",
@@ -1011,7 +1037,9 @@ def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
     server, engine, folder = api
     monkeypatch.setattr(engine, "_local_vocabulary", lambda folder=None: sf_vocabulary)
     (folder / "Example_Fig1.wpd.json").write_text(
-        json.dumps(project(GOOD, extra=("legend", "axis labels")))
+        json.dumps(project(GOOD, extra=("legend", "axis labels"))),
+        encoding="utf-8",
+        newline="",
     )
     assert format_folder(folder).ok
     headers = authenticate(server)
@@ -1131,11 +1159,11 @@ def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
     sheet.cell(3, column).value = 5
     book.save(workbook_path(folder))
     table = folder / "timecourses_Fig1.tsv"
-    lines = table.read_text().splitlines()
+    lines = table.read_text(encoding="utf-8").splitlines()
     cells = lines[2].split("\t")
     cells[lines[0].split("\t").index("mean")] = "7"
     lines[2] = "\t".join(cells)
-    table.write_text("\n".join(lines) + "\n")
+    table.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
     status, result = tables(action="sync")
     assert status == 200 and not result["ok"]
     assert [c["file"] for c in result["conflicts"]] == ["timecourses_Fig1.tsv"]
@@ -1145,7 +1173,7 @@ def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
     assert status == 200 and result["ok"]
     assert result["conflicts"][0]["kept"] == "workbook"
     assert (
-        table.read_text()
+        table.read_text(encoding="utf-8")
         .splitlines()[2]
         .split("\t")[lines[0].split("\t").index("mean")]
         == "5"
@@ -1297,7 +1325,7 @@ def test_curator_roster(api):
 
 def test_detail_has_the_people_with_their_profiles(api):
     server, engine, folder = api
-    study = json.loads((folder / "study.json").read_text())
+    study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
     (folder / "study.json").write_text(
         dump_json(
             {
@@ -1306,7 +1334,9 @@ def test_detail_has_the_people_with_their_profiles(api):
                 "curators": [{"user": "mkoenig", "rating": 4.5}, {"user": "curator"}],
                 "collaborators": ["Jane Doe"],
             }
-        )
+        ),
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
     people = _detail(server, authenticate(server))["people"]
@@ -1398,7 +1428,9 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
         and job["created_at"]
         for job in writes
     )
-    saved = json.loads((engine.state_dir / "state.json").read_text())["jobs"]
+    saved = json.loads((engine.state_dir / "state.json").read_text(encoding="utf-8"))[
+        "jobs"
+    ]
     assert [job["message"] for job in saved if job["action"] == "write"][0] == (
         "Saved study.json"
     )
@@ -1424,20 +1456,24 @@ def test_detail_has_the_reference_and_the_state_of_the_row(api):
     assert detail["reference"]["pmid"] == "123"
     assert detail["reference_match"] is True
     assert detail["message"] is None and detail["last_upload"] is None
-    reference = json.loads((folder / "reference.json").read_text())
+    reference = json.loads((folder / "reference.json").read_text(encoding="utf-8"))
     (folder / "reference.json").write_text(
-        dump_json({**reference, "pmid": "456", "doi": "10.1000/ABC"})
+        dump_json({**reference, "pmid": "456", "doi": "10.1000/ABC"}),
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
     assert _detail(server, headers)["reference_match"] is False
-    study = json.loads((folder / "study.json").read_text())
+    study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
     (folder / "study.json").write_text(
-        dump_json({**study, "reference": {"doi": "10.1000/abc"}})
+        dump_json({**study, "reference": {"doi": "10.1000/abc"}}),
+        encoding="utf-8",
+        newline="",
     )
     engine.scan()
     assert _detail(server, headers)["reference_match"] is True
     del study["reference"]
-    (folder / "study.json").write_text(dump_json(study))
+    (folder / "study.json").write_text(dump_json(study), encoding="utf-8", newline="")
     engine.scan()
     assert _detail(server, headers)["reference_match"] is None
     etag = request(server, "GET", DETAIL, headers=headers)[1]["ETag"]
@@ -1504,4 +1540,7 @@ def test_a_write_succeeds_when_the_rescan_fails(api, monkeypatch):
         headers,
     )
     assert status == 200
-    assert json.loads((folder / "study.json").read_text())["licence"] == "closed"
+    assert (
+        json.loads((folder / "study.json").read_text(encoding="utf-8"))["licence"]
+        == "closed"
+    )

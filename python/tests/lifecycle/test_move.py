@@ -271,6 +271,7 @@ def test_the_fixed_files_of_a_study_named_like_them_stay(
     target.write_text(
         target.read_text(encoding="utf-8").replace('"Example', f'"{name}'),
         encoding="utf-8",
+        newline="",
     )
     assert format_folder(folder).ok
     fixed = {"study.json", "review.json", "reference.json"} | {
@@ -326,7 +327,7 @@ def test_a_reference_name_other_than_the_study_name_stays(
 ):
     path = study_folder(moved_checkout) / "reference.json"
     text = path.read_text(encoding="utf-8").replace('"Example"', '"Jönsson2015"')
-    path.write_text(text, encoding="utf-8")
+    path.write_text(text, encoding="utf-8", newline="")
     before = path.read_bytes()
     folder = move_study(moved_checkout, OLD, NEW, sf_vocabulary).folder
     assert (folder / "reference.json").read_bytes() == before
@@ -518,7 +519,9 @@ def test_an_old_location_in_another_case_is_refused(moved_checkout, sf_vocabular
 def test_a_format_1_folder_is_refused(moved_checkout, sf_vocabulary):
     legacy = study_folder(moved_checkout, "caffeine/Legacy")
     legacy.mkdir()
-    (legacy / "study.json").write_text('{"name": "Legacy"}', encoding="utf-8")
+    (legacy / "study.json").write_text(
+        '{"name": "Legacy"}', encoding="utf-8", newline=""
+    )
     with pytest.raises(MoveRefused, match="is not a study format 2 folder"):
         move_study(moved_checkout, "caffeine/Legacy", NEW, sf_vocabulary)
     assert legacy.is_dir()
@@ -560,7 +563,7 @@ def test_a_raw_table_name_too_long_for_a_sheet_is_refused(
     moved_checkout, sf_vocabulary
 ):
     folder = study_folder(moved_checkout)
-    (folder / "Example_Tab3_part2.tsv").write_text(RAW, encoding="utf-8")
+    (folder / "Example_Tab3_part2.tsv").write_text(RAW, encoding="utf-8", newline="")
     with pytest.raises(MoveRefused, match="31 characters"):
         move_study(moved_checkout, OLD, "codeine/" + "R" * 24, sf_vocabulary)
     assert (folder / "Example_Tab3_part2.tsv").exists()
@@ -579,7 +582,7 @@ def test_a_study_that_pkdb_format_cannot_read_is_refused(moved_checkout, sf_voca
 def test_an_open_workbook_refuses_the_move(moved_checkout, sf_vocabulary):
     folder = study_folder(moved_checkout)
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"
-    (folder / ".~lock.Example.xlsx#").write_text("lock", encoding="utf-8")
+    (folder / ".~lock.Example.xlsx#").write_text("lock", encoding="utf-8", newline="")
     before = snapshot(folder)
     with pytest.raises(MoveRefused, match="open"):
         move_study(moved_checkout, OLD, NEW, sf_vocabulary)
@@ -606,7 +609,7 @@ def test_a_workbook_that_conflicts_with_the_tables_refuses_the_move(
     set_cell(workbook_path(folder), "outputs_Tab2", 2, "mean", "3.5")
     table = folder / "outputs_Tab2.tsv"
     text = table.read_text(encoding="utf-8").replace("\t2.5\t", "\t4.5\t")
-    table.write_text(text, encoding="utf-8")
+    table.write_text(text, encoding="utf-8", newline="")
     with pytest.raises(MoveRefused, match="pkdb tables sync"):
         move_study(moved_checkout, OLD, NEW, sf_vocabulary)
     assert (folder / "Example.xlsx").exists()
@@ -647,8 +650,8 @@ def test_a_synced_workbook_is_removed(moved_checkout, sf_vocabulary):
     # A workbook that only lacks a change of the tables holds no edits.
     table = folder / "outputs_Tab2.tsv"
     text = table.read_text(encoding="utf-8").replace("\t2.5\t", "\t4.5\t")
-    table.write_text(text, encoding="utf-8")
-    state_path(workbook_path(folder)).write_text("{}", encoding="utf-8")
+    table.write_text(text, encoding="utf-8", newline="")
+    state_path(workbook_path(folder)).write_text("{}", encoding="utf-8", newline="")
     result = move_study(moved_checkout, OLD, NEW, sf_vocabulary)
     assert result.workbook == "Example.xlsx"
     names = [path.name for path in result.folder.iterdir()]
@@ -662,7 +665,7 @@ def test_a_substance_only_move_removes_the_synced_workbook(
 ):
     folder = study_folder(moved_checkout)
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"
-    state_path(workbook_path(folder)).write_text("{}", encoding="utf-8")
+    state_path(workbook_path(folder)).write_text("{}", encoding="utf-8", newline="")
     before = {
         name: content
         for name, content in snapshot(folder).items()
@@ -713,7 +716,7 @@ def test_a_workbook_changed_during_the_move_is_kept(
     folder = study_folder(moved_checkout)
     assert sync_study(folder, sf_vocabulary).workbook_action == "created"
     state = state_path(workbook_path(folder))
-    state.write_text("{}", encoding="utf-8")
+    state.write_text("{}", encoding="utf-8", newline="")
     rename = Path.rename
 
     def edit_workbook(path, target):
@@ -725,7 +728,7 @@ def test_a_workbook_changed_during_the_move_is_kept(
                 set_cell(workbook, "outputs_Tab2", 2, "mean", "3.5")
             else:
                 lock = Path(target) / ".~lock.Example.xlsx#"
-                lock.write_text("lock", encoding="utf-8")
+                lock.write_text("lock", encoding="utf-8", newline="")
         return moved
 
     monkeypatch.setattr(move.Path, "rename", edit_workbook)
@@ -803,7 +806,9 @@ def test_a_review_change_during_the_move_is_kept(
         review = Path(target) / "review.json"
         if review.exists():
             text = review.read_text(encoding="utf-8")
-            review.write_text(text.replace("Who are", "Which are"), encoding="utf-8")
+            review.write_text(
+                text.replace("Who are", "Which are"), encoding="utf-8", newline=""
+            )
         return moved
 
     monkeypatch.setattr(move.Path, "rename", edit_review)

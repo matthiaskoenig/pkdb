@@ -349,7 +349,9 @@ class JobsMixin(EngineState):
         if not any(job["report_id"] == identifier for job in self.jobs):
             raise ValueError("Unknown report")
         return json.loads(
-            (self.state_dir / "reports" / f"{identifier}.json").read_text()
+            (self.state_dir / "reports" / f"{identifier}.json").read_text(
+                encoding="utf-8"
+            )
         )
 
     def _worker(self):

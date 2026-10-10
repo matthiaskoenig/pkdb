@@ -701,7 +701,7 @@ def test_a_workbook_that_git_tracks_is_a_warning(
     # Outside the current directory, the command names the absolute folder.
     [issue] = git_issues(path)
     assert issue.suggestions[0].candidates == [
-        f"git -C {shlex.quote(str(study))} rm --cached Example.xlsx"
+        f"git -C {shlex.quote(study.as_posix())} rm --cached Example.xlsx"
     ]
     monkeypatch.chdir(root)
 

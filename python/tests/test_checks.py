@@ -512,8 +512,10 @@ def test_a_file_name_that_is_not_utf_8_is_a_problem_of_its_study(
     try:
         with open(bad, "wb") as stream:
             stream.write(b"x\n")
-    except OSError:
-        pytest.skip("the file system refuses a name that is not UTF-8")
+    except OSError, UnicodeDecodeError:
+        # APFS refuses the name; Windows file names are Unicode, and Python reads a
+        # bytes path there as UTF-8.
+        pytest.skip("the platform refuses a file name that is not UTF-8")
     report = check(root, [studies["caffeine/A"], studies["caffeine/B"]], sf_vocabulary)
     assert report.checked == ["caffeine/A", "caffeine/B"]
     assert report.problems

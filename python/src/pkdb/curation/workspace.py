@@ -5,8 +5,10 @@ reference_previews, paused, queue, stop, wakeup, state_dir, _formats. Uses engin
 _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
 
+import hashlib
 import json
 import os
+import sys
 import time
 from collections import Counter
 from pathlib import Path
@@ -317,21 +319,23 @@ class WorkspaceMixin(EngineState):
     def _is_v2(self, folder):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
 
-        Only scans call it, one at a time, so the remembered decisions need no lock. The
-        inode and the status change time tell a same-size edit that kept the modification
-        time, as `cp -p`, `rsync -t` and `tar x` write it.
+        Only scans call it, one at a time, so the remembered decisions need no lock. A
+        format 2 file decides without study.json, as in `is_v2_folder`. Otherwise the
+        inode and the status change time of study.json tell a same-size edit that kept
+        the modification time, as `cp -p`, `rsync -t` and `tar x` write it. On Windows
+        `os.stat` reports the creation time as the status change time, so the content of
+        study.json tells it there.
         """
+        if any(os.path.lexists(folder / name) for name in FORMAT_2_FILES):
+            return True
+        path = folder / STUDY_JSON
         try:
-            stat = (folder / STUDY_JSON).stat()
+            stat = path.stat()
+            key = (stat.st_size, stat.st_mtime_ns, stat.st_ino, stat.st_ctime_ns)
+            if sys.platform == "win32":
+                key += (hashlib.sha256(path.read_bytes()).digest(),)
         except OSError:
             return is_v2_folder(folder)
-        key = (
-            stat.st_size,
-            stat.st_mtime_ns,
-            stat.st_ino,
-            stat.st_ctime_ns,
-            *(os.path.lexists(folder / name) for name in FORMAT_2_FILES),
-        )
         remembered = self._formats.get(folder)
         if remembered is None or remembered[0] != key:
             remembered = self._formats[folder] = (key, is_v2_folder(folder))
@@ -539,7 +543,9 @@ class WorkspaceMixin(EngineState):
                 if path.is_symlink():
                     raise ReferenceError("Reference source must not be a symlink")
                 return {
-                    "reference": json.loads(path.read_text()) if path.exists() else {}
+                    "reference": json.loads(path.read_text(encoding="utf-8"))
+                    if path.exists()
+                    else {}
                 }
             if action == "save":
                 token = body["token"]

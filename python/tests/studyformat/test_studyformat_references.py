@@ -52,7 +52,7 @@ def set_reference(folder, reference):
     path = folder / "study.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     data["reference"] = reference
-    path.write_text(dump_json(data), encoding="utf-8")
+    path.write_text(dump_json(data), encoding="utf-8", newline="")
     return path.read_bytes()
 
 

@@ -515,16 +515,20 @@ def _release_folders(
         as_path = path if _is_study(path) else None
         as_location = _checkout_study(value, root_option)
         if as_path and as_location and as_path != as_location:
+            # SUBSTANCE/NAME, as the documentation writes it on every platform.
+            location = value.as_posix()
             raise ValueError(
-                f"{value} is the folder of another study than {STUDIES}/{value} of "
-                f"the checkout; give the path of the folder you mean, such as {path}"
+                f"{location} is the folder of another study than {STUDIES}/{location} "
+                f"of the checkout; give the path of the folder you mean, such as {path}"
             )
         folder = as_path or as_location
         if folder is None:
             if _is_location(value):
+                # SUBSTANCE/NAME, as the documentation writes it on every platform.
+                location = value.as_posix()
                 raise ValueError(
-                    f"Neither {value} nor {STUDIES}/{value} of the checkout is a "
-                    "study format 2 folder"
+                    f"Neither {location} nor {STUDIES}/{location} of the checkout is "
+                    "a study format 2 folder"
                 )
             raise ValueError(f"{value} is not a study format 2 folder")
         if folder in folders:

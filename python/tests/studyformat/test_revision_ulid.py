@@ -24,12 +24,12 @@ def test_revision_of_missing_and_present(tmp_path):
 
 def test_write_checked_refuses_a_stale_revision(tmp_path):
     path = tmp_path / "review.json"
-    path.write_text("old\n")
+    path.write_text("old\n", encoding="utf-8", newline="")
     stale = revision_of(b"older\n")
     with folder_lock(tmp_path), pytest.raises(RevisionConflict) as error:
         write_checked(path, "new\n", stale)
     assert error.value.content == "old\n"
-    assert path.read_text() == "old\n"
+    assert path.read_text(encoding="utf-8") == "old\n"
     with folder_lock(tmp_path):
         assert write_checked(path, "new\n", revision_of(b"old\n")) == revision_of(
             b"new\n"

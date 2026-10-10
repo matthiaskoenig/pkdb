@@ -276,7 +276,7 @@ class ReferenceResolver:
         with _LOCK:
             cached = None
             try:
-                cached = json.loads(path.read_text())
+                cached = json.loads(path.read_text(encoding="utf-8"))
                 if not isinstance(cached, dict) or cached.get("version") != 1:
                     cached = None
             except OSError, ValueError:
@@ -654,9 +654,9 @@ def _format_2_input(folder, publication, seed, existing, reset_overrides):
 def preview_reference(folder, seed, resolver, *, reset_overrides=False):
     folder = Path(folder)
     revision = _file_digest(folder)
-    study = json.loads((folder / "study.json").read_text())
+    study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
     path = folder / "reference.json"
-    existing = json.loads(path.read_text()) if path.exists() else {}
+    existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     publication = _format_2_publication(study)
     if publication is not None:
         sid, seed, existing = _format_2_input(

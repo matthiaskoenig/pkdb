@@ -1,6 +1,7 @@
 """Curate, prepare, validate, and upload PK-DB study folders."""
 
 import argparse
+import io
 import json
 import os
 import sys
@@ -37,16 +38,39 @@ def _update(*, check=False) -> int:
     return 0 if upgrade(target) else 1
 
 
+def utf8_output(platform: str = sys.platform) -> None:
+    """Write UTF-8 to pipes and files on Windows, as on the other platforms.
+
+    Python 3.14 on Windows writes redirected output in the ANSI code page, which
+    cannot encode characters such as the Greek mu, so `pkdb study show ... | jq` failed.
+    The console keeps its own encoding.
+    """
+    if platform != "win32":
+        return
+    for stream in (sys.stdout, sys.stderr):
+        if not isinstance(stream, io.TextIOWrapper):
+            continue
+        try:
+            if not stream.isatty():
+                stream.reconfigure(encoding="utf-8", errors=stream.errors)
+        except OSError, ValueError:
+            # A closed or detached stream keeps its state; writing to it fails
+            # later with the usual message.
+            continue
+
+
 def entry() -> int:
     """Console entry point: update outdated installations before running."""
     from pkdb.update import automatic_update
 
+    utf8_output()
     argv = sys.argv[1:]
     code = automatic_update(argv)
     return main(argv) if code is None else code
 
 
 def main(argv=None, *, client=None) -> int:
+    utf8_output()
     parser = argparse.ArgumentParser(prog="pkdb", description=__doc__)
     parser.add_argument("--version", action="version", version=f"pkdb {__version__}")
     parser.add_argument(
