@@ -334,7 +334,7 @@ def _record_issue(
     studies = read_studies(root)
     claimed = {state.issue for state in studies.states if state.issue is not None}
     issue, created = issue_for_new_study(
-        github, place, claimed=frozenset(claimed) | studies.claimed
+        github, place, claimed=frozenset(claimed).union(studies.claimed)
     )
     patch_metadata(folder, {"issue": issue.number}, revision)
     return issue.number, created, issue.state == "closed"

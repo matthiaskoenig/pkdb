@@ -12,7 +12,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
 
 from pkdb.identity import Author
-from pkdb.issues.adopt import DUPLICATE, SIMILAR, Adoption, match
+from pkdb.issues.adopt import DUPLICATE, SIMILAR, SIMILAR_CREATED, Adoption, match
 from pkdb.issues.github import GitHub, GitHubError, Issue
 from pkdb.issues.state import (
     LABEL_COLORS,
@@ -40,7 +40,7 @@ class AdoptionResult(BaseModel):
     """The issue a study without one got; `number` is None for a new issue in a dry run.
 
     `labels` and `assignees` are those of a new issue, which is titled with
-    the study.
+    the study: the ones to send in a dry run, else the ones GitHub applied.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -136,7 +136,7 @@ def _sync(
     )
     states = studies.states
     if author is not None:
-        states = _adopt(run, states, studies.claimed, author)
+        states = _adopt(run, states, studies.claimed.keys(), author)
     result.plan = plan(
         states,
         list(run.issues.values()),
@@ -145,6 +145,7 @@ def _sync(
         label_names=run.label_names,
         repository=github.repository,
         problems=run.problems,
+        claimed=studies.claimed,
     )
     result.warnings += result.plan.warnings
     result.errors += result.plan.errors
@@ -157,7 +158,9 @@ class _Run:
     """The GitHub repository as the sync knows it, and the result so far.
 
     `problems` holds the user problems of new issues in a dry run, which the
-    plan does not see.
+    plan does not see; `dropped` the issues whose labels or assignees GitHub
+    dropped, which are reported once; `created` the number of the issue
+    created for a study, also when its adoption failed afterwards.
     """
 
     github: GitHub
@@ -167,6 +170,8 @@ class _Run:
     label_names: list[str]
     progress: Callable[[str], None] | None
     problems: Problems = field(default_factory=Problems)
+    dropped: set[int] = field(default_factory=set)
+    created: dict[str, int] = field(default_factory=dict)
 
     @property
     def dry_run(self) -> bool:
@@ -177,7 +182,7 @@ class _Run:
 
     def fail(self, where: str, error: GitHubError) -> None:
         """Record a failed GitHub request, or raise one that every request would hit."""
-        if error.rate_limited or error.unreachable or error.status_code in (401, 403):
+        if _stops(error):
             raise error
         self.error(f"{where}: {error}")
 
@@ -204,12 +209,6 @@ def _adopt(
         if (adoption := adoptions.get(state.location)) is None:
             planned.append(state)
             continue
-        run.result.warnings += [
-            SIMILAR.format(
-                location=state.location, number=issue.number, title=issue.title
-            )
-            for issue in adoption.similar
-        ]
         try:
             result, adopted_state = _adopt_one(run, adoption, author)
         except GitHubError as error:
@@ -223,6 +222,8 @@ def _adopt(
         except (MetadataError, ReviewError) as error:
             run.error(f"{state.location}: {error}")
             continue
+        finally:
+            run.result.warnings += _similar(adoption, run.created.get(state.location))
         run.result.adopted.append(result)
         if not run.dry_run:
             run.done(adoption_line(result, dry_run=False))
@@ -276,12 +277,16 @@ def _adopt_one(
         return result, replace(state, issue=keep.number, status=status)
     if keep is None:
         issue = _create(run, state, result.labels, result.assignees)
+        result.labels, result.assignees = list(issue.labels), list(issue.assignees)
     elif renamed:
         issue = run.github.update_issue(keep.number, title=state.location)
     else:
         issue = keep
     for number in duplicates:
-        run.github.comment(number, DUPLICATE.format(number=issue.number))
+        # A rerun after a failed close finds the comment of the earlier run.
+        comment = DUPLICATE.format(number=issue.number)
+        if comment not in run.github.comments(number):
+            run.github.comment(number, comment)
         run.github.update_issue(number, state="closed", state_reason="not_planned")
     review_revision = state.review_revision
     if in_review:
@@ -313,6 +318,7 @@ def _create(
     for name in labels:
         _create_label(run, name)
     issue = run.github.create_issue(state.location, labels=labels, assignees=assignees)
+    run.created[state.location] = issue.number
     _check_applied(run, state.location, issue, labels, assignees)
     return issue
 
@@ -325,6 +331,29 @@ def _create_label(run: _Run, name: str) -> None:
     run.label_names.append(name)
 
 
+def _similar(adoption: Adoption, created: int | None) -> list[str]:
+    """The warnings about issues with a title similar to the study's.
+
+    They ask to rename the issue unless a new issue was created for the study,
+    also one whose adoption failed afterwards; then they name both issues.
+    """
+    location = adoption.study.location
+    if created is None:
+        return [
+            SIMILAR.format(location=location, number=issue.number, title=issue.title)
+            for issue in adoption.similar
+        ]
+    return [
+        SIMILAR_CREATED.format(
+            location=location,
+            created=created,
+            number=issue.number,
+            title=issue.title,
+        )
+        for issue in adoption.similar
+    ]
+
+
 def _apply(run: _Run, changes: SyncPlan) -> None:
     """Create the missing labels, then change the issues."""
     for name in changes.labels:
@@ -334,22 +363,103 @@ def _apply(run: _Run, changes: SyncPlan) -> None:
             run.fail(f"Label {name}", error)
     for change in changes.changes:
         try:
-            if change.reopen_first:
-                run.github.update_issue(change.number, state="open")
-            issue = run.github.update_issue(
-                change.number,
-                title=change.title,
-                labels=change.labels,
-                assignees=change.assignees,
-                state=change.state,
-                state_reason=change.state_reason,
-            )
+            issue = _change(run, change)
         except GitHubError as error:
             run.fail(change.study, error)
+            continue
+        if issue is None:
             continue
         if _check_applied(run, change.study, issue, change.labels, change.assignees):
             run.result.applied += 1
             run.done(change_line(change))
+
+
+def _change(run: _Run, change: IssueChange) -> Issue | None:
+    """Write the change of one issue; None when it was not closed as completed.
+
+    An issue closed with another reason than completed is reopened with the
+    other changes and then closed as completed. When that close fails, the
+    issue is closed again with its former reason, and the error of the study
+    names the state that GitHub then reports for the issue. A run that stops
+    or is interrupted on the way names the issue as possibly left open.
+    """
+    if not change.reopen_first:
+        return run.github.update_issue(
+            change.number,
+            title=change.title,
+            labels=change.labels,
+            assignees=change.assignees,
+            state=change.state,
+            state_reason=change.state_reason,
+        )
+    # The plan reopens only an issue closed with another reason than completed.
+    reason = run.issues[change.number].state_reason
+    assert reason is not None
+    try:
+        run.github.update_issue(
+            change.number,
+            title=change.title,
+            labels=change.labels,
+            assignees=change.assignees,
+            state="open",
+        )
+    except KeyboardInterrupt:
+        run.error(_not_closed(change, None, None))
+        raise
+    refused: GitHubError | None = None
+    try:
+        try:
+            return run.github.update_issue(
+                change.number, state="closed", state_reason="completed"
+            )
+        except GitHubError as error:
+            if _stops(error):
+                raise
+            refused = error
+        try:
+            # GitHub keeps the reason of a close it applied despite the error.
+            run.github.update_issue(change.number, state="closed", state_reason=reason)
+        except GitHubError as error:
+            if _stops(error):
+                raise
+        issue = run.github.issue(change.number)
+    except KeyboardInterrupt:
+        run.error(_not_closed(change, refused, None))
+        raise
+    except GitHubError as error:
+        run.error(_not_closed(change, refused, None))
+        if _stops(error):
+            raise
+        return None
+    run.error(_not_closed(change, refused, issue))
+    return None
+
+
+def _not_closed(
+    change: IssueChange, refused: GitHubError | None, issue: Issue | None
+) -> str:
+    """The error of a reopened issue that was not closed as completed.
+
+    `refused` is the failed close, None when the run stopped on it; `issue`
+    the issue as GitHub reports it afterwards, None when that is unknown.
+    """
+    number = change.number
+    if issue is None:
+        state = f"#{number} was reopened and may be left open"
+    elif issue.state == "open":
+        state = f"#{number} was reopened and is left open"
+    elif issue.state_reason is None:
+        state = f"#{number} is closed"
+    else:
+        state = f"#{number} is closed as {issue.state_reason.replace('_', ' ')}"
+    if refused is None:
+        return f"{change.study}: {state}"
+    return f"{change.study}: {refused}; {state}"
+
+
+def _stops(error: GitHubError) -> bool:
+    """Whether every following request would hit the failure, so the run stops."""
+    return error.rate_limited or error.unreachable or error.status_code in (401, 403)
 
 
 def _check_applied(
@@ -362,14 +472,17 @@ def _check_applied(
     """Whether GitHub took the labels and assignees it was sent, ignoring case.
 
     GitHub drops both silently for a token without push access; that is an
-    error of the study.
+    error of the study, reported once for an issue that is written again, such
+    as a new issue that the plan changes.
     """
     if _folded(issue.labels, labels) and _folded(issue.assignees, assignees):
         return True
-    run.error(
-        f"{where}: GitHub did not apply the labels or assignees of "
-        f"#{issue.number}; the token may lack write access"
-    )
+    if issue.number not in run.dropped:
+        run.dropped.add(issue.number)
+        run.error(
+            f"{where}: GitHub did not apply the labels or assignees of "
+            f"#{issue.number}; the token may lack write access"
+        )
     return False
 
 
@@ -387,10 +500,10 @@ def adoption_line(item: AdoptionResult, *, dry_run: bool) -> str:
     )
     if item.created:
         new = "new issue" if item.number is None else f"created #{item.number}"
-        assignees = " ".join(item.assignees)
+        labels, assignees = " ".join(item.labels), " ".join(item.assignees)
         parts = [
             f"{new} titled {item.study}",
-            f"labels {' '.join(item.labels)}",
+            f"labels {labels}" if labels else "no labels",
             f"assignees {assignees}" if assignees else "no assignees",
         ]
     else:

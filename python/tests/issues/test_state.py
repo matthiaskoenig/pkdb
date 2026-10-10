@@ -24,6 +24,7 @@ def run(
         substance_names=["caffeine", "codeine"],
         label_names=list(labels),
         repository=REPOSITORY,
+        claimed=studies.claimed,
     )
 
 
@@ -283,4 +284,19 @@ def test_an_unreadable_study_claims_the_issue_it_names(tmp_path):
     (syntax / "study.json").write_text('{"format": 2, "issue": 6', encoding="utf-8")
     studies = read_studies(tmp_path)
     assert studies.states == [] and len(studies.errors) == 4
-    assert studies.claimed == {4, 5}
+    assert studies.claimed == {4: ["caffeine/A"], 5: ["caffeine/B"]}
+
+
+def test_an_issue_claimed_by_an_unreadable_study_gets_no_change(tmp_path):
+    study(tmp_path, "caffeine/A", issue=4)
+    for name in ("B", "C"):
+        broken = study(tmp_path, f"caffeine/{name}", issue=4)
+        (broken / "review.json").write_text("{", encoding="utf-8")
+    study(tmp_path, "caffeine/D", issue=5)
+    broken = study(tmp_path, "caffeine/E", issue=6)
+    (broken / "review.json").write_text("{", encoding="utf-8")
+    result = run(tmp_path, [issue(4, "x"), issue(5, "y"), issue(6, "z")])
+    assert result.errors == [
+        "Issue #4 is named by several studies: caffeine/A, caffeine/B, caffeine/C"
+    ]
+    assert [change.number for change in result.changes] == [5]

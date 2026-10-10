@@ -813,6 +813,20 @@ def test_new_does_not_adopt_an_issue_of_another_study(
     assert read_metadata(smith).metadata.issue == 1
 
 
+def test_new_does_not_adopt_an_issue_of_an_unreadable_study(
+    checkout, resolver, github, monkeypatch, capsys
+):
+    monkeypatch.chdir(checkout)
+    assert main([*WITH_ISSUE, *OPTIONS]) == 0
+    smith = checkout / "studies" / "caffeine" / "Smith2020"
+    (smith / "review.json").write_text("{", encoding="utf-8")
+    github.issues[1]["title"] = "caffeine/Brown2022"
+    brown = ["new", "caffeine/Brown2022", *WITH_ISSUE[2:]]
+    capsys.readouterr()
+    assert main([*brown, *OPTIONS, "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["issue"] == 2
+
+
 def test_a_closed_adopted_issue_is_named(
     checkout, resolver, github, monkeypatch, capsys
 ):
