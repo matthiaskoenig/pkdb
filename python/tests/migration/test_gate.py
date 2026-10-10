@@ -222,6 +222,21 @@ def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocab
     ]
 
 
+def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary):
+    # The converter writes text cells on one line; a blank cell is no value.
+    output = {**OUTPUT, "unit": "col==unit", "method": "col==method"}
+    sheets = {
+        **SHEETS,
+        "Tab2": [["mean", "sd", "unit", "method"], [2.5, 0.5, "mg  / l", " "]],
+    }
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert "\tmg / l\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("whitespace", 1)]
+
+
 def test_a_v1_study_that_cannot_be_prepared_is_invalid_v1(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)

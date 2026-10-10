@@ -11,10 +11,11 @@ from collections import Counter, defaultdict
 from collections.abc import Callable, Collection, Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Change, Difference, StudyResult
 from pkdb.migration.rows import comment, label_name, scatter_comment, series_arrays
 from pkdb.migration.sources import image_sources
@@ -38,6 +39,20 @@ JPG_SUFFIXES = (".jpg", ".jpeg")
 GENERATED_DATASET = "dataset:auto"
 # Fields of a key that are shown with their name, such as `time 1`.
 NAMED = frozenset({"time", "time_end", "interval", "doses"})
+# Fields of a key that the converter writes as text cells on one line.
+TEXT = (
+    "measurement_type",
+    "calculation_type",
+    "choice",
+    "substance",
+    "tissue",
+    "method",
+    "route",
+    "form",
+    "application",
+    "time_unit",
+    "unit",
+)
 NO_COMMENT = "no comment"
 # Cells that identify a row of a converted table, shown with a validation issue.
 IDENTIFYING = (
@@ -259,6 +274,23 @@ class _Normalizer:
         self.images: dict[str, str] = {}
         self.renamed: dict[str, str] = {}
 
+    def whitespace(self, key: Key) -> Key:
+        """Text as the converter writes it: on one line, and a blank cell is empty.
+
+        Format 1 keeps text such as the unit `ng  hr/ml` or a substance cell
+        holding a space as read.
+        """
+        # Any: ty checks keyword arguments of _replace against every field type.
+        updates: dict[str, Any] = {}
+        for name in TEXT:
+            value = getattr(key, name)
+            if isinstance(value, str) and (single_line(value) or None) != value:
+                updates[name] = single_line(value) or None
+        if not updates:
+            return key
+        self.changes.add("whitespace", described(key))
+        return key._replace(**updates)
+
     def image(self, image: str | None) -> str | None:
         """The image file; format 1 keeps the image of a characteristic as written."""
         if not image:
@@ -334,6 +366,7 @@ class _Normalizer:
     def __call__(
         self, key: Key, statistics: Statistics, record: str
     ) -> tuple[Key, Statistics]:
+        key = self.whitespace(key)
         key, statistics = self.geometric(
             key._replace(image=self.image(key.image)), statistics
         )
