@@ -232,6 +232,54 @@ def test_choice_rows_statements_and_unknown_measurements_are_kept(tmp_path):
     assert "valueless_row" not in {d.kind for d in decisions}
 
 
+def test_a_numeric_categorical_row_is_dropped_only_without_a_choice(tmp_path):
+    group = {
+        **STUDY["groupset"]["groups"][0],
+        "characteristica": [
+            {"measurement_type": "disease", "choice": "t2dm"},
+            {"measurement_type": "disease", "mean": 4, "unit": "yr"},
+            {"measurement_type": "disease"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}, "outputset": {}}
+    folder = v1_study(tmp_path, study, {}, IMAGES)
+    tables, decisions = tables_of(folder)
+    kept = [
+        (row["choice"], row["mean"])
+        for row in tables["characteristica.tsv"]
+        if row["measurement"] == "disease"
+    ]
+    assert kept == [("t2dm", ""), ("", "4")]
+    assert [d.detail for d in decisions] == [
+        "characteristica.tsv: study.json groupset.groups.0, subject all, disease"
+    ]
+
+
+def test_a_scatter_point_without_value_is_kept(tmp_path):
+    # A scatter row pairs two outputs, so a point without value stays for curators.
+    sheets = {"Fig2": [["subject", "age", "cmax"], ["S1", 30, 2], ["S2", 40, "NA"]]}
+    folder = scatter_study(tmp_path, sheets=sheets)
+    tables, decisions = tables_of(folder)
+    assert [row["y_mean"] for row in tables["scatters_Fig2.tsv"]] == ["2", ""]
+    assert decisions == []
+
+
+def test_labelled_array_outputs_form_a_series_without_their_dropped_rows(tmp_path):
+    # Without the empty row, time 1 appears once and the rows form a series.
+    array = {**ARRAY, "time": "col==time", "time_unit": "h"}
+    study = {**STUDY, "outputset": {"outputs": [array]}}
+    sheet = [["subject", "time", "mean"], ["S1", 0, 1], ["S1", 1, 2], ["S1", 1, "NA"]]
+    folder = v1_study(tmp_path, study, {"Tab3": sheet}, (*IMAGES, "Tab3"))
+    tables, decisions = tables_of(folder)
+    assert [row["time"] for row in tables["timecourses_Tab3.tsv"]] == ["0", "1"]
+    assert "outputs_Tab3.tsv" not in tables
+    assert [d.detail for d in decisions] == [
+        "timecourses_Tab3.tsv: Example.xlsx Tab3 row 5, label drug_individuals, "
+        "subject S1, concentration, substance drug, tissue plasma",
+        "2 array outputs in timecourses_Tab3.tsv",
+    ]
+
+
 def test_schedules_and_dose_lists_are_decisions(tmp_path):
     intervention = {
         **INTERVENTION,

@@ -283,6 +283,25 @@ def test_a_timecourse_without_any_value_is_an_intended_change(tmp_path, sf_vocab
 
 
 @pytest.mark.parametrize(
+    ("repeat", "outcome", "found"),
+    [
+        (["all", 2.5, 0.5], "mismatch", ["duplicate_row"]),
+        (["all", "NA", "NA"], "intended", ["valueless_row"]),
+    ],
+    ids=["repeat with data", "empty row"],
+)
+def test_only_an_empty_row_of_a_repeated_key_is_dropped(
+    tmp_path, sf_vocabulary, repeat, outcome, found
+):
+    study = with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE)
+    tab2 = [["group", "mean", "sd"], ["all", 2.5, 0.5], repeat]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == outcome
+    assert (result.issues or [c.kind for c in result.changes]) == found
+
+
+@pytest.mark.parametrize(
     "row",
     [
         {"measurement_type": "age", "count": 2, "unit": "yr"},
@@ -302,6 +321,33 @@ def test_rows_that_carry_information_without_value_stay_a_mismatch(
     )
     result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
     assert (result.outcome, result.issues) == ("mismatch", ["missing_value"])
+
+
+def test_labelled_array_outputs_with_a_dropped_row_are_an_intended_series(
+    tmp_path, sf_vocabulary
+):
+    # Without the empty row, time 1 appears once and the rows form a series.
+    array = {
+        **TIMECOURSE,
+        "source": "Tab3",
+        "image": "Tab3",
+        "output_type": "array",
+        "label": "drug_individuals",
+        "group": None,
+        "individual": "col==subject",
+    }
+    array = {key: value for key, value in array.items() if value is not None}
+    study = with_outputs(OUTPUT, TIMECOURSE, array)
+    tab3 = [["subject", "time", "mean"], ["S1", 0, 1], ["S1", 1, 2], ["S1", 1, "NA"]]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab3": tab3}, (*IMAGES, "Tab3"))
+    v2 = converted(tmp_path, v1)
+    assert (v2 / "timecourses_Tab3.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [
+        ("array_output", 2),
+        ("valueless_row", 1),
+    ]
 
 
 def test_a_dropped_record_with_data_is_a_mismatch(tmp_path, sf_vocabulary):

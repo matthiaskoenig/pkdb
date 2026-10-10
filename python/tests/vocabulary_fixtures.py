@@ -15,6 +15,13 @@ def studyformat_vocabulary() -> Vocabulary:
             MeasurementRule(name="age", units=("yr",)),
             # Numeric, but a row without a value states the abstinence.
             MeasurementRule(name="abstinence", units=("day", "NO_UNIT")),
+            # A value, such as the years since diagnosis, or a choice.
+            MeasurementRule(
+                name="disease",
+                dtype="numeric_categorical",
+                units=("yr", "NO_UNIT"),
+                choices=("t2dm", "cirrhosis"),
+            ),
             MeasurementRule(name="concentration", units=("mg/l",), time_required=True),
             MeasurementRule(name="cmax", units=("mg/l",)),
             MeasurementRule(name="dosing", units=("mg",)),

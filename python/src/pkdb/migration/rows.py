@@ -678,6 +678,8 @@ def study_tables(
     dropped = valueless(study, vocabulary)
     scatters, used = _scatter_rows(study, name, images, decisions)
     arrays = series_arrays(study, name, images, dropped)
+    # A dropped array output is listed in the timecourses of its label's series.
+    series = {record.label for record in study.measurements if record.key in arrays}
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, images, decisions),
         "characteristica.tsv": _characteristica(
@@ -700,7 +702,13 @@ def study_tables(
         else:
             source, row = _measurement(record, name, error_bars, images)
             timecourse = bool(record.label) and (
-                record.output_type == "timecourse" or record.key in arrays
+                record.output_type == "timecourse"
+                or record.key in arrays
+                or (
+                    record.output_type == "array"
+                    and record.key in dropped
+                    and record.label in series
+                )
             )
             file = table_file("timecourses" if timecourse else "outputs", source)
             if record.key in dropped:
