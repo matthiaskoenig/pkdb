@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "d8aeb28705838a5ada96f206f23d35f4c28f877b381ea7e7ba3ee70a73d3be81",
+    "version": "3bc6b7f56b83dbd71a739a00ca5b9e40444cdc7e1af2cdb046ea4b3e3fd3dbe6",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -11668,5 +11668,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "0edcee474a17b490b9a6c93d40dea3daa8fa7fd5f9bd1d1a433de759338016e4"
+  "vocabulary_hash": "8fdea7deaed5b28e90e1beba27164ad973c5b08f445663bc8da7888461f1e803"
 }

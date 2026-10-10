@@ -1,5 +1,5 @@
 {
-  "version": "f0fdebf75b1514808ad298c50ac00519f59c020c5e8e6ef8d9fad79d84509a45",
+  "version": "a91ce1e8c2ebdc0b87f49dc0b9b625d21b445bf223bb69506f64223f5e92b3f4",
   "nodes": [
     {
       "sid": "root",
@@ -11669,7 +11669,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"A condition in which body mass index falls between 25 and 29.9.\", \"label\": \"Overweight\", \"relation\": \"BQB_IS\", \"term\": \"C94250\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C94250\"}",
           "{\"collection\": \"efo\", \"description\": \"quantification of weight/height relationships above a certain threshold that classes an individual as overweight. This threshold may vary based on an individual's ethnicity but is commonly considered to correspond in European populations to a 25<BMI<30\", \"label\": \"overweight body mass index status\", \"relation\": \"BQB_IS\", \"term\": \"0005935\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0005935\"}",
-          "{\"collection\": \"hp\", \"description\": \"Increased body weight with a body mass index of 25-29.9 kg per square meter.\", \"label\": \"Overweight\", \"relation\": \"BQB_IS\", \"term\": \"HP:0025502\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0025502\"}"
+          "{\"collection\": \"hp\", \"description\": \"Increased body weight with a body mass index of 25-29.9 kg per square meter.\", \"label\": \"Overweight\", \"relation\": \"BQB_IS\", \"term\": \"HP:0025502\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0025502\"}"
         ],
         "xrefs": [],
         "label": [
@@ -16276,7 +16276,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"The state of a subject's mental or physical condition.\", \"label\": \"Health Status\", \"relation\": \"BQB_IS\", \"term\": \"C16669\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C16669\"}",
           "{\"collection\": \"opmi\", \"description\": \"The state of being free from illness or injury\", \"label\": \"health status\", \"relation\": \"BQB_IS\", \"term\": \"OPMI:0000281\", \"url\": \"https://bioregistry.io/OPMI:0000281\"}",
-          "{\"collection\": \"hp\", \"description\": \"Health status of a family member with respect to the disease being investigated in a proband.\", \"label\": \"Health status\", \"relation\": \"BQB_IS\", \"term\": \"HP:0032319\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0032319\"}"
+          "{\"collection\": \"hp\", \"description\": \"Health status of a family member with respect to the disease being investigated in a proband.\", \"label\": \"Health status\", \"relation\": \"BQB_IS\", \"term\": \"HP:0032319\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0032319\"}"
         ],
         "xrefs": [],
         "label": [
@@ -16836,7 +16836,7 @@
           "obsolete_disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\", \"label\": \"disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:4\"}",
+          "{\"collection\": \"doid\", \"description\": \"A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\", \"label\": \"disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:4\"}",
           "{\"collection\": \"ncit\", \"description\": \"Any abnormal condition of the body or mind that causes discomfort, dysfunction, or distress to the person affected or those in contact with the person. The term is often used broadly to include injuries, disabilities, syndromes, symptoms, deviant behaviors, and atypical variations of structure and function.\", \"label\": \"Disease or Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C2991\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2991\"}",
           "{\"collection\": \"efo\", \"description\": \"A disease is a disposition that describes states of disease associated with a particular sample and/or organism.\", \"label\": \"obsolete_disease\", \"relation\": \"BQB_IS\", \"term\": \"0000408\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000408\"}"
         ],
@@ -16886,7 +16886,7 @@
           "genetic disorder"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease that has_material_basis_in genetic variations in the human genome.\", \"label\": \"genetic disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:630\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:630\"}",
+          "{\"collection\": \"doid\", \"description\": \"A disease that has_material_basis_in genetic variations in the human genome.\", \"label\": \"genetic disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:630\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:630\"}",
           "{\"collection\": \"ncit\", \"description\": \"Genetic diseases are diseases in which inherited genes predispose to increased risk. The genetic disorders associated with cancer often result from an alteration or mutation in a single gene. The diseases range from rare dominant cancer family syndrome to familial tendencies in which low-penetrance genes may interact with other genes or environmental factors to induce cancer. Research may involve clinical, epidemiologic, and laboratory studies of persons, families, and populations at high risk of these disorders.\", \"label\": \"Genetic Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C3101\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3101\"}"
         ],
         "xrefs": [
@@ -16928,7 +16928,7 @@
           "metabolic disorder"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease that involves errors in metabolic processes of building or degradation of molecules.\", \"label\": \"disease of metabolism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0014667\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0014667\"}",
+          "{\"collection\": \"doid\", \"description\": \"A disease that involves errors in metabolic processes of building or degradation of molecules.\", \"label\": \"disease of metabolism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0014667\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0014667\"}",
           "{\"collection\": \"ncit\", \"description\": \"A congenital (due to inherited enzyme abnormality) or acquired (due to failure of a metabolic important organ) disorder resulting from an abnormal metabolic process.\", \"label\": \"Metabolic Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C3235\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3235\"}"
         ],
         "xrefs": [
@@ -17040,7 +17040,7 @@
           "obsolete_familial hypercholesterolemia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"familial hypercholesterolemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:13810\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:13810\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"familial hypercholesterolemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:13810\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:13810\"}",
           "{\"collection\": \"efo\", \"description\": \"Familial hypercholesterolaemia is an autosomal inherited disorder characterized by markedly elevated LDL-cholesterol levels and an increased risk of premature atherosclerotic cardiovascular disease\", \"label\": \"obsolete_familial hypercholesterolemia\", \"relation\": \"BQB_IS\", \"term\": \"0004911\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0004911\"}"
         ],
         "xrefs": [
@@ -17089,7 +17089,7 @@
           "autosomal recessive hypercholesterolemia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A familial hypercholesterolemia that is characterized by very high levels of low-density lipoprotein (LDL) cholesterol (usually above 400 mg/dl) and increased risk of premature atherosclerotic cardiovascular disease, and has_material_basis_in autosomal recessive homozygous mutation in the low density lipoprotein receptor adaptor protein 1 gene (LDLRAP1) on chromosome 1p36.\", \"label\": \"autosomal recessive hypercholesterolemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0090105\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0090105\"}"
+          "{\"collection\": \"doid\", \"description\": \"A familial hypercholesterolemia that is characterized by very high levels of low-density lipoprotein (LDL) cholesterol (usually above 400 mg/dl) and increased risk of premature atherosclerotic cardiovascular disease, and has_material_basis_in autosomal recessive homozygous mutation in the low density lipoprotein receptor adaptor protein 1 gene (LDLRAP1) on chromosome 1p36.\", \"label\": \"autosomal recessive hypercholesterolemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0090105\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0090105\"}"
         ],
         "xrefs": [
           "{\"accession\": \"391665\", \"name\": \"ORDO\", \"url\": \"http://www.orpha.net/ORDO/Orphanet_391665\"}"
@@ -17161,7 +17161,7 @@
           "disease of cellular proliferation"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease that is characterized by abnormally rapid cell division.\", \"label\": \"disease of cellular proliferation\", \"relation\": \"BQB_IS\", \"term\": \"DOID:14566\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:14566\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease that is characterized by abnormally rapid cell division.\", \"label\": \"disease of cellular proliferation\", \"relation\": \"BQB_IS\", \"term\": \"DOID:14566\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:14566\"}"
         ],
         "xrefs": [],
         "label": [
@@ -17195,7 +17195,7 @@
           "obsolete_cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Updating out dated UMLS CUI.\", \"label\": \"cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:162\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:162\"}",
+          "{\"collection\": \"doid\", \"description\": \"Updating out dated UMLS CUI.\", \"label\": \"cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:162\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:162\"}",
           "{\"collection\": \"ncit\", \"description\": \"A neoplasm composed of atypical neoplastic, often pleomorphic cells that invade other tissues. Malignant neoplasms often metastasize to distant anatomic sites and may recur after excision. The most common malignant neoplasms are carcinomas, Hodgkin and non-Hodgkin lymphomas, leukemias, melanomas, and sarcomas.\", \"label\": \"Malignant Neoplasm\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C9305\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C9305\"}",
           "{\"collection\": \"efo\", \"description\": \"A tumor composed of atypical neoplastic, often pleomorphic cells that invade other tissues. Malignant neoplasms often metastasize to distant anatomic sites and may recur after excision. The most common malignant neoplasms are carcinomas (adenocarcinomas or squamous cell carcinomas), Hodgkin and non-Hodgkin lymphomas, leukemias, melanomas, and sarcomas.\", \"label\": \"obsolete_cancer\", \"relation\": \"BQB_IS\", \"term\": \"0000311\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000311\"}"
         ],
@@ -17246,7 +17246,7 @@
           "hematologic malignancy"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"An organ system cancer located in the hematological system that is characterized by uncontrolled cellular proliferation in blood, bone marrow and lymph nodes.\", \"label\": \"hematologic cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2531\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2531\"}"
+          "{\"collection\": \"doid\", \"description\": \"An organ system cancer located in the hematological system that is characterized by uncontrolled cellular proliferation in blood, bone marrow and lymph nodes.\", \"label\": \"hematologic cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2531\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2531\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D019337\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D019337\"}",
@@ -17293,7 +17293,7 @@
           "leukemia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A cancer that affects the blood or bone marrow characterized by an abnormal proliferation of blood cells.\", \"label\": \"leukemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1240\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1240\"}",
+          "{\"collection\": \"doid\", \"description\": \"A cancer that affects the blood or bone marrow characterized by an abnormal proliferation of blood cells.\", \"label\": \"leukemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1240\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1240\"}",
           "{\"collection\": \"ncit\", \"description\": \"A malignant (clonal) hematologic disorder, involving hematopoietic stem cells and characterized by the presence of primitive or atypical myeloid or lymphoid cells in the bone marrow and the blood. Leukemias are classified as acute or chronic based on the degree of cellular differentiation and the predominant cell type present. Leukemia is usually associated with anemia, fever, hemorrhagic episodes, and splenomegaly. Common leukemias include acute myeloid leukemia, chronic myelogenous leukemia, acute lymphoblastic or precursor lymphoblastic leukemia, and chronic lymphocytic leukemia. Treatment is vital to patient survival; untreated, the natural course of acute leukemias is normally measured in weeks or months, while that of chronic leukemias is more often measured in months or years.\", \"label\": \"Leukemia\", \"relation\": \"BQB_IS\", \"term\": \"C3161\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3161\"}",
           "{\"collection\": \"omit\", \"description\": null, \"label\": \"Leukemia\", \"relation\": \"BQB_IS\", \"term\": \"0009028\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/omit/terms?short_form=OMIT_0009028\"}"
         ],
@@ -17334,7 +17334,7 @@
           "myeloid leukemia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A leukemia that is located_in myeloid tissue.\", \"label\": \"myeloid leukemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:8692\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:8692\"}"
+          "{\"collection\": \"doid\", \"description\": \"A leukemia that is located_in myeloid tissue.\", \"label\": \"myeloid leukemia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:8692\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:8692\"}"
         ],
         "xrefs": [
           "{\"accession\": \"8226\", \"name\": \"GARD\", \"url\": \"https://rarediseases.info.nih.gov/?gard_id=8226\"}",
@@ -17375,7 +17375,7 @@
           "chronic myelogenous leukemia, BCR-ABL1 positive"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A chronic myeloid leukemia that is characterized by an abnormally high number of neutrophils and the expression of the BCR-ABL1 fusion gene.\", \"label\": \"chronic myelogenous leukemia, BCR-ABL1 positive\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0081088\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0081088\"}"
+          "{\"collection\": \"doid\", \"description\": \"A chronic myeloid leukemia that is characterized by an abnormally high number of neutrophils and the expression of the BCR-ABL1 fusion gene.\", \"label\": \"chronic myelogenous leukemia, BCR-ABL1 positive\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0081088\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0081088\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D015464\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D015464\"}",
@@ -17412,7 +17412,7 @@
           "hematopoietic system disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that has_material_basis_in hematopoietic cells.\", \"label\": \"hematopoietic system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:74\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:74\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that has_material_basis_in hematopoietic cells.\", \"label\": \"hematopoietic system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:74\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:74\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D006402\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D006402\"}",
@@ -17455,7 +17455,7 @@
           "sickle cell disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A blood protein disease that is characterized by chronic hemolytic anemia and intermittent vaso-occlusive events that result in tissue ischemia leading to acute and chronic pain as well as organ damage that can affect any organ system, resulting from the replacement of one of the beta-globin subunits in hemoglobin with atypical hemoglobin molecules called hemoglobin S which can distort red blood cells into a sickle or crescent shape. Sickle cell disease subtypes should include a detailed genotypic description for the hemoglobin molecules (e.g., Hb S/S, Hb S/C, Hb S/\\u03b20-thalassemia).\", \"label\": \"sickle cell disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0081445\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0081445\"}",
+          "{\"collection\": \"doid\", \"description\": \"A blood protein disease that is characterized by chronic hemolytic anemia and intermittent vaso-occlusive events that result in tissue ischemia leading to acute and chronic pain as well as organ damage that can affect any organ system, resulting from the replacement of one of the beta-globin subunits in hemoglobin with atypical hemoglobin molecules called hemoglobin S which can distort red blood cells into a sickle or crescent shape. Sickle cell disease subtypes should include a detailed genotypic description for the hemoglobin molecules (e.g., Hb S/S, Hb S/C, Hb S/\\u03b20-thalassemia).\", \"label\": \"sickle cell disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0081445\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0081445\"}",
           "{\"collection\": \"ncit\", \"description\": \"A blood disorder characterized by the appearance of sickle-shaped red blood cells and anemia.\", \"label\": \"Sickle Cell Disease\", \"relation\": \"BQB_IS\", \"term\": \"C34383\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C34383\"}"
         ],
         "xrefs": [
@@ -17494,7 +17494,7 @@
           "endocrine system disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that is located_in endocrine glands which secretes a type of hormone directly into the bloodstream to regulate the body.\", \"label\": \"endocrine system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:28\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:28\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that is located_in endocrine glands which secretes a type of hormone directly into the bloodstream to regulate the body.\", \"label\": \"endocrine system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:28\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:28\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D004700\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D004700\"}",
@@ -17533,7 +17533,7 @@
           "pancreas disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"An endocrine system disease that is located_in the pancreas.\", \"label\": \"pancreas disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:26\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:26\"}",
+          "{\"collection\": \"doid\", \"description\": \"An endocrine system disease that is located_in the pancreas.\", \"label\": \"pancreas disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:26\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:26\"}",
           "{\"collection\": \"efo\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the pancreas. Representative examples of non-neoplastic disorders include pancreatitis and pancreatic insufficiency. Representative examples of neoplastic disorders include cystadenomas, carcinomas, lymphomas, and neuroendocrine neoplasms. [ NCIt:C26842 ]\", \"label\": \"obsolete_pancreas disease\", \"relation\": \"BQB_IS\", \"term\": \"0009605\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0009605\"}"
         ],
         "xrefs": [
@@ -17576,7 +17576,7 @@
           "pancreatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A pancreas disease that is characterized by inflammation of the pancreas.\", \"label\": \"pancreatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4989\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:4989\"}",
+          "{\"collection\": \"doid\", \"description\": \"A pancreas disease that is characterized by inflammation of the pancreas.\", \"label\": \"pancreatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4989\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:4989\"}",
           "{\"collection\": \"ncit\", \"description\": \"Inflammation of the pancreas.\", \"label\": \"Pancreatitis\", \"relation\": \"BQB_IS\", \"term\": \"C3306\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3306\"}"
         ],
         "xrefs": [
@@ -17661,7 +17661,7 @@
           "Gilbert's Syndrome"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"Gilbert syndrome\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2739\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2739\"}",
+          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"Gilbert syndrome\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2739\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2739\"}",
           "{\"collection\": \"ncit\", \"description\": \"An autosomal recessive inherited disorder characterized by unconjugated hyperbilirubinemia, resulting in harmless intermittent jaundice.\", \"label\": \"Gilbert Syndrome\", \"relation\": \"BQB_IS\", \"term\": \"C84729\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C84729\"}"
         ],
         "xrefs": [
@@ -17709,7 +17709,7 @@
           "thyroid gland disorders"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"An endocrine system disease that is located_in the thyroid.\", \"label\": \"thyroid gland disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:50\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:50\"}",
+          "{\"collection\": \"doid\", \"description\": \"An endocrine system disease that is located_in the thyroid.\", \"label\": \"thyroid gland disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:50\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:50\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the thyroid gland.  Representative examples include hyperthyroidism, hypothyroidism, thyroiditis, follicular adenoma, and carcinoma.\", \"label\": \"Thyroid Gland Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C26893\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26893\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_thyroid disease\", \"relation\": \"BQB_IS\", \"term\": \"1000627\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_1000627\"}"
         ],
@@ -17758,7 +17758,7 @@
           "overactive thyroid"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"hyperthyroidism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:7998\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:7998\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"hyperthyroidism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:7998\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:7998\"}",
           "{\"collection\": \"ncit\", \"description\": \"Overactivity of the thyroid gland resulting in overproduction of thyroid hormone and increased metabolic rate. Causes include diffuse hyperplasia of the thyroid gland (Graves' disease), single nodule in the thyroid gland, and thyroiditis. The symptoms are related to the increased metabolic rate and include weight loss, fatigue, heat intolerance, excessive sweating, diarrhea, tachycardia, insomnia, muscle weakness, and tremor.\", \"label\": \"Hyperthyroidism\", \"relation\": \"BQB_IS\", \"term\": \"C3123\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3123\"}"
         ],
         "xrefs": [
@@ -17803,7 +17803,7 @@
           "underactive thyroid"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A thyroid gland disease which involves an underproduction of thyroid hormone.\", \"label\": \"hypothyroidism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1459\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1459\"}",
+          "{\"collection\": \"doid\", \"description\": \"A thyroid gland disease which involves an underproduction of thyroid hormone.\", \"label\": \"hypothyroidism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1459\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1459\"}",
           "{\"collection\": \"ncit\", \"description\": \"Abnormally low levels of thyroid hormone.\", \"label\": \"Hypothyroidism\", \"relation\": \"BQB_IS\", \"term\": \"C26800\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26800\"}"
         ],
         "xrefs": [
@@ -17843,7 +17843,7 @@
           "gastrointestinal system disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that is located_in the gastrointestinal tract.\", \"label\": \"gastrointestinal system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:77\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:77\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that is located_in the gastrointestinal tract.\", \"label\": \"gastrointestinal system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:77\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:77\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D004066\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D004066\"}",
@@ -17883,7 +17883,7 @@
           "ulceration"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Adding UMLS CUI for Curling Ulcer C0013295.\", \"label\": \"duodenal ulcer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1724\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1724\"}",
+          "{\"collection\": \"doid\", \"description\": \"Adding UMLS CUI for Curling Ulcer C0013295.\", \"label\": \"duodenal ulcer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1724\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1724\"}",
           "{\"collection\": \"ncit\", \"description\": \"An ulcer in the duodenal wall.\", \"label\": \"Duodenal Ulcer\", \"relation\": \"BQB_IS\", \"term\": \"C26755\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26755\"}"
         ],
         "xrefs": [
@@ -17932,7 +17932,7 @@
           "hepatobiliary disorder"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A gastrointestinal system disease that is located_in the liver and/or biliary tract.\", \"label\": \"hepatobiliary disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:3118\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:3118\"}",
+          "{\"collection\": \"doid\", \"description\": \"A gastrointestinal system disease that is located_in the liver and/or biliary tract.\", \"label\": \"hepatobiliary disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:3118\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:3118\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver, bile ducts, and gallbladder. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and cholecystitis. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, and cholangiocarcinoma.\", \"label\": \"Hepatobiliary Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C3959\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3959\"}"
         ],
         "xrefs": [
@@ -17978,7 +17978,7 @@
           "obsolete_liver disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18023,7 +18023,7 @@
       "terms": {
         "synonyms": [],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18056,7 +18056,7 @@
       "terms": {
         "synonyms": [],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18089,7 +18089,7 @@
       "terms": {
         "synonyms": [],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18122,7 +18122,7 @@
       "terms": {
         "synonyms": [],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18155,7 +18155,7 @@
       "terms": {
         "synonyms": [],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:409\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:409\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:409\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma.\", \"label\": \"Liver and Intrahepatic Bile Duct Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3196\"}",
           "{\"collection\": \"efo\", \"description\": \"Any disease or dysfunction of the liver and the intrahepatic bile ducts.\", \"label\": \"obsolete_liver disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0001421\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001421\"}"
         ],
@@ -18193,7 +18193,7 @@
           "hemochromatosis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"hemochromatosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2352\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2352\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"hemochromatosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2352\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2352\"}",
           "{\"collection\": \"ncit\", \"description\": \"A systemic process in which an accumulation of iron typically results in tissue damage.\", \"label\": \"Hemochromatosis\", \"relation\": \"BQB_IS\", \"term\": \"C82892\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C82892\"}",
           "{\"collection\": \"efo\", \"description\": \"A disorder of iron metabolism characterized by a triad of HEMOSIDEROSIS; LIVER CIRRHOSIS; and DIABETES MELLITUS. It is caused by massive iron deposits in parenchymal cells that may develop after a prolonged increase of iron absorption.\", \"label\": \"hemochromatosis\", \"relation\": \"BQB_IS\", \"term\": \"1000642\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_1000642\"}"
         ],
@@ -18356,7 +18356,7 @@
           "hepatoma"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"hepatocellular carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:684\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:684\"}",
+          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"hepatocellular carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:684\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:684\"}",
           "{\"collection\": \"ncit\", \"description\": \"A malignant tumor that arises from hepatocytes. Hepatocellular carcinoma is relatively rare in the United States but very common in all African countries south of the Sahara and in Southeast Asia. Most cases are seen in patients over the age of 50 years, but this tumor can also occur in younger individuals and even in children. Hepatocellular carcinoma is more common in males than females and is associated with hepatitis B, hepatitis C, chronic alcohol abuse and cirrhosis. Serum elevation of alpha-fetoprotein occurs in a large percentage of patients with hepatocellular carcinoma. Grossly, hepatocellular carcinoma may present as a single mass, as multiple nodules, or as diffuse liver involvement. Microscopically, there is a wide range of differentiation from tumor to tumor (well differentiated to poorly differentiated tumors). Hepatocellular carcinomas quickly metastasize to regional lymph nodes and lung. The overall median survival of untreated liver cell carcinoma is about 4 months. The most effective treatment of hepatocellular carcinoma is complete resection of the tumor. Lately, an increasing number of tumors have been treated with liver transplantation.\", \"label\": \"Hepatocellular Carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"C3099\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3099\"}"
         ],
         "xrefs": [
@@ -18402,7 +18402,7 @@
           "liver cirrhosis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver cirrhosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5082\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:5082\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"liver cirrhosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5082\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:5082\"}",
           "{\"collection\": \"ncit\", \"description\": \"A disorder characterized by replacement of the liver parenchyma with fibrous tissue and regenerative nodules. It is usually caused by alcoholism, hepatitis B, and hepatitis C. Complications include the development of ascites, esophageal varices, bleeding, and hepatic encephalopathy.\", \"label\": \"Cirrhosis\", \"relation\": \"BQB_IS\", \"term\": \"C2951\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2951\"}"
         ],
         "xrefs": [
@@ -18472,7 +18472,7 @@
           "alcoholic liver cirrhosis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"alcoholic liver cirrhosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:14018\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:14018\"}"
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"alcoholic liver cirrhosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:14018\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:14018\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D008104\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D008104\"}",
@@ -18603,9 +18603,9 @@
           "hepatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A liver disease that is characterized as an inflammation of the liver.\", \"label\": \"hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2237\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2237\"}",
+          "{\"collection\": \"doid\", \"description\": \"A liver disease that is characterized as an inflammation of the liver.\", \"label\": \"hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2237\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2237\"}",
           "{\"collection\": \"ncit\", \"description\": \"Inflammation of the liver; usually from a viral infection, but sometimes from toxic agents.\", \"label\": \"Hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"C3095\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3095\"}",
-          "{\"collection\": \"hp\", \"description\": \"Inflammation of the liver.\", \"label\": \"Hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"HP:0012115\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0012115\"}"
+          "{\"collection\": \"hp\", \"description\": \"Inflammation of the liver.\", \"label\": \"Hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"HP:0012115\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0012115\"}"
         ],
         "xrefs": [
           "{\"accession\": \"570\", \"name\": \"ICD9CM\", \"url\": \"http://icd9cm.chrisendres.com/index.php?action=search&srchtext=570\"}",
@@ -18648,7 +18648,7 @@
           "alcoholic hepatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"alcoholic hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12351\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:12351\"}"
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"alcoholic hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12351\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:12351\"}"
         ],
         "xrefs": [
           "{\"accession\": \"C34352\", \"name\": \"NCI\", \"url\": \"http://purl.obolibrary.org/obo/NCIT_C34352\"}",
@@ -18685,7 +18685,7 @@
           "drug-induced hepatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"drug-induced hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2044\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2044\"}"
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"drug-induced hepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2044\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2044\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D056487\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D056487\"}",
@@ -18722,7 +18722,7 @@
           "mononeuritis of upper limb"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"mononeuritis of upper limb\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1844\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1844\"}"
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"mononeuritis of upper limb\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1844\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1844\"}"
         ],
         "xrefs": [
           "{\"accession\": \"58850003\", \"name\": \"SNOMEDCT_US_2025_09_01\", \"url\": \"http://purl.bioontology.org/ontology/SNOMEDCT/58850003\"}",
@@ -18762,7 +18762,7 @@
           "hepatitis A"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in Hepatitis A virus (Hepatovirus ahepa), which is transmitted_by ingestion of contaminated food or water, or transmitted_by direct contact with an infected person. The infection has_symptom fever, has_symptom fatigue, has_symptom loss of appetite, has_symptom nausea, has_symptom vomiting, has_symptom abdominal pain, has_symptom clay-colored bowel movements, has_symptom joint pain, and has_symptom jaundice.\", \"label\": \"hepatitis A\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12549\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:12549\"}",
+          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in Hepatitis A virus (Hepatovirus ahepa), which is transmitted_by ingestion of contaminated food or water, or transmitted_by direct contact with an infected person. The infection has_symptom fever, has_symptom fatigue, has_symptom loss of appetite, has_symptom nausea, has_symptom vomiting, has_symptom abdominal pain, has_symptom clay-colored bowel movements, has_symptom joint pain, and has_symptom jaundice.\", \"label\": \"hepatitis A\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12549\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:12549\"}",
           "{\"collection\": \"ncit\", \"description\": \"Acute inflammation of the liver caused by the hepatitis A virus. It is highly contagious and usually contracted through close contact with an infected individual or their feces, contaminated food or water.\", \"label\": \"Hepatitis A Infection\", \"relation\": \"BQB_IS\", \"term\": \"C3096\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3096\"}"
         ],
         "xrefs": [
@@ -18802,7 +18802,7 @@
           "hepatitis B"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in Hepatitis B virus (Orthohepadnavirus hominoidei), which is transmitted_by sexual contact, blood transfusions, or fomites like needles or syringes. The infection has_symptom fever, fatigue, loss of appetite, nausea, vomiting, abdominal pain, clay-colored bowel movements, joint pain, and jaundice.\", \"label\": \"hepatitis B\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2043\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2043\"}"
+          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in Hepatitis B virus (Orthohepadnavirus hominoidei), which is transmitted_by sexual contact, blood transfusions, or fomites like needles or syringes. The infection has_symptom fever, fatigue, loss of appetite, nausea, vomiting, abdominal pain, clay-colored bowel movements, joint pain, and jaundice.\", \"label\": \"hepatitis B\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2043\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2043\"}"
         ],
         "xrefs": [
           "{\"accession\": \"0004197\", \"name\": \"EFO\", \"url\": \"http://www.ebi.ac.uk/efo/EFO_0004197\"}",
@@ -18841,7 +18841,7 @@
           "hepatitis C"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in hepatitis C virus (Hepacivirus hominis), which is transmitted_by blood from an infected person enters the body of an uninfected person. The infection has_symptom fever, has_symptom fatigue, has_symptom loss of appetite, has_symptom nausea, has_symptom vomiting, has_symptom abdominal pain, has_symptom clay-colored bowel movements, has_symptom joint pain, and has_symptom jaundice.\", \"label\": \"hepatitis C\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:1883\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1883\"}",
+          "{\"collection\": \"doid\", \"description\": \"A viral hepatitis that results_in inflammation located_in liver, has_material_basis_in hepatitis C virus (Hepacivirus hominis), which is transmitted_by blood from an infected person enters the body of an uninfected person. The infection has_symptom fever, has_symptom fatigue, has_symptom loss of appetite, has_symptom nausea, has_symptom vomiting, has_symptom abdominal pain, has_symptom clay-colored bowel movements, has_symptom joint pain, and has_symptom jaundice.\", \"label\": \"hepatitis C\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:1883\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1883\"}",
           "{\"collection\": \"ncit\", \"description\": \"A small, enveloped, positive sense single strand RNA virus in the family Flaviviridae. The genome consists of a single RNA molecule with a single open reading frame.\", \"label\": \"Hepatitis C Virus\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C14312\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C14312\"}"
         ],
         "xrefs": [],
@@ -18949,7 +18949,7 @@
           "biliary tract disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A hepatobiliary disease that is located_in the biliary tract.\", \"label\": \"biliary tract disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:9741\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9741\"}",
+          "{\"collection\": \"doid\", \"description\": \"A hepatobiliary disease that is located_in the biliary tract.\", \"label\": \"biliary tract disease\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:9741\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9741\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder that affects the intrahepatic or extrahepatic bile ducts or the gallbladder. Representative examples of non-neoplastic disorders include cholangitis and cholecystitis. Representative examples of neoplastic disorders include extrahepatic bile duct adenoma, intrahepatic and extrahepatic cholangiocarcinoma, and gallbladder carcinoma.\", \"label\": \"Biliary System Disorder\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C2899\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2899\"}"
         ],
         "xrefs": [],
@@ -19017,7 +19017,7 @@
           "primary biliary cholangitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"primary biliary cholangitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12236\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:12236\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"primary biliary cholangitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12236\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:12236\"}",
           "{\"collection\": \"ncit\", \"description\": \"An acute or chronic inflammatory process affecting the biliary tract.\", \"label\": \"Cholangitis\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C26718\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26718\"}"
         ],
         "xrefs": [
@@ -19104,7 +19104,7 @@
           "steatotic liver disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"PRISM.\", \"label\": \"steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9452\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9452\"}",
+          "{\"collection\": \"doid\", \"description\": \"PRISM.\", \"label\": \"steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9452\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9452\"}",
           "{\"collection\": \"mondo\", \"description\": \"Editor note: classified as inherited in DO\", \"label\": \"fatty liver disease\", \"relation\": \"BQB_IS\", \"term\": \"0004790\", \"url\": \"http://purl.obolibrary.org/obo/MONDO_0004790\"}"
         ],
         "xrefs": [
@@ -19159,7 +19159,7 @@
           "obsolete_non-alcoholic fatty liver disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A steatotic liver disease characterized by at least one of five specified cardiometabolic risk factors and no other discernible cause with normal to no alcohol use. The five cardiometabolic risk factors are: (1) higher than normal body mass index or waist circumference; (2) higher than normal serum glucose or glycated hemoglobin level, or type 2 diabetes; (3) higher than normal blood pressure or hypertensive treatment; (4) higher than normal plasma triglycerides or lipid lowering treatment; and (5) lower than normal plasma high-density lipoprotein cholesterol.\", \"label\": \"metabolic dysfunction-associated steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080208\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080208\"}",
+          "{\"collection\": \"doid\", \"description\": \"A steatotic liver disease characterized by at least one of five specified cardiometabolic risk factors and no other discernible cause with normal to no alcohol use. The five cardiometabolic risk factors are: (1) higher than normal body mass index or waist circumference; (2) higher than normal serum glucose or glycated hemoglobin level, or type 2 diabetes; (3) higher than normal blood pressure or hypertensive treatment; (4) higher than normal plasma triglycerides or lipid lowering treatment; and (5) lower than normal plasma high-density lipoprotein cholesterol.\", \"label\": \"metabolic dysfunction-associated steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080208\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080208\"}",
           "{\"collection\": \"ncit\", \"description\": \"A term referring to fatty replacement of the hepatic parenchyma which is not related to alcohol use.\", \"label\": \"Metabolic Dysfunction-Associated Steatotic Liver Disease\", \"relation\": \"BQB_IS\", \"term\": \"C84444\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C84444\"}",
           "{\"collection\": \"efo\", \"description\": \"A term referring to fatty replacement of the hepatic parenchyma which is not related to alcohol use.\", \"label\": \"obsolete_non-alcoholic fatty liver disease\", \"relation\": \"BQB_IS\", \"term\": \"0003095\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003095\"}"
         ],
@@ -19206,7 +19206,7 @@
           "obsolete_non-alcoholic steatohepatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis.\", \"label\": \"metabolic dysfunction-associated steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080547\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080547\"}",
+          "{\"collection\": \"doid\", \"description\": \"A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis.\", \"label\": \"metabolic dysfunction-associated steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080547\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080547\"}",
           "{\"collection\": \"efo\", \"description\": \"A common, often \\u201csilent\\u201d liver disease. It resembles alcoholic liver disease, but occurs in people who drink little or no alcohol. The major feature in NASH is fat in the liver, along with inflammation and damage.\", \"label\": \"obsolete_non-alcoholic steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"1001249\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_1001249\"}",
           "{\"collection\": \"ncit\", \"description\": \"Fatty replacement and damage to the hepatocytes not related to alcohol use. It may lead to cirrhosis and liver failure.\", \"label\": \"Metabolic Dysfunction-Associated Steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"C84445\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C84445\"}"
         ],
@@ -19249,7 +19249,7 @@
           "metabolic dysfunction-associated steatotic liver disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A steatotic liver disease characterized by at least one of five specified cardiometabolic risk factors and no other discernible cause with normal to no alcohol use. The five cardiometabolic risk factors are: (1) higher than normal body mass index or waist circumference; (2) higher than normal serum glucose or glycated hemoglobin level, or type 2 diabetes; (3) higher than normal blood pressure or hypertensive treatment; (4) higher than normal plasma triglycerides or lipid lowering treatment; and (5) lower than normal plasma high-density lipoprotein cholesterol.\", \"label\": \"metabolic dysfunction-associated steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080208\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080208\"}"
+          "{\"collection\": \"doid\", \"description\": \"A steatotic liver disease characterized by at least one of five specified cardiometabolic risk factors and no other discernible cause with normal to no alcohol use. The five cardiometabolic risk factors are: (1) higher than normal body mass index or waist circumference; (2) higher than normal serum glucose or glycated hemoglobin level, or type 2 diabetes; (3) higher than normal blood pressure or hypertensive treatment; (4) higher than normal plasma triglycerides or lipid lowering treatment; and (5) lower than normal plasma high-density lipoprotein cholesterol.\", \"label\": \"metabolic dysfunction-associated steatotic liver disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080208\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080208\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D065626\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D065626\"}"
@@ -19286,7 +19286,7 @@
           "metabolic dysfunction-associated steatohepatitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis.\", \"label\": \"metabolic dysfunction-associated steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080547\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080547\"}"
+          "{\"collection\": \"doid\", \"description\": \"A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis.\", \"label\": \"metabolic dysfunction-associated steatohepatitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080547\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080547\"}"
         ],
         "xrefs": [],
         "label": [
@@ -19349,7 +19349,7 @@
           "hepatic fibrosis"
         ],
         "annotations": [
-          "{\"collection\": \"hp\", \"description\": \"The presence of excessive fibrous connective tissue in the liver. Fibrosis is a reparative or reactive process.\", \"label\": \"Hepatic fibrosis\", \"relation\": \"BQB_IS\", \"term\": \"HP:0001395\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0001395\"}",
+          "{\"collection\": \"hp\", \"description\": \"The presence of excessive fibrous connective tissue in the liver. Fibrosis is a reparative or reactive process.\", \"label\": \"Hepatic fibrosis\", \"relation\": \"BQB_IS\", \"term\": \"HP:0001395\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0001395\"}",
           "{\"collection\": \"ncit\", \"description\": \"The formation of fibrous tissue.\", \"label\": \"Fibrosis\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C3044\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3044\"}",
           "{\"collection\": \"efo\", \"description\": \"the formation of excess fibrous connective tissue in an organ or tissue in a reparative or reactive process. This can be a reactive, benign, or pathological state.\", \"label\": \"fibrosis\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"0006890\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0006890\"}"
         ],
@@ -19507,7 +19507,7 @@
           "obsolete_kidney disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A urinary system disease that is located_in the kidney.\", \"label\": \"kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:557\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:557\"}",
+          "{\"collection\": \"doid\", \"description\": \"A urinary system disease that is located_in the kidney.\", \"label\": \"kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:557\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:557\"}",
           "{\"collection\": \"ncit\", \"description\": \"A neoplastic or non-neoplastic condition affecting the kidney. Representative examples of non-neoplastic conditions include glomerulonephritis and nephrotic syndrome. Representative examples of neoplastic conditions include benign processes (e.g., renal lipoma and renal fibroma) and malignant processes (e.g., renal cell carcinoma and renal lymphoma).\", \"label\": \"Kidney Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C3149\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3149\"}",
           "{\"collection\": \"efo\", \"description\": \"A disease affecting the kidneys\", \"label\": \"obsolete_kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"0003086\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003086\"}"
         ],
@@ -19674,7 +19674,7 @@
           "renal hypoplasia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A kidney disease that is characterized by abnormally small kidneys with normal morphology and reduced number of nephrons.\", \"label\": \"renal hypoplasia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080204\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080204\"}",
+          "{\"collection\": \"doid\", \"description\": \"A kidney disease that is characterized by abnormally small kidneys with normal morphology and reduced number of nephrons.\", \"label\": \"renal hypoplasia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080204\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080204\"}",
           "{\"collection\": \"efo\", \"description\": \"Capture of Associated Targets on CHromatin (CATCH)\", \"label\": \"CATCH-seq\", \"relation\": \"BQB_IS\", \"term\": \"0008678\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0008678\"}"
         ],
         "xrefs": [
@@ -19718,7 +19718,7 @@
           "renal carcinoma"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A kidney cancer that derives_from the lining of the proximal convoluted tubule (the very small tubes in the kidney that filter the blood and remove waste products).\", \"label\": \"renal carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4451\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:4451\"}",
+          "{\"collection\": \"doid\", \"description\": \"A kidney cancer that derives_from the lining of the proximal convoluted tubule (the very small tubes in the kidney that filter the blood and remove waste products).\", \"label\": \"renal carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4451\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:4451\"}",
           "{\"collection\": \"ncit\", \"description\": \"A carcinoma arising from the epithelium of the renal parenchyma or the renal pelvis.  The majority are renal cell carcinomas.  Kidney carcinomas usually affect middle aged and elderly adults.  Hematuria, abdominal pain, and a palpable mass are common symptoms.\", \"label\": \"Kidney Carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"C9384\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C9384\"}"
         ],
         "xrefs": [
@@ -19761,7 +19761,7 @@
           "pyelonephritis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11400\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:11400\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11400\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:11400\"}",
           "{\"collection\": \"ncit\", \"description\": \"An inflammatory process affecting the kidney. The cause is most often bacterial, but may also be fungal in nature. Signs and symptoms may include fever, chills, flank pain, painful and frequent urination, cloudy or bloody urine, and confusion.\", \"label\": \"Pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"C34965\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C34965\"}",
           "{\"collection\": \"efo\", \"description\": \"Inflammation of the KIDNEY involving the renal parenchyma (the NEPHRONS); KIDNEY PELVIS; and KIDNEY CALICES. It is characterized by ABDOMINAL PAIN; FEVER; NAUSEA; VOMITING; and occasionally DIARRHEA.\", \"label\": \"obsolete_pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"1001141\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_1001141\"}"
         ],
@@ -19806,7 +19806,7 @@
           "chronic pyelonephritis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"chronic pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1076\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1076\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"chronic pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1076\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1076\"}",
           "{\"collection\": \"ncit\", \"description\": \"Persistent pyelonephritis.\", \"label\": \"Chronic Pyelonephritis\", \"relation\": \"BQB_IS\", \"term\": \"C123216\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C123216\"}"
         ],
         "xrefs": [
@@ -19846,7 +19846,7 @@
           "obsolete_nephrosclerosis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": null, \"label\": \"nephrosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11664\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:11664\"}",
+          "{\"collection\": \"doid\", \"description\": null, \"label\": \"nephrosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11664\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:11664\"}",
           "{\"collection\": \"efo\", \"description\": \"Hardening of the walls of the small arteries and arterioles (small arteries that convey blood from arteries to the even smaller capillaries) of the kidney. This condition is caused by hypertension (high blood pressure)\", \"label\": \"obsolete_nephrosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"1000041\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_1000041\"}"
         ],
         "xrefs": [
@@ -19929,7 +19929,7 @@
           "obsolete_cystic kidney disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A kidney disease that is characterized by the formation of cysts (fluid-filled sacs) in and around the kidney.\", \"label\": \"cystic kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2975\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2975\"}",
+          "{\"collection\": \"doid\", \"description\": \"A kidney disease that is characterized by the formation of cysts (fluid-filled sacs) in and around the kidney.\", \"label\": \"cystic kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2975\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2975\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_cystic kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"0008615\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0008615\"}"
         ],
         "xrefs": [
@@ -19976,7 +19976,7 @@
           "polycystic kidney disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A cystic kidney disease that is characterized by the growth of fluid-filled cysts in the kidneys that reduces kidney function and may lead to kidney failure.\", \"label\": \"polycystic kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080322\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080322\"}",
+          "{\"collection\": \"doid\", \"description\": \"A cystic kidney disease that is characterized by the growth of fluid-filled cysts in the kidneys that reduces kidney function and may lead to kidney failure.\", \"label\": \"polycystic kidney disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080322\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080322\"}",
           "{\"collection\": \"ncit\", \"description\": \"A usually autosomal dominant and less frequently autosomal recessive genetic disorder characterized by the presence of numerous cysts in the kidneys leading to end-stage renal failure. The autosomal dominant trait is associated with abnormalities on the short arm of chromosome 16. Symptoms in patients with the autosomal dominant trait usually appear at middle age and include abdominal pain, hematuria, and high blood pressure. Patients may develop brain aneurysms and liver cysts. Patients with the autosomal recessive trait present with progressive renal failure early in life and symptoms resulting from hepatic fibrosis. The autosomal recessive trait is associated with abnormalities of chromosome 6. Polycystic kidney disease may also result as a side effect in patients on renal dialysis.\", \"label\": \"Polycystic Kidney Disease\", \"relation\": \"BQB_IS\", \"term\": \"C75464\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C75464\"}"
         ],
         "xrefs": [],
@@ -20042,7 +20042,7 @@
           "glomerulosclerosis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A glomerulonephritis that is characterized by hardening of the glomerulus in the kidney.\", \"label\": \"glomerulosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0050851\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0050851\"}",
+          "{\"collection\": \"doid\", \"description\": \"A glomerulonephritis that is characterized by hardening of the glomerulus in the kidney.\", \"label\": \"glomerulosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0050851\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0050851\"}",
           "{\"collection\": \"ncit\", \"description\": \"A hardening of the kidney glomerulus caused by scarring of the blood vessels.\", \"label\": \"Glomerulosclerosis\", \"relation\": \"BQB_IS\", \"term\": \"C120888\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C120888\"}"
         ],
         "xrefs": [],
@@ -20079,7 +20079,7 @@
           "glomerulonephritis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A nephritis that causes inflammation of the glomeruli located_in kidney.\", \"label\": \"glomerulonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2921\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2921\"}",
+          "{\"collection\": \"doid\", \"description\": \"A nephritis that causes inflammation of the glomeruli located_in kidney.\", \"label\": \"glomerulonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2921\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2921\"}",
           "{\"collection\": \"ncit\", \"description\": \"A renal disorder characterized by damage in the glomeruli. It may be acute or chronic, focal or diffuse, and it may lead to renal failure. Causes include autoimmune disorders, infections, diabetes, and malignancies.\", \"label\": \"Glomerulonephritis\", \"relation\": \"BQB_IS\", \"term\": \"C26784\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26784\"}"
         ],
         "xrefs": [
@@ -20255,7 +20255,7 @@
           "obsolete_cardiovascular disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity which occurs in the blood, heart, blood vessels or the lymphatic system that passes nutrients (such as amino acids and electrolytes), gases, hormones, blood cells or lymph to and from cells in the body to help fight diseases and help stabilize body temperature and pH to maintain homeostasis.\", \"label\": \"cardiovascular system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1287\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1287\"}",
+          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity which occurs in the blood, heart, blood vessels or the lymphatic system that passes nutrients (such as amino acids and electrolytes), gases, hormones, blood cells or lymph to and from cells in the body to help fight diseases and help stabilize body temperature and pH to maintain homeostasis.\", \"label\": \"cardiovascular system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1287\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1287\"}",
           "{\"collection\": \"ncit\", \"description\": \"A non-neoplastic or neoplastic disorder affecting the heart or the vessels (arteries, veins and lymph vessels). Representative examples of non-neoplastic cardiovascular disorders are endocarditis and hypertension. Representative examples of neoplastic cardiovascular disorders are endocardial myxoma and angiosarcoma.\", \"label\": \"Cardiovascular Disorder\", \"relation\": \"BQB_IS\", \"term\": \"C2931\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2931\"}",
           "{\"collection\": \"efo\", \"description\": \"A body system disease which occurs in the blood, heart, blood vessels or the lymphatic system that passes nutrients (such as amino acids and electrolytes), gases, hormones, blood cells or lymph to and from cells in the body to help fight diseases and help stabilize body temperature and pH to maintain homeostasis.\", \"label\": \"obsolete_cardiovascular disease\", \"relation\": \"BQB_IS\", \"term\": \"0000319\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000319\"}"
         ],
@@ -20305,7 +20305,7 @@
           "obsolete_heart disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A cardiovascular system disease that involves the heart.\", \"label\": \"heart disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:114\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:114\"}",
+          "{\"collection\": \"doid\", \"description\": \"A cardiovascular system disease that involves the heart.\", \"label\": \"heart disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:114\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:114\"}",
           "{\"collection\": \"efo\", \"description\": \"Pathological conditions involving the HEART including its structural and functional abnormalities.\", \"label\": \"obsolete_heart disease\", \"relation\": \"BQB_IS\", \"term\": \"0003777\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003777\"}"
         ],
         "xrefs": [
@@ -20406,7 +20406,7 @@
           "obsolete_congestive heart failure"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A heart disease that is characterized by any structural or functional cardiac disorder that impairs the ability of the heart to fill with or pump a sufficient amount of blood throughout the body.\", \"label\": \"congestive heart failure\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6000\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:6000\"}",
+          "{\"collection\": \"doid\", \"description\": \"A heart disease that is characterized by any structural or functional cardiac disorder that impairs the ability of the heart to fill with or pump a sufficient amount of blood throughout the body.\", \"label\": \"congestive heart failure\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6000\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:6000\"}",
           "{\"collection\": \"efo\", \"description\": \"1. inadequacy of the heart so that as a pump it fails to maintain the circulation of blood, with the result that congestion and edema develop in the tissues; SEE ALSO forward heart failure, backward heart failure, right ventricular failure, left ventricular failure. SYN cardiac failure, cardiac insufficiency, congestive heart failure, myocardial insufficiency. 2. resulting clinical syndromes including shortness of breath, pitting edema, enlarged tender liver, engorged neck veins, and pulmonary rales in various combinations.\", \"label\": \"obsolete_congestive heart failure\", \"relation\": \"BQB_IS\", \"term\": \"0000373\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000373\"}",
           "{\"collection\": \"ncit\", \"description\": \"Failure of the heart to pump a sufficient amount of blood to meet the needs of the body tissues, resulting in tissue congestion and edema. Signs and symptoms include shortness of breath, pitting edema, enlarged tender liver, engorged neck veins, and pulmonary rales.\", \"label\": \"Congestive Heart Failure\", \"relation\": \"BQB_IS\", \"term\": \"C3080\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3080\"}"
         ],
@@ -20536,7 +20536,7 @@
           "myocardial infarction"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"myocardial infarction\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5844\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:5844\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"myocardial infarction\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5844\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:5844\"}",
           "{\"collection\": \"ncit\", \"description\": \"Gross necrosis of the myocardium, as a result of interruption of the blood supply to the area, as in coronary thrombosis.\", \"label\": \"Myocardial Infarction\", \"relation\": \"BQB_IS\", \"term\": \"C27996\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C27996\"}"
         ],
         "xrefs": [
@@ -20770,7 +20770,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"A protozoan infection caused by the genus Plasmodium. There are four species of Plasmodium that can infect humans: Plasmodium falciparum, vivax, ovale, and malariae. It is transmitted to humans by infected mosquitoes. Signs and symptoms include paroxysmal high fever, sweating, chills, and anemia.\", \"label\": \"Malaria\", \"relation\": \"BQB_IS\", \"term\": \"C34797\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C34797\"}",
           "{\"collection\": \"efo\", \"description\": \"A protozoan disease caused in humans by four species of the PLASMODIUM genus: PLASMODIUM FALCIPARUM; PLASMODIUM VIVAX; PLASMODIUM OVALE; and PLASMODIUM MALARIAE; and transmitted by the bite of an infected female mosquito of the genus ANOPHELES. Malaria is endemic in parts of Asia, Africa, Central and South America, Oceania, and certain Caribbean islands. It is characterized by extreme exhaustion associated with paroxysms of high FEVER; SWEATING; shaking CHILLS; and ANEMIA. Malaria in ANIMALS is caused by other species of plasmodia.\", \"label\": \"obsolete_malaria\", \"relation\": \"BQB_IS\", \"term\": \"0001068\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001068\"}",
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"malaria\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12365\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:12365\"}"
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"malaria\", \"relation\": \"BQB_IS\", \"term\": \"DOID:12365\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:12365\"}"
         ],
         "xrefs": [
           "{\"accession\": \"12365\", \"name\": \"DOID\", \"url\": \"http://purl.obolibrary.org/obo/DOID_12365\"}",
@@ -20820,7 +20820,7 @@
           "central nervous system disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A nervous system disease that affects either the spinal cord (myelopathy) or brain (encephalopathy) of the central nervous system.\", \"label\": \"central nervous system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:331\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:331\"}"
+          "{\"collection\": \"doid\", \"description\": \"A nervous system disease that affects either the spinal cord (myelopathy) or brain (encephalopathy) of the central nervous system.\", \"label\": \"central nervous system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:331\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:331\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D002493\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D002493\"}",
@@ -20858,7 +20858,7 @@
           "brain disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A central nervous system disease that is located_in the brain.\", \"label\": \"brain disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:936\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:936\"}"
+          "{\"collection\": \"doid\", \"description\": \"A central nervous system disease that is located_in the brain.\", \"label\": \"brain disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:936\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:936\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D001927\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D001927\"}",
@@ -20899,7 +20899,7 @@
           "obsolete_epilepsy"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A brain disease that is characterized by the occurrance of at least two unprovoked seizures resulting from a persistent epileptogenic abnormality of the brain that is able to spontaneously generate paroxysmal activity and typically manifested by sudden brief episodes of altered or diminished consciousness, involuntary movements, or convulsions.\", \"label\": \"epilepsy\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1826\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1826\"}",
+          "{\"collection\": \"doid\", \"description\": \"A brain disease that is characterized by the occurrance of at least two unprovoked seizures resulting from a persistent epileptogenic abnormality of the brain that is able to spontaneously generate paroxysmal activity and typically manifested by sudden brief episodes of altered or diminished consciousness, involuntary movements, or convulsions.\", \"label\": \"epilepsy\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1826\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1826\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_epilepsy\", \"relation\": \"BQB_IS\", \"term\": \"0000474\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000474\"}"
         ],
         "xrefs": [
@@ -20947,8 +20947,8 @@
           "Parkinsonism"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A movement disorder that is characterized by disturbances of balance, gait and posture.\", \"label\": \"Parkinsonism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080855\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080855\"}",
-          "{\"collection\": \"hp\", \"description\": \"Characteristic neurologic anomaly resulting from degeneration of dopamine-generating cells in the substantia nigra, a region of the midbrain, characterized clinically by shaking, rigidity, slowness of movement and difficulty with walking and gait.\", \"label\": \"Parkinsonism\", \"relation\": \"BQB_IS\", \"term\": \"HP:0001300\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0001300\"}",
+          "{\"collection\": \"doid\", \"description\": \"A movement disorder that is characterized by disturbances of balance, gait and posture.\", \"label\": \"Parkinsonism\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080855\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080855\"}",
+          "{\"collection\": \"hp\", \"description\": \"Characteristic neurologic anomaly resulting from degeneration of dopamine-generating cells in the substantia nigra, a region of the midbrain, characterized clinically by shaking, rigidity, slowness of movement and difficulty with walking and gait.\", \"label\": \"Parkinsonism\", \"relation\": \"BQB_IS\", \"term\": \"HP:0001300\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0001300\"}",
           "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"32798002\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=32798002\"}"
         ],
         "xrefs": [],
@@ -20985,7 +20985,7 @@
           "obsolete_migraine disorder"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"migraine\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6364\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:6364\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"migraine\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6364\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:6364\"}",
           "{\"collection\": \"efo\", \"description\": \"A class of disabling primary headache disorders, characterized by recurrent unilateral pulsatile headaches. The two major subtypes are common migraine (without aura) and classic migraine (with aura or neurological symptoms). (International Classification of Headache Disorders, 2nd ed. Cephalalgia 2004: suppl 1)\", \"label\": \"obsolete_migraine disorder\", \"relation\": \"BQB_IS\", \"term\": \"0003821\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003821\"}",
           "{\"collection\": \"ncit\", \"description\": \"A common, severe type of vascular headache often associated with increased sympathetic activity, resulting in nausea, vomiting, and light sensitivity.\", \"label\": \"Migraine\", \"relation\": \"BQB_IS\", \"term\": \"C89715\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C89715\"}"
         ],
@@ -21043,7 +21043,7 @@
           "obsolete_stroke"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A cerebrovascular disease that is characterized by tissue necrosis located_in the brain, resulting from inadequate blood flow through the brain.\", \"label\": \"brain infarction\", \"relation\": \"BQB_IS\", \"term\": \"DOID:3454\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:3454\"}",
+          "{\"collection\": \"doid\", \"description\": \"A cerebrovascular disease that is characterized by tissue necrosis located_in the brain, resulting from inadequate blood flow through the brain.\", \"label\": \"brain infarction\", \"relation\": \"BQB_IS\", \"term\": \"DOID:3454\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:3454\"}",
           "{\"collection\": \"ncit\", \"description\": \"A disorder characterized by an interruption of blood supply to parts of the brain resulting in neurological damage.\", \"label\": \"Stroke, CTCAE\", \"relation\": \"BQB_IS\", \"term\": \"C143862\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C143862\"}",
           "{\"collection\": \"efo\", \"description\": \"A group of pathological conditions characterized by sudden, non-convulsive loss of neurological function due to BRAIN ISCHEMIA or INTRACRANIAL HEMORRHAGES. Stroke is classified by the type of tissue NECROSIS, such as the anatomic location, vasculature involved, etiology, age of the affected individual, and hemorrhagic vs. non-hemorrhagic nature. (From Adams et al., Principles of Neurology, 6th ed, pp777-810)\", \"label\": \"obsolete_stroke\", \"relation\": \"BQB_IS\", \"term\": \"0000712\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000712\"}"
         ],
@@ -21087,7 +21087,7 @@
           "brain disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A central nervous system disease that is located_in the brain.\", \"label\": \"brain disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:936\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:936\"}"
+          "{\"collection\": \"doid\", \"description\": \"A central nervous system disease that is located_in the brain.\", \"label\": \"brain disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:936\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:936\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D001927\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D001927\"}",
@@ -21168,7 +21168,7 @@
           "schizophrenia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"schizophrenia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5419\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:5419\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"schizophrenia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:5419\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:5419\"}",
           "{\"collection\": \"ncit\", \"description\": \"A major psychotic disorder characterized by abnormalities in the perception or expression of reality. It affects the cognitive and psychomotor functions. Common clinical signs and symptoms include delusions, hallucinations, disorganized thinking, and retreat from reality.\", \"label\": \"Schizophrenia\", \"relation\": \"BQB_IS\", \"term\": \"C3362\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3362\"}",
           "{\"collection\": \"efo\", \"description\": \"A major psychotic disorder characterized by abnormalities in the perception or expression of reality. It affects the cognitive and psychomotor functions. Common clinical signs and symptoms include delusions, hallucinations, disorganized thinking, and retreat from reality.\", \"label\": \"obsolete_schizophrenia\", \"relation\": \"BQB_IS\", \"term\": \"0000692\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000692\"}"
         ],
@@ -21219,7 +21219,7 @@
           "glucose metabolism disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A carbohydrate metabolic disorder that is characterized by blood glucose levels which cannot be maintained within the normal range.\", \"label\": \"glucose metabolism disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4194\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:4194\"}"
+          "{\"collection\": \"doid\", \"description\": \"A carbohydrate metabolic disorder that is characterized by blood glucose levels which cannot be maintained within the normal range.\", \"label\": \"glucose metabolism disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:4194\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:4194\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D044882\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D044882\"}",
@@ -21261,8 +21261,8 @@
           "prediabetes syndrome"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A glucose metabolism disease that is characterized by blood glucose levels are high, but not high enough to be classified as type 2 diabetes.\", \"label\": \"prediabetes syndrome\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11716\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:11716\"}",
-          "{\"collection\": \"hp\", \"description\": \"An abnormal resistance to glucose, i.e., a reduction in the ability to maintain glucose levels in the blood stream within normal limits following oral or intravenous administration of glucose.\", \"label\": \"Impaired glucose tolerance\", \"relation\": \"BQB_IS\", \"term\": \"HP:0040270\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/hp/terms?obo_id=HP:0040270\"}",
+          "{\"collection\": \"doid\", \"description\": \"A glucose metabolism disease that is characterized by blood glucose levels are high, but not high enough to be classified as type 2 diabetes.\", \"label\": \"prediabetes syndrome\", \"relation\": \"BQB_IS\", \"term\": \"DOID:11716\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:11716\"}",
+          "{\"collection\": \"hp\", \"description\": \"An abnormal resistance to glucose, i.e., a reduction in the ability to maintain glucose levels in the blood stream within normal limits following oral or intravenous administration of glucose.\", \"label\": \"Impaired glucose tolerance\", \"relation\": \"BQB_IS\", \"term\": \"HP:0040270\", \"url\": \"https://hpo.jax.org/app/browse/term/HP:0040270\"}",
           "{\"collection\": \"mp\", \"description\": \"less than the normal response to oral consumption or intravenous injection of specified amounts of glucose and indicative of insulin resistance; measured by determining whole blood or plasma sugar level in a fasting state before and after taking glucose at specified intervals\", \"label\": \"impaired glucose tolerance\", \"relation\": \"BQB_IS\", \"term\": \"MP:0005293\", \"url\": \"https://bioportal.bioontology.org/ontologies/MP/MP:0005293\"}",
           "{\"collection\": \"efo\", \"description\": \"An abnormal resistance to glucose, i.e., a reduction in the ability to maintain glucose levels in the blood stream within normal limits following oral or intravenous administration of glucose.\", \"label\": \"abnormal glucose tolerance\", \"relation\": \"BQB_IS\", \"term\": \"0002546\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0002546\"}"
         ],
@@ -21312,7 +21312,7 @@
           "obsolete_diabetes mellitus"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A glucose metabolism disease that is characterized by chronic hyperglycaemia with disturbances of carbohydrate, fat and protein metabolism resulting from defects in insulin secretion, insulin action, or both.\", \"label\": \"diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9351\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9351\"}",
+          "{\"collection\": \"doid\", \"description\": \"A glucose metabolism disease that is characterized by chronic hyperglycaemia with disturbances of carbohydrate, fat and protein metabolism resulting from defects in insulin secretion, insulin action, or both.\", \"label\": \"diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9351\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9351\"}",
           "{\"collection\": \"ncit\", \"description\": \"A metabolic disorder characterized by abnormally high blood sugar levels due to diminished production of insulin or insulin resistance/desensitization.\", \"label\": \"Diabetes Mellitus\", \"relation\": \"BQB_IS\", \"term\": \"C2985\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2985\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"0000400\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000400\"}"
         ],
@@ -21376,7 +21376,7 @@
           "type 1 diabetes mellitus"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"type 1 diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9744\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9744\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"type 1 diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9744\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9744\"}",
           "{\"collection\": \"ncit\", \"description\": \"A chronic condition characterized by minimal or absent production of insulin by the pancreas.\", \"label\": \"Type 1 Diabetes Mellitus\", \"relation\": \"BQB_IS\", \"term\": \"C2986\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2986\"}",
           "{\"collection\": \"efo\", \"description\": \"A subtype of DIABETES MELLITUS that is characterized by INSULIN deficiency. It is manifested by the sudden onset of severe HYPERGLYCEMIA, rapid progression to DIABETIC KETOACIDOSIS, and DEATH unless treated with insulin. The disease may occur at any age, but is most common in childhood or adolescence.\", \"label\": \"obsolete_type I diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"0001359\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001359\"}"
         ],
@@ -21439,7 +21439,7 @@
           "type 2 diabetes mellitus"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"type 2 diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9352\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9352\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"type 2 diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9352\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9352\"}",
           "{\"collection\": \"ncit\", \"description\": \"A type of diabetes mellitus that is characterized by insulin resistance or desensitization and increased blood glucose levels. This is a chronic disease that can develop gradually over the life of a patient and can be linked to both environmental factors and heredity.\", \"label\": \"Type 2 Diabetes Mellitus\", \"relation\": \"BQB_IS\", \"term\": \"C26747\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C26747\"}",
           "{\"collection\": \"efo\", \"description\": \"A subclass of DIABETES MELLITUS that is not INSULIN-responsive or dependent (NIDDM). It is characterized initially by INSULIN RESISTANCE and HYPERINSULINEMIA; and eventually by GLUCOSE INTOLERANCE; HYPERGLYCEMIA; and overt diabetes. Type II diabetes mellitus is no longer considered a disease exclusively found in adults. Patients seldom develop KETOSIS but often exhibit OBESITY.\", \"label\": \"obsolete_type II diabetes mellitus\", \"relation\": \"BQB_IS\", \"term\": \"0001360\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0001360\"}"
         ],
@@ -21530,7 +21530,7 @@
           "benign neoplasm"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of cellular proliferation that results in abnormal growths in the body which lack the ability to metastasize.\", \"label\": \"benign neoplasm\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0060072\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0060072\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of cellular proliferation that results in abnormal growths in the body which lack the ability to metastasize.\", \"label\": \"benign neoplasm\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0060072\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0060072\"}"
         ],
         "xrefs": [],
         "label": [
@@ -21566,7 +21566,7 @@
           "prostatic adenoma"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A male reproductive organ benign neoplasm that derives_from glandular epithelial cells and that is located_in the prostate.\", \"label\": \"prostatic adenoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2883\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2883\"}",
+          "{\"collection\": \"doid\", \"description\": \"A male reproductive organ benign neoplasm that derives_from glandular epithelial cells and that is located_in the prostate.\", \"label\": \"prostatic adenoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2883\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2883\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_benign prostatic hyperplasia\", \"relation\": \"BQB_IS\", \"term\": \"0000284\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000284\"}"
         ],
         "xrefs": [
@@ -21622,7 +21622,7 @@
           "ovarian epithelial cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"ovarian cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2394\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2394\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"ovarian cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2394\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2394\"}",
           "{\"collection\": \"ncit\", \"description\": \"An invasive carcinoma that arises from the surface ovarian epithelium. The vast majority of cases are adenocarcinomas. The most common sites of involvement are the contralateral ovary, peritoneal cavity, para-aortic and pelvic lymph nodes, and liver.  Lung and pleura are the most common sites of extra-abdominal spread. The primary form of therapy is surgical.  The overall prognosis of ovarian carcinoma remains poor, a direct result of its rapid growth rate and the lack of early symptoms.\", \"label\": \"Ovarian Carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"C4908\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C4908\"}"
         ],
         "xrefs": [
@@ -21671,7 +21671,7 @@
           "breast cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"breast cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1612\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1612\"}"
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"breast cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1612\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1612\"}"
         ],
         "xrefs": [
           "{\"accession\": \"C50\", \"name\": \"ICD10CM\", \"url\": \"https://www.icd10data.com/search?s=C50\"}",
@@ -21747,7 +21747,7 @@
           "endometrial cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A uterine cancer that is located_in tissues lining the uterus.\", \"label\": \"endometrial cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1380\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1380\"}",
+          "{\"collection\": \"doid\", \"description\": \"A uterine cancer that is located_in tissues lining the uterus.\", \"label\": \"endometrial cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1380\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1380\"}",
           "{\"collection\": \"ncit\", \"description\": \"A malignant tumor arising from the epithelium that lines the cavity of the uterine body.  The vast majority of endometrial carcinomas are adenocarcinomas; squamous cell and adenosquamous carcinomas represent a minority of the cases.  Endometrioid adenocarcinoma is the most frequently seen variant of endometrial adenocarcinoma.  Uterine bleeding is an initial clinical sign.  The prognosis depends on the stage of the tumor, the depth of myometrial wall invasion, and the degree of differentiation.\", \"label\": \"Endometrial Carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"C7558\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C7558\"}"
         ],
         "xrefs": [
@@ -21791,7 +21791,7 @@
           "colorectal cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"colorectal cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9256\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9256\"}"
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI. OMIM mapping confirmed by DO. [SN].\", \"label\": \"colorectal cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9256\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9256\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D015179\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D015179\"}",
@@ -21832,7 +21832,7 @@
           "pancreatic cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"pancreatic cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1793\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1793\"}"
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"pancreatic cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1793\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1793\"}"
         ],
         "xrefs": [
           "{\"accession\": \"9364\", \"name\": \"GARD\", \"url\": \"https://rarediseases.info.nih.gov/?gard_id=9364\"}",
@@ -21885,7 +21885,7 @@
           "stomach cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"stomach cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:10534\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:10534\"}"
+          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"stomach cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:10534\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:10534\"}"
         ],
         "xrefs": [
           "{\"accession\": \"7704\", \"name\": \"GARD\", \"url\": \"https://rarediseases.info.nih.gov/?gard_id=7704\"}",
@@ -21949,7 +21949,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"A stromal tumor most commonly seen in the gastrointestinal tract. Rare cases of solitary masses in the omentum or the mesentery have also been reported (extragastrointestinal gastrointestinal stromal tumor).  It is a tumor that differentiates along the lines of interstitial cells of Cajal.  Most cases contain KIT- or PDGFRA-activating mutations. Until recently, surgery has been the only effective therapy for this tumor.  However, many patients still experience recurrence.  Conventional chemotherapy and radiation therapy have been of limited value.  A KIT tyrosine kinase inhibitor, imatinib mesylate (also known as STI-571 or Gleevec), is now effective in the treatment of relapsed and unresectable cases.\", \"label\": \"Gastrointestinal Stromal Tumor\", \"relation\": \"BQB_IS\", \"term\": \"C3868\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3868\"}",
-          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"gastrointestinal stromal tumor\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9253\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9253\"}"
+          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"gastrointestinal stromal tumor\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9253\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9253\"}"
         ],
         "xrefs": [
           "{\"accession\": \"8598\", \"name\": \"GARD\", \"url\": \"https://rarediseases.info.nih.gov/?gard_id=8598\"}",
@@ -21988,7 +21988,7 @@
           "respiratory system disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that located_in the respiratory system which extends from the nasal sinuses to the diaphragm.\", \"label\": \"respiratory system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1579\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1579\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of anatomical entity that located_in the respiratory system which extends from the nasal sinuses to the diaphragm.\", \"label\": \"respiratory system disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1579\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1579\"}"
         ],
         "xrefs": [
           "{\"accession\": \"J98\", \"name\": \"ICD10CM\", \"url\": \"https://www.icd10data.com/search?s=J98\"}",
@@ -22028,7 +22028,7 @@
           "obsolete_asthma"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"asthma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2841\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:2841\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"asthma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2841\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2841\"}",
           "{\"collection\": \"ncit\", \"description\": \"A chronic respiratory disease manifested as difficulty breathing due to the narrowing of bronchial passageways.\", \"label\": \"Asthma\", \"relation\": \"BQB_IS\", \"term\": \"C28397\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C28397\"}",
           "{\"collection\": \"efo\", \"description\": \"A bronchial disease that is characterized by chronic inflammation and narrowing of the airways, which is caused by a combination of environmental and genetic factors resulting in recurring periods of wheezing (a whistling sound while breathing), chest tightness, shortness of breath, mucus production and coughing. The symptoms appear due to a variety of triggers such as allergens, irritants, respiratory infections, weather changes, excercise, stress, reflux disease, medications, foods and emotional anxiety.\", \"label\": \"obsolete_asthma\", \"relation\": \"BQB_IS\", \"term\": \"0000270\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000270\"}"
         ],
@@ -22079,7 +22079,7 @@
           "bronchitis"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A bronchial disease that is an inflammation of the bronchial tubes. It is caused by bacteria and viruses. The disease has_symptom cough with mucus, has_symptom shortness of breath, has_symptom low fever and has_symptom chest tightness.\", \"label\": \"bronchitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6132\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:6132\"}"
+          "{\"collection\": \"doid\", \"description\": \"A bronchial disease that is an inflammation of the bronchial tubes. It is caused by bacteria and viruses. The disease has_symptom cough with mucus, has_symptom shortness of breath, has_symptom low fever and has_symptom chest tightness.\", \"label\": \"bronchitis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:6132\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:6132\"}"
         ],
         "xrefs": [
           "{\"accession\": \"J20\", \"name\": \"ICD10CM\", \"url\": \"https://www.icd10data.com/search?s=J20\"}",
@@ -22163,7 +22163,7 @@
           "lung disease"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Updating out dated CUI and removing lung abscess as a synonym.\", \"label\": \"lung disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:850\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:850\"}"
+          "{\"collection\": \"doid\", \"description\": \"Updating out dated CUI and removing lung abscess as a synonym.\", \"label\": \"lung disease\", \"relation\": \"BQB_IS\", \"term\": \"DOID:850\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:850\"}"
         ],
         "xrefs": [
           "{\"accession\": \"D008171\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D008171\"}",
@@ -22216,7 +22216,7 @@
           "non-small cell lung cancer"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A respiratory system cancer that is located_in the lung.\", \"label\": \"lung cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1324\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:1324\"}",
+          "{\"collection\": \"doid\", \"description\": \"A respiratory system cancer that is located_in the lung.\", \"label\": \"lung cancer\", \"relation\": \"BQB_IS\", \"term\": \"DOID:1324\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:1324\"}",
           "{\"collection\": \"ncit\", \"description\": \"A group of at least three distinct histological types of lung cancer, including non-small cell squamous cell carcinoma, adenocarcinoma, and large cell carcinoma. Non-small cell lung carcinomas have a poor response to conventional chemotherapy.\", \"label\": \"Lung Non-Small Cell Carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"C2926\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2926\"}"
         ],
         "xrefs": [
@@ -22271,7 +22271,7 @@
           "obsolete_non-small cell lung carcinoma"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A lung non-small cell carcinoma that is characterized by the lack of evidence of squamous differentiation.\", \"label\": \"lung non-squamous non-small cell carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080521\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0080521\"}",
+          "{\"collection\": \"doid\", \"description\": \"A lung non-small cell carcinoma that is characterized by the lack of evidence of squamous differentiation.\", \"label\": \"lung non-squamous non-small cell carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0080521\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0080521\"}",
           "{\"collection\": \"efo\", \"description\": \"A group of at least three distinct histological types of lung cancer, including non-small cell squamous cell carcinoma, adenocarcinoma, and large cell carcinoma. Non-small cell lung carcinomas have a poor response to conventional chemotherapy.\", \"label\": \"obsolete_non-small cell lung carcinoma\", \"relation\": \"BQB_IS\", \"term\": \"0003060\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003060\"}"
         ],
         "xrefs": [
@@ -22316,7 +22316,7 @@
           "pneumonia"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A lung disease that involves lung parenchyma or alveolar inflammation and abnormal alveolar filling with fluid (consolidation and exudation). It results from a variety of causes including infection with bacteria, viruses, fungi or parasites, and chemical or physical injury to the lungs. It is accompanied by fever, chills, cough, and difficulty in breathing.\", \"label\": \"pneumonia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:552\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:552\"}",
+          "{\"collection\": \"doid\", \"description\": \"A lung disease that involves lung parenchyma or alveolar inflammation and abnormal alveolar filling with fluid (consolidation and exudation). It results from a variety of causes including infection with bacteria, viruses, fungi or parasites, and chemical or physical injury to the lungs. It is accompanied by fever, chills, cough, and difficulty in breathing.\", \"label\": \"pneumonia\", \"relation\": \"BQB_IS\", \"term\": \"DOID:552\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:552\"}",
           "{\"collection\": \"efo\", \"description\": \"A lung disease that involves lung parenchyma or alveolar inflammation and abnormal alveolar filling with fluid (consolidation and exudation). It results from infection with bacteria, viruses, fungi or parasites. It is accompanied by fever, chills, cough, and difficulty in breathing.\", \"label\": \"obsolete_pneumonia\", \"relation\": \"BQB_IS\", \"term\": \"0003106\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0003106\"}"
         ],
         "xrefs": [
@@ -22390,7 +22390,7 @@
           "sleep disorder"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"A disease of mental health that involves disruption of sleep patterns.\", \"label\": \"sleep disorder\", \"relation\": \"BQB_IS\", \"term\": \"DOID:535\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:535\"}"
+          "{\"collection\": \"doid\", \"description\": \"A disease of mental health that involves disruption of sleep patterns.\", \"label\": \"sleep disorder\", \"relation\": \"BQB_IS\", \"term\": \"DOID:535\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:535\"}"
         ],
         "xrefs": [
           "{\"accession\": \"C0154564\", \"name\": \"UMLS_CUI\", \"url\": \"https://uts.nlm.nih.gov/uts/umls/concept/C0154564\"}"
@@ -22427,7 +22427,7 @@
           "central sleep apnea"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"central sleep apnea\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9220\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:9220\"}",
+          "{\"collection\": \"doid\", \"description\": \"Xref MGI.\", \"label\": \"central sleep apnea\", \"relation\": \"BQB_IS\", \"term\": \"DOID:9220\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:9220\"}",
           "{\"collection\": \"ncit\", \"description\": \"The periodic cessation of breathing while asleep that occurs secondary to the decreased responsiveness of the respiratory center of the brain to carbon dioxide, resulting in alternating cycles of apnea and hyperpnea.\", \"label\": \"Central Sleep Apnea\", \"relation\": \"BQB_IS\", \"term\": \"C116046\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C116046\"}"
         ],
         "xrefs": [
@@ -22475,7 +22475,7 @@
           "obsolete_hypertension"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"An artery disease characterized by chronic elevated blood pressure in the arteries.\", \"label\": \"hypertension\", \"relation\": \"BQB_IS\", \"term\": \"DOID:10763\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:10763\"}",
+          "{\"collection\": \"doid\", \"description\": \"An artery disease characterized by chronic elevated blood pressure in the arteries.\", \"label\": \"hypertension\", \"relation\": \"BQB_IS\", \"term\": \"DOID:10763\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:10763\"}",
           "{\"collection\": \"ncit\", \"description\": \"Blood pressure that is abnormally high.\", \"label\": \"Hypertension\", \"relation\": \"BQB_IS\", \"term\": \"C3117\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C3117\"}",
           "{\"collection\": \"efo\", \"description\": null, \"label\": \"obsolete_hypertension\", \"relation\": \"BQB_IS\", \"term\": \"0000537\", \"url\": \"http://purl.bioontology.org/ontology/EFO/efo:EFO_0000537\"}"
         ],
@@ -22552,7 +22552,7 @@
           "cardiomyopathy"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"MESH:D009202 added from NeuroDevNet [WAK].\", \"label\": \"cardiomyopathy\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0050700\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0050700\"}",
+          "{\"collection\": \"doid\", \"description\": \"MESH:D009202 added from NeuroDevNet [WAK].\", \"label\": \"cardiomyopathy\", \"relation\": \"BQB_IS\", \"term\": \"DOID:0050700\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0050700\"}",
           "{\"collection\": \"ncit\", \"description\": \"A disease of the heart muscle or myocardium proper. Cardiomyopathies may be classified as either primary or secondary, on the basis of etiology, or on the pathophysiology of the lesion: hypertrophic, dilated, or restrictive.\", \"label\": \"Cardiomyopathy\", \"relation\": \"BQB_IS\", \"term\": \"C34830\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C34830\"}"
         ],
         "xrefs": [
@@ -22599,7 +22599,7 @@
           "left ventricular impairment"
         ],
         "annotations": [
-          "{\"collection\": \"doid\", \"description\": \"An intrinsic cardiomyopathy characterized by distinctive (spongy) morphological appearance of the LV myocardium.\", \"label\": \"left ventricular noncompaction\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:0060480\", \"url\": \"http://purl.bioontology.org/ontology/DOID/DOID:0060480\"}",
+          "{\"collection\": \"doid\", \"description\": \"An intrinsic cardiomyopathy characterized by distinctive (spongy) morphological appearance of the LV myocardium.\", \"label\": \"left ventricular noncompaction\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"DOID:0060480\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:0060480\"}",
           "{\"collection\": \"ncit\", \"description\": \"Impairment of the left ventricle to either fill or eject adequately.\", \"label\": \"Left Ventricular Dysfunction\", \"relation\": \"BQB_IS\", \"term\": \"C50629\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C50629\"}"
         ],
         "xrefs": [],
@@ -38317,7 +38317,7 @@
           "dorsal aorta"
         ],
         "annotations": [
-          "{\"collection\": \"uberon\", \"description\": \"The main trunk of the systemic arterial system that carries blood from the heart to all the organs and other structures of the body, bringing oxygenated blood to all parts of the body in the systemic circulation.\", \"label\": \"aorta\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0000947\", \"url\": \"http://purl.bioontology.org/ontology/UBERON/UBERON:0000947\"}",
+          "{\"collection\": \"uberon\", \"description\": \"The main trunk of the systemic arterial system that carries blood from the heart to all the organs and other structures of the body, bringing oxygenated blood to all parts of the body in the systemic circulation.\", \"label\": \"aorta\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0000947\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/uberon/terms?obo_id=UBERON:0000947\"}",
           "{\"collection\": \"bto\", \"description\": \"The great arterial trunk that carries blood from the heart to be distributed by branch arteries through the body.\", \"label\": \"aorta\", \"relation\": \"BQB_IS\", \"term\": \"BTO:0000135\", \"url\": \"http://purl.bioontology.org/ontology/BTO/BTO:0000135\"}"
         ],
         "xrefs": [
@@ -38372,7 +38372,7 @@
           "subdivision of common carotid artery"
         ],
         "annotations": [
-          "{\"collection\": \"uberon\", \"description\": \"One of: the common carotid artery, or its branches, the external and internal carotid arteries.\", \"label\": \"carotid artery segment\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0005396\", \"url\": \"http://purl.bioontology.org/ontology/UBERON/UBERON:0005396\"}",
+          "{\"collection\": \"uberon\", \"description\": \"One of: the common carotid artery, or its branches, the external and internal carotid arteries.\", \"label\": \"carotid artery segment\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0005396\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/uberon/terms?obo_id=UBERON:0005396\"}",
           "{\"collection\": \"bto\", \"description\": \"A key artery located in the front of the neck that carries blood from the heart to the brain. Cholesterol plaques on the inner wall of the carotid artery can lead to stroke.\", \"label\": \"carotid artery\", \"relation\": \"BQB_IS\", \"term\": \"BTO:0000168\", \"url\": \"http://purl.bioontology.org/ontology/BTO/BTO:0000168\"}"
         ],
         "xrefs": [
@@ -38881,7 +38881,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"An organ that is part of the hematopoietic and immune systems. It is composed of the white pulp and the red pulp and is surrounded by a capsule. It is located in the left hypochondriac region. Its functions include lymphocyte production, blood cell storage, and blood cell destruction.\", \"label\": \"Spleen\", \"relation\": \"BQB_IS\", \"term\": \"C12432\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C12432\"}",
           "{\"collection\": \"bto\", \"description\": \"A highly vascular ductless organ that is located in the left abdominal region near the stomach or intestine of most vertebrates and is concerned with final destruction of red blood cells, filtration and storage of blood, and production of lymphocytes.\", \"label\": \"spleen\", \"relation\": \"BQB_IS\", \"term\": \"BTO:0001281\", \"url\": \"http://purl.bioontology.org/ontology/BTO/BTO:0001281\"}",
-          "{\"collection\": \"uberon\", \"description\": \"The organ that functions to filter blood and to store red corpuscles and platelets.\", \"label\": \"spleen\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0002106\", \"url\": \"http://purl.bioontology.org/ontology/UBERON/UBERON:0002106\"}",
+          "{\"collection\": \"uberon\", \"description\": \"The organ that functions to filter blood and to store red corpuscles and platelets.\", \"label\": \"spleen\", \"relation\": \"BQB_IS\", \"term\": \"UBERON:0002106\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/uberon/terms?obo_id=UBERON:0002106\"}",
           "{\"collection\": \"fma\", \"description\": null, \"label\": \"Spleen\", \"relation\": \"BQB_IS\", \"term\": \"FMA:7196\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/fma/terms?obo_id=FMA:7196\"}"
         ],
         "xrefs": [
@@ -39570,7 +39570,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"A qualitative or quantitative analysis performed to determine the amount of a particular constituent in a sample or the biological or pharmacological properties or activity of a drug or substance.\", \"label\": \"Assay\", \"relation\": \"BQB_IS\", \"term\": \"C60819\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C60819\"}",
-          "{\"collection\": \"obi\", \"description\": \"A planned process that has the objective to produce information about a material entity (the evaluant) by examining it.\", \"label\": \"assay\", \"relation\": \"BQB_IS\", \"term\": \"OBI_0000070\", \"url\": \"https://bioportal.bioontology.org/ontologies/OBI?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FOBI_0000070\"}",
+          "{\"collection\": \"obi\", \"description\": \"A planned process that has the objective to produce information about a material entity (the evaluant) by examining it.\", \"label\": \"assay\", \"relation\": \"BQB_IS\", \"term\": \"OBI_0000070\", \"url\": \"http://purl.obolibrary.org/obo/OBI_0000070\"}",
           "{\"collection\": \"sio\", \"description\": \"An assay is an investigative (analytic) procedure in laboratory medicine, pharmacology, environmental biology, and molecular biology for qualitatively assessing or quantitatively measuring the presence or amount or the functional activity of a target entity (the analyte) which can be a drug or biochemical substance or a cell in an organism or organic sample.\", \"label\": \"assay\", \"relation\": \"BQB_IS\", \"term\": \"SIO_001007\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/sio/terms?short_form=SIO_001007\"}"
         ],
         "xrefs": [],
@@ -45610,7 +45610,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Apolipoprotein A-I (267 aa, ~31 kDa) is encoded by the human APOA1 gene. This protein is involved in the transport and metabolism of cholesterol.\", \"label\": \"Apolipoprotein A-I\", \"relation\": \"BQB_IS\", \"term\": \"C116419\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C116419\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02647\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02647\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02647\", \"url\": \"http://purl.uniprot.org/uniprot/P02647\"}"
         ],
         "xrefs": [],
         "label": [
@@ -45646,7 +45646,7 @@
           "Lp A-II"
         ],
         "annotations": [
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02652\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02652\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02652\", \"url\": \"http://purl.uniprot.org/uniprot/P02652\"}"
         ],
         "xrefs": [],
         "label": [
@@ -45722,7 +45722,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Apolipoprotein B-100 (4563 aa, ~516 kDa) is encoded by the human APOB gene. This protein plays a role in both transport and cellular uptake of LDL particles.\", \"label\": \"Apolipoprotein B-100\", \"relation\": \"BQB_IS\", \"term\": \"C106032\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C106032\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P04114\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P04114\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P04114\", \"url\": \"http://purl.uniprot.org/uniprot/P04114\"}"
         ],
         "xrefs": [],
         "label": [
@@ -45794,7 +45794,7 @@
           "Lp C-II"
         ],
         "annotations": [
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02655\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02655\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02655\", \"url\": \"http://purl.uniprot.org/uniprot/P02655\"}"
         ],
         "xrefs": [],
         "label": [
@@ -45830,7 +45830,7 @@
           "Lp C-III"
         ],
         "annotations": [
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02656\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02656\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02656\", \"url\": \"http://purl.uniprot.org/uniprot/P02656\"}"
         ],
         "xrefs": [],
         "label": [
@@ -45871,7 +45871,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Apolipoprotein E (317 aa, ~36 kDa) is encoded by the human APOE gene. This protein is involved in lipid metabolism and transport.\", \"label\": \"Apolipoprotein E\", \"relation\": \"BQB_IS\", \"term\": \"C84470\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C84470\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"Q8TCZ8\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/Q8TCZ8\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"Q8TCZ8\", \"url\": \"http://purl.uniprot.org/uniprot/Q8TCZ8\"}"
         ],
         "xrefs": [],
         "label": [
@@ -49104,7 +49104,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"A family of globular proteins found in many plant and animal tissues that tend to bind a wide variety of ligands.  Albumin is the main protein in blood plasma.  Low serum levels occur in conditions associated with malnutrition, inflammation and liver and kidney diseases.\", \"label\": \"Albumin\", \"relation\": \"BQB_IS\", \"term\": \"C214\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C214\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02768\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02768\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02768\", \"url\": \"http://purl.uniprot.org/uniprot/P02768\"}"
         ],
         "xrefs": [],
         "label": [
@@ -49516,7 +49516,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Alpha-fetoprotein (609 aa, ~69 kDa) is encoded by the human AFP gene. This protein plays a role in the binding to copper, nickel, bilirubin and fatty acids in the fetal circulation.\", \"label\": \"Alpha-Fetoprotein\", \"relation\": \"BQB_IS\", \"term\": \"C16278\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C16278\"}",
           "{\"collection\": \"pr\", \"description\": \"Category=gene.\", \"label\": \"alpha-fetoprotein\", \"relation\": \"BQB_IS\", \"term\": \"PR:000003809\", \"url\": \"http://purl.bioontology.org/ontology/PR/PR:000003809\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02771\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P02771\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P02771\", \"url\": \"http://purl.uniprot.org/uniprot/P02771\"}"
         ],
         "xrefs": [],
         "label": [
@@ -89341,7 +89341,7 @@
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Renin (406 aa, ~45 kDa) is encoded by the human REN gene. This protein plays a role in activation of angiotensin.\", \"label\": \"Renin\", \"relation\": \"BQB_IS\", \"term\": \"C113591\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C113591\"}",
           "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"112052004\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=112052004\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"P00797\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P00797\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"P00797\", \"url\": \"http://purl.uniprot.org/uniprot/P00797\"}"
         ],
         "xrefs": [],
         "label": [
@@ -114928,7 +114928,7 @@
         ],
         "annotations": [
           "{\"collection\": \"ncit\", \"description\": \"Insulin (51 aa, ~6 kDa) is encoded by the human INS gene. This protein is involved in the direct regulation of glucose metabolism.\", \"label\": \"Insulin\", \"relation\": \"BQB_IS\", \"term\": \"C2271\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C2271\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P01308\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P01308\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P01308\", \"url\": \"http://purl.uniprot.org/uniprot/P01308\"}"
         ],
         "xrefs": [],
         "label": [
@@ -116908,7 +116908,7 @@
         ],
         "annotations": [
           "{\"collection\": \"chebi\", \"description\": null, \"label\": \"Glucose-dependent insulinotropic peptide\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:80165\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:80165\"}",
-          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P09681\", \"url\": \"https://www.ncbi.nlm.nih.gov/protein/P09681\"}"
+          "{\"collection\": \"uniprot\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"P09681\", \"url\": \"http://purl.uniprot.org/uniprot/P09681\"}"
         ],
         "xrefs": [],
         "label": [

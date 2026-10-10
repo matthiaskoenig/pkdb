@@ -1,7 +1,7 @@
 {
   "generator": "scripts/update_vocabulary.py",
   "nodes": 2148,
-  "version": "f0fdebf75b1514808ad298c50ac00519f59c020c5e8e6ef8d9fad79d84509a45",
+  "version": "a91ce1e8c2ebdc0b87f49dc0b9b625d21b445bf223bb69506f64223f5e92b3f4",
   "inputs_sha256": "0b0687653d9397ac2d138a7b58af1c7da3b9977235c542f9c44f313c1e1ddc53",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
