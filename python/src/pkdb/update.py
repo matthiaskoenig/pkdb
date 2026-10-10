@@ -176,7 +176,7 @@ def installed_version() -> str | None:
             [sys.executable, "-P", "-c", "import pkdb; print(pkdb.__version__)"],
             check=True,
             capture_output=True,
-            text=True,
+            encoding="utf-8",
             timeout=60,
         )
     except OSError, subprocess.SubprocessError:

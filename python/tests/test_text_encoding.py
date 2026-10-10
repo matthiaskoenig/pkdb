@@ -8,81 +8,123 @@ written on Windows gets CRLF line endings, which study files must not have.
 
 import ast
 import re
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
 
 SOURCE = Path(__file__).resolve().parents[1] / "src" / "pkdb"
 MODE = re.compile(r"[rwax][rwaxbt+]*")
+SUBPROCESS = {"run", "Popen", "call", "check_call", "check_output"}
 
 
-def _argument(call: ast.Call, position: int, name: str) -> ast.expr | None:
-    """An argument given by keyword or at its position."""
-    if position < len(call.args):
-        return call.args[position]
-    return next((k.value for k in call.keywords if k.arg == name), None)
+@dataclass(frozen=True)
+class Opener:
+    """Where a call that opens a file takes its arguments; None where it has none."""
+
+    mode: int | None
+    default: str
+    encoding: int
+    newline: int | None
 
 
-def _mode(call: ast.Call, position: int, default: str) -> str | None:
-    """The constant mode of a call; None when it is not a constant."""
-    mode = _argument(call, position, "mode")
-    if mode is None:
-        return default
-    if isinstance(mode, ast.Constant) and isinstance(mode.value, str):
-        return mode.value
+# The signatures of open, io.open and os.fdopen.
+OPEN = Opener(mode=1, default="r", encoding=3, newline=5)
+# codecs.open reads and writes bytes when it has an encoding, so it has no newline.
+CODECS_OPEN = Opener(mode=1, default="r", encoding=2, newline=None)
+PATH_OPEN = Opener(mode=0, default="r", encoding=2, newline=4)
+READ_TEXT = Opener(mode=None, default="r", encoding=0, newline=None)
+WRITE_TEXT = Opener(mode=None, default="w", encoding=1, newline=3)
+TEMPORARY_FILE = Opener(mode=0, default="w+b", encoding=2, newline=3)
+
+
+def _argument(call: ast.Call, position: int | None, name: str) -> ast.expr | None:
+    """An argument given at its position or by keyword; None when missing or None."""
+    if position is not None and position < len(call.args):
+        value = call.args[position]
+    else:
+        value = next((k.value for k in call.keywords if k.arg == name), None)
+    if isinstance(value, ast.Constant) and value.value is None:
+        return None
+    return value
+
+
+def _opener(call: ast.Call) -> Opener | None:
+    function = call.func
+    if isinstance(function, ast.Name):
+        owner, name = None, function.id
+    elif isinstance(function, ast.Attribute):
+        value = function.value
+        owner = value.id if isinstance(value, ast.Name) else ""
+        name = function.attr
+    else:
+        return None
+    match owner, name:
+        case (None, "open") | ("io", "open") | ("os", "fdopen"):
+            return OPEN
+        case ("codecs", "open"):
+            return CODECS_OPEN
+        case (_, "NamedTemporaryFile" | "TemporaryFile"):
+            return TEMPORARY_FILE
+        case (str(), "read_text"):
+            return READ_TEXT
+        case (str(), "write_text"):
+            return WRITE_TEXT
+        case (str(), "open"):
+            # Path.open(mode, ...); other open methods, such as ZipFile.open, take a
+            # name first.
+            first = _argument(call, 0, "mode")
+            if first is None or (
+                isinstance(first, ast.Constant) and MODE.fullmatch(str(first.value))
+            ):
+                return PATH_OPEN
     return None
+
+
+def _subprocess_problems(call: ast.Call) -> list[str]:
+    """A subprocess call that decodes its output in the locale encoding."""
+    function = call.func
+    if not (
+        isinstance(function, ast.Attribute)
+        and isinstance(function.value, ast.Name)
+        and function.value.id == "subprocess"
+        and function.attr in SUBPROCESS
+    ):
+        return []
+    text = [
+        k.value
+        for k in call.keywords
+        if k.arg in {"text", "universal_newlines"}
+        and not (isinstance(k.value, ast.Constant) and not k.value.value)
+    ]
+    if text and _argument(call, None, "encoding") is None:
+        return ["encoding"]
+    return []
 
 
 def _problems(call: ast.Call) -> list[str]:
     """What a call that opens a file in text mode leaves to the platform."""
-    function = call.func
-    name = function.attr if isinstance(function, ast.Attribute) else None
-    if isinstance(function, ast.Name):
-        name = function.id
-    if name == "read_text" and isinstance(function, ast.Attribute):
-        # Path.read_text(encoding, errors); importlib's read_text takes a file name.
-        mode, encoding, newline = "r", _argument(call, 0, "encoding"), None
-    elif name == "write_text" and isinstance(function, ast.Attribute):
-        # Path.write_text(data, encoding, errors, newline)
-        mode = "w"
-        encoding, newline = (
-            _argument(call, 1, "encoding"),
-            _argument(call, 3, "newline"),
-        )
-    elif name == "open" and isinstance(function, ast.Name):
-        mode = _mode(call, 1, "r")
-        encoding, newline = (
-            _argument(call, 3, "encoding"),
-            _argument(call, 6, "newline"),
-        )
-    elif name == "open" and isinstance(function, ast.Attribute):
-        # Path.open(mode, ...); other open methods, such as ZipFile.open, take a name.
-        first = _argument(call, 0, "mode")
-        if first is None:
-            mode = "r"
-        elif isinstance(first, ast.Constant) and MODE.fullmatch(str(first.value)):
-            mode = str(first.value)
-        else:
-            return []
-        encoding, newline = (
-            _argument(call, 3, "encoding"),
-            _argument(call, 4, "newline"),
-        )
-    elif name == "NamedTemporaryFile":
-        mode = _mode(call, 0, "w+b")
-        encoding, newline = (
-            _argument(call, 2, "encoding"),
-            _argument(call, 3, "newline"),
-        )
-    else:
-        return []
+    opener = _opener(call)
+    if opener is None:
+        return _subprocess_problems(call)
+    mode: str | None = opener.default
+    if opener.mode is not None:
+        given = _argument(call, opener.mode, "mode")
+        if isinstance(given, ast.Constant) and isinstance(given.value, str):
+            mode = given.value
+        elif given is not None:
+            mode = None
     if mode is not None and "b" in mode:
         return []
     problems = []
-    if encoding is None:
+    if _argument(call, opener.encoding, "encoding") is None:
         problems.append("encoding")
     writes = mode is None or any(c in mode for c in "wax+")
-    if writes and newline is None:
+    if (
+        writes
+        and opener.newline is not None
+        and _argument(call, opener.newline, "newline") is None
+    ):
         problems.append("newline")
     return problems
 
@@ -129,6 +171,25 @@ def test_every_text_file_is_opened_with_an_encoding_and_a_newline():
         ("NamedTemporaryFile(dir=folder)", []),
         ("NamedTemporaryFile('w', encoding='utf-8')", ["newline"]),
         ("NamedTemporaryFile('w', encoding='utf-8', newline='')", []),
+        ("tempfile.NamedTemporaryFile('w', encoding='utf-8')", ["newline"]),
+        ("open(path, 'w', -1, 'utf-8', None, '')", []),
+        ("open(path, 'w', -1, 'utf-8', None, None, True)", ["newline"]),
+        ("path.open('w', -1, 'utf-8', None, '')", []),
+        ("path.open('r', -1, 'utf-8')", []),
+        ("path.read_text(encoding=None)", ["encoding"]),
+        ("path.write_text(text, encoding='utf-8', newline=None)", ["newline"]),
+        ("io.open(path, 'w', encoding='utf-8')", ["newline"]),
+        ("io.open(path, 'rb')", []),
+        ("os.fdopen(descriptor, 'w')", ["encoding", "newline"]),
+        ("os.fdopen(descriptor, 'wb')", []),
+        ("codecs.open(path, 'w')", ["encoding"]),
+        ("codecs.open(path, 'w', 'utf-8')", []),
+        ("subprocess.run(command, text=True)", ["encoding"]),
+        ("subprocess.check_output(command, universal_newlines=True)", ["encoding"]),
+        ("subprocess.run(command, text=True, encoding='utf-8')", []),
+        ("subprocess.run(command, encoding='utf-8')", []),
+        ("subprocess.run(command, text=False)", []),
+        ("subprocess.run(command, capture_output=True)", []),
     ],
 )
 def test_text_files_left_to_the_platform_are_found(source, problems):
