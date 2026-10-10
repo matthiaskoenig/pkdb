@@ -16,7 +16,7 @@ from curation_http import authenticate, request
 
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine
-from pkdb.curation.launch import open_path
+from pkdb.curation.launch import open_path, windows_quoted
 from pkdb.schemas.validation import StudyValidationError, refusal
 from pkdb.studyformat.load import BeyondLimits
 
@@ -547,9 +547,12 @@ def test_open_command_is_split_like_a_shell_command_on_posix(
     "command",
     [r"C:\Tools\rec.exe --flag", r'"C:\Program Files\Rec\rec.exe" --flag'],
 )
-def test_open_command_is_a_command_line_on_windows(tmp_path, monkeypatch, command):
-    # Windows splits the command line itself, so backslashes and double quotes stay.
-    folder = tmp_path / "my study"
+@pytest.mark.parametrize("name", ["my study", "study"])
+def test_open_command_is_a_command_line_on_windows(
+    tmp_path, monkeypatch, command, name
+):
+    # Windows gets the command line as written, followed by the path in quotes.
+    folder = tmp_path / name
     folder.mkdir()
     file = folder / "outputs.xlsx"
     file.write_text("x")
@@ -561,3 +564,17 @@ def test_open_command_is_a_command_line_on_windows(tmp_path, monkeypatch, comman
     monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
     open_path(file)
     assert runner.call_args.args[0] == f'{command} "{file.resolve()}"'
+
+
+@pytest.mark.parametrize(
+    ("path", "quoted"),
+    [
+        (r"C:\Studies\Fig1.xlsx", r'"C:\Studies\Fig1.xlsx"'),
+        (r"C:\R&D\my study", r'"C:\R&D\my study"'),
+        # The C runtime reads \" as a quote, so the backslash before it is doubled.
+        ("C:\\", '"C:\\\\"'),
+        (r"\\server\share" + "\\", r'"\\server\share\\"'),
+    ],
+)
+def test_a_windows_path_is_quoted_as_one_argument(path, quoted):
+    assert windows_quoted(path) == quoted
