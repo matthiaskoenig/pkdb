@@ -107,6 +107,8 @@ class CurationEngine(
         self.format1_folders = 0
         # The format of each study folder, by its study.json and its format 2 files.
         self._formats = {}
+        # The listings of the folders of the workspace, which scans reuse while unchanged.
+        self._tree = None
         self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
