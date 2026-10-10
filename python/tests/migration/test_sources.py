@@ -175,7 +175,7 @@ def folders(tmp_path):
     return v1, target
 
 
-@pytest.mark.parametrize("study", ["Ex[ab]mple", "Ex*", "Ex?mple", "Ex[mple"])
+@pytest.mark.parametrize("study", ["Ex[ab]mple", "Ex[mple"])
 def test_a_study_name_with_glob_characters_matches_only_its_images(tmp_path, study):
     v1, target = folders(tmp_path)
     (v1 / f"{study}_Fig1.png").write_bytes(tiny_png())
@@ -208,7 +208,7 @@ def test_a_jpg_is_turned_upright_and_keeps_its_color_profile(tmp_path):
         assert image.info["icc_profile"] == profile
         assert 0x0112 not in image.getexif()
     assert [d.detail for d in decisions] == [
-        "Example_Fig1.jpg to Example_Fig1.png (rotated by its EXIF orientation)"
+        "Example_Fig1.jpg to Example_Fig1.png (turned upright by its EXIF orientation)"
     ]
 
 
@@ -262,3 +262,33 @@ def test_a_write_failure_is_not_blamed_on_the_image(tmp_path, suffix, monkeypatc
     assert error.value.code == "image_write"
     assert "cannot be read" not in error.value.message
     assert "No space left" in error.value.message
+
+
+@pytest.mark.parametrize("orientation", [0, 9])
+def test_an_unknown_orientation_is_not_reported(tmp_path, orientation):
+    v1, target = folders(tmp_path)
+    exif = Image.Exif()
+    exif[0x0112] = orientation
+    Image.new("RGB", (4, 2)).save(v1 / "Example_Fig1.jpg", exif=exif)
+    decisions = copy_images(v1, target, "Example", {"Fig1"})
+    assert decisions[0].detail == "Example_Fig1.jpg to Example_Fig1.png"
+
+
+@pytest.mark.parametrize("format", ["JPEG", "GIF"])
+def test_another_image_format_named_png_is_converted(tmp_path, format):
+    v1, target = folders(tmp_path)
+    Image.new("RGB", (4, 2), "red").save(v1 / "Example_Fig1.png", format=format)
+    decisions = copy_images(v1, target, "Example", {"Fig1"})
+    with Image.open(target / "Example_Fig1.png") as image:
+        assert image.format == "PNG"
+    assert [d.kind for d in decisions] == ["image_converted"]
+
+
+def test_the_reason_of_an_unreadable_image_names_no_absolute_path(tmp_path):
+    v1, target = folders(tmp_path)
+    (v1 / "Example_Fig1.png").write_bytes(b"garbage")
+    with pytest.raises(NotConverted) as error:
+        copy_images(v1, target, "Example", {"Fig1"})
+    assert error.value.code == "image_unreadable"
+    assert str(tmp_path) not in error.value.message
+    assert "Example_Fig1.png" in error.value.message

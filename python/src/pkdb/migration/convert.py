@@ -178,11 +178,7 @@ def convert_study(
     )
     try:
         metadata, metadata_decisions = study_metadata(
-            bundle.study,
-            bundle.reference,
-            release,
-            creator_fallback=approver or "pkdb",
-            study=name,
+            bundle.study, bundle.reference, release, creator_fallback=approver or "pkdb"
         )
         status = review(release, approver)
     except ValidationError as error:

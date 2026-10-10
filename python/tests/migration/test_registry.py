@@ -1,4 +1,5 @@
 import json
+import pickle
 from datetime import date
 
 import pytest
@@ -108,6 +109,7 @@ def test_findings_name_double_identifiers_and_missing_paths(tmp_path):
         ('{"PKDB00001": "a/B"}', "entry PKDB00001"),
         ('{"PKDB00001": ["a/B", "yesterday"]}', "entry PKDB00001"),
         ('{"PKDB00001": ["a/B", 3]}', "entry PKDB00001"),
+        ('{"PKDB00001": [null, "2020-01-01"]}', "entry PKDB00001"),
     ],
 )
 def test_a_malformed_registry_names_the_file_and_entry(tmp_path, content, problem):
@@ -116,6 +118,20 @@ def test_a_malformed_registry_names_the_file_and_entry(tmp_path, content, proble
     with pytest.raises(ValueError, match=problem) as error:
         Registry.read(path)
     assert "ids.json" in str(error.value)
+
+
+def test_a_registry_that_is_not_text_names_the_file(tmp_path):
+    path = tmp_path / "ids.json"
+    path.write_bytes(b"\xff\xfe{")
+    with pytest.raises(ValueError, match="ids.json"):
+        Registry.read(path)
+
+
+def test_the_location_index_survives_pickling():
+    registry = Registry({"PKDB00001": ("a/B", date(2020, 1, 1))})
+    copy = pickle.loads(pickle.dumps(registry))
+    assert copy == registry
+    assert copy.__dict__["_by_location"] == {"a/B": ["PKDB00001"]}
 
 
 def test_the_locations_are_indexed_once():

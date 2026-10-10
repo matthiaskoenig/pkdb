@@ -5,7 +5,6 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date
-from functools import cached_property
 from pathlib import Path
 
 from pkdb.migration.model import NotConverted, RegistryFindings
@@ -19,6 +18,9 @@ class Registry:
     """PKDB identifiers with the `<substance>/<name>` location and the release date."""
 
     entries: dict[str, tuple[str, date]] = field(default_factory=dict)
+    _by_location: dict[str, list[str]] = field(
+        init=False, repr=False, compare=False, default_factory=dict
+    )
 
     @classmethod
     def read(cls, path: Path | None) -> Registry:
@@ -26,6 +28,10 @@ class Registry:
             return cls()
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError as error:
+            raise ValueError(
+                f"The registry {path.as_posix()} is not UTF-8 text: {error}"
+            ) from error
         except json.JSONDecodeError as error:
             raise ValueError(
                 f"The registry {path.as_posix()} is not JSON: {error}"
@@ -39,7 +45,9 @@ class Registry:
         for pkdb_id, entry in sorted(data.items()):
             try:
                 location, day = entry
-                entries[pkdb_id] = (str(location), date.fromisoformat(day))
+                if not isinstance(location, str):
+                    raise TypeError("the location must be text")
+                entries[pkdb_id] = (location, date.fromisoformat(day))
             except (TypeError, ValueError) as error:
                 raise ValueError(
                     f"The registry {path.as_posix()} entry {pkdb_id} must be "
@@ -51,12 +59,12 @@ class Registry:
     def identifiers(self) -> dict[str, str]:
         return {pkdb_id: location for pkdb_id, (location, _) in self.entries.items()}
 
-    @cached_property
-    def _by_location(self) -> dict[str, list[str]]:
+    def __post_init__(self) -> None:
+        # Built once and eagerly: it is part of the state that a parallel run pickles.
         located = defaultdict(list)
         for pkdb_id, (location, _) in self.entries.items():
             located[location].append(pkdb_id)
-        return located
+        object.__setattr__(self, "_by_location", located)
 
     def release(self, location: str, sid: str) -> Release | None:
         """The release of the study at `location` whose v1 study.json has `sid`.
