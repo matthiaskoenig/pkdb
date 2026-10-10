@@ -37,7 +37,7 @@ As the third setup command, load the bundled historical curator/reviewer roster 
 docker compose exec backend pkdb-server import-users /app/bootstrap/curator-roster.json --avatar-root /app/frontend/public --apply
 ```
 
-Use `--dry-run` instead of `--apply` to preview changes first, especially on an existing database. The public roster contains 69 historical entries: 67 curator/reviewer accounts are imported on a fresh database; the historical test account is excluded, and the historical administrator profile is skipped unless it matches the already designated administrator. Choosing another admin username does not rename or adopt that historical identity. The empty `users.json` is not the user roster. Compose mounts the bundled avatars read-only and the importer copies them into persistent backend storage.
+Use `--dry-run` instead of `--apply` to preview changes first, especially on an existing database. The public roster contains 68 historical entries: 66 curator/reviewer accounts are imported on a fresh database; the historical test account is excluded, and the historical administrator profile is skipped unless it matches the already designated administrator. Choosing another admin username does not rename or adopt that historical identity. The empty `users.json` is not the user roster. Compose mounts the bundled avatars read-only and the importer copies them into persistent backend storage.
 
 Imported users retain their attribution, roles, and profile data, but new imported accounts have no usable password and remain disabled. Repeating the same import is safe: it preserves credentials, account state, and later profile edits. Existing role or study-assignment changes require a reviewed dry run and `--update-existing` on both preview and apply.
 

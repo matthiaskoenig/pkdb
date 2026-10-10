@@ -12,8 +12,9 @@ Use `--check` to detect stale generated files. See [the vocabulary guide](../../
 
 ## Curator roster and avatars
 
-`curator-roster.json` records all 69 historical accounts from
-`backend/pkdb_data/management/users.py` at the exact revision in the manifest.
+`curator-roster.json` records 68 of the 69 historical accounts from
+`backend/pkdb_data/management/users.py` at the exact revision in the manifest;
+the group account `xresearch` is left out.
 It contains public identity mappings and intended migration roles, with no email
 addresses or credentials. It is **not** an input to the existing account bootstrap.
 The private invitation import must match existing account IDs/usernames explicitly,
@@ -31,8 +32,8 @@ All accounts were checked against `livermetabolism-site/data/people.yml`.
 46 accounts have matched site avatars (45 distinct images). Exact source revision,
 person ID, relative source filename, and SHA-256 are recorded. Matched WebP thumbnails
 are copied to `frontend/public/assets/images/avatars/curators/`, so production does
-not need the sibling repository. Existing PK-DB images are retained for `kgreen`
-and `xresearch`. The other 21 entries, including the excluded test account, use
+not need the sibling repository. The existing PK-DB image of `kgreen` is retained.
+The other 21 entries, including the excluded test account, use
 initials or a generic fallback; their missing mappings are explicitly recorded.
 No remote avatar lookup or email hashing is needed.
 
