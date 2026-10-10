@@ -16,10 +16,10 @@ import pytest
 # so the check catches a quadratic regression on a slow or busy machine alike,
 # where an absolute budget fails or passes by chance. Each size is measured up
 # to REPEATS times and its least CPU time counts, since a busy machine only
-# ever adds time.
+# ever adds time. Repeats cost nothing while the first ones pass.
 SCALE = 4
 SCALING_LIMIT = 6
-REPEATS = 3
+REPEATS = 6
 
 
 def cpu_seconds(step):
@@ -28,12 +28,18 @@ def cpu_seconds(step):
     time.thread_time hardly depends on the load of the machine, unlike the wall
     clock, and unlike time.process_time it leaves out the other threads of the
     process, such as servers or watchers of other tests. Garbage of the
-    preparation is collected first.
+    preparation is collected first, and the collector is paused during the
+    step: a collection pass walks the whole live heap, which a larger input
+    makes larger, and it runs at moments that depend on earlier allocations.
     """
     gc.collect()
-    start = time.thread_time()
-    result = step()
-    return result, time.thread_time() - start
+    gc.disable()
+    try:
+        start = time.thread_time()
+        result = step()
+        return result, time.thread_time() - start
+    finally:
+        gc.enable()
 
 
 @pytest.fixture

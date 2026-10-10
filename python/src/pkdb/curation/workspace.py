@@ -18,7 +18,7 @@ from pkdb.curation.state import EngineState
 from pkdb.curation.studies import study_summary
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
-from pkdb.source_files import ignored_source
+from pkdb.source_files import below_hidden_folder, ignored_source
 from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON
@@ -192,10 +192,14 @@ class WorkspaceMixin(EngineState):
         # its keys and paths are relative to the old root.
         with self.lock:
             root = self.root
+        # A folder below a hidden folder, such as the build folder of an
+        # interrupted pkdb new, is no study.
         folders = {
             p.parent
             for p in root.rglob("study.json")
-            if not p.is_symlink() and not ignored_source(p.relative_to(root))
+            if not p.is_symlink()
+            and not ignored_source(p.relative_to(root))
+            and not below_hidden_folder(p.relative_to(root))
         }
         with self.lock:
             if self.root is not root:

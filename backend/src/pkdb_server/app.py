@@ -68,7 +68,7 @@ from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p006studyformat"
+SCHEMA_REVISION = "p007issueunique"
 # File names and folder names are limited by common file systems.
 NAME_BYTES = 255
 SID_LENGTH = 255

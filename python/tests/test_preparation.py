@@ -67,3 +67,15 @@ def test_serialized_hashes_do_not_mutate_preparation(study_folder, vocabulary):
     artifact = prepared.model_dump()
     artifact["file_hashes"].clear()
     assert prepared.file_hashes == before
+
+
+def test_study_folders_skip_folders_below_hidden_folders(tmp_path):
+    from pkdb.preparation import study_folders
+
+    for folder in ("caffeine/A", "caffeine/.B.new/B", ".git/C", "codeine/D"):
+        (tmp_path / folder).mkdir(parents=True)
+        (tmp_path / folder / "study.json").write_text("{}", encoding="utf-8")
+    # A leftover of an interrupted pkdb new is no study.
+    assert study_folders(tmp_path) == [tmp_path / "caffeine/A", tmp_path / "codeine/D"]
+    hidden = tmp_path / "caffeine" / ".B.new" / "B"
+    assert study_folders(hidden) == [hidden]

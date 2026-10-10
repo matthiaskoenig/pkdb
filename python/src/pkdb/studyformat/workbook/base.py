@@ -147,6 +147,14 @@ def parse_base(rows: Iterable[tuple[object, ...]]) -> WorkbookBase:
     return WorkbookBase(generation, created, files)
 
 
+def is_scratch_sheet(name: str) -> bool:
+    """Whether a sheet is a scratch sheet: its name starts with `_` and it is not generated.
+
+    Scratch sheets are never synced and are kept when the workbook is regenerated.
+    """
+    return name.startswith("_") and name.casefold() not in {LISTS_SHEET, BASE_SHEET}
+
+
 def workbook_path(folder: Path) -> Path:
     """The workbook of a study folder, named after the study: Smith2020/Smith2020.xlsx."""
     return folder / f"{folder.name}.xlsx"

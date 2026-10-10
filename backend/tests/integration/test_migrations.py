@@ -26,7 +26,7 @@ def test_initial_schema_round_trip(session_factory):
     config = alembic_config(session_factory)
     scripts = ScriptDirectory.from_config(config)
     assert scripts.get_heads() == [SCHEMA_REVISION]
-    assert len(list(scripts.walk_revisions())) == 6
+    assert len(list(scripts.walk_revisions())) == 7
     command.check(config)
     with engine.connect() as connection:
         assert (
@@ -224,6 +224,53 @@ def test_study_format_revision_round_trip_keeps_published_studies(
     assert search_index(session_factory) == before_revision
     command.upgrade(config, "head")
     command.check(config)
+
+
+def issue_index(session_factory):
+    """The definition of the unique index of issue numbers, or None."""
+    with session_factory() as session:
+        return session.execute(
+            text(
+                "SELECT indexdef FROM pg_indexes WHERE schemaname = current_schema() "
+                "AND indexname = 'uq_studies_issue'"
+            )
+        ).scalar_one_or_none()
+
+
+def test_issue_revision_refuses_studies_that_share_an_issue(session_factory):
+    config = alembic_config(session_factory)
+    command.downgrade(config, "p006studyformat")
+    assert issue_index(session_factory) is None
+    with session_factory.begin() as session:
+        for sid, issue in (
+            ("caffeine/A", 7),
+            ("caffeine/B", 7),
+            ("caffeine/C", 8),
+            ("caffeine/D", None),
+            ("caffeine/E", None),
+        ):
+            session.execute(
+                text(
+                    "INSERT INTO studies (sid, name, access, licence, issue, "
+                    "validation_report, source_manifest) VALUES "
+                    "(:sid, :sid, 'private', 'closed', :issue, '{}', '{}')"
+                ),
+                {"sid": sid, "issue": issue},
+            )
+    with pytest.raises(RuntimeError) as refused:
+        command.upgrade(config, "head")
+    assert str(refused.value) == (
+        "Studies share an issue number; give each study its own issue first "
+        "(#7: caffeine/A, caffeine/B)"
+    )
+    assert issue_index(session_factory) is None
+    with session_factory.begin() as session:
+        session.execute(text("UPDATE studies SET issue = 9 WHERE sid = 'caffeine/B'"))
+    command.upgrade(config, "head")
+    command.check(config)
+    index = issue_index(session_factory)
+    assert index.startswith("CREATE UNIQUE INDEX uq_studies_issue ON")
+    assert index.endswith("(issue) WHERE (issue IS NOT NULL)")
 
 
 VALUES = """

@@ -184,10 +184,11 @@ def lock_study(session, sid: str) -> None:
     A publication locks its sid and its PKDB identifier, then the uploader's
     account, then the study row. It replaces the study under the same sid or
     takes it over by its PKDB identifier (a rename); a takeover of a study
-    format 1 study by its publication locks that study's sid as well. So the
-    locks of both names exclude every publication of the study. With the sid alone, a rename
-    could hold the account row of a curator, which the grant inserts wait for,
-    while it waits for the study row: a deadlock. StudyChanged if the PKDB
+    format 1 study by its publication or of a moved study by its issue number
+    locks that study's sid as well. So the locks of both names exclude every
+    publication of the study. With the sid alone, a rename could hold the
+    account row of a curator, which the grant inserts wait for, while it waits
+    for the study row: a deadlock. StudyChanged if the PKDB
     identifier changed before the locks were taken; the caller has taken no
     account or row lock yet and starts again.
     """

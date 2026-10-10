@@ -41,7 +41,10 @@ SYNCED_WITHOUT_WORKBOOK = {
 }
 
 
-def _vocabulary_options(command) -> None:
+def _vocabulary_options(
+    command,
+    offline_help: str = "Never contact the server; tables commands only use cached vocabulary",
+) -> None:
     """The options of pkdb validate that choose the vocabulary of the dropdowns."""
     command.add_argument(
         "--vocabulary", type=Path, help="Pinned vocabulary snapshot JSON"
@@ -55,7 +58,7 @@ def _vocabulary_options(command) -> None:
     command.add_argument(
         "--offline",
         action="store_true",
-        help="Never contact the server; tables commands only use cached vocabulary",
+        help=offline_help,
     )
 
 

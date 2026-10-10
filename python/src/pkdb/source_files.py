@@ -11,6 +11,11 @@ CHUNK = 1024 * 1024
 TEMPORARY_FILE = re.compile(r"\.tmp[0-9a-f]{16}")
 
 
+def below_hidden_folder(path: Path) -> bool:
+    """Whether a relative file path lies below a folder whose name starts with a dot."""
+    return any(part.startswith(".") for part in path.parts[:-1])
+
+
 def ignored_source(path: Path) -> bool:
     name = path.name
     return (

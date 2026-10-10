@@ -42,6 +42,7 @@ from pkdb.studyformat.workbook.base import (
     WORKBOOK_FORMAT,
     WorkbookBase,
     base_rows,
+    is_scratch_sheet,
 )
 
 AUTHOR = "pkdb"
@@ -294,9 +295,8 @@ def _open(existing: Path | None) -> Workbook:
         raise WorkbookError(
             "workbook_unreadable", f"{existing.name} cannot be read: {error}"
         ) from error
-    generated = {LISTS_SHEET, BASE_SHEET}
     for name in workbook.sheetnames:
-        if not name.startswith("_") or name.casefold() in generated:
+        if not is_scratch_sheet(name):
             workbook.remove(workbook[name])
     return workbook
 

@@ -42,6 +42,19 @@ def test_rows_are_format_2_studies_by_identity(workspace):
     assert "sid" not in row and "metadata" not in row
 
 
+def test_rows_skip_folders_below_hidden_folders(workspace, valid_files):
+    import shutil
+
+    engine, folder, legacy = workspace
+    # The leftovers of an interrupted pkdb new, of format 2 and format 1.
+    shutil.copytree(folder, folder.parent / ".Example.new" / "Example")
+    shutil.copytree(legacy, folder.parent / ".Legacy1990.new" / "Legacy1990")
+    engine.scan()
+    snapshot = engine.snapshot()
+    assert [row["id"] for row in snapshot["studies"]] == ["caffeine/Example"]
+    assert snapshot["format1_folders"] == 1
+
+
 def run_queue(engine):
     while engine.queue:
         identifier = next(iter(engine.queue))

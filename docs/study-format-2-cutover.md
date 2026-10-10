@@ -80,4 +80,4 @@ Re-upload all studies with processing version 9 to staging and compare counts an
 
 ## Papers
 
-Folders without `study.json` move to `papers/<substance>/<name>/`. `pkdb new` takes the PDF and images from there.
+Folders without `study.json` move to `papers/<substance>/<name>/`. `pkdb new <substance>/<name>` takes the PDF `<name>.pdf` and the images `<name>_<source>.png`, with a source such as `Tab1`, `Fig2A` or `Text`, from there into the new study. Other files, such as a study format 1 workbook `<name>.xlsx`, stay in the paper folder and are listed in the output; a file whose name differs from these names only in case, such as `<name>.PDF`, also stays and is named with the expected name. An emptied paper folder and an emptied substance folder below `papers/` are removed.

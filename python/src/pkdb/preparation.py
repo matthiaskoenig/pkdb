@@ -21,7 +21,7 @@ from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
-from pkdb.source_files import ignored_source
+from pkdb.source_files import below_hidden_folder, ignored_source
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.validation import (
@@ -39,12 +39,21 @@ MAX_FILES = 256
 
 
 def study_folders(path: str | Path) -> list[Path]:
+    """The study folder `path`, or the folders with a study.json below it.
+
+    Folders below a hidden folder are skipped, such as `.git` or the build
+    folder `.<name>.new/<name>` that an interrupted `pkdb new` leaves.
+    """
     root = Path(path)
     if not root.is_dir():
         raise ValueError("Study path must be a directory")
     if (root / "study.json").is_file():
         return [root]
-    folders = sorted(file.parent for file in root.rglob("study.json"))
+    folders = sorted(
+        file.parent
+        for file in root.rglob("study.json")
+        if not below_hidden_folder(file.relative_to(root))
+    )
     if not folders:
         raise ValueError("No study.json files found")
     return folders

@@ -80,6 +80,7 @@ REQUEST_GUIDANCE = {
     "study_format_route": "Send study format 2 folders to /api/v2/studies/{substance}/{name} and study format 1 bundles to /api/v2/studies/{sid}; the Python client chooses the route.",
     "invalid_study_location": "Name the substance folder and the study folder in the request URL, without dot segments, backslashes or control characters.",
     "duplicate_pkdb_id": "Check the release block of study.json: each PKDB identifier belongs to exactly one study.",
+    "duplicate_issue": "Check the issue number in study.json: each GitHub issue belongs to exactly one study.",
     "invalid_file": "Send attachments as named files multipart parts.",
     "invalid_filename": "Use unique attachment basenames without path separators or parent-directory components. For study format 2, send study.json and reference.json as the study and reference parts and only the other files of the study as files.",
     "invalid_bundle": "Check the study, reference, and attachment fields against the source bundle schema.",
