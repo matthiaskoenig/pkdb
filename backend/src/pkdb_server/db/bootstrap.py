@@ -6,11 +6,12 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
-from sqlalchemy import delete, insert, select, text
+from sqlalchemy import delete, insert, select
 from sqlalchemy.orm import Session
 
 from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabulary
 from pkdb.schemas.validation import ValidationIssue
+from pkdb_server.db.locks import advisory_xact_lock
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import (
     VocabularyEdge,
@@ -126,9 +127,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
             ValidationIssue(code="invalid_bootstrap", message=str(error))
         )
         return report
-    session.execute(
-        text("SELECT pg_advisory_xact_lock(:key)"), {"key": VOCABULARY_LOCK}
-    )
+    advisory_xact_lock(session, VOCABULARY_LOCK)
     existing_users = {
         user.username: user for user in session.scalars(select(User).with_for_update())
     }

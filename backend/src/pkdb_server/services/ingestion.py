@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import NoReturn
 
-from sqlalchemy import or_, select, text, tuple_
+from sqlalchemy import or_, select, tuple_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -27,6 +27,7 @@ from pkdb.studyformat.validation import prepare_folder
 from pkdb_server.config import Settings
 from pkdb_server.db import replace
 from pkdb_server.db.bootstrap import VOCABULARY_LOCK, load_vocabulary
+from pkdb_server.db.locks import advisory_xact_lock
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.studies import PublicationIdentifier, Study, StudyGrant
 from pkdb_server.db.models.users import User
@@ -83,7 +84,7 @@ def lock_publication(
     if issue is not None:
         names.add(issue_lock(issue))
     for key in sorted(sid_lock(name) for name in names):
-        session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
+        advisory_xact_lock(session, key)
     return names
 
 
@@ -542,10 +543,7 @@ class IngestionService:
         study = prepared.study
         try:
             with self.session_factory.begin() as session:
-                session.execute(
-                    text("SELECT pg_advisory_xact_lock_shared(:key)"),
-                    {"key": VOCABULARY_LOCK},
-                )
+                advisory_xact_lock(session, VOCABULARY_LOCK, shared=True)
                 release = study.metadata.release
                 pkdb_id = release.pkdb_id if release else None
                 locked = lock_publication(

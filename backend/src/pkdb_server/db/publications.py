@@ -3,9 +3,10 @@
 import hashlib
 import json
 
-from sqlalchemy import select, text
+from sqlalchemy import select
 
 from pkdb.references import normalize_doi, normalize_pmid
+from pkdb_server.db.locks import advisory_xact_lock
 from pkdb_server.db.models.studies import Publication, PublicationIdentifier, Study
 
 
@@ -13,7 +14,7 @@ def lock_identity(session, identity):
     key = int.from_bytes(
         hashlib.sha256(json.dumps(identity).encode()).digest()[:8], "big", signed=True
     )
-    session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
+    advisory_xact_lock(session, key)
 
 
 def identifiers(reference):

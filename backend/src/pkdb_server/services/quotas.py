@@ -6,6 +6,7 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy import case, select
 from sqlalchemy.dialects.postgresql import insert
 
+from pkdb_server.db.locks import advisory_xact_lock
 from pkdb_server.db.models.users import AccountThrottle
 
 
@@ -83,7 +84,7 @@ class QuotaService:
             return None
         from uuid import uuid4
 
-        from sqlalchemy import delete, func, text
+        from sqlalchemy import delete, func
 
         from pkdb_server.db.models.limits import WorkLease
 
@@ -115,9 +116,7 @@ class QuotaService:
                     "big",
                     signed=True,
                 )
-                session.execute(
-                    text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock}
-                )
+                advisory_xact_lock(session, lock)
                 session.execute(
                     delete(WorkLease).where(
                         WorkLease.bucket == bucket, WorkLease.expires_at <= now

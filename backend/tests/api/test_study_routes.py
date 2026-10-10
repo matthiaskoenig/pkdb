@@ -12,6 +12,7 @@ from sqlalchemy import select, text, update
 
 from pkdb import Client
 from pkdb.studyformat.jsonio import dump_json
+from pkdb_server.db.locks import SCHEMA_KEY
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.users import User
 from pkdb_server.services.ingestion import issue_lock, sid_lock
@@ -340,13 +341,14 @@ def lock_holder(session_factory):
 
 def advisory(connection, operation, name):
     connection.execute(
-        text(f"SELECT pg_advisory_{operation}(:key)"), {"key": sid_lock(name)}
+        text(f"SELECT pg_advisory_{operation}({SCHEMA_KEY})"), {"key": sid_lock(name)}
     )
 
 
 def wait_for_waiter(connection, name):
     """Wait until a transaction waits for the advisory lock of `name`."""
-    key = sid_lock(name) & 0xFFFF_FFFF_FFFF_FFFF
+    key = connection.scalar(text(f"SELECT {SCHEMA_KEY}"), {"key": sid_lock(name)})
+    key &= 0xFFFF_FFFF_FFFF_FFFF
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
         if connection.scalar(
