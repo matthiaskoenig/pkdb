@@ -3,7 +3,7 @@
 import hashlib
 import json
 import shutil
-from collections.abc import Iterator, Mapping
+from collections.abc import Generator, Mapping
 from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -246,7 +246,7 @@ class PreparedBundle:
         }
 
     @contextmanager
-    def source(self) -> Iterator[UploadSource]:
+    def source(self) -> Generator[UploadSource]:
         """The upload of a private snapshot equal to the prepared folder.
 
         The snapshot is prepared again with the vocabulary of the preparation,

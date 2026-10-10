@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import socket
 import time
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator
 from contextlib import ExitStack, contextmanager
 from functools import cache as memoize
 from json import JSONEncoder
@@ -132,7 +132,7 @@ class MetadataCache:
 
 
 @contextmanager
-def use_metadata_cache(root: Path, *, offline: bool) -> Iterator[MetadataCache]:
+def use_metadata_cache(root: Path, *, offline: bool) -> Generator[MetadataCache]:
     """Scope pymetadata's service hooks and singleton state to one compilation."""
     from info_nodes import node
 
