@@ -17,16 +17,24 @@ def below_hidden_folder(path: Path) -> bool:
 
 
 def ignored_source(path: Path) -> bool:
-    name = path.name
-    return (
-        ".git" in path.parts
-        or name in {".DS_Store", "Thumbs.db", "desktop.ini"}
-        or name.startswith("~$")
+    return ".git" in path.parts or ignored_name(path.name)
+
+
+def ignored_name(name: str) -> bool:
+    """Whether a source file or folder name is one that sources ignore, by the name alone.
+
+    Everything below a `.git` folder is ignored as well; `ignored_source` checks the whole path.
+    """
+    if name in {".DS_Store", "Thumbs.db", "desktop.ini"} or name.startswith("~$"):
+        return True
+    # The other names start with a dot; scans of large workspaces check every name.
+    return name.startswith(".") and (
+        name == ".git"
         or (name.startswith(".~lock.") and name.endswith("#"))
-        or (name.startswith(".") and name.endswith((".swp", ".swo")))
+        or name.endswith((".swp", ".swo"))
         or TEMPORARY_FILE.fullmatch(name) is not None
         # The state files of the workbook sync, such as .Example.xlsx.pkdb-base.
-        or (name.startswith(".") and name.endswith(".pkdb-base"))
+        or name.endswith(".pkdb-base")
     )
 
 

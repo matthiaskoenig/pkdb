@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from pkdb.cache import VocabularyCache
 from pkdb.curation.github import GitHubAssignments
+from pkdb.curation.tree import SourceTree
 
 #: The color themes of the app: the system theme, or one that the curator chose.
 THEMES = ("light", "dark", "system")
@@ -44,6 +45,7 @@ class EngineState:
     studies: dict
     format1_folders: int
     _formats: dict
+    _tree: SourceTree | None
     reference_previews: dict
     jobs: list
     modes: dict

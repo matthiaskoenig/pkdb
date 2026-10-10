@@ -1,8 +1,8 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
 Reads and writes engine attributes: lock, scan_lock, root, studies, modes, recent_workspaces,
-reference_previews, paused, queue, stop, wakeup, state_dir, _formats. Uses engine methods _save,
-_enqueue_one, snapshot, _local_vocabulary and _sync_later.
+reference_previews, paused, queue, stop, wakeup, state_dir, _formats, _tree. Uses engine
+methods _save, _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
 
 import hashlib
@@ -18,14 +18,13 @@ from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import study_summary
+from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
-from pkdb.source_files import below_hidden_folder, ignored_source
 from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON
-from pkdb.studyformat.validation import _FORMAT_2_FILES as FORMAT_2_FILES
-from pkdb.studyformat.workbook.base import open_lock, workbook_path
+from pkdb.studyformat.workbook.base import workbook_path
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
@@ -194,53 +193,49 @@ class WorkspaceMixin(EngineState):
         # its keys and paths are relative to the old root.
         with self.lock:
             root = self.root
+        if self._tree is None or self._tree.root is not root:
+            self._tree = SourceTree(root)
+        tree = self._tree
         # A folder below a hidden folder, such as the build folder of an
         # interrupted pkdb new, is no study.
-        folders = {
-            p.parent
-            for p in root.rglob("study.json")
-            if not p.is_symlink()
-            and not ignored_source(p.relative_to(root))
-            and not below_hidden_folder(p.relative_to(root))
-        }
+        found = tree.study_folders()
+        folders = set(found)
         with self.lock:
             if self.root is not root:
                 return
             folders.update(row["_folder"] for row in self.studies.values())
         format1 = 0
-        for folder in sorted(folders):
-            key = folder.relative_to(root).as_posix()
+        for folder in tree.ordered(folders):
+            study = found.get(folder)
+            key = folder.relative_to(root).as_posix() if study is None else study.key
             try:
-                if folder.is_symlink() or not folder.resolve().is_relative_to(root):
+                # The walk found the folder through folders that are no symbolic links, so
+                # only a junction on its way, on Windows, can lead outside the workspace. The
+                # folder of a row that the walk no longer finds is checked as well.
+                if (study is None or study.junction) and (
+                    folder.is_symlink() or not folder.resolve().is_relative_to(root)
+                ):
                     continue
-                if not self._is_v2(folder):
+                if not self._is_v2(folder, tree):
                     with self.lock:
                         if self.root is not root:
                             return
                         self.studies.pop(key, None)
-                    if (folder / "study.json").is_file():
+                    if study is None:
+                        study_file = (folder / "study.json").is_file()
+                    else:
+                        study_file = study.study_file
+                    if study_file:
                         format1 += 1
                     continue
                 with self.lock:
                     if self.root is not root:
                         return
-                    row = self.studies.setdefault(key, self._row(folder, root))
-                paths = sorted(
-                    p
-                    for p in folder.rglob("*")
-                    if not ignored_source(p.relative_to(folder))
-                )
-                files = [
-                    (
-                        p.relative_to(folder).as_posix(),
-                        p.stat().st_size,
-                        p.stat().st_mtime_ns,
-                    )
-                    for p in paths
-                    if p.is_file()
-                ]
+                    row = self.studies.get(key)
+                    if row is None:
+                        row = self.studies[key] = self._row(folder, root)
                 # Opening or closing the workbook changes its sync status, not the source.
-                signature = (files, open_lock(workbook_path(folder)) is not None)
+                signature = (tree.files(folder), tree.workbook_open(folder))
                 if signature == row["_signature"]:
                     continue
                 hashes = source_hashes(folder)
@@ -316,17 +311,18 @@ class WorkspaceMixin(EngineState):
             for row in self.studies.values():
                 row["duplicate"] = counts[row["id"]] > 1
 
-    def _is_v2(self, folder):
+    def _is_v2(self, folder, tree):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
 
         Only scans call it, one at a time, so the remembered decisions need no lock. A
-        format 2 file decides without study.json, as in `is_v2_folder`. Otherwise the
+        format 2 file decides without study.json, as in `is_v2_folder`; the tree remembers
+        whether one exists with the listing of the folder. Otherwise the
         inode and the status change time of study.json tell a same-size edit that kept
         the modification time, as `cp -p`, `rsync -t` and `tar x` write it. On Windows
         `os.stat` reports the creation time as the status change time, so the content of
         study.json tells it there.
         """
-        if any(os.path.lexists(folder / name) for name in FORMAT_2_FILES):
+        if tree.has_format_2_file(folder):
             return True
         path = folder / STUDY_JSON
         try:

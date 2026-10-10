@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from pkdb.source_files import ignored_source
+from pkdb.source_files import ignored_name, ignored_source
 
 
 @pytest.mark.parametrize(
@@ -16,11 +16,13 @@ from pkdb.source_files import ignored_source
         ".table.tsv.swp",
         ".tmp0123456789abcdef",
         ".Example.xlsx.pkdb-base",
+        ".git",
     ],
 )
 def test_ignored_source_files(name):
     assert ignored_source(Path(name))
     assert ignored_source(Path("sub") / name)
+    assert ignored_name(name)
 
 
 @pytest.mark.parametrize(
@@ -40,3 +42,4 @@ def test_ignored_source_files(name):
 )
 def test_other_files_are_not_ignored(name):
     assert not ignored_source(Path(name))
+    assert not ignored_name(name)
