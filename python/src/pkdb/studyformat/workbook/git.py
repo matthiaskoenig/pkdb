@@ -71,7 +71,8 @@ def _untrack(path: Path, cwd: Path | None) -> str:
         folder = folder.relative_to((cwd or Path.cwd()).absolute())
     except ValueError:
         pass
-    return f"git -C {_shell(str(folder))} rm --cached {_shell(path.name)}"
+    # Forward slashes work on every platform and need no quotes.
+    return f"git -C {_shell(folder.as_posix())} rm --cached {_shell(path.name)}"
 
 
 def git_issues(workbook: Path, *, cwd: Path | None = None) -> list[ValidationIssue]:

@@ -68,7 +68,7 @@ def source_hashes(folder: Path) -> dict[str, str]:
             fail(
                 "symlink",
                 "Symlinks are not accepted",
-                SourceLocation(file=str(path.relative_to(folder))),
+                SourceLocation(file=path.relative_to(folder).as_posix()),
             )
         if path.is_file():
             with path.open("rb") as handle:
