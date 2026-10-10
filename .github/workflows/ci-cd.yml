@@ -16,7 +16,7 @@ concurrency:
 jobs:
   python:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -63,7 +63,9 @@ jobs:
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_vocabulary.py --check
       - name: Verify bundled curator profiles match the curator roster
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_curators.py --check
-      - run: uv run --python ${{ matrix.python }} --locked pytest -q
+      # every test owns a database schema, so the tests run in parallel; a test file
+      # stays on one worker, which builds its module fixtures only once
+      - run: uv run --python ${{ matrix.python }} --locked pytest -q -n auto --dist loadfile --durations=15
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
@@ -102,7 +104,7 @@ jobs:
   client:
     name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 25
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -133,7 +135,7 @@ jobs:
       - name: Install LibreOffice Calc
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-calc
-      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q
+      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -n auto --durations=15
         env:
           # On Linux a missing LibreOffice fails the round trip tests; macOS and Windows skip them.
           PKDB_REQUIRE_LIBREOFFICE: ${{ runner.os == 'Linux' && '1' || '' }}
@@ -156,9 +158,22 @@ jobs:
         working-directory: frontend
       # The curation app end to end in Chromium against the real `pkdb curate`, which the specs
       # start with the Python of the uv environment on copies of tools/curation_testing/fixture.
+      - name: Cache Chromium for the curation app tests
+        id: chromium-cache
+        # a release run restores no cache and downloads Chromium, which zizmor
+        # cannot tell from the condition
+        if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
       - name: Install Chromium for the curation app tests
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && steps.chromium-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Install the system dependencies of the cached Chromium
+        if: runner.os == 'Linux' && steps.chromium-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
         working-directory: frontend
       - name: Test the curation app end to end
         if: runner.os == 'Linux'
@@ -270,6 +285,7 @@ jobs:
     needs: [python, client, compose, frontend]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Require backend, frontend, and local Docker setup
         env:

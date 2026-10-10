@@ -133,7 +133,7 @@ Browser tests use a separate disposable Compose project. See [isolated frontend 
 
 The unit tests of the curation app read contract fixtures in `frontend/tests/fixtures/curation-contract/`. `python/tests/test_curation_contract.py` writes them from real answers of the local server on the fixture workspace and fails when an answer changes. Regenerate them from `python/` with `PKDB_UPDATE_CONTRACT=1 uv run --locked pytest -q tests/test_curation_contract.py`, review the diff, and run the frontend unit tests against them. Never edit them by hand.
 
-The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`. Run them from `frontend/`:
+The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`, so the spec files run in parallel on half of the CPU cores. Run them from `frontend/`:
 
 ```bash
 npx playwright install --with-deps chromium
@@ -188,14 +188,14 @@ uv sync --project backend --locked --python 3.14
 uv run --project backend pre-commit install
 docker compose -f compose.test.yaml up -d --wait
 export PKDB_TEST_DATABASE_URL=postgresql+psycopg://pkdb_test:local-test-only@127.0.0.1:15439/pkdb_test
-uv run --project backend pytest backend/tests -q -x
+uv run --project backend pytest backend/tests -q -x -n auto --dist loadfile
 uv run --project backend python -m pytest tools/backend_migration -q -x
 uv run --project backend ruff check .
 uv run --project backend ruff format --check .
 uv run --project backend ty check --project backend
 ```
 
-The test database uses temporary container storage. Tests create isolated schemas. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
+The test database uses temporary container storage. Tests create isolated schemas, so `-n auto` (pytest-xdist) runs them in parallel, as CI does; `--dist loadfile` keeps a test file on one worker, which builds its module fixtures only once. CI adds `--durations=15` to list the slowest tests. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
 
 Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14; for Python 3.15 run them locally against the Python 3.15 runtime image above, with `PKDB_TEST_IMAGE_PYTHON=3.15`. Corpus tests require explicitly configured source data and are not part of the default suite.
 
