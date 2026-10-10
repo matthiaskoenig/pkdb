@@ -30,8 +30,8 @@ pkdb-server = "pkdb_server.cli:main"
 
 [dependency-groups]
 vocabulary = [
-    "pymetadata==0.7.0",
-    "python-slugify==9.1.2",
+    "pymetadata==0.8.0",
+    "python-slugify==9.1.3",
 ]
 dev = [
     {include-group = "vocabulary"},
