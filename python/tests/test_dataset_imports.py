@@ -43,8 +43,10 @@ def finish(builder, tmp_path):
     folder = next((tmp_path / "studies").iterdir())
     result = prepare(folder, vocabulary=Vocabulary.load(tmp_path / "vocabulary.json"))
     assert result.report.valid, result.report
-    study = json.loads((folder / "study.json").read_text())
-    provenance = json.loads((folder / "source-records.json").read_text())
+    study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
+    provenance = json.loads(
+        (folder / "source-records.json").read_text(encoding="utf-8")
+    )
     for entry in provenance["lineage"]:
         target = study
         for token in entry["target"].strip("/").split("/"):
@@ -185,10 +187,10 @@ def test_checksum_cannot_be_bypassed(provider, tmp_path):
 
 
 def test_existing_import_is_never_overwritten(tmp_path):
-    (tmp_path / "keep").write_text("existing")
+    (tmp_path / "keep").write_text("existing", encoding="utf-8", newline="")
     with pytest.raises(ValueError, match="new or empty"):
         Builder("frdb", "curator").write(tmp_path)
-    assert (tmp_path / "keep").read_text() == "existing"
+    assert (tmp_path / "keep").read_text(encoding="utf-8") == "existing"
 
 
 def test_conflicting_mass_is_not_arbitrarily_used_for_unit_conversion(tmp_path):

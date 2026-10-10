@@ -63,7 +63,7 @@ def by_key(records):
 
 
 def write(folder, name, text):
-    (folder / name).write_text(text, encoding="utf-8")
+    (folder / name).write_text(text, encoding="utf-8", newline="")
     assert format_folder(folder).ok
 
 
@@ -109,7 +109,7 @@ def test_study_json_notes_release_and_review(valid_study):
             }
         },
     )
-    path.write_text(dump_json(data), encoding="utf-8")
+    path.write_text(dump_json(data), encoding="utf-8", newline="")
     review = {
         "status": "in_review",
         "reviewers": ["reviewer"],
@@ -146,9 +146,13 @@ def test_study_json_notes_release_and_review(valid_study):
 def test_reference_sid_is_the_doi_without_a_pmid(valid_study):
     data = study_json(valid_study)
     data["reference"] = {"doi": "10.1234/abc"}
-    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    (valid_study / "study.json").write_text(
+        dump_json(data), encoding="utf-8", newline=""
+    )
     reference = {"sid": "x", "name": "Example", "doi": "10.1234/abc"}
-    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    (valid_study / "reference.json").write_text(
+        dump_json(reference), encoding="utf-8", newline=""
+    )
     assert read(valid_study).reference.sid == "10.1234/abc"
 
 
@@ -156,9 +160,13 @@ def test_reference_sid_is_the_normalized_doi(valid_study):
     # DOIs are case-insensitive; the server matches publications by the lowercase form.
     data = study_json(valid_study)
     data["reference"] = {"doi": "10.1234/ABC.Def"}
-    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    (valid_study / "study.json").write_text(
+        dump_json(data), encoding="utf-8", newline=""
+    )
     reference = {"sid": "x", "name": "Example", "doi": "10.1234/ABC.Def"}
-    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    (valid_study / "reference.json").write_text(
+        dump_json(reference), encoding="utf-8", newline=""
+    )
     study = read(valid_study)
     assert (study.reference.sid, study.reference.doi) == (
         "10.1234/abc.def",
@@ -171,10 +179,14 @@ def test_reference_sid_follows_study_json_not_the_enriched_snapshot(valid_study)
     # does not change the identifier of a study that names its DOI.
     data = study_json(valid_study)
     data["reference"] = {"doi": "10.1234/abc"}
-    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    (valid_study / "study.json").write_text(
+        dump_json(data), encoding="utf-8", newline=""
+    )
     reference = {"sid": "10.1234/abc", "name": "Example", "doi": "10.1234/abc"}
     reference["pmid"] = "123"
-    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    (valid_study / "reference.json").write_text(
+        dump_json(reference), encoding="utf-8", newline=""
+    )
     study = read(valid_study)
     assert (study.reference.sid, study.reference.pmid) == ("10.1234/abc", "123")
 
@@ -182,9 +194,13 @@ def test_reference_sid_follows_study_json_not_the_enriched_snapshot(valid_study)
 def test_manual_reference_keeps_its_sid(valid_study):
     data = study_json(valid_study)
     del data["reference"]
-    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    (valid_study / "study.json").write_text(
+        dump_json(data), encoding="utf-8", newline=""
+    )
     reference = {"sid": "Smith2020", "name": "Example", "pmid": "123"}
-    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    (valid_study / "reference.json").write_text(
+        dump_json(reference), encoding="utf-8", newline=""
+    )
     assert read(valid_study).reference.sid == "Smith2020"
 
 
@@ -192,9 +208,13 @@ def test_refused_reference_is_reported_at_its_file(valid_study, sf_vocabulary):
     doi = "10.1234/" + "a" * 300
     data = study_json(valid_study)
     data["reference"] = {"doi": doi}
-    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    (valid_study / "study.json").write_text(
+        dump_json(data), encoding="utf-8", newline=""
+    )
     reference = {"sid": "x", "name": "Example", "doi": doi}
-    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    (valid_study / "reference.json").write_text(
+        dump_json(reference), encoding="utf-8", newline=""
+    )
     with pytest.raises(StudyValidationError) as error:
         prepare_folder(valid_study, sf_vocabulary)
     [issue] = error.value.report.issues
@@ -569,7 +589,7 @@ def test_prepare_folder_runs_the_server_stages(valid_study, sf_vocabulary):
 
 def test_prepare_folder_reports_layers_one_to_five(valid_study, tsv, sf_vocabulary):
     (valid_study / "outputs_Tab2.tsv").write_text(
-        tsv("outputs", {**CMAX, "subjects": "S9"}), encoding="utf-8"
+        tsv("outputs", {**CMAX, "subjects": "S9"}), encoding="utf-8", newline=""
     )
     with pytest.raises(StudyValidationError) as error:
         prepare_folder(valid_study, sf_vocabulary)

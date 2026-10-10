@@ -9,7 +9,9 @@ from pkdb.studyformat.sources import source_view, study_sources
 
 
 def test_study_sources_lists_every_source(valid_study):
-    (valid_study / "Example_Tab2.tsv").write_text("cmax\t2.5 ± 0.5\n")
+    (valid_study / "Example_Tab2.tsv").write_text(
+        "cmax\t2.5 ± 0.5\n", encoding="utf-8", newline=""
+    )
     summaries = {s.source: s for s in study_sources(load_study(valid_study))}
     assert list(summaries) == ["Fig1", "Fig2", "Tab1", "Tab2", "TabA", "Text"]
     assert (
@@ -21,7 +23,9 @@ def test_study_sources_lists_every_source(valid_study):
 
 
 def test_table_source_view(valid_study):
-    (valid_study / "Example_Tab2.tsv").write_text("cmax\t2.5 ± 0.5\n")
+    (valid_study / "Example_Tab2.tsv").write_text(
+        "cmax\t2.5 ± 0.5\n", encoding="utf-8", newline=""
+    )
     view = source_view(load_study(valid_study), "Tab2")
     assert view.raw_grid == (("cmax", "2.5 ± 0.5"),)
     assert [table.file for table in view.mapped] == ["outputs_Tab2.tsv"]

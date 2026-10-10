@@ -27,7 +27,9 @@ def released_study(
         metadata["issue"] = issue
     if pkdb_id is not None:
         metadata["release"] = {"pkdb_id": pkdb_id, "date": date}
-    (folder / "study.json").write_text(dump_json(metadata), encoding="utf-8")
+    (folder / "study.json").write_text(
+        dump_json(metadata), encoding="utf-8", newline=""
+    )
     review = {"status": status}
     if status == "approved":
         review |= {
@@ -35,5 +37,5 @@ def released_study(
             "approved_by": "bo",
             "approved": "2026-10-01T00:00:00Z",
         }
-    (folder / "review.json").write_text(dump_json(review), encoding="utf-8")
+    (folder / "review.json").write_text(dump_json(review), encoding="utf-8", newline="")
     return folder
