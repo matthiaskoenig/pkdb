@@ -5,6 +5,7 @@ import {
   fileCounts,
   fileForSource,
   isShared,
+  nameParts,
   ownerOf,
   rowSource,
   selectionOf,
@@ -160,5 +161,24 @@ describe("rows and their sources", () => {
   it("lists the lines of a source; a table without a source column keeps all its lines", () => {
     expect([...sourceLines(subjects, "Tab2")]).toEqual([2]);
     expect([...sourceLines({ file: "x.tsv", kind: "raw", rows: [{ line: 1, cells: [] }] }, "Tab2")]).toEqual([1]);
+  });
+});
+
+describe("names of table files", () => {
+  it("splits a name without .tsv before its last part, which tells the files of a kind apart", () => {
+    expect(nameParts("timecourses_Fig1.tsv")).toEqual({ start: "timecourses", end: "_Fig1" });
+    expect(nameParts("Demirbas1998_Tab2.tsv")).toEqual({ start: "Demirbas1998", end: "_Tab2" });
+    expect(nameParts("pharmacokinetics_of_caffeine_Fig12.tsv")).toEqual({
+      start: "pharmacokinetics_of_caffeine",
+      end: "_Fig12",
+    });
+  });
+
+  it("keeps the last six characters apart of a name without such a part", () => {
+    expect(nameParts("interventions.tsv")).toEqual({ start: "interve", end: "ntions" });
+    expect(nameParts("subjects.tsv")).toEqual({ start: "su", end: "bjects" });
+    expect(nameParts("short.tsv")).toEqual({ start: "", end: "short" });
+    expect(nameParts("_Fig1.tsv")).toEqual({ start: "", end: "_Fig1" });
+    expect(nameParts("outputs_.tsv")).toEqual({ start: "ou", end: "tputs_" });
   });
 });

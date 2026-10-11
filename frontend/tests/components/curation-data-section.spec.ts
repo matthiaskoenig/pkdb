@@ -410,9 +410,10 @@ function files(): DOMWrapper<Element>[] {
   return page().findAll(".nav-file");
 }
 
-/** The name of a navigator entry. */
-function nameOf(entry: Pick<DOMWrapper<Element>, "get">): string {
-  return entry.get(".nav-name").text();
+/** The name of a navigator entry; a table file has its full name for screen readers. */
+function nameOf(entry: Pick<DOMWrapper<Element>, "find" | "get">): string {
+  const file = entry.find(".nav-file-name");
+  return (file.exists() ? file : entry.get(".nav-name")).text();
 }
 
 /** The source or the file that the section shows. */
@@ -768,11 +769,7 @@ describe("linked selection", () => {
 
   it("selects the owner of a clicked table file", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig1`);
-    await page()
-      .findAll(".nav-file")
-      .find((entry) => entry.text().startsWith("outputs_Tab2.tsv"))!
-      .trigger("click");
-    await flushPromises();
+    await choose("file", "outputs_Tab2.tsv");
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
   });
 

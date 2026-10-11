@@ -145,3 +145,18 @@ export function sourceLines(table: TableResponse, source: string): Set<number> {
   const index = table.kind === "table" ? table.header.indexOf("source") : -1;
   return new Set(table.rows.filter((row) => index < 0 || row.cells[index] === source).map((row) => row.line));
 }
+
+/** The characters at the end of a table name without an underscore that stay when the name is cut. */
+const NAME_END = 6;
+
+/**
+ * The name of a table file without `.tsv`, split before the part that tells the files of a kind
+ * apart, so that a cut shortens the start: the part from the last underscore, such as `_Fig1` of
+ * `timecourses_Fig1.tsv`, else the last six characters.
+ */
+export function nameParts(file: string): { start: string; end: string } {
+  const name = file.endsWith(".tsv") ? file.slice(0, -".tsv".length) : file;
+  const cut = name.lastIndexOf("_");
+  const at = cut > 0 && cut < name.length - 1 ? cut : Math.max(0, name.length - NAME_END);
+  return { start: name.slice(0, at), end: name.slice(at) };
+}

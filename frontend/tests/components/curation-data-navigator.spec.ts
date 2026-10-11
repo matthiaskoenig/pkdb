@@ -25,6 +25,13 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
   });
 }
 
+/** The text of `element` that screen readers read: without the parts hidden from them. */
+function spoken(element: Element): string {
+  const copy = element.cloneNode(true) as Element;
+  for (const hidden of copy.querySelectorAll('[aria-hidden="true"]')) hidden.remove();
+  return (copy.textContent ?? "").replace(/\s+/g, " ").trim();
+}
+
 function mountNavigator(props: Record<string, unknown> = {}) {
   return mount(DataNavigator, {
     props: { detail: detail(), source: "Fig1", file: "timecourses_Fig1.tsv", rows: null, ...props },
@@ -41,12 +48,26 @@ describe("data navigator", () => {
     expect(thumbnail.attributes("loading")).toBe("lazy");
     expect(thumbnail.attributes("alt")).toBe("");
     expect(sources[1]!.find("img").exists()).toBe(false);
-    expect(wrapper.findAll(".nav-file .nav-name").map((entry) => entry.text())).toEqual([
+    expect(wrapper.findAll(".nav-file .nav-file-name").map((entry) => entry.text())).toEqual([
       "subjects.tsv",
       "outputs_Tab2.tsv",
       "timecourses_Fig1.tsv",
       "Example_Tab2.tsv",
     ]);
+  });
+
+  it("shows a table file without .tsv and keeps the end of its name, which a cut shortens before", () => {
+    const wrapper = mountNavigator();
+    const entry = wrapper.findAll(".nav-file")[2]!;
+    const name = entry.get(".nav-name");
+    expect(name.attributes("aria-hidden")).toBe("true");
+    expect(name.get(".nav-name-start").text()).toBe("timecourses");
+    expect(name.get(".nav-name-end").text()).toBe("_Fig1");
+    expect(name.attributes("title")).toBe("timecourses_Fig1.tsv");
+    // Screen readers read the name in full, first.
+    expect(entry.get(".nav-file-name").classes()).toContain("d-sr-only");
+    expect(entry.get(".nav-file-name").text()).toBe("timecourses_Fig1.tsv");
+    expect(spoken(entry.element)).toBe("timecourses_Fig1.tsv");
   });
 
   it("marks the selected source and file", () => {

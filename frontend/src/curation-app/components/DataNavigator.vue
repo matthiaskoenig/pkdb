@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import type { SourceSummary, StudyDetail } from "../api/types";
-import { fileCounts, sourceCounts } from "../data";
+import { fileCounts, nameParts, sourceCounts } from "../data";
 import { plural } from "../overview";
 import { rawTableFiles, tableFiles } from "../study";
 
@@ -35,6 +35,7 @@ const sources = computed(() =>
 const files = computed(() =>
   tableFiles(props.detail).map((file) => ({
     file,
+    name: nameParts(file),
     raw: raw.value.has(file),
     problems: counts.value.problems.get(file) ?? 0,
     items: counts.value.items.get(file) ?? 0,
@@ -85,7 +86,12 @@ const files = computed(() =>
           @click="emit('select-file', entry.file)"
         >
           <i :class="entry.raw ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
-          <span class="nav-name" :title="entry.file">{{ entry.file }}</span>
+          <!-- The name without .tsv, whose start a cut shortens; screen readers read it in full. -->
+          <span class="nav-name nav-name--parts" :title="entry.file" aria-hidden="true"
+            ><span class="nav-name-start">{{ entry.name.start }}</span
+            ><span class="nav-name-end">{{ entry.name.end }}</span></span
+          >
+          <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
           <span v-if="entry.raw" class="d-sr-only">, raw table</span>
           <span v-if="entry.problems" class="nav-count nav-count--problems" :title="plural(entry.problems, 'problem')">
             <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
@@ -215,6 +221,21 @@ const files = computed(() =>
 }
 .nav-file .nav-name {
   flex: 1 1 auto;
+}
+/* The start of a table name shortens first; its end tells the files of a kind apart. */
+.nav-name--parts {
+  display: flex;
+}
+.nav-name-start {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-name-end {
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* Dimmed by its color, which keeps a contrast of 4.5:1; an opacity on top of the text color would not. */
 .nav-file--other .nav-name {
