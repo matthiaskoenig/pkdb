@@ -180,6 +180,24 @@ test("the separator moves with the keyboard and keeps its place after a reload",
   );
 });
 
+test("the pane heads keep the source and the count of rows whole while a pane is at its narrowest", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data?source=Fig1");
+  const whole = (element: Element) => element.scrollWidth <= element.clientWidth;
+  const name = page.locator(".source-pane .pane-head-name");
+  const count = page.locator(".rows-pane .pane-head").getByText(/^\d+ rows$/);
+  const separator = page.getByRole("separator", { name: "Resize the source and the rows" });
+  await separator.focus();
+  await page.keyboard.press("Home");
+  await expect(name).toHaveText("Fig1");
+  await expect.poll(() => name.evaluate(whole)).toBe(true);
+  await page.keyboard.press("End");
+  await expect(count).toBeVisible();
+  await expect.poll(() => count.evaluate(whole)).toBe(true);
+});
+
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
   await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "6", exact: true }).click();

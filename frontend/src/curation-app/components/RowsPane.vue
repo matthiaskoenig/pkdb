@@ -120,7 +120,7 @@ const missingLine = computed(() => {
       <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
       <h3 class="pane-head-name">{{ file }}</h3>
       <template v-if="table">
-        <span class="pane-head-part" aria-hidden="true">{{ count }}</span>
+        <span class="pane-head-part pane-head-count" aria-hidden="true">{{ count }}</span>
         <span v-if="hiddenColumns" class="pane-head-part" aria-hidden="true">
           {{ hiddenColumns === 1 ? "1 empty column hidden" : `${hiddenColumns} empty columns hidden` }}
         </span>
@@ -187,7 +187,7 @@ const missingLine = computed(() => {
   overflow: hidden;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-/* The file name keeps its room; the counts and notes after it shorten first. */
+/* The file name and the count of rows keep their room; the notes after them shorten first. */
 .pane-head-name {
   flex: 0 0 auto;
   max-width: 100%;
@@ -203,6 +203,9 @@ const missingLine = computed(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.pane-head-count {
+  flex: 0 0 auto;
 }
 .pane-head-line {
   flex: 0 0 auto;

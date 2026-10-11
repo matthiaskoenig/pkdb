@@ -257,7 +257,10 @@ const automatic = computed(() =>
   white-space: nowrap;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
+/* The source and its kind keep their room in a narrow pane; the image file name shortens first. */
 .pane-head-name {
+  flex: 0 0 auto;
+  max-width: 100%;
   margin: 0;
   overflow: hidden;
   font-size: inherit;
@@ -266,15 +269,18 @@ const automatic = computed(() =>
   text-overflow: ellipsis;
 }
 .pane-head-part {
+  flex: 0 0 auto;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .pane-head-file {
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .zoom {
   display: flex;
+  flex: 0 0 auto;
   margin-inline-start: auto;
 }
 .zoom button {
