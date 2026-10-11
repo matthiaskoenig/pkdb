@@ -35,7 +35,7 @@ export class ApiError extends Error {
         ? body.message
         : typeof body.error === "string"
           ? body.error
-          : `Request failed (${status})`,
+          : `Request failed (${status}).`,
     );
   }
 }
@@ -55,7 +55,7 @@ export class UnexpectedResponse extends Error {
   override readonly name = "UnexpectedResponse";
 
   constructor(readonly status: number) {
-    super("The local server sent an unexpected response");
+    super("The local server sent an unexpected response.");
   }
 }
 
