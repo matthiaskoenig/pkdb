@@ -107,8 +107,9 @@ function setCollaborators(value: unknown): void {
       class="creator-field"
       @update:model-value="creator = userOf($event)"
     >
+      <!-- 20 px, which keeps the avatar clear of the label on the outline of the compact field. -->
       <template v-if="creatorProfile" #prepend-inner>
-        <PersonAvatar :profile="creatorProfile" :size="24" />
+        <PersonAvatar :profile="creatorProfile" :size="20" />
       </template>
       <template v-if="disk.has('creator')" #details>
         <DiskVersion field="creator" @use="emit('useDisk', 'creator')" />
@@ -142,7 +143,7 @@ function setCollaborators(value: unknown): void {
           @update:model-value="setUser(index, $event)"
         >
           <template v-if="row.user" #prepend-inner>
-            <PersonAvatar :profile="profileOf(row.user)" :size="24" />
+            <PersonAvatar :profile="profileOf(row.user)" :size="20" />
           </template>
           <template #item="{ props: item, item: person }">
             <VListItem v-bind="item" :subtitle="person.value" role="option">

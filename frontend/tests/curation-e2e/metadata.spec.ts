@@ -49,3 +49,17 @@ test("saves the metadata form to study.json and keeps the edits through a confli
   await expect.poll(onDisk).toMatchObject({ licence: "closed", descriptions: [EDITED, ON_DISK] });
   await expect(page.getByText("Unsaved changes in study.json")).toBeHidden();
 });
+
+test("the avatar of a person stays clear of the label on the outline of its field", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/metadata");
+  const creator = page.getByRole("combobox", { name: "Creator" });
+  await expect(creator).toBeVisible();
+  // The floating label crosses the top of the outline, so the avatar keeps 4 px from both edges.
+  const room = await page.locator(".creator-field .v-field").evaluate((field) => {
+    const outline = field.getBoundingClientRect();
+    const avatar = field.querySelector(".v-avatar")!.getBoundingClientRect();
+    return { top: avatar.top - outline.top, bottom: outline.bottom - avatar.bottom };
+  });
+  expect(room.top).toBeGreaterThanOrEqual(4);
+  expect(room.bottom).toBeGreaterThanOrEqual(4);
+});
