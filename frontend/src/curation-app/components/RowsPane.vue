@@ -114,10 +114,11 @@ const missingLine = computed(() => {
 </script>
 
 <template>
-  <section class="rows-pane" :aria-label="`Rows of ${file}`">
+  <!-- Named apart from its grid, the region "Rows of <file>", so that each landmark has its own name. -->
+  <section class="rows-pane" :aria-label="`Table ${file}`">
     <div class="pane-head">
       <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
-      <b class="pane-head-name">{{ file }}</b>
+      <h3 class="pane-head-name">{{ file }}</h3>
       <template v-if="table">
         <span class="pane-head-part" aria-hidden="true">{{ count }}</span>
         <span v-if="hiddenColumns" class="pane-head-part" aria-hidden="true">
@@ -186,15 +187,25 @@ const missingLine = computed(() => {
   overflow: hidden;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
+/* The file name keeps its room; the counts and notes after it shorten first. */
 .pane-head-name {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
   text-overflow: ellipsis;
 }
 .pane-head-part {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .pane-head-line {
+  flex: 0 0 auto;
   margin-inline-start: auto;
   font-variant-numeric: tabular-nums;
 }

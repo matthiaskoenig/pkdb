@@ -207,8 +207,9 @@ const files = computed(() =>
 .nav-file .nav-name {
   flex: 1 1 auto;
 }
+/* Dimmed by its color, which keeps a contrast of 4.5:1; an opacity on top of the text color would not. */
 .nav-file--other .nav-name {
-  opacity: var(--v-medium-emphasis-opacity);
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .nav-rows {
   flex: none;

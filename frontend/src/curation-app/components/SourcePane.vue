@@ -101,7 +101,7 @@ const automatic = computed(() =>
   <section class="source-pane" :aria-label="`Source ${summary.source}`" :style="figureWidth">
     <div class="pane-head">
       <i :class="ICONS[summary.kind]" aria-hidden="true"></i>
-      <b class="pane-head-name">{{ summary.source }}</b>
+      <h3 class="pane-head-name">{{ summary.source }}</h3>
       <span class="pane-head-part">{{ summary.kind }}</span>
       <span v-if="summary.image" class="pane-head-part pane-head-file">{{ summary.image }}</span>
       <div v-if="showsImage && view?.image_url" class="zoom" role="group" aria-label="Image size">
@@ -110,7 +110,8 @@ const automatic = computed(() =>
       </div>
     </div>
 
-    <div class="pane-body">
+    <!-- It scrolls on its own and takes the focus, so that a keyboard can scroll it: its first content is no control. -->
+    <div class="pane-body" tabindex="0">
       <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
       <VAlert v-else-if="error" type="error" variant="tonal" density="compact" class="status-alert">
         {{ summary.source }} could not be loaded. {{ error }}
@@ -249,7 +250,11 @@ const automatic = computed(() =>
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .pane-head-name {
+  margin: 0;
   overflow: hidden;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
   text-overflow: ellipsis;
 }
 .pane-head-part {
