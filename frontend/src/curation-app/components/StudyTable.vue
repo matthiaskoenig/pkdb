@@ -198,9 +198,9 @@ const items = computed(() =>
           />
         </td>
         <td class="cell-study">
-          <div class="study-heading">
-            <!-- A long identity wraps after the slash rather than inside a name. -->
-            <span v-if="row.duplicate" class="study-identity">{{ row.substance }}/<wbr />{{ row.name }}</span>
+          <div class="study-row-line">
+            <!-- A long identity stays on its line; the title after it is cut with an ellipsis. -->
+            <span v-if="row.duplicate" class="study-identity">{{ row.substance }}/{{ row.name }}</span>
             <RouterLink v-else :to="studyRoute(row)" class="study-identity"
               >{{ row.substance }}/<wbr />{{ row.name }}</RouterLink
             >
@@ -214,10 +214,15 @@ const items = computed(() =>
             >
               Duplicate identity
             </VChip>
+            <span v-if="row.duplicate" class="study-path" :title="row.path">{{ row.path }}</span>
+            <span
+              v-if="row.summary.title"
+              class="study-row-title"
+              :title="row.summary.title"
+              >{{ row.summary.title }}</span
+            >
+            <span v-else class="study-row-title study-row-title--missing">No reference title yet</span>
           </div>
-          <div v-if="row.duplicate" class="study-path">{{ row.path }}</div>
-          <div v-if="row.summary.title" class="study-title" :title="row.summary.title">{{ row.summary.title }}</div>
-          <div v-else class="study-title study-title--missing">No reference title yet</div>
         </td>
         <td class="cell-review">
           <div class="cell-chips">
@@ -239,7 +244,7 @@ const items = computed(() =>
         <td class="cell-open">{{ row.summary.open_items ?? 0 }}</td>
         <td v-if="row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
         <td v-else class="cell-problems">
-          <div v-if="problems.length" class="cell-chips">
+          <div class="cell-chips">
             <VChip
               v-for="problem in problems"
               :key="problem.label"
@@ -250,21 +255,21 @@ const items = computed(() =>
             >
               {{ problem.label }}
             </VChip>
+            <span v-if="activity" class="cell-note">{{ activity }}</span>
+            <span v-if="row.message" class="cell-message" :title="row.message">{{ row.message }}</span>
+            <VBtn
+              v-if="row.status === 'unknown'"
+              size="x-small"
+              variant="tonal"
+              color="primary"
+              prepend-icon="fas fa-triangle-exclamation"
+              class="retry-button"
+              :aria-label="`Review uncertain upload of ${row.id}`"
+              @click="emit('retry', row)"
+            >
+              Review
+            </VBtn>
           </div>
-          <div v-if="activity" class="cell-note">{{ activity }}</div>
-          <div v-if="row.message" class="cell-message" :title="row.message">{{ row.message }}</div>
-          <VBtn
-            v-if="row.status === 'unknown'"
-            size="small"
-            variant="tonal"
-            color="primary"
-            prepend-icon="fas fa-triangle-exclamation"
-            class="retry-button"
-            :aria-label="`Review uncertain upload of ${row.id}`"
-            @click="emit('retry', row)"
-          >
-            Review
-          </VBtn>
         </td>
         <td class="cell-sync">
           <VChip size="small" variant="tonal" :color="SYNC_TONES[row.sync.status]" class="status-chip">
@@ -294,7 +299,7 @@ const items = computed(() =>
             <VAvatar
               v-for="(person, index) in curators"
               :key="index"
-              size="28"
+              size="22"
               color="primary"
               variant="tonal"
               class="curator"
@@ -337,9 +342,11 @@ const items = computed(() =>
 }
 .study-table th,
 .study-table td {
-  padding: 8px;
+  box-sizing: border-box;
+  height: 24px;
+  padding: 0 8px;
   white-space: nowrap;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .study-table th {
   vertical-align: middle;
@@ -356,11 +363,20 @@ const items = computed(() =>
   padding-inline: 8px 0;
   vertical-align: middle;
 }
-.study-table td.cell-select {
-  vertical-align: top;
-}
 .cell-select :deep(.v-selection-control) {
   justify-content: center;
+}
+/* The checkbox and the chips of a row fit the 24px of the row, of which 1px is its border. */
+.cell-select :deep(.v-selection-control) {
+  min-height: 23px;
+  --v-selection-control-size: 20px;
+}
+.cell-select :deep(.v-selection-control__input) {
+  width: 23px;
+  height: 23px;
+}
+.study-table :deep(.v-chip) {
+  height: 20px;
 }
 .sort-button {
   display: inline-flex;
@@ -393,29 +409,31 @@ th[aria-sort] .sort-icon {
 .study-table tbody tr.study-row--selected {
   background: rgba(var(--v-theme-primary), 0.08);
 }
-/* The study column takes the room that the table has left, and its title wraps within a
-   readable measure; every other cell stays on one line at the width of its content. */
+/* The study column takes the room that the table has left: its title is cut with an ellipsis
+   instead of wrapping, so that every study keeps one 24px line, and every other cell stays on
+   one line at the width of its content. */
 .study-table th,
 .study-table td {
   width: 1px;
 }
 .study-table .cell-study {
-  width: auto;
+  width: 100%;
   min-width: 12rem;
 }
 .study-table td.cell-study {
-  white-space: normal;
+  max-width: 0;
+  overflow: hidden;
 }
-.study-heading {
+.study-row-line {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 4px 8px;
-  min-height: 24px;
+  gap: 8px;
+  min-width: 0;
+  height: 23px;
 }
 .study-identity {
+  flex: none;
   font-weight: 600;
-  overflow-wrap: anywhere;
 }
 a.study-identity {
   text-decoration: none;
@@ -423,23 +441,22 @@ a.study-identity {
 a.study-identity:hover {
   text-decoration: underline;
 }
-.study-path {
-  font-size: 0.8125rem;
-  overflow-wrap: anywhere;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.study-title {
-  display: -webkit-box;
-  max-width: 30rem;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+.study-path,
+.study-row-title {
+  min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.8125rem;
-  line-height: 1.35;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.study-title--missing {
+.study-row-title {
+  flex: 1 1 0;
+}
+.study-path {
+  flex: 0 1 auto;
+}
+.study-row-title--missing {
   font-style: italic;
 }
 .ai-marker {
@@ -449,11 +466,10 @@ a.study-identity:hover {
   display: flex;
   align-items: center;
   gap: 4px;
-  min-height: 24px;
+  height: 23px;
 }
 .study-table td.cell-open {
   text-align: end;
-  line-height: 24px;
   font-variant-numeric: tabular-nums;
 }
 .study-table th.cell-open .sort-button {
@@ -462,64 +478,46 @@ a.study-identity:hover {
 .study-table th.cell-open {
   text-align: end;
 }
-/* Problems wrap within a fixed measure: chips, notes and messages can be long. */
+/* The problems of a row stay on its line: a long note or message is cut with an ellipsis. */
 .study-table .cell-problems {
-  width: 8.5rem;
-}
-.study-table td.cell-problems {
-  white-space: normal;
+  width: 12rem;
+  max-width: 12rem;
+  overflow: hidden;
 }
 .cell-problems .cell-chips {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .cell-note,
 .cell-message {
-  margin-top: 2px;
-  font-size: 0.8125rem;
-  line-height: 1.35;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* A note without chips above it starts on the 24px line of the other cells; when it wraps, its
-   lines keep the spacing of the note. */
-.cell-note:first-child {
-  margin-top: 0;
-  padding-top: 3px;
-}
-.cell-message {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  min-width: 0;
   overflow: hidden;
-  overflow-wrap: anywhere;
-}
-.retry-button {
-  margin-top: 6px;
+  text-overflow: ellipsis;
+  font-size: 0.8125rem;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .cell-release,
 .cell-issue,
 .cell-mode,
 .cell-upload {
-  line-height: 24px;
+  line-height: 23px;
 }
 .cell-release,
 .cell-upload {
   font-variant-numeric: tabular-nums;
 }
 .cell-empty {
-  line-height: 24px;
+  line-height: 23px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* The avatars are taller than a line of the row; they center on the first line. */
 .curators {
   display: flex;
   align-items: center;
-  margin-block: -2px;
 }
 /* Avatars overlap a little, each with a ring of the surface color. */
 .curator {
-  border: 2px solid rgb(var(--v-theme-surface));
-  font-size: 0.75rem;
+  border: 1px solid rgb(var(--v-theme-surface));
+  font-size: 0.625rem;
   font-weight: 700;
 }
 .curator + .curator,
@@ -535,11 +533,11 @@ a.study-identity:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
-  height: 28px;
+  min-width: 22px;
+  height: 22px;
   padding: 0 4px;
   border: 2px solid rgb(var(--v-theme-surface));
-  border-radius: 14px;
+  border-radius: 11px;
   background: rgba(var(--v-theme-on-surface), 0.08);
   font-size: 0.6875rem;
   font-weight: 700;

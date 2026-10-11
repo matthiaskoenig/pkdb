@@ -159,7 +159,7 @@ describe("OverviewPage", () => {
     expect(identities()).toEqual(["caffeine/Example", "caffeine/Harder1988", "codeine/Kirchheiner2007"]);
 
     const row = rowOf("caffeine/Harder1988");
-    expect(row.get(".study-title").text()).toBe("Effect of smoking on caffeine");
+    expect(row.get(".study-row-title").text()).toBe("Effect of smoking on caffeine");
     expect(row.get(".cell-review .status-chip").text()).toBe("In review");
     expect(row.get(".ai-marker").text()).toBe("AI");
     expect(row.get(".cell-open").text()).toBe("2");
@@ -288,6 +288,14 @@ describe("OverviewPage", () => {
     expect(curators.get('[role="img"][aria-label="mkoenig"]').text()).toBe("M");
   });
 
+  it("shows each study on one line with its title truncated and complete in a tooltip", async () => {
+    await mountPage(snapshot());
+    const row = rows()[0]!;
+    const title = row.get(".study-row-title");
+    expect(title.attributes("title")).toBe(studyRow().summary.title);
+    expect(row.findAll(".study-row-line")).toHaveLength(1);
+  });
+
   it("opens the study page when a row is clicked", async () => {
     await mountPage(snapshot());
     const identity = rowOf("caffeine/Example").get(".study-identity");
@@ -305,16 +313,16 @@ describe("OverviewPage", () => {
     expect(push).not.toHaveBeenCalled();
 
     // Dragging over the title selects its text; the click that ends the drag keeps the page.
-    const title = rowOf("caffeine/Example").get(".study-title").element;
+    const title = rowOf("caffeine/Example").get(".study-row-title").element;
     const range = document.createRange();
     range.selectNodeContents(title);
     window.getSelection()?.addRange(range);
     expect(window.getSelection()?.toString()).toBe("Caffeine pharmacokinetics");
-    await rowOf("caffeine/Example").get(".study-title").trigger("click");
+    await rowOf("caffeine/Example").get(".study-row-title").trigger("click");
     expect(push).not.toHaveBeenCalled();
 
     window.getSelection()?.removeAllRanges();
-    await rowOf("caffeine/Example").get(".study-title").trigger("click");
+    await rowOf("caffeine/Example").get(".study-row-title").trigger("click");
     expect(push).toHaveBeenCalledOnce();
   });
 
