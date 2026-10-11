@@ -138,13 +138,14 @@ const files = computed(() =>
   text-align: start;
   cursor: pointer;
 }
+/* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. */
 .nav-source {
   display: grid;
   grid-template-columns: 48px 1fr auto auto;
   align-items: center;
   gap: 8px;
   min-height: 40px;
-  padding: 3px 6px;
+  padding: 2px 6px;
 }
 /* As high as the smallest target of the app, 24 px. */
 .nav-file {

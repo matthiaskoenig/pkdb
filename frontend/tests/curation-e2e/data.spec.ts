@@ -85,6 +85,13 @@ test.describe("sources", () => {
     await app.open("#/studies/caffeine/Demo2020/data");
   });
 
+  test("the navigator lists each source in 40 px with its thumbnail and each table file in 24 px", async ({ page }) => {
+    const height = async (name: RegExp) => (await navigatorButton(page, name).boundingBox())!.height;
+    expect(await height(/^Fig1/)).toBe(40);
+    expect(await height(/^Tab2/)).toBe(40);
+    expect(await height(/^subjects\.tsv/)).toBe(24);
+  });
+
   test("the Fig1 overlay shows the row of a mapped point and focuses it in the rows of the Data section", async ({ page }) => {
     await navigatorButton(page, /^Fig1/).click();
     const figure = page.getByRole("img", {
