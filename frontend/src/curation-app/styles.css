@@ -8,6 +8,11 @@ html {
   font-size: 0.9286rem;
   line-height: 1.4;
 }
+/* The rules below for fields, switches, radios, checkboxes, chips and expansion panels set the
+   inner variables, classes and offsets of Vuetify 4.2.1, such as the scale of a floating label,
+   the 8 px start of an outline and the -6 px margin of a radio group, which a release of Vuetify
+   may change: after an upgrade, check fields, switches and radios in the app by eye. */
+
 /* Fields are 30 px high with the 13 px of the body text, and their floating label is 12 px
    (0.923 of 13 px): Vuetify sizes them for 16 px text in fixed pixels. The icons in a field shrink
    with its text. Every field of the app is compact (density.ts). */
