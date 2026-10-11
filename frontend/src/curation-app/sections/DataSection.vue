@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, shallowRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VBtn, VSelect, VSwitch } from "vuetify/components";
@@ -123,9 +123,19 @@ const {
 const sourceView = computed(() =>
   view.value && view.value.key === source.value?.source ? view.value.content : null,
 );
-/** The rows of the selected source per file, for the navigator. */
-const sourceRows = computed(() =>
-  sourceView.value ? new Map(sourceView.value.mapped.map((entry) => [entry.file, entry.rows.length])) : null,
+/**
+ * The rows of the selected source per file, for the navigator. While the next source loads, those
+ * of the last one stay, so that the counts and the dimmed files do not flicker on every click; a
+ * source that failed to load, a study without sources and another study have none.
+ */
+const sourceRows = shallowRef<ReadonlyMap<string, number> | null>(null);
+watch(
+  [sourceView, viewError, () => source.value === null, identity],
+  ([shown, error, none, study], previous) => {
+    if (shown) sourceRows.value = new Map(shown.mapped.map((entry) => [entry.file, entry.rows.length]));
+    else if (error !== null || none || study !== previous?.[3]) sourceRows.value = null;
+  },
+  { immediate: true },
 );
 /** The cell of the route in the selected file: its line, and its column when it names one. */
 const focus = computed(() =>

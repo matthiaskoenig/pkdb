@@ -800,6 +800,40 @@ describe("linked selection", () => {
     expect(rowsOf("interventions.tsv").exists()).toBe(false);
   });
 
+  it("keeps the rows of the last source in the navigator while the next source loads", async () => {
+    let answer: (response: Response) => void = () => {};
+    await mountSection(detail(), {
+      [`GET ${EXAMPLE}/sources/Fig1`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
+    }, `${SECTION}?source=Tab2`);
+    const pills = () =>
+      files().map((entry) => {
+        const pill = entry.find(".nav-rows [aria-hidden='true']");
+        return pill.exists() ? pill.text() : null;
+      });
+    const ofTab2 = pills();
+    expect(ofTab2.filter(Boolean)).toEqual(["2", "2"]);
+    await choose("source", "Fig1");
+    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
+    expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
+    expect(pills()).toEqual(ofTab2);
+    expect(files().some((entry) => entry.classes().includes("nav-file--other"))).toBe(true);
+    answer(json(digitized));
+    await flushPromises();
+    expect(pills().filter(Boolean)).toEqual(["2"]);
+  });
+
+  it("drops the rows of the last source from the navigator when the next source cannot be loaded", async () => {
+    await mountSection(detail(), {
+      [`GET ${EXAMPLE}/sources/Fig1`]: (() => json({ error: "The image cannot be read." }, { status: 500 })) satisfies Handler,
+    }, `${SECTION}?source=Tab2`);
+    expect(page().findAll(".nav-rows")).toHaveLength(2);
+    await choose("source", "Fig1");
+    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
+    expect(sourcePane().text()).toContain("Fig1 could not be loaded.");
+    expect(page().findAll(".nav-rows")).toHaveLength(0);
+    expect(page().find(".nav-file--other").exists()).toBe(false);
+  });
+
   it("shows only the rows of the source in a shared table until the switch shows all", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Tab2&file=subjects.tsv`);
     expect(page().findAll(".rows-pane tbody tr[data-index]")).toHaveLength(2);
