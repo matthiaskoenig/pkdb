@@ -889,8 +889,9 @@ describe("sync status", () => {
   ] as const)("says what %s means in the toolbar, before the panes", async (status, changes, text) => {
     await mountSection(reviewed(sync(status, changes)));
     expect(syncText()).toBe(text);
-    const toolbar = page().get('.data-section [role="toolbar"]');
-    expect(toolbar.attributes("aria-label")).toBe("Data");
+    const toolbar = page().get(".data-section .data-toolbar");
+    // Its controls are reached with Tab; a toolbar role would promise arrow keys.
+    expect(toolbar.attributes("role")).toBeUndefined();
     expect(toolbar.find('[role="status"]').exists()).toBe(true);
     const order = toolbar.element.compareDocumentPosition(page().get(".data-panes").element);
     expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -1136,7 +1137,7 @@ describe("beyond the upload limits", () => {
     expect(page().text()).not.toContain("no sources yet");
     expect(page().text()).not.toContain("no tables yet");
     // The workbook still syncs: the toolbar keeps its actions and the meaning of the sync status.
-    const toolbar = page().get('.data-section [role="toolbar"]');
+    const toolbar = page().get(".data-section .data-toolbar");
     expect(toolbar.findAll("button").map((control) => control.text().trim())).toEqual(["Sync", "Add table"]);
     expect(toolbar.find(".v-switch").exists()).toBe(false);
     expect(syncText()).toBe("Changed: the next sync changes 1 file");

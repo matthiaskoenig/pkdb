@@ -324,7 +324,8 @@ onBeforeUnmount(() => {
     :style="{ '--data-offset': `${offset}px` }"
   >
     <template v-if="detail">
-      <div class="data-toolbar" role="toolbar" aria-label="Data">
+      <!-- No toolbar role: its controls are reached with Tab, not with the arrow keys that a toolbar promises. -->
+      <div class="data-toolbar">
         <template v-if="!wide">
           <VSelect
             v-if="sourceNames.length"
