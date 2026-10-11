@@ -201,6 +201,29 @@ test("the separator moves with the keyboard and keeps its place after a reload",
   );
 });
 
+test("the separator follows the mouse from where it was grabbed and selects no text on the way", async ({ app, page }) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  await expect(page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" })).toBeVisible();
+  const separator = page.getByRole("separator", { name: "Resize the source and the rows" });
+  const before = Number(await separator.getAttribute("aria-valuenow"));
+  const box = (await separator.boundingBox())!;
+  const split = (await page.locator(".data-split").boundingBox())!;
+  // Grabbed left of its middle and moved across the rows, whose text a drag would select.
+  const x = box.x + 1;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 160, y + 60, { steps: 12 });
+  await page.mouse.up();
+  await expect(separator).not.toHaveAttribute("aria-valuenow", String(before));
+  expect(Number(await separator.getAttribute("aria-valuenow"))).toBeGreaterThan(before);
+  // The place where it was grabbed stays under the pointer, within the 1 % steps of the share.
+  const after = (await separator.boundingBox())!;
+  expect(Math.abs(after.x + 1 - (x + 160))).toBeLessThanOrEqual(split.width / 100);
+  expect(await page.evaluate(() => window.getSelection()?.toString() ?? "")).toBe("");
+});
+
 test("the pane heads keep the source and the count of rows whole while a pane is at its narrowest", async ({
   app,
   page,
