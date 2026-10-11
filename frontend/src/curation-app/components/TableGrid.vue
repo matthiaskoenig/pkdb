@@ -367,7 +367,7 @@ watch(
                   v-if="selectable"
                   type="button"
                   class="grid-line-button"
-                  :aria-label="`Select line ${row.line}`"
+                  :title="`Select line ${row.line}`"
                   @click.stop="emit('select-line', row.line)"
                 >
                   {{ row.line }}

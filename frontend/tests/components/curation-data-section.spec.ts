@@ -733,7 +733,7 @@ describe("linked selection", () => {
   it("switches the source with a row of a shared table that names another source", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
     await toggle("Rows of Fig1 only");
-    await page().get('button[aria-label="Select line 4"]').trigger("click");
+    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
     await flushPromises();
     await routed({ source: "Tab2", file: "subjects.tsv", line: "4" }, "partly");
   });
@@ -742,7 +742,7 @@ describe("linked selection", () => {
     // subjects.tsv line 5 names "Fig9", which the study does not have.
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
     await toggle("Rows of Fig1 only");
-    await page().get('button[aria-label="Select line 5"]').trigger("click");
+    await page().get('th[scope="row"] button[title="Select line 5"]').trigger("click");
     await flushPromises();
     await routed({ source: "Fig1", line: "5" }, "partly");
   });
@@ -803,7 +803,7 @@ describe("linked selection", () => {
 
   it("shows the line of the route although the filter would hide it", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Tab2&file=subjects.tsv&line=3`);
-    expect(page().find('button[aria-label="Select line 3"]').exists()).toBe(true);
+    expect(page().find('th[scope="row"] button[title="Select line 3"]').exists()).toBe(true);
   });
 
   it("falls back for a source and a file the study does not have", async () => {

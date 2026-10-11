@@ -293,8 +293,16 @@ describe("selection and the line filter", () => {
   it("emits the line of a clicked row and of its line button", async () => {
     const wrapper = mountGrid({ selectable: true });
     await wrapper.findAll("tbody tr[data-index]")[1]!.find("td").trigger("click");
-    await wrapper.get('button[aria-label="Select line 4"]').trigger("click");
+    await wrapper.get('th[scope="row"] button[title="Select line 4"]').trigger("click");
     expect(wrapper.emitted("select-line")).toEqual([[3], [4]]);
+  });
+
+  it("names the line button by its line number, so the row header reads as the line", () => {
+    const wrapper = mountGrid({ selectable: true });
+    const header = wrapper.findAll("tbody tr[data-index]")[2]!.get("th[scope=row]");
+    expect(header.text()).toBe("4");
+    expect(header.get("button").attributes("aria-label")).toBeUndefined();
+    expect(header.get("button").attributes("title")).toBe("Select line 4");
   });
 
   it("renders no buttons and emits nothing when not selectable", async () => {
