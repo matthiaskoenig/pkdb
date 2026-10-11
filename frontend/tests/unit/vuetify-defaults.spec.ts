@@ -8,7 +8,7 @@ describe("vuetify defaults", () => {
     expect(website?.VBtn).toEqual({ rounded: "lg", variant: "flat" });
     expect(website?.VTabs).toBeUndefined();
     const curation = makeVuetify({ defaults: COMPACT_DEFAULTS }).defaults.value;
-    expect(curation?.VBtn).toEqual({ rounded: "lg", variant: "flat", density: "compact", size: "small" });
+    expect(curation?.VBtn).toEqual({ rounded: "lg", variant: "flat", size: "small" });
     expect(curation?.VSelect).toEqual({ variant: "outlined", density: "compact" });
     expect(curation?.VTabs).toEqual({ density: "compact" });
   });

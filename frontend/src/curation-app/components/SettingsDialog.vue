@@ -153,7 +153,6 @@ watch(
               <VBtn
                 variant="text"
                 size="small"
-                density="compact"
                 color="primary"
                 class="settings-key-remove"
                 :loading="removing"

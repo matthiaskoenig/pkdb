@@ -92,7 +92,6 @@ const describedBy = computed(() =>
         v-if="showable"
         :to="tableRoute"
         variant="text"
-        density="compact"
         color="primary"
         prepend-icon="fas fa-table-cells"
         :aria-describedby="describedBy"
@@ -102,7 +101,6 @@ const describedBy = computed(() =>
       <VBtn
         v-if="acknowledgeable && !pending"
         variant="text"
-        density="compact"
         color="primary"
         prepend-icon="fas fa-check"
         :disabled="disabled"
@@ -115,7 +113,6 @@ const describedBy = computed(() =>
       <VBtn
         v-else-if="acknowledgeable && !automatic"
         variant="text"
-        density="compact"
         color="primary"
         prepend-icon="fas fa-circle-check"
         :disabled="disabled"

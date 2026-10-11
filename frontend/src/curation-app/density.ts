@@ -1,6 +1,6 @@
 /** The curation app is a dense working surface: compact controls everywhere, the website keeps its sizes. */
 export const COMPACT_DEFAULTS = {
-  VBtn: { density: "compact", size: "small" },
+  VBtn: { size: "small" },
   VChip: { size: "small" },
   VTabs: { density: "compact" },
   VAlert: { density: "compact" },

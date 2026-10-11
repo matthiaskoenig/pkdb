@@ -147,7 +147,7 @@ const missingLine = computed(() => {
       <p v-if="empty" class="pane-missing">
         <i class="fas fa-filter" aria-hidden="true"></i>
         <span role="status">No rows of {{ source }} in {{ file }}.</span>
-        <VBtn variant="text" size="x-small" color="primary" @click="emit('show-all')">Show all rows</VBtn>
+        <VBtn variant="text" size="small" color="primary" @click="emit('show-all')">Show all rows</VBtn>
       </p>
       <TableGrid
         v-else
