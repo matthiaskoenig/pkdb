@@ -232,6 +232,41 @@ def no_network(request):
     pytest.fail(f"Unexpected request: {request.url}")
 
 
+def renamed(folder):
+    """The copy of Example at `folder`, with its files named after the folder."""
+    from pkdb.studyformat.formatter import format_folder
+
+    for path in folder.glob("Example[._]*"):
+        path.rename(folder / path.name.replace("Example", folder.name, 1))
+    assert format_folder(folder).ok
+    return folder
+
+
+def uploader(sf_vocabulary, tmp_path):
+    """Upload folders to a server that confirms every PUT; returns the result and the PUTs."""
+    puts = []
+
+    def handler(request):
+        if request.url.path == "/api/v2/capabilities":
+            return httpx2.Response(200, json=capabilities(sf_vocabulary))
+        assert request.method == "PUT", request.url
+        puts.append(request.url.path.removeprefix("/api/v2/studies/"))
+        return httpx2.Response(201, json=confirmation(puts[-1]))
+
+    def upload(folders):
+        with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+            return upload_many(
+                folders,
+                endpoint=ENDPOINT,
+                api_key="secret",
+                vocabulary=sf_vocabulary,
+                options=BatchOptions(reference_cache=tmp_path / "refs"),
+                transport=transport,
+            )
+
+    return upload, puts
+
+
 @pytest.mark.parametrize(
     ("copies", "message"),
     [
@@ -246,22 +281,29 @@ def no_network(request):
         ),
     ],
 )
-def test_batch_checks_identities_before_uploading(
+def test_studies_with_one_identity_fail_and_the_others_upload(
     study, sf_vocabulary, tmp_path, copies, message
 ):
+    """PK-DB keeps one study per sid and per publication and source.
+
+    Which of two such studies the server would keep depends on the order of the
+    uploads, so neither is uploaded; the other studies of the batch are.
+    """
     folders = [
         copy_study(study, tmp_path / root, name, pmid=pmid)
         for root, name, pmid in copies
     ]
-    with httpx2.Client(transport=httpx2.MockTransport(no_network)) as transport:
-        with pytest.raises(ValueError, match=message):
-            upload_many(
-                folders,
-                endpoint=ENDPOINT,
-                api_key="secret",
-                vocabulary=sf_vocabulary,
-                transport=transport,
-            )
+    folders.append(renamed(copy_study(study, tmp_path / "c", "Third", pmid="789")))
+    upload, puts = uploader(sf_vocabulary, tmp_path)
+    result = upload(folders)
+    rows = result["results"]
+    assert [row["status"] for row in rows] == ["failed", "failed", "confirmed"]
+    for row in rows[:2]:
+        assert row["error"].startswith(message)
+        assert row["persistence"] == "not_attempted"
+        assert row["code"] == "identity_conflict"
+    assert puts == ["caffeine/Third"]
+    assert result["summary"]["failed"] == 2
 
 
 def automatic_curation(folder):
@@ -287,18 +329,13 @@ def test_batch_refuses_two_curations_of_one_paper_and_source(
         automatic_curation(copy_study(study, tmp_path / "copies", name))
         for name in ("Example", "Exampleai")
     ]
-    with httpx2.Client(transport=httpx2.MockTransport(no_network)) as transport:
-        with pytest.raises(
-            ValueError,
-            match="Multiple studies claim reference 123 with the source key pkdb.ai",
-        ):
-            upload_many(
-                folders,
-                endpoint=ENDPOINT,
-                api_key="secret",
-                vocabulary=sf_vocabulary,
-                transport=transport,
-            )
+    upload, puts = uploader(sf_vocabulary, tmp_path)
+    rows = upload(folders)["results"]
+    assert [row["error"] for row in rows] == [
+        "Multiple studies claim reference 123 with the source key pkdb.ai: "
+        "Example, Exampleai"
+    ] * 2
+    assert puts == []
 
 
 def test_batch_uploads_a_manual_and_an_automatic_curation_of_one_paper(
@@ -347,15 +384,10 @@ def test_batch_reference_keys_compare_normalized_dois(study, sf_vocabulary, tmp_
         data["reference"] = {"doi": doi}
         path.write_text(dump_json(data), encoding="utf-8", newline="")
         folders.append(target)
-    with httpx2.Client(transport=httpx2.MockTransport(no_network)) as transport:
-        with pytest.raises(ValueError, match="Multiple studies claim reference"):
-            upload_many(
-                folders,
-                endpoint=ENDPOINT,
-                api_key="secret",
-                vocabulary=sf_vocabulary,
-                transport=transport,
-            )
+    upload, puts = uploader(sf_vocabulary, tmp_path)
+    rows = upload(folders)["results"]
+    assert all("Multiple studies claim reference" in row["error"] for row in rows)
+    assert puts == []
 
 
 def test_batch_uploads_and_resumes_by_substance_and_name(

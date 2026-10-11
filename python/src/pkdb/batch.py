@@ -401,23 +401,20 @@ def upload_many(
         else Path(os.path.commonpath(paths))
     )
     rows: list[dict[str, Any]] = []
-    sids = set()
-    references = set()
+    # PK-DB keeps one study per sid and per publication and source; which of two
+    # such studies it kept would depend on the order of the uploads.
+    claims: dict[str, list[int]] = {}
     for index, path in enumerate(paths):
         sid, key = _identity(Path(path))
-        if sid is not None and sid in sids:
-            raise ValueError(f"Duplicate study SID: {sid}")
-        sids.add(sid)
+        if sid is not None:
+            claims.setdefault(f"Duplicate study SID: {sid}", []).append(index)
         if key is not None:
             # A format 1 folder has no source key; it claims its reference like a
             # manual curation.
             publication, source = key
-            if (publication, source or MANUAL_SOURCE_KEY) in references:
-                claimed = f" with the source key {source}" if source else ""
-                raise ValueError(
-                    f"Multiple studies claim reference {publication}{claimed}"
-                )
-            references.add((publication, source or MANUAL_SOURCE_KEY))
+            claimed = f" with the source key {source}" if source else ""
+            message = f"Multiple studies claim reference {publication}{claimed}"
+            claims.setdefault(message, []).append(index)
         rows.append(
             dict(
                 index=index,
@@ -430,6 +427,17 @@ def upload_many(
                 ok=False,
             )
         )
+    for message, indexes in claims.items():
+        if len(indexes) < 2:
+            continue
+        places = ", ".join(rows[index]["relative_path"] for index in indexes)
+        for index in indexes:
+            if rows[index]["status"] == "queued":
+                rows[index].update(
+                    status="failed",
+                    code="identity_conflict",
+                    error=f"{message}: {places}",
+                )
     batch: dict[str, Any] = dict(
         report_version=3,
         command="upload",
@@ -515,7 +523,7 @@ def upload_many(
     checkpoint()
     if on_result:
         for row in rows:
-            if row.get("skipped"):
+            if row.get("skipped") or row.get("code") == "identity_conflict":
                 on_result(redact(dict(row), api_key))
     pending = iter(r for r in rows if r["status"] == "queued")
     ctx = multiprocessing.get_context("spawn")
