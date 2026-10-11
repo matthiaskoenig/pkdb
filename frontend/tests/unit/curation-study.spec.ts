@@ -23,6 +23,7 @@ import {
   isSection,
   issueLabel,
   knownProfiles,
+  lastUploadUrl,
   messageOf,
   openItems,
   profileMap,
@@ -302,5 +303,20 @@ describe("failures", () => {
         label: "Show the conflicts",
       }),
     );
+  });
+});
+
+describe("lastUploadUrl", () => {
+  const upload = { at: "2026-10-01T10:12:00Z", url: "https://beta.pk-db.com/data/Example" };
+
+  it("is the page of the last upload on the web", () => {
+    expect(lastUploadUrl(studyDetail({ last_upload: upload } as Partial<StudyDetail>))).toBe(
+      "https://beta.pk-db.com/data/Example",
+    );
+  });
+
+  it("is null without an upload and for a URL that is not a web page", () => {
+    expect(lastUploadUrl(studyDetail())).toBeNull();
+    expect(lastUploadUrl(studyDetail({ last_upload: { ...upload, url: "javascript:alert(1)" } } as Partial<StudyDetail>))).toBeNull();
   });
 });

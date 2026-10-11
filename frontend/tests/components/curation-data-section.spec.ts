@@ -1108,15 +1108,15 @@ describe("beyond the upload limits", () => {
     expect(toolbar.find(".v-switch").exists()).toBe(false);
     expect(syncText()).toBe("Changed: the next sync changes 1 file");
     expect(requests.filter((request) => /\/(tables|sources)\//.test(request.path))).toEqual([]);
-    // The rail claims no count of the data that the study page cannot list.
-    const rail = (label: string) =>
+    // The tabs claim no count of the data that the study page cannot list.
+    const tab = (label: string) =>
       page()
-        .findAll(".rail-link")
-        .find((link) => link.get(".rail-label").text().startsWith(label));
-    expect(rail("Data")!.find(".rail-count").exists()).toBe(false);
-    expect(rail("Problems")!.get(".rail-count").text()).toBe("1");
-    expect(rail("Sources")).toBeUndefined();
-    expect(rail("Tables")).toBeUndefined();
+        .findAll(".section-tab")
+        .find((link) => link.get(".section-tab-label").text().startsWith(label));
+    expect(tab("Data")!.find(".section-tab-count").exists()).toBe(false);
+    expect(tab("Problems")!.get(".section-tab-count").text()).toBe("1");
+    expect(tab("Sources")).toBeUndefined();
+    expect(tab("Tables")).toBeUndefined();
   });
 
   it("shows the conflicts and syncs, so that Show the conflicts lands on them", async () => {

@@ -15,7 +15,6 @@ import {
   SYNC_LABELS,
   SYNC_TONES,
   uploadBlocker,
-  webUrl,
 } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -24,6 +23,7 @@ import {
   approvalRefusal,
   folderPath,
   issueLabel,
+  lastUploadUrl,
   messageOf,
   openItems,
   provenanceLabel,
@@ -76,7 +76,7 @@ const pmid = computed(() => {
   return props.detail.metadata.value?.reference?.pmid ?? fromReference ?? null;
 });
 const problems = computed(() => problemLabels(props.detail));
-const lastUploadUrl = computed(() => webUrl(props.detail.last_upload?.url));
+const lastUpload = computed(() => lastUploadUrl(props.detail));
 const activity = computed(() => activityLabel(props.detail));
 const pdf = computed(() => `${name.value}.pdf`);
 const hasPdf = computed(() => props.detail.files.includes(pdf.value));
@@ -386,7 +386,7 @@ function added(table: string): void {
       </li>
       <li v-if="detail.last_upload" class="fact fact-upload">
         <span class="fact-name">Last upload</span>
-        <a v-if="lastUploadUrl" :href="lastUploadUrl" target="_blank" rel="noopener noreferrer">
+        <a v-if="lastUpload" :href="lastUpload" target="_blank" rel="noopener noreferrer">
           {{ formatTime(detail.last_upload.at) }}
         </a>
         <span v-else>{{ formatTime(detail.last_upload.at) }}</span>

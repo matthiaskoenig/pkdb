@@ -275,18 +275,18 @@ describe("StudyPage", () => {
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("review"));
   });
 
-  it("lists the five sections with counts in the rail and marks the active one", async () => {
+  it("lists the five sections with counts in the tabs and marks the active one", async () => {
     await mountPage("/studies/caffeine/Harder1988/problems");
     const nav = page().get('nav[aria-label="Study sections"]');
     const links = nav.findAll("a");
-    expect(links.map((link) => link.get(".rail-label").element.firstChild?.textContent)).toEqual([
+    expect(links.map((link) => link.get(".section-tab-label").element.firstChild?.textContent)).toEqual([
       "Metadata",
       "Review",
       "Problems",
       "Data",
       "Activity",
     ]);
-    expect(links.map((link) => link.find(".rail-count").exists() && link.get(".rail-count").text())).toEqual([
+    expect(links.map((link) => link.find(".section-tab-count").exists() && link.get(".section-tab-count").text())).toEqual([
       false,
       "1",
       "3",
@@ -294,12 +294,13 @@ describe("StudyPage", () => {
       false,
     ]);
     // The counts have their meaning for screen readers.
-    expect(links[1]!.get(".rail-label").text()).toBe("Review, 1 open item");
-    expect(links[2]!.get(".rail-label").text()).toBe("Problems, 3 problems");
-    expect(links[0]!.get(".rail-label").text()).toBe("Metadata");
+    expect(links[1]!.get(".section-tab-label").text()).toBe("Review, 1 open item");
+    expect(links[2]!.get(".section-tab-label").text()).toBe("Problems, 3 problems");
+    expect(links[0]!.get(".section-tab-label").text()).toBe("Metadata");
     expect(links[1]!.attributes("href")).toBe("#/studies/caffeine/Harder1988/review");
     expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([null, null, "page", null, null]);
     expect(page().get(".study-section h2").text()).toBe("Problems");
+    expect(page().get(".study-section h2").classes()).toContain("d-sr-only");
 
     await links[3]!.trigger("click");
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
@@ -307,7 +308,30 @@ describe("StudyPage", () => {
     expect(page().get(".study-section h2").text()).toBe("Data");
   });
 
-  it("shows the rail as a select below 600 px", async () => {
+  it("shows the sections as one line of tabs with the facts of the study at its end", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const nav = page().get('nav[aria-label="Study sections"]');
+    expect(nav.classes()).toContain("section-tabs");
+    expect(nav.findAll("a").map((link) => link.text().replace(/\s+/g, " ").trim())).toEqual([
+      "Metadata",
+      expect.stringMatching(/^Review/),
+      expect.stringMatching(/^Problems/),
+      "Data",
+      "Activity",
+    ]);
+    expect(page().get(".section-tabs-facts").text()).toContain("On save");
+  });
+
+  it("links the last upload fact to its page on PK-DB, only when that is a web page", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
+    });
+    const link = page().get(".section-tabs-facts a");
+    expect(link.attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
+    expect(link.attributes("rel")).toBe("noopener noreferrer");
+  });
+
+  it("shows the tabs as a select below 600 px", async () => {
     setViewport(375, 800);
     const wrapper = await mountPage("/studies/caffeine/Harder1988/review");
     expect(page().find('nav[aria-label="Study sections"] a').exists()).toBe(false);

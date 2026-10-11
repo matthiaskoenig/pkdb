@@ -4,6 +4,7 @@
  */
 import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
+import { webUrl } from "./overview";
 import type {
   IssueState,
   People,
@@ -232,4 +233,9 @@ const NUMBERS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
 export function duplicateHeading(folders: number): string {
   if (folders < 2) return "This identity belongs to more than one folder";
   return `This identity belongs to ${NUMBERS[folders] ?? folders} folders`;
+}
+
+/** The page of the last upload of the study on PK-DB; null without an upload or when its URL is not a web page. */
+export function lastUploadUrl(detail: StudyDetail): string | null {
+  return webUrl(detail.last_upload?.url);
 }
