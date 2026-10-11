@@ -62,21 +62,35 @@ function key(event: KeyboardEvent): void {
   set(move());
 }
 
+/** Ends the drag in progress, if any. */
+let stopDrag: (() => void) | null = null;
+
+/**
+ * Drag the separator: it keeps the place under the pointer where it was grabbed, and no text of
+ * the panes is selected on the way (the class `split-pane-dragging` of the body).
+ */
 function drag(event: PointerEvent): void {
   const element = root.value;
   if (!element) return;
+  event.preventDefault();
+  stopDrag?.();
   const box = element.getBoundingClientRect();
   const separator = event.currentTarget as HTMLElement;
+  const grab = event.clientX - separator.getBoundingClientRect().left;
   separator.setPointerCapture(event.pointerId);
-  const move = (next: PointerEvent) => set(((next.clientX - box.left) / box.width) * 100);
+  document.body.classList.add("split-pane-dragging");
+  const move = (next: PointerEvent) => set(((next.clientX - grab - box.left) / box.width) * 100);
   const stop = () => {
     separator.removeEventListener("pointermove", move);
     separator.removeEventListener("pointerup", stop);
     separator.removeEventListener("pointercancel", stop);
+    document.body.classList.remove("split-pane-dragging");
+    stopDrag = null;
   };
   separator.addEventListener("pointermove", move);
   separator.addEventListener("pointerup", stop);
   separator.addEventListener("pointercancel", stop);
+  stopDrag = stop;
 }
 
 let observer: ResizeObserver | undefined;
@@ -86,7 +100,10 @@ onMounted(() => {
   observer = new ResizeObserver(([entry]) => (width.value = entry?.contentRect.width ?? 0));
   observer.observe(root.value);
 });
-onBeforeUnmount(() => observer?.disconnect());
+onBeforeUnmount(() => {
+  observer?.disconnect();
+  stopDrag?.();
+});
 </script>
 
 <template>
@@ -148,6 +165,11 @@ onBeforeUnmount(() => observer?.disconnect());
   margin-top: -14px;
   border-radius: 1px;
   background: rgba(var(--v-theme-on-surface), 0.3);
+}
+/* While the separator is dragged, the pointer selects no text of the page. */
+:global(body.split-pane-dragging) {
+  user-select: none;
+  -webkit-user-select: none;
 }
 .split-pane-separator:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
