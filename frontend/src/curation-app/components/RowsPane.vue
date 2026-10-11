@@ -85,20 +85,20 @@ const notes = computed(() => {
   return parts;
 });
 
-/** The rows, the targets, the cells with problems and the hidden columns, in sentences, for screen readers. */
-const caption = computed(() => {
-  if (!props.table) return "";
-  const parts = [`${plural(props.table.rows.length, "row")}.`, ...notes.value];
-  if (hiddenColumns.value) parts.push(hiddenText.value);
-  return parts.join(" ");
-});
-
 /** The count of the head line: the rows that show of all rows when narrowed to the source. */
 const count = computed(() => {
   const total = props.table?.rows.length ?? 0;
   if (!visible.value || !props.table) return plural(total, "row");
   const shown = props.table.rows.filter((row) => visible.value!.has(row.line)).length;
   return `${shown.toLocaleString("en-US")} of ${plural(total, "row")}`;
+});
+
+/** The rows, the targets, the cells with problems and the hidden columns, in sentences, for screen readers. */
+const caption = computed(() => {
+  if (!props.table) return "";
+  const parts = [`${count.value}.`, ...notes.value];
+  if (hiddenColumns.value) parts.push(hiddenText.value);
+  return parts.join(" ");
 });
 
 /** Whether the narrowed table has no row of the source and no focus. */

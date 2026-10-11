@@ -51,6 +51,8 @@ describe("rows pane", () => {
     const wrapper = mountPane();
     expect(lines(wrapper)).toEqual(["3", "4"]);
     expect(wrapper.get(".pane-head").text()).toContain("2 of 3 rows");
+    // Screen readers hear the same count.
+    expect(wrapper.get(".pane-head .d-sr-only").text()).toBe("2 of 3 rows.");
   });
 
   it("shows the line of the route although the filter would hide it", () => {
