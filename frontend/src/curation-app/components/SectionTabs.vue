@@ -76,7 +76,7 @@ function show(section: Section | null): void {
           :aria-current="item.section === active ? 'page' : undefined"
         >
           <!-- Screen readers hear what the count means, such as "Review, 1 open item". -->
-          <span class="section-tab-label"
+          <span class="section-tab-label" :data-label="item.label"
             >{{ item.label }}<span v-if="item.meaning" class="d-sr-only">, {{ item.meaning }}</span
             ><span v-if="item.unsaved" class="d-sr-only">, unsaved changes</span></span
           >
@@ -131,6 +131,19 @@ function show(section: Section | null): void {
 .section-tab--active:hover {
   border-bottom-color: rgb(var(--v-theme-primary));
   font-weight: 600;
+}
+/* Each label is as wide as its bold form, so that the tabs keep their places when the active one
+   changes: a hidden bold copy of the label, without height, sets the width. */
+.section-tab-label {
+  display: inline-flex;
+  flex-direction: column;
+}
+.section-tab-label::after {
+  content: attr(data-label);
+  height: 0;
+  overflow: hidden;
+  font-weight: 600;
+  visibility: hidden;
 }
 .section-tab:focus-visible {
   outline-offset: -3px;

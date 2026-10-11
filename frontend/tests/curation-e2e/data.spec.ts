@@ -144,6 +144,19 @@ test("the app bar, the study header and the section tabs take at most 110 px of 
   expect(field!.y).toBeGreaterThanOrEqual(bar!.y + bar!.height + 4);
 });
 
+test("the section tabs keep their places when another one becomes active and bold", async ({ app, page }) => {
+  const navigation = page.getByRole("navigation", { name: "Study sections" });
+  const tab = (name: string) => navigation.getByRole("link", { name, exact: true });
+  const places = () =>
+    navigation.getByRole("link").evaluateAll((links) => links.map((link) => link.getBoundingClientRect().left));
+  await app.open("#/studies/caffeine/Demo2020/data");
+  await expect(tab("Data")).toHaveAttribute("aria-current", "page");
+  const onData = await places();
+  await tab("Metadata").click();
+  await expect(tab("Metadata")).toHaveAttribute("aria-current", "page");
+  expect(await places()).toEqual(onData);
+});
+
 test("old addresses of the Sources and Tables sections open the Data section", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=6");
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=6$/);
