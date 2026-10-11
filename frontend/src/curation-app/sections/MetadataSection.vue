@@ -964,7 +964,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 56rem;
+  max-width: 100rem;
 }
 /* Hidden, it stays in the page for screen readers but takes no gap. */
 .metadata-notice {
@@ -987,10 +987,12 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 12px;
 }
+/* The cards sit side by side where two of them fit, from a window of about 1400px. */
 .metadata-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 36rem), 1fr));
+  align-items: start;
+  gap: 12px;
 }
 .metadata-card-head {
   padding-bottom: 0;
