@@ -568,3 +568,21 @@ def test_unreachable_server_has_stable_code():
         with pytest.raises(ClientError) as error:
             client.capabilities()
     assert error.value.code == "unreachable"
+
+
+def test_idle_connections_expire_before_a_server_closes_them(monkeypatch):
+    """uvicorn closes a connection that is idle for five seconds.
+
+    A write sent on a connection that the server closes at that moment gets no
+    answer, so its outcome is unknown and a batch upload stops; the client gives
+    an idle connection up well before.
+    """
+    import pkdb.client
+
+    made = []
+    monkeypatch.setattr(
+        pkdb.client.httpx2, "Client", lambda **options: made.append(options)
+    )
+    Client("https://example.test", api_key="secret")
+    [options] = made
+    assert options["limits"].keepalive_expiry == pkdb.client.KEEPALIVE_EXPIRY < 5
