@@ -1,6 +1,6 @@
 /**
- * The parts of the Tables section: what the sync status means and what a sync did, and the rows of
- * a sync conflict in one grid.
+ * The sync parts of the Data section: what the sync status means and what a sync did, and the rows
+ * of a sync conflict in one grid.
  */
 import type { ConflictData, SyncState, TableResponse, TableRow, TablesResult } from "./api/types";
 import { columnName } from "./grid";

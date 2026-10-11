@@ -5,8 +5,8 @@ import { columnName, keptColumns, ROW, visibleColumns, type CellIssues, type Iss
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
-/** The height of a row and of the header until one is measured: 32 px with the line below. */
-const ROW_HEIGHT = 32;
+/** The height of a row and of the header until one is measured: 22 px with the line below. */
+const ROW_HEIGHT = 22;
 /** The height of the region until it is measured, such as without a layout. */
 const VIEW_HEIGHT = 600;
 /** The rows that render beyond each edge of the view. */
@@ -22,7 +22,9 @@ const STEP = 10;
  *
  * Above 500 rows, only the rows near the view render, between spacers of the height of the
  * others; `aria-rowcount` and `aria-rowindex` give screen readers the place of each row. The
- * `focus` line scrolls into view with its cell marked and focused.
+ * `focus` line scrolls into view with its cell marked and focused. The line buttons of a
+ * selectable grid are one Tab stop: the arrow keys move the focus to the row above or below,
+ * Home and End to the first and the last row.
  */
 const props = withDefaults(
   defineProps<{
@@ -41,6 +43,10 @@ const props = withDefaults(
     label?: string | null;
     /** The header of the line column, such as Row for the rows of a sheet; null leaves the column out. */
     lineHeader?: string | null;
+    /** Whether a click on a row selects its line: the line cell becomes a button. */
+    selectable?: boolean;
+    /** The lines of the rows to show; null shows every row. */
+    visibleLines?: ReadonlySet<number> | null;
   }>(),
   {
     highlightLines: () => new Set<number>(),
@@ -52,8 +58,11 @@ const props = withDefaults(
     columns: null,
     label: null,
     lineHeader: "Line",
+    selectable: false,
+    visibleLines: null,
   },
 );
+const emit = defineEmits<{ "select-line": [line: number] }>();
 defineSlots<{
   /** The content of the line cell of a row; its line by default. */
   line?: (props: { line: number }) => unknown;
@@ -61,6 +70,11 @@ defineSlots<{
 
 const id = useId();
 const region = ref<HTMLElement | null>(null);
+
+/** The rows that show: all, or those of `visibleLines`. */
+const shownRows = computed(() =>
+  props.visibleLines ? props.table.rows.filter((row) => props.visibleLines!.has(row.line)) : props.table.rows,
+);
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
@@ -80,7 +94,7 @@ const span = computed(() => headers.value.length + (lines.value ? 1 : 0));
 
 // The rows near the view
 
-const virtual = computed(() => props.table.rows.length > VIRTUAL_ROWS);
+const virtual = computed(() => shownRows.value.length > VIRTUAL_ROWS);
 const rowHeight = ref(ROW_HEIGHT);
 const headerHeight = ref(ROW_HEIGHT);
 const viewRows = ref(Math.ceil(VIEW_HEIGHT / ROW_HEIGHT));
@@ -100,22 +114,22 @@ const fade = computed(() => ({
 }));
 
 function windowEnd(first: number): number {
-  return Math.min(props.table.rows.length, first + viewRows.value + 2 * OVERSCAN + STEP);
+  return Math.min(shownRows.value.length, first + viewRows.value + 2 * OVERSCAN + STEP);
 }
 
 /** The first row to render for `scrollTop`: a step at least `OVERSCAN` rows above the view. */
 function windowStart(scrollTop: number): number {
   const first = Math.floor(Math.max(0, scrollTop - headerHeight.value) / rowHeight.value);
-  return Math.max(0, Math.min(Math.floor(first / STEP) * STEP - OVERSCAN, props.table.rows.length - 1));
+  return Math.max(0, Math.min(Math.floor(first / STEP) * STEP - OVERSCAN, shownRows.value.length - 1));
 }
 
-const from = computed(() => (virtual.value ? Math.min(start.value, Math.max(0, props.table.rows.length - 1)) : 0));
-const to = computed(() => (virtual.value ? windowEnd(from.value) : props.table.rows.length));
+const from = computed(() => (virtual.value ? Math.min(start.value, Math.max(0, shownRows.value.length - 1)) : 0));
+const to = computed(() => (virtual.value ? windowEnd(from.value) : shownRows.value.length));
 const rendered = computed(() =>
-  props.table.rows.slice(from.value, to.value).map((row, offset) => ({ row, index: from.value + offset })),
+  shownRows.value.slice(from.value, to.value).map((row, offset) => ({ row, index: from.value + offset })),
 );
 const before = computed(() => from.value * rowHeight.value);
-const after = computed(() => (props.table.rows.length - to.value) * rowHeight.value);
+const after = computed(() => (shownRows.value.length - to.value) * rowHeight.value);
 
 /** A focused cell that is about to leave the rendered rows gives the focus to the region. */
 function keepFocus(first: number): void {
@@ -254,33 +268,66 @@ function described(...ids: (string | undefined | false)[]): string | undefined {
 }
 
 /**
- * Scroll the focused cell to the middle of the region, bring the region into the page view, then
- * focus the cell without scrolling again. Only the region scrolls to the cell, so that the page
- * keeps what is above the region in view (its margin: `--rows-scroll-margin`).
+ * How far a region scrolls so that the span from `start` to `end` shows between `low` and `high`:
+ * not at all when it shows whole, so that the rows under the pointer stay where they are; the
+ * least when it shows in part or `nearest` asks for it; else to the middle.
+ */
+function scrollFor(start: number, end: number, low: number, high: number, nearest = false): number {
+  if (start >= low && end <= high) return 0;
+  if (nearest || (end > low && start < high)) return start < low ? start - low : end - high;
+  return start - low - (high - low - (end - start)) / 2;
+}
+
+/** Render the row at `index` of the shown rows, with the row in the middle of the view. */
+async function renderRow(index: number): Promise<boolean> {
+  const element = region.value;
+  if (!element || !virtual.value || (index >= from.value && index < to.value)) return false;
+  const view = element.clientHeight || VIEW_HEIGHT;
+  element.scrollTop = Math.max(0, headerHeight.value + index * rowHeight.value - (view - rowHeight.value) / 2);
+  update();
+  await nextTick();
+  return true;
+}
+
+/**
+ * Scroll the region to `cell` when it is not in view below the header and, for a cell of a
+ * column, right of the line column; whether the region scrolled.
+ */
+function scrollToCell(cell: HTMLElement, nearest = false): boolean {
+  const element = region.value;
+  if (!element) return false;
+  const box = element.getBoundingClientRect();
+  const target = cell.getBoundingClientRect();
+  const top = box.top + element.clientTop;
+  const down = scrollFor(target.top, target.bottom, top + headerHeight.value, top + element.clientHeight, nearest);
+  element.scrollTop += down;
+  let right = 0;
+  if (cell.tagName === "TD") {
+    const left = box.left + element.clientLeft;
+    const start = lines.value ? (element.querySelector("thead .rows-line")?.getBoundingClientRect().width ?? 0) : 0;
+    right = scrollFor(target.left, target.right, left + start, left + element.clientWidth);
+    element.scrollLeft += right;
+  }
+  return down !== 0 || right !== 0;
+}
+
+/**
+ * Scroll the region to the focused cell when it is not in view, bring the region into the page
+ * view when the cell was not in the window either, then focus the cell without scrolling again.
+ * A focus in view, such as of a clicked row, leaves the rows in place. Only the region scrolls to
+ * the cell, so that the page keeps what is above the region in view (its margin:
+ * `--rows-scroll-margin`).
  */
 async function reveal(): Promise<void> {
   const element = region.value;
-  const index = focusLine.value === null ? -1 : props.table.rows.findIndex((row) => row.line === focusLine.value);
+  const index = focusLine.value === null ? -1 : shownRows.value.findIndex((row) => row.line === focusLine.value);
   if (!element || index < 0) return;
-  if (virtual.value) {
-    // Render the rows around the line first, with the line in the middle of the view.
-    const view = element.clientHeight || VIEW_HEIGHT;
-    element.scrollTop = Math.max(0, headerHeight.value + index * rowHeight.value - (view - rowHeight.value) / 2);
-    update();
-    await nextTick();
-  }
+  const moved = await renderRow(index);
   const cell = element.querySelector<HTMLElement>(".grid-cell--focus");
   if (!cell) return;
-  // The middle of the rows below the header, and of the columns right of the line column.
-  const box = element.getBoundingClientRect();
-  const target = cell.getBoundingClientRect();
-  const top = headerHeight.value;
-  element.scrollTop += target.top - box.top - top - (element.clientHeight - top - target.height) / 2;
-  if (cell.tagName === "TD") {
-    const start = lines.value ? (element.querySelector("thead .rows-line")?.getBoundingClientRect().width ?? 0) : 0;
-    element.scrollLeft += target.left - box.left - start - (element.clientWidth - start - target.width) / 2;
-  }
-  element.scrollIntoView({ block: "nearest" });
+  const { top, bottom } = cell.getBoundingClientRect();
+  const outside = top < 0 || bottom > window.innerHeight;
+  if (scrollToCell(cell) || moved || outside) element.scrollIntoView({ block: "nearest" });
   cell.focus({ preventScroll: true });
 }
 
@@ -290,10 +337,45 @@ watch(
   () => void nextTick(reveal),
   { immediate: true },
 );
+
+// The keyboard: the line buttons of a selectable grid are one Tab stop, which the arrow keys move.
+
+/** The line whose button the keyboard reached last; a new focus of the route takes its place. */
+const keyLine = ref<number | null>(null);
+watch(focusLine, (line) => (keyLine.value = line));
+/** The line whose button is the Tab stop: the one the keyboard reached, else the focus line, else the first rendered row. */
+const tabLine = computed(() => {
+  const shown = new Set(rendered.value.map(({ row }) => row.line));
+  return [keyLine.value, focusLine.value].find((line) => line !== null && shown.has(line)) ?? rendered.value[0]?.row.line;
+});
+
+const MOVES: Record<string, (index: number, last: number) => number> = {
+  ArrowUp: (index) => index - 1,
+  ArrowDown: (index) => index + 1,
+  Home: () => 0,
+  End: (_, last) => last,
+};
+
+/** Move the focus from the line cell of the shown row `index`, or its button, to the button of another row. */
+async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
+  const move = MOVES[event.key];
+  const cell = event.currentTarget as HTMLElement;
+  if (!move || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (!cell.querySelector(".grid-line-button")) return;
+  event.preventDefault();
+  const last = shownRows.value.length - 1;
+  const next = Math.min(last, Math.max(0, move(index, last)));
+  keyLine.value = shownRows.value[next]?.line ?? null;
+  await renderRow(next);
+  const button = region.value?.querySelector<HTMLElement>(`tr[data-index="${next}"] .grid-line-button`);
+  if (!button) return;
+  scrollToCell(button.closest("th") ?? button, true);
+  button.focus({ preventScroll: true });
+}
 </script>
 
 <template>
-  <div class="table-grid" :class="{ 'table-grid--more': more }" :style="fade">
+  <div class="table-grid" :class="{ 'table-grid--more': more, 'table-grid--selectable': selectable }" :style="fade">
     <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
     <div
       ref="region"
@@ -304,7 +386,7 @@ watch(
       :aria-label="label ?? `Rows of ${table.file}`"
       @scroll.passive="update"
     >
-      <table class="rows-table rows-table--packed" :aria-rowcount="table.rows.length + 1">
+      <table class="rows-table rows-table--packed" :aria-rowcount="shownRows.length + 1">
         <thead>
           <tr aria-rowindex="1">
             <th
@@ -337,7 +419,8 @@ watch(
             :key="row.line"
             :data-index="index"
             :aria-rowindex="index + 2"
-            :class="{ 'grid-row--target': highlightLines.has(row.line) }"
+            :class="{ 'grid-row--target': highlightLines.has(row.line), 'grid-row--focus': row.line === focusLine }"
+            @click="selectable && emit('select-line', row.line)"
           >
             <th
               v-if="lines"
@@ -348,8 +431,22 @@ watch(
               :aria-describedby="
                 described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
               "
+              @keydown="selectable && moveFocus($event, index)"
             >
-              <slot name="line" :line="row.line">{{ row.line }}</slot>
+              <slot name="line" :line="row.line">
+                <button
+                  v-if="selectable"
+                  type="button"
+                  class="grid-line-button"
+                  :tabindex="row.line === tabLine ? 0 : -1"
+                  :title="`Select line ${row.line}`"
+                  @focus="keyLine = row.line"
+                  @click.stop="emit('select-line', row.line)"
+                >
+                  {{ row.line }}
+                </button>
+                <template v-else>{{ row.line }}</template>
+              </slot>
             </th>
             <td
               v-for="column in headers"
@@ -420,6 +517,34 @@ watch(
   width: 3px;
   background-color: var(--grid-amber);
 }
+/* The row of the focus: a tint, opaque on the line column, which covers the rows below it. */
+.rows-table .grid-row--focus > td {
+  background-color: rgba(var(--v-theme-primary), 0.12);
+}
+.rows-scroll .rows-table .grid-row--focus > .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--v-theme-primary)) 12%, rgb(var(--v-theme-surface)));
+}
+/* A selectable row shows the pointer, and under it the tint of a hovered entry of the navigator,
+   opaque on the line column; the rows of open review items and of the focus keep their tints. */
+.table-grid--selectable tbody tr[data-index] {
+  cursor: pointer;
+}
+.table-grid--selectable .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > td {
+  background-color: rgba(var(--v-theme-on-surface), 0.05);
+}
+.table-grid--selectable .rows-scroll .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--v-theme-on-surface)) 5%, rgb(var(--v-theme-surface)));
+}
+/* Its line is a button that looks like the line. */
+.grid-line-button {
+  all: unset;
+  cursor: pointer;
+  width: 100%;
+}
+.grid-line-button:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 1px;
+}
 /* A cell with a problem has an outline inside, which leaves the content and the lines in place. */
 .rows-table .grid-cell--error {
   box-shadow: inset 0 0 0 2px rgb(var(--v-theme-error));
@@ -432,11 +557,12 @@ watch(
   background-image: linear-gradient(rgba(var(--v-theme-primary), 0.1), rgba(var(--v-theme-primary), 0.1));
 }
 /* The cell of the focus: a ring inside the outline of a problem. A focused cell shows the same
-   ring; the focus ring of the page would sit outside the cell, below its neighbours. */
+   ring; the focus ring of the page would sit outside the cell, below its neighbours. The ring
+   leaves room around the 12 px text of a 22 px row. */
 .rows-table .grid-cell--focus,
 .rows-table :is(td, th):focus-visible {
-  outline: 3px solid rgb(var(--v-theme-primary));
-  outline-offset: -5px;
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: -4px;
 }
 /* Raw tables: lines between the columns, as in a spreadsheet; the line column has its own.
    Cells keep their spaces as printed. */

@@ -16,7 +16,7 @@ import TableGrid from "./TableGrid.vue";
  * What a review item is about: the rows of its table that match its row filters, with its column
  * marked, and for a digitized series the figure overlay with that series emphasized, as the local
  * server matched its target. Nothing shows for the whole study or a file that is no table. The
- * rows link to the Tables section. Beyond the upload limits a target of a file says that its rows
+ * rows link to the Data section. Beyond the upload limits a target of a file says that its rows
  * cannot be shown.
  */
 const props = defineProps<{ item: ReviewItem }>();
@@ -68,9 +68,9 @@ const {
   () => study.detail,
 );
 
-/** A clicked mapped point of the figure opens its row in the Tables section. */
+/** A clicked mapped point of the figure opens its row in the Data section. */
 function showRow(row: { file: string; line: number }): void {
-  if (study.detail) void router.push(sectionRoute(study.detail.id, "tables", { file: row.file, line: String(row.line) }));
+  if (study.detail) void router.push(sectionRoute(study.detail.id, "data", { file: row.file, line: String(row.line) }));
 }
 
 const rows = computed(() => {
@@ -93,10 +93,10 @@ const rows = computed(() => {
   };
 });
 
-/** The Tables section at the target, or at its row `line`, with the column of the item. */
+/** The Data section at the target, or at its row `line`, with the column of the item. */
 function tableRoute(line?: number) {
   const column = rows.value?.column;
-  return sectionRoute(study.detail?.id ?? "", "tables", {
+  return sectionRoute(study.detail?.id ?? "", "data", {
     file: tableFile.value ?? "",
     ...(line === undefined ? {} : { line: String(line) }),
     ...(column ? { column } : {}),
@@ -156,7 +156,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
             <template #line="{ line }">
               <RouterLink
                 :to="tableRoute(line)"
-                :aria-label="`Show line ${line} of ${tableFile} in the Tables section`"
+                :aria-label="`Show line ${line} of ${tableFile} in the Data section`"
               >
                 {{ line }}
               </RouterLink>

@@ -1,8 +1,8 @@
 # Curation app screenshots and benchmarks
 
-`render.mjs` renders the screenshots of [the local curation app guide](../../docs/local-curation.md) into `docs/images/curation/`: `overview.png`, `review.png`, `sources.png`, `metadata.png` and `tables-conflict.png`, in the light theme, 1440 pixels wide. Most are 900 pixels high; `review.png` is 1010 and `sources.png` 1100 pixels high, so that they show the study header together with the whole review target or the whole figure. It drives the real app of a running `pkdb curate` in Chromium by roles and labels. The app runs on a copy of the synthetic fixture workspace of the browser tests (`tools/curation_testing/fixture`), so the images show no real publication or account.
+`render.mjs` renders the screenshots of [the local curation app guide](../../docs/local-curation.md) into `docs/images/curation/`: `overview.png`, `review.png`, `data.png`, `metadata.png` and `data-conflict.png`, in the light theme, 1440 pixels wide. `review.png` and `data.png` are 1010 pixels high, so that they show the whole review target or the whole figure with its legend; the others are 900 pixels high. It drives the real app of a running `pkdb curate` in Chromium by roles and labels. The app runs on a copy of the synthetic fixture workspace of the browser tests (`tools/curation_testing/fixture`), so the images show no real publication or account.
 
-The renderer changes the workspace: for `tables-conflict.png` it edits the same cell of `caffeine/Demo2020` in the workbook and in `timecourses_Fig1.tsv`. Start every run from a fresh copy.
+The renderer changes the workspace: for `data-conflict.png` it edits the same cell of `caffeine/Demo2020` in the workbook and in `timecourses_Fig1.tsv`. Start every run from a fresh copy.
 
 You need the frontend dependencies with Playwright Chromium, the built app, and [uv](https://docs.astral.sh/uv/). From the repository root:
 

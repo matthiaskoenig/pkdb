@@ -762,7 +762,6 @@ onBeforeUnmount(() => {
                 <VBtn
                   icon="fas fa-xmark"
                   variant="text"
-                  density="comfortable"
                   size="small"
                   :aria-label="`Remove asset ${index + 1}`"
                   class="row-remove"
@@ -965,7 +964,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 56rem;
+  max-width: 100rem;
 }
 /* Hidden, it stays in the page for screen readers but takes no gap. */
 .metadata-notice {
@@ -988,10 +987,13 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 12px;
 }
+/* The cards sit side by side where two of them fit, from a window of about 1400px. The cards of
+   a row are as high as the higher one, so that the rows read evenly. */
 .metadata-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 36rem), 1fr));
+  align-items: stretch;
+  gap: 12px;
 }
 .metadata-card-head {
   padding-bottom: 0;
@@ -1015,16 +1017,8 @@ onBeforeUnmount(() => {
 .field-row--radios {
   gap: 8px 16px;
 }
-/* The label, the first radio circle and the messages of a radio group start at the edge of the
-   card content, as the fields and headings do. */
-.field-row--radios :deep(.v-radio-group > .v-input__control > .v-label) {
-  margin-inline-start: 0;
-}
-/* The input of a radio is 5px wider than its circle on each side. */
-.field-row--radios :deep(.v-selection-control-group) {
-  padding-inline-start: 0;
-  margin-inline-start: -5px;
-}
+/* The messages of a radio group start at the edge of the card content, as its label and its first
+   circle do (styles.css). */
 .field-row--radios :deep(.v-input__details) {
   padding-inline: 0;
 }

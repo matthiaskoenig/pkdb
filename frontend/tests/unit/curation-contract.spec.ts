@@ -9,6 +9,7 @@ import type {
   Job,
   Problem,
   ReviewItem,
+  SourceSummary,
   SourceView,
   Suggestion,
   TableEntry,
@@ -33,12 +34,14 @@ import {
   suggestionView,
 } from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
-import { beyondLimits, isLimitIssue, isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
+import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
+import { defaultSource, fileForSource } from "../../src/curation-app/data";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
+import sourcesFixture from "../fixtures/curation-contract/sources.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 import targetsFixture from "../fixtures/curation-contract/targets.json";
@@ -55,8 +58,8 @@ describe("limits contract", () => {
     for (const detail of BEYOND_LIMITS) {
       expect(isLimitIssue(detail.problems[0]!)).toBe(true);
       expect(beyondLimits(detail)).toBe(true);
-      // The rail claims no count of the sources and tables that the study page cannot list.
-      expect(railCounts(studyDetail({ ...detail, counts: { errors: 1, warnings: 0 } }))).toEqual({ review: 0, problems: 1 });
+      // The limit is the one problem that the sections count.
+      expect(sectionCounts(studyDetail({ ...detail, counts: { errors: 1, warnings: 0 } }))).toEqual({ review: 0, problems: 1 });
     }
   });
 });
@@ -77,7 +80,6 @@ describe("tables contract", () => {
     ]);
     expect(isRawTable({ tables }, "Demo2020_Tab2.tsv")).toBe(true);
     expect(isRawTable({ tables }, "outputs_Tab2.tsv")).toBe(false);
-    expect(railCounts(studyDetail({ tables })).tables).toBe(6);
   });
 
   it("lists every table kind of the library", () => {
@@ -146,6 +148,46 @@ describe("targets contract", () => {
 
   it("accepts every preview answer", () => {
     for (const { response } of targetsFixture.previews) expect(isTargetMatch(response)).toBe(true);
+  });
+});
+
+describe("sources contract", () => {
+  const sources = contract<SourceSummary[]>(sourcesFixture.sources);
+  const tables = contract<TableEntry[]>(tablesFixture.tables);
+
+  it("has the fields of a source summary", () => {
+    const fields: (keyof SourceSummary)[] = [
+      "source",
+      "kind",
+      "image",
+      "image_url",
+      "raw",
+      "raw_kind",
+      "tables",
+      "missing_image",
+      "missing_raw",
+    ];
+    for (const summary of sources) expect(Object.keys(summary).sort()).toEqual([...fields].sort());
+  });
+
+  it("names the URL of the image of a source, the one of its source view, and none without an image", () => {
+    expect(sources.map((summary) => [summary.source, summary.image_url])).toEqual([
+      ["Fig1", "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png"],
+      ["Tab2", "/local/studies/caffeine/Demo2020/files/Demo2020_Tab2.png"],
+      ["Text", null],
+    ]);
+    expect(sources[0]!.image_url).toBe(contract<SourceView>(sourceFixture).image_url);
+    for (const summary of sources) expect(summary.image_url === null).toBe(summary.image === null);
+  });
+
+  it("opens each source on its own table, a text on its first shared one", () => {
+    const study = { sources, tables, problems: [], review: studyDetail().review };
+    expect(defaultSource(study)?.source).toBe("Fig1");
+    expect(sources.map((summary) => fileForSource(study, summary, null))).toEqual([
+      "timecourses_Fig1.tsv",
+      "outputs_Tab2.tsv",
+      "subjects.tsv",
+    ]);
   });
 });
 

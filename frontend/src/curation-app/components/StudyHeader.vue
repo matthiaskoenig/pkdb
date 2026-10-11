@@ -7,15 +7,12 @@ import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import {
   activityLabel,
-  formatTime,
   issueUrl,
-  MODE_LABELS,
   problemLabels,
   REVIEW_LABELS,
   SYNC_LABELS,
   SYNC_TONES,
   uploadBlocker,
-  webUrl,
 } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -46,6 +43,7 @@ const props = defineProps<{
 const study = useStudyStore();
 const overview = useOverviewStore();
 const reasonId = useId();
+const statusId = useId();
 
 type Action = "status" | "tables" | "validate" | "folder" | "pdf" | "copy";
 
@@ -76,7 +74,6 @@ const pmid = computed(() => {
   return props.detail.metadata.value?.reference?.pmid ?? fromReference ?? null;
 });
 const problems = computed(() => problemLabels(props.detail));
-const lastUploadUrl = computed(() => webUrl(props.detail.last_upload?.url));
 const activity = computed(() => activityLabel(props.detail));
 const pdf = computed(() => `${name.value}.pdf`);
 const hasPdf = computed(() => props.detail.files.includes(pdf.value));
@@ -193,84 +190,116 @@ function added(table: string): void {
 
 <template>
   <header ref="root" class="study-header">
-    <div class="study-header-row">
-      <div class="study-heading">
-        <!-- A long identity wraps after the slash rather than inside a name. -->
-        <h1 class="study-identity">{{ substance }}/<wbr />{{ name }}</h1>
-        <div v-if="release || issue || provenance" class="study-chips">
-          <VChip
-            v-if="release"
-            size="small"
-            variant="tonal"
-            color="success"
-            prepend-icon="fas fa-tag"
-            class="status-chip release-chip"
-          >
-            {{ release }}
-          </VChip>
-          <template v-if="issue">
-            <VChip
-              v-if="issue.url"
-              :href="issue.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              size="small"
-              variant="outlined"
-              prepend-icon="fas fa-circle-dot"
-              class="header-chip issue-chip"
-              :aria-label="`GitHub issue ${issue.label}`"
-            >
-              {{ issue.label }}
-            </VChip>
-            <VChip
-              v-else
-              size="small"
-              variant="outlined"
-              prepend-icon="fas fa-circle-dot"
-              class="header-chip issue-chip"
-            >
-              {{ issue.label }}
-            </VChip>
-          </template>
-          <VChip
-            v-if="provenance"
-            size="small"
-            variant="outlined"
-            prepend-icon="fas fa-robot"
-            class="header-chip provenance-chip"
-          >
-            {{ provenance }}
-          </VChip>
-        </div>
-      </div>
-
-      <div class="study-actions">
-        <VSelect
-          :model-value="reviewStatus"
-          :items="STATUS_ITEMS"
-          label="Review status"
-          density="compact"
-          hide-details
-          :disabled="!canSetStatus || working"
-          :loading="busy === 'status'"
-          class="review-select"
-          @update:model-value="setStatus"
+    <div class="study-header-line">
+      <!-- A long identity wraps after the slash rather than inside a name. -->
+      <h1 class="study-identity">{{ substance }}/<wbr />{{ name }}</h1>
+    <template v-if="release || issue || provenance">
+      <VChip
+        v-if="release"
+        size="x-small"
+        variant="tonal"
+        color="success"
+        prepend-icon="fas fa-tag"
+        class="status-chip release-chip"
+      >
+        {{ release }}
+      </VChip>
+      <template v-if="issue">
+        <VChip
+          v-if="issue.url"
+          :href="issue.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          size="x-small"
+          variant="outlined"
+          prepend-icon="fas fa-circle-dot"
+          class="header-chip issue-chip"
+          :aria-label="`GitHub issue ${issue.label}`"
         >
-          <!-- Vuetify's loader has no accessible name. -->
-          <template #loader="{ isActive, color }">
-            <VProgressLinear
-              :active="isActive"
-              :color="color"
-              height="2"
-              indeterminate
-              aria-label="Setting the review status"
-            />
-          </template>
-        </VSelect>
+          {{ issue.label }}
+        </VChip>
+        <VChip
+          v-else
+          size="x-small"
+          variant="outlined"
+          prepend-icon="fas fa-circle-dot"
+          class="header-chip issue-chip"
+        >
+          {{ issue.label }}
+        </VChip>
+      </template>
+      <VChip
+        v-if="provenance"
+        size="x-small"
+        variant="outlined"
+        prepend-icon="fas fa-robot"
+        class="header-chip provenance-chip"
+      >
+        {{ provenance }}
+      </VChip>
+    </template>
+      <p
+        class="study-title"
+        :class="{ 'study-title--missing': !summary.title }"
+        :title="summary.title || undefined"
+      >
+        {{ summary.title || "No reference title yet" }}
+      </p>
+      <span v-if="pmid" class="fact-pmid">
+        <span class="fact-name">PMID</span>
+        <a :href="`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`" target="_blank" rel="noopener noreferrer">{{ pmid }}</a>
+      </span>
+      <VChip size="x-small" variant="tonal" :color="SYNC_TONES[detail.sync.status]" class="status-chip fact-sync">
+        {{ SYNC_LABELS[detail.sync.status] }}
+      </VChip>
+      <span v-if="problems.length || activity" class="fact-problems">
+        <VChip
+          v-for="problem in problems"
+          :key="problem.label"
+          size="x-small"
+          variant="tonal"
+          :color="problem.tone"
+          class="status-chip"
+        >
+          {{ problem.label }}
+        </VChip>
+        <span v-if="activity" class="fact-activity">{{ activity }}</span>
+      </span>
+      <div class="study-actions">
+        <!-- The field keeps "Review status" as its name; its label stands beside it, as PMID does,
+             since a label above the field would not fit into the line. -->
+        <span class="fact-status">
+          <label :for="statusId" class="fact-name">Review</label>
+          <VSelect
+            :id="statusId"
+            :model-value="reviewStatus"
+            :items="STATUS_ITEMS"
+            label="Review status"
+            single-line
+            density="compact"
+            hide-details
+            :disabled="!canSetStatus || working"
+            :loading="busy === 'status'"
+            class="review-select"
+            @update:model-value="setStatus"
+          >
+            <!-- Vuetify's loader has no accessible name. -->
+            <template #loader="{ isActive, color }">
+              <VProgressLinear
+                :active="isActive"
+                :color="color"
+                height="2"
+                indeterminate
+                aria-label="Setting the review status"
+              />
+            </template>
+          </VSelect>
+        </span>
         <div class="study-buttons">
           <VBtn
             variant="tonal"
             color="primary"
+            size="small"
             prepend-icon="fas fa-table"
             :disabled="stale || working"
             :loading="busy === 'tables'"
@@ -281,6 +310,7 @@ function added(table: string): void {
           <VBtn
             variant="tonal"
             color="primary"
+            size="small"
             prepend-icon="fas fa-circle-check"
             :disabled="stale || working"
             :loading="busy === 'validate'"
@@ -295,6 +325,7 @@ function added(table: string): void {
                 <VBtn
                   variant="tonal"
                   color="primary"
+                  size="small"
                   prepend-icon="fas fa-cloud-arrow-up"
                   :disabled="!canUpload || working"
                   :aria-describedby="uploadReason ? reasonId : undefined"
@@ -311,7 +342,7 @@ function added(table: string): void {
                 v-bind="activator"
                 icon="fas fa-ellipsis-vertical"
                 variant="text"
-                density="comfortable"
+                size="small"
                 :disabled="working"
                 class="more-actions"
                 aria-label="More actions"
@@ -352,47 +383,10 @@ function added(table: string): void {
             </VCard>
           </VMenu>
         </div>
-        <!-- The reason describes Upload for screen readers, and shows where no pointer can hover. -->
-        <p v-if="uploadReason" :id="reasonId" class="upload-reason">{{ uploadReason }}</p>
       </div>
     </div>
-
-    <p class="study-title" :class="{ 'study-title--missing': !summary.title }">
-      {{ summary.title || "No reference title yet" }}
-    </p>
-    <ul class="study-facts">
-      <li v-if="pmid" class="fact fact-pmid">
-        <span class="fact-name">PMID</span>
-        <a :href="`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`" target="_blank" rel="noopener noreferrer">{{ pmid }}</a>
-      </li>
-      <li class="fact fact-mode"><span class="fact-name">On save</span> {{ MODE_LABELS[detail.mode] }}</li>
-      <li class="fact fact-sync">
-        <VChip size="small" variant="tonal" :color="SYNC_TONES[detail.sync.status]" class="status-chip">
-          {{ SYNC_LABELS[detail.sync.status] }}
-        </VChip>
-      </li>
-      <li v-if="problems.length || activity" class="fact fact-problems">
-        <VChip
-          v-for="problem in problems"
-          :key="problem.label"
-          size="small"
-          variant="tonal"
-          :color="problem.tone"
-          class="status-chip"
-        >
-          {{ problem.label }}
-        </VChip>
-        <span v-if="activity" class="fact-activity">{{ activity }}</span>
-      </li>
-      <li v-if="detail.last_upload" class="fact fact-upload">
-        <span class="fact-name">Last upload</span>
-        <a v-if="lastUploadUrl" :href="lastUploadUrl" target="_blank" rel="noopener noreferrer">
-          {{ formatTime(detail.last_upload.at) }}
-        </a>
-        <span v-else>{{ formatTime(detail.last_upload.at) }}</span>
-      </li>
-    </ul>
-
+    <!-- The reason describes Upload for screen readers, and shows where no pointer can hover. -->
+    <p v-if="uploadReason" :id="reasonId" class="upload-reason">{{ uploadReason }}</p>
     <ActionFailureAlert
       v-if="failure"
       :failure="failure"
@@ -420,53 +414,92 @@ function added(table: string): void {
 .study-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
-.study-header-row {
+/* One line from 1280 px; below that the parts wrap onto more lines where they do not fit, the
+   title shrinking to 12rem before it wraps. */
+.study-header-line {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px 24px;
-}
-.study-heading {
-  display: flex;
-  flex: 1 1 20rem;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 16px;
-  min-width: 0;
-  /* As tall as the select beside it, so that both center on one line. */
-  min-height: 40px;
+  gap: 8px 10px;
+  min-height: 38px;
+}
+@media (min-width: 1280px) {
+  .study-header-line {
+    flex-wrap: nowrap;
+  }
 }
 .study-identity {
+  flex: 0 0 auto;
+  max-width: 100%;
   margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
   overflow-wrap: anywhere;
-}
-.study-chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
 }
 .header-chip {
   border-color: rgba(var(--v-theme-on-surface), 0.3);
 }
-.study-actions {
-  display: flex;
+.study-title {
+  flex: 1 1 12rem;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.study-title--missing {
+  font-style: italic;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.fact-pmid {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  font-size: 12px;
+}
+.fact-problems {
+  display: inline-flex;
+  flex: 0 0 auto;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 16px;
+  gap: 4px 6px;
+}
+.fact-name,
+.fact-activity {
+  font-size: 12px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.study-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.fact-status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
 }
 .review-select {
-  width: 10.5rem;
+  width: 150px;
   flex: 0 0 auto;
+}
+.more-actions {
+  width: 28px;
+  height: 28px;
 }
 .study-buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .upload-action {
   display: inline-flex;
@@ -489,46 +522,14 @@ function added(table: string): void {
     height: auto;
     overflow: visible;
     clip: auto;
-    font-size: 0.8125rem;
+    font-size: 13px;
     line-height: 1.4;
     white-space: normal;
     color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
   }
 }
-.study-title {
-  max-width: 60rem;
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.4;
-}
-.study-title--missing {
-  font-style: italic;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* The facts are apart by a wide gap rather than a separator, which would start a wrapped line. */
-.study-facts {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 20px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.875rem;
-}
-.fact {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 6px;
-  min-height: 24px;
-}
-.fact-name,
-.fact-activity {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
 .study-notice {
-  font-size: 0.875rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* Empty, it stays in the page for screen readers but takes no gap of the header. */
@@ -542,8 +543,11 @@ function added(table: string): void {
     width: 100%;
     gap: 8px;
   }
-  .review-select {
+  .fact-status {
     flex: 1 1 calc(100% - 56px);
+  }
+  .review-select {
+    flex: 1 1 auto;
   }
   .study-buttons {
     display: contents;
@@ -563,9 +567,6 @@ function added(table: string): void {
   .study-buttons :deep(.v-btn__prepend) {
     display: none;
   }
-  .upload-reason {
-    order: 2;
-  }
 }
 .study-menu {
   width: auto;
@@ -573,7 +574,7 @@ function added(table: string): void {
 }
 .study-menu-note {
   margin: -4px 0 4px 44px;
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 </style>

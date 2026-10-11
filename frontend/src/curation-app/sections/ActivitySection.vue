@@ -249,7 +249,6 @@ async function retried(): Promise<void> {
             <VBtn
               v-if="entry.reviewable"
               variant="text"
-              density="compact"
               color="primary"
               prepend-icon="fas fa-triangle-exclamation"
               :disabled="working || row === null"
@@ -261,7 +260,6 @@ async function retried(): Promise<void> {
             <VBtn
               v-if="entry.cancelable"
               variant="text"
-              density="compact"
               color="primary"
               prepend-icon="fas fa-xmark"
               :disabled="working && busy !== `cancel:${entry.job.id}`"
@@ -277,7 +275,6 @@ async function retried(): Promise<void> {
               target="_blank"
               rel="noopener noreferrer"
               variant="text"
-              density="compact"
               color="primary"
               prepend-icon="fas fa-arrow-up-right-from-square"
               :aria-describedby="`${entry.textId} ${entry.metaId}`"
@@ -288,7 +285,6 @@ async function retried(): Promise<void> {
             <VBtn
               v-if="entry.job.report_id"
               variant="text"
-              density="compact"
               color="primary"
               prepend-icon="fas fa-download"
               :disabled="working && busy !== `report:${entry.job.id}`"

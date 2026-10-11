@@ -3,35 +3,35 @@ import { computed, onBeforeUnmount, ref, useId, watch, type Component } from "vu
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VContainer, VProgressLinear } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../api/client";
-import SectionRail from "../components/SectionRail.vue";
+import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import ActivitySection from "../sections/ActivitySection.vue";
+import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
-import SourcesSection from "../sections/SourcesSection.vue";
-import TablesSection from "../sections/TablesSection.vue";
+import { formatTime, MODE_LABELS } from "../overview";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
   duplicateFolders,
   duplicateHeading,
   isSection,
-  railCounts,
+  lastUploadUrl,
   SECTION_LABELS,
+  sectionCounts,
   type Section,
 } from "../study";
 
 /**
  * The component of each section. A section gets the open study from the study store, and a
- * section with a form emits `unsaved` with whether it has unsaved changes, which the rail marks.
+ * section with a form emits `unsaved` with whether it has unsaved changes, which the tabs mark.
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
   review: ReviewSection,
   problems: ProblemsSection,
-  sources: SourcesSection,
-  tables: TablesSection,
+  data: DataSection,
   activity: ActivitySection,
 };
 
@@ -71,7 +71,19 @@ const loadError = computed(() => {
   if (error === null || failure.value || error instanceof ServerStopped || error instanceof SessionMissing) return null;
   return `The study could not be loaded. ${error.message}`;
 });
-const counts = computed(() => (detail.value ? railCounts(detail.value) : {}));
+const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
+
+/** The facts of the study at the end of the line of tabs. */
+const facts = computed(() => {
+  const value = detail.value;
+  if (!value) return [];
+  const list: { text: string; href?: string }[] = [{ text: `On save: ${MODE_LABELS[value.mode]}` }];
+  if (value.last_upload) {
+    const href = lastUploadUrl(value);
+    list.push({ text: `Last upload ${formatTime(value.last_upload.at)}`, ...(href ? { href } : {}) });
+  }
+  return list;
+});
 
 /** The section on the screen when it has unsaved changes; only that section can have any. */
 const unsaved = ref<Section | null>(null);
@@ -119,21 +131,19 @@ watch(
       </VAlert>
       <template v-if="detail">
         <StudyHeader :detail="detail" :stale="study.error !== null" />
-        <div class="study-body">
-          <SectionRail
-            :substance="substance"
-            :name="name"
-            :active="section"
-            :counts="counts"
-            :unsaved="unsavedSections"
-            class="study-rail"
-          />
-          <section v-if="section" class="study-section" :aria-labelledby="headingId">
-            <!-- It takes the focus after a dialog of the section when the control that opened it is gone. -->
-            <h2 :id="headingId" tabindex="-1" class="study-section-heading">{{ SECTION_LABELS[section] }}</h2>
-            <component :is="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
-          </section>
-        </div>
+        <SectionTabs
+          :substance="substance"
+          :name="name"
+          :active="section"
+          :counts="counts"
+          :unsaved="unsavedSections"
+          :facts="facts"
+        />
+        <section v-if="section" class="study-section" :aria-labelledby="headingId">
+          <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
+          <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>
+          <component :is="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
+        </section>
       </template>
       <div v-else-if="!study.error" class="study-loading">
         <VProgressLinear indeterminate color="primary" aria-label="Loading the study" />
@@ -143,49 +153,20 @@ watch(
 </template>
 
 <style scoped>
+/* Little room above the header: the app bar, the header line and the section tabs together take at
+   most 110 px, which leaves the rest of the window to the section. */
 .study-page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px 16px;
-}
-.study-body {
-  display: grid;
-  grid-template-columns: 13rem minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
-  padding-top: 16px;
-  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-/* The rail stays in view below the app bar while a long section scrolls. */
-.study-rail {
-  position: sticky;
-  top: 80px;
+  gap: 0;
+  padding: 2px 12px 8px;
 }
 .study-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
-}
-/* As tall as a link of the rail, so that the heading lines up with the first one. */
-.study-section-heading {
-  display: flex;
-  align-items: center;
-  min-height: 40px;
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-@media (max-width: 599.98px) {
-  .study-body {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
-  .study-rail {
-    position: static;
-  }
+  padding-top: 8px;
 }
 .study-failure {
   display: flex;

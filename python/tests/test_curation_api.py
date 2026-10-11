@@ -93,6 +93,46 @@ def test_study_detail(api):
     assert json.loads(changed[2])["metadata"]["value"]["licence"] == "closed"
 
 
+def test_study_detail_names_the_image_url_of_each_source(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    (folder / "Example_Tab2.png").unlink()
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    sources = {source["source"]: source for source in detail["sources"]}
+    # The same URL as the source view, so that the browser shows one image for both.
+    assert sources["Fig1"]["image_url"] == f"{DETAIL}/files/Example_Fig1.png"
+    view = json.loads(
+        request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
+    )
+    assert view["image_url"] == sources["Fig1"]["image_url"]
+    # A source without an image has no URL.
+    assert sources["Tab2"]["image"] is None and sources["Tab2"]["image_url"] is None
+
+
+def test_study_detail_gives_no_image_url_for_an_image_that_the_file_route_refuses(
+    api, tmp_path
+):
+    server, engine, folder = api
+    headers = authenticate(server)
+    outside = tmp_path / "outside.png"
+    outside.write_bytes((folder / "Example_Fig1.png").read_bytes())
+    (folder / "Example_Fig1.png").unlink()
+    (folder / "Example_Fig1.png").symlink_to(outside)
+    engine.scan()
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    fig1 = next(source for source in detail["sources"] if source["source"] == "Fig1")
+    url = f"{DETAIL}/files/Example_Fig1.png"
+    assert request(server, "GET", url, headers=headers)[0] == 404
+    # A symlink is no file of the study: the image counts as missing and has no URL, which
+    # would show a broken thumbnail in the navigator.
+    assert (fig1["image"], fig1["missing_image"]) == (None, "Example_Fig1.png")
+    assert fig1["image_url"] is None
+    view = json.loads(
+        request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
+    )
+    assert view["image_url"] is None
+
+
 def test_detail_etag_changes_with_a_job(api):
     server, engine, folder = api
     headers = authenticate(server)

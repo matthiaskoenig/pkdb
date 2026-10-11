@@ -1,4 +1,118 @@
 @import "../styles/base.css";
+/* The curation app is compact: every rem of Vuetify and of the app is 14 px at the browser's
+   default size, and still follows the reader's font size setting. Body text is 13 px. */
+html {
+  font-size: 87.5%;
+}
+.v-application {
+  font-size: 0.9286rem;
+  line-height: 1.4;
+}
+/* The rules below for fields, switches, radios, checkboxes, chips and expansion panels set the
+   inner variables, classes and offsets of Vuetify 4.2.1, such as the scale of a floating label,
+   the 8 px start of an outline and the -6 px margin of a radio group, which a release of Vuetify
+   may change: after an upgrade, check fields, switches and radios in the app by eye. */
+
+/* Fields are 30 px high with the 13 px of the body text, and their floating label is 12 px
+   (0.923 of 13 px): Vuetify sizes them for 16 px text in fixed pixels. The icons in a field shrink
+   with its text. Every field of the app is compact (density.ts). */
+.v-input--density-compact {
+  --v-input-control-height: 30px;
+  --v-input-padding-top: 4px;
+}
+.v-input--density-compact .v-field:is(.v-field--variant-outlined, .v-field--single-line, .v-field--no-label) {
+  --v-field-padding-bottom: 4px;
+}
+.v-field {
+  font-size: 0.9286rem;
+}
+.v-field .v-field-label {
+  font-size: 1em;
+}
+.v-field .v-field-label--floating {
+  --v-field-label-scale: 0.923em;
+  font-size: var(--v-field-label-scale);
+}
+.v-field :is(.v-field__prepend-inner, .v-field__append-inner, .v-field__clearable) > .v-icon {
+  font-size: 1.15em;
+}
+/* Text starts 12 px inside the outline, and the floating label in its notch starts where the
+   text does. A field with an icon at its start keeps the spacing of Vuetify. */
+.v-field--variant-outlined:not(.v-field--prepended) {
+  --v-field-padding-start: 12px;
+}
+.v-field--variant-outlined:not(.v-field--prepended) .v-field__outline__start {
+  flex-basis: 8px;
+}
+.v-field--variant-outlined:not(.v-field--appended) {
+  --v-field-padding-end: 12px;
+}
+/* Hints and messages below a field start where its text does. */
+.v-input--indent-details .v-input__details {
+  padding-inline: 12px;
+}
+
+/* Switches, radios and checkboxes stand in 28 px rows with 13 px labels; their inputs stay 25 px
+   or more as targets. */
+.v-input:is(.v-switch, .v-checkbox, .v-radio-group).v-input--density-compact {
+  --v-input-control-height: 28px;
+}
+.v-selection-control .v-label {
+  font-size: 0.9286rem;
+}
+/* Radio circles and checkboxes are 16 px, which leaves a gap to their label in the 28 px input. */
+.v-selection-control__input > .v-icon {
+  font-size: 1.1429rem;
+}
+/* Radios in a line keep apart from the label of the radio before them. */
+.v-selection-control-group--inline > .v-selection-control:not(:last-child) {
+  margin-inline-end: 8px;
+}
+/* The label of a radio group is 12 px, as the floating label of a field. The label and the first
+   circle start at the edge of the content, as fields and headings do: a circle stands 6 px inside
+   its input. */
+.v-radio-group > .v-input__control > .v-label {
+  margin-inline-start: 0;
+  font-size: 0.8571rem;
+}
+.v-radio-group > .v-input__control > .v-label + .v-selection-control-group {
+  margin-top: 2px;
+  padding-inline-start: 0;
+}
+.v-radio-group .v-selection-control-group {
+  margin-inline-start: -6px;
+}
+
+/* An extra small chip, 20 px high, has the 10.5 px text of a small one: the 8.75 px of the
+   compact root size are too small to read. */
+.v-chip.v-chip--size-x-small {
+  font-size: 0.75rem;
+}
+
+/* Expansion panels have 32 px titles, also while open. */
+.v-expansion-panel-title {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 0.9286rem;
+}
+.v-expansion-panel--active > .v-expansion-panel-title:not(.v-expansion-panel-title--static) {
+  min-height: 32px;
+}
+.v-expansion-panel-title__icon > .v-icon {
+  font-size: 1rem;
+}
+.v-expansion-panel-text__wrapper {
+  padding: 4px 12px 12px;
+}
+
+/* An alert keeps the height of its content: Vuetify 4.2.1 lets it grow (flex: 1 1), which in a
+   flex column of a fixed height, such as the Data section and its panes, gives it a share of the
+   free height, and its hidden overflow would let it shrink below its content. Every alert of the
+   app stands in a flex column or a block, so it still spans their width. */
+.v-alert {
+  flex: 0 0 auto;
+}
+
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;
@@ -11,7 +125,7 @@ h1 {
   align-items: center;
   gap: 12px;
   margin: 0 16px;
-  font-size: 1.15rem;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
@@ -234,22 +348,63 @@ a.brand {
   line-height: 1.35;
 }
 
-/* Tabs that scroll: a tab cut at an edge with more tabs beyond fades out, so that it reads as a
-   hint of the tabs beyond, not as a broken tab. */
-.scroll-tabs:has(.v-slide-group__prev:not(.v-slide-group__prev--disabled)) {
-  --tabs-fade-start: transparent;
+/* The source pane and the rows pane of the Data section: a head line of 26 px with the name of
+   the source or the table file and its facts, notes, and a dashed box for what is missing. The
+   name and the facts that end with `--fixed` keep their room; the other facts shorten first. */
+.pane-head {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  height: 26px;
+  padding-inline: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.scroll-tabs:has(.v-slide-group__next:not(.v-slide-group__next--disabled)) {
-  --tabs-fade-end: transparent;
+.pane-head-name {
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  text-overflow: ellipsis;
 }
-.scroll-tabs .v-slide-group__container {
-  mask-image: linear-gradient(
-    to right,
-    var(--tabs-fade-start, #000),
-    #000 24px,
-    #000 calc(100% - 24px),
-    var(--tabs-fade-end, #000)
-  );
+.pane-head-part {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.pane-head-part--fixed {
+  flex: 0 0 auto;
+}
+.pane-note {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* The icon, then one text that wraps as a paragraph in a narrow pane; a long file name breaks only
+   when it does not fit into a line. */
+.pane-missing {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  padding: 3px 8px;
+  font-size: 11.5px;
+  border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
+  border-radius: 6px;
+}
+.pane-missing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.pane-missing-hint {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
 /* Problems: the parts of an issue and of an acknowledged warning. */
@@ -287,7 +442,7 @@ a.brand {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
-/* The issues of a file, in the Problems and the Sources sections. */
+/* The issues of a file, in the Problems and the Data sections. */
 /* A file is a card: its name in a bar, then its issues apart by a line. */
 .problem-group {
   overflow: hidden;
@@ -345,7 +500,7 @@ a.brand {
 }
 
 /* Rows of a table in a region of their own, such as the rows of a review target or of a source.
-   At most about twelve rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
+   At most about eighteen rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
    the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
    them at the start and the end. */
 .rows-scroll {
@@ -369,12 +524,12 @@ a.brand {
   min-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.8125rem;
+  font-size: 12px;
 }
 .rows-table th,
 .rows-table td {
-  height: 32px;
-  padding: 0 12px;
+  height: 22px;
+  padding: 0 8px;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   text-align: start;
   white-space: nowrap;

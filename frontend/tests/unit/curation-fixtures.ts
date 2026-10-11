@@ -266,9 +266,11 @@ export function beyondLimitsDetail(changes: Partial<StudyDetail> = {}): StudyDet
 
 /** A source of `GET /local/studies/<id>`: a paper table with its image and raw extraction unless `changes` say otherwise. */
 export function sourceSummary(changes: Partial<SourceSummary> & Pick<SourceSummary, "source">): SourceSummary {
+  const image = changes.image ?? null;
   return {
     kind: "table",
-    image: null,
+    image,
+    image_url: image === null ? null : `/local/studies/caffeine/Example/files/${image}`,
     raw: null,
     raw_kind: null,
     tables: [],

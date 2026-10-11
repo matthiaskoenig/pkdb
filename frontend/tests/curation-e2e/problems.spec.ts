@@ -55,11 +55,14 @@ test("acknowledges a warning with a reason, which a resolved review item keeps",
   await expect(page.getByRole("article", { name: "Issue" })).toContainText(REASON);
 });
 
-test("Show in table opens the table with the cell of the problem focused", async ({ page }) => {
+test("Show in table opens the Data section with the cell of the problem focused", async ({ page }) => {
   const mismatch = problem(page, "digitized_mismatch");
   await expect(mismatch).toContainText("mean 1.24 at 4 hr lies");
   await mismatch.getByRole("link", { name: "Show in table" }).click();
-  await expect(page.getByRole("tab", { name: /^timecourses_Fig1\.tsv/, selected: true })).toBeVisible();
+  await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?/);
+  await expect(
+    page.getByRole("navigation", { name: "Sources and tables" }).getByRole("button", { name: /^timecourses_Fig1\.tsv/ }),
+  ).toHaveAttribute("aria-current", "true");
   const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
   await expect(grid.getByRole("cell", { name: "1.24", exact: true })).toBeFocused();
 });

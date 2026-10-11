@@ -531,6 +531,8 @@ export interface SourceSummary {
   /** A paper table `Tab…`, a figure `Fig…` or the text. */
   kind: "table" | "figure" | "text";
   image: string | null;
+  /** The URL of the image on the local server, or null without an image. */
+  image_url: string | null;
   raw: string | null;
   raw_kind: "table" | "digitization" | null;
   tables: string[];

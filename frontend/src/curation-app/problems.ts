@@ -129,7 +129,7 @@ export function suggestionView(suggestion: Suggestion): SuggestionView {
 }
 
 /**
- * The query of the Tables section that shows the cell of an issue: its file, and its line and
+ * The query of the Data section that shows the cell of an issue: its file, and its line and
  * column (the header, or the letter in a raw table) when it has them; null without a file. Only
  * the tables of a study can be shown.
  */

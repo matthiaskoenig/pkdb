@@ -1,0 +1,45 @@
+{
+  "sources": [
+    {
+      "source": "Fig1",
+      "kind": "figure",
+      "image": "Demo2020_Fig1.png",
+      "raw": "Demo2020_Fig1.wpd.json",
+      "raw_kind": "digitization",
+      "tables": [
+        "timecourses_Fig1.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png"
+    },
+    {
+      "source": "Tab2",
+      "kind": "table",
+      "image": "Demo2020_Tab2.png",
+      "raw": "Demo2020_Tab2.tsv",
+      "raw_kind": "table",
+      "tables": [
+        "outputs_Tab2.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": "/local/studies/caffeine/Demo2020/files/Demo2020_Tab2.png"
+    },
+    {
+      "source": "Text",
+      "kind": "text",
+      "image": null,
+      "raw": null,
+      "raw_kind": null,
+      "tables": [
+        "subjects.tsv",
+        "characteristica.tsv",
+        "interventions.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": null
+    }
+  ]
+}

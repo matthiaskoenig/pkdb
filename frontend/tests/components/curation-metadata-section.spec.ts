@@ -401,7 +401,7 @@ describe("descriptions, comments and notes", () => {
 });
 
 describe("saving", () => {
-  it("shows a sticky bar with Discard and Save for unsaved changes and marks the rail", async () => {
+  it("shows a sticky bar with Discard and Save for unsaved changes and marks the tab", async () => {
     await mountSection();
     expect(saveBar().exists()).toBe(false);
 
@@ -411,13 +411,13 @@ describe("saving", () => {
     expect(button("Discard").element.disabled).toBe(false);
     expect(button("Save").element.disabled).toBe(false);
     const metadataLink = page().get('nav[aria-label="Study sections"] a');
-    expect(metadataLink.get(".rail-label").text()).toBe("Metadata, unsaved changes");
-    expect(metadataLink.find(".rail-unsaved").exists()).toBe(true);
+    expect(metadataLink.get(".section-tab-label").text()).toBe("Metadata, unsaved changes");
+    expect(metadataLink.find(".section-tab-unsaved").exists()).toBe(true);
 
     await click("Discard");
     expect(field("DOI").element.value).toBe("");
     expect(saveBar().text()).toContain("Changes discarded.");
-    expect(page().get('nav[aria-label="Study sections"] a .rail-label').text()).toBe("Metadata");
+    expect(page().get('nav[aria-label="Study sections"] a .section-tab-label').text()).toBe("Metadata");
   });
 
   it("undoes a discard for a few seconds, until the next edit", async () => {
@@ -668,7 +668,7 @@ describe("leaving with unsaved changes", () => {
     await click("Discard and leave");
     await leave;
     expect(router.currentRoute.value.params.section).toBe("review");
-    expect(page().get('nav[aria-label="Study sections"] a .rail-label').text()).toBe("Metadata");
+    expect(page().get('nav[aria-label="Study sections"] a .section-tab-label').text()).toBe("Metadata");
   });
 
   it("asks before the overview opens", async () => {

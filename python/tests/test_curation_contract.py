@@ -208,6 +208,14 @@ def test_problems_contract(workspace, engine_on):
     check_contract("problems", {"validated": validated, "synced": synced})
 
 
+def test_sources_contract(workspace, engine_on):
+    """The sources of the study page of Demo2020 with the URLs of their images, which the
+    navigator of the Data section shows, and with the files that they lack."""
+    sources = engine_on(workspace).study_detail(DEMO)["sources"]
+    assert any(source["image_url"] for source in sources)
+    check_contract("sources", {"sources": sources})
+
+
 def test_source_contract(workspace, engine_on):
     """The source view of Fig1 of Demo2020, whose project digitizes the error bar ends of both series."""
     view = engine_on(workspace).study_source(DEMO, "Fig1")

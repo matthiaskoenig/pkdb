@@ -14,6 +14,7 @@ import {
   rowAt,
   type EventPoint,
   type OverlayMode,
+  type SelectedRow,
 } from "../overlay";
 import { loadNoncedPlotly, plotlyImport, retryPlotly } from "../plotly";
 import { messageOf } from "../study";
@@ -29,8 +30,14 @@ import { plotColors } from "../../features/plots/theme";
  * With `highlight`, the other series fade. A click on a mapped point emits its file and line.
  * The plot is an image with a name, a legend and a data table for assistive technology.
  */
-const props = defineProps<{ view: SourceView; highlight?: string | null; mode?: OverlayMode }>();
-const emit = defineEmits<{ "select-row": [row: { file: string; line: number }] }>();
+const props = defineProps<{
+  view: SourceView;
+  highlight?: string | null;
+  mode?: OverlayMode;
+  /** The row that the curator selected, whose point gets a ring. */
+  selected?: SelectedRow;
+}>();
+const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>] }>();
 
 /** Beyond this many points, the data table scrolls below a header that stays in view. */
 const SCROLL_ROWS = 12;
@@ -53,8 +60,8 @@ const plot = computed(() => {
   const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors), font };
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
-    ? overlayTraces(props.view, highlight, colors, markScale.value)
-    : plotTraces(props.view, highlight, colors);
+    ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
+    : plotTraces(props.view, highlight, colors, props.selected ?? null);
 });
 
 const legend = computed(() => legendEntries(props.view, shown.value, dark.value));
@@ -119,6 +126,9 @@ const drawn = ref(false);
 let generation = 0;
 let engine: Awaited<ReturnType<typeof loadNoncedPlotly>> | undefined;
 let observer: ResizeObserver | undefined;
+/** The element that the next animation frame resizes, and the frame that is waiting. */
+let resizing: HTMLElement | undefined;
+let resizeFrame = 0;
 let disposed = false;
 let rendering = Promise.resolve();
 const listening = new WeakSet<HTMLElement>();
@@ -189,13 +199,20 @@ watch(
   { flush: "post" },
 );
 
-// The plot follows the size of its element, such as when the window or the rail changes.
+// The plot follows the size of its element, such as when the window or the split of the panes changes.
 watch(host, (element) => {
   observer?.disconnect();
   if (!element) return;
   observer = new ResizeObserver(([entry]) => {
     if (entry) hostWidth.value = entry.contentRect.width;
-    if (drawn.value) void engine?.Plots.resize(element).catch(() => undefined);
+    // A drag of the splitter reports many sizes: one resize per frame follows the latest.
+    if (!drawn.value) return;
+    resizing = element;
+    if (resizeFrame) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      if (resizing) void engine?.Plots.resize(resizing).catch(() => undefined);
+    });
   });
   observer.observe(element);
 });
@@ -208,6 +225,7 @@ onBeforeUnmount(() => {
   disposed = true;
   generation++;
   observer?.disconnect();
+  cancelAnimationFrame(resizeFrame);
   if (host.value) engine?.purge(host.value);
 });
 </script>
@@ -288,7 +306,7 @@ onBeforeUnmount(() => {
       </p>
 
       <p v-if="selectable" class="overlay-key">
-        Click a {{ shown === "overlay" ? "point, bar or cross" : "point" }} to show its row in the Tables section.
+        Click a point to select its row.
       </p>
     </template>
 
@@ -333,7 +351,7 @@ onBeforeUnmount(() => {
 .source-overlay {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   min-width: 0;
 }
 .overlay-failure-text,
@@ -356,7 +374,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 .overlay-frame--plot .overlay-host {
-  height: 360px;
+  height: 220px;
 }
 .overlay-fallback {
   max-width: calc(var(--figure-width) + 2px);
@@ -387,7 +405,7 @@ onBeforeUnmount(() => {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.875rem;
+  font-size: 11.5px;
   line-height: 1.45;
 }
 .overlay-legend-item {
@@ -415,7 +433,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   gap: 4px 16px;
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 11px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .overlay-key-item {

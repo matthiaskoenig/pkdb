@@ -27,9 +27,8 @@ const destination = resolve(process.env.PKDB_CURATION_SCREENSHOTS ?? join(reposi
 /** The width of every image, and the height of those that need no more. */
 const WIDTH = 1440;
 const HEIGHT = 900;
-/** The heights that show the review item with all its target rows, and the figure with its legend, below the study header. */
+/** The height that shows the review item with all its target rows below the study header. */
 const REVIEW_HEIGHT = 1010;
-const SOURCES_HEIGHT = 1100;
 /** The folder of the copy of the fixture workspace, whose name the header of every image shows. */
 const WORKSPACE = "demo_studies";
 /** The study of the fixture that the screenshots show, and its table of the digitized figure. */
@@ -103,16 +102,21 @@ async function render() {
       whole: target,
     });
 
-    // Sources: the digitization of the figure on its image, with the row of a mapped point.
-    await page.setViewportSize({ width: WIDTH, height: SOURCES_HEIGHT });
-    await sections.getByRole("link", { name: /^Sources\b/ }).click();
-    await page.getByRole("tab", { name: "Fig1", selected: true }).waitFor();
+    // Data: the digitization of the figure with the selected mapped point, and the rows of its table.
+    await sections.getByRole("link", { name: /^Data\b/ }).click();
+    const navigator = page.getByRole("navigation", { name: "Sources and tables" });
+    await navigator.getByRole("button", { name: /^Fig1/ }).click();
     const legend = page.getByRole("list", { name: "Series" });
     await legend.waitFor();
+    const rowsOfTable = page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true });
+    await rowsOfTable.waitFor();
     await hoverMappedRow(page, "Fig1", MISPLACED_LINE);
-    await capture("sources.png", [legend, page.getByText(`${TABLE} line ${MISPLACED_LINE}`)], {
+    // A click on the point selects its row, which the rows pane marks; the pointer keeps its hover label.
+    await page.mouse.down();
+    await page.mouse.up();
+    await page.waitForURL(new RegExp(`line=${MISPLACED_LINE}\\b`));
+    await capture("data.png", [legend, rowsOfTable, page.getByText(`${TABLE} line ${MISPLACED_LINE}`)], {
       pointer: true,
-      whole: page.getByText("Data of the plot"),
     });
 
     // Metadata: the forms of study.json with an unsaved change, which is discarded afterwards.
@@ -122,17 +126,16 @@ async function render() {
     await capture("metadata.png", [page.getByText("Unsaved changes in study.json")]);
     await page.getByRole("button", { name: "Discard", exact: true }).click();
 
-    // Tables: the panel of a conflict between the workbook and the TSV file, above the table.
-    await sections.getByRole("link", { name: /^Tables\b/ }).click();
-    await page.getByRole("status").filter({ hasText: /^\s*In sync/ }).waitFor();
+    // Data in a conflict: the panel of the conflict between the workbook and the TSV file at the top of the rows.
+    await sections.getByRole("link", { name: /^Data\b/ }).click();
+    await page.locator(".fact-sync").filter({ hasText: "In sync" }).waitFor();
     await setAutomaticActions(page, true);
     await conflict(join(workspace, STUDY));
     await setAutomaticActions(page, false);
     await page.getByRole("status").filter({ hasText: `Conflict in ${TABLE}` }).waitFor();
-    const tabs = page.getByRole("tablist", { name: "Tables" });
-    await tabs.getByRole("tab", { name: new RegExp(`^${TABLE.replace(".", "\\.")}`) }).click();
+    await navigator.getByRole("button", { name: new RegExp(`^${TABLE.replace(".", "\\.")}`) }).click();
     // The job of the conflict has ended once its report, the conflict as an error, is the study's.
-    await capture("tables-conflict.png", [
+    await capture("data-conflict.png", [
       page.getByRole("region", { name: `Conflicting rows of ${TABLE}` }),
       page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true }),
       page.getByText("1 error", { exact: true }),

@@ -275,56 +275,78 @@ describe("StudyPage", () => {
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("review"));
   });
 
-  it("lists the six sections with counts in the rail and marks the active one", async () => {
+  it("lists the five sections with counts in the tabs and marks the active one", async () => {
     await mountPage("/studies/caffeine/Harder1988/problems");
     const nav = page().get('nav[aria-label="Study sections"]');
     const links = nav.findAll("a");
-    expect(links.map((link) => link.get(".rail-label").element.firstChild?.textContent)).toEqual([
+    expect(links.map((link) => link.get(".section-tab-label").element.firstChild?.textContent)).toEqual([
       "Metadata",
       "Review",
       "Problems",
-      "Sources",
-      "Tables",
+      "Data",
       "Activity",
     ]);
-    expect(links.map((link) => link.find(".rail-count").exists() && link.get(".rail-count").text())).toEqual([
+    expect(links.map((link) => link.find(".section-tab-count").exists() && link.get(".section-tab-count").text())).toEqual([
       false,
       "1",
       "3",
-      "2",
-      "5",
+      false,
       false,
     ]);
     // The counts have their meaning for screen readers.
-    expect(links[1]!.get(".rail-label").text()).toBe("Review, 1 open item");
-    expect(links[2]!.get(".rail-label").text()).toBe("Problems, 3 problems");
-    expect(links[0]!.get(".rail-label").text()).toBe("Metadata");
+    expect(links[1]!.get(".section-tab-label").text()).toBe("Review, 1 open item");
+    expect(links[2]!.get(".section-tab-label").text()).toBe("Problems, 3 problems");
+    expect(links[0]!.get(".section-tab-label").text()).toBe("Metadata");
     expect(links[1]!.attributes("href")).toBe("#/studies/caffeine/Harder1988/review");
-    expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([
-      null,
-      null,
-      "page",
-      null,
-      null,
-      null,
-    ]);
+    expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([null, null, "page", null, null]);
     expect(page().get(".study-section h2").text()).toBe("Problems");
+    expect(page().get(".study-section h2").classes()).toContain("d-sr-only");
 
-    await links[4]!.trigger("click");
-    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("tables"));
+    await links[3]!.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
     await flushPromises();
-    expect(page().get(".study-section h2").text()).toBe("Tables");
+    expect(page().get(".study-section h2").text()).toBe("Data");
   });
 
-  it("shows the rail as a select below 600 px", async () => {
+  it("shows the sections as one line of tabs with the facts of the study at its end", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const nav = page().get('nav[aria-label="Study sections"]');
+    expect(nav.classes()).toContain("section-tabs");
+    expect(nav.findAll("a").map((link) => link.text().replace(/\s+/g, " ").trim())).toEqual([
+      "Metadata",
+      expect.stringMatching(/^Review/),
+      expect.stringMatching(/^Problems/),
+      "Data",
+      "Activity",
+    ]);
+    expect(page().get(".section-tabs-facts").text()).toContain("On save");
+  });
+
+  it("links the last upload fact to its page on PK-DB, only when that is a web page", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
+    });
+    const link = page().get(".section-tabs-facts a");
+    expect(link.attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
+    expect(link.attributes("rel")).toBe("noopener noreferrer");
+  });
+
+  it("shows the tabs as a select below 600 px, with the facts of the study below it", async () => {
     setViewport(375, 800);
-    const wrapper = await mountPage("/studies/caffeine/Harder1988/review");
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
+    });
     expect(page().find('nav[aria-label="Study sections"] a').exists()).toBe(false);
+    const facts = page().get(".section-tabs-facts");
+    expect(facts.text()).toContain("On save: Upload");
+    expect(facts.get("a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
+    const order = page().get(".section-tabs-select").element.compareDocumentPosition(facts.element);
+    expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const sections = select(wrapper, "Section");
     expect(sections.props("modelValue")).toBe("review");
     expect(sections.props("items")).toContainEqual({ title: "Problems (3)", value: "problems" });
-    await sections.setValue("sources");
-    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("sources"));
+    await sections.setValue("data");
+    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
   });
 
   it("shows the identity, the review status, the release, the issue and the provenance", async () => {
@@ -339,34 +361,53 @@ describe("StudyPage", () => {
     expect(header.get(".provenance-chip").text()).toBe("AI curated · claude-opus-5-5");
   });
 
-  it("shows a summary line with the title, the PMID, On save, the sync status and the problems", async () => {
+  it("shows a summary line with the title, the PMID, the sync status and the problems", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const line = page().get(".study-header .study-header-line");
+    const title = "Effect of smoking on caffeine clearance and plasma levels in healthy volunteers";
+    expect(line.get(".study-title").text()).toBe(title);
+    expect(line.get(".study-title").attributes("title")).toBe(title);
+    expect(line.get(".fact-pmid a").text()).toBe("2895442");
+    expect(line.get(".fact-pmid a").attributes("href")).toBe("https://pubmed.ncbi.nlm.nih.gov/2895442/");
+    expect(line.get(".fact-sync").text()).toBe("Workbook open");
+    expect(line.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
+  });
+
+  it("labels the review status beside its field, which keeps its name, so that the field fits into the line", async () => {
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review");
+    const status = select(wrapper, "Review status");
+    expect(status.props("singleLine")).toBe(true);
+    const input = status.get("input:not([type=hidden])");
+    const label = page().get(".study-header-line label.fact-name");
+    expect(label.text()).toBe("Review");
+    expect(label.attributes("for")).toBe(input.attributes("id"));
+    // The name of the field stays "Review status", from the label inside the field.
+    expect(page().get(`#${input.attributes("aria-labelledby")}`).text()).toBe("Review status");
+  });
+
+  it("shows identity, chips, title and actions in one line", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const line = page().get(".study-header-line");
+    expect(line.find(".study-identity").exists()).toBe(true);
+    expect(line.find(".study-title").exists()).toBe(true);
+    expect(line.find(".study-buttons").exists()).toBe(true);
+  });
+
+  it("leaves On save and the last upload to the section tabs", async () => {
     await mountPage("/studies/caffeine/Harder1988/review");
     const header = page().get(".study-header");
-    expect(header.get(".study-title").text()).toBe(
-      "Effect of smoking on caffeine clearance and plasma levels in healthy volunteers",
-    );
-    const facts = header.get(".study-facts");
-    expect(facts.get(".fact-pmid a").text()).toBe("2895442");
-    expect(facts.get(".fact-pmid a").attributes("href")).toBe("https://pubmed.ncbi.nlm.nih.gov/2895442/");
-    expect(facts.get(".fact-mode").text()).toBe("On save Upload");
-    expect(facts.get(".fact-sync").text()).toBe("Workbook open");
-    expect(facts.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
+    expect(header.text()).not.toContain("On save");
+    expect(header.text()).not.toContain("Last upload");
+    expect(page().get(".section-tabs-facts").text()).toContain("On save: Upload");
   });
 
-  it("links the last upload to its page on PK-DB", async () => {
-    await mountPage("/studies/caffeine/Harder1988/review", {
-      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
-    });
-    expect(page().get(".fact-upload a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
-  });
-
-  it("links the last upload only to a web page", async () => {
+  it("shows the last upload without a link unless it is a web page", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
       [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "javascript:alert(1)" } },
     });
-    const fact = page().get(".fact-upload");
-    expect(fact.find("a").exists()).toBe(false);
-    expect(fact.get("span:not(.fact-name)").text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
+    const facts = page().get(".section-tabs-facts");
+    expect(facts.find("a").exists()).toBe(false);
+    expect(facts.text()).toMatch(/Last upload 2026-10-01 \d\d:\d\d/);
   });
 
   it("names a study before its first check and without release, issue and AI", async () => {
@@ -918,7 +959,7 @@ describe("StudyPage", () => {
     await click("Add table");
     await field("Source").setValue("Tab3");
     await flushPromises();
-    await router.push("/studies/caffeine/Example/tables");
+    await router.push("/studies/caffeine/Example/data");
     await flushPromises();
     answers[0]?.resolve(json(HARDER_PREVIEWS["outputs Tab3"]));
     await flushPromises();

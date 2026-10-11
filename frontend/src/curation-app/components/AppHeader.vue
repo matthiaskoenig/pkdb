@@ -46,9 +46,9 @@ function fromPanel(open: () => void): void {
 </script>
 
 <template>
-  <VAppBar elevation="0" class="app-header">
+  <VAppBar elevation="0" :height="36" class="app-header">
     <RouterLink to="/" class="brand">
-      <img class="brand-logo" :src="logo" alt="PK-DB" width="40" height="40" />
+      <img class="brand-logo" :src="logo" alt="PK-DB" width="24" height="24" />
       <span>Local curation</span>
     </RouterLink>
     <VSpacer />

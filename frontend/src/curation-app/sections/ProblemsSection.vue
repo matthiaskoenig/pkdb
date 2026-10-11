@@ -102,7 +102,7 @@ const emptyText = computed(() =>
 
 const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
 
-/** Whether the Tables section can show the cell of the issue: only tables of the study. */
+/** Whether the Data section can show the cell of the issue: only tables of the study. */
 function showable(issue: ValidationIssue): boolean {
   return tables.value.has(issue.source?.file ?? "");
 }

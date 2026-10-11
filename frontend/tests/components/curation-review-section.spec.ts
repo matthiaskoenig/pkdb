@@ -951,14 +951,14 @@ describe("target", () => {
     expect(target().find(".overlay-stub").exists()).toBe(false);
   });
 
-  it("links the target and each of its rows to the Tables section", async () => {
+  it("links the target and each of its rows to the Data section", async () => {
     await mountSection();
     const link = target()
       .findAll("a")
       .find((candidate) => candidate.text() === "Show in table");
-    expect(link?.attributes("href")).toBe("#/studies/caffeine/Example/tables?file=outputs_Tab2.tsv&line=2&column=mean");
-    const line = target().get('a[aria-label="Show line 3 of outputs_Tab2.tsv in the Tables section"]');
-    expect(line.attributes("href")).toBe("#/studies/caffeine/Example/tables?file=outputs_Tab2.tsv&line=3&column=mean");
+    expect(link?.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=2&column=mean");
+    const line = target().get('a[aria-label="Show line 3 of outputs_Tab2.tsv in the Data section"]');
+    expect(line.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=3&column=mean");
   });
 
   it("lists the matching rows and shows the overlay of a digitized series with the series emphasized", async () => {
@@ -1046,11 +1046,11 @@ describe("target", () => {
     expect(targetLines()).toEqual(["4"]);
   });
 
-  it("opens the Tables section at the row of a clicked mapped point", async () => {
+  it("opens the Data section at the row of a clicked mapped point", async () => {
     await mountSection();
     await select("The error bars");
     await click("Select a mapped point");
-    await vi.waitFor(() => expect(router.currentRoute.value.path).toBe("/studies/caffeine/Example/tables"));
+    await vi.waitFor(() => expect(router.currentRoute.value.path).toBe("/studies/caffeine/Example/data"));
     expect(router.currentRoute.value.query).toEqual({ file: "timecourses_Fig1.tsv", line: "3" });
   });
 
