@@ -13,3 +13,5 @@
 - The overview of the local curation app shows the names and pictures of the curators after a launch URL was pasted into an open overview without a session. Before, it kept their initials and the Curator filter their user names until the page was reloaded, because it loaded the curator roster only when it opened.
 
 - The search and the selects of the overview stay in place when the counts of the status chips change. Before, the search field took the width that the chips left, so it grew or shrank by a few pixels with each filter, and a second line of chips moved every field down.
+
+- The characteristica follow the subjects: generated workbooks order their sheets `subjects`, `characteristica`, `interventions`, then the outputs, timecourses, scatters and raw tables, and the local curation app shows the tabs of the Tables section, the mapped rows of a source and the notes per table in the same order. The characteristica describe the subjects, so they belong next to them. A workbook keeps its sheet order until it is generated again, as after a change of the tables or after it was deleted; `study.json` and the tables are not changed.

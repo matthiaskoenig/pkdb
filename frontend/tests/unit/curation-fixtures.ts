@@ -236,8 +236,8 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     ],
     tables: [
       { file: "subjects.tsv", kind: "subjects" },
-      { file: "interventions.tsv", kind: "interventions" },
       { file: "characteristica.tsv", kind: "characteristica" },
+      { file: "interventions.tsv", kind: "interventions" },
       { file: "outputs_Tab2.tsv", kind: "outputs" },
       { file: "timecourses_Fig1.tsv", kind: "timecourses" },
       { file: "Example_Tab2.tsv", kind: "raw" },

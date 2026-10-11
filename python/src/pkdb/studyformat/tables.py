@@ -173,7 +173,21 @@ TABLES = {
         SCATTERS,
     )
 }
-KIND_ORDER = {kind: index for index, kind in enumerate(TABLES)}
+# The order of the tables in a workbook, in a study folder listing and in the curation app: the
+# subjects with their characteristica, then the interventions, then the tables of the data.
+KIND_ORDER = {
+    kind: index
+    for index, kind in enumerate(
+        (
+            "subjects",
+            "characteristica",
+            "interventions",
+            "outputs",
+            "timecourses",
+            "scatters",
+        )
+    )
+}
 
 
 def table_file(kind: str, source: str | None = None) -> str:

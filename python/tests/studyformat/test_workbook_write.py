@@ -113,8 +113,8 @@ def test_sheet_order(valid_study, sf_vocabulary):
     )
     assert workbook.sheetnames == [
         "subjects",
-        "interventions",
         "characteristica",
+        "interventions",
         "outputs_Tab2",
         "outputs_Tab10",
         "timecourses_Fig1",
@@ -279,10 +279,10 @@ def test_lists_are_hidden_and_leave_out_deprecated_measurements(
         "substances",
         "tissues",
         "methods",
+        "choice:error_type",
         "routes",
         "forms",
         "applications",
-        "choice:error_type",
     ]
     measurements = list_values(workbook, "measurements")
     assert "old_measure" not in measurements
@@ -337,8 +337,8 @@ def test_regenerating_keeps_scratch_sheets(valid_study, sf_vocabulary, tmp_path)
     regenerated = load(build(tables, sf_vocabulary, existing=existing))
     assert regenerated.sheetnames == [
         "subjects",
-        "interventions",
         "characteristica",
+        "interventions",
         "outputs_Tab2",
         "timecourses_Fig1",
         "scatters_Fig2",

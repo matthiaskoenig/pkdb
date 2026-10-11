@@ -196,8 +196,8 @@ def check_round_trip(content, tables):
         )
     assert content.sheets == (
         "subjects",
-        "interventions",
         "characteristica",
+        "interventions",
         "outputs_Tab1",
         "outputs_Tab2",
         "outputs_Tab3",

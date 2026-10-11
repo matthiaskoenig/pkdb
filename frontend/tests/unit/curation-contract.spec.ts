@@ -69,8 +69,8 @@ describe("tables contract", () => {
   it("lists the tables of a study in the order of the workbook sheets", () => {
     expect(tableFiles({ tables })).toEqual([
       "subjects.tsv",
-      "interventions.tsv",
       "characteristica.tsv",
+      "interventions.tsv",
       "outputs_Tab2.tsv",
       "timecourses_Fig1.tsv",
       "Demo2020_Tab2.tsv",

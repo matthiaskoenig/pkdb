@@ -3,6 +3,7 @@ import re
 from pkdb.cache import bundled_vocabulary
 from pkdb.studyformat.columns import ColumnType
 from pkdb.studyformat.tables import (
+    KIND_ORDER,
     TABLES,
     image_file,
     parse_table_file,
@@ -23,6 +24,17 @@ def test_tables_in_folder_order():
         "subjects",
         "interventions",
         "characteristica",
+        "outputs",
+        "timecourses",
+        "scatters",
+    ]
+
+
+def test_kind_order_puts_the_characteristica_after_the_subjects():
+    assert sorted(TABLES, key=KIND_ORDER.__getitem__) == [
+        "subjects",
+        "characteristica",
+        "interventions",
         "outputs",
         "timecourses",
         "scatters",

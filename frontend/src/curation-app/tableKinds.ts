@@ -3,8 +3,8 @@ import type { TableKind } from "./api/types";
 
 export const TABLE_KINDS = [
   "subjects",
-  "interventions",
   "characteristica",
+  "interventions",
   "outputs",
   "timecourses",
   "scatters",
