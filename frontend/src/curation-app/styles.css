@@ -335,24 +335,6 @@ a.brand {
   line-height: 1.35;
 }
 
-/* Tabs that scroll: a tab cut at an edge with more tabs beyond fades out, so that it reads as a
-   hint of the tabs beyond, not as a broken tab. */
-.scroll-tabs:has(.v-slide-group__prev:not(.v-slide-group__prev--disabled)) {
-  --tabs-fade-start: transparent;
-}
-.scroll-tabs:has(.v-slide-group__next:not(.v-slide-group__next--disabled)) {
-  --tabs-fade-end: transparent;
-}
-.scroll-tabs .v-slide-group__container {
-  mask-image: linear-gradient(
-    to right,
-    var(--tabs-fade-start, #000),
-    #000 24px,
-    #000 calc(100% - 24px),
-    var(--tabs-fade-end, #000)
-  );
-}
-
 /* Problems: the parts of an issue and of an acknowledged warning. */
 .problem-head {
   display: flex;
