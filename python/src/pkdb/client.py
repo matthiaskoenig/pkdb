@@ -90,6 +90,12 @@ def _known_report(value: dict) -> dict:
     return report
 
 
+# Seconds that an idle connection is kept for the next request. uvicorn closes a
+# connection after five idle seconds; a write sent while it does gets no answer
+# and has an unknown outcome, so the client gives the connection up before.
+KEEPALIVE_EXPIRY = 2.0
+
+
 class ResultPage[T: BaseModel](BaseModel):
     items: list[T]
     count: int = Field(ge=0)
@@ -167,7 +173,9 @@ class Client:
             transport
             if transport is not None
             else httpx2.Client(
-                timeout=httpx2.Timeout(600, connect=10), follow_redirects=False
+                timeout=httpx2.Timeout(600, connect=10),
+                limits=httpx2.Limits(keepalive_expiry=KEEPALIVE_EXPIRY),
+                follow_redirects=False,
             )
         )
         self.cache = cache if cache is not None else VocabularyCache()
