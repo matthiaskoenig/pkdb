@@ -42,6 +42,14 @@ test("lists the format 2 studies of the workspace and counts the format 1 folder
   await validated(page);
 });
 
+test("the table fits a window of 1280 px without horizontal scrolling", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await validated(page);
+  const wrapper = page.locator(".study-table .v-table__wrapper");
+  const [scrollWidth, clientWidth] = await wrapper.evaluate((element) => [element.scrollWidth, element.clientWidth]);
+  expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+});
+
 test("the labels of the column headers share one baseline", async ({ page }) => {
   await expect(studyRows(page)).toHaveCount(2);
   // The box of the text of each label: with one font, equal bottoms mean one baseline.

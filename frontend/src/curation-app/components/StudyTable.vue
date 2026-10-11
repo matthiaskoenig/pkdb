@@ -478,10 +478,12 @@ a.study-identity:hover {
 .study-table th.cell-open {
   text-align: end;
 }
-/* The problems of a row stay on its line: the cell takes the width of its chips and of the
-   button, which are never cut, while a long note or message is cut with an ellipsis. */
+/* The problems of a row stay on its line within a fixed measure, so that the table fits a window
+   of 1280px: the chips and the button are never cut, while a long note or message is cut with an
+   ellipsis. */
 .cell-problems .cell-chips {
   flex-wrap: nowrap;
+  max-width: 14rem;
 }
 .cell-problems .cell-chips > * {
   flex: none;
@@ -490,7 +492,6 @@ a.study-identity:hover {
 .cell-problems .cell-chips > .cell-message {
   flex: 0 1 auto;
   min-width: 0;
-  max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.8125rem;
