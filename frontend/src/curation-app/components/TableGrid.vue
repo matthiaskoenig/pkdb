@@ -22,7 +22,9 @@ const STEP = 10;
  *
  * Above 500 rows, only the rows near the view render, between spacers of the height of the
  * others; `aria-rowcount` and `aria-rowindex` give screen readers the place of each row. The
- * `focus` line scrolls into view with its cell marked and focused.
+ * `focus` line scrolls into view with its cell marked and focused. The line buttons of a
+ * selectable grid are one Tab stop: the arrow keys move the focus to the row above or below,
+ * Home and End to the first and the last row.
  */
 const props = withDefaults(
   defineProps<{
@@ -267,12 +269,12 @@ function described(...ids: (string | undefined | false)[]): string | undefined {
 
 /**
  * How far a region scrolls so that the span from `start` to `end` shows between `low` and `high`:
- * not at all when it shows whole, the least when it shows in part, and to the middle when it does
- * not show, so that the rows under the pointer stay where they are.
+ * not at all when it shows whole, so that the rows under the pointer stay where they are; the
+ * least when it shows in part or `nearest` asks for it; else to the middle.
  */
-function scrollFor(start: number, end: number, low: number, high: number): number {
+function scrollFor(start: number, end: number, low: number, high: number, nearest = false): number {
   if (start >= low && end <= high) return 0;
-  if (end > low && start < high) return start < low ? start - low : end - high;
+  if (nearest || (end > low && start < high)) return start < low ? start - low : end - high;
   return start - low - (high - low - (end - start)) / 2;
 }
 
@@ -291,13 +293,13 @@ async function renderRow(index: number): Promise<boolean> {
  * Scroll the region to `cell` when it is not in view below the header and, for a cell of a
  * column, right of the line column; whether the region scrolled.
  */
-function scrollToCell(cell: HTMLElement): boolean {
+function scrollToCell(cell: HTMLElement, nearest = false): boolean {
   const element = region.value;
   if (!element) return false;
   const box = element.getBoundingClientRect();
   const target = cell.getBoundingClientRect();
   const top = box.top + element.clientTop;
-  const down = scrollFor(target.top, target.bottom, top + headerHeight.value, top + element.clientHeight);
+  const down = scrollFor(target.top, target.bottom, top + headerHeight.value, top + element.clientHeight, nearest);
   element.scrollTop += down;
   let right = 0;
   if (cell.tagName === "TD") {
@@ -335,6 +337,41 @@ watch(
   () => void nextTick(reveal),
   { immediate: true },
 );
+
+// The keyboard: the line buttons of a selectable grid are one Tab stop, which the arrow keys move.
+
+/** The line whose button the keyboard reached last; a new focus of the route takes its place. */
+const keyLine = ref<number | null>(null);
+watch(focusLine, (line) => (keyLine.value = line));
+/** The line whose button is the Tab stop: the one the keyboard reached, else the focus line, else the first rendered row. */
+const tabLine = computed(() => {
+  const shown = new Set(rendered.value.map(({ row }) => row.line));
+  return [keyLine.value, focusLine.value].find((line) => line !== null && shown.has(line)) ?? rendered.value[0]?.row.line;
+});
+
+const MOVES: Record<string, (index: number, last: number) => number> = {
+  ArrowUp: (index) => index - 1,
+  ArrowDown: (index) => index + 1,
+  Home: () => 0,
+  End: (_, last) => last,
+};
+
+/** Move the focus from the line cell of the shown row `index`, or its button, to the button of another row. */
+async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
+  const move = MOVES[event.key];
+  const cell = event.currentTarget as HTMLElement;
+  if (!move || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (!cell.querySelector(".grid-line-button")) return;
+  event.preventDefault();
+  const last = shownRows.value.length - 1;
+  const next = Math.min(last, Math.max(0, move(index, last)));
+  keyLine.value = shownRows.value[next]?.line ?? null;
+  await renderRow(next);
+  const button = region.value?.querySelector<HTMLElement>(`tr[data-index="${next}"] .grid-line-button`);
+  if (!button) return;
+  scrollToCell(button.closest("th") ?? button, true);
+  button.focus({ preventScroll: true });
+}
 </script>
 
 <template>
@@ -394,13 +431,16 @@ watch(
               :aria-describedby="
                 described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
               "
+              @keydown="selectable && moveFocus($event, index)"
             >
               <slot name="line" :line="row.line">
                 <button
                   v-if="selectable"
                   type="button"
                   class="grid-line-button"
+                  :tabindex="row.line === tabLine ? 0 : -1"
                   :title="`Select line ${row.line}`"
+                  @focus="keyLine = row.line"
                   @click.stop="emit('select-line', row.line)"
                 >
                   {{ row.line }}

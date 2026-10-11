@@ -423,3 +423,68 @@ describe("selection and the line filter", () => {
     expect(lines(wrapper).every((line) => Number(line) % 2 === 0)).toBe(true);
   });
 });
+
+describe("the keyboard in a selectable grid", () => {
+  /** The tab indices of the line buttons in the order of the rows. */
+  function stops(wrapper: VueWrapper): (string | undefined)[] {
+    return wrapper.findAll(".grid-line-button").map((entry) => entry.attributes("tabindex"));
+  }
+
+  function lineButton(wrapper: VueWrapper, line: number) {
+    return wrapper.get<HTMLButtonElement>(`button[title="Select line ${line}"]`);
+  }
+
+  async function press(element: Element, key: string): Promise<void> {
+    element.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }));
+    await flushPromises();
+  }
+
+  it("is one Tab stop: the button of the focus line, else of the first row", async () => {
+    const wrapper = mountGrid({ selectable: true });
+    expect(stops(wrapper)).toEqual(["0", "-1", "-1"]);
+    await wrapper.setProps({ focus: { line: 3 } });
+    expect(stops(wrapper)).toEqual(["-1", "0", "-1"]);
+  });
+
+  it("moves the focus to the row above or below with the arrow keys, and to the first or last with Home and End", async () => {
+    const wrapper = mount(TableGrid, { props: { table: small, selectable: true }, attachTo: document.body });
+    const button = (line: number) => lineButton(wrapper, line).element;
+    button(2).focus();
+    await press(button(2), "ArrowDown");
+    expect(document.activeElement).toBe(button(3));
+    expect(stops(wrapper)).toEqual(["-1", "0", "-1"]);
+    await press(button(3), "End");
+    expect(document.activeElement).toBe(button(4));
+    await press(button(4), "ArrowDown");
+    expect(document.activeElement).toBe(button(4));
+    await press(button(4), "Home");
+    expect(document.activeElement).toBe(button(2));
+    await press(button(2), "ArrowUp");
+    expect(document.activeElement).toBe(button(2));
+    expect(stops(wrapper)).toEqual(["0", "-1", "-1"]);
+    // Moving selects nothing; Enter and Space press the button.
+    expect(wrapper.emitted("select-line")).toBeUndefined();
+  });
+
+  it("moves on from the line cell that the focus of the route focused", async () => {
+    const wrapper = mount(TableGrid, {
+      props: { table: small, selectable: true, focus: { line: 3 } },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    const cell = wrapper.findAll("tbody tr")[1]!.get("th").element;
+    expect(document.activeElement).toBe(cell);
+    await press(cell, "ArrowDown");
+    expect(document.activeElement).toBe(lineButton(wrapper, 4).element);
+  });
+
+  it("renders the row that it moves to in a large table", async () => {
+    const wrapper = mount(TableGrid, { props: { table: large(), selectable: true }, attachTo: document.body });
+    lineButton(wrapper, 2).element.focus();
+    await press(lineButton(wrapper, 2).element, "End");
+    expect(document.activeElement?.textContent?.trim()).toBe("5001");
+    expect(stops(wrapper).filter((stop) => stop === "0")).toHaveLength(1);
+    await press(document.activeElement!, "ArrowUp");
+    expect(document.activeElement?.textContent?.trim()).toBe("5000");
+  });
+});

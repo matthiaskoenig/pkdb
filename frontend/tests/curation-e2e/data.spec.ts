@@ -303,6 +303,27 @@ test("the ring of the selected line leaves room around its number in a row of 22
   expect(room.height).toBeGreaterThanOrEqual(2);
 });
 
+test("the line buttons of the rows are one Tab stop, which the arrow keys move, and Enter selects a row", async ({
+  app,
+  page,
+}) => {
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  await rows.focus();
+  await page.keyboard.press("Tab");
+  await expect(rows.getByRole("button", { name: "2", exact: true })).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowDown");
+  await expect(rows.getByRole("button", { name: "4", exact: true })).toBeFocused();
+  await expect(page).not.toHaveURL(/line=/);
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/line=4/);
+  // Tab leaves the rows: the other line buttons are no Tab stops.
+  await rows.getByRole("button", { name: "4", exact: true }).focus();
+  await page.keyboard.press("Tab");
+  expect(await page.evaluate(() => document.activeElement?.closest(".rows-scroll") === null)).toBe(true);
+});
+
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
   await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "6", exact: true }).click();
