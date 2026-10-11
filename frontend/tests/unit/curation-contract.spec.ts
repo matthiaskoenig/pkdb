@@ -33,7 +33,7 @@ import {
   suggestionView,
 } from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
-import { beyondLimits, isLimitIssue, isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
+import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
@@ -55,8 +55,8 @@ describe("limits contract", () => {
     for (const detail of BEYOND_LIMITS) {
       expect(isLimitIssue(detail.problems[0]!)).toBe(true);
       expect(beyondLimits(detail)).toBe(true);
-      // The rail claims no count of the sources and tables that the study page cannot list.
-      expect(railCounts(studyDetail({ ...detail, counts: { errors: 1, warnings: 0 } }))).toEqual({ review: 0, problems: 1 });
+      // The limit is the one problem that the sections count.
+      expect(sectionCounts(studyDetail({ ...detail, counts: { errors: 1, warnings: 0 } }))).toEqual({ review: 0, problems: 1 });
     }
   });
 });
@@ -77,7 +77,6 @@ describe("tables contract", () => {
     ]);
     expect(isRawTable({ tables }, "Demo2020_Tab2.tsv")).toBe(true);
     expect(isRawTable({ tables }, "outputs_Tab2.tsv")).toBe(false);
-    expect(railCounts(studyDetail({ tables })).tables).toBe(6);
   });
 
   it("lists every table kind of the library", () => {

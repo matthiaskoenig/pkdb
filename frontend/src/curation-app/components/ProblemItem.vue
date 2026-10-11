@@ -6,18 +6,18 @@ import { acknowledgement, location, locationKey, SEVERITY_LABELS, suggestionView
 import { sectionRoute } from "../study";
 
 /**
- * One issue of the Problems and the Sources sections: severity, code, message, location and
+ * One issue of the Problems and the Data sections: severity, code, message, location and
  * suggestions, with Show in table and Acknowledge. A component of its own, so that a long list
  * renders only the issues whose props changed.
  */
 const props = withDefaults(
   defineProps<{
     issue: Problem;
-    /** The identity of the study, for the link to the Tables section. */
+    /** The identity of the study, for the link to the Data section. */
     study: string;
     /** The start of the ids of the message and the location, unique in the page. */
     idBase: string;
-    /** Whether the Tables section can show the cell: only tables of the study. */
+    /** Whether the Data section can show the cell: only tables of the study. */
     showable: boolean;
     /** Acknowledged in the app, and the report of the study still lists it. */
     pending: boolean;
@@ -27,7 +27,7 @@ const props = withDefaults(
     disabled: boolean;
     /** Whether a validation is being queued. */
     validating: boolean;
-    /** Whether a warning offers Acknowledge; the Sources section lists the problems without it. */
+    /** Whether a warning offers Acknowledge; the Data section lists the problems without it. */
     offersAcknowledge?: boolean;
   }>(),
   { offersAcknowledge: true },
@@ -37,7 +37,7 @@ const emit = defineEmits<{ acknowledge: []; validate: [] }>();
 const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
 const acknowledgeable = computed(() => props.offersAcknowledge && acknowledgement(props.issue) !== null);
-const tableRoute = computed(() => sectionRoute(props.study, "tables", tableQuery(props.issue) ?? {}));
+const tableRoute = computed(() => sectionRoute(props.study, "data", tableQuery(props.issue) ?? {}));
 /** The message and the location describe the actions. */
 const describedBy = computed(() =>
   where.value ? `${props.idBase}-message ${props.idBase}-location` : `${props.idBase}-message`,

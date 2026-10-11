@@ -11,8 +11,8 @@ import StudyPage from "./views/StudyPage.vue";
  * session took the launch token from `#token=...`.
  *
  * As on the website, another page or section starts at the top, back and forward return to the
- * saved position, and a change of the query alone, such as the table of the Tables section, keeps
- * the position.
+ * saved position, and a change of the query alone, such as the row of the Data section, keeps the
+ * position.
  */
 export function makeRouter(): Router {
   return createRouter({
@@ -24,6 +24,11 @@ export function makeRouter(): Router {
     },
     routes: [
       { path: "/", name: "Overview", component: OverviewPage },
+      // The Data section replaced the Sources and Tables sections; their links keep working.
+      {
+        path: "/studies/:substance/:name/:section(sources|tables)",
+        redirect: (to) => ({ name: "Study", params: { ...to.params, section: "data" }, query: to.query }),
+      },
       // Without a section, the study page shows the section that the study needs first.
       { path: "/studies/:substance/:name/:section?", name: "Study", component: StudyPage },
     ],

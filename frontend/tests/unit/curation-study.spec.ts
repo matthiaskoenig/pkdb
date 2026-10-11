@@ -28,8 +28,8 @@ import {
   profileMap,
   profileOf,
   provenanceLabel,
-  railCounts,
   releaseLabel,
+  sectionCounts,
   sectionRoute,
   SECTIONS,
   tableFiles,
@@ -60,8 +60,10 @@ function detail(items: ReviewItem[], counts = { errors: 0, warnings: 0 }, change
 }
 
 describe("sections", () => {
-  it("lists the six sections of the study page in the order of the rail", () => {
-    expect(SECTIONS).toEqual(["metadata", "review", "problems", "sources", "tables", "activity"]);
+  it("lists the five sections of the study page in their order", () => {
+    expect(SECTIONS).toEqual(["metadata", "review", "problems", "data", "activity"]);
+    expect(isSection("data")).toBe(true);
+    expect(isSection("tables")).toBe(false);
     expect(isSection("review")).toBe(true);
     expect(isSection("figures")).toBe(false);
     expect(isSection(undefined)).toBe(false);
@@ -96,27 +98,24 @@ describe("sections", () => {
   });
 });
 
-describe("railCounts", () => {
-  it("counts open items, errors and warnings, sources, and table and raw table files", () => {
-    const counts = railCounts(
+describe("sectionCounts", () => {
+  it("counts open items, and errors plus warnings; the Data section has no count", () => {
+    const counts = sectionCounts(
       detail([item("open", "a"), item("open", "b"), item("resolved")], { errors: 2, warnings: 3 }),
     );
-    // subjects, interventions, characteristica, outputs_Tab2, timecourses_Fig1 and the raw Example_Tab2.
-    expect(counts).toEqual({ review: 2, problems: 5, sources: 2, tables: 6 });
+    expect(counts).toEqual({ review: 2, problems: 5 });
   });
 
   it("counts zeros for an empty study", () => {
-    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"], tables: [] }))).toEqual({
+    expect(sectionCounts(studyDetail({ sources: [], files: ["study.json", "review.json"], tables: [] }))).toEqual({
       review: 0,
       problems: 0,
-      sources: 0,
-      tables: 0,
     });
   });
 
-  it("counts no sources and tables beyond the upload limits, where the study page lists none", () => {
+  it("counts the limit of a study beyond the upload limits as a problem", () => {
     const review = { revision: "review-1", value: { status: "in_review" as const, reviewers: [], items: [item("open")] }, issues: [] };
-    expect(railCounts(beyondLimitsDetail({ review }))).toEqual({ review: 1, problems: 1 });
+    expect(sectionCounts(beyondLimitsDetail({ review }))).toEqual({ review: 1, problems: 1 });
   });
 });
 
@@ -299,7 +298,7 @@ describe("failures", () => {
     const conflicts = [conflict, conflict, { ...conflict, kept: "tables" as const }];
     expect(tablesOutcome({ ...result, ok: false, conflicts })).toEqual(
       actionFailure("The workbook opened, but the sync found problems.", ["2 sheets conflict with their tables."], {
-        section: "tables",
+        section: "data",
         label: "Show the conflicts",
       }),
     );

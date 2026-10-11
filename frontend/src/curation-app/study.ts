@@ -1,5 +1,5 @@
 /**
- * The sections of the study page, the section it opens on, the counts of its rail, the labels
+ * The sections of the study page, the section it opens on, the counts of its sections, the labels
  * of its header, failed actions and the profiles of its people.
  */
 import type { RouteLocationRaw } from "vue-router";
@@ -16,7 +16,7 @@ import type {
 } from "./api/types";
 
 /** The sections of the study page in the order of the rail. */
-export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
+export const SECTIONS = ["metadata", "review", "problems", "data", "activity"] as const;
 
 export type Section = (typeof SECTIONS)[number];
 
@@ -24,8 +24,7 @@ export const SECTION_LABELS: Record<Section, string> = {
   metadata: "Metadata",
   review: "Review",
   problems: "Problems",
-  sources: "Sources",
-  tables: "Tables",
+  data: "Data",
   activity: "Activity",
 };
 
@@ -88,15 +87,9 @@ export function beyondLimits(detail: Pick<StudyDetail, "problems">): boolean {
   return detail.problems.some(isLimitIssue);
 }
 
-/**
- * The counts of the rail: open items, errors plus warnings, sources, and table and raw table
- * files; none of the sources and tables beyond the upload limits, where the page cannot list them.
- */
-export function railCounts(detail: StudyDetail): Partial<Record<Section, number>> {
-  const counts = { review: openItems(detail), problems: detail.counts.errors + detail.counts.warnings };
-  return beyondLimits(detail)
-    ? counts
-    : { ...counts, sources: detail.sources.length, tables: detail.tables.length };
+/** The counts of the section tabs: open items, and errors plus warnings. */
+export function sectionCounts(detail: StudyDetail): Partial<Record<Section, number>> {
+  return { review: openItems(detail), problems: detail.counts.errors + detail.counts.warnings };
 }
 
 // Header
@@ -173,7 +166,7 @@ export function actionFailure(
 export function tablesOutcome(result: TablesResult): ActionFailure | null {
   const issues = result.issues.map((item) => item.message);
   const unresolved = result.conflicts.filter((conflict) => conflict.kept === null).length;
-  const link: ActionFailure["link"] = unresolved ? { section: "tables", label: "Show the conflicts" } : null;
+  const link: ActionFailure["link"] = unresolved ? { section: "data", label: "Show the conflicts" } : null;
   if (unresolved === 1) issues.unshift("A sheet conflicts with its table.");
   if (unresolved > 1) issues.unshift(`${unresolved} sheets conflict with their tables.`);
   if (!result.opened) return actionFailure("The workbook could not be opened.", issues, link);

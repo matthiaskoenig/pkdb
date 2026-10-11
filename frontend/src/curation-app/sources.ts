@@ -1,20 +1,8 @@
 /**
- * The parts of the Sources section: the mapped rows that a source lists and the problems of the
- * files of a source. What a source is and which files it lacks come from the library, in the
- * summaries of the study detail.
+ * The problems of the files of a source, which the source pane of the Data section lists. What a
+ * source is and which files it lacks come from the library, in the summaries of the study detail.
  */
-import type { MappedTable, SourceSummary, SourceView, TableResponse, ValidationIssue } from "./api/types";
-import { shownColumns } from "./review";
-
-/** The columns that a list of mapped rows leaves out: every row of a source has them alike. */
-const IMPLIED_COLUMNS = new Set(["study", "source"]);
-
-/** The mapped rows of a table as a table grid, and the columns that have a value in one of them. */
-export function mappedGrid(table: MappedTable): { grid: TableResponse; columns: number[] } {
-  const rows = table.rows.map(([line, cells]) => ({ line, cells }));
-  const columns = shownColumns(table.header, rows, []).filter((index) => !IMPLIED_COLUMNS.has(table.header[index]!));
-  return { grid: { file: table.file, kind: "table", header: table.header, rows }, columns };
-}
+import type { SourceSummary, SourceView, ValidationIssue } from "./api/types";
 
 /**
  * The problems of the files of a source: its image, its raw extraction and its own tables; of a

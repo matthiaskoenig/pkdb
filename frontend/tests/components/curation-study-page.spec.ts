@@ -275,7 +275,7 @@ describe("StudyPage", () => {
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("review"));
   });
 
-  it("lists the six sections with counts in the rail and marks the active one", async () => {
+  it("lists the five sections with counts in the rail and marks the active one", async () => {
     await mountPage("/studies/caffeine/Harder1988/problems");
     const nav = page().get('nav[aria-label="Study sections"]');
     const links = nav.findAll("a");
@@ -283,16 +283,14 @@ describe("StudyPage", () => {
       "Metadata",
       "Review",
       "Problems",
-      "Sources",
-      "Tables",
+      "Data",
       "Activity",
     ]);
     expect(links.map((link) => link.find(".rail-count").exists() && link.get(".rail-count").text())).toEqual([
       false,
       "1",
       "3",
-      "2",
-      "5",
+      false,
       false,
     ]);
     // The counts have their meaning for screen readers.
@@ -300,20 +298,13 @@ describe("StudyPage", () => {
     expect(links[2]!.get(".rail-label").text()).toBe("Problems, 3 problems");
     expect(links[0]!.get(".rail-label").text()).toBe("Metadata");
     expect(links[1]!.attributes("href")).toBe("#/studies/caffeine/Harder1988/review");
-    expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([
-      null,
-      null,
-      "page",
-      null,
-      null,
-      null,
-    ]);
+    expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([null, null, "page", null, null]);
     expect(page().get(".study-section h2").text()).toBe("Problems");
 
-    await links[4]!.trigger("click");
-    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("tables"));
+    await links[3]!.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
     await flushPromises();
-    expect(page().get(".study-section h2").text()).toBe("Tables");
+    expect(page().get(".study-section h2").text()).toBe("Data");
   });
 
   it("shows the rail as a select below 600 px", async () => {
@@ -323,8 +314,8 @@ describe("StudyPage", () => {
     const sections = select(wrapper, "Section");
     expect(sections.props("modelValue")).toBe("review");
     expect(sections.props("items")).toContainEqual({ title: "Problems (3)", value: "problems" });
-    await sections.setValue("sources");
-    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("sources"));
+    await sections.setValue("data");
+    await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
   });
 
   it("shows the identity, the review status, the release, the issue and the provenance", async () => {
@@ -918,7 +909,7 @@ describe("StudyPage", () => {
     await click("Add table");
     await field("Source").setValue("Tab3");
     await flushPromises();
-    await router.push("/studies/caffeine/Example/tables");
+    await router.push("/studies/caffeine/Example/data");
     await flushPromises();
     answers[0]?.resolve(json(HARDER_PREVIEWS["outputs Tab3"]));
     await flushPromises();

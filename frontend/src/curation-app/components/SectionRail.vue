@@ -24,8 +24,6 @@ const { xs } = useDisplay();
 const COUNT_NOUNS: Partial<Record<Section, [string, string]>> = {
   review: ["open item", "open items"],
   problems: ["problem", "problems"],
-  sources: ["source", "sources"],
-  tables: ["table", "tables"],
 };
 
 const items = computed(() =>

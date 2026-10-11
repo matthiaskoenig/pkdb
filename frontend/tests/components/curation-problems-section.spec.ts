@@ -514,7 +514,7 @@ describe("actions", () => {
     await mountSection();
     const link = control(problem("outside_range"), "Show in table");
     expect(link.attributes("href")).toBe(
-      "#/studies/caffeine/Example/tables?file=timecourses_Fig1.tsv&line=6&column=mean",
+      "#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=6&column=mean",
     );
     // Only the tables of the study can be shown.
     expect(controls(problem("invalid_study_json"), "Show in table")).toHaveLength(0);
@@ -523,7 +523,7 @@ describe("actions", () => {
     await link.trigger("click");
     await vi.waitFor(() =>
       expect(router.currentRoute.value.fullPath).toBe(
-        "/studies/caffeine/Example/tables?file=timecourses_Fig1.tsv&line=6&column=mean",
+        "/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=6&column=mean",
       ),
     );
   });

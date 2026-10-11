@@ -31,7 +31,7 @@ export const STATE_LABELS: Record<ItemState, string> = {
   dismissed: "Dismissed",
 };
 
-/** Open items are amber, as the rows that they target in the Tables section. */
+/** Open items are amber, as the rows that they target in the Data section. */
 export const STATE_TONES: Record<ItemState, Tone> = {
   open: "warning",
   resolved: "success",

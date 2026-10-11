@@ -287,7 +287,7 @@ a.brand {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
-/* The issues of a file, in the Problems and the Sources sections. */
+/* The issues of a file, in the Problems and the Data sections. */
 /* A file is a card: its name in a bar, then its issues apart by a line. */
 .problem-group {
   overflow: hidden;

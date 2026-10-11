@@ -6,19 +6,18 @@ import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import SectionRail from "../components/SectionRail.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import ActivitySection from "../sections/ActivitySection.vue";
+import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
-import SourcesSection from "../sections/SourcesSection.vue";
-import TablesSection from "../sections/TablesSection.vue";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
   duplicateFolders,
   duplicateHeading,
   isSection,
-  railCounts,
   SECTION_LABELS,
+  sectionCounts,
   type Section,
 } from "../study";
 
@@ -30,8 +29,7 @@ const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
   review: ReviewSection,
   problems: ProblemsSection,
-  sources: SourcesSection,
-  tables: TablesSection,
+  data: DataSection,
   activity: ActivitySection,
 };
 
@@ -71,7 +69,7 @@ const loadError = computed(() => {
   if (error === null || failure.value || error instanceof ServerStopped || error instanceof SessionMissing) return null;
   return `The study could not be loaded. ${error.message}`;
 });
-const counts = computed(() => (detail.value ? railCounts(detail.value) : {}));
+const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
 
 /** The section on the screen when it has unsaved changes; only that section can have any. */
 const unsaved = ref<Section | null>(null);

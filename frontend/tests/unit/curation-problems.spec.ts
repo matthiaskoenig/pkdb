@@ -164,7 +164,7 @@ describe("links and acknowledgements", () => {
     expect(tableQuery(limit)).toBeNull();
   });
 
-  it("names the cell of a raw table by its column letter, as the grid of the Tables section does", () => {
+  it("names the cell of a raw table by its column letter, as the grid of the Data section does", () => {
     const raw = issue("invalid_encoding", "error", {
       file: "Example_Tab2.tsv",
       sheet: "Example_Tab2",
