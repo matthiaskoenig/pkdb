@@ -276,7 +276,6 @@ async function add(): Promise<void> {
                 <VBtn
                   icon="fas fa-xmark"
                   variant="text"
-                  density="comfortable"
                   size="small"
                   :aria-label="`Remove row filter ${index + 1}`"
                   class="filter-remove"

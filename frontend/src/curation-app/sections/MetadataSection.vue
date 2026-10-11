@@ -762,7 +762,6 @@ onBeforeUnmount(() => {
                 <VBtn
                   icon="fas fa-xmark"
                   variant="text"
-                  density="comfortable"
                   size="small"
                   :aria-label="`Remove asset ${index + 1}`"
                   class="row-remove"

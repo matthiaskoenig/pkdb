@@ -51,12 +51,34 @@ import {
 } from "vuetify/components";
 import { Ripple } from "vuetify/directives";
 import { aliases, fa } from "vuetify/iconsets/fa";
+/** The component defaults of the website. */
+const WEBSITE_DEFAULTS: Record<string, Record<string, unknown>> = {
+  VBtn: { rounded: "lg", variant: "flat" },
+  VTextField: { variant: "outlined", density: "compact" },
+  VAutocomplete: { variant: "outlined", density: "compact" },
+  VCombobox: { variant: "outlined", density: "compact" },
+  VSelect: { variant: "outlined", density: "compact" },
+  VCard: { rounded: "lg", elevation: 0 },
+};
+
+/** The website defaults with the given ones merged over them per component. */
+function mergeDefaults(extra: Readonly<Record<string, Readonly<Record<string, unknown>>>>) {
+  const merged: Record<string, Record<string, unknown>> = { ...WEBSITE_DEFAULTS };
+  for (const [name, values] of Object.entries(extra)) {
+    merged[name] = { ...WEBSITE_DEFAULTS[name], ...values };
+  }
+  return merged;
+}
+
 /**
  * The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles, and
  * `defaultTheme` sets the theme of the first paint (light by default).
  */
 export function makeVuetify(
-  options: { cspNonce?: string | undefined; defaultTheme?: "light" | "dark" | "system" } = {},
+  options: { cspNonce?: string | undefined; defaultTheme?: "light" | "dark" | "system";
+    /** Component defaults merged per component over those of the website. */
+    defaults?: Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+  } = {},
 ) {
   return createVuetify({
     components: {
@@ -136,13 +158,6 @@ export function makeVuetify(
         },
       },
     },
-    defaults: {
-      VBtn: { rounded: "lg", variant: "flat" },
-      VTextField: { variant: "outlined", density: "compact" },
-      VAutocomplete: { variant: "outlined", density: "compact" },
-      VCombobox: { variant: "outlined", density: "compact" },
-      VSelect: { variant: "outlined", density: "compact" },
-      VCard: { rounded: "lg", elevation: 0 },
-    },
+    defaults: mergeDefaults(options.defaults ?? {}),
   });
 }

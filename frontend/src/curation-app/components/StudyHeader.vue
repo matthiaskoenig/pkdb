@@ -473,7 +473,7 @@ function added(table: string): void {
   gap: 4px 10px;
 }
 .review-select {
-  width: 9rem;
+  width: 150px;
   flex: 0 0 auto;
   /* A select as low as the small buttons, so that the line stays 38 px high. */
   --v-input-control-height: 30px;
@@ -515,14 +515,14 @@ function added(table: string): void {
     height: auto;
     overflow: visible;
     clip: auto;
-    font-size: 0.8125rem;
+    font-size: 13px;
     line-height: 1.4;
     white-space: normal;
     color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
   }
 }
 .study-notice {
-  font-size: 0.875rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* Empty, it stays in the page for screen readers but takes no gap of the header. */
@@ -564,7 +564,7 @@ function added(table: string): void {
 }
 .study-menu-note {
   margin: -4px 0 4px 44px;
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 </style>

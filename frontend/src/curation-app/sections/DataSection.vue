@@ -484,7 +484,7 @@ onBeforeUnmount(() => {
 }
 /* The label reads as a part of the toolbar beside it. */
 .data-switch :deep(.v-label) {
-  font-size: 0.8125rem;
+  font-size: 13px;
 }
 .data-switch :deep(.v-selection-control) {
   min-height: 30px;
@@ -492,11 +492,11 @@ onBeforeUnmount(() => {
 .data-sync-text {
   flex: 1 1 12rem;
   min-width: 0;
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .data-notice {
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* Empty, it stays in the page for screen readers but takes no gap. */
@@ -509,7 +509,7 @@ onBeforeUnmount(() => {
 }
 .data-pane-note {
   padding: 8px;
-  font-size: 0.8125rem;
+  font-size: 13px;
 }
 .data-panes {
   display: flex;

@@ -1,4 +1,13 @@
 @import "../styles/base.css";
+/* The curation app is compact: every rem of Vuetify and of the app is 14 px at the browser's
+   default size, and still follows the reader's font size setting. Body text is 13 px. */
+html {
+  font-size: 87.5%;
+}
+.v-application {
+  font-size: 0.9286rem;
+  line-height: 1.4;
+}
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;
@@ -11,7 +20,7 @@ h1 {
   align-items: center;
   gap: 12px;
   margin: 0 16px;
-  font-size: 1.15rem;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;

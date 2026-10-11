@@ -96,7 +96,6 @@ function addComment(): void {
         <VBtn
           icon="fas fa-xmark"
           variant="text"
-          density="comfortable"
           size="small"
           :aria-label="`Remove description ${index + 1}${of('of')}`"
           class="row-remove"
@@ -146,7 +145,6 @@ function addComment(): void {
         <VBtn
           icon="fas fa-xmark"
           variant="text"
-          density="comfortable"
           size="small"
           :aria-label="`Remove comment ${index + 1}${of('on')}`"
           class="row-remove comment-remove"

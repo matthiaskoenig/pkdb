@@ -161,7 +161,6 @@ function setCollaborators(value: unknown): void {
         <VBtn
           icon="fas fa-xmark"
           variant="text"
-          density="comfortable"
           size="small"
           :aria-label="`Remove curator ${index + 1}`"
           class="row-remove"

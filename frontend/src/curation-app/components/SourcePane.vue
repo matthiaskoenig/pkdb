@@ -245,7 +245,7 @@ const automatic = computed(() =>
   gap: 8px;
   height: 26px;
   padding-inline: 8px;
-  font-size: 0.8125rem;
+  font-size: 12px;
   white-space: nowrap;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
@@ -272,7 +272,7 @@ const automatic = computed(() =>
 .zoom button {
   height: 20px;
   padding-inline: 8px;
-  font-size: 0.75rem;
+  font-size: 12px;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   color: rgb(var(--v-theme-on-surface));
 }
@@ -315,7 +315,7 @@ const automatic = computed(() =>
 }
 .pane-note {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 13px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* The image scrolls sideways at its full size. */
@@ -361,7 +361,7 @@ const automatic = computed(() =>
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .source-problems summary {
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
