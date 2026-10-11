@@ -198,6 +198,29 @@ test("the pane heads keep the source and the count of rows whole while a pane is
   await expect.poll(() => count.evaluate(whole)).toBe(true);
 });
 
+test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=6");
+  const cell = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "6", exact: true });
+  await expect(cell).toBeFocused();
+  const room = await cell.evaluate((element) => {
+    const style = getComputedStyle(element);
+    const box = element.getBoundingClientRect();
+    // The outline is drawn inside the cell: its inner edge is the offset away from the border.
+    const inset = -parseFloat(style.outlineOffset);
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const text = range.getBoundingClientRect();
+    return {
+      ring: parseFloat(style.outlineWidth) <= inset,
+      side: text.left - (box.left + inset),
+      height: box.height - 2 * inset - parseFloat(style.fontSize),
+    };
+  });
+  expect(room.ring).toBe(true);
+  expect(room.side).toBeGreaterThanOrEqual(3);
+  expect(room.height).toBeGreaterThanOrEqual(2);
+});
+
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
   await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "6", exact: true }).click();

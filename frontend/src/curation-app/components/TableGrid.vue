@@ -473,11 +473,12 @@ watch(
   background-image: linear-gradient(rgba(var(--v-theme-primary), 0.1), rgba(var(--v-theme-primary), 0.1));
 }
 /* The cell of the focus: a ring inside the outline of a problem. A focused cell shows the same
-   ring; the focus ring of the page would sit outside the cell, below its neighbours. */
+   ring; the focus ring of the page would sit outside the cell, below its neighbours. The ring
+   leaves room around the 12 px text of a 22 px row. */
 .rows-table .grid-cell--focus,
 .rows-table :is(td, th):focus-visible {
-  outline: 3px solid rgb(var(--v-theme-primary));
-  outline-offset: -5px;
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: -4px;
 }
 /* Raw tables: lines between the columns, as in a spreadsheet; the line column has its own.
    Cells keep their spaces as printed. */
