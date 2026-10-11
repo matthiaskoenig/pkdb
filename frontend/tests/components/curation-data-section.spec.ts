@@ -415,7 +415,7 @@ function nameOf(entry: Pick<DOMWrapper<Element>, "get">): string {
   return entry.get(".nav-name").text();
 }
 
-/** The source or the file that the section shows; a default selection is not in the route. */
+/** The source or the file that the section shows. */
 function current(name: "source" | "file"): string {
   return nameOf(page().get(`.nav-${name}[aria-current='true']`));
 }
@@ -711,8 +711,28 @@ describe("linked selection", () => {
     await mountSection(detail({ problems: [problemAt("outputs_Tab2.tsv", 2)] }));
     expect(current("source")).toBe("Tab2");
     expect(current("file")).toBe("outputs_Tab2.tsv");
-    // A default selection is not written into the route.
-    expect(router.currentRoute.value.query).toEqual({});
+    // The default selection is written into the route, so that only the curator changes it.
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+  });
+
+  it("keeps the source that it opened on when the problems change", async () => {
+    await mountSection(detail({ problems: [problemAt("outputs_Tab2.tsv", 2)] }));
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    // The problem of Tab2 is fixed, and Fig2 has one now: the default would be Fig2.
+    served = detail({ problems: [problemAt("timecourses_Fig2.tsv", 2)] });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(current("source")).toBe("Tab2");
+    expect(current("file")).toBe("outputs_Tab2.tsv");
+    expect(router.currentRoute.value.query).toEqual({ source: "Tab2", file: "outputs_Tab2.tsv" });
+  });
+
+  it("writes no default selection into the route of another section", async () => {
+    await mountSection(detail());
+    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
+    await router.push("/studies/caffeine/Example/metadata");
+    await flushPromises();
+    expect(router.currentRoute.value.fullPath).toBe("/studies/caffeine/Example/metadata");
   });
 
   it("selects the owner of a table file that a link names without a source", async () => {

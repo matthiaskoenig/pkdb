@@ -42,8 +42,8 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * tables; the sync actions and the conflicts stay.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
- * and Review sections can link to a row (`data.ts` has its rules). Only the actions of the
- * curator change the route: a default selection stays out of it.
+ * and Review sections can link to a row (`data.ts` has its rules). A route without a source and
+ * a file gets the default selection once; after that only the actions of the curator change it.
  */
 const study = useStudyStore();
 const route = useRoute();
@@ -162,6 +162,21 @@ function selectLine(line: number): void {
 function selectRow(row: { file: string; line: number }): void {
   go({ source: source.value?.source ?? null, file: row.file, line: row.line, column: null });
 }
+
+// The default selection goes into the route as soon as the study is loaded, so that it stays when
+// the problems that chose it change, such as when the curator fixes them. Only the route of this
+// section of this study takes it: a route that leaves the section changes before it unmounts.
+watch(
+  [detail, query],
+  ([value, selection]) => {
+    if (!value || selection.source !== null || selection.file !== null) return;
+    const { substance, name, section } = route.params;
+    if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
+    const chosen = source.value?.source ?? null;
+    if (chosen !== null || file.value !== null) go({ source: chosen, file: file.value, line: null, column: null });
+  },
+  { immediate: true },
+);
 
 // Most tables leave many of their fixed columns empty, so they are hidden until the curator shows them.
 const hideEmpty = ref(true);
