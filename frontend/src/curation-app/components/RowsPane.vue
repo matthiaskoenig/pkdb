@@ -120,7 +120,8 @@ const missingLine = computed(() => {
       <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
       <h3 class="pane-head-name">{{ file }}</h3>
       <template v-if="table">
-        <span class="pane-head-part pane-head-count" aria-hidden="true">{{ count }}</span>
+        <!-- The file name and the count of rows keep their room; the notes after them shorten first. -->
+        <span class="pane-head-part pane-head-part--fixed" aria-hidden="true">{{ count }}</span>
         <span v-if="hiddenColumns" class="pane-head-part" aria-hidden="true">
           {{ hiddenColumns === 1 ? "1 empty column hidden" : `${hiddenColumns} empty columns hidden` }}
         </span>
@@ -175,58 +176,21 @@ const missingLine = computed(() => {
   min-height: 0;
   height: 100%;
 }
-.pane-head {
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
-  gap: 8px;
-  height: 26px;
-  padding-inline: 8px;
-  font-size: 12px;
-  white-space: nowrap;
+/* The head clips what a narrow pane has no room for, after the notes have shortened. */
+.rows-pane > .pane-head {
   overflow: hidden;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-/* The file name and the count of rows keep their room; the notes after them shorten first. */
-.pane-head-name {
-  flex: 0 0 auto;
-  max-width: 100%;
-  margin: 0;
-  overflow: hidden;
-  font-size: inherit;
-  font-weight: 700;
-  line-height: inherit;
-  text-overflow: ellipsis;
-}
-.pane-head-part {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.pane-head-count {
-  flex: 0 0 auto;
 }
 .pane-head-line {
   flex: 0 0 auto;
   margin-inline-start: auto;
   font-variant-numeric: tabular-nums;
 }
-.pane-note {
-  margin: 0;
+/* The notes stand 8 px from the edges, as in the source pane, which has a padding. */
+.rows-pane > .pane-note {
   padding: 4px 8px;
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.pane-missing {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.rows-pane > .pane-missing {
   margin: 8px;
-  padding: 3px 8px;
-  font-size: 11.5px;
-  border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
-  border-radius: 6px;
 }
 .rows-pane-grid {
   --rows-max-height: 100%;

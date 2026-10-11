@@ -335,6 +335,65 @@ a.brand {
   line-height: 1.35;
 }
 
+/* The source pane and the rows pane of the Data section: a head line of 26 px with the name of
+   the source or the table file and its facts, notes, and a dashed box for what is missing. The
+   name and the facts that end with `--fixed` keep their room; the other facts shorten first. */
+.pane-head {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  height: 26px;
+  padding-inline: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.pane-head-name {
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  text-overflow: ellipsis;
+}
+.pane-head-part {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.pane-head-part--fixed {
+  flex: 0 0 auto;
+}
+.pane-note {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* The icon, then one text that wraps as a paragraph in a narrow pane; a long file name breaks only
+   when it does not fit into a line. */
+.pane-missing {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  padding: 3px 8px;
+  font-size: 11.5px;
+  border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
+  border-radius: 6px;
+}
+.pane-missing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.pane-missing-hint {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
 /* Problems: the parts of an issue and of an acknowledged warning. */
 .problem-head {
   display: flex;

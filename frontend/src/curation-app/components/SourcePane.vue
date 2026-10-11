@@ -7,7 +7,7 @@ import { useStudyStore } from "../stores/study";
 import { rawTable } from "../grid";
 import { drawsOnImage, plottedSeries, type SelectedRow } from "../overlay";
 import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
-import { sourceProblems } from "../sources";
+import { SOURCE_ICONS, sourceProblems } from "../sources";
 import { tableFiles } from "../study";
 import ProblemItem from "./ProblemItem.vue";
 import SourceOverlay from "./SourceOverlay.vue";
@@ -34,12 +34,6 @@ const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>]; retry:
 const study = useStudyStore();
 const overview = useOverviewStore();
 const id = useId();
-
-const ICONS: Record<SourceSummary["kind"], string> = {
-  table: "fas fa-table",
-  figure: "fas fa-chart-line",
-  text: "fas fa-align-left",
-};
 
 type Zoom = "fit" | "full";
 const ZOOM_KEY = "pkdb-curation:source-zoom";
@@ -100,10 +94,11 @@ const automatic = computed(() =>
 <template>
   <section class="source-pane" :aria-label="`Source ${summary.source}`" :style="figureWidth">
     <div class="pane-head">
-      <i :class="ICONS[summary.kind]" aria-hidden="true"></i>
+      <i :class="SOURCE_ICONS[summary.kind]" aria-hidden="true"></i>
       <h3 class="pane-head-name">{{ summary.source }}</h3>
-      <span class="pane-head-part">{{ summary.kind }}</span>
-      <span v-if="summary.image" class="pane-head-part pane-head-file">{{ summary.image }}</span>
+      <!-- The source and its kind keep their room in a narrow pane; the image file name shortens first. -->
+      <span class="pane-head-part pane-head-part--fixed">{{ summary.kind }}</span>
+      <span v-if="summary.image" class="pane-head-part">{{ summary.image }}</span>
       <div v-if="showsImage && view?.image_url" class="zoom" role="group" aria-label="Image size">
         <button type="button" :aria-pressed="zoom === 'fit'" @click="setZoom('fit')">Fit</button>
         <button type="button" :aria-pressed="zoom === 'full'" @click="setZoom('full')">100 %</button>
@@ -246,38 +241,6 @@ const automatic = computed(() =>
   min-height: 0;
   height: 100%;
 }
-.pane-head {
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
-  gap: 8px;
-  height: 26px;
-  padding-inline: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-/* The source and its kind keep their room in a narrow pane; the image file name shortens first. */
-.pane-head-name {
-  flex: 0 0 auto;
-  max-width: 100%;
-  margin: 0;
-  overflow: hidden;
-  font-size: inherit;
-  font-weight: 700;
-  line-height: inherit;
-  text-overflow: ellipsis;
-}
-.pane-head-part {
-  flex: 0 0 auto;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.pane-head-file {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .zoom {
   display: flex;
   flex: 0 0 auto;
@@ -328,11 +291,6 @@ const automatic = computed(() =>
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
   overflow-wrap: anywhere;
 }
-.pane-note {
-  margin: 0;
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
 /* The image scrolls sideways at its full size. */
 .image-scroll {
   overflow-x: auto;
@@ -360,26 +318,6 @@ const automatic = computed(() =>
 /* The plot of the series without a dataset is as wide as the overlay above it. */
 .source-unmatched {
   max-width: calc(var(--figure-width, 100%) + 2px);
-}
-/* The icon, then one text that wraps as a paragraph in a narrow pane; a long file name breaks only
-   when it does not fit into a line. */
-.pane-missing {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin: 0;
-  padding: 3px 8px;
-  font-size: 11.5px;
-  border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
-  border-radius: 6px;
-}
-.pane-missing-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-.pane-missing-hint {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .source-problems summary {
   font-size: 13px;

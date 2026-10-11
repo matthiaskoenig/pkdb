@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import type { SourceSummary, StudyDetail } from "../api/types";
+import type { StudyDetail } from "../api/types";
 import { fileCounts, nameParts, sourceCounts } from "../data";
 import { plural } from "../overview";
+import { SOURCE_ICONS } from "../sources";
 import { rawTableFiles, tableFiles } from "../study";
+import NavigatorCounts from "./NavigatorCounts.vue";
 
 /**
  * The sources of a study with a thumbnail of their image, and its table files in workbook
@@ -17,12 +19,6 @@ const props = defineProps<{
   rows: ReadonlyMap<string, number> | null;
 }>();
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
-
-const ICONS: Record<SourceSummary["kind"], string> = {
-  table: "fas fa-table",
-  figure: "fas fa-chart-line",
-  text: "fas fa-align-left",
-};
 
 const sourcesId = useId();
 const tablesId = useId();
@@ -57,21 +53,12 @@ const files = computed(() =>
           @click="emit('select-source', summary.source)"
         >
           <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" decoding="async" class="nav-thumb" />
-          <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="ICONS[summary.kind]"></i></span>
+          <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="SOURCE_ICONS[summary.kind]"></i></span>
           <span class="nav-text">
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
-          <span v-if="count.problems" class="nav-count nav-count--problems" :title="plural(count.problems, 'problem')">
-            <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
-            <span class="d-sr-only">{{ plural(count.problems, "problem") }}</span>
-            <span aria-hidden="true">{{ count.problems }}</span>
-          </span>
-          <span v-if="count.items" class="nav-count" :title="plural(count.items, 'open review item')">
-            <i class="fas fa-comment" aria-hidden="true"></i>
-            <span class="d-sr-only">{{ plural(count.items, "open review item") }}</span>
-            <span aria-hidden="true">{{ count.items }}</span>
-          </span>
+          <NavigatorCounts :problems="count.problems" :items="count.items" />
         </button>
       </li>
     </ul>
@@ -93,16 +80,7 @@ const files = computed(() =>
           >
           <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
           <span v-if="entry.raw" class="d-sr-only">, raw table</span>
-          <span v-if="entry.problems" class="nav-count nav-count--problems" :title="plural(entry.problems, 'problem')">
-            <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
-            <span class="d-sr-only">{{ plural(entry.problems, "problem") }}</span>
-            <span aria-hidden="true">{{ entry.problems }}</span>
-          </span>
-          <span v-if="entry.items" class="nav-count" :title="plural(entry.items, 'open review item')">
-            <i class="fas fa-comment" aria-hidden="true"></i>
-            <span class="d-sr-only">{{ plural(entry.items, "open review item") }}</span>
-            <span aria-hidden="true">{{ entry.items }}</span>
-          </span>
+          <NavigatorCounts :problems="entry.problems" :items="entry.items" />
           <span v-if="entry.rows !== null" class="nav-rows" :title="`${plural(entry.rows, 'row')} of ${source}`">
             <span class="d-sr-only">{{ plural(entry.rows, "row") }} of {{ source }}</span>
             <span aria-hidden="true">{{ entry.rows }}</span>
@@ -204,20 +182,6 @@ const files = computed(() =>
 .nav-kind {
   font-size: 11px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* A count of problems or of open review items has its icon before the number. */
-.nav-count {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  flex: none;
-  font-variant-numeric: tabular-nums;
-}
-.nav-count > i {
-  font-size: 10px;
-}
-.nav-count--problems {
-  color: rgb(var(--v-theme-error));
 }
 .nav-file .nav-name {
   flex: 1 1 auto;

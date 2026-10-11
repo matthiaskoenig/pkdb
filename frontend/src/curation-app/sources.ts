@@ -1,8 +1,16 @@
 /**
- * The problems of the files of a source, which the source pane of the Data section lists. What a
- * source is and which files it lacks come from the library, in the summaries of the study detail.
+ * The icons of the sources and the problems of their files, which the navigator and the source
+ * pane of the Data section show. What a source is and which files it lacks come from the library,
+ * in the summaries of the study detail.
  */
 import type { SourceSummary, SourceView, ValidationIssue } from "./api/types";
+
+/** The icon of each kind of source, beside its name and in place of a missing image. */
+export const SOURCE_ICONS: Readonly<Record<SourceSummary["kind"], string>> = {
+  table: "fas fa-table",
+  figure: "fas fa-chart-line",
+  text: "fas fa-align-left",
+};
 
 /**
  * The problems of the files of a source: its image, its raw extraction and its own tables; of a
