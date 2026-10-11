@@ -266,33 +266,66 @@ function described(...ids: (string | undefined | false)[]): string | undefined {
 }
 
 /**
- * Scroll the focused cell to the middle of the region, bring the region into the page view, then
- * focus the cell without scrolling again. Only the region scrolls to the cell, so that the page
- * keeps what is above the region in view (its margin: `--rows-scroll-margin`).
+ * How far a region scrolls so that the span from `start` to `end` shows between `low` and `high`:
+ * not at all when it shows whole, the least when it shows in part, and to the middle when it does
+ * not show, so that the rows under the pointer stay where they are.
+ */
+function scrollFor(start: number, end: number, low: number, high: number): number {
+  if (start >= low && end <= high) return 0;
+  if (end > low && start < high) return start < low ? start - low : end - high;
+  return start - low - (high - low - (end - start)) / 2;
+}
+
+/** Render the row at `index` of the shown rows, with the row in the middle of the view. */
+async function renderRow(index: number): Promise<boolean> {
+  const element = region.value;
+  if (!element || !virtual.value || (index >= from.value && index < to.value)) return false;
+  const view = element.clientHeight || VIEW_HEIGHT;
+  element.scrollTop = Math.max(0, headerHeight.value + index * rowHeight.value - (view - rowHeight.value) / 2);
+  update();
+  await nextTick();
+  return true;
+}
+
+/**
+ * Scroll the region to `cell` when it is not in view below the header and, for a cell of a
+ * column, right of the line column; whether the region scrolled.
+ */
+function scrollToCell(cell: HTMLElement): boolean {
+  const element = region.value;
+  if (!element) return false;
+  const box = element.getBoundingClientRect();
+  const target = cell.getBoundingClientRect();
+  const top = box.top + element.clientTop;
+  const down = scrollFor(target.top, target.bottom, top + headerHeight.value, top + element.clientHeight);
+  element.scrollTop += down;
+  let right = 0;
+  if (cell.tagName === "TD") {
+    const left = box.left + element.clientLeft;
+    const start = lines.value ? (element.querySelector("thead .rows-line")?.getBoundingClientRect().width ?? 0) : 0;
+    right = scrollFor(target.left, target.right, left + start, left + element.clientWidth);
+    element.scrollLeft += right;
+  }
+  return down !== 0 || right !== 0;
+}
+
+/**
+ * Scroll the region to the focused cell when it is not in view, bring the region into the page
+ * view when the cell was not in the window either, then focus the cell without scrolling again.
+ * A focus in view, such as of a clicked row, leaves the rows in place. Only the region scrolls to
+ * the cell, so that the page keeps what is above the region in view (its margin:
+ * `--rows-scroll-margin`).
  */
 async function reveal(): Promise<void> {
   const element = region.value;
   const index = focusLine.value === null ? -1 : shownRows.value.findIndex((row) => row.line === focusLine.value);
   if (!element || index < 0) return;
-  if (virtual.value) {
-    // Render the rows around the line first, with the line in the middle of the view.
-    const view = element.clientHeight || VIEW_HEIGHT;
-    element.scrollTop = Math.max(0, headerHeight.value + index * rowHeight.value - (view - rowHeight.value) / 2);
-    update();
-    await nextTick();
-  }
+  const moved = await renderRow(index);
   const cell = element.querySelector<HTMLElement>(".grid-cell--focus");
   if (!cell) return;
-  // The middle of the rows below the header, and of the columns right of the line column.
-  const box = element.getBoundingClientRect();
-  const target = cell.getBoundingClientRect();
-  const top = headerHeight.value;
-  element.scrollTop += target.top - box.top - top - (element.clientHeight - top - target.height) / 2;
-  if (cell.tagName === "TD") {
-    const start = lines.value ? (element.querySelector("thead .rows-line")?.getBoundingClientRect().width ?? 0) : 0;
-    element.scrollLeft += target.left - box.left - start - (element.clientWidth - start - target.width) / 2;
-  }
-  element.scrollIntoView({ block: "nearest" });
+  const { top, bottom } = cell.getBoundingClientRect();
+  const outside = top < 0 || bottom > window.innerHeight;
+  if (scrollToCell(cell) || moved || outside) element.scrollIntoView({ block: "nearest" });
   cell.focus({ preventScroll: true });
 }
 

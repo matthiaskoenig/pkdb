@@ -285,6 +285,84 @@ describe("TableGrid with many rows", () => {
   });
 });
 
+/**
+ * A layout for jsdom, which has none: the region is 600 × 300 pixels at the top of the window,
+ * the header and each row 22 pixels high, the line column 64 pixels wide and each column 80.
+ */
+function layOut(): void {
+  const row = (element: Element) => Number(element.closest("tr[data-index]")?.getAttribute("data-index") ?? -1);
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    const scroller = this.closest<HTMLElement>(".rows-scroll");
+    if (this === scroller) return new DOMRect(0, 0, 600, 300);
+    if (!scroller) return new DOMRect();
+    const top = (this.closest("thead") ? 0 : 22 + row(this) * 22) - scroller.scrollTop;
+    const cell = this.closest("th, td");
+    const column = cell ? [...cell.parentElement!.children].indexOf(cell) : 0;
+    const left = column === 0 ? 0 : 64 + (column - 1) * 80 - scroller.scrollLeft;
+    return new DOMRect(left, top, column === 0 ? 64 : 80, 22);
+  });
+  for (const [name, value] of Object.entries({ clientHeight: 300, clientWidth: 600 }))
+    Object.defineProperty(HTMLElement.prototype, name, { configurable: true, value });
+}
+
+describe("revealing the focus", () => {
+  afterEach(() => {
+    for (const name of ["clientHeight", "clientWidth"]) Reflect.deleteProperty(HTMLElement.prototype, name);
+  });
+
+  it("leaves the rows in place for a focus that is in view, as after a click on a row", async () => {
+    layOut();
+    const wrapper = mount(TableGrid, { props: { table: large(60), selectable: true }, attachTo: document.body });
+    const element = region(wrapper);
+    element.scrollTop = 220;
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    // Line 14 is the 13th row, 66 pixels below the top of the region.
+    await wrapper.setProps({ focus: { line: 14 } });
+    await flushPromises();
+    expect(element.scrollTop).toBe(220);
+    expect(scrolled).toEqual([]);
+    expect(document.activeElement?.textContent?.trim()).toBe("14");
+  });
+
+  it("scrolls a focus that is out of view to the middle of the rows", async () => {
+    layOut();
+    const wrapper = mount(TableGrid, { props: { table: large(60) }, attachTo: document.body });
+    const element = region(wrapper);
+    // Line 50 is the 49th row, 1,078 pixels below the top of the region.
+    await wrapper.setProps({ focus: { line: 50, column: "mean" } });
+    await flushPromises();
+    expect(element.scrollTop).toBe(1078 - 22 - (300 - 22 - 22) / 2);
+    expect(scrolled).toEqual([element]);
+    expect(document.activeElement?.textContent?.trim()).toBe("4.8");
+  });
+
+  it("scrolls a focus that is partly in view by the least amount", async () => {
+    layOut();
+    const wrapper = mount(TableGrid, { props: { table: large(60) }, attachTo: document.body });
+    const element = region(wrapper);
+    // Line 14 is the 13th row: 286 to 308 pixels, of which 8 are below the region.
+    await wrapper.setProps({ focus: { line: 14 } });
+    await flushPromises();
+    expect(element.scrollTop).toBe(8);
+  });
+
+  it("scrolls sideways only to a cell that is out of view, clear of the line column", async () => {
+    layOut();
+    const wide: TableResponse = { ...small, header: [...HEADER, ...HEADER.map((name) => `${name}_2`)] };
+    const wrapper = mount(TableGrid, { props: { table: wide }, attachTo: document.body });
+    const element = region(wrapper);
+    await wrapper.setProps({ focus: { line: 3, column: "mean" } });
+    await flushPromises();
+    expect(element.scrollLeft).toBe(0);
+    // The 12th column starts at 944 pixels.
+    await wrapper.setProps({ focus: { line: 3, column: "comment_2" } });
+    await flushPromises();
+    expect(element.scrollLeft).toBe(944 - 64 - (600 - 64 - 80) / 2);
+    expect(element.scrollTop).toBe(0);
+  });
+});
+
 function mountGrid(props: Record<string, unknown>) {
   return mount(TableGrid, { props: { table: small, ...props } });
 }
