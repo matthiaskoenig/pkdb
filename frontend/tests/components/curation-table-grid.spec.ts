@@ -188,7 +188,7 @@ describe("TableGrid with many rows", () => {
 
     // Down to the row of line 2,102 (the 2,101st row).
     const element = region(wrapper);
-    element.scrollTop = 2100 * 32;
+    element.scrollTop = 2100 * 22;
     element.dispatchEvent(new Event("scroll"));
     await flushPromises();
     const shown = lines(wrapper).map(Number);
@@ -222,7 +222,7 @@ describe("TableGrid with many rows", () => {
       attachTo: document.body,
     });
     await flushPromises();
-    expect(region(wrapper).scrollTop).toBeGreaterThan(3900 * 32);
+    expect(region(wrapper).scrollTop).toBeGreaterThan(3900 * 22);
     const row = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "4001")!;
     const cell = row.findAll("td")[4]!;
     expect(cell.text()).toBe("399.9");
@@ -282,5 +282,53 @@ describe("TableGrid with many rows", () => {
     await flushPromises();
     expect(lines(wrapper)).not.toContain("4001");
     expect(document.activeElement).toBe(element);
+  });
+});
+
+function mountGrid(props: Record<string, unknown>) {
+  return mount(TableGrid, { props: { table: small, ...props } });
+}
+
+describe("selection and the line filter", () => {
+  it("emits the line of a clicked row and of its line button", async () => {
+    const wrapper = mountGrid({ selectable: true });
+    await wrapper.findAll("tbody tr[data-index]")[1]!.find("td").trigger("click");
+    await wrapper.get('button[aria-label="Select line 4"]').trigger("click");
+    expect(wrapper.emitted("select-line")).toEqual([[3], [4]]);
+  });
+
+  it("renders no buttons and emits nothing when not selectable", async () => {
+    const wrapper = mountGrid({});
+    expect(wrapper.find(".grid-line-button").exists()).toBe(false);
+    await wrapper.findAll("tbody tr[data-index]")[0]!.find("td").trigger("click");
+    expect(wrapper.emitted("select-line")).toBeUndefined();
+  });
+
+  it("shows only the visible lines and counts them for screen readers", () => {
+    const wrapper = mountGrid({ visibleLines: new Set([2, 4]) });
+    expect(wrapper.findAll("tbody tr[data-index]").map((row) => row.get("th").text())).toEqual(["2", "4"]);
+    expect(wrapper.get("table").attributes("aria-rowcount")).toBe("3");
+  });
+
+  it("tints the row of the focus", () => {
+    const wrapper = mountGrid({ focus: { line: 3 } });
+    expect(wrapper.findAll("tbody tr[data-index]")[1]!.classes()).toContain("grid-row--focus");
+  });
+
+  it("scrolls a filtered large table to the focus line and numbers the shown rows", async () => {
+    // Every second row shows: the lines 2, 4, 6 and so on.
+    const visibleLines = new Set(Array.from({ length: 2500 }, (_, index) => index * 2 + 2));
+    const wrapper = mount(TableGrid, {
+      props: { table: large(), visibleLines, focus: { line: 4002 } },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    expect(wrapper.get("table").attributes("aria-rowcount")).toBe("2501");
+    // Line 4002 is the 2,001st shown row.
+    const row = wrapper.findAll("tbody tr[data-index]").find((entry) => entry.get("th").text() === "4002")!;
+    expect(row.attributes("aria-rowindex")).toBe("2002");
+    expect(row.classes()).toContain("grid-row--focus");
+    expect(region(wrapper).scrollTop).toBeGreaterThan(1900 * 22);
+    expect(lines(wrapper).every((line) => Number(line) % 2 === 0)).toBe(true);
   });
 });

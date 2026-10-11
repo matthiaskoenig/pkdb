@@ -345,7 +345,7 @@ a.brand {
 }
 
 /* Rows of a table in a region of their own, such as the rows of a review target or of a source.
-   At most about twelve rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
+   At most about eighteen rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
    the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
    them at the start and the end. */
 .rows-scroll {
@@ -369,12 +369,12 @@ a.brand {
   min-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.8125rem;
+  font-size: 12px;
 }
 .rows-table th,
 .rows-table td {
-  height: 32px;
-  padding: 0 12px;
+  height: 22px;
+  padding: 0 8px;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   text-align: start;
   white-space: nowrap;

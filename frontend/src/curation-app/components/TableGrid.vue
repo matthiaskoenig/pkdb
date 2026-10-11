@@ -5,8 +5,8 @@ import { columnName, keptColumns, ROW, visibleColumns, type CellIssues, type Iss
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
-/** The height of a row and of the header until one is measured: 32 px with the line below. */
-const ROW_HEIGHT = 32;
+/** The height of a row and of the header until one is measured: 22 px with the line below. */
+const ROW_HEIGHT = 22;
 /** The height of the region until it is measured, such as without a layout. */
 const VIEW_HEIGHT = 600;
 /** The rows that render beyond each edge of the view. */
@@ -41,6 +41,10 @@ const props = withDefaults(
     label?: string | null;
     /** The header of the line column, such as Row for the rows of a sheet; null leaves the column out. */
     lineHeader?: string | null;
+    /** Whether a click on a row selects its line: the line cell becomes a button. */
+    selectable?: boolean;
+    /** The lines of the rows to show; null shows every row. */
+    visibleLines?: ReadonlySet<number> | null;
   }>(),
   {
     highlightLines: () => new Set<number>(),
@@ -52,8 +56,11 @@ const props = withDefaults(
     columns: null,
     label: null,
     lineHeader: "Line",
+    selectable: false,
+    visibleLines: null,
   },
 );
+const emit = defineEmits<{ "select-line": [line: number] }>();
 defineSlots<{
   /** The content of the line cell of a row; its line by default. */
   line?: (props: { line: number }) => unknown;
@@ -61,6 +68,11 @@ defineSlots<{
 
 const id = useId();
 const region = ref<HTMLElement | null>(null);
+
+/** The rows that show: all, or those of `visibleLines`. */
+const shownRows = computed(() =>
+  props.visibleLines ? props.table.rows.filter((row) => props.visibleLines!.has(row.line)) : props.table.rows,
+);
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
@@ -80,7 +92,7 @@ const span = computed(() => headers.value.length + (lines.value ? 1 : 0));
 
 // The rows near the view
 
-const virtual = computed(() => props.table.rows.length > VIRTUAL_ROWS);
+const virtual = computed(() => shownRows.value.length > VIRTUAL_ROWS);
 const rowHeight = ref(ROW_HEIGHT);
 const headerHeight = ref(ROW_HEIGHT);
 const viewRows = ref(Math.ceil(VIEW_HEIGHT / ROW_HEIGHT));
@@ -100,22 +112,22 @@ const fade = computed(() => ({
 }));
 
 function windowEnd(first: number): number {
-  return Math.min(props.table.rows.length, first + viewRows.value + 2 * OVERSCAN + STEP);
+  return Math.min(shownRows.value.length, first + viewRows.value + 2 * OVERSCAN + STEP);
 }
 
 /** The first row to render for `scrollTop`: a step at least `OVERSCAN` rows above the view. */
 function windowStart(scrollTop: number): number {
   const first = Math.floor(Math.max(0, scrollTop - headerHeight.value) / rowHeight.value);
-  return Math.max(0, Math.min(Math.floor(first / STEP) * STEP - OVERSCAN, props.table.rows.length - 1));
+  return Math.max(0, Math.min(Math.floor(first / STEP) * STEP - OVERSCAN, shownRows.value.length - 1));
 }
 
-const from = computed(() => (virtual.value ? Math.min(start.value, Math.max(0, props.table.rows.length - 1)) : 0));
-const to = computed(() => (virtual.value ? windowEnd(from.value) : props.table.rows.length));
+const from = computed(() => (virtual.value ? Math.min(start.value, Math.max(0, shownRows.value.length - 1)) : 0));
+const to = computed(() => (virtual.value ? windowEnd(from.value) : shownRows.value.length));
 const rendered = computed(() =>
-  props.table.rows.slice(from.value, to.value).map((row, offset) => ({ row, index: from.value + offset })),
+  shownRows.value.slice(from.value, to.value).map((row, offset) => ({ row, index: from.value + offset })),
 );
 const before = computed(() => from.value * rowHeight.value);
-const after = computed(() => (props.table.rows.length - to.value) * rowHeight.value);
+const after = computed(() => (shownRows.value.length - to.value) * rowHeight.value);
 
 /** A focused cell that is about to leave the rendered rows gives the focus to the region. */
 function keepFocus(first: number): void {
@@ -260,7 +272,7 @@ function described(...ids: (string | undefined | false)[]): string | undefined {
  */
 async function reveal(): Promise<void> {
   const element = region.value;
-  const index = focusLine.value === null ? -1 : props.table.rows.findIndex((row) => row.line === focusLine.value);
+  const index = focusLine.value === null ? -1 : shownRows.value.findIndex((row) => row.line === focusLine.value);
   if (!element || index < 0) return;
   if (virtual.value) {
     // Render the rows around the line first, with the line in the middle of the view.
@@ -304,7 +316,7 @@ watch(
       :aria-label="label ?? `Rows of ${table.file}`"
       @scroll.passive="update"
     >
-      <table class="rows-table rows-table--packed" :aria-rowcount="table.rows.length + 1">
+      <table class="rows-table rows-table--packed" :aria-rowcount="shownRows.length + 1">
         <thead>
           <tr aria-rowindex="1">
             <th
@@ -337,7 +349,8 @@ watch(
             :key="row.line"
             :data-index="index"
             :aria-rowindex="index + 2"
-            :class="{ 'grid-row--target': highlightLines.has(row.line) }"
+            :class="{ 'grid-row--target': highlightLines.has(row.line), 'grid-row--focus': row.line === focusLine }"
+            @click="selectable && emit('select-line', row.line)"
           >
             <th
               v-if="lines"
@@ -349,7 +362,18 @@ watch(
                 described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
               "
             >
-              <slot name="line" :line="row.line">{{ row.line }}</slot>
+              <slot name="line" :line="row.line">
+                <button
+                  v-if="selectable"
+                  type="button"
+                  class="grid-line-button"
+                  :aria-label="`Select line ${row.line}`"
+                  @click.stop="emit('select-line', row.line)"
+                >
+                  {{ row.line }}
+                </button>
+                <template v-else>{{ row.line }}</template>
+              </slot>
             </th>
             <td
               v-for="column in headers"
@@ -419,6 +443,23 @@ watch(
   inset-inline-start: 0;
   width: 3px;
   background-color: var(--grid-amber);
+}
+/* The row of the focus: a tint, opaque on the line column, which covers the rows below it. */
+.rows-table .grid-row--focus > td {
+  background-color: rgba(var(--v-theme-primary), 0.12);
+}
+.rows-scroll .rows-table .grid-row--focus > .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--v-theme-primary)) 12%, rgb(var(--v-theme-surface)));
+}
+/* A selectable row; its line is a button that looks like the line. */
+.grid-line-button {
+  all: unset;
+  cursor: pointer;
+  width: 100%;
+}
+.grid-line-button:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 1px;
 }
 /* A cell with a problem has an outline inside, which leaves the content and the lines in place. */
 .rows-table .grid-cell--error {
