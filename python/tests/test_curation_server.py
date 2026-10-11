@@ -229,20 +229,47 @@ def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
 
 
-def test_curate_exits_with_an_instruction_without_built_assets(
+def test_curate_names_the_source_checkout_without_built_assets(
     tmp_path, monkeypatch, capsys
 ):
     from pkdb.curation import launch
 
-    monkeypatch.setattr(transport, "ASSETS", tmp_path / "static")
+    checkout = tmp_path / "pkdb"
+    assets = checkout / "python" / "src" / "pkdb" / "curation" / "static"
+    (checkout / "frontend").mkdir(parents=True)
+    (checkout / "frontend" / "package.json").write_text("{}")
+    monkeypatch.setattr(transport, "ASSETS", assets)
     engine = Mock(side_effect=AssertionError("The engine must not start"))
     monkeypatch.setattr("pkdb.curation.engine.CurationEngine", engine)
     assert launch.run(tmp_path, offline=True, no_browser=True) == 1
     captured = capsys.readouterr()
     assert captured.out == ""
     assert captured.err == (
-        "The curation app is not built. "
-        "Run npm ci and npm run build:curation in frontend/.\n"
+        f"The curation app is not built: {assets} has no index.html.\n"
+        f"This pkdb runs from the source checkout {checkout}. Run npm ci and "
+        f"npm run build:curation in {checkout / 'frontend'}, or run an installed "
+        "pkdb release, which contains the app.\n"
+    )
+    engine.assert_not_called()
+
+
+def test_curate_names_the_installed_folder_without_built_assets(
+    tmp_path, monkeypatch, capsys
+):
+    from pkdb.curation import launch
+
+    assets = tmp_path / "lib" / "site-packages" / "pkdb" / "curation" / "static"
+    monkeypatch.setattr(transport, "ASSETS", assets)
+    engine = Mock(side_effect=AssertionError("The engine must not start"))
+    monkeypatch.setattr("pkdb.curation.engine.CurationEngine", engine)
+    assert launch.run(tmp_path, offline=True, no_browser=True) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == (
+        f"The curation app is not built: {assets} has no index.html.\n"
+        "This pkdb was installed from a source checkout without the app. Run npm ci "
+        "and npm run build:curation in frontend/ of the checkout and install it "
+        "again, or install a pkdb release, which contains the app.\n"
     )
     engine.assert_not_called()
 

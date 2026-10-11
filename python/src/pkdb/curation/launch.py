@@ -40,6 +40,29 @@ def open_path(path: Path, *, reveal=False):
         )
 
 
+def unbuilt_app_message(assets: Path) -> str:
+    """Why `pkdb curate` cannot start without the built app, and which pkdb runs.
+
+    The folder of the app names the pkdb that runs, so that a user with a release and a
+    source checkout of pkdb sees that the checkout runs, for example from an active
+    virtual environment. The app lies in `python/src/pkdb/curation/static` of a checkout.
+    """
+    message = f"The curation app is not built: {assets} has no index.html."
+    parents = assets.parents
+    checkout = parents[4] if len(parents) > 4 else None
+    if checkout is not None and (checkout / "frontend" / "package.json").is_file():
+        return (
+            f"{message}\nThis pkdb runs from the source checkout {checkout}. Run npm ci "
+            f"and npm run build:curation in {checkout / 'frontend'}, or run an installed "
+            "pkdb release, which contains the app."
+        )
+    return (
+        f"{message}\nThis pkdb was installed from a source checkout without the app. "
+        "Run npm ci and npm run build:curation in frontend/ of the checkout and install "
+        "it again, or install a pkdb release, which contains the app."
+    )
+
+
 def run(
     path=None,
     *,
@@ -59,11 +82,7 @@ def run(
         raise ValueError("Port must be between 0 and 65535")
     if not (transport.ASSETS / "index.html").is_file():
         # A source checkout without `npm run build:curation`; release wheels ship the app.
-        print(
-            "The curation app is not built. "
-            "Run npm ci and npm run build:curation in frontend/.",
-            file=sys.stderr,
-        )
+        print(unbuilt_app_message(transport.ASSETS), file=sys.stderr)
         return 1
     engine = CurationEngine(
         path=path,

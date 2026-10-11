@@ -83,7 +83,7 @@ Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pk
 
 ## Prepare, validate, and upload a study folder
 
-The development version includes a [local curation app](local-curation.md) for study format 2 folders: forms for the metadata and the review items, the sources and tables side by side, file watching, and validation or upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
+`pkdb` includes a [local curation app](local-curation.md) for study format 2 folders: forms for the metadata and the review items, the sources and tables side by side, file watching, and validation or upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work.
 
 Pass the existing study directory from `pkdb_data` directly. Keep its original `study.json`, `reference.json`, workbooks, tables, and attachments together. The directory name must match the study's name. The parser understands existing spreadsheet sheet names, second-row workbook headers, `col==...` expressions, and TSV sources; no intermediate conversion is needed. A folder whose `study.json` contains `"format": 2` is a [study format 2](study-format.md) folder; `prepare`, `validate`, and `upload` accept both formats, and for study format 2 the folder is located as `<substance>/<name>` (for example `studies/caffeine/Harder1988`).
 

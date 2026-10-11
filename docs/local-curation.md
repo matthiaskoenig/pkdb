@@ -1,12 +1,10 @@
 # Local curation app
 
-!!! info "Available in the development version"
-
-    `pkdb curate` is not yet part of a published release. To try it, build the app once in a source checkout and install the checkout: run `npm ci` and `npm run build:curation` in `frontend/` (Node **24.21.0** and npm **12.1.0**), then `pip install ./python`. See [Build from source](#build-from-source). The screenshots show the running app with the synthetic test studies of the repository, not design mockups.
-
 `pkdb curate` opens a local app in your browser to check and curate study format 2 folders. You see a study in one place: its metadata, its review items, the validation problems at their cells, and each table and figure of the paper next to its raw extraction and the rows mapped into the database. You edit the metadata and the review items in the app and the tables in the study workbook. The app watches the folder, keeps the workbook and the tables in sync, and validates or uploads a study when you save a file.
 
 AI agents work on the same files with the `pkdb` command line, which calls the same library functions as the app. The app checks a new `study.json` or `review.json` before it writes the file, writes it atomically, and refuses the write when the file changed on disk since the app read it.
+
+`pkdb curate` is part of `pkdb` since release 0.12.1, and a release contains the built app. A source checkout needs the app built once, see [Build from source](#build-from-source). The screenshots show the running app with the synthetic test studies of the repository, not design mockups.
 
 ## Start the app
 
@@ -270,7 +268,7 @@ Then open `http://localhost:8090/` followed by the `#token=...` part of the laun
 | --- | --- |
 | The local server stopped. Start pkdb curate again. | The `pkdb curate` process ended. Start it again and open the new launch URL. |
 | This page has no session. Open the link that pkdb curate printed. | The page was opened without its launch URL, or the app was restarted on the same port. Open the launch URL that `pkdb curate` printed; pasting it into the open page works too. A launch URL works once: in the browser that opened it, reload the page instead. For another browser, restart `pkdb curate`. |
-| The curation app is not built. Run npm ci and npm run build:curation in frontend/. | A source checkout without the built app. See [Build from source](#build-from-source). |
+| The curation app is not built: ... has no index.html. | The `pkdb` that runs is a source checkout without the built app, or was installed from one. The message names the folder of that `pkdb`. When a release of `pkdb` is installed too, a virtual environment of the checkout is probably active: deactivate it, or build the app as [Build from source](#build-from-source) describes. |
 | Unable to start curation. Application state must be outside the selected source workspace | Choose a `--state-dir` outside the workspace. |
 | The header offers **Set user**. | Set your PK-DB user in **Settings**, or start the app with `--user` or `PKDB_USER`. |
 | **Upload** is disabled. | Hover it to see why: offline mode, no API key, no connected server, or an account that may not upload. |
