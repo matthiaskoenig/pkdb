@@ -9,3 +9,7 @@
 - The Tables section of the local curation app hides the empty columns when it opens, because most tables leave many of their fixed columns empty. The switch **Hide empty columns** shows them again.
 
 - The overview of the local curation app filters the studies by curator. **Curator** lists every curator of the workspace with the number of their studies, and **Me**, the PK-DB user of the app, first, so a curator sees their own studies. The filters and the sort order of the overview stay when a study is opened and the overview is shown again; before, every visit of a study reset them.
+
+- The overview of the local curation app shows the names and pictures of the curators after a launch URL was pasted into an open overview without a session. Before, it kept their initials and the Curator filter their user names until the page was reloaded, because it loaded the curator roster only when it opened.
+
+- The search and the selects of the overview stay in place when the counts of the status chips change. Before, the search field took the width that the chips left, so it grew or shrank by a few pixels with each filter, and a second line of chips moved every field down.

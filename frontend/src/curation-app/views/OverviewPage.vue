@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, shallowRef, useId, watch } from "vue";
+import { computed, ref, shallowRef, useId, watch } from "vue";
 import {
   VAlert,
   VBtn,
@@ -45,18 +45,26 @@ const stale = computed(() => overview.error !== null);
 const blocker = computed(() => (snapshot.value ? uploadBlocker(snapshot.value) : null));
 
 // Curator profiles for the avatars and the Curator filter; without them the avatars show initials
-// and the filter shows user names.
+// and the filter shows user names. They load with the state of the local server until they loaded:
+// a launch URL pasted into the open overview creates the session without mounting the page again.
 const profiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
-onMounted(() => {
-  useStudyStore()
-    .curators()
-    .then(
-      (list) => {
-        profiles.value = profileMap(list);
-      },
-      () => undefined,
-    );
-});
+let profilesLoaded = false;
+watch(
+  snapshot,
+  (state) => {
+    if (!state || profilesLoaded) return;
+    useStudyStore()
+      .curators()
+      .then(
+        (list) => {
+          profiles.value = profileMap(list);
+          profilesLoaded = true;
+        },
+        () => undefined,
+      );
+  },
+  { immediate: true },
+);
 
 // Filters
 const filters = useOverviewFilters();
@@ -427,15 +435,24 @@ const format1Notice = computed(() =>
 .overview-count {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+/*
+ * The counts of the chips change with the filters, and the chips may wrap. So that they never
+ * move the fields, the fields do not grow and keep to the top of the row; their 4px margin puts
+ * them on the center line of the first row of chips, which their group pads by 4px.
+ */
 .overview-filters {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 16px;
+  align-items: flex-start;
+  gap: 4px 16px;
+}
+.overview-search,
+.overview-substance,
+.overview-curator {
+  margin-block: 4px;
 }
 .overview-search {
-  flex: 1 1 18rem;
-  max-width: 28rem;
+  flex: 0 1 20rem;
 }
 .overview-substance {
   flex: 0 1 12rem;

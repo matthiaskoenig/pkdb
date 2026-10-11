@@ -231,6 +231,39 @@ describe("OverviewPage", () => {
     expect(curators.get('[role="img"][aria-label="curator"]').text()).toBe("C");
   });
 
+  it("loads the curator profiles once the page has a session, as after a pasted launch URL", async () => {
+    // Without a session the local server answers 401; a launch URL pasted into the open overview
+    // creates the session and loads the state, but does not mount the page again.
+    let session = false;
+    const state = snapshot({ studies: [harder], author: { user: "mkoenig", reason: null } });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const path = new URL(input instanceof Request ? input.url : String(input), "http://127.0.0.1").pathname;
+      const [status, body] = !session
+        ? [401, { error: "No session" }]
+        : path === "/local/state"
+          ? [200, state]
+          : [200, { curators: profiles }];
+      return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+    });
+    await useOverviewStore().refresh();
+    router = makeRouter();
+    await router.push("/");
+    await router.isReady();
+    const wrapper = mount(OverviewPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
+    await flushPromises();
+    expect(page().find(".study-table").exists()).toBe(false);
+
+    session = true;
+    await useOverviewStore().refresh();
+    await flushPromises();
+    const curators = rowOf("caffeine/Harder1988").get(".cell-curators");
+    expect(curators.get('img[alt="Matthias König"]').attributes("src")).toBe("/avatars/matthias_koenig.webp");
+    const select = wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "Curator")!;
+    expect((select.props("items") as { title: string }[]).map((item) => item.title)).toContain(
+      "Me: Matthias König (1)",
+    );
+  });
+
   it("shows at most three circles of curators, the last one counting the others", async () => {
     const many = studyRow({ summary: { ...example.summary, curators: ["a", "b", "curator", "mkoenig", "janekg"] } });
     await mountPage(snapshot({ studies: [many, harder] }));
