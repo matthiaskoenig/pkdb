@@ -542,8 +542,11 @@ function added(table: string): void {
     width: 100%;
     gap: 8px;
   }
-  .review-select {
+  .fact-status {
     flex: 1 1 calc(100% - 56px);
+  }
+  .review-select {
+    flex: 1 1 auto;
   }
   .study-buttons {
     display: contents;

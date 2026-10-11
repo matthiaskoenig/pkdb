@@ -144,6 +144,20 @@ test("the app bar, the study header and the section tabs take at most 110 px of 
   expect(field!.y).toBeGreaterThanOrEqual(bar!.y + bar!.height + 4);
 });
 
+test("on a phone the review status and More actions share a line above the buttons of the study", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await app.open("#/studies/caffeine/Demo2020/data");
+  const top = async (name: string, role: "combobox" | "button") =>
+    (await page.getByRole(role, { name, exact: true }).boundingBox())!.y;
+  const status = await top("Review status", "combobox");
+  const more = await top("More actions", "button");
+  expect(Math.abs(more - status)).toBeLessThan(4);
+  for (const button of ["Open tables", "Validate"]) expect(await top(button, "button")).toBeGreaterThan(status + 20);
+});
+
 test("the section tabs keep their places when another one becomes active and bold", async ({ app, page }) => {
   const navigation = page.getByRole("navigation", { name: "Study sections" });
   const tab = (name: string) => navigation.getByRole("link", { name, exact: true });
