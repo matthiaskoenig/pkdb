@@ -81,22 +81,31 @@ export function fileForSource(study: Study, source: SourceSummary, current: stri
   return files.find((file) => source.tables.includes(file)) ?? valid ?? files[0] ?? null;
 }
 
-/** The problems and the open review items of a navigator entry. */
-export interface Counts {
-  problems: number;
+/** The problems of a navigator entry by severity. */
+export interface ProblemCounts {
+  errors: number;
+  warnings: number;
+}
+
+/** The problems by severity and the open review items of a navigator entry. */
+export interface Counts extends ProblemCounts {
   items: number;
 }
 
-/** The problems and the open review items of each file. */
+/** The problems by severity and the open review items of each file. */
 export function fileCounts(detail: Pick<StudyDetail, "problems" | "review">): {
-  problems: Map<string, number>;
+  problems: Map<string, ProblemCounts>;
   items: Map<string, number>;
 } {
-  const problems = new Map<string, number>();
+  const problems = new Map<string, ProblemCounts>();
   const items = new Map<string, number>();
   for (const issue of detail.problems) {
     const file = issue.source?.file;
-    if (file) problems.set(file, (problems.get(file) ?? 0) + 1);
+    if (!file) continue;
+    const counts = problems.get(file) ?? { errors: 0, warnings: 0 };
+    if (issue.severity === "error") counts.errors += 1;
+    else counts.warnings += 1;
+    problems.set(file, counts);
   }
   for (const item of detail.review.value?.items ?? []) {
     const file = item.target?.file;
@@ -113,23 +122,32 @@ function sourceFiles(study: Study, source: SourceSummary): string[] {
 }
 
 /**
- * The problems and open review items of the files of a source. A shared table counts for no
- * source: its rows belong to several. The source pane lists the problems of its rows.
+ * The problems by severity and open review items of the files of a source. A shared table counts
+ * for no source: its rows belong to several. The source pane lists the problems of its rows.
  */
 export function sourceCounts(detail: Counted, source: SourceSummary): Counts {
   const counts = fileCounts(detail);
-  return sourceFiles(detail, source).reduce(
-    (sum, file) => ({
-      problems: sum.problems + (counts.problems.get(file) ?? 0),
-      items: sum.items + (counts.items.get(file) ?? 0),
-    }),
-    { problems: 0, items: 0 },
+  return sourceFiles(detail, source).reduce<Counts>(
+    (sum, file) => {
+      const problems = counts.problems.get(file);
+      return {
+        errors: sum.errors + (problems?.errors ?? 0),
+        warnings: sum.warnings + (problems?.warnings ?? 0),
+        items: sum.items + (counts.items.get(file) ?? 0),
+      };
+    },
+    { errors: 0, warnings: 0, items: 0 },
   );
+}
+
+/** Whether an entry has an error or a warning. */
+function hasProblems(counts: ProblemCounts): boolean {
+  return counts.errors + counts.warnings > 0;
 }
 
 /** The source that the Data section opens on: the first with problems, else the first. */
 export function defaultSource(detail: Counted): SourceSummary | null {
-  return detail.sources.find((source) => sourceCounts(detail, source).problems > 0) ?? detail.sources[0] ?? null;
+  return detail.sources.find((source) => hasProblems(sourceCounts(detail, source))) ?? detail.sources[0] ?? null;
 }
 
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */

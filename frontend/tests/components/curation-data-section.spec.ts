@@ -1236,8 +1236,8 @@ describe("tables", () => {
       "Example_Tab2.tsv",
     ]);
     const entry = files()[3]!;
-    expect(entry.get(".nav-count--problems .d-sr-only").text()).toBe("2 problems");
-    expect(entry.get(".nav-count:not(.nav-count--problems) .d-sr-only").text()).toBe("1 open review item");
+    expect(entry.get(".nav-count--error .d-sr-only").text()).toBe("1 error, 1 warning");
+    expect(entry.get(".nav-count:not(.nav-count--error) .d-sr-only").text()).toBe("1 open review item");
     expect(files()[0]!.find(".nav-count").exists()).toBe(false);
     // The source with problems opens on its table.
     expect(entry.attributes("aria-current")).toBe("true");

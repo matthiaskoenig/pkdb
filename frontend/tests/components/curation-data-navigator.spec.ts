@@ -6,7 +6,13 @@ import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixture
 
 enableAutoUnmount(afterEach);
 
-const problem = (file: string): Problem => ({ code: "c", severity: "error", message: "m", source: { file }, acknowledgeable: false });
+const problem = (file: string, severity: Problem["severity"] = "error"): Problem => ({
+  code: "c",
+  severity,
+  message: "m",
+  source: { file },
+  acknowledgeable: false,
+});
 
 function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
   return studyDetail({
@@ -78,8 +84,38 @@ describe("data navigator", () => {
 
   it("shows the problems of a source and of a file, with their meaning for screen readers", () => {
     const wrapper = mountNavigator();
-    expect(wrapper.findAll(".nav-source")[1]!.text()).toContain("2 problems");
-    expect(wrapper.findAll(".nav-file")[1]!.text()).toContain("2 problems");
+    expect(wrapper.findAll(".nav-source")[1]!.text()).toContain("2 errors");
+    expect(wrapper.findAll(".nav-file")[1]!.text()).toContain("2 errors");
+  });
+
+  it("shows warnings in the warning tone with a triangle, and one number for both severities", () => {
+    const wrapper = mountNavigator({
+      detail: detail({
+        problems: [
+          problem("timecourses_Fig1.tsv", "warning"),
+          problem("timecourses_Fig1.tsv", "warning"),
+          problem("outputs_Tab2.tsv"),
+          problem("outputs_Tab2.tsv", "warning"),
+        ],
+      }),
+    });
+    const [subjects, tab2, fig1] = wrapper.findAll(".nav-file");
+    const warnings = fig1!.get(".nav-count--warning");
+    expect(fig1!.find(".nav-count--error").exists()).toBe(false);
+    expect(warnings.find("i.fa-triangle-exclamation").exists()).toBe(true);
+    expect(warnings.attributes("title")).toBe("2 warnings");
+    expect(warnings.get(".d-sr-only").text()).toBe("2 warnings");
+    expect(warnings.text()).toContain("2");
+    const mixed = tab2!.get(".nav-count--error");
+    expect(mixed.find("i.fa-circle-exclamation").exists()).toBe(true);
+    expect(mixed.attributes("title")).toBe("1 error, 1 warning");
+    expect(mixed.get('[aria-hidden="true"]:not(i)').text()).toBe("2");
+    expect(tab2!.find(".nav-count--warning").exists()).toBe(false);
+    expect(subjects!.find(".nav-count").exists()).toBe(false);
+    // A source counts the warnings of its own files.
+    const sources = wrapper.findAll(".nav-source");
+    expect(sources[0]!.get(".nav-count--warning").attributes("title")).toBe("2 warnings");
+    expect(sources[1]!.get(".nav-count--error").attributes("title")).toBe("1 error, 1 warning");
   });
 
   it("tells the counts of a file apart by an icon or a pill, each with a title", () => {
@@ -95,17 +131,17 @@ describe("data navigator", () => {
       rows: new Map([["outputs_Tab2.tsv", 18]]),
     });
     const entry = wrapper.findAll(".nav-file")[1]!;
-    const problems = entry.get(".nav-count--problems");
+    const problems = entry.get(".nav-count--error");
     expect(problems.find("i.fa-circle-exclamation").attributes("aria-hidden")).toBe("true");
-    expect(problems.attributes("title")).toBe("2 problems");
-    const items = entry.get(".nav-count:not(.nav-count--problems)");
+    expect(problems.attributes("title")).toBe("2 errors");
+    const items = entry.get(".nav-count:not(.nav-count--error)");
     expect(items.find("i.fa-comment").attributes("aria-hidden")).toBe("true");
     expect(items.attributes("title")).toBe("1 open review item");
     const rows = entry.get(".nav-rows");
     expect(rows.find("i").exists()).toBe(false);
     expect(rows.attributes("title")).toBe("18 rows of Tab2");
     // Screen readers read each number with its meaning.
-    expect(problems.get(".d-sr-only").text()).toBe("2 problems");
+    expect(problems.get(".d-sr-only").text()).toBe("2 errors");
     expect(items.get(".d-sr-only").text()).toBe("1 open review item");
     expect(rows.get(".d-sr-only").text()).toBe("18 rows of Tab2");
   });

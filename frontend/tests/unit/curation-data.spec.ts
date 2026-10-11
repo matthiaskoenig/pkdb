@@ -32,8 +32,8 @@ const tab2 = sourceSummary({
 });
 const text = sourceSummary({ source: "Text", kind: "text" });
 
-function problem(file: string, row: number | null = null): Problem {
-  return { code: "c", severity: "error", message: "m", source: { file, row }, acknowledgeable: false };
+function problem(file: string, row: number | null = null, severity: Problem["severity"] = "error"): Problem {
+  return { code: "c", severity, message: "m", source: { file, row }, acknowledgeable: false };
 }
 
 function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
@@ -132,15 +132,40 @@ describe("counts", () => {
 
   it("counts the problems and the open review items of each file", () => {
     const counts = fileCounts(counted);
-    expect(counts.problems.get("outputs_Tab2.tsv")).toBe(2);
+    expect(counts.problems.get("outputs_Tab2.tsv")).toEqual({ errors: 2, warnings: 0 });
     expect(counts.items.get("timecourses_Fig1.tsv")).toBe(1);
     expect(counts.items.size).toBe(1);
   });
 
   it("counts for a source its image, raw extraction and own tables, not the shared tables", () => {
-    expect(sourceCounts(counted, tab2)).toEqual({ problems: 2, items: 0 });
-    expect(sourceCounts(counted, fig1)).toEqual({ problems: 1, items: 1 });
-    expect(sourceCounts(counted, text)).toEqual({ problems: 0, items: 0 });
+    expect(sourceCounts(counted, tab2)).toEqual({ errors: 2, warnings: 0, items: 0 });
+    expect(sourceCounts(counted, fig1)).toEqual({ errors: 1, warnings: 0, items: 1 });
+    expect(sourceCounts(counted, text)).toEqual({ errors: 0, warnings: 0, items: 0 });
+  });
+
+  it("counts errors and warnings apart, any other severity as a warning", () => {
+    const mixed = detail({
+      problems: [
+        problem("outputs_Tab2.tsv", 1, "warning"),
+        problem("outputs_Tab2.tsv", 2, "warning"),
+        problem("outputs_Tab2.tsv", 3),
+        problem("Example_Fig1.png", null, "warning"),
+        { ...problem("timecourses_Fig1.tsv"), severity: "info" as never },
+      ],
+    });
+    const counts = fileCounts(mixed);
+    expect(counts.problems.get("outputs_Tab2.tsv")).toEqual({ errors: 1, warnings: 2 });
+    expect(counts.problems.get("Example_Fig1.png")).toEqual({ errors: 0, warnings: 1 });
+    expect(counts.problems.get("timecourses_Fig1.tsv")).toEqual({ errors: 0, warnings: 1 });
+    expect(sourceCounts(mixed, tab2)).toEqual({ errors: 1, warnings: 2, items: 0 });
+    expect(sourceCounts(mixed, fig1)).toEqual({ errors: 0, warnings: 2, items: 0 });
+  });
+
+  it("counts the warnings of a shared table for no source", () => {
+    const shared = detail({ problems: [problem("subjects.tsv", 2, "warning"), problem("subjects.tsv", 3)] });
+    expect(fileCounts(shared).problems.get("subjects.tsv")).toEqual({ errors: 1, warnings: 1 });
+    expect(sourceCounts(shared, fig1)).toEqual({ errors: 0, warnings: 0, items: 0 });
+    expect(sourceCounts(shared, tab2)).toEqual({ errors: 0, warnings: 0, items: 0 });
   });
 
   it("opens the first source with problems, else the first source, else none", () => {

@@ -33,7 +33,8 @@ const files = computed(() =>
     file,
     name: nameParts(file),
     raw: raw.value.has(file),
-    problems: counts.value.problems.get(file) ?? 0,
+    errors: counts.value.problems.get(file)?.errors ?? 0,
+    warnings: counts.value.problems.get(file)?.warnings ?? 0,
     items: counts.value.items.get(file) ?? 0,
     rows: props.rows?.get(file) ?? null,
     other: props.rows !== null && !props.rows.has(file),
@@ -58,7 +59,7 @@ const files = computed(() =>
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
-          <NavigatorCounts :problems="count.problems" :items="count.items" />
+          <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
         </button>
       </li>
     </ul>
@@ -80,7 +81,7 @@ const files = computed(() =>
           >
           <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
           <span v-if="entry.raw" class="d-sr-only">, raw table</span>
-          <NavigatorCounts :problems="entry.problems" :items="entry.items" />
+          <NavigatorCounts :errors="entry.errors" :warnings="entry.warnings" :items="entry.items" />
           <span v-if="entry.rows !== null" class="nav-rows" :title="`${plural(entry.rows, 'row')} of ${source}`">
             <span class="d-sr-only">{{ plural(entry.rows, "row") }} of {{ source }}</span>
             <span aria-hidden="true">{{ entry.rows }}</span>
