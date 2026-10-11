@@ -437,8 +437,9 @@ const format1Notice = computed(() =>
 }
 /*
  * The counts of the chips change with the filters, and the chips may wrap. So that they never
- * move the fields, the fields do not grow and keep to the top of the row; their 4px margin puts
- * them on the center line of the first row of chips, which their group pads by 4px.
+ * move the fields, the fields do not grow and keep to the top of the row. Their 6px margin puts
+ * them on the center line of the first row of chips: a field is 30px high, and a chip of 26px
+ * stands 8px below the top of its group.
  */
 .overview-filters {
   display: flex;
@@ -449,7 +450,7 @@ const format1Notice = computed(() =>
 .overview-search,
 .overview-substance,
 .overview-curator {
-  margin-block: 4px;
+  margin-block: 6px;
 }
 .overview-search {
   flex: 0 1 20rem;

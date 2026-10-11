@@ -225,7 +225,7 @@ async function add(): Promise<void> {
         <VCardTitle :id="titleId" tag="h2">New review item</VCardTitle>
       </VCardItem>
       <VCardText class="new-item-body">
-        <VRadioGroup v-model="kind" label="Kind" inline hide-details class="new-item-kind">
+        <VRadioGroup v-model="kind" label="Kind" inline hide-details>
           <VRadio v-for="value in KINDS" :key="value" :value="value" :label="KIND_LABELS[value]" />
         </VRadioGroup>
         <VTextarea
@@ -347,13 +347,6 @@ async function add(): Promise<void> {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-/* The label and the circles of the radio buttons start at the edge of the fields below them. */
-.new-item-kind :deep(.v-input__control > .v-label) {
-  margin-inline-start: 0;
-}
-.new-item-kind :deep(.v-selection-control-group) {
-  margin-inline-start: -8px;
 }
 .new-item-target {
   display: flex;

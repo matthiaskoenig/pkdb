@@ -96,6 +96,10 @@ function show(section: Section | null): void {
 </template>
 
 <style scoped>
+/* The label of the select stands above its field, clear of the header. */
+.section-tabs-select {
+  margin-top: 8px;
+}
 .section-tabs {
   display: flex;
   flex-wrap: wrap;

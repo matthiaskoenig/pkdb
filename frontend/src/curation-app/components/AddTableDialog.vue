@@ -131,7 +131,7 @@ async function add(): Promise<void> {
           Adds an empty sheet to the workbook. The table file appears when the sheet has content and you save the
           workbook.
         </p>
-        <VRadioGroup v-model="kind" label="Kind" inline hide-details class="add-table-kind">
+        <VRadioGroup v-model="kind" label="Kind" inline hide-details>
           <VRadio v-for="item in NEW_TABLE_KINDS" :key="item.value" :value="item.value" :label="item.label" />
         </VRadioGroup>
         <!-- While the answer for the current kind and source loads, the last one stays, marked as
@@ -206,13 +206,6 @@ async function add(): Promise<void> {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.45;
-}
-/* The label and the circles of the radio buttons start at the edge of the text above them. */
-.add-table-kind :deep(.v-input__control > .v-label) {
-  margin-inline-start: 0;
-}
-.add-table-kind :deep(.v-selection-control-group) {
-  margin-inline-start: -8px;
 }
 .table-preview dd {
   overflow-wrap: anywhere;

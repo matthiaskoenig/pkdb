@@ -462,12 +462,13 @@ onBeforeUnmount(() => {
   height: auto;
   min-height: 0;
 }
+/* A wrapped line leaves room for the labels of the selects, which stand above their fields. */
 .data-toolbar {
   display: flex;
   flex: 0 0 auto;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 10px 6px;
   min-height: 30px;
 }
 .data-select {
@@ -481,13 +482,6 @@ onBeforeUnmount(() => {
 .data-switch {
   flex: 0 0 auto;
   margin-inline-end: 6px;
-}
-/* The label reads as a part of the toolbar beside it. */
-.data-switch :deep(.v-label) {
-  font-size: 13px;
-}
-.data-switch :deep(.v-selection-control) {
-  min-height: 30px;
 }
 .data-sync-text {
   flex: 1 1 12rem;

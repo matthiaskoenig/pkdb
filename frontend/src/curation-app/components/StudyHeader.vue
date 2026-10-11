@@ -408,12 +408,13 @@ function added(table: string): void {
   flex-direction: column;
   gap: 4px;
 }
-/* One line from 1280 px; below that the parts wrap and the title gets a line of its own. */
+/* One line from 1280 px; below that the parts wrap and the title gets a line of its own. A wrapped
+   line leaves room for the label of the review status, which stands above its field. */
 .study-header-line {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 10px;
+  gap: 8px 10px;
   min-height: 38px;
 }
 @media (min-width: 1280px) {
@@ -475,14 +476,6 @@ function added(table: string): void {
 .review-select {
   width: 150px;
   flex: 0 0 auto;
-  /* A select as low as the small buttons, so that the line stays 38 px high. */
-  --v-input-control-height: 30px;
-  font-size: 12.5px;
-}
-.review-select :deep(.v-field__input) {
-  min-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 .more-actions {
   width: 28px;

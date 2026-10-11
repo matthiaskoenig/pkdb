@@ -8,6 +8,98 @@ html {
   font-size: 0.9286rem;
   line-height: 1.4;
 }
+/* Fields are 30 px high with the 13 px of the body text, and their floating label is 12 px
+   (0.923 of 13 px): Vuetify sizes them for 16 px text in fixed pixels. The icons in a field shrink
+   with its text. Every field of the app is compact (density.ts). */
+.v-input--density-compact {
+  --v-input-control-height: 30px;
+  --v-input-padding-top: 4px;
+}
+.v-input--density-compact .v-field:is(.v-field--variant-outlined, .v-field--single-line, .v-field--no-label) {
+  --v-field-padding-bottom: 4px;
+}
+.v-field {
+  font-size: 0.9286rem;
+}
+.v-field .v-field-label {
+  font-size: 1em;
+}
+.v-field .v-field-label--floating {
+  --v-field-label-scale: 0.923em;
+  font-size: var(--v-field-label-scale);
+}
+.v-field :is(.v-field__prepend-inner, .v-field__append-inner, .v-field__clearable) > .v-icon {
+  font-size: 1.15em;
+}
+/* Text starts 12 px inside the outline, and the floating label in its notch starts where the
+   text does. A field with an icon at its start keeps the spacing of Vuetify. */
+.v-field--variant-outlined:not(.v-field--prepended) {
+  --v-field-padding-start: 12px;
+}
+.v-field--variant-outlined:not(.v-field--prepended) .v-field__outline__start {
+  flex-basis: 8px;
+}
+.v-field--variant-outlined:not(.v-field--appended) {
+  --v-field-padding-end: 12px;
+}
+/* Hints and messages below a field start where its text does. */
+.v-input--indent-details .v-input__details {
+  padding-inline: 12px;
+}
+
+/* Switches, radios and checkboxes stand in 28 px rows with 13 px labels; their inputs stay 25 px
+   or more as targets. */
+.v-input:is(.v-switch, .v-checkbox, .v-radio-group).v-input--density-compact {
+  --v-input-control-height: 28px;
+}
+.v-selection-control .v-label {
+  font-size: 0.9286rem;
+}
+/* Radio circles and checkboxes are 16 px, which leaves a gap to their label in the 28 px input. */
+.v-selection-control__input > .v-icon {
+  font-size: 1.1429rem;
+}
+/* Radios in a line keep apart from the label of the radio before them. */
+.v-selection-control-group--inline > .v-selection-control:not(:last-child) {
+  margin-inline-end: 8px;
+}
+/* The label of a radio group is 12 px, as the floating label of a field. The label and the first
+   circle start at the edge of the content, as fields and headings do: a circle stands 6 px inside
+   its input. */
+.v-radio-group > .v-input__control > .v-label {
+  margin-inline-start: 0;
+  font-size: 0.8571rem;
+}
+.v-radio-group > .v-input__control > .v-label + .v-selection-control-group {
+  margin-top: 2px;
+  padding-inline-start: 0;
+}
+.v-radio-group .v-selection-control-group {
+  margin-inline-start: -6px;
+}
+
+/* An extra small chip, 20 px high, has the 10.5 px text of a small one: the 8.75 px of the
+   compact root size are too small to read. */
+.v-chip.v-chip--size-x-small {
+  font-size: 0.75rem;
+}
+
+/* Expansion panels have 32 px titles, also while open. */
+.v-expansion-panel-title {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 0.9286rem;
+}
+.v-expansion-panel--active > .v-expansion-panel-title:not(.v-expansion-panel-title--static) {
+  min-height: 32px;
+}
+.v-expansion-panel-title__icon > .v-icon {
+  font-size: 1rem;
+}
+.v-expansion-panel-text__wrapper {
+  padding: 4px 12px 12px;
+}
+
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;

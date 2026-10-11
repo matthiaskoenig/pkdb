@@ -366,14 +366,15 @@ const items = computed(() =>
 .cell-select :deep(.v-selection-control) {
   justify-content: center;
 }
-/* The checkbox and the chips of a row fit the 24px of the row, of which 1px is its border. */
+/* The checkbox and the chips of a row fit the 24px of the row, of which 1px is its border. The
+   input of the checkbox, its target, is 24px and reaches over the border. */
 .cell-select :deep(.v-selection-control) {
   min-height: 23px;
   --v-selection-control-size: 20px;
 }
 .cell-select :deep(.v-selection-control__input) {
-  width: 23px;
-  height: 23px;
+  width: 24px;
+  height: 24px;
 }
 .study-table :deep(.v-chip) {
   height: 20px;
