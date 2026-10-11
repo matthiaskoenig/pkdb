@@ -44,18 +44,19 @@ const SCREENS: Screen[] = [
     },
   },
   {
-    name: "sources",
-    hash: `${STUDY}/sources`,
+    name: "data of a figure",
+    hash: `${STUDY}/data?source=Fig1`,
     ready: async (page) => {
-      await expect(page.getByRole("tab", { name: "Fig1", selected: true })).toBeVisible();
       await expect(page.getByRole("list", { name: "Series" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" })).toBeVisible();
     },
   },
   {
-    name: "tables",
-    hash: `${STUDY}/tables?file=timecourses_Fig1.tsv`,
+    name: "data of a table",
+    hash: `${STUDY}/data?source=Tab2&file=outputs_Tab2.tsv`,
     ready: async (page) => {
-      await expect(page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Raw extraction Demo2020_Tab2.tsv" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" })).toBeVisible();
     },
   },
   {
@@ -111,7 +112,7 @@ const DIALOGS: Dialog[] = [
   },
   {
     name: "Add table",
-    hash: `${STUDY}/tables`,
+    hash: `${STUDY}/data`,
     open: (page) => page.getByRole("button", { name: "Add table", exact: true }).click(),
   },
 ];
