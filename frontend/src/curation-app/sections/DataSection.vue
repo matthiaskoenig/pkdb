@@ -287,7 +287,6 @@ const conflictPanel = computed(() => {
   const running = busy.value;
   return { conflicts: detail.value?.conflicts ?? [], busy: running === "sync" ? null : running, disabled: working.value };
 });
-
 </script>
 
 <template>
