@@ -74,7 +74,7 @@ The overview lists the study format 2 folders of the workspace by their identity
 | Review | The status of `review.json` (Draft, In review or Approved), and **AI** for an automatic curation. |
 | Open items | The number of open review items. |
 | Problems | The errors and warnings of the last validation, or **valid**, and what the study is doing, such as **Validating**. |
-| Sync | The sync status of the workbook and the tables, see [Tables](#tables). |
+| Sync | The sync status of the workbook and the tables, see [Data](#data). |
 | Release | The PKDB identifier of the release in `study.json`. |
 | Issue | The GitHub issue of the study, from `issue` in `study.json`. GitHub is read with `GH_TOKEN` or `GITHUB_TOKEN`, see the [environment table](python-client.md#environment-variables). |
 | Curators | The curators, with names and pictures from the curator roster that comes with `pkdb`, also offline. |
@@ -89,9 +89,11 @@ Study format 1 folders are not listed. The line below the table counts them, and
 
 ## The study page
 
-The header of a study shows its identity, its release, its issue and its provenance, the title of the publication, the PMID, the On save action, the sync status, the problems and the last upload. Its actions are the **Review status** select, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
+The header of a study is one line: its identity, its release, its issue and its provenance, the title of the publication, the PMID, the sync status, the problems, the **Review status** select, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
 
-The rail on the left lists the sections Metadata, Review, Problems, Sources, Tables and Activity, with the number of open review items, problems, sources and tables. A study beyond the upload limits shows no number of sources and tables, because the app cannot read them; its Sources and Tables sections and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
+Tabs under the header switch between the sections Metadata, Review, Problems, Data and Activity. The tabs of Review and Problems count the open review items and the problems. At the end of the tab line are two facts: **On save**, the action of a save, and **Last upload**, with a link to the study on PK-DB. A narrow window turns the tabs into a select. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
+
+The old addresses `#/studies/<substance>/<name>/sources` and `.../tables` open the Data section, with their query.
 
 ### Metadata
 
@@ -127,27 +129,27 @@ The **Review status** select in the header sets Draft, In review or Approved. Ap
 
 The Problems section lists the issues of the last validation by file. Each shows its severity, code and message, and where it is: the line and the column of the TSV file and the cell of the workbook sheet. Spelling suggestions follow **Did you mean:**.
 
-Filter by **All**, **Errors** or **Warnings**. **Show in table** opens the Tables section at the cell of the issue. **Open** opens another file of the study, such as `study.json`, in its default application, and **Open tables** opens the workbook.
+Filter by **All**, **Errors** or **Warnings**. **Show in table** opens the Data section at the cell of the issue. **Open** opens another file of the study, such as `study.json`, in its default application, and **Open tables** opens the workbook.
 
 **Acknowledge** marks a warning as expected; errors cannot be acknowledged. Neither can the warnings of a sync that stopped before the validation, such as a workbook saved during the sync: they are about the workbook, not about the study files. It asks for a reason and writes a resolved review item that acknowledges exactly this warning: a warning at a row of a data table at its row and column, and a warning of a whole file by its key, such as the dataset of a WebPlotDigitizer project or the review item of `review.json`. Other warnings with the same code, also later ones, stay listed. The warning leaves the list after the next validation. The acknowledged warnings are listed below the problems with their reason and a link to their review item. An acknowledgement that names only a file, as the app wrote before acknowledgements were exact, covers every warning of its code in that file, also later ones, and the list says so. Dismissing the review item brings its warnings back.
 
-### Sources
+### Data
 
-The Sources section has a tab for each source of the study: each paper table (`Tab…`), each figure (`Fig…`), and the text (`Text`).
+The Data section shows a source of the study beside the rows of a table. It has three panes: the navigator, the source pane and the rows pane.
 
-[![The Sources section of the figure Fig1: the digitized points and the mapped rows on the image, with the hover label of a mapped row that lies away from its digitized point.](images/curation/sources.png)](images/curation/sources.png)
+[![The Data section with the figure Fig1: the navigator of sources and table files, the digitized points and the mapped rows on the image with the hover label of the selected mapped row, and the rows of timecourses_Fig1.tsv with that row marked.](images/curation/data.png)](images/curation/data.png)
 
-- A table shows its image, its raw extraction `<name>_<source>.tsv` as a grid with spreadsheet column letters, and the mapped rows.
-- A figure with a WebPlotDigitizer project `<name>_<source>.wpd.json` shows the digitization on the image: dots for the digitized points, short bars for the digitized ends of error bars, crosses for the mapped rows and lines for their error bars. Hover a point to see its file, TSV line, series and values, and click a point, bar or cross to show its row in the Tables section. **Data of the plot** lists every point in a table. The series without a dataset in the project are plotted below the image.
-- A figure without a project shows its image and a plot of the mapped rows.
+- The navigator lists the sources, each paper table (`Tab…`), figure (`Fig…`) and the text (`Text`), with a thumbnail of its image, and the table files in the order of the workbook sheets, with the raw tables last. A source and a file show the number of their problems and open review items. While a source is selected, a file shows how many rows of the source it has, and a file without any is dimmed. In a window narrower than 1100 pixels the navigator becomes two selects, **Source** and **Table**, in the toolbar.
+- The source pane shows the selected source. A table shows its image and its raw extraction `<name>_<source>.tsv` as a grid with spreadsheet column letters. A figure with a WebPlotDigitizer project `<name>_<source>.wpd.json` shows the digitization on the image: dots for the digitized points, short bars for the digitized ends of error bars, crosses for the mapped rows and lines for their error bars. Hover a point to see its file, TSV line, series and values. **Data of the plot** lists every point in a table, and the series without a dataset in the project are plotted below the image. A figure without a project shows its image and a plot of the mapped rows. A missing image or raw extraction shows the name of the file to add. The problems of the files of the source are listed at the end, by file, as in the Problems section.
+- The rows pane shows the selected table file, read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined.
 
-The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `characteristica.tsv` and `interventions.tsv` whose `source` names it. They are grouped by table in the order of the workbook sheets, and each line number links to the row in the Tables section. A missing image or raw extraction shows the name of the file to add. The problems of the files of a source are listed at the end, by file, as in the Problems section.
+The separator between the source pane and the rows pane resizes them; drag it or focus it and press the arrow keys. The app remembers the split. In a window narrower than 960 pixels the panes stack, the source above its rows.
 
-### Tables
+The selection is linked. Choose a source in the navigator, and the pane shows it and the rows pane shows the table file of its mapped rows. Choose a table file, and the pane shows the source that owns it. Click a row, and the source pane rings its point on the plot or the image. Click the cross of a mapped row, and the rows pane selects its row. The selection is in the address of the page as `source`, `file`, `line` and `column`, so that **Show in table** of the Problems and Review sections and the line numbers of a review target open the row.
 
-The Tables section starts with the sync status of the workbook `<name>.xlsx` and the tables.
+The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `characteristica.tsv` and `interventions.tsv` whose `source` names it. A table shared by several sources, such as `subjects.tsv`, names the source of each row. The switch **Rows of <source> only** shows the rows of the selected source until you turn it off. **Hide empty columns** hides the columns without values; it is on when the section opens, and the line above the grid counts the hidden columns.
 
-[![The Tables section in a conflict: the workbook and the TSV file changed the mean of the same row, and the panel shows the last sync, the workbook row and the table line with Keep workbook, Keep tables and Open workbook.](images/curation/tables-conflict.png)](images/curation/tables-conflict.png)
+The toolbar starts with these switches. After them come **Sync**, which syncs the workbook `<name>.xlsx` and the tables at once, and **Add table**, which adds a sheet to the workbook, see [Work with the workbook](#work-with-the-workbook). A line of text ends the toolbar: after a sync in the app it says what the sync changed, and while the status is not In sync it says what the status means. The sync status itself is in the study header.
 
 | Status | Meaning |
 | --- | --- |
@@ -160,9 +162,9 @@ The Tables section starts with the sync status of the workbook `<name>.xlsx` and
 | Unknown | The workbook or the tables cannot be read. |
 | Not checked yet | The app has not checked the workbook and the tables yet. |
 
-When the workbook and the tables conflict, the panel **Conflicting rows** shows the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it. Validation and upload wait until the conflict is resolved.
+[![The Data section in a conflict: the workbook and the TSV file changed the mean of the same row, and the panel at the top of the rows pane shows the last sync, the workbook row and the table line with Keep workbook, Keep tables and Open workbook.](images/curation/data-conflict.png)](images/curation/data-conflict.png)
 
-Below the status are **Sync**, which syncs at once, and **Add table**, then a tab for each table and raw table in the order of the workbook sheets: `subjects`, `characteristica`, `interventions`, the outputs, timecourses and scatters, and the raw tables. A tab counts the problems and the open review items of its table. The grid is read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined. **Hide empty columns** hides the columns without values; it is on when the section opens, and the line above the grid counts the hidden columns.
+When the workbook and the tables conflict, the panel **Conflicting rows** shows at the top of the rows pane, with the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it. Validation and upload wait until the conflict is resolved.
 
 ### Activity
 
@@ -203,9 +205,9 @@ When the connection fails during an upload, the outcome of the upload is unknown
 
 Tables are edited in the workbook `<name>.xlsx`, not in the app. **Open tables** syncs the study, creates the workbook when it does not exist, and opens it in the default application for `.xlsx` files. Save the workbook, and the app syncs it into the tables, formats them and validates the study. The app never replaces a workbook that is open; close it so that the app can update it from the tables. See [Edit tables in a workbook](workbooks.md).
 
-**Add table**, in the study menu or the Tables section, adds an empty sheet to the workbook: a table of outputs, timecourses or scatters for a source such as `Tab3`, `Fig2A` or `Text`, or the raw table `<name>_<source>` of a paper table. Close the workbook first. The TSV file appears when the sheet has content and you save the workbook. Validation needs the image `<name>_<source>.png` of every paper table and figure.
+**Add table**, in the study menu or the Data section, adds an empty sheet to the workbook: a table of outputs, timecourses or scatters for a source such as `Tab3`, `Fig2A` or `Text`, or the raw table `<name>_<source>` of a paper table. Close the workbook first. The TSV file appears when the sheet has content and you save the workbook. Validation needs the image `<name>_<source>.png` of every paper table and figure.
 
-When the workbook and the TSV files changed the same rows since the last sync, the sync stops and reports a conflict. Resolve it in the [Tables](#tables) section, or with `pkdb tables sync --keep workbook` or `--keep tables`.
+When the workbook and the TSV files changed the same rows since the last sync, the sync stops and reports a conflict. Resolve it in the [Data](#data) section, or with `pkdb tables sync --keep workbook` or `--keep tables`.
 
 ## WebPlotDigitizer projects
 
@@ -217,7 +219,7 @@ pkdb digitize import /path/to/studies/caffeine/Demo2020 Fig1 Demo2020_Fig1.tar
 
 The command takes a project `.json` file or a saved `.tar` project, checks it against the image, and writes `<name>_<source>.wpd.json`. When the study has no image yet and the `.tar` project holds exactly one PNG image, it writes the image too. Name each dataset after its series: the `label` of a timecourse for its central values, `<label>;error_bar` for the ends of its error bars, and the `name` of a scatter for its points.
 
-The Sources section then draws the digitized points and the mapped rows on the image. Validation warns about a dataset without rows (`unknown_dataset`). It also warns, as `digitized_mismatch`, about a mapped row more than 2 pixels away from every point of its dataset, and about the points of a dataset that have no mapped row within 2 pixels. `pkdb plot` draws the same comparison into PNG files, for agents. See [Raw extraction](study-format.md#raw-extraction) for the accepted projects.
+The Data section then draws the digitized points and the mapped rows on the image. Validation warns about a dataset without rows (`unknown_dataset`). It also warns, as `digitized_mismatch`, about a mapped row more than 2 pixels away from every point of its dataset, and about the points of a dataset that have no mapped row within 2 pixels. `pkdb plot` draws the same comparison into PNG files, for agents. See [Raw extraction](study-format.md#raw-extraction) for the accepted projects.
 
 ## AI-curated studies
 
@@ -225,7 +227,7 @@ An AI agent curates a study with the same files and the `pkdb` command line. It 
 
 - **AI** in the Review column of the overview and **AI curated** with the method in the study header, when the provenance in `study.json` is an automatic curation;
 - a robot on the cards of the items of the agent, and **written by** with the name of the agent on the selected item;
-- the raw extraction next to the mapped rows of each source in the Sources section.
+- the raw extraction of each paper table in the source pane of the Data section, beside its mapped rows.
 
 Agents may add, answer, resolve and dismiss items, but a person approves a study: `pkdb review status approved` refuses to run for an agent, and the app always writes as a person. See the curation commands in [Python client](python-client.md#study-format-2-folders).
 
