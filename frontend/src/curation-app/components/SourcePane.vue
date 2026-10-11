@@ -196,7 +196,8 @@ const automatic = computed(() =>
           >
         </p>
 
-        <details v-if="problemGroups.length" :open="problemGroups.length > 0" class="source-problems">
+        <!-- Open for each source, also after the curator closed them for the last one. -->
+        <details v-if="problemGroups.length" :key="summary.source" open class="source-problems">
           <summary>Problems ({{ problemCount }})</summary>
           <!-- As in the Problems section: by file, the files with errors first. -->
           <section

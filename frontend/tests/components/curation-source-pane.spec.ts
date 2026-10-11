@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { enableAutoUnmount, mount } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import type { SourceView } from "../../src/curation-app/api/types";
+import type { Problem, SourceView } from "../../src/curation-app/api/types";
 import SourcePane from "../../src/curation-app/components/SourcePane.vue";
-import { sourceSummary } from "../unit/curation-fixtures";
+import { useStudyStore } from "../../src/curation-app/stores/study";
+import { snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { serveApi } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -115,5 +117,41 @@ describe("source pane", () => {
     await buttons[1]!.trigger("click");
     expect(buttons[1]!.attributes("aria-pressed")).toBe("true");
     vi.restoreAllMocks();
+  });
+});
+
+describe("problems of the source", () => {
+  /** A problem of the raw extraction of a paper table. */
+  const problem = (file: string): Problem => ({
+    code: "raw_row_empty",
+    severity: "warning",
+    message: `${file} has an empty row.`,
+    source: { file, row: 2 },
+    acknowledgeable: false,
+  });
+
+  it("opens them again for the next source after the curator closed them", async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    serveApi({
+      "GET /local/state": snapshot(),
+      [`GET ${EXAMPLE}`]: studyDetail({ problems: [problem("Example_Tab2.tsv"), problem("Example_Tab3.tsv")] }),
+    });
+    const study = useStudyStore();
+    await study.open("caffeine", "Example");
+    const tab3 = sourceSummary({ source: "Tab3", image: "Example_Tab3.png", raw: "Example_Tab3.tsv", raw_kind: "table" });
+    const wrapper = mount(SourcePane, {
+      props: { summary, view, loading: false, error: null, selected: null },
+      global: { plugins: [pinia] },
+    });
+    const details = () => wrapper.get<HTMLDetailsElement>("details.source-problems").element;
+    expect(wrapper.get(".source-problems").text()).toContain("Example_Tab2.tsv has an empty row.");
+    expect(details().open).toBe(true);
+    details().open = false;
+    await wrapper.setProps({ summary: tab3, view: { ...view, source: "Tab3", image: "Example_Tab3.png" } });
+    await flushPromises();
+    expect(wrapper.get(".source-problems").text()).toContain("Example_Tab3.tsv has an empty row.");
+    expect(details().open).toBe(true);
+    study.close();
   });
 });
