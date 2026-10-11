@@ -275,10 +275,12 @@ class Handler(BaseHTTPRequestHandler):
         self._reply(200, data, content_type=content_type, nonce=nonce)
 
     def do_POST(self):
-        if not self._allowed(mutation=True):
-            return
         path = urlsplit(self.path).path
-        if path != "/local/session" and not self._authenticated(mutation=True):
+        if not self._allowed(mutation=True) or (
+            path != "/local/session" and not self._authenticated(mutation=True)
+        ):
+            # Refused before the body was read: discard it, as _refuse does.
+            self._discard_body(self.headers.get("Content-Length", "0"))
             return
         try:
             if (
@@ -383,13 +385,20 @@ class Handler(BaseHTTPRequestHandler):
         )
 
     def _refuse(self, status, message, size):
-        """Reply without reading the body, then discard what the client sends, within bounds.
+        """Reply without reading the body, then discard what the client sends."""
+        self._reply(status, {"error": message})
+        self._discard_body(size)
+
+    def _discard_body(self, size):
+        """Discard the body of a request that got its reply unread, within bounds, and close.
 
         Closing the connection with unread data resets it, and the client would lose the reply.
         """
         self.close_connection = True
-        self._reply(status, {"error": message})
-        remaining = min(size, DRAIN_LIMIT)
+        try:
+            remaining = min(int(size), DRAIN_LIMIT)
+        except ValueError:
+            return
         try:
             self.connection.settimeout(2)
             while remaining > 0 and (chunk := self.rfile.read1(min(remaining, 65536))):
