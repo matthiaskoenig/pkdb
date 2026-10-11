@@ -93,6 +93,22 @@ def test_study_detail(api):
     assert json.loads(changed[2])["metadata"]["value"]["licence"] == "closed"
 
 
+def test_study_detail_names_the_image_url_of_each_source(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    (folder / "Example_Tab2.png").unlink()
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    sources = {source["source"]: source for source in detail["sources"]}
+    # The same URL as the source view, so that the browser shows one image for both.
+    assert sources["Fig1"]["image_url"] == f"{DETAIL}/files/Example_Fig1.png"
+    view = json.loads(
+        request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
+    )
+    assert view["image_url"] == sources["Fig1"]["image_url"]
+    # A source without an image has no URL.
+    assert sources["Tab2"]["image"] is None and sources["Tab2"]["image_url"] is None
+
+
 def test_detail_etag_changes_with_a_job(api):
     server, engine, folder = api
     headers = authenticate(server)

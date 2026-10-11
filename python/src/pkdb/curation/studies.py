@@ -174,6 +174,12 @@ def study_summary(folder: Path) -> dict:
     }
 
 
+def _file_url(identity: str, file: str) -> str:
+    """The URL at which the local API serves a file of the study `identity`."""
+    segments = (*identity.split("/"), "files", file)
+    return "/local/studies/" + "/".join(quote(s, safe="") for s in segments)
+
+
 def _issues(issues: list[ValidationIssue]) -> list[dict]:
     return [issue.model_dump(mode="json") for issue in issues]
 
@@ -491,7 +497,16 @@ class StudiesMixin(EngineState):
             sources, files, tables = [], [], []
         else:
             layout = study.layout
-            sources = [dataclasses.asdict(source) for source in study_sources(study)]
+            # With the URL of the image, which the navigator of the Data section shows.
+            sources = [
+                {
+                    **dataclasses.asdict(source),
+                    "image_url": None
+                    if source.image is None
+                    else _file_url(identity, source.image),
+                }
+                for source in study_sources(study)
+            ]
             files = sorted(layout.files, key=natural_key)
             tables = [
                 {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
@@ -566,12 +581,7 @@ class StudiesMixin(EngineState):
 
     def study_source(self, identity: str, source: str) -> dict:
         view = source_view(_bounded(self.study_folder(identity)), source)
-        image_url = None
-        if view.image is not None:
-            segments = (*identity.split("/"), "files", view.image)
-            image_url = "/local/studies/" + "/".join(
-                quote(s, safe="") for s in segments
-            )
+        image_url = None if view.image is None else _file_url(identity, view.image)
         return {**dataclasses.asdict(view), "image_url": image_url}
 
     def study_image(self, identity: str, file: str) -> tuple[bytes, str]:

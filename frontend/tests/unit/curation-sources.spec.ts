@@ -59,6 +59,7 @@ describe("sourceProblems", () => {
     source: "Tab2",
     kind: "table",
     image: "Example_Tab2.png",
+    image_url: "/x.png",
     raw: "Example_Tab2.tsv",
     raw_kind: "table",
     tables: ["outputs_Tab2.tsv", "subjects.tsv"],
