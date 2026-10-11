@@ -20,7 +20,12 @@ export const POINT_RING = "#1f1f1f";
 /** The color of a series that the source view does not list, which does not happen in a valid view. */
 const UNKNOWN_COLOR = "#757575";
 
-/** Amber, apart from the series colors and readable on the paper and on both themes. */
+/**
+ * The ring of the selected row: amber, apart from the series colors, on a dark outline of
+ * `POINT_RING`. The outline has 16.5:1 on the white paper and on the plot of the light theme,
+ * where the amber has only 2.2:1; the amber has 6.8:1 on the dark surface #192b31, where the
+ * outline has 1.1:1, and 7.7:1 against the outline.
+ */
 const SELECTED_COLOR = "#e8a400";
 
 /** The opacity of the series beside an emphasized series. */
@@ -210,23 +215,25 @@ function emphasizedLast(traces: OverlayTrace[]): OverlayTrace[] {
 /** A row that the curator selected, whose point gets a ring. */
 export type SelectedRow = { file: string; line: number } | null;
 
-/** A ring around the points of the selected row, drawn last so that it stays on top. */
-function selectedTrace(points: { x: number; y: number }[], color: string): OverlayTrace[] {
+/**
+ * A ring around the points of the selected row, drawn last so that it stays on top: the amber
+ * ring on a wider dark one, which shows on both sides of it (`SELECTED_COLOR`).
+ */
+function selectedTrace(points: { x: number; y: number }[]): OverlayTrace[] {
   if (!points.length) return [];
-  return [
-    {
-      type: "scatter",
-      meta: "selected",
-      name: "selected",
-      mode: "markers",
-      x: points.map((point) => point.x),
-      y: points.map((point) => point.y),
-      opacity: 1,
-      showlegend: false,
-      marker: { symbol: "circle-open", size: 16, color, line: { width: 2.5, color } },
-      hoverinfo: "skip",
-    },
-  ];
+  const ring = (meta: string, color: string, width: number): OverlayTrace => ({
+    type: "scatter",
+    meta,
+    name: "selected",
+    mode: "markers",
+    x: points.map((point) => point.x),
+    y: points.map((point) => point.y),
+    opacity: 1,
+    showlegend: false,
+    marker: { symbol: "circle-open", size: 16, color, line: { width, color } },
+    hoverinfo: "skip",
+  });
+  return [ring("selected outline", POINT_RING, 5.5), ring("selected", SELECTED_COLOR, 2.5)];
 }
 
 function baseLayout(theme: PlotTheme): Omit<OverlayLayout, "xaxis" | "yaxis" | "margin"> {
@@ -340,7 +347,6 @@ export function overlayTraces(
               point.role === "mapped" && selected !== null && point.file === selected.file && point.line === selected.line,
           )
           .map((point) => ({ x: point.px, y: point.py })),
-        SELECTED_COLOR,
       ),
     ],
     layout: {
@@ -426,7 +432,6 @@ export function plotTraces(
       ...emphasizedLast(traces),
       ...selectedTrace(
         points.filter((point) => selected !== null && point.file === selected.file && point.line === selected.line),
-        SELECTED_COLOR,
       ),
     ],
     layout: {

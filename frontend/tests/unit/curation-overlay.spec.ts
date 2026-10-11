@@ -317,6 +317,19 @@ describe("plotTraces", () => {
   });
 });
 
+/** The contrast ratio of two colors `#rrggbb` (WCAG 2). */
+function contrast(first: string, second: string): number {
+  const luminance = (color: string) => {
+    const [red, green, blue] = [1, 3, 5].map((start) => {
+      const value = Number.parseInt(color.slice(start, start + 2), 16) / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * red! + 0.7152 * green! + 0.0722 * blue!;
+  };
+  const [light, dark] = [luminance(first), luminance(second)].sort((a, b) => b - a);
+  return (light! + 0.05) / (dark! + 0.05);
+}
+
 describe("the selected row", () => {
   const plain = figure({
     digitization: null,
@@ -334,6 +347,20 @@ describe("the selected row", () => {
     expect(last.marker?.symbol).toBe("circle-open");
     expect(last.hoverinfo).toBe("skip");
     expect(last.showlegend).toBe(false);
+  });
+
+  it("draws the ring in amber on a dark outline, which keep 3:1 on the paper and on the dark surface", () => {
+    const { traces } = overlayTraces(figure(), null, undefined, 1, { file: TIMECOURSES, line: 2 });
+    const [outline, ring] = traces.slice(-2);
+    expect(outline!.meta).toBe("selected outline");
+    expect(outline!.marker).toEqual({ symbol: "circle-open", size: 16, color: POINT_RING, line: { width: 5.5, color: POINT_RING } });
+    expect([outline!.x, outline!.y]).toEqual([ring!.x, ring!.y]);
+    const amber = ring!.marker!.line!.color as string;
+    expect(ring!.marker!.line!.width).toBe(2.5);
+    // The outline on the white paper and on the plot of the light theme, the ring on the dark surface.
+    expect(contrast(POINT_RING, "#ffffff")).toBeGreaterThanOrEqual(3);
+    expect(contrast(amber, "#192b31")).toBeGreaterThanOrEqual(3);
+    expect(contrast(amber, POINT_RING)).toBeGreaterThanOrEqual(3);
   });
 
   it("rings the plotted point of the selected row", () => {
