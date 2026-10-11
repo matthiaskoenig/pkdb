@@ -162,7 +162,7 @@ The Tables section starts with the sync status of the workbook `<name>.xlsx` and
 
 When the workbook and the tables conflict, the panel **Conflicting rows** shows the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it. Validation and upload wait until the conflict is resolved.
 
-Below the status are **Sync**, which syncs at once, and **Add table**, then a tab for each table and raw table. A tab counts the problems and the open review items of its table. The grid is read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined. **Hide empty columns** hides the columns without values.
+Below the status are **Sync**, which syncs at once, and **Add table**, then a tab for each table and raw table. A tab counts the problems and the open review items of its table. The grid is read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined. **Hide empty columns** hides the columns without values; it is on when the section opens, and the line above the grid counts the hidden columns.
 
 ### Activity
 

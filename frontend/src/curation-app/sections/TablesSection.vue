@@ -136,7 +136,8 @@ const { data, error, loading, reload } = useLoaded<TableResponse, StudyDetail | 
 /** The rows of the chosen table; null while another one is shown or it loads. */
 const table = computed(() => (data.value && data.value.key === selected.value ? data.value.content : null));
 
-const hideEmpty = ref(false);
+// Most tables leave many of their fixed columns empty, so they are hidden until the curator shows them.
+const hideEmpty = ref(true);
 /**
  * The study page that the rows were loaded for. Its review items and the lines that the local
  * server matched for them belong to these rows: after a table changed, a newer page can arrive
