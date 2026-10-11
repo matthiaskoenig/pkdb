@@ -416,7 +416,8 @@ function added(table: string): void {
   flex-direction: column;
   gap: 4px;
 }
-/* One line from 1280 px; below that the parts wrap and the title gets a line of its own. */
+/* One line from 1280 px; below that the parts wrap onto more lines where they do not fit, the
+   title shrinking to 12rem before it wraps. */
 .study-header-line {
   display: flex;
   flex-wrap: wrap;
