@@ -440,8 +440,8 @@ describe("tabs", () => {
     await mountSection();
     expect(tabs().map((tab) => tab.get(".tab-name").text())).toEqual([
       "subjects.tsv",
-      "interventions.tsv",
       "characteristica.tsv",
+      "interventions.tsv",
       "outputs_Tab2.tsv",
       "timecourses_Fig1.tsv",
       "Example_Tab2.tsv",

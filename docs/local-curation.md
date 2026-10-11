@@ -141,7 +141,7 @@ The Sources section has a tab for each source of the study: each paper table (`T
 - A figure with a WebPlotDigitizer project `<name>_<source>.wpd.json` shows the digitization on the image: dots for the digitized points, short bars for the digitized ends of error bars, crosses for the mapped rows and lines for their error bars. Hover a point to see its file, TSV line, series and values, and click a point, bar or cross to show its row in the Tables section. **Data of the plot** lists every point in a table. The series without a dataset in the project are plotted below the image.
 - A figure without a project shows its image and a plot of the mapped rows.
 
-The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `interventions.tsv` and `characteristica.tsv` whose `source` names it. They are grouped by table, and each line number links to the row in the Tables section. A missing image or raw extraction shows the name of the file to add. The problems of the files of a source are listed at the end, by file, as in the Problems section.
+The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `characteristica.tsv` and `interventions.tsv` whose `source` names it. They are grouped by table in the order of the workbook sheets, and each line number links to the row in the Tables section. A missing image or raw extraction shows the name of the file to add. The problems of the files of a source are listed at the end, by file, as in the Problems section.
 
 ### Tables
 
@@ -162,7 +162,7 @@ The Tables section starts with the sync status of the workbook `<name>.xlsx` and
 
 When the workbook and the tables conflict, the panel **Conflicting rows** shows the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it. Validation and upload wait until the conflict is resolved.
 
-Below the status are **Sync**, which syncs at once, and **Add table**, then a tab for each table and raw table. A tab counts the problems and the open review items of its table. The grid is read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined. **Hide empty columns** hides the columns without values; it is on when the section opens, and the line above the grid counts the hidden columns.
+Below the status are **Sync**, which syncs at once, and **Add table**, then a tab for each table and raw table in the order of the workbook sheets: `subjects`, `characteristica`, `interventions`, the outputs, timecourses and scatters, and the raw tables. A tab counts the problems and the open review items of its table. The grid is read only. Its line numbers are the lines of the TSV file, the rows that open review items target are amber, and the cells with problems are outlined. **Hide empty columns** hides the columns without values; it is on when the section opens, and the line above the grid counts the hidden columns.
 
 ### Activity
 

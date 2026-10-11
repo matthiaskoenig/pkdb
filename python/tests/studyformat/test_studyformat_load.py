@@ -22,8 +22,9 @@ def test_load_valid_study(make_study, valid_files):
     study = load_study(make_study(valid_files))
     assert study.issues == []
     assert study.name == "Example"
-    assert [table.file for table in study.tables][:2] == [
+    assert [table.file for table in study.tables][:3] == [
         "subjects.tsv",
+        "characteristica.tsv",
         "interventions.tsv",
     ]
     outputs = study.of_kind("outputs")[0]

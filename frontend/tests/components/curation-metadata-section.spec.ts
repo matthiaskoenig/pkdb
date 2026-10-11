@@ -383,8 +383,8 @@ describe("descriptions, comments and notes", () => {
     const notes = card("Notes per table");
     expect(notes.findAll(".v-expansion-panel-title").map((title) => title.text())).toEqual([
       "Subjects No notes",
-      "Interventions No notes",
       "Characteristica No notes",
+      "Interventions No notes",
       "Outputs 1 description, 1 comment",
       "Timecourses 1 description",
       "Scatters No notes",

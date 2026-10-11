@@ -70,8 +70,8 @@ def test_study_detail(api):
     assert "Example_Fig1.wpd.json" in detail["files"]
     assert detail["tables"] == [
         {"file": "subjects.tsv", "kind": "subjects"},
-        {"file": "interventions.tsv", "kind": "interventions"},
         {"file": "characteristica.tsv", "kind": "characteristica"},
+        {"file": "interventions.tsv", "kind": "interventions"},
         {"file": "outputs_Tab2.tsv", "kind": "outputs"},
         {"file": "timecourses_Fig1.tsv", "kind": "timecourses"},
         {"file": "scatters_Fig2.tsv", "kind": "scatters"},

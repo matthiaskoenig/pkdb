@@ -17,7 +17,7 @@ from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
-from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.tables import KIND_ORDER, TABLES
 from pkdb.studyformat.validation import validate_folder
 from pkdb.studyformat.workbook.base import BASE_SHEET
 
@@ -97,7 +97,11 @@ def test_tables_contract(workspace, engine_on):
     ]
     check_contract(
         "tables",
-        {"tables": tables, "table_kinds": list(TABLES), "conflicts": conflicts},
+        {
+            "tables": tables,
+            "table_kinds": sorted(TABLES, key=KIND_ORDER.__getitem__),
+            "conflicts": conflicts,
+        },
     )
 
 

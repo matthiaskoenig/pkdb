@@ -61,8 +61,8 @@ def test_scan_valid_folder(make_study, valid_files):
     assert (layout.study, layout.substance) == ("Example", "caffeine")
     assert [table.name for table in layout.tables] == [
         "subjects.tsv",
-        "interventions.tsv",
         "characteristica.tsv",
+        "interventions.tsv",
         "outputs_Tab2.tsv",
         "timecourses_Fig1.tsv",
         "scatters_Fig2.tsv",
@@ -204,8 +204,8 @@ def test_workbook_tables_follow_the_sheets_of_the_workbook(make_study, valid_fil
     tables = workbook_tables(scan_folder(folder))
     assert tables == [
         ("subjects.tsv", "subjects"),
-        ("interventions.tsv", "interventions"),
         ("characteristica.tsv", "characteristica"),
+        ("interventions.tsv", "interventions"),
         ("outputs_Tab2.tsv", "outputs"),
         ("outputs_Tab10.tsv", "outputs"),
         ("timecourses_Fig1.tsv", "timecourses"),

@@ -5,12 +5,12 @@
       "kind": "subjects"
     },
     {
-      "file": "interventions.tsv",
-      "kind": "interventions"
-    },
-    {
       "file": "characteristica.tsv",
       "kind": "characteristica"
+    },
+    {
+      "file": "interventions.tsv",
+      "kind": "interventions"
     },
     {
       "file": "outputs_Tab2.tsv",
@@ -27,8 +27,8 @@
   ],
   "table_kinds": [
     "subjects",
-    "interventions",
     "characteristica",
+    "interventions",
     "outputs",
     "timecourses",
     "scatters"
