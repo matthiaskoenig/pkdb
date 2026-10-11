@@ -37,8 +37,9 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * rows pane, which a separator resizes. Tables are edited in the workbook, which Open tables of
  * the study header opens: Sync syncs it, and Add table adds a sheet. While the workbook and the
  * tables conflict, the conflict panel shows at the top of the rows pane. Below 1100 px the
- * navigator becomes two selects, and below 960 px the panes stack. Beyond the upload limits the
- * section says that it cannot show the sources and tables.
+ * navigator becomes two selects, and below 960 px the panes stack. Beyond the upload limits a
+ * note says, in place of the navigator and the panes, that the app cannot show the sources and
+ * tables; the sync actions and the conflicts stay.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
  * and Review sections can link to a row (`data.ts` has its rules). Only the actions of the
@@ -263,29 +264,36 @@ const conflictPanel = computed(() => {
 });
 
 /**
- * The section fills the window between the page above it and the padding below it, so that the
- * page does not scroll and the panes scroll on their own. Both are measured when the section
- * mounts, when the window resizes, and when the page changes its height, such as with an alert of
- * the study header.
+ * The section fills the window between the page above it and the padding of the study page below
+ * it, so that the page does not scroll and the panes scroll on their own. Both are measured when
+ * the section mounts, when the window resizes, and when the study page changes its height, such as
+ * when an alert of the study header shows or goes. The document is no measure of the space below:
+ * the app fills the window below a short page.
  */
 const root = ref<HTMLElement | null>(null);
 const offset = ref(0);
+
+/** The study page around the section. */
+function studyPage(element: HTMLElement): HTMLElement | null {
+  return element.closest<HTMLElement>(".study-page") ?? element.parentElement;
+}
 
 function measure(): void {
   const element = root.value;
   if (!element) return;
   const box = element.getBoundingClientRect();
-  const top = box.top + window.scrollY;
-  const below = document.documentElement.scrollHeight - (box.bottom + window.scrollY);
-  offset.value = top + Math.max(0, below);
+  const below = (studyPage(element)?.getBoundingClientRect().bottom ?? box.bottom) - box.bottom;
+  offset.value = box.top + window.scrollY + Math.max(0, below);
 }
 
 let observer: ResizeObserver | undefined;
 onMounted(() => {
   measure();
   window.addEventListener("resize", measure);
+  const around = root.value ? studyPage(root.value) : null;
+  if (!around) return;
   observer = new ResizeObserver(measure);
-  observer.observe(document.body);
+  observer.observe(around);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("resize", measure);
@@ -297,14 +305,10 @@ onBeforeUnmount(() => {
   <div
     ref="root"
     class="data-section"
-    :class="{ 'data-section--stacked': stacked }"
+    :class="{ 'data-section--fitted': stacked || limited }"
     :style="{ '--data-offset': `${offset}px` }"
   >
-    <p v-if="limited" class="data-empty">
-      This study is beyond the upload limits, so the app cannot show its sources and tables. See
-      <RouterLink :to="sectionRoute(identity, 'problems')">Problems</RouterLink>.
-    </p>
-    <template v-else-if="detail">
+    <template v-if="detail">
       <div class="data-toolbar" role="toolbar" aria-label="Data">
         <template v-if="!wide">
           <VSelect
@@ -376,10 +380,14 @@ onBeforeUnmount(() => {
       <UserHint v-else-if="userText" :text="userText" />
       <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
       <span role="status" aria-live="polite" class="data-notice">{{ notice }}</span>
-      <!-- Without a table the conflicts have no rows pane to show in. -->
+      <!-- Without a table, also beyond the upload limits, the conflicts have no rows pane to show in. -->
       <ConflictPanel v-if="conflicted && !rowsPane" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
 
-      <div class="data-panes">
+      <p v-if="limited" class="data-empty">
+        This study is beyond the upload limits, so the app cannot show its sources and tables. See
+        <RouterLink :to="sectionRoute(identity, 'problems')">Problems</RouterLink>.
+      </p>
+      <div v-else class="data-panes">
         <DataNavigator
           v-if="wide"
           :detail="detail"
@@ -448,8 +456,9 @@ onBeforeUnmount(() => {
   min-height: 480px;
   min-width: 0;
 }
-/* Stacked panes take the height of their content, each at most 70 % of the window. */
-.data-section--stacked {
+/* Stacked panes take the height of their content, each at most 70 % of the window; beyond the
+   upload limits a note takes the place of the panes. */
+.data-section--fitted {
   height: auto;
   min-height: 0;
 }

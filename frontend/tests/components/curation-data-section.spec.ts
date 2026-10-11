@@ -717,13 +717,16 @@ describe("linked selection", () => {
   });
 
   it("selects the owner of a table file that a link names without a source", async () => {
-    await mountSection(detail(), {}, `${SECTION}?file=timecourses_Fig1.tsv&line=2`);
-    expect(page().get(".nav-source[aria-current='true']").text()).toContain("Fig1");
+    // The default source is Fig1; outputs_Tab2.tsv belongs to Tab2.
+    await mountSection(detail(), {}, `${SECTION}?file=outputs_Tab2.tsv`);
+    expect(current("source")).toBe("Tab2");
+    expect(current("file")).toBe("outputs_Tab2.tsv");
   });
 
-  it("selects the source named in the linked row of a shared table", async () => {
-    await mountSection(detail(), {}, `${SECTION}?file=subjects.tsv&line=3`);
-    expect(current("source")).toBe("Fig1");
+  it("selects the source named in the linked row of a shared table once its rows load", async () => {
+    // The default source is Fig1; line 4 of subjects.tsv names Tab2, and a shared table has no owner.
+    await mountSection(detail(), {}, `${SECTION}?file=subjects.tsv&line=4`);
+    expect(current("source")).toBe("Tab2");
     expect(current("file")).toBe("subjects.tsv");
   });
 
@@ -1088,10 +1091,10 @@ describe("conflicts", () => {
 });
 
 describe("beyond the upload limits", () => {
-  it("says that the app cannot show the sources and tables, suggests no Add table and counts neither", async () => {
-    await mountSection(beyondLimitsDetail());
-    expect(sources()).toHaveLength(0);
-    expect(files()).toHaveLength(0);
+  it("says in place of the panes that the app cannot show the sources and tables, and counts neither", async () => {
+    await mountSection(beyondLimitsDetail(sync("changed", 1)));
+    expect(page().find(".data-navigator").exists()).toBe(false);
+    expect(page().find(".data-panes").exists()).toBe(false);
     const text = page().get(".data-empty");
     expect(text.text()).toBe(
       "This study is beyond the upload limits, so the app cannot show its sources and tables. See Problems.",
@@ -1099,7 +1102,11 @@ describe("beyond the upload limits", () => {
     expect(text.get("a").attributes("href")).toBe("#/studies/caffeine/Example/problems");
     expect(page().text()).not.toContain("no sources yet");
     expect(page().text()).not.toContain("no tables yet");
-    expect(page().get(".data-section").findAll("button")).toHaveLength(0);
+    // The workbook still syncs: the toolbar keeps its actions and the meaning of the sync status.
+    const toolbar = page().get('.data-section [role="toolbar"]');
+    expect(toolbar.findAll("button").map((control) => control.text().trim())).toEqual(["Sync", "Add table"]);
+    expect(toolbar.find(".v-switch").exists()).toBe(false);
+    expect(syncText()).toBe("Changed: the next sync changes 1 file");
     expect(requests.filter((request) => /\/(tables|sources)\//.test(request.path))).toEqual([]);
     // The rail claims no count of the data that the study page cannot list.
     const rail = (label: string) =>
@@ -1110,6 +1117,74 @@ describe("beyond the upload limits", () => {
     expect(rail("Problems")!.get(".rail-count").text()).toBe("1");
     expect(rail("Sources")).toBeUndefined();
     expect(rail("Tables")).toBeUndefined();
+  });
+
+  it("shows the conflicts and syncs, so that Show the conflicts lands on them", async () => {
+    await mountSection(beyondLimitsDetail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
+      [`POST ${TABLES}`]: conflictAnswer([[REGION_CONFLICT, REGION_ISSUE]]),
+    });
+    expect(syncText()).toBe("Conflict in outputs_Tab2.tsv");
+    expect(page().get(".conflict-panel .conflict-file-name").text()).toBe("outputs_Tab2.tsv");
+    expect(page().get(".data-empty").text()).toContain("beyond the upload limits");
+    await press("Sync");
+    expect(posted()).toEqual([{ action: "sync", study: "caffeine/Example" }]);
+    expect(page().get(".data-notice").text()).toBe("The workbook and the tables conflict.");
+    // The rows of a study beyond the limits are not read.
+    expect(requests.filter((request) => /\/(tables|sources)\//.test(request.path))).toEqual([]);
+  });
+});
+
+describe("the height of the section", () => {
+  it("fills the window below the page above it, also after the page above it changed its height", async () => {
+    // jsdom has no layout: the page above the section is 300 px high, 40 px more with an alert,
+    // and the study page has a padding of 24 px below the section.
+    const above = () => 300 + (document.querySelector(".test-alert") ? 40 : 0);
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.classList.contains("data-section")) return new DOMRect(0, above(), 1000, 600);
+      if (this.classList.contains("study-page")) return new DOMRect(0, 0, 1000, above() + 600 + 24);
+      return new DOMRect();
+    });
+    const observers: { callback: ResizeObserverCallback; targets: Element[] }[] = [];
+    const original = globalThis.ResizeObserver;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        private readonly entry: { callback: ResizeObserverCallback; targets: Element[] };
+        constructor(callback: ResizeObserverCallback) {
+          this.entry = { callback, targets: [] };
+          observers.push(this.entry);
+        }
+        observe(target: Element) {
+          this.entry.targets.push(target);
+        }
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    /** The study page changed its height: its observers are told. */
+    const resized = async () => {
+      const studyPage = page().get(".study-page").element;
+      for (const { callback, targets } of observers)
+        if (targets.includes(studyPage)) callback([], {} as ResizeObserver);
+      await flushPromises();
+    };
+    const offset = () => page().get<HTMLElement>(".data-section").element.style.getPropertyValue("--data-offset");
+    try {
+      await mountSection();
+      expect(offset()).toBe("324px");
+
+      const alert = document.createElement("div");
+      alert.className = "test-alert";
+      page().get(".study-page").element.prepend(alert);
+      await resized();
+      expect(offset()).toBe("364px");
+
+      alert.remove();
+      await resized();
+      expect(offset()).toBe("324px");
+    } finally {
+      vi.stubGlobal("ResizeObserver", original);
+    }
   });
 });
 
