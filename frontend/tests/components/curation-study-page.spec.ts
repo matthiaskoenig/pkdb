@@ -331,10 +331,17 @@ describe("StudyPage", () => {
     expect(link.attributes("rel")).toBe("noopener noreferrer");
   });
 
-  it("shows the tabs as a select below 600 px", async () => {
+  it("shows the tabs as a select below 600 px, with the facts of the study below it", async () => {
     setViewport(375, 800);
-    const wrapper = await mountPage("/studies/caffeine/Harder1988/review");
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
+    });
     expect(page().find('nav[aria-label="Study sections"] a').exists()).toBe(false);
+    const facts = page().get(".section-tabs-facts");
+    expect(facts.text()).toContain("On save: Upload");
+    expect(facts.get("a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
+    const order = page().get(".section-tabs-select").element.compareDocumentPosition(facts.element);
+    expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const sections = select(wrapper, "Section");
     expect(sections.props("modelValue")).toBe("review");
     expect(sections.props("items")).toContainEqual({ title: "Problems (3)", value: "problems" });

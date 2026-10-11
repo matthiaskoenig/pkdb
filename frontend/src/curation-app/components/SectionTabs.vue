@@ -56,35 +56,37 @@ function show(section: Section | null): void {
 </script>
 
 <template>
-  <VSelect
-    v-if="xs"
-    :model-value="active"
-    :items="selectItems"
-    label="Section"
-    hide-details
-    density="compact"
-    class="section-tabs-select"
-    @update:model-value="show"
-  />
-  <nav v-else aria-label="Study sections" class="section-tabs">
-    <ul class="section-tabs-list">
-      <li v-for="item in items" :key="item.section">
-        <RouterLink
-          :to="item.to"
-          class="section-tab"
-          :class="{ 'section-tab--active': item.section === active }"
-          :aria-current="item.section === active ? 'page' : undefined"
-        >
-          <!-- Screen readers hear what the count means, such as "Review, 1 open item". -->
-          <span class="section-tab-label" :data-label="item.label"
-            >{{ item.label }}<span v-if="item.meaning" class="d-sr-only">, {{ item.meaning }}</span
-            ><span v-if="item.unsaved" class="d-sr-only">, unsaved changes</span></span
+  <div class="section-tabs-line" :class="{ 'section-tabs-line--select': xs }">
+    <VSelect
+      v-if="xs"
+      :model-value="active"
+      :items="selectItems"
+      label="Section"
+      hide-details
+      density="compact"
+      class="section-tabs-select"
+      @update:model-value="show"
+    />
+    <nav v-else aria-label="Study sections" class="section-tabs">
+      <ul class="section-tabs-list">
+        <li v-for="item in items" :key="item.section">
+          <RouterLink
+            :to="item.to"
+            class="section-tab"
+            :class="{ 'section-tab--active': item.section === active }"
+            :aria-current="item.section === active ? 'page' : undefined"
           >
-          <span v-if="item.unsaved" class="section-tab-unsaved" title="Unsaved changes" aria-hidden="true"></span>
-          <span v-if="item.count !== undefined" class="section-tab-count" aria-hidden="true">{{ item.count }}</span>
-        </RouterLink>
-      </li>
-    </ul>
+            <!-- Screen readers hear what the count means, such as "Review, 1 open item". -->
+            <span class="section-tab-label" :data-label="item.label"
+              >{{ item.label }}<span v-if="item.meaning" class="d-sr-only">, {{ item.meaning }}</span
+              ><span v-if="item.unsaved" class="d-sr-only">, unsaved changes</span></span
+            >
+            <span v-if="item.unsaved" class="section-tab-unsaved" title="Unsaved changes" aria-hidden="true"></span>
+            <span v-if="item.count !== undefined" class="section-tab-count" aria-hidden="true">{{ item.count }}</span>
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
     <p v-if="facts?.length" class="section-tabs-facts">
       <template v-for="(fact, index) in facts" :key="fact.text">
         <span v-if="index > 0" aria-hidden="true"> · </span>
@@ -92,20 +94,28 @@ function show(section: Section | null): void {
         <span v-else>{{ fact.text }}</span>
       </template>
     </p>
-  </nav>
+  </div>
 </template>
 
 <style scoped>
-/* The label of the select stands above its field, clear of the header. */
-.section-tabs-select {
-  margin-top: 8px;
-}
-.section-tabs {
+/* The tabs and the facts of the study share a line above a rule; the facts wrap below the tabs
+   in a narrow window, and stand below the select of the sections on a phone. */
+.section-tabs-line {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 16px;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.section-tabs-line--select {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  border-bottom: 0;
+}
+/* The label of the select stands above its field, clear of the header. */
+.section-tabs-select {
+  margin-top: 8px;
 }
 .section-tabs-list {
   display: flex;
@@ -171,5 +181,8 @@ function show(section: Section | null): void {
   margin-inline-start: auto;
   font-size: 11.5px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.section-tabs-line--select .section-tabs-facts {
+  margin-inline-start: 0;
 }
 </style>
