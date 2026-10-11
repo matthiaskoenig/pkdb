@@ -3,6 +3,7 @@ import type { StudyRow } from "../../src/curation-app/api/types";
 import {
   activityLabel,
   chipCounts,
+  curatorsOf,
   filterStudies,
   formatTime,
   issueUrl,
@@ -33,11 +34,12 @@ function row(id: string, changes: Partial<StudyRow> = {}, summary: Partial<Study
   });
 }
 
-const example = row("caffeine/Example", {}, { title: "Caffeine pharmacokinetics" });
+const example = row("caffeine/Example", {}, { title: "Caffeine pharmacokinetics", curators: ["mkoenig"] });
 const harder = row("caffeine/Harder1988", {}, {
   title: "Effect of smoking on caffeine",
   review_status: "in_review",
   open_items: 2,
+  curators: ["janekg", "MKoenig"],
 });
 const approved = row("codeine/Kirchheiner2007", {}, {
   title: "Codeine in CYP2D6 ultrarapid metabolizers",
@@ -52,7 +54,7 @@ function ids(result: StudyRow[]): string[] {
 }
 
 describe("filterStudies", () => {
-  const all = { search: "", substance: "", chip: "all" as StatusChip };
+  const all = { search: "", substance: "", curator: "", chip: "all" as StatusChip };
 
   it("keeps every row without filters", () => {
     expect(ids(filterStudies(rows, all))).toEqual(ids(rows));
@@ -76,6 +78,12 @@ describe("filterStudies", () => {
     expect(ids(filterStudies(rows, { ...all, substance: "codeine" }))).toEqual(["codeine/Kirchheiner2007"]);
   });
 
+  it("keeps the rows of one curator, ignoring the case of the user name", () => {
+    expect(ids(filterStudies(rows, { ...all, curator: "mkoenig" }))).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
+    expect(ids(filterStudies(rows, { ...all, curator: "JANEKG" }))).toEqual(["caffeine/Harder1988"]);
+    expect(filterStudies(rows, { ...all, curator: "nobody" })).toEqual([]);
+  });
+
   it.each<[StatusChip, string[]]>([
     ["all", ids(rows)],
     ["attention", ["caffeine/Harder1988", "caffeine/Broken1999", "midazolam/Conflict2001"]],
@@ -86,15 +94,34 @@ describe("filterStudies", () => {
     expect(ids(filterStudies(rows, { ...all, chip }))).toEqual(expected);
   });
 
-  it("combines the search, the substance and the chip", () => {
-    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", chip: "draft" }))).toEqual([
-      "caffeine/Example",
-      "caffeine/Broken1999",
-    ]);
+  it("combines the search, the substance, the curator and the chip", () => {
+    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "", chip: "draft" }))).toEqual(
+      ["caffeine/Example", "caffeine/Broken1999"],
+    );
+    expect(
+      ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "mkoenig", chip: "draft" })),
+    ).toEqual(["caffeine/Example"]);
   });
 
   it("counts the rows of every chip", () => {
     expect(chipCounts(rows)).toEqual({ all: 5, attention: 3, draft: 3, in_review: 1, approved: 1 });
+  });
+});
+
+describe("curatorsOf", () => {
+  it("counts the studies of each curator once, by the first spelling of the user name", () => {
+    const twice = row("codeine/Twice2000", {}, { curators: ["janekg", "JanekG"] });
+    expect(curatorsOf([...rows, twice])).toEqual([
+      { user: "curator", studies: 3 },
+      { user: "janekg", studies: 2 },
+      { user: "mkoenig", studies: 2 },
+    ]);
+  });
+
+  it("lists no curator for rows without curators", () => {
+    const unknown = row("caffeine/Unknown");
+    delete unknown.summary.curators;
+    expect(curatorsOf([row("caffeine/Nobody", {}, { curators: [] }), unknown])).toEqual([]);
   });
 });
 

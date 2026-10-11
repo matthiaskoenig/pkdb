@@ -15,8 +15,10 @@ import type { Profile, SaveMode, StudyRow } from "../api/types";
 import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
+import { storeToRefs } from "pinia";
 import {
   chipCounts,
+  curatorsOf,
   filterStudies,
   MODE_LABELS,
   plural,
@@ -24,14 +26,13 @@ import {
   STATUS_CHIPS,
   substancesOf,
   uploadBlocker,
-  type StatusChip,
-  type StudySort,
 } from "../overview";
 import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
+import { useOverviewFilters } from "../stores/overviewFilters";
 import { useStudyStore } from "../stores/study";
-import { messageOf, profileMap } from "../study";
+import { findProfile, messageOf, profileMap } from "../study";
 
 const overview = useOverviewStore();
 const dialogs = useDialogStore();
@@ -43,23 +44,70 @@ const studies = computed(() => snapshot.value?.studies ?? []);
 const stale = computed(() => overview.error !== null);
 const blocker = computed(() => (snapshot.value ? uploadBlocker(snapshot.value) : null));
 
+// Curator profiles for the avatars and the Curator filter; without them the avatars show initials
+// and the filter shows user names.
+const profiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
+onMounted(() => {
+  useStudyStore()
+    .curators()
+    .then(
+      (list) => {
+        profiles.value = profileMap(list);
+      },
+      () => undefined,
+    );
+});
+
 // Filters
-const search = ref("");
-const substance = ref("");
-const chip = ref<StatusChip>("all");
-const sort = ref<StudySort>({ key: "study", descending: false });
+const filters = useOverviewFilters();
+const { search, substance, curator, chip, sort } = storeToRefs(filters);
+watch(
+  () => snapshot.value?.workspace,
+  (path) => {
+    if (path !== undefined) filters.forWorkspace(path);
+  },
+  { immediate: true },
+);
 
 const substanceItems = computed(() => [
   { title: "All substances", value: "" },
   ...substancesOf(studies.value).map((name) => ({ title: name, value: name })),
 ]);
-/** The rows behind each chip, within the search and the substance. */
+/** Every curator with the number of their studies; the user of the app comes first, as Me. */
+const curatorItems = computed(() => {
+  const name = (user: string) => findProfile(profiles.value, user)?.display_name ?? user;
+  const me = snapshot.value?.author.user ?? null;
+  const curators = curatorsOf(studies.value);
+  const mine = me ? curators.find(({ user }) => user.toLowerCase() === me.toLowerCase()) : undefined;
+  const others = curators
+    .filter((entry) => entry !== mine)
+    .map(({ user, studies: count }) => ({ title: `${name(user)} (${count.toLocaleString("en-US")})`, value: user }))
+    .sort((a, b) => a.title.localeCompare(b.title));
+  return [
+    { title: "All curators", value: "" },
+    ...(me ? [{ title: `Me: ${name(me)} (${(mine?.studies ?? 0).toLocaleString("en-US")})`, value: me }] : []),
+    ...others,
+  ];
+});
+/** The rows behind each chip, within the search, the substance and the curator. */
 const counts = computed(() =>
-  chipCounts(filterStudies(studies.value, { search: search.value, substance: substance.value, chip: "all" })),
+  chipCounts(
+    filterStudies(studies.value, {
+      search: search.value,
+      substance: substance.value,
+      curator: curator.value,
+      chip: "all",
+    }),
+  ),
 );
 const shown = computed(() =>
   sortStudies(
-    filterStudies(studies.value, { search: search.value, substance: substance.value, chip: chip.value }),
+    filterStudies(studies.value, {
+      search: search.value,
+      substance: substance.value,
+      curator: curator.value,
+      chip: chip.value,
+    }),
     sort.value,
   ),
 );
@@ -70,9 +118,7 @@ const countText = computed(() => {
 });
 
 function clearFilters(): void {
-  search.value = "";
-  substance.value = "";
-  chip.value = "all";
+  filters.clear();
 }
 
 // Selection and batch actions
@@ -196,19 +242,6 @@ function retriedStudy(): HTMLElement | null | undefined {
     ?.querySelector<HTMLElement>("a.study-identity");
 }
 
-// Curator profiles for the avatars; without them the avatars show initials.
-const profiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
-onMounted(() => {
-  useStudyStore()
-    .curators()
-    .then(
-      (list) => {
-        profiles.value = profileMap(list);
-      },
-      () => undefined,
-    );
-});
-
 const format1 = computed(() => snapshot.value?.format1_folders ?? 0);
 const format1Notice = computed(() =>
   format1.value === 1
@@ -244,6 +277,13 @@ const format1Notice = computed(() =>
             label="Substance"
             hide-details
             class="overview-substance"
+          />
+          <VSelect
+            v-model="curator"
+            :items="curatorItems"
+            label="Curator"
+            hide-details
+            class="overview-curator"
           />
           <VChipGroup
             v-model="chip"
@@ -401,13 +441,18 @@ const format1Notice = computed(() =>
   flex: 0 1 12rem;
   min-width: 10rem;
 }
+.overview-curator {
+  flex: 0 1 16rem;
+  min-width: 12rem;
+}
 .overview-chips {
   flex: 1 1 auto;
 }
-/* On a phone the search and the substance take the whole width, one above the other. */
+/* On a phone the search, the substance and the curator take the whole width, one above the other. */
 @media (max-width: 599.98px) {
   .overview-search,
-  .overview-substance {
+  .overview-substance,
+  .overview-curator {
     flex: 1 1 100%;
     max-width: none;
   }

@@ -7,3 +7,5 @@
 - `pkdb curate` without the built app names the folder where it looked and the source checkout that runs. Before, it only said `The curation app is not built. Run npm ci and npm run build:curation in frontend/.`, so a user with an installed release and an active virtual environment of a pkdb checkout could not tell that the checkout ran instead of the release. The guide of the local curation app no longer says that `pkdb curate` is missing from the releases; it is part of `pkdb` since 0.12.1.
 
 - The Tables section of the local curation app hides the empty columns when it opens, because most tables leave many of their fixed columns empty. The switch **Hide empty columns** shows them again.
+
+- The overview of the local curation app filters the studies by curator. **Curator** lists every curator of the workspace with the number of their studies, and **Me**, the PK-DB user of the app, first, so a curator sees their own studies. The filters and the sort order of the overview stay when a study is opened and the overview is shown again; before, every visit of a study reset them.
