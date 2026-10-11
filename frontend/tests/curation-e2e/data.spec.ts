@@ -128,6 +128,22 @@ test.describe("sources", () => {
   });
 });
 
+test("the app bar, the study header and the section tabs take at most 110 px of a 1600 × 1000 window", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await app.open("#/studies/caffeine/Demo2020/data");
+  const status = page.getByRole("combobox", { name: "Review status" });
+  await expect(status).toBeVisible();
+  const tabs = await page.getByRole("navigation", { name: "Study sections" }).boundingBox();
+  expect(tabs!.y + tabs!.height).toBeLessThanOrEqual(110);
+  // The field of the review status stays inside the header line, below the app bar.
+  const field = await page.locator(".review-select .v-field").boundingBox();
+  const bar = await page.getByRole("banner").first().boundingBox();
+  expect(field!.y).toBeGreaterThanOrEqual(bar!.y + bar!.height + 4);
+});
+
 test("old addresses of the Sources and Tables sections open the Data section", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=6");
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=6$/);

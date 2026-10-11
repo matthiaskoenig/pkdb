@@ -89,7 +89,7 @@ Study format 1 folders are not listed. The line below the table counts them, and
 
 ## The study page
 
-The header of a study is one line: its identity, its release, its issue and its provenance, the title of the publication, the PMID, the sync status, the problems, the **Review status** select, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
+The header of a study is one line: its identity, its release, its issue and its provenance, the title of the publication, the PMID, the sync status, the problems, the review status select labelled **Review**, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
 
 Tabs under the header switch between the sections Metadata, Review, Problems, Data and Activity. The tabs of Review and Problems count the open review items and the problems. At the end of the tab line are two facts: **On save**, the action of a save, and **Last upload**, with a link to the study on PK-DB. A narrow window turns the tabs into a select. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
 
@@ -123,7 +123,7 @@ Filter the items by state (**Open**, **Resolved**, **Dismissed**, **All**) and b
 
 Below the item, the target shows the rows that it matches, with **Show in table**. When the target is a series of a digitized figure, the `label` of `timecourses_<Fig>.tsv` or the `name` of `scatters_<Fig>.tsv`, the figure is drawn too, with that series emphasized and the other series faded.
 
-The **Review status** select in the header sets Draft, In review or Approved. Approved needs zero open review items and zero validation errors. Otherwise the app refuses and says why, with a link to the open items or the problems. Approving records you as `approved_by`, adds you to the reviewers, and stores the time; any other status removes the approval. While a study is approved, items cannot be added or reopened: set the status to In review first.
+The review status select in the header, labelled **Review**, sets Draft, In review or Approved. Approved needs zero open review items and zero validation errors. Otherwise the app refuses and says why, with a link to the open items or the problems. Approving records you as `approved_by`, adds you to the reviewers, and stores the time; any other status removes the approval. While a study is approved, items cannot be added or reopened: set the status to In review first.
 
 ### Problems
 

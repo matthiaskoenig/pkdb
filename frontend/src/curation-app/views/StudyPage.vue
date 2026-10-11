@@ -153,11 +153,13 @@ watch(
 </template>
 
 <style scoped>
+/* Little room above the header: the app bar, the header line and the section tabs together take at
+   most 110 px, which leaves the rest of the window to the section. */
 .study-page {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 8px 12px;
+  padding: 2px 12px 8px;
 }
 .study-section {
   display: flex;

@@ -43,6 +43,7 @@ const props = defineProps<{
 const study = useStudyStore();
 const overview = useOverviewStore();
 const reasonId = useId();
+const statusId = useId();
 
 type Action = "status" | "tables" | "validate" | "folder" | "pdf" | "copy";
 
@@ -265,28 +266,35 @@ function added(table: string): void {
         <span v-if="activity" class="fact-activity">{{ activity }}</span>
       </span>
       <div class="study-actions">
-        <VSelect
-          :model-value="reviewStatus"
-          :items="STATUS_ITEMS"
-          label="Review status"
-          density="compact"
-          hide-details
-          :disabled="!canSetStatus || working"
-          :loading="busy === 'status'"
-          class="review-select"
-          @update:model-value="setStatus"
-        >
-          <!-- Vuetify's loader has no accessible name. -->
-          <template #loader="{ isActive, color }">
-            <VProgressLinear
-              :active="isActive"
-              :color="color"
-              height="2"
-              indeterminate
-              aria-label="Setting the review status"
-            />
-          </template>
-        </VSelect>
+        <!-- The field keeps "Review status" as its name; its label stands beside it, as PMID does,
+             since a label above the field would not fit into the line. -->
+        <span class="fact-status">
+          <label :for="statusId" class="fact-name">Review</label>
+          <VSelect
+            :id="statusId"
+            :model-value="reviewStatus"
+            :items="STATUS_ITEMS"
+            label="Review status"
+            single-line
+            density="compact"
+            hide-details
+            :disabled="!canSetStatus || working"
+            :loading="busy === 'status'"
+            class="review-select"
+            @update:model-value="setStatus"
+          >
+            <!-- Vuetify's loader has no accessible name. -->
+            <template #loader="{ isActive, color }">
+              <VProgressLinear
+                :active="isActive"
+                :color="color"
+                height="2"
+                indeterminate
+                aria-label="Setting the review status"
+              />
+            </template>
+          </VSelect>
+        </span>
         <div class="study-buttons">
           <VBtn
             variant="tonal"
@@ -408,8 +416,7 @@ function added(table: string): void {
   flex-direction: column;
   gap: 4px;
 }
-/* One line from 1280 px; below that the parts wrap and the title gets a line of its own. A wrapped
-   line leaves room for the label of the review status, which stands above its field. */
+/* One line from 1280 px; below that the parts wrap and the title gets a line of its own. */
 .study-header-line {
   display: flex;
   flex-wrap: wrap;
@@ -472,6 +479,12 @@ function added(table: string): void {
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 10px;
+}
+.fact-status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
 }
 .review-select {
   width: 150px;

@@ -366,6 +366,18 @@ describe("StudyPage", () => {
     expect(line.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
   });
 
+  it("labels the review status beside its field, which keeps its name, so that the field fits into the line", async () => {
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review");
+    const status = select(wrapper, "Review status");
+    expect(status.props("singleLine")).toBe(true);
+    const input = status.get("input:not([type=hidden])");
+    const label = page().get(".study-header-line label.fact-name");
+    expect(label.text()).toBe("Review");
+    expect(label.attributes("for")).toBe(input.attributes("id"));
+    // The name of the field stays "Review status", from the label inside the field.
+    expect(page().get(`#${input.attributes("aria-labelledby")}`).text()).toBe("Review status");
+  });
+
   it("shows identity, chips, title and actions in one line", async () => {
     await mountPage("/studies/caffeine/Harder1988/review");
     const line = page().get(".study-header-line");
