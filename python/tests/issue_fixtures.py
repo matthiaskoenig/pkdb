@@ -39,6 +39,16 @@ def study(
     return folder
 
 
+def table(folder: Path, file: str, rows: Sequence[dict[str, str]]) -> None:
+    """Write a table of the study `folder` with the columns of the first row."""
+    header = list(rows[0])
+    lines = [
+        "\t".join(header),
+        *("\t".join(row[name] for name in header) for row in rows),
+    ]
+    (folder / file).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def issue(
     number, title, *, state="open", reason=None, labels=(), assignees=()
 ) -> Issue:

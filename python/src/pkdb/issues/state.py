@@ -4,7 +4,7 @@ Everything here is pure except `read_studies`, which only reads the checkout.
 """
 
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
@@ -16,6 +16,8 @@ from pkdb.issues.github import Issue
 from pkdb.repository import location, study_folders
 from pkdb.schemas.curators import Curator
 from pkdb.studyformat.jsonio import JsonFileError, load_json
+from pkdb.studyformat.layout import scan_folder
+from pkdb.studyformat.load import load_table
 from pkdb.studyformat.metadata import MetadataError, read_metadata
 from pkdb.studyformat.review_edit import ReviewError, read_review
 from pkdb.studyformat.tables import STUDY_JSON
@@ -26,6 +28,14 @@ WORKFLOW = {"draft": "curate", "in_review": "check", "approved": "approved"}
 LABEL_COLORS = {"curate": "fbca04", "check": "1d76db", "approved": "0e8a16"}
 SUBSTANCE_COLOR = "c5def5"
 MAX_ASSIGNEES = 10
+# The tables whose substances become labels: what the subjects were given and the
+# data; the baseline values of characteristica are not about a substance.
+SUBSTANCE_COLUMNS = {
+    "interventions": ("substance",),
+    "outputs": ("substance",),
+    "timecourses": ("substance",),
+    "scatters": ("x_substance", "y_substance"),
+}
 
 
 @dataclass(frozen=True)
@@ -33,6 +43,7 @@ class StudyState:
     """What the issue sync needs of one format 2 study.
 
     `users` are the curators, then the reviewers, without repeats.
+    `substances` are those that its interventions and data name, sorted.
     """
 
     location: str
@@ -43,6 +54,7 @@ class StudyState:
     users: tuple[str, ...]
     metadata_revision: str
     review_revision: str
+    substances: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -96,9 +108,39 @@ def read_studies(root: Path) -> Studies:
                 users=tuple(dict.fromkeys(users)),
                 metadata_revision=metadata.revision,
                 review_revision=review.revision,
+                substances=_substances(folder),
             )
         )
     return Studies(states, errors, format_1, claimed)
+
+
+def _substances(folder: Path) -> tuple[str, ...]:
+    """The substances that the interventions and the data of a study name, sorted.
+
+    A table that cannot be read names none; validation reports it.
+    """
+    layout = scan_folder(folder)
+    found: dict[str, str] = {}
+    for table_file in layout.tables:
+        columns = SUBSTANCE_COLUMNS.get(table_file.spec.kind, ())
+        if not columns:
+            continue
+        try:
+            with (layout.folder / table_file.name).open("rb") as stream:
+                table, _ = load_table(
+                    table_file.name,
+                    stream,
+                    table_file.spec,
+                    table_file.source,
+                    study=layout.study,
+                )
+        except OSError:
+            continue
+        for row in table.rows if table is not None else ():
+            for column in columns:
+                if substance := row.cells.get(column, "").strip():
+                    found.setdefault(substance.casefold(), substance)
+    return tuple(sorted(found.values(), key=str.casefold))
 
 
 def _raw_issue(folder: Path) -> int | None:
@@ -253,7 +295,6 @@ def plan(
     counted together with the problems of the plan.
     """
     by_number = {issue.number: issue for issue in issues}
-    substances = {name.casefold() for name in substance_names}
     shared = _duplicates(states, claimed or {})
     errors = [
         f"Issue #{number} is named by several studies: {', '.join(locations)}"
@@ -280,7 +321,7 @@ def plan(
             assignees = desired_assignees(state, roster, found, repository=repository)
             fields = (
                 _title(state, issue)
-                | _labels(state, issue, substances)
+                | _labels(state, issue, substance_names)
                 | _assignees(issue, assignees)
                 | _state(state, issue)
             )
@@ -322,16 +363,34 @@ def _title(state: StudyState, issue: Issue) -> dict[str, Any]:
     return {} if issue.title == state.location else {"title": state.location}
 
 
-def _labels(state: StudyState, issue: Issue, substances: set[str]) -> dict[str, Any]:
+def study_labels(state: StudyState, substance_names: Iterable[str]) -> list[str]:
+    """The substance labels and the workflow label of the issue of a study.
+
+    The substance of its folder comes first, then the other substance folders of
+    the repository that its interventions and data name, sorted and spelled as
+    the folders, so that the issue is found under each substance it has data of.
+    """
+    substance = state.location.partition("/")[0]
+    folders = {name.casefold(): name for name in substance_names}
+    folders.pop(substance.casefold(), None)
+    others = {
+        folders[key] for name in state.substances if (key := name.casefold()) in folders
+    }
+    return [substance, *sorted(others, key=str.casefold), WORKFLOW[state.status]]
+
+
+def _labels(
+    state: StudyState, issue: Issue, substance_names: Sequence[str]
+) -> dict[str, Any]:
     """The new labels when the label set differs, ignoring case.
 
     Labels other than workflow and substance labels stay in their current order
-    and spelling; the substance and the workflow label of the study follow.
+    and spelling; the substance labels and the workflow label of the study follow.
     """
-    substance = state.location.partition("/")[0]
-    managed = substances | {substance.casefold(), *WORKFLOW.values()}
+    managed = {name.casefold() for name in substance_names}
+    managed |= {state.location.partition("/")[0].casefold(), *WORKFLOW.values()}
     kept = [label for label in issue.labels if label.casefold() not in managed]
-    labels = [*kept, substance, WORKFLOW[state.status]]
+    labels = [*kept, *study_labels(state, substance_names)]
     current = {label.casefold() for label in issue.labels}
     wanted = {label.casefold() for label in labels}
     if current == wanted:

@@ -1,4 +1,4 @@
-from issue_fixtures import issue, study
+from issue_fixtures import issue, study, table
 
 from pkdb.issues.state import Roster, plan, read_studies
 from pkdb.schemas.curators import Curator
@@ -239,6 +239,94 @@ def test_missing_labels_are_created(tmp_path):
         tmp_path, [issue(1, "codeine/A"), issue(2, "codeine/B")], labels=["CHECK"]
     )
     assert result.labels == ["codeine"]
+
+
+def other_substances(folder):
+    """Tables of a caffeine study that name other substances, in each kind of table."""
+    dosing = {"name": "D1", "measurement": "dosing"}
+    table(
+        folder,
+        "interventions.tsv",
+        [
+            dosing | {"substance": "Midazolam"},
+            dosing | {"name": "D2", "substance": "caffeine"},
+        ],
+    )
+    table(
+        folder,
+        "outputs_Tab1.tsv",
+        [{"subjects": "all", "measurement": "auc", "substance": "codeine"}],
+    )
+    point = {"label": "a", "subjects": "all", "measurement": "concentration"}
+    table(
+        folder,
+        "timecourses_Fig1.tsv",
+        [point | {"time": "1", "time_unit": "hr", "substance": "paraxanthine"}],
+    )
+    axes = {"name": "s", "subjects": "all", "x_measurement": "auc", "x_mean": "1"}
+    axes |= {"y_measurement": "auc", "y_mean": "2"}
+    table(
+        folder,
+        "scatters_Fig2.tsv",
+        [axes | {"x_substance": "omeprazole", "y_substance": "caffeine"}],
+    )
+    # Baseline values of the subjects are no data about a substance.
+    table(
+        folder,
+        "characteristica.tsv",
+        [
+            {
+                "source": "Tab1",
+                "subjects": "all",
+                "measurement": "age",
+                "substance": "glucose",
+            }
+        ],
+    )
+
+
+def test_the_substances_of_interventions_and_data_are_read(tmp_path):
+    other_substances(study(tmp_path, "caffeine/A", issue=1))
+    [state] = read_studies(tmp_path).states
+    assert state.substances == (
+        "caffeine",
+        "codeine",
+        "Midazolam",
+        "omeprazole",
+        "paraxanthine",
+    )
+
+
+def test_the_substance_folders_that_a_study_names_are_labels(tmp_path):
+    other_substances(study(tmp_path, "caffeine/A", issue=1))
+    current = issue(
+        1,
+        "caffeine/A",
+        labels=["Glucose", "caffeine", "help wanted", "curate"],
+        assignees=["ana-gh"],
+    )
+    result = plan(
+        read_studies(tmp_path).states,
+        [current],
+        ROSTER,
+        substance_names=["caffeine", "codeine", "glucose", "midazolam", "omeprazole"],
+        label_names=["curate", "caffeine", "codeine", "Glucose", "help wanted"],
+        repository=REPOSITORY,
+    )
+    [change] = result.changes
+    # Spelled as their folders, after the substance of the study; paraxanthine has
+    # no folder, and glucose is only a baseline value.
+    assert change.labels == [
+        "help wanted",
+        "caffeine",
+        "codeine",
+        "midazolam",
+        "omeprazole",
+        "curate",
+    ]
+    assert change.add_labels == ["codeine", "midazolam", "omeprazole"]
+    assert change.remove_labels == ["Glucose"]
+    assert result.labels == ["midazolam", "omeprazole"]
 
 
 def test_unreadable_studies_are_errors_and_format_1_is_counted(tmp_path):
