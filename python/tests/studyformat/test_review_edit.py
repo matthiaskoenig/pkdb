@@ -16,6 +16,7 @@ from pkdb.studyformat.review_edit import (
     ReviewError,
     acknowledge,
     add_item,
+    assign_reviewer,
     dismiss,
     matching_warnings,
     read_review,
@@ -64,6 +65,17 @@ def test_item_lifecycle(valid_study):
     assert read_review(valid_study).review.items[0].resolved is None
     with pytest.raises(ReviewError, match="open already"):
         reopen(valid_study, PERSON, item.id, revision=revision, now=NOW)
+
+
+def test_assigning_a_reviewer_names_them_once(valid_study):
+    before = read_review(valid_study).review
+    revision = assign_reviewer(valid_study, "mkoenig")
+    after = read_review(valid_study).review
+    assert after.reviewers == [*before.reviewers, "mkoenig"]
+    assert after.status == before.status and after.approved_by == before.approved_by
+    assert assign_reviewer(valid_study, "mkoenig") == revision
+    with pytest.raises(ReviewError):
+        assign_reviewer(valid_study, "two words")
 
 
 def test_unknown_item(valid_study):

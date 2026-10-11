@@ -218,6 +218,16 @@ def test_review_status_without_approval_needs_no_vocabulary(
     assert json.loads(capsys.readouterr().out)["ok"] is True
 
 
+def test_review_assign_names_a_reviewer(valid_study, reviewer, capsys):
+    assign = ["review", "assign", str(valid_study), "mkoenig", "--offline"]
+    assert main([*assign, "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["ok"] is True
+    review = json.loads((valid_study / "review.json").read_text())
+    assert review["reviewers"][-1] == "mkoenig"
+    assert main([*assign, "--format", "human"]) == 0
+    assert "reviewer mkoenig" in capsys.readouterr().out
+
+
 def test_review_show_lists_target_matches(valid_study, reviewer, capsys):
     add = ["review", "add", str(valid_study), "--kind", "question", "--text", "Why?"]
     add += ["--file", "timecourses_Fig1.tsv", "--rows", "label=drug_plasma"]
