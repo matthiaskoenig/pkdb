@@ -132,7 +132,7 @@ async function render() {
     await setAutomaticActions(page, true);
     await conflict(join(workspace, STUDY));
     await setAutomaticActions(page, false);
-    await page.locator(".data-sync-text").filter({ hasText: `Conflict in ${TABLE}` }).waitFor();
+    await page.getByRole("status").filter({ hasText: `Conflict in ${TABLE}` }).waitFor();
     await navigator.getByRole("button", { name: new RegExp(`^${TABLE.replace(".", "\\.")}`) }).click();
     // The job of the conflict has ended once its report, the conflict as an error, is the study's.
     await capture("data-conflict.png", [

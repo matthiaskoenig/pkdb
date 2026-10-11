@@ -461,8 +461,13 @@ async function toggle(label: string): Promise<void> {
   await flushPromises();
 }
 
+/** The live region of the toolbar that says what the sync status means. */
+function syncStatus() {
+  return page().get('.data-toolbar [role="status"]');
+}
+
 function syncText(): string {
-  return page().get(".data-sync-text").text();
+  return syncStatus().text();
 }
 
 function posted(): (Record<string, unknown> | null)[] {
@@ -886,7 +891,7 @@ describe("sync status", () => {
     expect(syncText()).toBe(text);
     const toolbar = page().get('.data-section [role="toolbar"]');
     expect(toolbar.attributes("aria-label")).toBe("Data");
-    expect(toolbar.find(".data-sync-text").exists()).toBe(true);
+    expect(toolbar.find('[role="status"]').exists()).toBe(true);
     const order = toolbar.element.compareDocumentPosition(page().get(".data-panes").element);
     expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
@@ -894,8 +899,20 @@ describe("sync status", () => {
   it("names the conflicting file in muted text, without an alert", async () => {
     await mountSection(reviewed({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), CONFLICT_TABLES);
     expect(syncText()).toBe("Conflict in outputs_Tab2.tsv");
-    expect(page().get(".data-sync-text").attributes("role")).toBeUndefined();
-    expect(page().find('.data-section .v-alert[role="status"]').exists()).toBe(false);
+    expect(page().find(".data-section .v-alert").exists()).toBe(false);
+  });
+
+  it("announces a sync status that changes outside the app, in a live region that stays while empty", async () => {
+    await mountSection(reviewed(sync("in_sync")), CONFLICT_TABLES);
+    const status = syncStatus();
+    expect(status.attributes("aria-live")).toBe("polite");
+    expect(status.text()).toBe("");
+    // The workbook and the tables changed on disk: the next poll brings the conflict.
+    served = reviewed({ ...sync("conflict"), conflicts: [REGION_CONFLICT] });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(syncStatus().element).toBe(status.element);
+    expect(status.text()).toBe("Conflict in outputs_Tab2.tsv");
   });
 
   it("syncs, and then says what the sync did", async () => {

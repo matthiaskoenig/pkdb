@@ -388,7 +388,9 @@ onBeforeUnmount(() => {
         >
           Add table
         </VBtn>
-        <span class="data-sync-text">{{ syncText }}</span>
+        <!-- A live region stays in the page while it is empty, so that screen readers announce a
+             status that changes outside the app, such as a saved workbook or a conflict. -->
+        <span role="status" aria-live="polite" class="data-sync-text">{{ syncText }}</span>
       </div>
 
       <ActionFailureAlert v-if="failure" :failure="failure" :study="identity" @close="failure = null" />

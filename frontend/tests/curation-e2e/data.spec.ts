@@ -35,14 +35,14 @@ async function editWorkbook(workspace: string, line: number, column: string, val
   await runTool("edit_workbook.py", workbook, SHEET, cell, value);
 }
 
-/** The sync status of the study header, which starts with `text`. */
+/** The sync status of the study header, which starts with `text`; a chip, which has no role. */
 function syncStatus(page: Page, text: string) {
   return page.locator(".fact-sync").filter({ hasText: text });
 }
 
-/** The sync text of the Data toolbar, which explains a sync that is not clean. */
+/** The sync text of the Data toolbar, a live region that explains a sync that is not clean. */
 function syncText(page: Page, text: string) {
-  return page.locator(".data-sync-text").filter({ hasText: text });
+  return page.getByRole("status").filter({ hasText: text });
 }
 
 /** The cell of the grid at `line` that shows `value`. */
