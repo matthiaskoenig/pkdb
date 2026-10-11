@@ -307,19 +307,22 @@ test("the separator follows the mouse from where it was grabbed and selects no t
   const separator = page.getByRole("separator", { name: "Resize the source and the rows" });
   const before = Number(await separator.getAttribute("aria-valuenow"));
   const box = (await separator.boundingBox())!;
-  const split = (await page.locator(".data-split").boundingBox())!;
-  // Grabbed left of its middle and moved across the rows, whose text a drag would select.
-  const x = box.x + 1;
+  // The share of the source pane is a whole percent of the split, which the separator moves by.
+  const percent = (await page.locator(".data-split").boundingBox())!.width / 100;
+  // Grabbed 1 px inside its end and moved across the rows, whose text a drag would select, by
+  // 10.5 % less half the grab. The share rounds that to 10 %, which keeps the grabbed place under
+  // the pointer as closely as whole percents can; a separator that put its start under the
+  // pointer would move by the grab more, which rounds to 11 %.
+  const grab = box.width - 1;
+  const x = box.x + grab;
   const y = box.y + box.height / 2;
   await page.mouse.move(x, y);
   await page.mouse.down();
-  await page.mouse.move(x + 160, y + 60, { steps: 12 });
+  await page.mouse.move(x + 10.5 * percent - grab / 2, y + 60, { steps: 12 });
   await page.mouse.up();
-  await expect(separator).not.toHaveAttribute("aria-valuenow", String(before));
-  expect(Number(await separator.getAttribute("aria-valuenow"))).toBeGreaterThan(before);
-  // The place where it was grabbed stays under the pointer, within the 1 % steps of the share.
+  await expect(separator).toHaveAttribute("aria-valuenow", String(before + 10));
   const after = (await separator.boundingBox())!;
-  expect(Math.abs(after.x + 1 - (x + 160))).toBeLessThanOrEqual(split.width / 100);
+  expect(Math.abs(after.x - (box.x + 10 * percent))).toBeLessThanOrEqual(1);
   expect(await page.evaluate(() => window.getSelection()?.toString() ?? "")).toBe("");
 });
 
