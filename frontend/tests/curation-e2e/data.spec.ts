@@ -242,6 +242,23 @@ test("the pane heads keep the source and the count of rows whole while a pane is
   await expect.poll(() => count.evaluate(whole)).toBe(true);
 });
 
+test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px head of the source pane", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  const zoom = page.getByRole("group", { name: "Image size" });
+  for (const name of ["Fit", "100 %"]) {
+    const box = (await zoom.getByRole("button", { name, exact: true }).boundingBox())!;
+    expect(box.height).toBeGreaterThanOrEqual(24);
+  }
+  const head = (await page.locator(".source-pane .pane-head").boundingBox())!;
+  expect(head.height).toBe(26);
+  const fit = (await zoom.getByRole("button", { name: "Fit", exact: true }).boundingBox())!;
+  expect(fit.y).toBeGreaterThanOrEqual(head.y);
+  expect(fit.y + fit.height).toBeLessThanOrEqual(head.y + head.height);
+});
+
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=6");
   const cell = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "6", exact: true });

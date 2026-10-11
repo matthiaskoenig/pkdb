@@ -283,8 +283,9 @@ const automatic = computed(() =>
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
+/* As high as the smallest target of the app, 24 px, inside the 26 px head with its line below. */
 .zoom button {
-  height: 20px;
+  height: 24px;
   padding-inline: 8px;
   font-size: 12px;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
