@@ -63,6 +63,35 @@ describe("source pane", () => {
     expect(wrapper.get(".pane-missing").text()).toContain("No image: add Example_Tab2.png");
   });
 
+  it("names each missing file and what to do about it in one text beside its icon", () => {
+    /** The text of each note, which wraps as one paragraph in a narrow pane. */
+    const notes = (wrapper: ReturnType<typeof mountPane>) =>
+      wrapper.findAll(".pane-missing").map((note) => {
+        expect(note.element.children).toHaveLength(2);
+        return note.get(".pane-missing-text").text();
+      });
+    const table = mountPane({
+      summary: sourceSummary({ source: "Tab3", missing_image: "Example_Tab3.png", missing_raw: "Example_Tab3.tsv" }),
+      view: { ...view, source: "Tab3", image: null, image_url: null, raw_grid: null },
+    });
+    expect(notes(table)).toEqual([
+      "No image: add Example_Tab3.png. Save it from the paper as a PNG image.",
+      "No raw extraction: add Example_Tab3.tsv with Add table.",
+    ]);
+    const figure = mountPane({
+      summary: sourceSummary({
+        source: "Fig1",
+        kind: "figure",
+        image: "Example_Fig1.png",
+        missing_raw: "Example_Fig1.wpd.json",
+      }),
+      view: { ...view, source: "Fig1", raw_grid: null },
+    });
+    expect(notes(figure)).toEqual([
+      "No digitization: add Example_Fig1.wpd.json. Digitize it in WebPlotDigitizer and import it with pkdb digitize import.",
+    ]);
+  });
+
   it("toggles the zoom, which survives a storage that throws", async () => {
     const wrapper = mountPane();
     const [fit, full] = wrapper.findAll(".zoom button");

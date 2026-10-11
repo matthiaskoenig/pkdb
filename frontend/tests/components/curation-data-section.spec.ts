@@ -581,8 +581,7 @@ describe("table sources", () => {
   it("names the missing files of a paper table, and the rows pane has no rows of it", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Tab3`);
     expect(sourcePane().text()).toContain("No image: add Example_Tab3.png");
-    expect(sourcePane().text()).toContain("No raw extraction: add Example_Tab3.tsv");
-    expect(sourcePane().text()).toContain("use Add table");
+    expect(sourcePane().text()).toContain("No raw extraction: add Example_Tab3.tsv with Add table.");
     expect(sourcePane().find("img").exists()).toBe(false);
     // Tab3 has no table, so the section shows the first table, which has no rows of it.
     expect(rowsPane().text()).toContain("No rows of Tab3 in subjects.tsv.");

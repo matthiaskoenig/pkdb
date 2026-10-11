@@ -157,8 +157,10 @@ const automatic = computed(() =>
             </div>
             <p v-else class="pane-missing">
               <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-              <span><b>No image:</b> add {{ summary.missing_image }}</span>
-              <span class="pane-missing-hint">save it from the paper as a PNG image</span>
+              <span class="pane-missing-text"
+                ><b>No image:</b> add {{ summary.missing_image }}.
+                <span class="pane-missing-hint">Save it from the paper as a PNG image.</span></span
+              >
             </p>
           </section>
 
@@ -167,8 +169,10 @@ const automatic = computed(() =>
             <TableGrid v-if="raw" :table="raw" :label="`Raw extraction ${raw.file}`" class="source-raw" />
             <p v-else class="pane-missing">
               <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-              <span><b>No raw extraction:</b> add {{ summary.missing_raw }}</span>
-              <span class="pane-missing-hint">use Add table</span>
+              <span class="pane-missing-text"
+                ><b>No raw extraction:</b> add {{ summary.missing_raw }}
+                <span class="pane-missing-hint">with Add table.</span></span
+              >
             </p>
           </section>
 
@@ -189,8 +193,12 @@ const automatic = computed(() =>
 
         <p v-if="kind === 'figure' && summary.missing_raw" class="pane-missing">
           <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-          <span><b>No digitization:</b> add {{ summary.missing_raw }}</span>
-          <span class="pane-missing-hint">digitize it in WebPlotDigitizer and import it with pkdb digitize import</span>
+          <span class="pane-missing-text"
+            ><b>No digitization:</b> add {{ summary.missing_raw }}.
+            <span class="pane-missing-hint"
+              >Digitize it in WebPlotDigitizer and import it with pkdb digitize import.</span
+            ></span
+          >
         </p>
 
         <details v-if="problemGroups.length" :open="problemGroups.length > 0" class="source-problems">
@@ -346,6 +354,8 @@ const automatic = computed(() =>
 .source-unmatched {
   max-width: calc(var(--figure-width, 100%) + 2px);
 }
+/* The icon, then one text that wraps as a paragraph in a narrow pane; a long file name breaks only
+   when it does not fit into a line. */
 .pane-missing {
   display: flex;
   align-items: baseline;
@@ -355,7 +365,11 @@ const automatic = computed(() =>
   font-size: 11.5px;
   border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
   border-radius: 6px;
-  overflow-wrap: anywhere;
+}
+.pane-missing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 .pane-missing-hint {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
