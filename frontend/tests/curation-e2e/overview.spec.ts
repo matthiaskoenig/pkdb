@@ -127,6 +127,24 @@ test("filters the studies by curator and keeps the filters when a study is opene
   await expect(page.getByText("1 of 2 studies")).toBeVisible();
 });
 
+test("the filter fields keep their place when the counts of the status chips change", async ({ page }) => {
+  // Wide enough for the fields and the chips in one row.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await validated(page);
+  const fields = [
+    page.getByRole("textbox", { name: "Search studies" }),
+    page.getByRole("combobox", { name: "Substance" }),
+    page.getByRole("combobox", { name: "Curator" }),
+  ];
+  const boxes = () => Promise.all(fields.map((field) => field.boundingBox()));
+  const before = await boxes();
+  // Counts of more digits, as in a workspace of hundreds of studies, make the chips wider.
+  await page.locator(".overview-chips .chip-count").evaluateAll((counts) => {
+    for (const count of counts) count.textContent = "1234";
+  });
+  expect(await boxes()).toEqual(before);
+});
+
 test("Validate queues a job, and the study shows it until it ran", async ({ page }) => {
   await validated(page);
   // While automatic actions are paused, the job waits in the queue.
