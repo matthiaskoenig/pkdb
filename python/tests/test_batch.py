@@ -177,19 +177,32 @@ def test_resume_unknown_reconciles_without_replay(study_folder, vocabulary, tmp_
             upload([study_folder], options=BatchOptions(resume=report))
 
 
-def test_duplicate_sid_rejected_before_network(study_folder, vocabulary, tmp_path):
-    other = tmp_path / "other"
-    shutil.copytree(study_folder, other)
-    with pytest.raises(ValueError, match="Duplicate study SID"):
-        upload_many(
-            [study_folder, other],
+def conflicting(folders, vocabulary):
+    """Upload folders that all conflict: nothing reaches the server but its capabilities."""
+
+    def handler(request):
+        assert request.url.path == "/api/v2/capabilities", request.url
+        return httpx2.Response(200, json=capabilities(vocabulary))
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        return upload_many(
+            folders,
             endpoint="https://example.test",
             api_key="secret",
             vocabulary=vocabulary,
-        )
+            transport=transport,
+        )["results"]
 
 
-def test_format_1_studies_of_one_reference_rejected_before_network(
+def test_studies_with_one_sid_fail_without_upload(study_folder, vocabulary, tmp_path):
+    other = tmp_path / "other"
+    shutil.copytree(study_folder, other)
+    rows = conflicting([study_folder, other], vocabulary)
+    assert [row["status"] for row in rows] == ["failed", "failed"]
+    assert all(row["error"].startswith("Duplicate study SID") for row in rows)
+
+
+def test_format_1_studies_of_one_reference_fail_without_upload(
     study_folder, vocabulary, tmp_path
 ):
     other = tmp_path / "other"
@@ -197,14 +210,11 @@ def test_format_1_studies_of_one_reference_rejected_before_network(
     path = other / "study.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     path.write_text(json.dumps({**data, "sid": "TEST2"}), encoding="utf-8")
+    rows = conflicting([study_folder, other], vocabulary)
     # A format 1 study has no source key to name.
-    with pytest.raises(ValueError, match="^Multiple studies claim reference 123$"):
-        upload_many(
-            [study_folder, other],
-            endpoint="https://example.test",
-            api_key="secret",
-            vocabulary=vocabulary,
-        )
+    assert [row["error"].split(":")[0] for row in rows] == [
+        "Multiple studies claim reference 123"
+    ] * 2
 
 
 def test_checkpoint_failure_prevents_dispatch(
