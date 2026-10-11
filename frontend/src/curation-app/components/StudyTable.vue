@@ -255,7 +255,7 @@ const items = computed(() =>
             >
               {{ problem.label }}
             </VChip>
-            <span v-if="activity" class="cell-note">{{ activity }}</span>
+            <span v-if="activity" class="cell-note" :title="activity">{{ activity }}</span>
             <span v-if="row.message" class="cell-message" :title="row.message">{{ row.message }}</span>
             <VBtn
               v-if="row.status === 'unknown'"
@@ -478,18 +478,19 @@ a.study-identity:hover {
 .study-table th.cell-open {
   text-align: end;
 }
-/* The problems of a row stay on its line: a long note or message is cut with an ellipsis. */
-.study-table .cell-problems {
-  width: 12rem;
-  max-width: 12rem;
-  overflow: hidden;
-}
+/* The problems of a row stay on its line: the cell takes the width of its chips and of the
+   button, which are never cut, while a long note or message is cut with an ellipsis. */
 .cell-problems .cell-chips {
   flex-wrap: nowrap;
 }
-.cell-note,
-.cell-message {
+.cell-problems .cell-chips > * {
+  flex: none;
+}
+.cell-problems .cell-chips > .cell-note,
+.cell-problems .cell-chips > .cell-message {
+  flex: 0 1 auto;
   min-width: 0;
+  max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.8125rem;
@@ -517,7 +518,7 @@ a.study-identity:hover {
 /* Avatars overlap a little, each with a ring of the surface color. */
 .curator {
   border: 1px solid rgb(var(--v-theme-surface));
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
 }
 .curator + .curator,
@@ -536,7 +537,7 @@ a.study-identity:hover {
   min-width: 22px;
   height: 22px;
   padding: 0 4px;
-  border: 2px solid rgb(var(--v-theme-surface));
+  border: 1px solid rgb(var(--v-theme-surface));
   border-radius: 11px;
   background: rgba(var(--v-theme-on-surface), 0.08);
   font-size: 0.6875rem;

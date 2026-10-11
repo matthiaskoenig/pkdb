@@ -537,6 +537,20 @@ describe("OverviewPage", () => {
     expect(page().find(".overview-footer").exists()).toBe(false);
   });
 
+  it("keeps the review button and one line for an uncertain upload with chips, note and message", async () => {
+    const busy = studyRow({
+      status: "unknown",
+      message: "The connection closed during the upload and the server did not answer again",
+      counts: { ...example.counts, errors: 2, warnings: 3 },
+    });
+    await mountPage(snapshot({ studies: [busy] }));
+    const row = rowOf("caffeine/Example");
+    expect(row.findAll(".study-row-line")).toHaveLength(1);
+    expect(row.get(".cell-problems").findAll(".status-chip").length).toBeGreaterThanOrEqual(2);
+    expect(row.get(".cell-note").attributes("title")).toBe(row.get(".cell-note").text());
+    expect(button("Review uncertain upload of caffeine/Example").text()).toBe("Review");
+  });
+
   it("retries an uncertain upload only after the curator confirms the check of the server", async () => {
     const retry = vi.spyOn(useOverviewStore(), "retry").mockResolvedValue(snapshot());
     await mountPage(
