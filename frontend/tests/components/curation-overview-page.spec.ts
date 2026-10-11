@@ -615,6 +615,89 @@ describe("OverviewPage", () => {
     expect(field("Search studies").element.value).toBe("");
   });
 
+  it("filters by curator, with the user of the app first", async () => {
+    const state = snapshot({ studies: [example, harder, approved], author: { user: "mkoenig", reason: null } });
+    const wrapper = await mountPage(state);
+    const select = wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "Curator")!;
+    expect((select.props("items") as { title: string }[]).map((item) => item.title)).toEqual([
+      "All curators",
+      "Me: Matthias König (1)",
+      "curator (3)",
+      "Jan Grzegorzewski (1)",
+    ]);
+
+    await choose(wrapper, "Curator", "mkoenig");
+    expect(identities()).toEqual(["caffeine/Harder1988"]);
+    expect(page().get(".overview-count").text()).toBe("1 of 3 studies");
+    expect(button(/^All/).text()).toMatch(/All\s*1/);
+    await choose(wrapper, "Curator", "curator");
+    expect(identities()).toHaveLength(3);
+
+    await choose(wrapper, "Curator", "janekg");
+    await click(/^Approved/);
+    expect(rows()).toHaveLength(0);
+    await click("Clear filters");
+    expect(identities()).toHaveLength(3);
+    expect(select.props("modelValue")).toBe("");
+  });
+
+  it("offers Me without studies of the user, and no Me without a user", async () => {
+    const wrapper = await mountPage(
+      snapshot({ studies: [example, approved], author: { user: "mkoenig", reason: null } }),
+    );
+    const titles = () =>
+      (
+        wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "Curator")!.props(
+          "items",
+        ) as { title: string }[]
+      ).map((item) => item.title);
+    expect(titles()).toEqual(["All curators", "Me: Matthias König (0)", "curator (2)"]);
+    wrapper.unmount();
+
+    const anonymous = await mountPage(snapshot({ studies: [example], author: { user: null, reason: "no_user" } }));
+    expect(
+      (
+        anonymous.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "Curator")!.props(
+          "items",
+        ) as { title: string }[]
+      ).map((item) => item.title),
+    ).toEqual(["All curators", "curator (1)"]);
+  });
+
+  it("keeps the filters and the sort order when the overview is shown again", async () => {
+    const state = snapshot({ studies: [example, harder, approved], author: { user: "mkoenig", reason: null } });
+    const first = await mountPage(state);
+    await choose(first, "Curator", "curator");
+    await choose(first, "Substance", "caffeine");
+    await click("Open items");
+    first.unmount();
+
+    const again = await mountPage(state);
+    expect(identities()).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
+    expect(page().get(".overview-count").text()).toBe("2 of 3 studies");
+    const header = page().findAll("th").find((cell) => cell.text().startsWith("Open items"))!;
+    expect(header.attributes("aria-sort")).toBe("ascending");
+    expect(
+      again.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "Curator")!.props("modelValue"),
+    ).toBe("curator");
+  });
+
+  it("starts with the default filters in another workspace", async () => {
+    const state = snapshot({ studies: [example, harder, approved] });
+    const wrapper = await mountPage(state);
+    await choose(wrapper, "Curator", "janekg");
+    await click("Open items");
+    expect(identities()).toEqual(["caffeine/Harder1988"]);
+
+    serve({ "/local/state": { ...state, workspace: "/elsewhere/pkdb_data" }, "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(identities()).toEqual(["caffeine/Example", "caffeine/Harder1988", "codeine/Kirchheiner2007"]);
+    expect(page().findAll("th").find((cell) => cell.text().startsWith("Study"))!.attributes("aria-sort")).toBe(
+      "ascending",
+    );
+  });
+
   it("sorts by a column header", async () => {
     await mountPage(snapshot({ studies: [example, harder, approved] }));
     const header = () => page().findAll("th").find((cell) => cell.text().startsWith("Open items"))!;

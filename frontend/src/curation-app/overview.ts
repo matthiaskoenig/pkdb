@@ -12,6 +12,8 @@ export interface StudyFilter {
   search: string;
   /** One substance, or "" for all. */
   substance: string;
+  /** The user name of one curator, matched ignoring case, or "" for all. */
+  curator: string;
   chip: StatusChip;
 }
 
@@ -41,11 +43,18 @@ function matchesChip(row: StudyRow, chip: StatusChip): boolean {
   return row.summary.review_status === chip;
 }
 
-export function filterStudies(rows: StudyRow[], { search, substance, chip }: StudyFilter): StudyRow[] {
+/** Whether `user` is a curator of the study; user names are compared ignoring case, as the curator roster does. */
+function curatedBy(row: StudyRow, user: string): boolean {
+  const key = user.toLowerCase();
+  return (row.summary.curators ?? []).some((name) => name.toLowerCase() === key);
+}
+
+export function filterStudies(rows: StudyRow[], { search, substance, curator, chip }: StudyFilter): StudyRow[] {
   const needle = search.trim().toLowerCase();
   return rows.filter(
     (row) =>
       (!substance || row.substance === substance) &&
+      (!curator || curatedBy(row, curator)) &&
       matchesChip(row, chip) &&
       (!needle || row.id.toLowerCase().includes(needle) || (row.summary.title ?? "").toLowerCase().includes(needle)),
   );
@@ -56,6 +65,26 @@ export function chipCounts(rows: StudyRow[]): Record<StatusChip, number> {
   return Object.fromEntries(
     STATUS_CHIPS.map(({ value }) => [value, rows.filter((row) => matchesChip(row, value)).length]),
   ) as Record<StatusChip, number>;
+}
+
+/**
+ * The curators of the rows with the number of their studies, in alphabetical order of the user
+ * name. User names that differ only in case are one curator, named by its first spelling.
+ */
+export function curatorsOf(rows: StudyRow[]): { user: string; studies: number }[] {
+  const curators = new Map<string, { user: string; studies: number }>();
+  for (const row of rows) {
+    const seen = new Set<string>();
+    for (const user of row.summary.curators ?? []) {
+      const key = user.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const entry = curators.get(key);
+      if (entry) entry.studies += 1;
+      else curators.set(key, { user, studies: 1 });
+    }
+  }
+  return [...curators.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, entry]) => entry);
 }
 
 /** The substances of the rows in alphabetical order. */

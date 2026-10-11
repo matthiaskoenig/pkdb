@@ -106,6 +106,27 @@ test("filters the studies by search and status", async ({ page }) => {
   await expect(studyRows(page)).toHaveCount(2);
 });
 
+test("filters the studies by curator and keeps the filters when a study is opened", async ({ page }) => {
+  await validated(page);
+  const curator = page.getByRole("combobox", { name: "Curator" });
+  await curator.focus();
+  await curator.press("ArrowDown");
+  // The user of the app, curator, curates both studies.
+  await page.getByRole("option", { name: "Me: curator (2)", exact: true }).click();
+  await expect(studyRows(page)).toHaveCount(2);
+  await page.getByRole("textbox", { name: "Search studies" }).fill("draft2021");
+  await expect(studyRows(page)).toHaveCount(1);
+
+  await studyRow(page, "caffeine/Draft2021").getByRole("link", { name: "caffeine/Draft2021" }).click();
+  await expect(page.getByRole("heading", { name: "caffeine/Draft2021", level: 1 })).toBeVisible();
+  await page.getByRole("link", { name: "PK-DB Local curation" }).click();
+  await expect(page.getByRole("heading", { name: "Studies", level: 1 })).toBeVisible();
+  await expect(studyRows(page)).toHaveCount(1);
+  await expect(page.getByRole("textbox", { name: "Search studies" })).toHaveValue("draft2021");
+  await expect(page.getByRole("combobox", { name: "Curator" })).toHaveValue("Me: curator (2)");
+  await expect(page.getByText("1 of 2 studies")).toBeVisible();
+});
+
 test("Validate queues a job, and the study shows it until it ran", async ({ page }) => {
   await validated(page);
   // While automatic actions are paused, the job waits in the queue.
