@@ -3,7 +3,7 @@ import json
 import httpx2
 import pytest
 from fake_github import FakeGitHub
-from issue_fixtures import study
+from issue_fixtures import study, table
 
 from pkdb.identity import Author
 from pkdb.issues import state as state_module
@@ -155,6 +155,26 @@ def test_adoption_creates_an_issue_without_a_match(tmp_path):
     assert sorted(github.issues[1]["labels"]) == ["caffeine", "curate"]
     assert github.issues[1]["assignees"] == ["ana-gh"]
     assert [path for _, path, _ in github.writes] == ["/labels", "/labels", "/issues"]
+
+
+def test_a_new_issue_has_the_labels_of_the_other_substances(tmp_path):
+    folder = study(tmp_path, "caffeine/A")
+    study(tmp_path, "midazolam/B", issue=2)
+    dosing = {"name": "D1", "measurement": "dosing", "substance": "midazolam"}
+    table(folder, "interventions.tsv", [dosing])
+    github = FakeGitHub(
+        issues=[
+            {"number": 2, "title": "midazolam/B", "labels": ["midazolam", "curate"]}
+        ],
+        labels=["midazolam", "curate"],
+        assignable=["ana-gh"],
+    )
+    with github.client() as client:
+        result = sync(tmp_path, client, ROSTER, adopt=True, author=AUTHOR)
+    assert result.ok
+    [adopted] = result.adopted
+    assert adopted.labels == ["caffeine", "midazolam", "curate"]
+    assert sorted(github.issues[3]["labels"]) == ["caffeine", "curate", "midazolam"]
 
 
 def test_only_open_duplicates_are_closed(tmp_path):

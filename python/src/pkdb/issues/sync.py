@@ -17,7 +17,6 @@ from pkdb.issues.github import GitHub, GitHubError, Issue
 from pkdb.issues.state import (
     LABEL_COLORS,
     SUBSTANCE_COLOR,
-    WORKFLOW,
     IssueChange,
     Problems,
     Roster,
@@ -26,6 +25,7 @@ from pkdb.issues.state import (
     desired_assignees,
     plan,
     read_studies,
+    study_labels,
 )
 from pkdb.repository import substances
 from pkdb.schemas.curators import Curator
@@ -132,6 +132,7 @@ def _sync(
         issues={issue.number: issue for issue in github.issues()},
         roster=Roster.of(roster, github.assignable()),
         label_names=github.labels(),
+        substance_names=substances(root),
         progress=progress,
     )
     states = studies.states
@@ -141,7 +142,7 @@ def _sync(
         states,
         list(run.issues.values()),
         run.roster,
-        substance_names=substances(root),
+        substance_names=run.substance_names,
         label_names=run.label_names,
         repository=github.repository,
         problems=run.problems,
@@ -168,6 +169,7 @@ class _Run:
     issues: dict[int, Issue]
     roster: Roster
     label_names: list[str]
+    substance_names: list[str]
     progress: Callable[[str], None] | None
     problems: Problems = field(default_factory=Problems)
     dropped: set[int] = field(default_factory=set)
@@ -266,7 +268,7 @@ def _adopt_one(
     if keep is None:
         # The plan repeats the problems of a new issue, except in a dry run.
         problems = run.problems if run.dry_run else Problems()
-        result.labels = [state.location.partition("/")[0], WORKFLOW[state.status]]
+        result.labels = study_labels(state, run.substance_names)
         result.assignees = desired_assignees(
             state, run.roster, problems, repository=run.github.repository
         )
