@@ -14,6 +14,7 @@ import {
   rowAt,
   type EventPoint,
   type OverlayMode,
+  type SelectedRow,
 } from "../overlay";
 import { loadNoncedPlotly, plotlyImport, retryPlotly } from "../plotly";
 import { messageOf } from "../study";
@@ -34,9 +35,9 @@ const props = defineProps<{
   highlight?: string | null;
   mode?: OverlayMode;
   /** The row that the curator selected, whose point gets a ring. */
-  selected?: { file: string; line: number } | null;
+  selected?: SelectedRow;
 }>();
-const emit = defineEmits<{ "select-row": [row: { file: string; line: number }] }>();
+const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>] }>();
 
 /** Beyond this many points, the data table scrolls below a header that stays in view. */
 const SCROLL_ROWS = 12;

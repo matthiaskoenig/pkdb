@@ -18,9 +18,10 @@ import { plotColors, type PlotColors } from "../features/plots/theme";
 export const POINT_RING = "#1f1f1f";
 
 /** The color of a series that the source view does not list, which does not happen in a valid view. */
+const UNKNOWN_COLOR = "#757575";
+
 /** Amber, apart from the series colors and readable on the paper and on both themes. */
 const SELECTED_COLOR = "#e8a400";
-const UNKNOWN_COLOR = "#757575";
 
 /** The opacity of the series beside an emphasized series. */
 export const FADED = 0.2;
@@ -202,6 +203,10 @@ function opacities(drawn: readonly string[], highlight: string | null | undefine
 }
 
 /** The emphasized traces last, so that they are drawn on top. */
+function emphasizedLast(traces: OverlayTrace[]): OverlayTrace[] {
+  return [...traces.filter((trace) => trace.opacity !== 1), ...traces.filter((trace) => trace.opacity === 1)];
+}
+
 /** A row that the curator selected, whose point gets a ring. */
 export type SelectedRow = { file: string; line: number } | null;
 
@@ -222,10 +227,6 @@ function selectedTrace(points: { x: number; y: number }[], color: string): Overl
       hoverinfo: "skip",
     },
   ];
-}
-
-function emphasizedLast(traces: OverlayTrace[]): OverlayTrace[] {
-  return [...traces.filter((trace) => trace.opacity !== 1), ...traces.filter((trace) => trace.opacity === 1)];
 }
 
 function baseLayout(theme: PlotTheme): Omit<OverlayLayout, "xaxis" | "yaxis" | "margin"> {

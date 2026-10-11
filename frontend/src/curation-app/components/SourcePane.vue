@@ -29,7 +29,7 @@ const props = defineProps<{
   /** The row that the curator selected, whose point gets a ring. */
   selected: SelectedRow;
 }>();
-const emit = defineEmits<{ "select-row": [row: { file: string; line: number }]; retry: [] }>();
+const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>]; retry: [] }>();
 
 const study = useStudyStore();
 const overview = useOverviewStore();
