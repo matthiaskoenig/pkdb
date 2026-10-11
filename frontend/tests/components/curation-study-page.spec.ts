@@ -354,34 +354,41 @@ describe("StudyPage", () => {
     expect(header.get(".provenance-chip").text()).toBe("AI curated · claude-opus-5-5");
   });
 
-  it("shows a summary line with the title, the PMID, On save, the sync status and the problems", async () => {
+  it("shows a summary line with the title, the PMID, the sync status and the problems", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const line = page().get(".study-header .study-header-line");
+    const title = "Effect of smoking on caffeine clearance and plasma levels in healthy volunteers";
+    expect(line.get(".study-title").text()).toBe(title);
+    expect(line.get(".study-title").attributes("title")).toBe(title);
+    expect(line.get(".fact-pmid a").text()).toBe("2895442");
+    expect(line.get(".fact-pmid a").attributes("href")).toBe("https://pubmed.ncbi.nlm.nih.gov/2895442/");
+    expect(line.get(".fact-sync").text()).toBe("Workbook open");
+    expect(line.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
+  });
+
+  it("shows identity, chips, title and actions in one line", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review");
+    const line = page().get(".study-header-line");
+    expect(line.find(".study-identity").exists()).toBe(true);
+    expect(line.find(".study-title").exists()).toBe(true);
+    expect(line.find(".study-buttons").exists()).toBe(true);
+  });
+
+  it("leaves On save and the last upload to the section tabs", async () => {
     await mountPage("/studies/caffeine/Harder1988/review");
     const header = page().get(".study-header");
-    expect(header.get(".study-title").text()).toBe(
-      "Effect of smoking on caffeine clearance and plasma levels in healthy volunteers",
-    );
-    const facts = header.get(".study-facts");
-    expect(facts.get(".fact-pmid a").text()).toBe("2895442");
-    expect(facts.get(".fact-pmid a").attributes("href")).toBe("https://pubmed.ncbi.nlm.nih.gov/2895442/");
-    expect(facts.get(".fact-mode").text()).toBe("On save Upload");
-    expect(facts.get(".fact-sync").text()).toBe("Workbook open");
-    expect(facts.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
+    expect(header.text()).not.toContain("On save");
+    expect(header.text()).not.toContain("Last upload");
+    expect(page().get(".section-tabs-facts").text()).toContain("On save: Upload");
   });
 
-  it("links the last upload to its page on PK-DB", async () => {
-    await mountPage("/studies/caffeine/Harder1988/review", {
-      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
-    });
-    expect(page().get(".fact-upload a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
-  });
-
-  it("links the last upload only to a web page", async () => {
+  it("shows the last upload without a link unless it is a web page", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
       [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "javascript:alert(1)" } },
     });
-    const fact = page().get(".fact-upload");
-    expect(fact.find("a").exists()).toBe(false);
-    expect(fact.get("span:not(.fact-name)").text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
+    const facts = page().get(".section-tabs-facts");
+    expect(facts.find("a").exists()).toBe(false);
+    expect(facts.text()).toMatch(/Last upload 2026-10-01 \d\d:\d\d/);
   });
 
   it("names a study before its first check and without release, issue and AI", async () => {
