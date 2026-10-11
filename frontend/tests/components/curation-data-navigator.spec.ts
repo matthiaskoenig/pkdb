@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import DataNavigator from "../../src/curation-app/components/DataNavigator.vue";
 import type { Problem, StudyDetail } from "../../src/curation-app/api/types";
-import { sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);
 
@@ -59,6 +59,45 @@ describe("data navigator", () => {
     const wrapper = mountNavigator();
     expect(wrapper.findAll(".nav-source")[1]!.text()).toContain("2 problems");
     expect(wrapper.findAll(".nav-file")[1]!.text()).toContain("2 problems");
+  });
+
+  it("tells the counts of a file apart by an icon or a pill, each with a title", () => {
+    const review = {
+      revision: "review-1",
+      value: { status: "draft" as const, reviewers: [], items: [reviewItem({ target: { file: "outputs_Tab2.tsv" } })] },
+      issues: [],
+    };
+    const wrapper = mountNavigator({
+      detail: detail({ review }),
+      source: "Tab2",
+      file: "outputs_Tab2.tsv",
+      rows: new Map([["outputs_Tab2.tsv", 18]]),
+    });
+    const entry = wrapper.findAll(".nav-file")[1]!;
+    const problems = entry.get(".nav-count--problems");
+    expect(problems.find("i.fa-circle-exclamation").attributes("aria-hidden")).toBe("true");
+    expect(problems.attributes("title")).toBe("2 problems");
+    const items = entry.get(".nav-count:not(.nav-count--problems)");
+    expect(items.find("i.fa-comment").attributes("aria-hidden")).toBe("true");
+    expect(items.attributes("title")).toBe("1 open review item");
+    const rows = entry.get(".nav-rows");
+    expect(rows.find("i").exists()).toBe(false);
+    expect(rows.attributes("title")).toBe("18 rows of Tab2");
+    // Screen readers read each number with its meaning.
+    expect(problems.get(".d-sr-only").text()).toBe("2 problems");
+    expect(items.get(".d-sr-only").text()).toBe("1 open review item");
+    expect(rows.get(".d-sr-only").text()).toBe("18 rows of Tab2");
+  });
+
+  it("names every source and file in full in the title of its name, which the navigator may cut", () => {
+    const wrapper = mountNavigator();
+    expect(wrapper.findAll(".nav-source .nav-name").map((name) => name.attributes("title"))).toEqual(["Fig1", "Tab2"]);
+    expect(wrapper.findAll(".nav-file .nav-name").map((name) => name.attributes("title"))).toEqual([
+      "subjects.tsv",
+      "outputs_Tab2.tsv",
+      "timecourses_Fig1.tsv",
+      "Example_Tab2.tsv",
+    ]);
   });
 
   it("shows the rows of the selected source per file and dims the files without them", () => {

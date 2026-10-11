@@ -58,15 +58,15 @@ const files = computed(() =>
           <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" decoding="async" class="nav-thumb" />
           <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="ICONS[summary.kind]"></i></span>
           <span class="nav-text">
-            <span class="nav-name">{{ summary.source }}</span>
+            <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
-          <span v-if="count.problems" class="nav-count nav-count--problems">
+          <span v-if="count.problems" class="nav-count nav-count--problems" :title="plural(count.problems, 'problem')">
             <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
             <span class="d-sr-only">{{ plural(count.problems, "problem") }}</span>
             <span aria-hidden="true">{{ count.problems }}</span>
           </span>
-          <span v-if="count.items" class="nav-count">
+          <span v-if="count.items" class="nav-count" :title="plural(count.items, 'open review item')">
             <i class="fas fa-comment" aria-hidden="true"></i>
             <span class="d-sr-only">{{ plural(count.items, "open review item") }}</span>
             <span aria-hidden="true">{{ count.items }}</span>
@@ -85,17 +85,19 @@ const files = computed(() =>
           @click="emit('select-file', entry.file)"
         >
           <i :class="entry.raw ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
-          <span class="nav-name">{{ entry.file }}</span>
+          <span class="nav-name" :title="entry.file">{{ entry.file }}</span>
           <span v-if="entry.raw" class="d-sr-only">, raw table</span>
-          <span v-if="entry.problems" class="nav-count nav-count--problems">
+          <span v-if="entry.problems" class="nav-count nav-count--problems" :title="plural(entry.problems, 'problem')">
+            <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
             <span class="d-sr-only">{{ plural(entry.problems, "problem") }}</span>
             <span aria-hidden="true">{{ entry.problems }}</span>
           </span>
-          <span v-if="entry.items" class="nav-count">
+          <span v-if="entry.items" class="nav-count" :title="plural(entry.items, 'open review item')">
+            <i class="fas fa-comment" aria-hidden="true"></i>
             <span class="d-sr-only">{{ plural(entry.items, "open review item") }}</span>
             <span aria-hidden="true">{{ entry.items }}</span>
           </span>
-          <span v-if="entry.rows !== null" class="nav-rows">
+          <span v-if="entry.rows !== null" class="nav-rows" :title="`${plural(entry.rows, 'row')} of ${source}`">
             <span class="d-sr-only">{{ plural(entry.rows, "row") }} of {{ source }}</span>
             <span aria-hidden="true">{{ entry.rows }}</span>
           </span>
@@ -144,11 +146,12 @@ const files = computed(() =>
   min-height: 40px;
   padding: 3px 6px;
 }
+/* As high as the smallest target of the app, 24 px. */
 .nav-file {
   display: flex;
   align-items: center;
   gap: 6px;
-  min-height: 22px;
+  min-height: 24px;
   padding: 0 6px;
 }
 .nav-source:hover,
@@ -195,11 +198,16 @@ const files = computed(() =>
   font-size: 11px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+/* A count of problems or of open review items has its icon before the number. */
 .nav-count {
   display: inline-flex;
   align-items: center;
   gap: 3px;
   flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.nav-count > i {
+  font-size: 10px;
 }
 .nav-count--problems {
   color: rgb(var(--v-theme-error));
@@ -211,9 +219,17 @@ const files = computed(() =>
 .nav-file--other .nav-name {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+/* The rows of the selected source in a file: a muted number on a tinted pill, apart from the
+   counts with their icons. */
 .nav-rows {
   flex: none;
-  margin-inline-start: auto;
+  min-width: 22px;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: rgba(var(--v-theme-on-surface), 0.07);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
   font-variant-numeric: tabular-nums;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
