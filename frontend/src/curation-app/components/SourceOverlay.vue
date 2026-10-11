@@ -199,7 +199,7 @@ watch(
   { flush: "post" },
 );
 
-// The plot follows the size of its element, such as when the window or the rail changes.
+// The plot follows the size of its element, such as when the window or the split of the panes changes.
 watch(host, (element) => {
   observer?.disconnect();
   if (!element) return;

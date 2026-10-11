@@ -16,7 +16,7 @@ import type {
   ValidationIssue,
 } from "./api/types";
 
-/** The sections of the study page in the order of the rail. */
+/** The sections of the study page in the order of their tabs. */
 export const SECTIONS = ["metadata", "review", "problems", "data", "activity"] as const;
 
 export type Section = (typeof SECTIONS)[number];
