@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import type { StudyDetail } from "../api/types";
-import { fileCounts, nameParts, sourceCounts } from "../data";
+import { fileCounts, nameParts, sourceCounts, type SourceRows } from "../data";
 import { plural } from "../overview";
 import { SOURCE_ICONS } from "../sources";
 import { rawTableFiles, tableFiles } from "../study";
@@ -9,14 +9,15 @@ import NavigatorCounts from "./NavigatorCounts.vue";
 
 /**
  * The sources of a study with a thumbnail of their image, and its table files in workbook
- * order, each with its problems and open review items. While a source is selected and its rows
- * are known, a file shows how many rows of the source it has, and files without any are dimmed.
+ * order, each with its problems and open review items. While the rows of a source are known, a
+ * file shows how many rows of that source it has, and files without any are dimmed. The rows may
+ * be those of the last source while the selected one loads, so they name their own source.
  */
 const props = defineProps<{
   detail: StudyDetail;
   source: string | null;
   file: string | null;
-  rows: ReadonlyMap<string, number> | null;
+  rows: SourceRows | null;
 }>();
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
 
@@ -28,6 +29,13 @@ const raw = computed(() => rawTableFiles(props.detail));
 const sources = computed(() =>
   props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
+
+/** How many rows `file` has of the source of `rows`, and the text that names it; null for none. */
+function rowsIn(file: string): { count: number; text: string } | null {
+  const count = props.rows?.files.get(file);
+  return props.rows && count !== undefined ? { count, text: `${plural(count, "row")} of ${props.rows.source}` } : null;
+}
+
 const files = computed(() =>
   tableFiles(props.detail).map((file) => ({
     file,
@@ -36,8 +44,8 @@ const files = computed(() =>
     errors: counts.value.problems.get(file)?.errors ?? 0,
     warnings: counts.value.problems.get(file)?.warnings ?? 0,
     items: counts.value.items.get(file) ?? 0,
-    rows: props.rows?.get(file) ?? null,
-    other: props.rows !== null && !props.rows.has(file),
+    rows: rowsIn(file),
+    other: props.rows !== null && !props.rows.files.has(file),
   })),
 );
 </script>
@@ -82,9 +90,9 @@ const files = computed(() =>
           <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
           <span v-if="entry.raw" class="d-sr-only">, raw table</span>
           <NavigatorCounts :errors="entry.errors" :warnings="entry.warnings" :items="entry.items" />
-          <span v-if="entry.rows !== null" class="nav-rows" :title="`${plural(entry.rows, 'row')} of ${source}`">
-            <span class="d-sr-only">{{ plural(entry.rows, "row") }} of {{ source }}</span>
-            <span aria-hidden="true">{{ entry.rows }}</span>
+          <span v-if="entry.rows" class="nav-rows" :title="entry.rows.text">
+            <span class="d-sr-only">{{ entry.rows.text }}</span>
+            <span aria-hidden="true">{{ entry.rows.count }}</span>
           </span>
         </button>
       </li>

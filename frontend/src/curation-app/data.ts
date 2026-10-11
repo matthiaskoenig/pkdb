@@ -150,6 +150,15 @@ export function defaultSource(detail: Counted): SourceSummary | null {
   return detail.sources.find((source) => hasProblems(sourceCounts(detail, source))) ?? detail.sources[0] ?? null;
 }
 
+/**
+ * The rows of a source by table file, for the navigator. They name their source, as they may be
+ * those of the last source while the selected one loads.
+ */
+export interface SourceRows {
+  source: string;
+  files: ReadonlyMap<string, number>;
+}
+
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */
 export function rowSource(table: TableResponse, line: number): string | null {
   if (table.kind !== "table") return null;

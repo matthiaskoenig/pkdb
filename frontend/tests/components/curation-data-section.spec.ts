@@ -800,7 +800,7 @@ describe("linked selection", () => {
     expect(rowsOf("interventions.tsv").exists()).toBe(false);
   });
 
-  it("keeps the rows of the last source in the navigator while the next source loads", async () => {
+  it("keeps the rows of the last source in the navigator, named after it, while the next source loads", async () => {
     let answer: (response: Response) => void = () => {};
     await mountSection(detail(), {
       [`GET ${EXAMPLE}/sources/Fig1`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
@@ -810,16 +810,30 @@ describe("linked selection", () => {
         const pill = entry.find(".nav-rows [aria-hidden='true']");
         return pill.exists() ? pill.text() : null;
       });
+    /** What each pill counts, in its title and for screen readers. */
+    const meanings = () =>
+      page()
+        .findAll(".nav-rows")
+        .map((pill) => [pill.attributes("title"), pill.get(".d-sr-only").text()]);
     const ofTab2 = pills();
     expect(ofTab2.filter(Boolean)).toEqual(["2", "2"]);
+    expect(meanings()).toEqual([
+      ["2 rows of Tab2", "2 rows of Tab2"],
+      ["2 rows of Tab2", "2 rows of Tab2"],
+    ]);
     await choose("source", "Fig1");
     await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
     expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
     expect(pills()).toEqual(ofTab2);
+    expect(meanings()).toEqual([
+      ["2 rows of Tab2", "2 rows of Tab2"],
+      ["2 rows of Tab2", "2 rows of Tab2"],
+    ]);
     expect(files().some((entry) => entry.classes().includes("nav-file--other"))).toBe(true);
     answer(json(digitized));
     await flushPromises();
     expect(pills().filter(Boolean)).toEqual(["2"]);
+    expect(meanings()).toEqual([["2 rows of Fig1", "2 rows of Fig1"]]);
   });
 
   it("drops the rows of the last source from the navigator when the next source cannot be loaded", async () => {

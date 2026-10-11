@@ -128,7 +128,7 @@ describe("data navigator", () => {
       detail: detail({ review }),
       source: "Tab2",
       file: "outputs_Tab2.tsv",
-      rows: new Map([["outputs_Tab2.tsv", 18]]),
+      rows: { source: "Tab2", files: new Map([["outputs_Tab2.tsv", 18]]) },
     });
     const entry = wrapper.findAll(".nav-file")[1]!;
     const problems = entry.get(".nav-count--error");
@@ -158,11 +158,20 @@ describe("data navigator", () => {
   });
 
   it("shows the rows of the selected source per file and dims the files without them", () => {
-    const wrapper = mountNavigator({ rows: new Map([["timecourses_Fig1.tsv", 14], ["subjects.tsv", 1]]) });
+    const wrapper = mountNavigator({
+      rows: { source: "Fig1", files: new Map([["timecourses_Fig1.tsv", 14], ["subjects.tsv", 1]]) },
+    });
     const files = wrapper.findAll(".nav-file");
     expect(files[2]!.text()).toContain("14");
     expect(files[1]!.classes()).toContain("nav-file--other");
     expect(files[0]!.classes()).not.toContain("nav-file--other");
+  });
+
+  it("names the rows after their source, which is the last one while the selected source loads", () => {
+    const wrapper = mountNavigator({ source: "Fig1", rows: { source: "Tab2", files: new Map([["outputs_Tab2.tsv", 18]]) } });
+    const rows = wrapper.get(".nav-rows");
+    expect(rows.attributes("title")).toBe("18 rows of Tab2");
+    expect(rows.get(".d-sr-only").text()).toBe("18 rows of Tab2");
   });
 
   it("emits the chosen source and file", async () => {
