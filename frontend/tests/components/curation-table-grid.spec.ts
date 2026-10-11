@@ -383,6 +383,11 @@ describe("selection and the line filter", () => {
     expect(header.get("button").attributes("title")).toBe("Select line 4");
   });
 
+  it("marks a selectable grid, whose rows show the pointer and a tint under it", () => {
+    expect(mountGrid({ selectable: true }).get(".table-grid").classes()).toContain("table-grid--selectable");
+    expect(mountGrid({}).get(".table-grid").classes()).not.toContain("table-grid--selectable");
+  });
+
   it("renders no buttons and emits nothing when not selectable", async () => {
     const wrapper = mountGrid({});
     expect(wrapper.find(".grid-line-button").exists()).toBe(false);

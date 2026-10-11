@@ -338,7 +338,7 @@ watch(
 </script>
 
 <template>
-  <div class="table-grid" :class="{ 'table-grid--more': more }" :style="fade">
+  <div class="table-grid" :class="{ 'table-grid--more': more, 'table-grid--selectable': selectable }" :style="fade">
     <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
     <div
       ref="region"
@@ -484,7 +484,18 @@ watch(
 .rows-scroll .rows-table .grid-row--focus > .rows-line {
   background-color: color-mix(in srgb, rgb(var(--v-theme-primary)) 12%, rgb(var(--v-theme-surface)));
 }
-/* A selectable row; its line is a button that looks like the line. */
+/* A selectable row shows the pointer, and under it the tint of a hovered entry of the navigator,
+   opaque on the line column; the rows of open review items and of the focus keep their tints. */
+.table-grid--selectable tbody tr[data-index] {
+  cursor: pointer;
+}
+.table-grid--selectable .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > td {
+  background-color: rgba(var(--v-theme-on-surface), 0.05);
+}
+.table-grid--selectable .rows-scroll .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--v-theme-on-surface)) 5%, rgb(var(--v-theme-surface)));
+}
+/* Its line is a button that looks like the line. */
 .grid-line-button {
   all: unset;
   cursor: pointer;
