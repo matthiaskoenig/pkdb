@@ -50,7 +50,7 @@ function gridCell(page: Page, line: number, value: string) {
   return page
     .getByRole("region", { name: `Rows of ${TABLE}` })
     .getByRole("row")
-    .filter({ has: page.getByRole("rowheader", { name: `Select line ${line}`, exact: true }) })
+    .filter({ has: page.getByRole("rowheader", { name: String(line), exact: true }) })
     .getByRole("cell", { name: value, exact: true });
 }
 
@@ -113,7 +113,7 @@ test.describe("sources", () => {
     await expect(page.getByRole("heading", { name: "Data", level: 2 })).toBeVisible();
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/)).toHaveAttribute("aria-current", "true");
     const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
-    await expect(grid.getByRole("rowheader", { name: "Select line 6", exact: true })).toBeFocused();
+    await expect(grid.getByRole("rowheader", { name: "6", exact: true })).toBeFocused();
   });
 
   test("the Tab2 source shows the table image, the raw extraction and the rows of its table", async ({ page }) => {
@@ -124,7 +124,7 @@ test.describe("sources", () => {
     await expect(raw.getByRole("cell", { name: "36.1 ± 8.5" })).toBeVisible();
     await expect(navigatorButton(page, /^outputs_Tab2\.tsv/)).toHaveAttribute("aria-current", "true");
     const rows = page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" });
-    await expect(rows.getByRole("button", { name: "Select line 2" })).toBeVisible();
+    await expect(rows.getByRole("button", { name: "2", exact: true })).toBeVisible();
   });
 });
 
@@ -132,7 +132,7 @@ test("old addresses of the Sources and Tables sections open the Data section", a
   await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=6");
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=6$/);
   await expect(
-    page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "Select line 6", exact: true }),
+    page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "6", exact: true }),
   ).toBeFocused();
 });
 
@@ -153,7 +153,7 @@ test("the separator moves with the keyboard and keeps its place after a reload",
 
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
-  await page.getByRole("button", { name: "Select line 6" }).click();
+  await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "6", exact: true }).click();
   await expect(page).toHaveURL(/line=6/);
   const figure = page.getByRole("img", { name: /^Figure Fig1/ });
   await expect
