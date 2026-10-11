@@ -464,7 +464,7 @@ describe("tabs", () => {
     expect(rows[1]!.findAll("td")[4]!.classes()).toContain("grid-cell--error");
     expect(rows[2]!.findAll("td")[6]!.classes()).toContain("grid-cell--warning");
     expect(panel().get(".tables-caption").text()).toBe(
-      "3 rows. Open review items target 1 row. 2 problems are outlined.",
+      "3 rows. Open review items target 1 row. 2 problems are outlined. 1 empty column is hidden.",
     );
   });
 
@@ -486,7 +486,7 @@ describe("tabs", () => {
       `${SECTION}?file=outputs_Tab2.tsv`,
     );
     expect(panel().get(".tables-caption").text()).toBe(
-      "3 rows. 2 open review items are about the whole table. 1 open review item matches no row.",
+      "3 rows. 2 open review items are about the whole table. 1 open review item matches no row. 1 empty column is hidden.",
     );
   });
 
@@ -541,11 +541,9 @@ describe("tabs", () => {
     ]);
   });
 
-  it("hides empty columns", async () => {
+  it("hides empty columns until the switch shows them", async () => {
     await mountSection(detail(), {}, `${SECTION}?file=outputs_Tab2.tsv`);
-    expect(panel().findAll("thead th")).toHaveLength(OUTPUTS_HEADER.length + 1);
-    await page().get('input[type="checkbox"]').setValue(true);
-    await flushPromises();
+    expect(page().get('input[type="checkbox"]').element).toHaveProperty("checked", true);
     expect(panel().findAll("thead th").map((cell) => cell.text())).toEqual([
       "Line",
       "study",
@@ -557,6 +555,10 @@ describe("tabs", () => {
       "unit",
     ]);
     expect(panel().get(".tables-caption").text()).toContain("1 empty column is hidden.");
+    await page().get('input[type="checkbox"]').setValue(false);
+    await flushPromises();
+    expect(panel().findAll("thead th")).toHaveLength(OUTPUTS_HEADER.length + 1);
+    expect(panel().get(".tables-caption").text()).not.toContain("hidden");
   });
 
   it("opens the table of a problem and moves the focus to its cell", async () => {
