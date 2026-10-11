@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VBtn, VSelect, VSwitch } from "vuetify/components";
@@ -278,51 +278,10 @@ const conflictPanel = computed(() => {
   return { conflicts: detail.value?.conflicts ?? [], busy: running === "sync" ? null : running, disabled: working.value };
 });
 
-/**
- * The section fills the window between the page above it and the padding of the study page below
- * it, so that the page does not scroll and the panes scroll on their own. Both are measured when
- * the section mounts, when the window resizes, and when the study page changes its height, such as
- * when an alert of the study header shows or goes. The document is no measure of the space below:
- * the app fills the window below a short page.
- */
-const root = ref<HTMLElement | null>(null);
-const offset = ref(0);
-
-/** The study page around the section. */
-function studyPage(element: HTMLElement): HTMLElement | null {
-  return element.closest<HTMLElement>(".study-page") ?? element.parentElement;
-}
-
-function measure(): void {
-  const element = root.value;
-  if (!element) return;
-  const box = element.getBoundingClientRect();
-  const below = (studyPage(element)?.getBoundingClientRect().bottom ?? box.bottom) - box.bottom;
-  offset.value = box.top + window.scrollY + Math.max(0, below);
-}
-
-let observer: ResizeObserver | undefined;
-onMounted(() => {
-  measure();
-  window.addEventListener("resize", measure);
-  const around = root.value ? studyPage(root.value) : null;
-  if (!around) return;
-  observer = new ResizeObserver(measure);
-  observer.observe(around);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", measure);
-  observer?.disconnect();
-});
 </script>
 
 <template>
-  <div
-    ref="root"
-    class="data-section"
-    :class="{ 'data-section--fitted': stacked || limited }"
-    :style="{ '--data-offset': `${offset}px` }"
-  >
+  <div class="data-section" :class="{ 'data-section--fill': !stacked && !limited }">
     <template v-if="detail">
       <!-- No toolbar role: its controls are reached with Tab, not with the arrow keys that a toolbar promises. -->
       <div class="data-toolbar">
@@ -465,20 +424,38 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* The section fills the window below the page above it; the panes scroll on their own. */
 .data-section {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  height: calc(100dvh - var(--data-offset));
-  min-height: 480px;
   min-width: 0;
 }
-/* Stacked panes take the height of their content, each at most 70 % of the window; beyond the
-   upload limits a note takes the place of the panes. */
-.data-section--fitted {
-  height: auto;
+/* While the panes stand side by side, the page fills the window and does not scroll: a flex column
+   from the app down to the section, which takes what the app bar, a status banner, the study
+   header and the section tabs leave of the window, and its panes scroll on their own. Other
+   sections scroll with the page, as do stacked panes, each at most 70 % of the window, and the
+   note beyond the upload limits. */
+:global(.v-application__wrap:has(.data-section--fill)) {
+  height: 100dvh;
+}
+:global(.v-main:has(.data-section--fill)) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
   min-height: 0;
+}
+:global(.study-page:has(.data-section--fill)) {
+  flex: 1 1 0;
+  min-height: 0;
+}
+:global(.study-section:has(.data-section--fill)) {
+  flex: 1 1 0;
+  min-height: 0;
+}
+/* A short window scrolls the page rather than squeezing the panes. */
+.data-section--fill {
+  flex: 1 1 0;
+  min-height: 480px;
 }
 /* A wrapped line leaves room for the labels of the selects, which stand above their fields. */
 .data-toolbar {

@@ -1169,56 +1169,23 @@ describe("beyond the upload limits", () => {
 });
 
 describe("the height of the section", () => {
-  it("fills the window below the page above it, also after the page above it changed its height", async () => {
-    // jsdom has no layout: the page above the section is 300 px high, 40 px more with an alert,
-    // and the study page has a padding of 24 px below the section.
-    const above = () => 300 + (document.querySelector(".test-alert") ? 40 : 0);
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-      if (this.classList.contains("data-section")) return new DOMRect(0, above(), 1000, 600);
-      if (this.classList.contains("study-page")) return new DOMRect(0, 0, 1000, above() + 600 + 24);
-      return new DOMRect();
-    });
-    const observers: { callback: ResizeObserverCallback; targets: Element[] }[] = [];
-    const original = globalThis.ResizeObserver;
-    vi.stubGlobal(
-      "ResizeObserver",
-      class {
-        private readonly entry: { callback: ResizeObserverCallback; targets: Element[] };
-        constructor(callback: ResizeObserverCallback) {
-          this.entry = { callback, targets: [] };
-          observers.push(this.entry);
-        }
-        observe(target: Element) {
-          this.entry.targets.push(target);
-        }
-        unobserve() {}
-        disconnect() {}
-      },
-    );
-    /** The study page changed its height: its observers are told. */
-    const resized = async () => {
-      const studyPage = page().get(".study-page").element;
-      for (const { callback, targets } of observers)
-        if (targets.includes(studyPage)) callback([], {} as ResizeObserver);
-      await flushPromises();
-    };
-    const offset = () => page().get<HTMLElement>(".data-section").element.style.getPropertyValue("--data-offset");
-    try {
-      await mountSection();
-      expect(offset()).toBe("324px");
+  it("fills the window below the page above it while the panes stand side by side, and else scrolls with the page", async () => {
+    // jsdom has no layout: the CSS of the section and of the page around it fills the window
+    // (the end-to-end tests measure it); the section says when.
+    await mountSection();
+    expect(page().get(".data-section").classes()).toContain("data-section--fill");
+    expect(page().get(".data-section").attributes("style")).toBeUndefined();
+  });
 
-      const alert = document.createElement("div");
-      alert.className = "test-alert";
-      page().get(".study-page").element.prepend(alert);
-      await resized();
-      expect(offset()).toBe("364px");
+  it("scrolls with the page while the panes stack", async () => {
+    setViewport(900);
+    await mountSection();
+    expect(page().get(".data-section").classes()).not.toContain("data-section--fill");
+  });
 
-      alert.remove();
-      await resized();
-      expect(offset()).toBe("324px");
-    } finally {
-      vi.stubGlobal("ResizeObserver", original);
-    }
+  it("scrolls with the page beyond the upload limits", async () => {
+    await mountSection(beyondLimitsDetail(sync("changed", 1)));
+    expect(page().get(".data-section").classes()).not.toContain("data-section--fill");
   });
 });
 

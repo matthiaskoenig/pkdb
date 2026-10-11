@@ -151,6 +151,27 @@ test("the app bar, the study header and the section tabs take at most 110 px of 
   expect(field!.y).toBeGreaterThanOrEqual(bar!.y + bar!.height + 4);
 });
 
+test("the Data section fills the window below the page above it, which does not scroll, also below a status banner", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  const panes = page.locator(".data-panes");
+  await expect(panes).toBeVisible();
+  const layout = async () => {
+    const box = (await panes.boundingBox())!;
+    const scroll = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+    return { bottom: Math.round(box.y + box.height), scroll };
+  };
+  // The panes end at the padding of 8 px below the study page.
+  await expect.poll(layout).toEqual({ bottom: 992, scroll: 0 });
+  // The state of the local server cannot be read: the status banner shows above the page.
+  await page.route("**/local/state", (route) => route.fulfill({ json: {} }));
+  await expect(page.getByText("The state of the local server could not be loaded.")).toBeVisible();
+  await expect.poll(layout).toEqual({ bottom: 992, scroll: 0 });
+});
+
 test("on a phone the review status and More actions share a line above the buttons of the study", async ({
   app,
   page,
