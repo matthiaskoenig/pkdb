@@ -30,10 +30,7 @@ const message = computed(() => {
 </template>
 
 <style scoped>
-/* It keeps the height of its text in the flex column of the Data section (DataSection.vue), where
-   an alert would grow. */
 .status-banner {
-  flex: 0 0 auto;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 </style>

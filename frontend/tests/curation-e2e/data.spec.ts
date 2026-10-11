@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
 import { expect, runTool, setAutomaticActions, test } from "./fixtures.ts";
 
@@ -80,6 +80,27 @@ function navigatorButton(page: Page, name: RegExp) {
   return page.getByRole("navigation", { name: "Sources and tables" }).getByRole("button", { name });
 }
 
+/** Where the panes of the Data section end, how high they are, and how far the page scrolls. */
+async function panesLayout(page: Page): Promise<{ bottom: number; height: number; scroll: number }> {
+  const box = (await page.locator(".data-panes").boundingBox())!;
+  const scroll = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+  return { bottom: Math.round(box.y + box.height), height: box.height, scroll };
+}
+
+/**
+ * The alert `alert` above the panes of the Data section in a 1600 × 1000 window keeps the height
+ * of its text, and the panes, which were `panes` px high without it, give it just that room and
+ * a gap: they still end at the padding of 8 px below the study page, which does not scroll.
+ */
+async function expectAlertAbovePanes(page: Page, alert: Locator, panes: number): Promise<void> {
+  await expect(alert).toBeVisible();
+  const { height } = (await alert.boundingBox())!;
+  expect(height).toBeLessThan(80);
+  const layout = await panesLayout(page);
+  expect(layout).toMatchObject({ bottom: 992, scroll: 0 });
+  expect(layout.height).toBeGreaterThanOrEqual(panes - height - 6);
+}
+
 test.describe("sources", () => {
   test.beforeEach(async ({ app }) => {
     await app.open("#/studies/caffeine/Demo2020/data");
@@ -157,19 +178,76 @@ test("the Data section fills the window below the page above it, which does not 
 }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
   await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
-  const panes = page.locator(".data-panes");
-  await expect(panes).toBeVisible();
-  const layout = async () => {
-    const box = (await panes.boundingBox())!;
-    const scroll = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
-    return { bottom: Math.round(box.y + box.height), scroll };
-  };
+  await expect(page.locator(".data-panes")).toBeVisible();
   // The panes end at the padding of 8 px below the study page.
-  await expect.poll(layout).toEqual({ bottom: 992, scroll: 0 });
+  await expect.poll(() => panesLayout(page)).toMatchObject({ bottom: 992, scroll: 0 });
   // The state of the local server cannot be read: the status banner shows above the page.
   await page.route("**/local/state", (route) => route.fulfill({ json: {} }));
   await expect(page.getByText("The state of the local server could not be loaded.")).toBeVisible();
-  await expect.poll(layout).toEqual({ bottom: 992, scroll: 0 });
+  await expect.poll(() => panesLayout(page)).toMatchObject({ bottom: 992, scroll: 0 });
+});
+
+test("the alert of a failed action of the Data section keeps the height of its text above the panes", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  await expect(page.locator(".data-panes")).toBeVisible();
+  await expect.poll(() => panesLayout(page)).toMatchObject({ bottom: 992, scroll: 0 });
+  const { height } = await panesLayout(page);
+  const sync = page.getByRole("button", { name: "Sync", exact: true });
+  const alerts = page.getByRole("alert");
+
+  // The local server fails the sync.
+  app.allowFailedRequest("/local/studies/tables", 500);
+  await page.route("**/local/studies/tables", (route) =>
+    route.fulfill({ status: 500, json: { error: "The workbook cannot be read." } }),
+  );
+  await sync.click();
+  await expectAlertAbovePanes(page, alerts.filter({ hasText: "The workbook cannot be read." }), height);
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(alerts).toHaveCount(0);
+
+  // The local server refuses the sync without a user: the hint offers the settings.
+  app.allowFailedRequest("/local/studies/tables", 403);
+  await page.unroute("**/local/studies/tables");
+  await page.route("**/local/studies/tables", (route) =>
+    route.fulfill({ status: 403, json: { error: "no_user", message: "Set your PK-DB user." } }),
+  );
+  await sync.click();
+  await expectAlertAbovePanes(page, alerts.filter({ hasText: "Set your PK-DB user in Connection settings." }), height);
+});
+
+test("the alert of a study that cannot be loaded again keeps the height of its text above the Data section", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  await expect(page.locator(".data-panes")).toBeVisible();
+  await expect.poll(() => panesLayout(page)).toMatchObject({ bottom: 992, scroll: 0 });
+  const { height } = await panesLayout(page);
+  // The next poll of the study gets an answer that the app cannot read; the page keeps the study.
+  await page.route("**/local/studies/caffeine/Demo2020", (route) => route.fulfill({ json: {} }));
+  await expectAlertAbovePanes(page, page.getByRole("alert").filter({ hasText: "The study could not be loaded." }), height);
+  await expect(page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" })).toBeVisible();
+});
+
+test("the alerts of a source and a table that cannot be loaded keep the height of their text in their panes", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  // The local server answers the source and the table with what the app cannot read.
+  await page.route("**/local/studies/caffeine/Demo2020/sources/**", (route) => route.fulfill({ json: {} }));
+  await page.route("**/local/studies/caffeine/Demo2020/tables/**", (route) => route.fulfill({ json: {} }));
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  for (const name of ["Source Tab2", "Table outputs_Tab2.tsv"]) {
+    const alert = page.getByRole("region", { name }).getByRole("alert");
+    await expect(alert).toContainText("could not be loaded.");
+    expect((await alert.boundingBox())!.height).toBeLessThan(80);
+  }
 });
 
 test("on a phone the review status and More actions share a line above the buttons of the study", async ({

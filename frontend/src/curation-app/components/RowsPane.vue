@@ -189,7 +189,8 @@ const missingLine = computed(() => {
 .rows-pane > .pane-note {
   padding: 4px 8px;
 }
-.rows-pane > .pane-missing {
+.rows-pane > .pane-missing,
+.rows-pane > .status-alert {
   margin: 8px;
 }
 .rows-pane-grid {

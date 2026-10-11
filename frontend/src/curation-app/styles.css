@@ -105,6 +105,14 @@ html {
   padding: 4px 12px 12px;
 }
 
+/* An alert keeps the height of its content: Vuetify 4.2.1 lets it grow (flex: 1 1), which in a
+   flex column of a fixed height, such as the Data section and its panes, gives it a share of the
+   free height, and its hidden overflow would let it shrink below its content. Every alert of the
+   app stands in a flex column or a block, so it still spans their width. */
+.v-alert {
+  flex: 0 0 auto;
+}
+
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;
