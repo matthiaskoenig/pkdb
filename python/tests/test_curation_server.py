@@ -4,9 +4,11 @@ import json
 import os
 import re
 import shlex
+import socket
 import subprocess
 import sys
 import threading
+from http.client import HTTPConnection
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -138,6 +140,43 @@ def test_a_refused_action_token_has_a_code(local_server):
         }
     assert transport.ACTION_TOKEN == "action_token"
     engine.enqueue.assert_not_called()
+
+
+def _post_large(server, headers):
+    """POST a body of 1 MiB through a small send buffer, so that it is still sending when a
+    server that closes the connection without reading the body resets it."""
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=10)
+    connection.connect()
+    connection.sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 16 * 1024)
+    body = json.dumps({"api_key": "x" * (1024 * 1024)})
+    connection.request(
+        "POST",
+        "/local/settings",
+        body=body,
+        headers={
+            "Origin": server.origin,
+            "Content-Type": "application/json",
+            **headers,
+        },
+    )
+    status = connection.getresponse().status
+    connection.close()
+    return status
+
+
+def test_a_refused_post_gets_its_reply_before_the_connection_closes(local_server):
+    # The server refuses these requests before it reads their body. Closing the connection
+    # with the body unread resets it, and the client loses the reply: on Windows even for a
+    # small body (WinError 10053), everywhere for a body that is still being sent.
+    server, engine = local_server
+    assert _post_large(server, {}) == 401
+    headers = authenticate(server)
+    without_token = {
+        key: value for key, value in headers.items() if key != "X-CSRF-Token"
+    }
+    assert _post_large(server, without_token) == 403
+    assert _post_large(server, {**headers, "Sec-Fetch-Site": "cross-site"}) == 403
+    engine.configure.assert_not_called()
 
 
 def test_payload_limits_paths_and_errors(local_server):
