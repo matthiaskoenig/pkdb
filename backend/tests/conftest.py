@@ -6,6 +6,14 @@ from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabul
 from pkdb.schemas.study import CanonicalStudy
 
 
+@pytest.fixture(autouse=True)
+def isolated_environment(tmp_path_factory, monkeypatch):
+    """Keep the user's cache and PK-DB identity out of every test, as the client tests do."""
+    monkeypatch.setenv("PKDB_CACHE_DIR", str(tmp_path_factory.mktemp("cache")))
+    monkeypatch.delenv("PKDB_USER", raising=False)
+    monkeypatch.delenv("PKDB_AGENT", raising=False)
+
+
 @pytest.fixture
 def vocabulary():
     return Vocabulary(
