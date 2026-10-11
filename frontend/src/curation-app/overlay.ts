@@ -18,6 +18,8 @@ import { plotColors, type PlotColors } from "../features/plots/theme";
 export const POINT_RING = "#1f1f1f";
 
 /** The color of a series that the source view does not list, which does not happen in a valid view. */
+/** Amber, apart from the series colors and readable on the paper and on both themes. */
+const SELECTED_COLOR = "#e8a400";
 const UNKNOWN_COLOR = "#757575";
 
 /** The opacity of the series beside an emphasized series. */
@@ -81,7 +83,8 @@ export interface OverlayAxis {
   autorange?: false;
   visible: boolean;
   fixedrange: true;
-  title?: { text: string };
+  title?: { text: string; font?: { size: number } };
+  tickfont?: { size: number };
   automargin?: true;
   gridcolor?: string;
   linecolor?: string;
@@ -199,6 +202,28 @@ function opacities(drawn: readonly string[], highlight: string | null | undefine
 }
 
 /** The emphasized traces last, so that they are drawn on top. */
+/** A row that the curator selected, whose point gets a ring. */
+export type SelectedRow = { file: string; line: number } | null;
+
+/** A ring around the points of the selected row, drawn last so that it stays on top. */
+function selectedTrace(points: { x: number; y: number }[], color: string): OverlayTrace[] {
+  if (!points.length) return [];
+  return [
+    {
+      type: "scatter",
+      meta: "selected",
+      name: "selected",
+      mode: "markers",
+      x: points.map((point) => point.x),
+      y: points.map((point) => point.y),
+      opacity: 1,
+      showlegend: false,
+      marker: { symbol: "circle-open", size: 16, color, line: { width: 2.5, color } },
+      hoverinfo: "skip",
+    },
+  ];
+}
+
 function emphasizedLast(traces: OverlayTrace[]): OverlayTrace[] {
   return [...traces.filter((trace) => trace.opacity !== 1), ...traces.filter((trace) => trace.opacity === 1)];
 }
@@ -242,6 +267,7 @@ export function overlayTraces(
   highlight: string | null = null,
   theme: PlotTheme = LIGHT,
   scale = 1,
+  selected: SelectedRow = null,
 ): OverlayPlot {
   const [width, height] = view.image_size ?? [0, 0];
   const marks = Math.min(1, Math.max(MIN_MARK_SCALE, scale));
@@ -304,7 +330,18 @@ export function overlayTraces(
   }
   const hidden = { visible: false, fixedrange: true, autorange: false } as const;
   return {
-    traces: emphasizedLast(traces),
+    traces: [
+      ...emphasizedLast(traces),
+      ...selectedTrace(
+        view.overlay
+          .filter(
+            (point) =>
+              point.role === "mapped" && selected !== null && point.file === selected.file && point.line === selected.line,
+          )
+          .map((point) => ({ x: point.px, y: point.py })),
+        SELECTED_COLOR,
+      ),
+    ],
     layout: {
       ...baseLayout(theme),
       xaxis: { ...hidden, range: [0, width] },
@@ -337,7 +374,12 @@ export function overlayTraces(
  * as lines with error bars to the error bar end, scatters as points. With `highlight`, the other
  * series fade.
  */
-export function plotTraces(view: SourceView, highlight: string | null = null, theme: PlotTheme = LIGHT): OverlayPlot {
+export function plotTraces(
+  view: SourceView,
+  highlight: string | null = null,
+  theme: PlotTheme = LIGHT,
+  selected: SelectedRow = null,
+): OverlayPlot {
   const styles = seriesStyles(view);
   const points = plottedPoints(view);
   const series = unique(points.map((point) => point.series));
@@ -369,7 +411,8 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
   const first = styles.get(series[0] ?? "");
   const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
   const axis = (text: string): OverlayAxis => ({
-    title: { text },
+    title: { text, font: { size: 11 } },
+    tickfont: { size: 11 },
     visible: true,
     fixedrange: true,
     automargin: true,
@@ -378,15 +421,21 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
     zerolinecolor: theme.colors.grid,
   });
   return {
-    traces: emphasizedLast(traces),
+    traces: [
+      ...emphasizedLast(traces),
+      ...selectedTrace(
+        points.filter((point) => selected !== null && point.file === selected.file && point.line === selected.line),
+        SELECTED_COLOR,
+      ),
+    ],
     layout: {
       ...baseLayout(theme),
-      height: 360,
+      height: 220,
       paper_bgcolor: theme.colors.surface,
       plot_bgcolor: theme.colors.surface,
       xaxis: axis(xTitle),
       yaxis: axis(yTitle),
-      margin: { l: 64, r: 16, t: 16, b: 56, pad: 4 },
+      margin: { l: 48, r: 8, t: 8, b: 36, pad: 2 },
     },
   };
 }

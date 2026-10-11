@@ -270,15 +270,15 @@ describe("plotTraces", () => {
     expect(trace(traces, "plot drug_plasma").customdata?.[0]?.[4]).toBe("5.00");
     expect(feces.marker?.color).toBe("#3c4d5e");
     // The axes of the first series, from the source view.
-    expect(layout.xaxis).toEqual(expect.objectContaining({ title: { text: "time (h)" }, fixedrange: true }));
-    expect(layout.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)" }, fixedrange: true }));
+    expect(layout.xaxis).toEqual(expect.objectContaining({ title: { text: "time (h)", font: { size: 11 } }, fixedrange: true }));
+    expect(layout.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
   });
 
   it("plots only the series without a dataset of a digitized figure, with their labels", () => {
     const { traces, layout } = plotTraces(figure());
     expect(traces.map((entry) => entry.meta)).toEqual(["plot drug_feces"]);
     expect(trace(traces, "plot drug_feces").marker?.color).toBe("#3c4d5e");
-    expect(layout.yaxis.title).toEqual({ text: "amount (mg)" });
+    expect(layout.yaxis.title).toEqual({ text: "amount (mg)", font: { size: 11 } });
   });
 
   it("uses the dark steps of the colors on the dark surface", () => {
@@ -312,8 +312,52 @@ describe("plotTraces", () => {
     });
     const { traces, layout } = plotTraces(view);
     expect(trace(traces, "plot age_vs_cmax")).toEqual(expect.objectContaining({ mode: "markers", x: [30, 40], y: [2, 3] }));
-    expect(layout.xaxis.title).toEqual({ text: "age (yr)" });
-    expect(layout.yaxis.title).toEqual({ text: "cmax (mg/l)" });
+    expect(layout.xaxis.title).toEqual({ text: "age (yr)", font: { size: 11 } });
+    expect(layout.yaxis.title).toEqual({ text: "cmax (mg/l)", font: { size: 11 } });
+  });
+});
+
+describe("the selected row", () => {
+  const plain = figure({
+    digitization: null,
+    overlay: [],
+    layout: "side_by_side",
+    unmatched: ["drug_plasma", "drug_urine", "drug_feces"],
+  });
+
+  it("rings the mapped point of the selected row on the overlay, last", () => {
+    const { traces } = overlayTraces(figure(), "drug_urine", undefined, 1, { file: TIMECOURSES, line: 2 });
+    const last = traces.at(-1)!;
+    expect(last.meta).toBe("selected");
+    expect(last.x).toEqual([20]);
+    expect(last.y).toEqual([50]);
+    expect(last.marker?.symbol).toBe("circle-open");
+    expect(last.hoverinfo).toBe("skip");
+    expect(last.showlegend).toBe(false);
+  });
+
+  it("rings the plotted point of the selected row", () => {
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 6 });
+    const last = traces.at(-1)!;
+    expect(last.meta).toBe("selected");
+    expect(last.x).toEqual([1]);
+    expect(last.y).toEqual([3.25]);
+  });
+
+  it("adds no trace for a row without a point or without a selection", () => {
+    expect(overlayTraces(figure()).traces.some((entry) => entry.meta === "selected")).toBe(false);
+    expect(plotTraces(plain).traces.some((entry) => entry.meta === "selected")).toBe(false);
+    const other = plotTraces(plain, null, undefined, { file: "subjects.tsv", line: 2 });
+    expect(other.traces.some((entry) => entry.meta === "selected")).toBe(false);
+    const overlay = overlayTraces(figure(), null, undefined, 1, { file: TIMECOURSES, line: 99 });
+    expect(overlay.traces.some((entry) => entry.meta === "selected")).toBe(false);
+  });
+
+  it("draws the plot compact", () => {
+    const { layout } = plotTraces(plain);
+    expect(layout.height).toBe(220);
+    expect(layout.margin).toEqual({ l: 48, r: 8, t: 8, b: 36, pad: 2 });
+    expect(layout.xaxis.tickfont).toEqual({ size: 11 });
   });
 });
 

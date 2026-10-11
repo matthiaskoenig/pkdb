@@ -263,7 +263,7 @@ describe("SourceOverlay", () => {
     expect(image.attributes("src")).toBe(`${EXAMPLE}/files/Example_Fig1.png`);
     expect(image.attributes("alt")).toBe("Image of Fig1");
     for (const part of [".overlay-legend", ".overlay-key"]) expect(wrapper.find(part).exists()).toBe(false);
-    expect(wrapper.text()).not.toContain("Click a point, bar or cross");
+    expect(wrapper.text()).not.toContain("Click a point to select its row");
     // The data stay readable.
     expect(wrapper.findAll("details tbody tr")).toHaveLength(2);
   });
@@ -338,11 +338,18 @@ describe("SourceOverlay", () => {
         return traces.find((trace) => trace.meta === "mapped caf_plasma_D150")?.marker?.size;
       };
       expect(size()).toBe(11);
-      resized?.([{ contentRect: { width: 400 } }]);
+      const frames: FrameRequestCallback[] = [];
+      vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => frames.push(callback));
+      // A drag reports many sizes: Plotly resizes once per frame.
+      for (const width of [380, 390, 400]) resized?.([{ contentRect: { width } }]);
       await flushPromises();
-      expect(engine.Plots.resize).toHaveBeenCalled();
+      expect(frames).toHaveLength(1);
+      expect(engine.Plots.resize).not.toHaveBeenCalled();
+      frames[0]?.(0);
+      expect(engine.Plots.resize).toHaveBeenCalledTimes(1);
       expect(size()).toBeCloseTo(6.6);
     } finally {
+      vi.unstubAllGlobals();
       vi.stubGlobal("ResizeObserver", original);
     }
   });
