@@ -365,4 +365,39 @@ const automatic = computed(() =>
   font-weight: 600;
   cursor: pointer;
 }
+/* The problems of the source are a compact form of the cards of the Problems section, with the
+   12 to 13 px text and the small paddings of the panes. */
+.source-problems .problem-group {
+  margin-top: 6px;
+  border-radius: 6px;
+}
+.source-problems .problem-group-head {
+  gap: 8px;
+  min-height: 0;
+  padding: 3px 8px;
+}
+.source-problems .problem-file {
+  font-size: 13px;
+}
+.source-problems .problem-group-counts {
+  font-size: 12px;
+}
+.source-problems .problem {
+  gap: 3px;
+  padding: 6px 8px;
+}
+.source-problems :deep(.problem-severity) {
+  --v-chip-height: 20px;
+}
+.source-problems :deep(.problem-code) {
+  font-size: 12px;
+}
+.source-problems :deep(.problem-message) {
+  font-size: 13px;
+  line-height: 1.4;
+}
+.source-problems :deep(.problem-fact) {
+  font-size: 12px;
+  line-height: 1.4;
+}
 </style>
