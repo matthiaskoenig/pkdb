@@ -1,5 +1,6 @@
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick } from "vue";
 import {
   ServerStopped,
   SessionMissing,
@@ -257,6 +258,25 @@ describe("useStudyStore", () => {
     expect(store.rowFilter("characteristica.tsv")).toEqual({ kind: "all" });
     store.close();
     expect(store.rowFilter("subjects.tsv")).toEqual({ kind: "all" });
+  });
+
+  it("keeps one draft of study.json for the open study and forgets it when the study closes", async () => {
+    server((_method, url) => json(detail("r1", url.endsWith("/Other") ? "caffeine/Other" : "caffeine/Example")));
+    const store = useStudyStore();
+    await store.open("caffeine", "Example");
+    await nextTick();
+    expect(store.draft.form?.creator).toBe(metadata.creator);
+    store.draft.form!.creator = "janekg";
+    expect(store.draft.dirty).toBe(true);
+
+    // Another study gets a draft of its own.
+    await store.open("caffeine", "Other");
+    await nextTick();
+    expect(store.draft.dirty).toBe(false);
+    expect(store.draft.form?.creator).toBe(metadata.creator);
+
+    store.close();
+    expect(store.draft.form).toBeNull();
   });
 });
 

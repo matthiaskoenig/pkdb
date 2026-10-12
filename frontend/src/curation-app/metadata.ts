@@ -19,6 +19,8 @@ import {
   type TableKind,
   type ValidationIssue,
 } from "./api/types";
+import { notesKindOf } from "./notes";
+import type { Section } from "./study";
 import { noteKinds } from "./tableKinds";
 
 export type ProvenanceKind = Provenance["kind"];
@@ -354,6 +356,27 @@ export function copyField(target: MetadataForm, source: MetadataForm, key: strin
 export function changedFields(base: MetadataForm, current: MetadataForm): string[] {
   const keys = [...new Set([...fieldKeys(base), ...fieldKeys(current)])];
   return keys.filter((key) => !same(valueAt(base, key), valueAt(current, key)));
+}
+
+/**
+ * The sections whose fields have unsaved changes, for the marks of their tabs: Data for the notes
+ * of a kind in `dataKinds`, whose tables show them, and Metadata for the other fields, for the
+ * notes of a kind without a table, which Metadata shows, and for a new study.json. None without a
+ * form.
+ */
+export function unsavedSections(
+  base: MetadataForm | null,
+  form: MetadataForm | null,
+  dataKinds: readonly TableKind[],
+): Section[] {
+  if (form === null) return [];
+  if (base === null) return ["metadata"];
+  const changed = changedFields(base, form);
+  const inData = (key: string) => notesKindOf(key, dataKinds) !== null;
+  const sections: Section[] = [];
+  if (changed.some((key) => !inData(key))) sections.push("metadata");
+  if (changed.some(inData)) sections.push("data");
+  return sections;
 }
 
 /**

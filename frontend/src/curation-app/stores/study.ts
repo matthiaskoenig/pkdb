@@ -33,6 +33,7 @@ import {
   type TargetMatch,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
+import { useStudyDraft } from "../composables/useStudyDraft";
 import { ALL_ROWS, type RowFilter } from "../data";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
 
@@ -70,6 +71,11 @@ export const useStudyStore = defineStore("curation-study", () => {
   const lastSync = shallowRef<TablesResult | null>(null);
   /** The filter of the rows of each shared table of the open study, by file, which the Data section keeps while the study is open. */
   const rowFilters = shallowRef<ReadonlyMap<string, RowFilter>>(new Map());
+  /**
+   * The draft of study.json of the open study, which the Metadata and Data sections edit and
+   * save; `close` forgets it. Components read its values, such as `draft.dirty`, unwrapped.
+   */
+  const draft = useStudyDraft({ detail: () => polling.data.value, save: saveMetadata });
 
   // A report of a job queued after an acknowledgement ends its mark.
   watch(
@@ -121,6 +127,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     requests = new AbortController();
     identity.value = null;
     lastSync.value = null;
+    draft.reset();
     rowFilters.value = new Map();
     tables.clear();
     sources.clear();
@@ -262,6 +269,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     detail: computed(() => polling.data.value),
     error: computed(() => polling.error.value),
     lastSync: computed(() => lastSync.value),
+    draft,
     open,
     close,
     refresh,
