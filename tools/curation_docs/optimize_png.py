@@ -6,7 +6,7 @@ A screenshot of the app has a few thousand colors, most of them at the edges of 
 colors and no dithering it usually looks the same and takes less than half the bytes. The
 quantized version is faithful only when no channel of any pixel differs from the original by more
 than TOLERANCE: a median cut drops the hue of thin colored bars, which would contradict the
-guide. The app tries each quantizer, keeps the smallest faithful result that is smaller than the
+guide. It tries each quantizer, keeps the smallest faithful result that is smaller than the
 file, and leaves the file as it is when there is none.
 """
 
@@ -32,6 +32,7 @@ def optimize(path: Path) -> None:
     best = path.stat().st_size
     candidate = path.with_name(f".{path.name}")
     kept = path.with_name(f".kept.{path.name}")
+    kept.unlink(missing_ok=True)
     for method in METHODS:
         quantized = original.quantize(
             colors=256, method=method, dither=Image.Dither.NONE
