@@ -676,9 +676,21 @@ describe("saving", () => {
   });
 
   it("cannot merge a study.json on disk that is no JSON object, and saves again once it is fixed", async () => {
+    // study.json on disk: no JSON object at the first save, fixed in an editor at the second.
+    const fixed = studyMetadata({ licence: "closed" });
+    let saves = 0;
     await mountSection(studyDetail(), {
-      [`POST ${METADATA}`]: () =>
-        json({ error: "changed", file: "study.json", revision: "study-2", content: "{ broken" }, { status: 409 }),
+      [`POST ${METADATA}`]: ((body) => {
+        saves += 1;
+        if (saves === 1)
+          return json({ error: "changed", file: "study.json", revision: "study-2", content: "{ broken" }, { status: 409 });
+        if (body?.revision !== "study-3")
+          return json(
+            { error: "changed", file: "study.json", revision: "study-3", content: JSON.stringify(fixed) },
+            { status: 409 },
+          );
+        return write(body);
+      }) satisfies Handler,
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
@@ -688,6 +700,20 @@ describe("saving", () => {
     expect(buttons("Reload")).toHaveLength(0);
     expect(button("Save").element.disabled).toBe(false);
     expect(field("DOI").element.value).toBe("10.1000/xyz");
+
+    // Saved again after the fix: the readable file can be merged, and Save waits for Reload.
+    await click("Save");
+    expect(page().get(".savebar-conflict").text()).toContain("Reload it to keep your edits on top of the new version.");
+    expect(button("Save").element.disabled).toBe(true);
+    await click("Reload");
+    expect(radio("Closed").checked).toBe(true);
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
+
+    await click("Save");
+    expect(posted(METADATA).map((body) => body?.revision)).toEqual(["study-1", "study-1", "study-3"]);
+    expect(posted(METADATA)[2]?.metadata).toMatchObject({ licence: "closed", reference: { doi: "10.1000/xyz" } });
+    expect(saveBar().text()).toContain("study.json saved.");
+    expect(page().find(".savebar-conflict").exists()).toBe(false);
   });
 
   it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
