@@ -11,6 +11,7 @@ import os
 import sys
 import time
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -398,7 +399,11 @@ class WorkspaceMixin(EngineState):
                 self._check_workbooks()
             except Exception as error:
                 # The watcher retries every second and must outlive any failure.
-                self._watch_failed(error)
+                try:
+                    self._watch_failed(error)
+                except Exception as recording:
+                    # Recording the failure failed too: the loop still continues.
+                    self._watch_unrecorded(recording)
             else:
                 self._watch_recovered()
 
@@ -432,6 +437,15 @@ class WorkspaceMixin(EngineState):
                 self._watch_logged[body["detail"]] = moment
         if not repeated:
             self.log.unexpected(body, error, label="File watching")
+
+    def _watch_unrecorded(self, recording: Exception) -> None:
+        """Keep a minimal failure when the failure of the watcher could not be described."""
+        detail = f"{type(recording).__name__} while recording a watcher failure"
+        self.watcher_error = {
+            "time": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "detail": detail,
+            "recovered": False,
+        }
 
     def _watch_recovered(self) -> None:
         """A check of the workspace succeeded: the last failure of the watcher has passed."""

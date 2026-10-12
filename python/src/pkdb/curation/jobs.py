@@ -822,19 +822,31 @@ class JobsMixin(EngineState):
         traceback in its body, for the report, and one line in the terminal.
         """
         label = ACTION_NAMES[job["action"]].capitalize()
-        failure = describe_error(
-            error,
-            action=f"{label} of {job['study_id']}",
-            request_id=new_request_id(),
-            message=message,
-            code=code,
-            unexpected=unexpected,
-            secrets=self.secrets(),
-        )
-        if unexpected:
-            self.log.unexpected(failure, error, label=label)
-        else:
-            self.log.failed(failure, error)
+        try:
+            failure = describe_error(
+                error,
+                action=f"{label} of {job['study_id']}",
+                request_id=new_request_id(),
+                message=message,
+                code=code,
+                unexpected=unexpected,
+                secrets=self.secrets(),
+            )
+            if unexpected:
+                self.log.unexpected(failure, error, label=label)
+            else:
+                self.log.failed(failure, error)
+        except Exception as recording:
+            # Recording must not turn a failed job into an escaped exception: the job
+            # keeps its status and a body that names only the type of the new failure.
+            failure = {
+                "error": message,
+                "code": code,
+                "detail": f"{type(recording).__name__} while recording a job failure",
+                "action": f"{label} of {job['study_id']}",
+                "request_id": None,
+                "time": now(),
+            }
         return failure
 
     def resume(self, ids=None):

@@ -1584,3 +1584,78 @@ def test_the_watcher_rate_limits_every_distinct_error_on_its_own(
     assert len(capsys.readouterr().err.splitlines()) == 2
     assert engine.watcher_error["detail"] == "OSError: second"
     assert engine.watcher_error["recovered"] is True
+
+
+def test_a_watcher_failure_that_cannot_be_described_keeps_the_watcher_looping(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    scans = []
+
+    def scan():
+        scans.append(None)
+        if len(scans) == 1:
+            raise RuntimeError("unexpected")
+        engine.stop.set()
+
+    def broken(*args, **kwargs):
+        raise ValueError("odd exception")
+
+    monkeypatch.setattr(engine, "scan", scan)
+    monkeypatch.setattr(workspace_module, "describe", broken)
+    engine._watch()
+    assert len(scans) == 2
+    assert engine.watcher_error["detail"] == (
+        "ValueError while recording a watcher failure"
+    )
+    assert engine.watcher_error["recovered"] is True
+
+
+def test_a_job_failure_that_cannot_be_recorded_still_fails_the_job(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+
+    def broken(*args, **kwargs):
+        raise ValueError("odd exception")
+
+    def unexpected(*args, **kwargs):
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr(jobs, "sync_and_format", unexpected)
+    monkeypatch.setattr(jobs, "describe_error", broken)
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "failed"
+    assert job["error"]["detail"] == "ValueError while recording a job failure"
+    assert job["error"]["code"] == "unexpected"
+
+
+def test_the_same_watcher_error_after_a_recovery_is_logged_once_but_kept(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    outcomes = ["fail", "ok", "fail", "stop"]
+    times = []
+
+    def scan():
+        outcome = outcomes.pop(0)
+        if outcome == "fail":
+            raise OSError("disk unavailable")
+        if outcome == "stop":
+            times.append(dict(engine.watcher_error))
+            engine.stop.set()
+        else:
+            times.append(dict(engine.watcher_error))
+
+    monkeypatch.setattr(engine, "scan", scan)
+    monkeypatch.setattr(workspace_module.time, "monotonic", lambda: 1000.0)
+    engine._watch()
+    # The first check after the failure still holds it unrecovered; the repeat after the
+    # recovery is not logged again, but the kept error is replaced and unrecovered again.
+    assert times[0]["recovered"] is False
+    assert times[1]["recovered"] is False
+    assert engine.watcher_error["recovered"] is True
+    assert engine.log.path.read_text(encoding="utf-8").count("Traceback") == 1
