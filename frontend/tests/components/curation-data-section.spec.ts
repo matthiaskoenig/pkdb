@@ -1868,6 +1868,19 @@ describe("the paper in the Data section", () => {
     expect(paperPane().attributes("aria-label")).toBe("Paper Example.pdf");
   });
 
+  it("names the PDF that the pane shows in the navigator, also while another source shows", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&file=subjects.tsv`);
+    const line = () => page().get(".nav-paper .nav-kind").text();
+    expect(line()).toBe("Example.pdf");
+    await page().get<HTMLSelectElement>(".paper-pane select").setValue("Example_Supp.pdf");
+    await routed({ source: "paper", pdf: "Example_Supp.pdf", file: "subjects.tsv" });
+    expect(line()).toBe("Example_Supp.pdf");
+    expect(page().get(".nav-paper .nav-more").attributes("title")).toBe("Example.pdf");
+    await choose("file", "outputs_Tab2.tsv");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    expect(line()).toBe("Example_Supp.pdf");
+  });
+
   it("keeps the chosen PDF while another source shows, which leaves it out of the address, and names it again with the paper", async () => {
     await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&pdf=Example_Supp.pdf&file=subjects.tsv`);
     await choose("file", "outputs_Tab2.tsv");

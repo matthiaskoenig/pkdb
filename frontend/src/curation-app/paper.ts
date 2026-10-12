@@ -144,9 +144,14 @@ export function mainPaper(study: Pick<StudyDetail, "id" | "papers">): PaperFile 
   return study.papers.find((paper) => paper.file.startsWith(stem) && paper.file.toLowerCase() === `${stem.toLowerCase()}.pdf`) ?? null;
 }
 
-/** The line below Paper in the navigator: the PDF that the paper shows first, or the PDF that the folder lacks. */
-export function paperLine(study: Pick<StudyDetail, "id" | "papers">): string {
-  return study.papers[0]?.file ?? `No ${paperName(study)}`;
+/** The PDF that the paper shows: `file`, chosen in the head of its pane, while the folder has it, else the first. */
+export function shownPaper(papers: PaperFile[], file: string | null): PaperFile | null {
+  return papers.find((entry) => entry.file === file) ?? papers[0] ?? null;
+}
+
+/** The line below Paper in the navigator: the PDF that the paper shows, or the PDF that the folder lacks. */
+export function paperLine(study: Pick<StudyDetail, "id" | "papers">, file: string | null = null): string {
+  return shownPaper(study.papers, file)?.file ?? `No ${paperName(study)}`;
 }
 
 /** The route of a PDF of the study `id` in a tab of its own. */

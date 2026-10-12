@@ -502,6 +502,7 @@ const conflictPanel = computed(() => {
           :detail="detail"
           :source="sourceName"
           :file="file"
+          :paper="paperFile"
           class="data-navigator-pane"
           @select-source="selectSource"
           @select-file="selectFile"

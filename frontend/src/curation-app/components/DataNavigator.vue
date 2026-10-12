@@ -13,14 +13,19 @@ import NavigatorCounts from "./NavigatorCounts.vue";
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
  * the color of its class, its problems, its open review items and its rows; then the sources of
  * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
- * the folder, the first by name with a count of the others, or a disabled entry that names
- * `<name>.pdf` when the folder has none.
+ * the folder, the one that the paper shows by name with a count of the others, or a disabled entry
+ * that names `<name>.pdf` when the folder has none.
  */
-const props = defineProps<{
-  detail: StudyDetail;
-  source: string | null;
-  file: string | null;
-}>();
+const props = withDefaults(
+  defineProps<{
+    detail: StudyDetail;
+    source: string | null;
+    file: string | null;
+    /** The PDF that the paper shows, chosen in the head of its pane; null for the first. */
+    paper?: string | null;
+  }>(),
+  { paper: null },
+);
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
 
 const tablesId = useId();
@@ -58,11 +63,12 @@ const sources = computed(() =>
   props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
 
-/** The entry of the paper, first among the sources: its first PDF and the others, or the PDF that the folder lacks. */
+/** The entry of the paper, first among the sources: the PDF that it shows and the others, or the PDF that the folder lacks. */
 const paper = computed(() => {
-  const others = props.detail.papers.slice(1).map((entry) => entry.file);
+  const line = paperLine(props.detail, props.paper);
+  const others = props.detail.papers.filter((entry) => entry.file !== line).map((entry) => entry.file);
   return {
-    line: paperLine(props.detail),
+    line,
     shown: props.detail.papers.length > 0,
     others,
     more: others.length ? `and ${plural(others.length, "more PDF")}` : "",

@@ -10,6 +10,7 @@ import {
   paperLine,
   paperName,
   paperRoute,
+  shownPaper,
   zoomText,
 } from "../../src/curation-app/paper";
 import { paperFile, studyDetail } from "./curation-fixtures";
@@ -56,6 +57,14 @@ describe("the paper of a study", () => {
     expect(paperLine(studyDetail({ papers: [paperFile("Example.pdf"), paperFile("a.pdf"), paperFile("b.pdf")] }))).toBe(
       "Example.pdf",
     );
+  });
+
+  it("finds the PDF that the paper shows: the chosen one while the folder has it, else the first", () => {
+    const papers = [paperFile("Example.pdf"), paperFile("a.pdf")];
+    expect(shownPaper(papers, "a.pdf")?.file).toBe("a.pdf");
+    expect(shownPaper(papers, null)?.file).toBe("Example.pdf");
+    expect(shownPaper(papers, "gone.pdf")?.file).toBe("Example.pdf");
+    expect(shownPaper([], "a.pdf")).toBeNull();
   });
 
   it("routes a PDF to a tab of its own", () => {

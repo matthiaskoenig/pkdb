@@ -212,6 +212,19 @@ describe("data navigator", () => {
     expect(more.attributes("title")).toBe("Example_Supp.pdf, Example_Errata.pdf");
   });
 
+  it("names the PDF that the paper shows, with the count of the others", () => {
+    const papers = [paperFile("Example.pdf"), paperFile("Example_Supp.pdf"), paperFile("Example_Errata.pdf")];
+    const wrapper = mountNavigator({ detail: detail({ papers }), paper: "Example_Supp.pdf" });
+    const paper = wrapper.get(".nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example_Supp.pdf");
+    expect(paper.get(".nav-kind").attributes("title")).toBe("Example_Supp.pdf");
+    expect(paper.get(".nav-more [aria-hidden='true']").text()).toBe("+2");
+    expect(paper.get(".nav-more").attributes("title")).toBe("Example.pdf, Example_Errata.pdf");
+    // A PDF that the folder no longer has: the paper shows the first.
+    const gone = mountNavigator({ detail: detail({ papers }), paper: "Gone.pdf" });
+    expect(gone.get(".nav-paper .nav-kind").text()).toBe("Example.pdf");
+  });
+
   it("shows no count for a folder with one PDF", () => {
     const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf")] }) });
     expect(wrapper.find(".nav-paper .nav-more").exists()).toBe(false);

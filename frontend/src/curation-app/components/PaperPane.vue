@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import type { PaperFile } from "../api/types";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import { formatBytes, paperRoute, type PaperPlace } from "../paper";
+import { formatBytes, paperRoute, shownPaper, type PaperPlace } from "../paper";
 import { useOverviewStore } from "../stores/overview";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import PaperViewer from "./PaperViewer.vue";
@@ -35,7 +35,7 @@ const overview = useOverviewStore();
 const { notice, announce } = useNotice();
 const { busy, failure, run } = useAction<"open">(announce);
 
-const paper = computed(() => props.papers.find((entry) => entry.file === props.file) ?? props.papers[0]!);
+const paper = computed(() => shownPaper(props.papers, props.file)!);
 const tab = computed(() => router.resolve(paperRoute(props.study, paper.value.file)).href);
 
 function choose(event: Event): void {
