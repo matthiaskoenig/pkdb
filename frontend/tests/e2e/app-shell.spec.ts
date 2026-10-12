@@ -120,8 +120,9 @@ test("text, also in Vuetify's typography classes, is set in the bundled Inter", 
       loaded: inter.some((face) => face.status === "loaded"),
     };
   });
-  expect(font.body).toMatch(/^"Inter Variable",/);
-  expect(font.heading).toMatch(/^"Inter Variable",/);
+  // WebKit leaves out the quotes around the name of the family.
+  expect(font.body).toMatch(/^"?Inter Variable"?,/);
+  expect(font.heading).toMatch(/^"?Inter Variable"?,/);
   expect(font.loaded).toBe(true);
   // The license of the font is served beside it.
   const license = await page.request.get("/assets/Inter-LICENSE.txt");

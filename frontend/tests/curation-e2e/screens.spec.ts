@@ -228,7 +228,7 @@ test("text is set in the bundled Inter, so that it has the same width on every s
       loaded: inter.some((face) => face.status === "loaded"),
     };
   });
-  expect(font.body).toMatch(/^"Inter Variable",/);
+  expect(font.body).toMatch(/^"?Inter Variable"?,/);
   expect(font.loaded).toBe(true);
   // The license of the font is served beside it.
   const license = await page.evaluate(async () => {
