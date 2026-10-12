@@ -136,6 +136,9 @@ let pinia: Pinia;
 let router: Router;
 let requests: ServedRequest[];
 
+/** The view of the router, as the app renders it, so that the guards of the study page apply. */
+const Routed = defineComponent({ render: () => h(RouterView) });
+
 /**
  * The study page at `path` of the hash router, with `routes` of the local API besides the defaults. It
  * renders in the view of the router, as in the app, so that its guards of leaving the study apply.
@@ -151,7 +154,7 @@ async function mountPage(path: string, routes: Record<string, unknown> = {}, sta
   router = makeRouter();
   await router.push(path);
   await router.isReady();
-  const wrapper = mount(defineComponent({ render: () => h(RouterView) }), {
+  const wrapper = mount(Routed, {
     attachTo: document.body,
     global: { plugins: [pinia, router] },
   });
@@ -259,7 +262,7 @@ describe("StudyPage", () => {
     requests = serveApi({ "GET /local/state": snapshot({ studies: [harderRow] }), [`GET ${HARDER}`]: harder });
     router = makeRouter();
     await router.push("/studies/caffeine/Harder1988/review");
-    mount(defineComponent({ render: () => h(RouterView) }), {
+    mount(Routed, {
       attachTo: document.body,
       global: { plugins: [pinia, router] },
     });
