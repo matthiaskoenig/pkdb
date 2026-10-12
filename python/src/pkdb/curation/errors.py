@@ -184,7 +184,8 @@ class ErrorLog:
     The file is `logs/curation.log` of the state directory; it rotates at 1 MB and keeps
     three old files. Each instance has a logger of its own, so engines never share a file.
     A failure is logged with its traceback and named in the terminal once a minute: a repeat
-    gets one line in the file that names the request id of the failure it repeats.
+    gets one line in the file that names the request id of the failure it repeats, unless its
+    own request id is shown nowhere, as for the file watcher, which fails every second.
     """
 
     def __init__(
@@ -234,8 +235,17 @@ class ErrorLog:
             self._logged[key] = (moment, body["request_id"])
         return None
 
-    def _log(self, level: int, body: dict, error: BaseException, label: str) -> None:
+    def _log(
+        self,
+        level: int,
+        body: dict,
+        error: BaseException,
+        label: str,
+        quiet_repeats: bool,
+    ) -> None:
         if (first := self._repeats(body, label)) is not None:
+            if quiet_repeats:
+                return
             self._logger.log(
                 level,
                 "Error %s in %s repeats Error %s, which the log has with its traceback",
@@ -277,21 +287,34 @@ class ErrorLog:
             pass
 
     def failed(
-        self, body: dict, error: BaseException, *, label: str | None = None
+        self,
+        body: dict,
+        error: BaseException,
+        *,
+        label: str | None = None,
+        quiet_repeats: bool = False,
     ) -> None:
         """Log a failure that the app explains, with its traceback, and name it in one terminal line.
 
         The label of the line is the action of the body unless given. A repeat within a
-        minute gets one line in the file.
+        minute gets one line in the file, which names the request id that the app showed;
+        with `quiet_repeats`, for a failure whose request id nobody sees, it gets none.
         """
-        self._log(logging.WARNING, body, error, label or body["action"])
+        self._log(logging.WARNING, body, error, label or body["action"], quiet_repeats)
 
-    def unexpected(self, body: dict, error: BaseException, *, label: str) -> None:
+    def unexpected(
+        self,
+        body: dict,
+        error: BaseException,
+        *,
+        label: str,
+        quiet_repeats: bool = False,
+    ) -> None:
         """Log an unexpected error with its traceback, and name it in one terminal line.
 
-        A repeat within a minute gets one line in the file.
+        A repeat within a minute gets one line in the file, or none with `quiet_repeats`.
         """
-        self._log(logging.ERROR, body, error, label)
+        self._log(logging.ERROR, body, error, label, quiet_repeats)
 
     def close(self) -> None:
         """Close the file; later records go nowhere, not even to the last resort handler."""

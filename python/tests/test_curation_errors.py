@@ -344,3 +344,35 @@ def test_a_repeated_failure_is_logged_and_named_once_a_minute(tmp_path, capsys):
         "Error 00000006 in Read the study: PermissionError",
     ]
     assert REPEAT_SECONDS == 60
+
+
+def test_quiet_repeats_write_nothing_until_the_minute_is_over(tmp_path, capsys):
+    clock = Clock()
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [], clock=clock)
+    try:
+        raise OSError("disk unavailable")
+    except OSError as raised:
+        error = raised
+    body = {
+        "error": "File watching failed.",
+        "detail": "OSError: disk unavailable",
+        "action": "File watching",
+    }
+    # The watcher fails every second; its menu shows no request id.
+    for second in range(5):
+        clock.now = 1000.0 + second
+        body["request_id"] = f"0000000{second}"
+        log.unexpected(body, error, label="File watching", quiet_repeats=True)
+    clock.now = 1000.0 + REPEAT_SECONDS
+    body["request_id"] = "00000060"
+    log.unexpected(body, error, label="File watching", quiet_repeats=True)
+    log.close()
+    text = log.path.read_text(encoding="utf-8")
+    assert text.count("Traceback") == 2
+    assert "repeats Error" not in text
+    assert [
+        line.split(" (see ")[0] for line in capsys.readouterr().err.splitlines()
+    ] == [
+        "Error 00000000 in File watching: OSError",
+        "Error 00000060 in File watching: OSError",
+    ]

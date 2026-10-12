@@ -406,7 +406,8 @@ class WorkspaceMixin(EngineState):
     def _watch_failed(self, error: Exception) -> None:
         """Keep the failure for the File watching menu, and log it.
 
-        The log keeps a failure that repeats every second with its traceback once a minute.
+        The log keeps a failure that repeats every second with its traceback once a minute,
+        and nothing in between: the menu shows no request id that a line could name.
         """
         body = describe(
             error,
@@ -423,7 +424,7 @@ class WorkspaceMixin(EngineState):
                 "detail": body["detail"],
                 "recovered": False,
             }
-        self.log.unexpected(body, error, label="File watching")
+        self.log.unexpected(body, error, label="File watching", quiet_repeats=True)
 
     def _watch_unrecorded(self, recording: Exception) -> None:
         """Keep a minimal failure when the failure of the watcher could not be described."""

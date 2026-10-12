@@ -1561,6 +1561,31 @@ def test_the_watcher_logs_a_failure_once_a_minute_and_keeps_it_for_the_menu(
     )
 
 
+def test_a_watcher_that_fails_every_second_writes_one_traceback_a_minute_and_nothing_else(
+    workspace, monkeypatch, capsys
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    ticks = []
+
+    def scan():
+        ticks.append(None)
+        if len(ticks) > 5:
+            engine.stop.set()
+            return
+        raise OSError("disk unavailable")
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    # Five failing ticks within the minute: the menu has no request id that a line of
+    # the log could name, so the repeats write nothing.
+    log = engine.log.path.read_text(encoding="utf-8")
+    assert log.count("Traceback") == 1
+    assert "repeats Error" not in log
+    assert len(re.findall(r"^\d{4}-\d\d-\d\d ", log, re.MULTILINE)) == 1
+    assert len(capsys.readouterr().err.splitlines()) == 1
+
+
 def test_the_watcher_rate_limits_every_distinct_error_on_its_own(
     workspace, monkeypatch, capsys
 ):
