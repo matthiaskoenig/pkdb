@@ -6,6 +6,8 @@ import {
   FITS,
   findText,
   loadPaperEngine,
+  MAX_SCALE,
+  MIN_SCALE,
   paperAnswer,
   paperFailure,
   paperImport,
@@ -58,8 +60,11 @@ const importFailed = ref(false);
 
 const count = computed(() => findText(found.value, query.value));
 
-/** Counts the openings, so that a PDF that opens after a newer one is closed at once. */
-let generation = 0;
+/**
+ * The opening of the PDF in view. The next opening and the unmount abort it: a PDF that is still
+ * loading stops, and one that opens after all is closed at once and reports nothing.
+ */
+let opening: AbortController | null = null;
 
 /** Keep the page and the zoom of the PDF in its place. */
 function remember(): void {
@@ -76,13 +81,18 @@ async function close(shown: PaperSession | null): Promise<void> {
 }
 
 async function open(): Promise<void> {
-  const current = ++generation;
+  opening?.abort();
+  const own = new AbortController();
+  opening = own;
+  const { signal } = own;
   const container = scroller.value;
   const previous = session.value;
   session.value = null;
   found.value = null;
-  await close(previous);
-  if (!container || current !== generation) return;
+  // The PDF leaves the container at once; its worker goes in the background, which may take a
+  // while when it is busy, and the next PDF does not wait for it.
+  void close(previous);
+  if (!container) return;
   // The PDF opens at its place again; another PDF on page 1 at Fit width.
   const kept = place.value;
   const start: PaperStart =
@@ -99,46 +109,47 @@ async function open(): Promise<void> {
   importFailed.value = false;
   try {
     const engine = await loadPaperEngine();
-    if (current !== generation) return;
+    if (signal.aborted) return;
     const opened = await engine.openPaper(
       container,
       props.url,
       {
         opened: (value) => {
-          if (current === generation) pages.value = value;
+          if (!signal.aborted) pages.value = value;
         },
         page: (value) => {
-          if (current !== generation) return;
+          if (signal.aborted) return;
           page.value = value;
           remember();
         },
         scale: (value, preset) => {
-          if (current !== generation) return;
+          if (signal.aborted) return;
           scale.value = value;
           fit.value = preset;
           remember();
         },
         found: (result) => {
-          if (current === generation) found.value = result;
+          if (!signal.aborted) found.value = result;
         },
       },
       start,
+      signal,
     );
-    if (current !== generation) {
-      await close(opened);
+    if (signal.aborted) {
+      void close(opened);
       return;
     }
     session.value = opened;
     if (query.value.trim()) opened.find(query.value, { again: false, previous: false });
   } catch (caught) {
-    if (current !== generation) return;
+    if (signal.aborted) return;
     // PDF.js reports an error status of the local server without its answer, which says why.
     const answer = await paperAnswer(caught, props.url);
-    if (current !== generation) return;
+    if (signal.aborted) return;
     importFailed.value = caught instanceof PaperImportFailed;
     failure.value = paperFailure(caught, props.file, props.url, answer);
   } finally {
-    if (current === generation) loading.value = false;
+    if (!signal.aborted) loading.value = false;
   }
 }
 
@@ -148,7 +159,8 @@ watch([scroller, () => props.url, () => props.bytes, () => paperImport.attempt],
 });
 
 onBeforeUnmount(() => {
-  generation += 1;
+  opening?.abort();
+  opening = null;
   const shown = session.value;
   session.value = null;
   void close(shown);
@@ -242,7 +254,7 @@ function reload(): void {
           class="paper-tool"
           aria-label="Zoom out"
           title="Zoom out"
-          :disabled="!session"
+          :disabled="!session || scale <= MIN_SCALE"
           @click="session?.zoom(-1)"
         >
           <i class="fas fa-magnifying-glass-minus" aria-hidden="true"></i>
@@ -252,7 +264,7 @@ function reload(): void {
           class="paper-tool"
           aria-label="Zoom in"
           title="Zoom in"
-          :disabled="!session"
+          :disabled="!session || scale >= MAX_SCALE"
           @click="session?.zoom(1)"
         >
           <i class="fas fa-magnifying-glass-plus" aria-hidden="true"></i>
@@ -304,7 +316,7 @@ function reload(): void {
         color="primary"
         :aria-label="`Loading ${file}`"
       />
-      <div ref="scroller" class="paper-scroll" tabindex="0">
+      <div ref="scroller" class="paper-scroll" role="region" :aria-label="`Pages of ${file}`" tabindex="0">
         <div class="pdfViewer"></div>
       </div>
     </div>

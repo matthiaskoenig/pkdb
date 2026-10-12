@@ -12,6 +12,8 @@
  *   `disableStream`, without which PDF.js would read the whole file in the background.
  * - The worker, the character maps, the standard fonts and the decoders come from `pdfjs/`
  *   beside the app, which the build copies (vite.curation.config.ts).
+ * - Aborting the opening stops the loading with its worker and its range requests, and the viewer
+ *   of PDF.js stops watching the pane: a PDF that is no longer wanted never draws into it.
  *
  * pdf_viewer.mjs reads `globalThis.pdfjsLib` when it loads, which pdfjs-dist sets: it comes first.
  */
@@ -25,6 +27,7 @@ import {
   PDFViewer,
 } from "pdfjs-dist/web/pdf_viewer.mjs";
 import "pdfjs-dist/web/pdf_viewer.css";
+import { isAbort } from "./api/client";
 import { FITS, type Fit, type FindResult, type OpenPaper, type PaperSession } from "./paper";
 
 /** The URL of a file of PDF.js in `pdfjs/` beside index.html. */
@@ -33,6 +36,18 @@ export function pdfjsAsset(path: string): string {
 }
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsAsset("pdf.worker.min.mjs");
+
+/**
+ * PDF.js 6.4.299 cancels the request of a range twice when a PDF closes while the range loads:
+ * once when its worker ends and once when it cancels all requests. The second cancel rejects with
+ * the AbortError of the first, which nothing handles, so the browser would report an error for a
+ * PDF that was closed on purpose. A cancelled request is no failure: an AbortError that nothing
+ * handled is not reported.
+ */
+function quietAbort(event: Event & { reason?: unknown }): void {
+  if (isAbort(event.reason)) event.preventDefault();
+}
+window.addEventListener("unhandledrejection", quietAbort);
 
 /** The fit of a scale value of PDF.js; null for the scale of a zoom step. */
 function fitOf(value: string): Fit | null {
@@ -45,11 +60,44 @@ interface MatchesCount {
   total: number;
 }
 
-export const openPaper: OpenPaper = async (container, url, events, start) => {
+/** A find without a count yet. */
+const PENDING: FindResult = { status: "pending", current: 0, total: 0 };
+
+/** The find of `count`: at a match of its matches, or still without one. */
+function counted({ current, total }: MatchesCount): FindResult {
+  return total > 0 ? { status: "found", current, total } : PENDING;
+}
+
+/**
+ * The options of the viewer of PDF.js with `abortSignal`, an option at run time that the typings
+ * of pdfjs-dist 6.4.299 lack: once it aborts, the viewer stops watching the size and the scrolling
+ * of its container.
+ */
+type ViewerOptions = ConstructorParameters<typeof PDFViewer>[0] & { abortSignal: AbortSignal };
+
+/** How long a closing PDF may take to destroy its task before its worker goes all the same. */
+const DESTROY_MS = 2000;
+
+/** A promise that resolves after `ms`. */
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** `promise`, unless `signal` aborts first: then the reason of the abort. */
+function unlessAborted<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const abort = (): void => reject(signal.reason);
+    signal.addEventListener("abort", abort, { once: true });
+    void promise.then(resolve, reject).finally(() => signal.removeEventListener("abort", abort));
+  });
+}
+
+export const openPaper: OpenPaper = async (container, url, events, start, signal) => {
+  signal.throwIfAborted();
   const eventBus = new EventBus();
   const linkService = new PDFLinkService({ eventBus, externalLinkTarget: LinkTarget.BLANK });
   const findController = new PDFFindController({ eventBus, linkService });
-  const viewer = new PDFViewer({
+  const options: ViewerOptions = {
     container,
     eventBus,
     linkService,
@@ -57,7 +105,9 @@ export const openPaper: OpenPaper = async (container, url, events, start) => {
     // Links work; forms and editing do not.
     annotationMode: pdfjs.AnnotationMode.ENABLE,
     annotationEditorMode: pdfjs.AnnotationEditorType.DISABLE,
-  });
+    abortSignal: signal,
+  };
+  const viewer = new PDFViewer(options);
   linkService.setViewer(viewer);
 
   // PDF.js reports no page for the first one: the page in view is reported once the pages exist.
@@ -68,17 +118,19 @@ export const openPaper: OpenPaper = async (container, url, events, start) => {
   });
   eventBus.on("pagechanging", ({ pageNumber }: { pageNumber: number }) => events.page(pageNumber));
   eventBus.on("scalechanging", ({ scale }: { scale: number }) => events.scale(scale, fitOf(viewer.currentScaleValue)));
-  // A find reports its state, first without matches, then the counts while it goes through the pages.
-  let find: FindResult = { status: "pending", current: 0, total: 0 };
-  function report(missing: boolean, { current, total }: MatchesCount): void {
-    find = { status: missing ? "missing" : total > 0 ? "found" : "pending", current, total };
-    events.found(find);
+  // A find reports its state, first without matches, then the counts while it goes through the
+  // pages. PDF.js reports a pending find with the counts of the match that it selected last.
+  let find: FindResult = PENDING;
+  function report(result: FindResult): void {
+    find = result;
+    events.found(result);
   }
-  eventBus.on("updatefindcontrolstate", ({ state, matchesCount }: { state: number; matchesCount: MatchesCount }) =>
-    report(state === FindState.NOT_FOUND, matchesCount),
-  );
+  eventBus.on("updatefindcontrolstate", ({ state, matchesCount }: { state: number; matchesCount: MatchesCount }) => {
+    if (state === FindState.NOT_FOUND) report({ status: "missing", current: 0, total: 0 });
+    else report(state === FindState.PENDING ? PENDING : counted(matchesCount));
+  });
   eventBus.on("updatefindmatchescount", ({ matchesCount }: { matchesCount: MatchesCount }) =>
-    report(find.status === "missing" && matchesCount.total === 0, matchesCount),
+    report(find.status === "missing" && matchesCount.total === 0 ? find : counted(matchesCount)),
   );
 
   // PDF.js keeps a fit only until the size changes: the fit follows the pane, as in a PDF program.
@@ -98,8 +150,11 @@ export const openPaper: OpenPaper = async (container, url, events, start) => {
     cancelAnimationFrame(frame);
   }
 
+  // A worker of its own, which goes with the PDF also when PDF.js does not finish destroying it.
+  const worker = new pdfjs.PDFWorker();
   const task = pdfjs.getDocument({
     url,
+    worker,
     cMapUrl: pdfjsAsset("cmaps/"),
     cMapPacked: true,
     standardFontDataUrl: pdfjsAsset("standard_fonts/"),
@@ -109,14 +164,35 @@ export const openPaper: OpenPaper = async (container, url, events, start) => {
     disableStream: true,
     enableXfa: false,
   });
+  // The task goes once, whoever ends it first, and its worker with it. PDF.js 6.4.299 can wait
+  // forever for a page whose ranges it cancelled when it destroys the task; the worker goes
+  // after DESTROY_MS then, which stops whatever it still does.
+  let destroyed: Promise<void> | null = null;
+  function destroy(): Promise<void> {
+    destroyed ??= Promise.race([task.destroy().catch(() => undefined), delay(DESTROY_MS)]).then(() =>
+      worker.destroy(),
+    );
+    return destroyed;
+  }
+  // Aborted while it loads, the loading stops at once with its worker and its range requests.
+  // A PDF that opened is closed by its session.
+  const cancel = (): void => {
+    stop();
+    void destroy();
+  };
+  signal.addEventListener("abort", cancel, { once: true });
   let pdf: Awaited<typeof task.promise>;
   try {
-    pdf = await task.promise;
+    pdf = await unlessAborted(task.promise, signal);
+    // A PDF that loaded just as its viewer aborted never comes into the container.
+    signal.throwIfAborted();
   } catch (error) {
     stop();
-    await task.destroy();
+    await destroy();
     throw error;
   }
+  signal.removeEventListener("abort", cancel);
+  signal.addEventListener("abort", stop, { once: true });
   viewer.setDocument(pdf);
   linkService.setDocument(pdf, null);
   events.opened(pdf.numPages);
@@ -147,12 +223,14 @@ export const openPaper: OpenPaper = async (container, url, events, start) => {
         findPrevious: previous,
         matchDiacritics: false,
       });
+      // A new query has no count yet, though PDF.js keeps the one of the last query until it has.
+      if (!again) report(PENDING);
     },
     async close() {
       stop();
       viewer.setDocument(null);
       linkService.setDocument(null);
-      await task.destroy();
+      await destroy();
     },
   };
   return session;

@@ -86,6 +86,9 @@ export class ServerStopped extends ApiError {
   }
 }
 
+/** What to do when the page has no session of the running server, which the status banner says too. */
+export const NO_SESSION = "This page has no session. Open the link that pkdb curate printed.";
+
 /** The browser has no session cookie of the running server (401). */
 export class SessionMissing extends Error {
   override readonly name = "SessionMissing";

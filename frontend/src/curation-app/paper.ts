@@ -5,7 +5,7 @@
  */
 import { reactive } from "vue";
 import type { RouteLocationRaw } from "vue-router";
-import { ApiError, checkFile } from "./api/client";
+import { ApiError, checkFile, NO_SESSION, SessionMissing } from "./api/client";
 import type { StudyDetail } from "./api/types";
 import type { FailureDetails } from "./failures";
 import { actionFailure, studyName, type ActionFailure } from "./study";
@@ -17,6 +17,13 @@ export type Fit = "page-width" | "page-fit" | "1";
 export const FITS: readonly Fit[] = ["page-width", "page-fit", "1"];
 
 export const FIT_LABELS: Record<Fit, string> = { "page-width": "Fit width", "page-fit": "Fit page", "1": "100 %" };
+
+/**
+ * The smallest and the largest zoom of PDF.js 6.4.299, 10 % and 2500 %: its `MIN_SCALE` and
+ * `MAX_SCALE` (web/ui_utils.js), which pdf_viewer.mjs does not export.
+ */
+export const MIN_SCALE = 0.1;
+export const MAX_SCALE = 25;
 
 /** Where a find stands: running, at a match of its matches, or without any. */
 export interface FindResult {
@@ -63,16 +70,26 @@ export interface PaperSession {
    * `previous`. An empty query ends the find and its highlights.
    */
   find(query: string, options: { again: boolean; previous: boolean }): void;
-  /** Close the PDF and its worker. */
+  /**
+   * Close the PDF: it leaves the container at once, before `close` returns, and the promise
+   * resolves when its worker has gone.
+   */
   close(): Promise<void>;
 }
 
-/** Open the PDF at `url` in `container`, an absolutely positioned element with an empty `div.pdfViewer` inside. */
+/**
+ * Open the PDF at `url` in `container`, an absolutely positioned element with an empty
+ * `div.pdfViewer` inside. Aborting `signal` stops the loading, with its worker and its requests,
+ * and rejects with its reason: an aborted PDF never comes into the container. A PDF that opened
+ * is closed with `close` of its session; aborting then ends the listeners of PDF.js on the
+ * container.
+ */
 export type OpenPaper = (
   container: HTMLDivElement,
   url: string,
   events: PaperEvents,
   start: PaperStart,
+  signal: AbortSignal,
 ) => Promise<PaperSession>;
 
 /**
@@ -152,16 +169,20 @@ export function findText(result: FindResult | null, query: string): string {
   return result.current > 0 ? `${result.current} of ${result.total}` : `${result.total} matches`;
 }
 
+/** What the local server answered to a PDF that it did not serve: its error, or that the page has no session. */
+export type PaperAnswer = ApiError | SessionMissing;
+
 /**
  * Why the local server did not serve the PDF at `url`, which PDF.js reports by the status alone:
- * the error of the server when it is asked again, for one byte of the PDF. Null for another
- * failure of PDF.js, and when the server serves the PDF now or cannot be reached.
+ * the error of the server when it is asked again, for one byte of the PDF, or SessionMissing. Null
+ * for another failure of PDF.js, and when the server serves the PDF now or cannot be reached.
  */
-export async function paperAnswer(caught: unknown, url: string): Promise<ApiError | null> {
+export async function paperAnswer(caught: unknown, url: string): Promise<PaperAnswer | null> {
   if (!(caught instanceof Error) || caught.name !== "ResponseException") return null;
   try {
     await checkFile(url);
   } catch (error) {
+    if (error instanceof SessionMissing) return error;
     // ServerStopped is an ApiError of status 0, which says nothing about the PDF.
     if (error instanceof ApiError && error.status > 0) return error;
   }
@@ -199,13 +220,15 @@ function failureWords(error: Error, status: number | null, answerCode: string | 
  * The failure of a PDF that the viewer could not show, for the alert of a failed action: what
  * went wrong in words, and in its details the error of PDF.js with the request, or the answer
  * of the local server (`paperAnswer`) with its status, its code, its reason and its request id.
+ * A lost session says what the status banner of the app says, without details.
  */
 export function paperFailure(
   caught: unknown,
   file: string,
   url: string,
-  answer: ApiError | null = null,
+  answer: PaperAnswer | null = null,
 ): ActionFailure {
+  if (answer instanceof SessionMissing) return actionFailure(NO_SESSION);
   const error = caught instanceof Error ? caught : new Error(String(caught));
   const status = answer?.status ?? ("status" in error && typeof error.status === "number" ? error.status : null);
   const [text, code] = failureWords(error, status, answer?.code ?? null, file);

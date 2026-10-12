@@ -26,22 +26,39 @@ interface Opened {
   url: string;
   events: PaperEvents;
   start: PaperStart;
-  session: { [Name in keyof PaperSession]: Mock<PaperSession[Name]> };
+  signal: AbortSignal;
+  session: FakeSession;
 }
+type FakeSession = { [Name in keyof PaperSession]: Mock<PaperSession[Name]> };
 let opened: Opened[];
+
+function fakeSession(): FakeSession {
+  return {
+    goTo: vi.fn<PaperSession["goTo"]>(),
+    zoom: vi.fn<PaperSession["zoom"]>(),
+    fit: vi.fn<PaperSession["fit"]>(),
+    find: vi.fn<PaperSession["find"]>(),
+    close: vi.fn<PaperSession["close"]>(async () => undefined),
+  };
+}
+
+/** A promise with its resolve and reject. */
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (reason: unknown) => void;
+  const promise = new Promise<T>((done, fail) => {
+    resolve = done;
+    reject = fail;
+  });
+  return { promise, resolve, reject };
+}
 
 beforeEach(() => {
   opened = [];
   engine.openPaper.mockImplementation(
-    async (container: HTMLDivElement, url: string, events: PaperEvents, start: PaperStart) => {
-      const session = {
-        goTo: vi.fn<PaperSession["goTo"]>(),
-        zoom: vi.fn<PaperSession["zoom"]>(),
-        fit: vi.fn<PaperSession["fit"]>(),
-        find: vi.fn<PaperSession["find"]>(),
-        close: vi.fn<PaperSession["close"]>(async () => undefined),
-      };
-      opened.push({ container, url, events, start, session });
+    async (container: HTMLDivElement, url: string, events: PaperEvents, start: PaperStart, signal: AbortSignal) => {
+      const session = fakeSession();
+      opened.push({ container, url, events, start, signal, session });
       return session;
     },
   );
@@ -166,6 +183,35 @@ describe("paper viewer", () => {
     expect(document.activeElement).toBe(wrapper.get("input[aria-label='Find in the paper']").element);
   });
 
+  it("leaves Ctrl+F to the browser while no PDF is shown", async () => {
+    engine.openPaper.mockImplementationOnce(() => new Promise(() => undefined));
+    const wrapper = await mountViewer();
+    const field = wrapper.get<HTMLInputElement>("input[aria-label='Find in the paper']");
+    expect(field.element.disabled).toBe(true);
+    const pressed = new KeyboardEvent("keydown", { key: "f", ctrlKey: true, bubbles: true, cancelable: true });
+    wrapper.get(".paper-scroll").element.dispatchEvent(pressed);
+    expect(pressed.defaultPrevented).toBe(false);
+    expect(document.activeElement).not.toBe(field.element);
+  });
+
+  it("names its pages for screen readers, and keeps Zoom out and Zoom in within the zoom of PDF.js", async () => {
+    const wrapper = await mountViewer();
+    const pdf = await shown();
+    const pages = wrapper.get(".paper-scroll");
+    expect([pages.attributes("role"), pages.attributes("aria-label")]).toEqual(["region", "Pages of Example.pdf"]);
+    const zoomOut = wrapper.get("button[aria-label='Zoom out']");
+    const zoomIn = wrapper.get("button[aria-label='Zoom in']");
+    pdf.events.scale(25, null);
+    await flushPromises();
+    expect([zoomOut.attributes("disabled"), zoomIn.attributes("disabled")]).toEqual([undefined, ""]);
+    pdf.events.scale(0.1, null);
+    await flushPromises();
+    expect([zoomOut.attributes("disabled"), zoomIn.attributes("disabled")]).toEqual(["", undefined]);
+    pdf.events.scale(1.1, null);
+    await flushPromises();
+    expect([zoomOut.attributes("disabled"), zoomIn.attributes("disabled")]).toEqual([undefined, undefined]);
+  });
+
   it("shows a damaged PDF with the alert of a failed action and opens it again on Retry in the alert", async () => {
     engine.openPaper.mockRejectedValueOnce(
       Object.assign(new Error("Invalid PDF structure."), { name: "InvalidPDFException" }),
@@ -227,6 +273,99 @@ describe("paper viewer", () => {
     expect(alert.get(".action-failure-text").text()).toBe(text);
     expect(alert.get(".action-failure-detail").text()).toBe(detail);
     expect(alert.text()).toContain("0a1b2c3d");
+  });
+
+  it("shows a lost session as the app does, with the link that pkdb curate printed", async () => {
+    engine.openPaper.mockRejectedValueOnce(responseError(401));
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ error: "Open the launch URL printed in your terminal" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    const wrapper = await mountViewer();
+    const alert = wrapper.get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe(
+      "This page has no session. Open the link that pkdb curate printed.",
+    );
+    expect(alert.text()).not.toContain("401");
+    expect(alert.find(".failure-details").exists()).toBe(false);
+    expect(alert.findAll(".paper-retry button").map((button) => button.text())).toEqual(["Retry"]);
+  });
+
+  it("stops the loading of a PDF when another PDF opens, and closes a load that ends after that unseen", async () => {
+    const first = deferred<PaperSession>();
+    engine.openPaper.mockImplementationOnce(
+      (container: HTMLDivElement, url: string, events: PaperEvents, start: PaperStart, signal: AbortSignal) => {
+        opened.push({ container, url, events, start, signal, session: fakeSession() });
+        return first.promise;
+      },
+    );
+    const wrapper = await mountViewer();
+    const loading = opened[0]!;
+    expect(loading.signal.aborted).toBe(false);
+    await wrapper.setProps({ url: URL_SUPP, file: "Example_Supp.pdf" });
+    await flushPromises();
+    expect(loading.signal.aborted).toBe(true);
+    expect(opened).toHaveLength(2);
+    const supp = await shown(3);
+    // The first load ends after all: its PDF is closed at once and reports nothing.
+    const late = fakeSession();
+    first.resolve(late);
+    await flushPromises();
+    expect(late.close).toHaveBeenCalledTimes(1);
+    loading.events.opened(9);
+    loading.events.page(7);
+    await flushPromises();
+    expect(wrapper.get(".paper-of").text()).toBe("of 3");
+    await wrapper.get("button[aria-label='Next page']").trigger("click");
+    expect(supp.session.goTo).toHaveBeenLastCalledWith(2);
+    expect(late.goTo).not.toHaveBeenCalled();
+    expect(supp.signal.aborted).toBe(false);
+    wrapper.unmount();
+    expect(supp.signal.aborted).toBe(true);
+  });
+
+  it("stops the loading of a PDF when it unmounts, and closes a load that ends after that", async () => {
+    const first = deferred<PaperSession>();
+    engine.openPaper.mockImplementationOnce(
+      (container: HTMLDivElement, url: string, events: PaperEvents, start: PaperStart, signal: AbortSignal) => {
+        opened.push({ container, url, events, start, signal, session: fakeSession() });
+        return first.promise;
+      },
+    );
+    const wrapper = await mountViewer();
+    wrapper.unmount();
+    expect(opened[0]!.signal.aborted).toBe(true);
+    const late = fakeSession();
+    first.resolve(late);
+    await flushPromises();
+    expect(late.close).toHaveBeenCalledTimes(1);
+  });
+
+  it("opens the next PDF while the worker of the last one still goes", async () => {
+    const wrapper = await mountViewer();
+    const first = await shown();
+    first.session.close.mockReturnValue(new Promise(() => undefined));
+    await wrapper.setProps({ url: URL_SUPP, file: "Example_Supp.pdf" });
+    await flushPromises();
+    expect(first.session.close).toHaveBeenCalledTimes(1);
+    expect(opened.map((pdf) => pdf.url)).toEqual([URL_A, URL_SUPP]);
+  });
+
+  it("opens the next PDF and unmounts although a PDF fails to close", async () => {
+    const wrapper = await mountViewer();
+    const first = await shown();
+    first.session.close.mockRejectedValue(new Error("Worker was destroyed"));
+    await wrapper.setProps({ bytes: 2000 });
+    await flushPromises();
+    expect(opened).toHaveLength(2);
+    const second = await shown();
+    expect(wrapper.find(".action-failure").exists()).toBe(false);
+    second.session.close.mockRejectedValue(new Error("Worker was destroyed"));
+    wrapper.unmount();
+    await flushPromises();
+    expect(second.session.close).toHaveBeenCalledTimes(1);
   });
 
   it("opens a PDF that changed on disk again on its page and zoom, another PDF on page 1, and closes it when it unmounts", async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { ApiError } from "../../src/curation-app/api/client";
+import { ApiError, NO_SESSION, SessionMissing } from "../../src/curation-app/api/client";
 import {
   findText,
   formatBytes,
@@ -142,13 +142,33 @@ describe("the paper of a study", () => {
     });
   });
 
+  it("explains a lost session as the app does, without the status", () => {
+    const failure = paperFailure(
+      responseError(401),
+      "Example.pdf",
+      URL_A,
+      new SessionMissing("Open the launch URL printed in your terminal"),
+    );
+    expect(failure).toEqual({ text: NO_SESSION, issues: [], more: 0, link: null, details: null });
+    expect(NO_SESSION).toBe("This page has no session. Open the link that pkdb curate printed.");
+  });
+
+  it("has the lost session as the answer of the local server to a 401", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(json({ error: "Open the launch URL printed in your terminal" }, 401));
+    await expect(paperAnswer(responseError(401), URL_A)).resolves.toBeInstanceOf(SessionMissing);
+  });
+
   it("asks the local server again for its answer after an error status, for one byte of the PDF", async () => {
     const fetch = vi
       .spyOn(globalThis, "fetch")
       .mockResolvedValue(json({ error: "Could not read Example.pdf.", code: "file_error", detail: "PermissionError" }, 400));
     const answered = await paperAnswer(responseError(400), URL_A);
     expect(answered).toBeInstanceOf(ApiError);
-    expect([answered?.status, answered?.code, answered?.detail]).toEqual([400, "file_error", "PermissionError"]);
+    expect(answered instanceof ApiError && [answered.status, answered.code, answered.detail]).toEqual([
+      400,
+      "file_error",
+      "PermissionError",
+    ]);
     expect(fetch).toHaveBeenCalledTimes(1);
     const [input, init] = fetch.mock.calls[0]!;
     expect(String(input)).toBe(URL_A);
