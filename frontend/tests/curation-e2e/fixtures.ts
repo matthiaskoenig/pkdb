@@ -61,9 +61,10 @@ export interface CurationServer {
 
 /**
  * The environment of the server: the user `curator`, no PK-DB account, a cache of its own in the
- * folder of the server, which `stop` removes, and a recording opener.
+ * folder of the server, which `stop` removes, and the open command `openCommand`, by default a
+ * recording opener.
  */
-function serverEnvironment(cache: string, openLog: string): NodeJS.ProcessEnv {
+function serverEnvironment(cache: string, openLog: string, openCommand: string | null): NodeJS.ProcessEnv {
   const environment: NodeJS.ProcessEnv = { ...process.env };
   for (const name of ["PKDB_API_KEY", "PKDB_ENDPOINT", "PKDB_AGENT", "PKDB_CACHE_DIR"]) delete environment[name];
   // The server splits the command like a shell, so the paths are quoted.
@@ -76,7 +77,7 @@ function serverEnvironment(cache: string, openLog: string): NodeJS.ProcessEnv {
     // comes first in pkdb, on every platform.
     PKDB_CACHE_DIR: cache,
     XDG_CACHE_HOME: cache,
-    PKDB_OPEN_COMMAND: `${quoted(python())} ${quoted(join(testing, "record_open.py"))}`,
+    PKDB_OPEN_COMMAND: openCommand ?? `${quoted(python())} ${quoted(join(testing, "record_open.py"))}`,
     PKDB_OPEN_LOG: openLog,
   };
 }
@@ -96,8 +97,8 @@ class RunningServer {
     this.launchUrl = this.readLaunchUrl();
   }
 
-  /** Copy the fixture into a new folder below `root` and start `pkdb curate` on it. */
-  static async start(root: string): Promise<RunningServer> {
+  /** Copy the fixture into a new folder below `root` and start `pkdb curate` on it with `openCommand`. */
+  static async start(root: string, openCommand: string | null): Promise<RunningServer> {
     const folder = mkdtempSync(join(root, "server-"));
     const workspace = join(folder, "workspace");
     const openLog = join(folder, "open.log");
@@ -114,7 +115,7 @@ class RunningServer {
         ...["-m", "pkdb", "curate", workspace],
         ...["--offline", "--no-browser", "--port", "0", "--state-dir", join(folder, "state")],
       ],
-      { env: serverEnvironment(join(folder, "cache"), openLog), stdio: ["ignore", "pipe", "pipe"] },
+      { env: serverEnvironment(join(folder, "cache"), openLog, openCommand), stdio: ["ignore", "pipe", "pipe"] },
     );
     return new RunningServer(folder, workspace, openLog, child);
   }
@@ -190,13 +191,16 @@ class RunningServer {
 class ServerPool {
   private current: { file: string; server: RunningServer; cookies: Cookie[] } | null = null;
 
+  /** `openCommand` is the PKDB_OPEN_COMMAND of every server; null records the opened paths. */
+  constructor(private readonly openCommand: string | null) {}
+
   async forFile(file: string): Promise<CurationServer> {
     if (this.current?.file !== file) {
       await this.close();
       const root = process.env[ROOT_VARIABLE];
       if (!root) throw new Error(`${ROOT_VARIABLE} is not set: run the suite with playwright.curation.config.ts`);
       // Kept before its launch URL comes, so that closing the pool stops it in any case.
-      this.current = { file, server: await RunningServer.start(root), cookies: [] };
+      this.current = { file, server: await RunningServer.start(root, this.openCommand), cookies: [] };
     }
     return this.current.server.info();
   }
@@ -298,11 +302,17 @@ export async function setAutomaticActions(page: Page, paused: boolean): Promise<
   await page.keyboard.press("Escape");
 }
 
-export const test = base.extend<{ curation: CurationServer; app: CurationApp }, { servers: ServerPool }>({
+export const test = base.extend<
+  { curation: CurationServer; app: CurationApp },
+  { servers: ServerPool; openCommand: string | null }
+>({
+  // The PKDB_OPEN_COMMAND of the servers of a spec file, as `test.use({ openCommand: "false" })`
+  // sets it; null records the opened paths in `openLog`. Playwright starts another worker for
+  // another command, so spec files never share a server with another opener.
+  openCommand: [null, { scope: "worker", option: true }],
   servers: [
-    // eslint-disable-next-line no-empty-pattern
-    async ({}, use) => {
-      const pool = new ServerPool();
+    async ({ openCommand }, use) => {
+      const pool = new ServerPool(openCommand);
       await use(pool);
       await pool.close();
     },
