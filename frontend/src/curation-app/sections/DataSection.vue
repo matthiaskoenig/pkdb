@@ -54,7 +54,8 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * cannot show the sources and tables; the sync actions and the conflicts stay.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
- * and Review sections can link to a row (`data.ts` has its rules). A route without a source and
+ * and Review sections can link to a row (`data.ts` has its rules). A link may name `notes=<kind>`,
+ * which opens those notes above the table and focuses them. A route without a source and
  * a file gets the default selection once: the first table with problems or open review items,
  * else the first table, beside its source. After that only the actions of the curator change it.
  */
@@ -102,6 +103,30 @@ const notesKind = computed<TableKind | null>(() => {
   const entry = value && file.value ? findTable(value, file.value) : undefined;
   return value && entry ? (noteKinds(value).find((kind) => kind === entry.kind) ?? null) : null;
 });
+
+/**
+ * The notes that a link of the Problems section opened, whose toggle takes the focus. The link
+ * names them as `notes=<kind>`; the section opens them, which the draft keeps, and leaves only the
+ * selection in the address.
+ */
+const linkedNotes = ref<TableKind | null>(null);
+watch(
+  () => route.query.notes,
+  (named) => {
+    const value = detail.value;
+    if (!value || typeof named !== "string") return;
+    const { substance, name, section } = route.params;
+    if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
+    const kind = noteKinds(value).find((candidate) => candidate === named) ?? null;
+    if (kind) {
+      study.draft.setNotesOpen(kind, true);
+      linkedNotes.value = kind;
+    }
+    go(query.value);
+  },
+  { immediate: true },
+);
+watch(file, () => (linkedNotes.value = null));
 
 const {
   data: rows,
@@ -420,7 +445,7 @@ const conflictPanel = computed(() => {
               @update:filter="setFilter"
             >
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
-              <TableNotes v-if="notesKind" :kind="notesKind" />
+              <TableNotes v-if="notesKind" :kind="notesKind" :focused="linkedNotes === notesKind" />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet. Add table adds a sheet to the workbook.
@@ -438,7 +463,7 @@ const conflictPanel = computed(() => {
             @update:filter="setFilter"
           >
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
-            <TableNotes v-if="notesKind" :kind="notesKind" />
+            <TableNotes v-if="notesKind" :kind="notesKind" :focused="linkedNotes === notesKind" />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
             The study has no tables yet. Add table adds a sheet to the workbook.

@@ -14,9 +14,11 @@ import type {
   Suggestion,
   ValidationIssue,
 } from "./api/types";
+import { notesKindOf } from "./notes";
 import { plural } from "./overview";
 import { reviewFailure, type ReviewFailure } from "./review";
 import { issuesFailure } from "./study";
+import { noteKinds } from "./tableKinds";
 
 /** The severity chips above the issues. */
 export type SeverityFilter = ValidationIssue["severity"] | "all";
@@ -144,6 +146,22 @@ export function tableQuery(issue: ValidationIssue): Record<string, string> | nul
     ...(source.row != null ? { line: String(source.row) } : {}),
     ...(column ? { column } : {}),
   };
+}
+
+/**
+ * The query of the Data section that shows the notes of an issue of study.json in the notes of a
+ * table kind, such as `notes.subjects.comments.0.user`: the first table of the kind, and `notes`,
+ * which opens its notes. Null for another issue, and for the notes of a kind that the study has
+ * no table of, which the Metadata section shows.
+ */
+export function notesQuery(
+  detail: Pick<StudyDetail, "tables" | "table_kinds">,
+  issue: ValidationIssue,
+): Record<string, string> | null {
+  if (issue.source?.file !== "study.json") return null;
+  const kind = notesKindOf(issue.field, noteKinds(detail));
+  const table = kind ? detail.tables.find((entry) => entry.kind === kind) : undefined;
+  return kind && table ? { file: table.file, notes: kind } : null;
 }
 
 /**

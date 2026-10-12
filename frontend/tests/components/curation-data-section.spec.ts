@@ -1652,4 +1652,17 @@ describe("notes of the tables", () => {
     await textArea("Description 1", rowsPane().element).setValue("Edited.");
     expect(page().get(".study-savebar").classes()).not.toContain("study-savebar--static");
   });
+
+  it("opens the notes that a link names, focuses them, and keeps only the selection in the address", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv&notes=subjects`);
+    await routed({ file: "subjects.tsv" });
+    expect(toggle().attributes("aria-expanded")).toBe("true");
+    expect(document.activeElement).toBe(toggle().element);
+  });
+
+  it("ignores a link to the notes of a kind that the study does not describe", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv&notes=unknown`);
+    await routed({ file: "subjects.tsv" });
+    expect(toggle().attributes("aria-expanded")).toBe("false");
+  });
 });

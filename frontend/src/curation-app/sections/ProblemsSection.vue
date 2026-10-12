@@ -17,6 +17,7 @@ import {
   groupCounts,
   locationKey,
   noIssuesText,
+  notesQuery,
   scopeText,
   SEVERITY_CHIPS,
   severityCounts,
@@ -105,6 +106,11 @@ const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : 
 /** Whether the Data section can show the cell of the issue: only tables of the study. */
 function showable(issue: ValidationIssue): boolean {
   return tables.value.has(issue.source?.file ?? "");
+}
+
+/** The query of the Data section that opens the notes of an issue in the notes of a table; null for another issue. */
+function notesOf(issue: ValidationIssue): Record<string, string> | null {
+  return detail.value ? notesQuery(detail.value, issue) : null;
 }
 
 /** A file of the study that opens with the system; tables open in the workbook instead. */
@@ -334,6 +340,7 @@ function openFile(file: string): Promise<void> {
             :study="identity"
             :id-base="`${id}-${groupIndex}-${index}`"
             :showable="showable(issue)"
+            :notes-query="notesOf(issue)"
             :pending="isPending(issue)"
             :automatic="automatic"
             :disabled="blocked !== null || working"

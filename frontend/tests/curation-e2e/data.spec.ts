@@ -326,8 +326,9 @@ test("the Source filter of a shared table keeps its choice per table while the s
   await navigatorButton(page, /^outputs_Tab2\.tsv/).click();
   await expect(filter).toHaveCount(0);
   // The choice survives other sections of the study.
-  await page.getByRole("link", { name: /^Metadata\b/ }).click();
-  await page.getByRole("link", { name: /^Data\b/ }).click();
+  const tabs = page.getByRole("navigation", { name: "Study sections" });
+  await tabs.getByRole("link", { name: /^Metadata\b/ }).click();
+  await tabs.getByRole("link", { name: /^Data\b/ }).click();
   await navigatorButton(page, /^characteristica\.tsv/).click();
   await expect(filter).toHaveValue("none");
   await page.getByRole("button", { name: "Show all rows" }).click();

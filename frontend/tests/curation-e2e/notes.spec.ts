@@ -123,3 +123,31 @@ test("open notes leave rows of the table in view in a short window, with the sav
   await panel.locator(".table-notes-body").evaluate((body) => body.scrollTo(0, body.scrollHeight));
   await expect(fade).toBeHidden();
 });
+
+test("Show notes of a problem in the notes of the subjects opens them above subjects.tsv", async ({ app, page }) => {
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    // A user name with a space makes study.json invalid at a field of the notes of the subjects.
+    const broken = JSON.parse(original) as StudyJson;
+    broken.notes!.subjects!.comments![0]!.user = "the curator";
+    writeFileSync(path, `${JSON.stringify(broken, null, 2)}\n`);
+
+    await app.open(`${STUDY}/problems`);
+    const problem = page.getByRole("listitem").filter({ hasText: "notes.subjects.comments.0.user" });
+    await expect(problem).toContainText("A user name has no spaces.");
+    await problem.getByRole("link", { name: "Show notes" }).click();
+
+    await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=subjects\.tsv$/);
+    const pane = rowsPane(page, "subjects.tsv");
+    const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(toggle).toBeFocused();
+    await expect(toggle).toHaveText("Notes of the subjects study.json cannot be read");
+    const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
+    await expect(notes.getByRole("listitem")).toHaveText(["A user name has no spaces."]);
+    await expect(notes.getByRole("link", { name: "Metadata" })).toBeVisible();
+  } finally {
+    writeFileSync(path, original);
+  }
+});
