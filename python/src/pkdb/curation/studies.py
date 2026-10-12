@@ -474,8 +474,10 @@ def _tables(study: LoadedStudy) -> list[dict]:
 def _papers(identity: str, layout: Layout) -> list[dict]:
     """The PDFs at the top of the study folder: `<name>.pdf` first, then the others by name.
 
-    The suffix counts in any case. A hidden file, a symlink or a folder is no paper, as the scan
-    registers none of them as an attachment; a file that went away since the scan is left out.
+    The suffix counts in any case. A hidden file (also an AppleDouble `._name.pdf`), a symlink or a
+    folder is no paper: the scan registers none of them as an attachment, and the file route
+    refuses hidden names, so every listed PDF is served and every served PDF is listed. A file
+    that went away since the scan is left out.
     """
     files = [name for name in layout.attachments if Path(name).suffix.lower() == ".pdf"]
     papers = []
@@ -686,8 +688,14 @@ class StudiesMixin(EngineState):
         """
         folder = self.study_folder(identity)
         media_type = FILE_TYPES.get(Path(file).suffix.lower())
-        # Registered files are regular files at the top level of the folder, never symlinks.
-        if media_type is None or file not in scan_folder(folder).files:
+        # Registered files are regular files at the top level of the folder, never symlinks. A
+        # hidden file (also an AppleDouble `._name.pdf`) is no image and no paper: the scan lists
+        # it among the files but not among the attachments, which `papers` reads.
+        if (
+            media_type is None
+            or file.startswith(".")
+            or file not in scan_folder(folder).files
+        ):
             raise LookupError(f"{file} is not an image or a PDF of {identity}")
         path = folder / file
         if not path.resolve().is_relative_to(folder.resolve()):

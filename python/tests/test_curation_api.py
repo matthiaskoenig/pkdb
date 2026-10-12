@@ -1934,14 +1934,14 @@ def test_a_named_pipe_named_like_a_pdf_is_refused_without_waiting_for_a_writer(a
 def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp_path):
     server, engine, folder = api
     sizes = {
-        "Example.PDF": 30,
+        "Example.pdf": 30,
         "Example_Supp.pdf": 20,
+        "Zeta.PDF": 7,
         "appendix10.pdf": 10,
         "appendix9.Pdf": 5,
         ".hidden.pdf": 1,
         "notes.txt": 3,
     }
-    (folder / "Example.pdf").unlink()  # the fixture study has a paper of its own
     for name, size in sizes.items():
         (folder / name).write_bytes(b"%" * size)
     outside = tmp_path / "outside.pdf"
@@ -1952,10 +1952,11 @@ def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp
     assert detail["papers"] == [
         {"file": name, "url": f"{DETAIL}/files/{name}", "bytes": sizes[name]}
         for name in (
-            "Example.PDF",
+            "Example.pdf",
             "appendix9.Pdf",
             "appendix10.pdf",
             "Example_Supp.pdf",
+            "Zeta.PDF",
         )
     ]
 
@@ -1968,3 +1969,32 @@ def test_the_study_page_lists_its_pdfs_beyond_the_upload_limits(api, monkeypatch
     detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
     assert detail["problems"][0]["code"] == "file_limit"
     assert [paper["file"] for paper in detail["papers"]] == ["Example.pdf"]
+
+
+def test_a_hidden_pdf_and_a_hidden_image_are_refused_by_the_file_route(api):
+    server, engine, folder = api
+    (folder / ".hidden.pdf").write_bytes(PDF)
+    (folder / "._Example.pdf").write_bytes(b"\x00\x05\x16\x07")
+    (folder / ".hidden.png").write_bytes(png(2, 2))
+    engine.scan()
+    headers = authenticate(server)
+    for file in (".hidden.pdf", "._Example.pdf", ".hidden.png"):
+        assert (
+            request(server, "GET", f"{DETAIL}/files/{file}", headers=headers)[0] == 404
+        )
+
+
+def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
+    server, engine, folder = api
+    for name in ("Example.pdf", "Example.PDF", "Example_Supp.pdf", "Zeta.Pdf"):
+        (folder / name).write_bytes(PDF)
+    engine.scan()
+    headers = authenticate(server)
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    assert len(detail["papers"]) == 4
+    for paper in detail["papers"]:
+        status, response_headers, _ = request(
+            server, "GET", paper["url"], headers=headers
+        )
+        assert status == 200
+        assert response_headers["Content-Type"] == "application/pdf"
