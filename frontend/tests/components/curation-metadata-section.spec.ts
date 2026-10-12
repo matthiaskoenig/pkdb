@@ -103,7 +103,7 @@ function card(title: string): DOMWrapper<Element> {
 }
 
 function saveBar() {
-  return page().find(".metadata-savebar");
+  return page().find(".study-savebar");
 }
 
 function ratingOf(name: string) {
@@ -118,6 +118,16 @@ function ratingText(name: string): string | null {
 /** Waits until the dialog of a guarded navigation shows its buttons. */
 function leaveDialog(): Promise<void> {
   return vi.waitFor(() => expect(buttons("Stay")).toHaveLength(1));
+}
+
+/** The label of the tab of a section with what screen readers hear after it, such as "Data, unsaved changes". */
+function tabLabel(label: string): string {
+  const found = page()
+    .findAll('nav[aria-label="Study sections"] .section-tab-label')
+    .map((entry) => entry.text())
+    .find((text) => text === label || text.startsWith(`${label},`));
+  if (found === undefined) throw new Error(`No tab ${label}`);
+  return found;
 }
 
 /** An issue of study.json as the library gives it: the message names the field, the detail does not. */
@@ -375,7 +385,7 @@ describe("descriptions, comments and notes", () => {
       comments: [{ user: "mkoenig", text: "Checked against the PDF." }],
       curators: fullStudyMetadata().curators,
     });
-    expect(page().find(".metadata-failure").exists()).toBe(false);
+    expect(page().find(".savebar-failure").exists()).toBe(false);
   });
 
   it("keeps notes per table kind", async () => {
@@ -426,7 +436,7 @@ describe("saving", () => {
       await mountSection();
       await field("DOI").setValue("10.1000/xyz");
       await click("Discard");
-      expect(page().get(".metadata-notice").text()).toBe("Changes discarded.");
+      expect(page().get(".savebar-notice").text()).toBe("Changes discarded.");
 
       await click("Undo");
       expect(field("DOI").element.value).toBe("10.1000/xyz");
@@ -468,7 +478,7 @@ describe("saving", () => {
       expect(saveBar().text()).toContain("study.json saved.");
       expect(saveBar().text()).not.toContain("Unsaved changes");
       expect(button("Save").element.disabled).toBe(true);
-      expect(page().get(".metadata-notice").text()).toBe("study.json saved.");
+      expect(page().get(".savebar-notice").text()).toBe("study.json saved.");
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
       expect(saveBar().exists()).toBe(false);
@@ -488,7 +498,7 @@ describe("saving", () => {
     });
     await field("PMID").setValue("999");
     await click("Save");
-    expect(page().get(".metadata-reference-error").text()).toBe(
+    expect(page().get(".savebar-reference-error").text()).toBe(
       "study.json saved; reference.json could not be refreshed: PubMed is offline",
     );
   });
@@ -514,7 +524,7 @@ describe("saving", () => {
     expect(field("DOI").element.value).toBe("doi");
     expect(messagesOf(field("DOI"))).toBe("String should match pattern '^10\\.\\d{4,9}/\\S+$'");
     expect(page().get(".curator-row .curator-messages").text()).toBe("Input should be less than or equal to 5");
-    const failure = page().get(".metadata-failure").text();
+    const failure = page().get(".savebar-failure").text();
     expect(failure).toContain("study.json was not saved. Fix the marked fields.");
     expect(failure).toContain("format: Input should be 2");
     expect(saveBar().exists()).toBe(true);
@@ -531,7 +541,7 @@ describe("saving", () => {
 
     expect(messagesOf(field("PMID"))).toBe("Give a pmid or a doi, or remove reference for a manual reference");
     expect(messagesOf(page().get(".creator-field").element)).toBe("A user name has no spaces.");
-    expect(page().get(".metadata-failure").text()).toContain("study.json was not saved. Fix the marked fields.");
+    expect(page().get(".savebar-failure").text()).toContain("study.json was not saved. Fix the marked fields.");
   });
 
   it("reloads a study.json changed on disk, keeps the edits on top and saves over the new revision", async () => {
@@ -557,7 +567,7 @@ describe("saving", () => {
     await flushPromises();
     await click("Save");
 
-    expect(page().get(".metadata-conflict").text()).toContain(
+    expect(page().get(".savebar-conflict").text()).toContain(
       "study.json changed on disk after you opened this form",
     );
     expect(button("Save").element.disabled).toBe(true);
@@ -571,7 +581,7 @@ describe("saving", () => {
     expect(page().get(".curators-block").text()).toContain("Changed on disk");
     expect(messagesOf(textArea("Description 1", notes))).toBe("");
     expect(page().get(".descriptions-block").text()).toContain("Changed on disk");
-    expect(page().find(".metadata-conflict").exists()).toBe(false);
+    expect(page().find(".savebar-conflict").exists()).toBe(false);
     expect(button("Save").element.disabled).toBe(false);
 
     await click("Save");
@@ -589,7 +599,7 @@ describe("saving", () => {
     await click("Save");
     await click("Reload");
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("mkoenig");
-    expect(page().get(".metadata-reloaded").text()).toContain("Changed on both sides, your version is kept: Creator");
+    expect(page().get(".savebar-reloaded").text()).toContain("Changed on both sides, your version is kept: Creator");
     expect(messagesOf(page().get(".creator-field input"))).toBe(
       "Changed on disk too. Your edit is kept. On disk: janekg",
     );
@@ -599,7 +609,7 @@ describe("saving", () => {
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("janekg");
     expect(messagesOf(page().get(".creator-field input"))).toBe("Changed on disk");
     expect(buttons(/^Use the disk version/)).toHaveLength(0);
-    expect(page().get(".metadata-reloaded").text()).not.toContain("Changed on both sides");
+    expect(page().get(".savebar-reloaded").text()).not.toContain("Changed on both sides");
     expect(saveBar().text()).toContain("No unsaved changes");
   });
 
@@ -615,6 +625,44 @@ describe("saving", () => {
     await click("Use the disk version of Descriptions");
     expect(textArea("Description 1", card("Descriptions and comments").element).element.value).toBe("From disk.");
     expect(page().get(".descriptions-block").text()).not.toContain("Your edit is kept");
+  });
+
+  it("cannot merge a study.json on disk that is no JSON object, and saves again once it is fixed", async () => {
+    await mountSection(studyDetail(), {
+      [`POST ${METADATA}`]: () =>
+        json({ error: "changed", file: "study.json", revision: "study-2", content: "{ broken" }, { status: 409 }),
+    });
+    await field("DOI").setValue("10.1000/xyz");
+    await click("Save");
+    expect(page().get(".savebar-conflict").text()).toContain(
+      "It is not valid JSON now, so it cannot be merged. Fix it in your editor, then save again.",
+    );
+    expect(buttons("Reload")).toHaveLength(0);
+    expect(button("Save").element.disabled).toBe(false);
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
+  });
+
+  it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
+    const disk = studyMetadata({ licence: "closed" });
+    await mountSection(studyDetail(), { [`POST ${METADATA}`]: changedOnDisk(disk) });
+    await field("DOI").setValue("10.1000/xyz");
+    served = withMetadata(disk, "study-2");
+    await useStudyStore().refresh();
+    await flushPromises();
+
+    await click("Discard");
+    expect(radio("Closed").checked).toBe(true);
+    expect(field("DOI").element.value).toBe("");
+    await click("Undo");
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
+    expect(radio("Open").checked).toBe(true);
+
+    // The save goes over the revision that the edits were read from, and Reload puts them on top.
+    await click("Save");
+    expect(posted(METADATA)[0]?.revision).toBe("study-1");
+    await click("Reload");
+    expect(radio("Closed").checked).toBe(true);
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
   });
 
   it("follows study.json on disk while the form has no unsaved edits", async () => {
@@ -654,7 +702,7 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    const alert = page().get(".metadata-failure");
+    const alert = page().get(".savebar-failure");
     expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
     expect(alert.get("summary").text()).toBe("Details");
     expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
@@ -667,48 +715,108 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    expect(page().get(".metadata-failure").text()).toContain("Set your PK-DB user in Connection settings");
+    expect(page().get(".savebar-failure").text()).toContain("Set your PK-DB user in Connection settings");
     expect(useDialogStore().settings).toBe(false);
     await click("Open settings");
     expect(useDialogStore().settings).toBe(true);
   });
+
+  it("marks the tab of the section of each changed field: Data for the notes of a table, Metadata for the others", async () => {
+    await mountSection(withMetadata(fullStudyMetadata()));
+    // outputs has a table, outputs_Tab2.tsv, above which the Data section shows its notes.
+    useStudyStore().draft.form!.notes.outputs.descriptions.push("From Data.");
+    await flushPromises();
+    expect(tabLabel("Data")).toBe("Data, unsaved changes");
+    expect(tabLabel("Metadata")).toBe("Metadata");
+    expect(saveBar().text()).toContain("Unsaved changes in study.json");
+
+    await field("DOI").setValue("10.1000/xyz");
+    expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
+    expect(tabLabel("Data")).toBe("Data, unsaved changes");
+  });
+
+  it("names what failed when a save fails unexpectedly", async () => {
+    await mountSection(studyDetail(), {
+      [`POST ${METADATA}`]: () =>
+        json(
+          {
+            error: "Could not save study.json of caffeine/Example.",
+            code: "unexpected",
+            detail: "OSError: disk full",
+            action: "Save study.json (POST /local/studies/metadata)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T10:00:00+02:00",
+          },
+          { status: 500 },
+        ),
+    });
+    await field("DOI").setValue("10.1000/xyz");
+    await click("Save");
+    const failure = page().get(".savebar-failure");
+    expect(failure.get(".action-failure-text").text()).toBe("Could not save study.json of caffeine/Example.");
+    expect(failure.text()).toContain("OSError: disk full");
+
+    // Its alert closes it, in the draft of the store.
+    await failure.get(".v-alert__close button").trigger("click");
+    expect(page().find(".savebar-failure").exists()).toBe(false);
+    expect(useStudyStore().draft.failure).toBeNull();
+  });
 });
 
-describe("leaving with unsaved changes", () => {
-  it("asks before another section opens", async () => {
+describe("leaving the study with unsaved changes", () => {
+  it("keeps the edits while other sections of the study open", async () => {
+    await mountSection();
+    await field("DOI").setValue("10.1000/xyz");
+    await router.push("/studies/caffeine/Example/review");
+    await flushPromises();
+    expect(router.currentRoute.value.params.section).toBe("review");
+    expect(buttons("Stay")).toHaveLength(0);
+    expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
+
+    await router.push(SECTION);
+    await flushPromises();
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
+    expect(saveBar().text()).toContain("Unsaved changes in study.json");
+  });
+
+  it("asks before the overview opens, and stays or discards and leaves", async () => {
     await mountSection();
     await field("DOI").setValue("10.1000/xyz");
 
-    const stay = router.push("/studies/caffeine/Example/review");
+    const stay = router.push("/");
     await leaveDialog();
     expect(page().get('.v-overlay--active[role="dialog"]').text()).toContain("Leave without saving?");
+    expect(page().get('.v-overlay--active[role="dialog"]').text()).toContain(
+      "Your changes to study.json are not saved. Leaving discards them.",
+    );
     await click("Stay");
     await stay;
     expect(router.currentRoute.value.params.section).toBe("metadata");
     expect(field("DOI").element.value).toBe("10.1000/xyz");
 
-    const leave = router.push("/studies/caffeine/Example/review");
-    await leaveDialog();
-    await click("Discard and leave");
-    await leave;
-    expect(router.currentRoute.value.params.section).toBe("review");
-    expect(page().get('nav[aria-label="Study sections"] a .section-tab-label').text()).toBe("Metadata");
-  });
-
-  it("asks before the overview opens", async () => {
-    await mountSection();
-    await field("DOI").setValue("10.1000/xyz");
     const leave = router.push("/");
     await leaveDialog();
     await click("Discard and leave");
     await leave;
     expect(router.currentRoute.value.name).toBe("Overview");
+    expect(useStudyStore().draft.form).toBeNull();
+  });
+
+  it("asks before another study opens", async () => {
+    await mountSection();
+    await field("DOI").setValue("10.1000/xyz");
+    const stay = router.push("/studies/caffeine/Other/metadata");
+    await leaveDialog();
+    await click("Stay");
+    await stay;
+    expect(router.currentRoute.value.params.name).toBe("Example");
+    expect(field("DOI").element.value).toBe("10.1000/xyz");
   });
 
   it("leaves without asking when nothing changed", async () => {
     await mountSection();
-    await router.push("/studies/caffeine/Example/review");
-    expect(router.currentRoute.value.params.section).toBe("review");
+    await router.push("/");
+    expect(router.currentRoute.value.name).toBe("Overview");
   });
 
   it("asks the browser to confirm closing the tab", async () => {

@@ -8,7 +8,7 @@
  * The form follows study.json on disk while it has no unsaved edits. `reset` forgets the draft
  * when the study closes; the answer of a save that started before changes nothing.
  */
-import { computed, ref, shallowRef, watch, type ComputedRef, type Ref } from "vue";
+import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, watch, type ComputedRef, type Ref } from "vue";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
 import type {
   DocumentState,
@@ -246,14 +246,15 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
 
   /**
    * A refused save: the issues at their fields, and the others in the bar. The issues of the
-   * notes of a table are listed with their field too, since Metadata does not show those fields,
-   * and their notes open.
+   * notes of a kind with a table are listed with their field too, since Metadata does not show
+   * those fields; Metadata shows the notes of a kind without a table, with their issues. The notes
+   * with an issue open.
    */
   function refused(issues: ValidationIssue[], sent: MetadataForm): void {
     const grouped = issuesByTarget(sent, issues);
     errors.value = grouped.fields;
     const notes = [...grouped.fields].flatMap(([key, messages]) =>
-      notesKindOf(key, kinds.value) ? messages.map((message) => `${fieldLabel(notesField(key))}: ${message}`) : [],
+      notesKindOf(key, tabled.value) ? messages.map((message) => `${fieldLabel(notesField(key))}: ${message}`) : [],
     );
     failure.value = issuesFailure(
       grouped.fields.size ? "study.json was not saved. Fix the marked fields." : "study.json was not saved.",
@@ -368,6 +369,13 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     form.value = start;
     base.value = null;
   }
+
+  // The timers of the notice and of Undo stop with the store or the component that owns the draft.
+  if (getCurrentScope())
+    onScopeDispose(() => {
+      clearTimeout(undoTimer);
+      announce("");
+    });
 
   function reset(): void {
     generation += 1;

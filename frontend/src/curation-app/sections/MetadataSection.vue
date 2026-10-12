@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
+import { computed, onMounted, ref, useId } from "vue";
 import {
   VAlert,
   VBtn,
   VCard,
-  VCardActions,
   VCardItem,
   VCardText,
   VCardTitle,
   VChip,
-  VDialog,
   VExpansionPanel,
   VExpansionPanels,
   VExpansionPanelText,
@@ -19,53 +16,32 @@ import {
   VRadio,
   VRadioGroup,
   VSelect,
-  VSpacer,
   VTextField,
 } from "vuetify/components";
-import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
-import type { DocumentState, Profile, StudyMetadata, TableKind, ValidationIssue } from "../api/types";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import type { Profile, TableKind } from "../api/types";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
-import UserHint from "../components/UserHint.vue";
-import { useNotice } from "../composables/useNotice";
-import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
-import {
-  changedFields,
-  clone,
-  copyField,
-  fieldLabel,
-  fieldText,
-  fromForm,
-  issuesByTarget,
-  markMessage,
-  mergeOnReload,
-  PROVENANCE_LABELS,
-  readStudyJson,
-  startForm,
-  toForm,
-  withKind,
-  type FieldMark,
-  type MetadataForm,
-  type ProvenanceKind,
-} from "../metadata";
+import StudySaveBar from "../components/StudySaveBar.vue";
+import { sectionHeading } from "../composables/useReturnFocus";
+import { markMessage, PROVENANCE_LABELS, startForm, withKind, type ProvenanceKind } from "../metadata";
 import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { failureOf, issuesFailure, knownProfiles, NOTICE_MS, releaseLabel, userHint, type ActionFailure } from "../study";
+import { knownProfiles, releaseLabel } from "../study";
 import { kindLabel, noteKinds } from "../tableKinds";
 
 /**
- * The form of study.json. Saves are explicit and go over the revision that the form was read
- * from: a file changed on disk meanwhile is a conflict, and Reload puts the edits on top of the
- * new version. Leaving with unsaved edits asks first.
+ * The form of study.json. It edits the draft of the study store, which the Data section edits
+ * too; the save bar of both saves the draft over the revision that it was read from. A file
+ * changed on disk meanwhile is a conflict, and Reload puts the edits on top of the new version.
+ * The study page asks before the study is left with unsaved edits.
  */
-const emit = defineEmits<{ unsaved: [value: boolean] }>();
-
 const study = useStudyStore();
 const overview = useOverviewStore();
+/** The draft of study.json of the open study. */
+const draft = study.draft;
 const ids = {
   reference: useId(),
   people: useId(),
@@ -73,107 +49,31 @@ const ids = {
   release: useId(),
   notes: useId(),
   tables: useId(),
-  leave: useId(),
 };
 
 const detail = computed(() => study.detail);
+/** study.json as the app last read it. */
+const studyJson = computed(() => detail.value?.metadata ?? null);
+/** The form of the draft; null while an invalid study.json shows its issues instead. */
+const form = computed(() => draft.form);
+const writable = computed(() => draft.writable);
+const errors = computed(() => draft.errors);
+const marks = computed(() => draft.marks);
+const disk = computed(() => draft.disk);
+const referenceOpen = ref(false);
+
 /** The table kinds with notes in study.json and their labels, as the study page describes them. */
 const notesKinds = computed(() => {
   const value = detail.value;
   return value ? noteKinds(value).map((kind) => ({ kind, label: kindLabel(value, kind) })) : [];
 });
-const formKinds = computed(() => notesKinds.value.map((entry) => entry.kind));
-/** study.json as the app last read it. */
-const studyJson = computed(() => detail.value?.metadata ?? null);
-
-/** The revision of study.json that a save goes over; null for a file that the app cannot write. */
-const revision = ref<string | null>(null);
-/** The revision that the form was last read from, to notice a new one in the detail. */
-let adopted: string | null | undefined;
-/** The document that the form started from; null for an invalid study.json. */
-const base = ref<MetadataForm | null>(null);
-/** The form; null while an invalid study.json shows its issues instead. */
-const form = ref<MetadataForm | null>(null);
-
-const saving = ref(false);
-/** A refused save: why, and the issues that no field shows. */
-const failure = ref<ActionFailure | null>(null);
-/** The messages of a refused save by field. */
-const errors = ref<ReadonlyMap<string, string[]>>(new Map());
-/** Writes need a user: what to do about it. */
-const noUser = ref<string | null>(null);
-/** study.json changed on disk: its revision and its content as a form, null when it is no JSON object. */
-const conflict = ref<{ revision: string; theirs: MetadataForm | null } | null>(null);
-/** The fields that changed on disk at the last reload. */
-const marks = ref<ReadonlyMap<string, FieldMark>>(new Map());
-/** The fields that changed on both sides at the last reload; null before a reload. */
-const reloaded = ref<string[] | null>(null);
-const referenceError = ref("");
-const { notice, announce } = useNotice();
-const referenceOpen = ref(false);
-const openPanels = ref<TableKind[]>([]);
-
-/** The form before the last Discard, which Undo restores for a few seconds or until the next edit. */
-interface Discarded {
-  form: MetadataForm;
-  base: MetadataForm | null;
-  revision: string | null;
-  adopted: string | null | undefined;
-  marks: ReadonlyMap<string, FieldMark>;
-  reloaded: string[] | null;
-}
-const undo = ref<Discarded | null>(null);
-let undoTimer: ReturnType<typeof setTimeout> | undefined;
-
-const writable = computed(() => revision.value !== null);
-const dirty = computed(
-  () => form.value !== null && (base.value === null || changedFields(base.value, form.value).length > 0),
-);
-/** The bar shows unsaved changes and the outcome of the last save, reload or reference change. */
-const barShown = computed(
-  () =>
-    dirty.value ||
-    saving.value ||
-    conflict.value !== null ||
-    failure.value !== null ||
-    noUser.value !== null ||
-    reloaded.value !== null ||
-    referenceError.value !== "" ||
-    notice.value !== "" ||
-    undo.value !== null,
-);
-/** A conflict with a readable study.json blocks Save until Reload. */
-const canSave = computed(() => dirty.value && writable.value && !saving.value && !conflict.value?.theirs);
-
-function clearFeedback(): void {
-  failure.value = null;
-  errors.value = new Map();
-  noUser.value = null;
-  conflict.value = null;
-  marks.value = new Map();
-  reloaded.value = null;
-}
-
-/** Show `state` in the form, dropping the edits and the feedback of the last save. */
-function adopt(state: DocumentState<StudyMetadata>): void {
-  adopted = state.revision;
-  revision.value = state.revision;
-  base.value = state.value ? toForm(state.value, formKinds.value) : null;
-  form.value = base.value ? clone(base.value) : null;
-  clearFeedback();
-}
-
-// The form follows study.json on disk while it has no unsaved edits, also when the edits are
-// undone by hand after the file changed.
-watch(
-  [studyJson, dirty, saving],
-  ([state, edited, busy]) => {
-    if (state && state.revision !== adopted && !edited && !busy) adopt(state);
+/** The open panels of the notes per table, which the draft keeps while the study is open. */
+const openPanels = computed<TableKind[]>({
+  get: () => notesKinds.value.map((entry) => entry.kind).filter((kind) => draft.notesOpen.has(kind)),
+  set: (kinds) => {
+    for (const { kind } of notesKinds.value) draft.setNotesOpen(kind, kinds.includes(kind));
   },
-  { immediate: true },
-);
-
-watch(dirty, (value) => emit("unsaved", value), { immediate: true });
+});
 
 // Profiles: the roster, and the people of the study who are not in it.
 const roster = ref<Profile[]>([]);
@@ -220,7 +120,7 @@ const reference = computed(() => {
 function useDoi(doi: string): void {
   if (!form.value) return;
   form.value.reference = { pmid: "", doi };
-  announce(`DOI ${doi} is in the form. Save study.json to fetch its reference.`);
+  draft.announce(`DOI ${doi} is in the form. Save study.json to fetch its reference.`);
 }
 
 // Access and provenance
@@ -245,15 +145,6 @@ function errorsAt(key: string): string[] {
   return errors.value.get(key) ?? [];
 }
 
-/** The disk values of the fields that changed on both sides at the last reload. */
-const disk = computed(() => {
-  const theirs = base.value;
-  const values = new Map<string, string>();
-  if (theirs)
-    for (const [key, mark] of marks.value) if (mark === "conflict") values.set(key, fieldText(theirs, key));
-  return values;
-});
-
 function markAt(key: string): string[] {
   const mark = marks.value.get(key);
   return mark ? [markMessage(mark, disk.value.get(key) ?? null)] : [];
@@ -261,10 +152,7 @@ function markAt(key: string): string[] {
 
 /** Replace the edit of a field that changed on both sides with the version on disk. */
 function useDisk(key: string): void {
-  if (!form.value || !base.value) return;
-  copyField(form.value, base.value, key);
-  marks.value = new Map([...marks.value, [key, "disk"]]);
-  reloaded.value = reloaded.value?.filter((field) => field !== key) ?? null;
+  draft.useDisk(key);
 }
 
 function markColor(key: string): string | undefined {
@@ -306,127 +194,9 @@ function removeAsset(index: number): void {
   form.value?.provenance.assets.splice(index, 1);
 }
 
-// Saving
-
-function refused(issues: ValidationIssue[], sent: MetadataForm): void {
-  const grouped = issuesByTarget(sent, issues);
-  errors.value = grouped.fields;
-  failure.value = issuesFailure(
-    grouped.fields.size ? "study.json was not saved. Fix the marked fields." : "study.json was not saved.",
-    grouped.general,
-  );
-  // The notes of a table kind with an issue open, so that the issue shows.
-  const kinds = formKinds.value.filter((kind) => [...grouped.fields.keys()].some((key) => key.startsWith(`notes.${kind}.`)));
-  openPanels.value = [...new Set([...openPanels.value, ...kinds])];
-}
-
-async function save(): Promise<void> {
-  const current = form.value;
-  const at = revision.value;
-  if (!current || at === null || !canSave.value) return;
-  const sent = clone(current);
-  const metadata = fromForm(sent);
-  saving.value = true;
-  failure.value = null;
-  errors.value = new Map();
-  noUser.value = null;
-  referenceError.value = "";
-  announce("");
-  try {
-    const result = await study.saveMetadata(at, metadata);
-    const written = toForm(metadata, formKinds.value);
-    // Edits made while the save ran stay unsaved; otherwise the form shows what was written.
-    if (form.value && changedFields(sent, form.value).length === 0) form.value = clone(written);
-    base.value = written;
-    revision.value = result.revision;
-    adopted = result.revision;
-    conflict.value = null;
-    marks.value = new Map();
-    reloaded.value = null;
-    if (result.reference_error)
-      referenceError.value = `study.json saved; reference.json could not be refreshed: ${result.reference_error}`;
-    announce("study.json saved.");
-  } catch (caught) {
-    if (isRevisionConflict(caught))
-      conflict.value = { revision: caught.body.revision, theirs: readStudyJson(caught.body.content, formKinds.value) };
-    else if (isValidationError(caught)) refused(caught.body.issues, sent);
-    else if (isNoUser(caught)) noUser.value = userHint(caught);
-    else failure.value = failureOf(caught, "study.json was not saved.");
-  } finally {
-    saving.value = false;
-  }
-}
-
-/** Put the edits on top of study.json on disk and mark what changed there. */
-function reload(): void {
-  const changed = conflict.value;
-  if (!changed?.theirs || !form.value) return;
-  const start = base.value ?? toForm({}, formKinds.value);
-  const { merged, conflicts } = mergeOnReload(start, form.value, changed.theirs);
-  marks.value = new Map(
-    changedFields(start, changed.theirs).map((key): [string, FieldMark] => [
-      key,
-      conflicts.includes(key) ? "conflict" : "disk",
-    ]),
-  );
-  reloaded.value = conflicts;
-  base.value = changed.theirs;
-  form.value = merged;
-  revision.value = changed.revision;
-  adopted = changed.revision;
-  conflict.value = null;
-  failure.value = null;
-  errors.value = new Map();
-  const kinds = formKinds.value.filter((kind) => marks.value.has(`notes.${kind}.descriptions`) || marks.value.has(`notes.${kind}.comments`));
-  openPanels.value = [...new Set([...openPanels.value, ...kinds])];
-}
-
-/** Drop the edits: the form shows study.json as the app last read it. Undo brings them back. */
-function discard(): void {
-  if (!studyJson.value || !form.value) return;
-  const discarded: Discarded = {
-    form: clone(form.value),
-    base: base.value && clone(base.value),
-    revision: revision.value,
-    adopted,
-    marks: marks.value,
-    reloaded: reloaded.value,
-  };
-  adopt(studyJson.value);
-  undo.value = discarded;
-  clearTimeout(undoTimer);
-  undoTimer = setTimeout(() => (undo.value = null), NOTICE_MS);
-  announce("Changes discarded.");
-}
-
-/** Bring back the form of the last Discard, over the revision it was read from. */
-function undoDiscard(): void {
-  const discarded = undo.value;
-  if (!discarded) return;
-  undo.value = null;
-  clearTimeout(undoTimer);
-  form.value = discarded.form;
-  base.value = discarded.base;
-  revision.value = discarded.revision;
-  adopted = discarded.adopted;
-  marks.value = discarded.marks;
-  reloaded.value = discarded.reloaded;
-  announce("Changes restored.");
-}
-
-// The next edit ends the undo of a Discard.
-watch(dirty, (value) => {
-  if (value && undo.value) {
-    undo.value = null;
-    clearTimeout(undoTimer);
-  }
-});
-
 /** An invalid study.json: start a new one from what the folder summary could read. */
 function startNew(): void {
-  if (!detail.value) return;
-  form.value = startForm(detail.value, author.value ?? "");
-  base.value = null;
+  if (detail.value) draft.startNew(startForm(detail.value, author.value ?? ""));
 }
 
 const newFields = computed(() => {
@@ -441,61 +211,10 @@ const newFields = computed(() => {
     { name: "Release", value: start.release ? releaseLabel(start.release) : "None" },
   ];
 });
-
-// Leaving
-
-const leaving = ref(false);
-let answer: ((leave: boolean) => void) | null = null;
-
-/** Whether to leave: at once without unsaved edits, otherwise after the dialog answers. */
-function confirmLeave(): boolean | Promise<boolean> {
-  if (!dirty.value) return true;
-  answer?.(false);
-  leaving.value = true;
-  return new Promise((resolve) => (answer = resolve));
-}
-
-function answerLeave(leave: boolean): void {
-  const resolve = answer;
-  answer = null;
-  leaving.value = false;
-  if (leave && studyJson.value) adopt(studyJson.value);
-  resolve?.(leave);
-}
-
-// Closing the dialog with Escape or a click outside stays.
-watch(leaving, (value) => {
-  if (!value && answer) answerLeave(false);
-});
-useReturnFocus(leaving, sectionHeading);
-
-onBeforeRouteLeave(() => confirmLeave());
-onBeforeRouteUpdate((to, from) =>
-  to.params.section === from.params.section &&
-  to.params.substance === from.params.substance &&
-  to.params.name === from.params.name
-    ? true
-    : confirmLeave(),
-);
-
-/** Closing or reloading the tab with unsaved edits asks through the browser. */
-function beforeUnload(event: BeforeUnloadEvent): void {
-  if (dirty.value) event.preventDefault();
-}
-
-onMounted(() => window.addEventListener("beforeunload", beforeUnload));
-onBeforeUnmount(() => {
-  window.removeEventListener("beforeunload", beforeUnload);
-  clearTimeout(undoTimer);
-  answer?.(false);
-});
 </script>
 
 <template>
   <div class="metadata">
-    <!-- A live region stays in the page while it is empty, so that screen readers announce its
-         text; the bar shows it. -->
-    <span role="status" aria-live="polite" class="metadata-notice d-sr-only">{{ notice }}</span>
     <section v-if="!form && studyJson" class="metadata-invalid">
       <VAlert type="error" variant="tonal" density="compact" class="status-alert">
         <p class="metadata-alert-text">
@@ -867,89 +586,15 @@ onBeforeUnmount(() => {
       </VCard>
     </VForm>
 
-    <div v-if="barShown && form" class="metadata-savebar">
-      <VAlert
-        v-if="referenceError"
-        type="warning"
-        variant="tonal"
-        density="compact"
-        closable
-        class="status-alert metadata-reference-error"
-        @click:close="referenceError = ''"
-      >
-        {{ referenceError }}
-      </VAlert>
-      <VAlert
-        v-if="reloaded"
-        type="info"
-        variant="tonal"
-        density="compact"
-        closable
-        class="status-alert metadata-reloaded"
-        @click:close="reloaded = null"
-      >
-        <p class="metadata-alert-text">
-          Reloaded study.json from disk. Fields that changed there are marked, and your edits are kept.
-        </p>
-        <p v-if="reloaded.length" class="metadata-alert-text">
-          Changed on both sides, your version is kept: {{ reloaded.map(fieldLabel).join(", ") }}.
-        </p>
-      </VAlert>
-      <VAlert
-        v-if="conflict"
-        type="warning"
-        variant="tonal"
-        density="compact"
-        class="status-alert metadata-conflict"
-      >
-        <div class="metadata-alert-row">
-          <p class="metadata-alert-text">
-            study.json changed on disk after you opened this form.
-            {{
-              conflict.theirs
-                ? "Reload it to keep your edits on top of the new version."
-                : "It is not valid JSON now, so it cannot be merged. Fix it in your editor, then save again."
-            }}
-          </p>
-          <VBtn v-if="conflict.theirs" variant="flat" color="primary" size="small" @click="reload">Reload</VBtn>
-        </div>
-      </VAlert>
-      <UserHint v-if="noUser" :text="noUser" class="metadata-failure" />
-      <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" class="metadata-failure" @close="failure = null" />
-      <div class="savebar-row">
-        <span class="savebar-text">
-          <i class="fas fa-circle savebar-dot" aria-hidden="true"></i>
-          {{ dirty ? "Unsaved changes in study.json" : notice || "No unsaved changes" }}
-        </span>
-        <div class="savebar-actions">
-          <VBtn v-if="undo" variant="text" color="primary" @click="undoDiscard">Undo</VBtn>
-          <VBtn variant="text" :disabled="!dirty || saving" @click="discard">Discard</VBtn>
-          <VBtn variant="flat" color="primary" :disabled="!canSave" :loading="saving" @click="save">Save</VBtn>
-        </div>
-      </div>
-    </div>
+    <StudySaveBar />
 
     <ReferenceDialog
       v-model="referenceOpen"
       :unsaved-identifiers="identifiersChanged"
       :fallback-focus="sectionHeading"
-      @saved="announce('reference.json saved.')"
+      @saved="draft.announce('reference.json saved.')"
       @use-doi="useDoi"
     />
-
-    <VDialog v-model="leaving" max-width="440" :aria-labelledby="ids.leave">
-      <VCard>
-        <VCardItem class="metadata-card-head">
-          <VCardTitle :id="ids.leave" tag="h2">Leave without saving?</VCardTitle>
-        </VCardItem>
-        <VCardText>Your changes to study.json are not saved. Leaving discards them.</VCardText>
-        <VCardActions class="dialog-actions">
-          <VSpacer />
-          <VBtn variant="text" @click="answerLeave(false)">Stay</VBtn>
-          <VBtn variant="flat" color="primary" @click="answerLeave(true)">Discard and leave</VBtn>
-        </VCardActions>
-      </VCard>
-    </VDialog>
   </div>
 </template>
 
@@ -959,10 +604,6 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 16px;
   max-width: 100rem;
-}
-/* Hidden, it stays in the page for screen readers but takes no gap. */
-.metadata-notice {
-  position: absolute;
 }
 .metadata-alert-text,
 .metadata-text {
@@ -1076,64 +717,6 @@ onBeforeUnmount(() => {
   font-size: 0.875rem;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/* The bar stays in view at the bottom of the window while the form scrolls. */
-.metadata-savebar {
-  --savebar-gap: 12px;
-  position: sticky;
-  bottom: var(--savebar-gap);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px 10px 16px;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 12px;
-  background: rgb(var(--v-theme-surface));
-  /* Above the bar only, where the form scrolls under it; below it is the page. */
-  box-shadow: 0 -6px 16px -6px rgba(0, 0, 0, 0.16);
-}
-/* The page fills the gap below the bar, so that the form scrolls away under the bar rather than
-   showing a cut line below it. */
-.metadata-savebar::after {
-  content: "";
-  position: absolute;
-  inset-inline: -1px;
-  top: calc(100% + 1px);
-  height: var(--savebar-gap);
-  background: rgb(var(--v-theme-background));
-}
-.savebar-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-/* Wrapped below the text on a phone, the buttons stay at the end. */
-.savebar-actions {
-  display: flex;
-  gap: 8px;
-  margin-inline-start: auto;
-}
-/* The button of an alert follows its text, and goes below it in a narrow bar. */
-.metadata-alert-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-}
-.metadata-alert-row > .metadata-alert-text {
-  flex: 1 1 18rem;
-}
-.savebar-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-.savebar-dot {
-  font-size: 0.5rem;
-  color: rgb(var(--v-theme-primary));
-}
 @media (max-width: 599.98px) {
   .field-row,
   .field-grid {
@@ -1148,10 +731,6 @@ onBeforeUnmount(() => {
   .asset-row > .row-remove {
     grid-row: 1;
     grid-column: 2;
-  }
-  .metadata-savebar {
-    --savebar-gap: 8px;
-    padding: 8px 8px 8px 12px;
   }
 }
 </style>

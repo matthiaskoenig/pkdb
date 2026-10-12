@@ -127,7 +127,7 @@ describe("useStudyDraft", () => {
     expect(draft.referenceError.value).toBe("study.json saved; reference.json could not be refreshed: PubMed is offline");
   });
 
-  it("marks the fields of a refused save, lists the issues of notes by field and opens their notes", async () => {
+  it("marks the fields of a refused save, lists the issues of the notes of a table by field and opens their notes", async () => {
     const draft = await draftOf();
     answer = () =>
       Promise.reject(
@@ -135,20 +135,24 @@ describe("useStudyDraft", () => {
           error: "Invalid study.json",
           issues: [
             issue("notes.outputs.descriptions.0", "Enter some text or remove this entry."),
+            issue("notes.scatters.descriptions.0", "Enter some text or remove this entry."),
             { code: "invalid_study_json", severity: "error", message: "format: Input should be 2", field: "format" },
           ],
         }),
       );
     draft.form.value!.notes.outputs.descriptions[0] = " ";
+    // studyDetail has no scatters table: Metadata shows their notes, and the issue at its field.
+    draft.form.value!.notes.scatters.descriptions.push(" ");
     await draft.save();
 
     expect(draft.errors.value.get("notes.outputs.descriptions.0")).toEqual(["Enter some text or remove this entry."]);
+    expect(draft.errors.value.get("notes.scatters.descriptions.0")).toEqual(["Enter some text or remove this entry."]);
     expect(draft.failure.value?.text).toBe("study.json was not saved. Fix the marked fields.");
     expect(draft.failure.value?.issues).toEqual([
       "format: Input should be 2",
       "Descriptions of outputs: Enter some text or remove this entry.",
     ]);
-    expect([...draft.notesOpen.value]).toEqual(["outputs"]);
+    expect([...draft.notesOpen.value]).toEqual(["outputs", "scatters"]);
     expect(draft.form.value?.notes.outputs.descriptions).toEqual([" "]);
   });
 
@@ -180,6 +184,48 @@ describe("useStudyDraft", () => {
     answer = written;
     await draft.save();
     expect(writes.at(-1)).toMatchObject({ revision: "study-2", metadata: { licence: "open", creator: "janekg" } });
+  });
+
+  it("keeps Save on a changed study.json that is no JSON object, which cannot be merged", async () => {
+    const draft = await draftOf();
+    answer = () =>
+      Promise.reject(new ApiError(409, { error: "changed", file: "study.json", revision: "study-2", content: "{ broken" }));
+    draft.form.value!.licence = "open";
+    await draft.save();
+    expect(draft.conflict.value).toEqual({ revision: "study-2", theirs: null });
+    expect(draft.canSave.value).toBe(true);
+    expect(draft.form.value?.licence).toBe("open");
+
+    // Reload has nothing to merge; the next save goes over the revision the form was read from.
+    draft.reload();
+    expect(draft.conflict.value).not.toBeNull();
+    answer = written;
+    await draft.save();
+    expect(writes.at(-1)?.revision).toBe("study-1");
+    expect(draft.conflict.value).toBeNull();
+  });
+
+  it("replaces the edit of a field changed on both sides with the version on disk", async () => {
+    const draft = await draftOf();
+    const disk = fullStudyMetadata({ creator: "janekg", licence: "open" });
+    answer = () =>
+      Promise.reject(
+        new ApiError(409, { error: "changed", file: "study.json", revision: "study-2", content: JSON.stringify(disk) }),
+      );
+    draft.form.value!.creator = "mkoenig";
+    await draft.save();
+    draft.reload();
+    expect(draft.form.value?.creator).toBe("mkoenig");
+    expect(draft.reloaded.value).toEqual(["creator"]);
+    expect(draft.marks.value.get("creator")).toBe("conflict");
+    expect([...draft.disk.value]).toEqual([["creator", "janekg"]]);
+
+    draft.useDisk("creator");
+    expect(draft.form.value?.creator).toBe("janekg");
+    expect(draft.marks.value.get("creator")).toBe("disk");
+    expect(draft.disk.value.size).toBe(0);
+    expect(draft.reloaded.value).toEqual([]);
+    expect(draft.dirty.value).toBe(false);
   });
 
   it("keeps what the local server said about a save that failed", async () => {
@@ -237,6 +283,35 @@ describe("useStudyDraft", () => {
     vi.advanceTimersByTime(NOTICE_MS);
     expect(draft.undoable.value).toBe(false);
     expect(draft.barShown.value).toBe(false);
+  });
+
+  it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
+    const draft = await draftOf();
+    draft.form.value!.creator = "janekg";
+    detail.value = withMetadata(fullStudyMetadata({ licence: "open" }), "study-2");
+    await nextTick();
+    draft.discard();
+    expect(draft.form.value?.licence).toBe("open");
+    expect(draft.form.value?.creator).toBe("curator");
+
+    draft.undoDiscard();
+    await nextTick();
+    expect(draft.form.value?.creator).toBe("janekg");
+    expect(draft.form.value?.licence).toBe("closed");
+    expect(draft.dirty.value).toBe(true);
+    await draft.save();
+    expect(writes.at(-1)?.revision).toBe("study-1");
+  });
+
+  it("stops the timers of its notice and of Undo when its scope ends", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    const draft = await draftOf();
+    draft.form.value!.creator = "janekg";
+    draft.discard();
+    expect(vi.getTimerCount()).toBe(2);
+    scope?.stop();
+    expect(vi.getTimerCount()).toBe(0);
+    expect(draft.notice.value).toBe("");
   });
 
   it("starts a new study.json over the revision of an invalid one", async () => {
