@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
-import { VBtn, VSelect, VSwitch } from "vuetify/components";
+import { VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
 import type { SourceSummary, SourceView, StudyDetail, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
@@ -26,10 +26,11 @@ import {
   selectionOf,
   selectionQuery,
   sourceOfFile,
+  tablesByInfo,
   type RowFilter,
   type Selection,
-  type SourceRows,
 } from "../data";
+import { INFO_HEADINGS, infoStyle } from "../info";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
@@ -37,11 +38,12 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
 /**
  * A source of the study beside the rows of a table, read only. The toolbar holds the switch of
  * the empty columns, Sync, Add table and what the sync status means; the head of a shared table
- * holds its Source filter. Below the toolbar are the navigator of the sources and table files,
- * the source pane and the rows pane, which a separator resizes. Tables are edited in the
- * workbook, which Open tables of the study header opens: Sync syncs it, and Add table adds a
- * sheet. While the workbook and the tables conflict, the conflict panel shows at the top of the
- * rows pane. Below 1100 px the navigator becomes two selects, and below 960 px the panes stack.
+ * holds its Source filter. Below the toolbar are the navigator of the tables and sources, the
+ * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
+ * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
+ * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
+ * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
  * cannot show the sources and tables; the sync actions and the conflicts stay.
  *
@@ -63,6 +65,19 @@ const query = computed(() => selectionOf(route.query));
 const files = computed(() => (detail.value ? tableFiles(detail.value) : []));
 const sourceNames = computed(() => detail.value?.sources.map((entry) => entry.source) ?? []);
 const findSource = (name: string | null) => detail.value?.sources.find((entry) => entry.source === name) ?? null;
+/**
+ * The attributes of the list in the menu of a select of the toolbar. The list scrolls when its
+ * entries do not fit, and the keyboard must reach a region that scrolls, which the tabindex of -1
+ * that VSelect gives the list would prevent.
+ */
+const MENU_LIST: Record<string, unknown> = { tabindex: 0 };
+/** The items of the Table select below 1100 px: the tables under the headings of their class of information, as in the navigator. */
+const tableItems = computed(() =>
+  (detail.value ? tablesByInfo(detail.value) : []).flatMap(({ info, tables }) => [
+    { type: "subheader" as const, title: INFO_HEADINGS[info], info },
+    ...tables.map((table) => ({ type: "item" as const, title: table.file, value: table.file, info })),
+  ]),
+);
 
 // The selection
 
@@ -126,24 +141,6 @@ const {
 /** The view of the selected source; null while another one is shown or it loads. */
 const sourceView = computed(() =>
   view.value && view.value.key === source.value?.source ? view.value.content : null,
-);
-/**
- * The rows of the selected source per file, for the navigator. While the next source loads, those
- * of the last one stay with its name, so that the counts and the dimmed files do not flicker on
- * every click; a source that failed to load, a study without sources and another study have none.
- */
-const sourceRows = shallowRef<SourceRows | null>(null);
-watch(
-  [sourceView, viewError, () => source.value === null, identity],
-  ([shown, error, none, study], previous) => {
-    if (shown)
-      sourceRows.value = {
-        source: shown.source,
-        files: new Map(shown.mapped.map((entry) => [entry.file, entry.rows.length])),
-      };
-    else if (error !== null || none || study !== previous?.[3]) sourceRows.value = null;
-  },
-  { immediate: true },
 );
 /** The cell of the route in the selected file: its line, and its column when it names one. */
 const focus = computed(() =>
@@ -304,24 +301,34 @@ const conflictPanel = computed(() => {
       <div class="data-toolbar">
         <template v-if="!wide">
           <VSelect
-            v-if="sourceNames.length"
-            :model-value="source?.source ?? null"
-            :items="sourceNames"
-            label="Source"
-            density="compact"
-            hide-details
-            class="data-select"
-            @update:model-value="selectSource"
-          />
-          <VSelect
             v-if="files.length"
             :model-value="file"
-            :items="files"
+            :items="tableItems"
+            :list-props="MENU_LIST"
             label="Table"
             density="compact"
             hide-details
             class="data-select data-select--table"
             @update:model-value="selectFile"
+          >
+            <template #item="{ props: itemProps, item }">
+              <VListItem v-bind="itemProps">
+                <template #prepend>
+                  <span class="data-option-dot" :style="infoStyle(item.info)" aria-hidden="true"></span>
+                </template>
+              </VListItem>
+            </template>
+          </VSelect>
+          <VSelect
+            v-if="sourceNames.length"
+            :model-value="source?.source ?? null"
+            :items="sourceNames"
+            :list-props="MENU_LIST"
+            label="Source"
+            density="compact"
+            hide-details
+            class="data-select"
+            @update:model-value="selectSource"
           />
         </template>
         <VSwitch
@@ -377,7 +384,6 @@ const conflictPanel = computed(() => {
           :detail="detail"
           :source="source?.source ?? null"
           :file="file"
-          :rows="sourceRows"
           class="data-navigator-pane"
           @select-source="selectSource"
           @select-file="selectFile"
@@ -479,6 +485,14 @@ const conflictPanel = computed(() => {
 }
 .data-select--table {
   flex-basis: 240px;
+}
+/* The class of information of a table in the Table select: a dot in its color. */
+.data-option-dot {
+  width: 8px;
+  height: 8px;
+  margin-inline-end: 8px;
+  border-radius: 50%;
+  background: rgb(var(--info));
 }
 /* The switch keeps its label apart from the button after it. */
 .data-switch {

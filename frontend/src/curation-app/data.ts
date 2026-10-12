@@ -1,7 +1,7 @@
 /**
  * The selection of the Data section and its rules: the table that a source opens, the source of
  * a table and of a row, the selection that the section opens on, the filter of the rows of a
- * shared table, and the counts of the navigator.
+ * shared table, and the groups and counts of the navigator.
  *
  * The study page lists every table with its source: a table of one source, such as
  * `outputs_Tab2.tsv` or the raw table `<name>_Tab2.tsv`, belongs to it as a whole; a shared table
@@ -9,7 +9,8 @@
  * `source` column.
  */
 import type { LocationQuery } from "vue-router";
-import type { SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
+import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
+import { INFO_CLASSES } from "./info";
 import { tableFiles } from "./study";
 
 type Study = Pick<StudyDetail, "sources" | "tables">;
@@ -56,6 +57,17 @@ export function findTable(study: Pick<StudyDetail, "tables">, file: string): Tab
 /** Whether a table file of the study is shared by several sources, which it names per row. */
 export function isShared(study: Pick<StudyDetail, "tables">, file: string): boolean {
   return findTable(study, file)?.source === null;
+}
+
+/**
+ * The tables of a study by class of information, in the order of the navigator and each class in
+ * the order of the study page, without the classes that the study has no tables of: the groups of
+ * the navigator and of the Table select that replaces it in a narrow window.
+ */
+export function tablesByInfo(study: Pick<StudyDetail, "tables">): { info: InfoClass; tables: TableEntry[] }[] {
+  return INFO_CLASSES.map((info) => ({ info, tables: study.tables.filter((table) => table.info === info) })).filter(
+    (group) => group.tables.length > 0,
+  );
 }
 
 /**
@@ -162,15 +174,6 @@ export function defaultFile(detail: Counted): string | null {
   return (flagged ?? detail.tables[0])?.file ?? null;
 }
 
-/**
- * The rows of a source by table file, for the navigator. They name their source, as they may be
- * those of the last source while the selected one loads.
- */
-export interface SourceRows {
-  source: string;
-  files: ReadonlyMap<string, number>;
-}
-
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */
 export function rowSource(table: TableResponse, line: number): string | null {
   const index = sourceColumn(table);
@@ -229,19 +232,4 @@ export function filteredLines(table: TableResponse, filter: RowFilter): Set<numb
   if (filter.kind === "all" || index < 0) return null;
   const wanted = filter.kind === "source" ? filter.source : "";
   return new Set(table.rows.filter((row) => (row.cells[index] ?? "") === wanted).map((row) => row.line));
-}
-
-/** The characters at the end of a table name without an underscore that stay when the name is cut. */
-const NAME_END = 6;
-
-/**
- * The name of a table file without `.tsv`, split before the part that tells the files of a kind
- * apart, so that a cut shortens the start: the part from the last underscore, such as `_Fig1` of
- * `timecourses_Fig1.tsv`, else the last six characters.
- */
-export function nameParts(file: string): { start: string; end: string } {
-  const name = file.endsWith(".tsv") ? file.slice(0, -".tsv".length) : file;
-  const cut = name.lastIndexOf("_");
-  const at = cut > 0 && cut < name.length - 1 ? cut : Math.max(0, name.length - NAME_END);
-  return { start: name.slice(0, at), end: name.slice(at) };
 }

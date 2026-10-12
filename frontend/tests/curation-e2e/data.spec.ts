@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
-import { expect, runTool, setAutomaticActions, test } from "./fixtures.ts";
+import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./fixtures.ts";
 
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
@@ -77,7 +77,7 @@ function sourceView(page: Page, source: string): Promise<SourceView> {
 
 /** The button of a source or a table file in the navigator of the Data section. */
 function navigatorButton(page: Page, name: RegExp) {
-  return page.getByRole("navigation", { name: "Sources and tables" }).getByRole("button", { name });
+  return page.getByRole("navigation", { name: "Tables and sources" }).getByRole("button", { name });
 }
 
 /** Where the panes of the Data section end, how high they are, and how far the page scrolls. */
@@ -111,6 +111,45 @@ test.describe("sources", () => {
     expect(await height(/^Fig1/)).toBe(40);
     expect(await height(/^Tab2/)).toBe(40);
     expect(await height(/^subjects\.tsv/)).toBe(24);
+  });
+
+  test("the navigator lists the tables by class of information, then the sources", async ({ page }) => {
+    const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+    await expect(navigator.getByRole("heading")).toHaveText(["Tables", "Subjects", "Interventions", "Data", "Raw extractions", "Sources"]);
+    const names = (group: string) => navigator.getByRole("list", { name: group, exact: true }).locator(".nav-file-name");
+    await expect(names("Subjects")).toHaveText(["subjects.tsv", "characteristica.tsv"]);
+    await expect(names("Interventions")).toHaveText(["interventions.tsv"]);
+    await expect(names("Data")).toHaveText(["outputs_Tab2.tsv", "timecourses_Fig1.tsv"]);
+    await expect(names("Raw extractions")).toHaveText(["Demo2020_Tab2.tsv"]);
+    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Fig1", "Tab2", "Text"]);
+    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-rows")).toHaveAttribute("title", "18 rows");
+    await expect(navigatorButton(page, /^subjects\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(29, 95, 184)");
+    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(106, 63, 181)");
+  });
+
+  test("below 1100 px the Table select lists the tables under the headings of their class, in a menu that the keyboard reaches", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
+    await page.locator(".data-select--table .v-field").click();
+    const menu = page.getByRole("listbox");
+    await expect(menu.locator(".v-list-subheader")).toHaveText(["Subjects", "Interventions", "Data", "Raw extractions"]);
+    await expect(menu.getByRole("option")).toHaveText([
+      "subjects.tsv",
+      "characteristica.tsv",
+      "interventions.tsv",
+      "outputs_Tab2.tsv",
+      "timecourses_Fig1.tsv",
+      "Demo2020_Tab2.tsv",
+    ]);
+    await expect(menu.getByRole("option", { name: "subjects.tsv" }).locator(".data-option-dot")).toHaveCSS(
+      "background-color",
+      "rgb(29, 95, 184)",
+    );
+    // The menu scrolls when the tables do not fit, so the keyboard must reach it.
+    await expectAccessible(page);
+    await menu.getByRole("option", { name: "timecourses_Fig1.tsv" }).click();
+    await expect(page).toHaveURL(/file=timecourses_Fig1\.tsv/);
   });
 
   test("the Fig1 overlay shows the row of a mapped point and focuses it in the rows of the Data section", async ({ page }) => {

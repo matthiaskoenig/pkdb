@@ -61,7 +61,7 @@ test("Show in table opens the Data section with the cell of the problem focused"
   await mismatch.getByRole("link", { name: "Show in table" }).click();
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?/);
   await expect(
-    page.getByRole("navigation", { name: "Sources and tables" }).getByRole("button", { name: /^timecourses_Fig1\.tsv/ }),
+    page.getByRole("navigation", { name: "Tables and sources" }).getByRole("button", { name: /^timecourses_Fig1\.tsv/ }),
   ).toHaveAttribute("aria-current", "true");
   const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
   await expect(grid.getByRole("cell", { name: "1.24", exact: true })).toBeFocused();

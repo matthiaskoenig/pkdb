@@ -11,13 +11,13 @@ import {
   filterValue,
   firstSource,
   isShared,
-  nameParts,
   ownerOf,
   rowSource,
   selectionOf,
   selectionQuery,
   sourceCounts,
   sourceOfFile,
+  tablesByInfo,
 } from "../../src/curation-app/data";
 import { reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
@@ -239,21 +239,29 @@ describe("rows and their sources", () => {
   });
 });
 
-describe("names of table files", () => {
-  it("splits a name without .tsv before its last part, which tells the files of a kind apart", () => {
-    expect(nameParts("timecourses_Fig1.tsv")).toEqual({ start: "timecourses", end: "_Fig1" });
-    expect(nameParts("Demirbas1998_Tab2.tsv")).toEqual({ start: "Demirbas1998", end: "_Tab2" });
-    expect(nameParts("pharmacokinetics_of_caffeine_Fig12.tsv")).toEqual({
-      start: "pharmacokinetics_of_caffeine",
-      end: "_Fig12",
+describe("tables by class of information", () => {
+  it("groups the tables in the order of the navigator, each class in the order of the study page", () => {
+    const study = detail({
+      tables: [
+        tableEntry("subjects.tsv", "subjects"),
+        tableEntry("interventions.tsv", "interventions"),
+        tableEntry("characteristica.tsv", "characteristica"),
+        tableEntry("outputs_Tab2.tsv", "outputs"),
+        tableEntry("timecourses_Fig1.tsv", "timecourses"),
+        tableEntry("Example_Tab2.tsv", "raw"),
+      ],
     });
+    expect(tablesByInfo(study).map(({ info, tables }) => [info, tables.map((table) => table.file)])).toEqual([
+      ["subjects", ["subjects.tsv", "characteristica.tsv"]],
+      ["interventions", ["interventions.tsv"]],
+      ["data", ["outputs_Tab2.tsv", "timecourses_Fig1.tsv"]],
+      ["raw", ["Example_Tab2.tsv"]],
+    ]);
   });
 
-  it("keeps the last six characters apart of a name without such a part", () => {
-    expect(nameParts("interventions.tsv")).toEqual({ start: "interve", end: "ntions" });
-    expect(nameParts("subjects.tsv")).toEqual({ start: "su", end: "bjects" });
-    expect(nameParts("short.tsv")).toEqual({ start: "", end: "short" });
-    expect(nameParts("_Fig1.tsv")).toEqual({ start: "", end: "_Fig1" });
-    expect(nameParts("outputs_.tsv")).toEqual({ start: "ou", end: "tputs_" });
+  it("leaves out the classes without tables", () => {
+    const study = detail({ tables: [tableEntry("Example_Tab2.tsv", "raw"), tableEntry("subjects.tsv", "subjects")] });
+    expect(tablesByInfo(study).map((group) => group.info)).toEqual(["subjects", "raw"]);
+    expect(tablesByInfo(detail({ tables: [] }))).toEqual([]);
   });
 });

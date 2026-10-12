@@ -860,65 +860,6 @@ describe("linked selection", () => {
     expect(page().get(".overlay-stub").attributes("data-selected")).toBe("timecourses_Fig1.tsv:2");
   });
 
-  it("shows the rows of the selected source per file in the navigator", async () => {
-    await mountSection(detail(), {}, `${SECTION}?source=Tab2`);
-    const rowsOf = (name: string) =>
-      files()
-        .find((entry) => nameOf(entry) === name)!
-        .find(".nav-rows [aria-hidden='true']");
-    expect(rowsOf("outputs_Tab2.tsv").text()).toBe("2");
-    expect(rowsOf("subjects.tsv").text()).toBe("2");
-    expect(rowsOf("interventions.tsv").exists()).toBe(false);
-  });
-
-  it("keeps the rows of the last source in the navigator, named after it, while the next source loads", async () => {
-    let answer: (response: Response) => void = () => {};
-    await mountSection(detail(), {
-      [`GET ${EXAMPLE}/sources/Fig1`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
-    }, `${SECTION}?source=Tab2`);
-    const pills = () =>
-      files().map((entry) => {
-        const pill = entry.find(".nav-rows [aria-hidden='true']");
-        return pill.exists() ? pill.text() : null;
-      });
-    /** What each pill counts, in its title and for screen readers. */
-    const meanings = () =>
-      page()
-        .findAll(".nav-rows")
-        .map((pill) => [pill.attributes("title"), pill.get(".d-sr-only").text()]);
-    const ofTab2 = pills();
-    expect(ofTab2.filter(Boolean)).toEqual(["2", "2"]);
-    expect(meanings()).toEqual([
-      ["2 rows of Tab2", "2 rows of Tab2"],
-      ["2 rows of Tab2", "2 rows of Tab2"],
-    ]);
-    await choose("source", "Fig1");
-    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
-    expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
-    expect(pills()).toEqual(ofTab2);
-    expect(meanings()).toEqual([
-      ["2 rows of Tab2", "2 rows of Tab2"],
-      ["2 rows of Tab2", "2 rows of Tab2"],
-    ]);
-    expect(files().some((entry) => entry.classes().includes("nav-file--other"))).toBe(true);
-    answer(json(digitized));
-    await flushPromises();
-    expect(pills().filter(Boolean)).toEqual(["2"]);
-    expect(meanings()).toEqual([["2 rows of Fig1", "2 rows of Fig1"]]);
-  });
-
-  it("drops the rows of the last source from the navigator when the next source cannot be loaded", async () => {
-    await mountSection(detail(), {
-      [`GET ${EXAMPLE}/sources/Fig1`]: (() => json({ error: "The image cannot be read." }, { status: 500 })) satisfies Handler,
-    }, `${SECTION}?source=Tab2`);
-    expect(page().findAll(".nav-rows")).toHaveLength(2);
-    await choose("source", "Fig1");
-    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
-    expect(sourcePane().text()).toContain("Fig1 could not be loaded.");
-    expect(page().findAll(".nav-rows")).toHaveLength(0);
-    expect(page().find(".nav-file--other").exists()).toBe(false);
-  });
-
   it("shows every row of a shared table, whichever source is selected", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig2&file=subjects.tsv`);
     expect(lines()).toEqual(["2", "3", "4", "5"]);
@@ -980,6 +921,22 @@ describe("narrow windows", () => {
     expect(page().find(".data-navigator").exists()).toBe(false);
     const sourceSelect = labeled(wrapper, VSelect, "Source");
     const tableSelect = labeled(wrapper, VSelect, "Table");
+    // The Table select comes first, grouped as the navigator.
+    const labels = wrapper.findAllComponents(VSelect).map((select) => select.props("label"));
+    expect(labels.filter((label) => label === "Table" || label === "Source")).toEqual(["Table", "Source"]);
+    expect(tableSelect.props("items")).toEqual([
+      { type: "subheader", title: "Subjects", info: "subjects" },
+      { type: "item", title: "subjects.tsv", value: "subjects.tsv", info: "subjects" },
+      { type: "item", title: "characteristica.tsv", value: "characteristica.tsv", info: "subjects" },
+      { type: "subheader", title: "Interventions", info: "interventions" },
+      { type: "item", title: "interventions.tsv", value: "interventions.tsv", info: "interventions" },
+      { type: "subheader", title: "Data", info: "data" },
+      { type: "item", title: "outputs_Tab2.tsv", value: "outputs_Tab2.tsv", info: "data" },
+      { type: "item", title: "timecourses_Fig1.tsv", value: "timecourses_Fig1.tsv", info: "data" },
+      { type: "item", title: "timecourses_Fig2.tsv", value: "timecourses_Fig2.tsv", info: "data" },
+      { type: "subheader", title: "Raw extractions", info: "raw" },
+      { type: "item", title: "Example_Tab2.tsv", value: "Example_Tab2.tsv", info: "raw" },
+    ]);
     expect(sourceSelect.props("modelValue")).toBe("Fig1");
     expect(sourceSelect.props("items")).toEqual(["Fig1", "Fig2", "Tab2", "Tab3"]);
     expect(tableSelect.props("modelValue")).toBe("subjects.tsv");
@@ -990,6 +947,41 @@ describe("narrow windows", () => {
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
     await tableSelect.setValue("timecourses_Fig1.tsv");
     await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
+  });
+
+  it("marks each option of the Table select with a dot in the color of its class, under the heading of its class", async () => {
+    setViewport(1000);
+    const wrapper = await mountSection();
+    await labeled(wrapper, VSelect, "Table").find(".v-field").trigger("mousedown");
+    const menu = () => page().get(".v-overlay--active .v-list");
+    await vi.waitFor(() => expect(menu().findAll('[role="option"]')).toHaveLength(7));
+    expect(menu().findAll(".v-list-subheader").map((heading) => heading.text())).toEqual([
+      "Subjects",
+      "Interventions",
+      "Data",
+      "Raw extractions",
+    ]);
+    const options = menu().findAll('[role="option"]');
+    const dots = options.map((option) => option.get(".data-option-dot"));
+    expect(options.map((option) => option.text())).toEqual([
+      "subjects.tsv",
+      "characteristica.tsv",
+      "interventions.tsv",
+      "outputs_Tab2.tsv",
+      "timecourses_Fig1.tsv",
+      "timecourses_Fig2.tsv",
+      "Example_Tab2.tsv",
+    ]);
+    expect(dots.map((dot) => /--info: var\(--v-theme-(info-\w+)\)/.exec(dot.attributes("style") ?? "")?.[1])).toEqual([
+      "info-subjects",
+      "info-subjects",
+      "info-interventions",
+      "info-data",
+      "info-data",
+      "info-data",
+      "info-raw",
+    ]);
+    expect(dots.every((dot) => dot.attributes("aria-hidden") === "true")).toBe(true);
   });
 
   it("stacks the source above the rows without a separator below 960 px", async () => {
@@ -1325,12 +1317,12 @@ describe("the height of the section", () => {
 });
 
 describe("tables", () => {
-  it("lists every table and raw table in the workbook order, with their problems and open items", async () => {
+  it("lists every table under the heading of its class, with its problems and open items", async () => {
     await mountSection(reviewed());
     expect(files().map(nameOf)).toEqual([
       "subjects.tsv",
-      "interventions.tsv",
       "characteristica.tsv",
+      "interventions.tsv",
       "outputs_Tab2.tsv",
       "timecourses_Fig1.tsv",
       "timecourses_Fig2.tsv",

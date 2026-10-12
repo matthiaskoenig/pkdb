@@ -1,59 +1,90 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import type { StudyDetail } from "../api/types";
-import { fileCounts, nameParts, sourceCounts, type SourceRows } from "../data";
+import type { StudyDetail, TableEntry } from "../api/types";
+import { fileCounts, sourceCounts, tablesByInfo } from "../data";
+import { INFO_HEADINGS, infoStyle } from "../info";
 import { plural } from "../overview";
 import { SOURCE_ICONS } from "../sources";
-import { rawTableFiles, tableFiles } from "../study";
 import NavigatorCounts from "./NavigatorCounts.vue";
 
 /**
- * The sources of a study with a thumbnail of their image, and its table files in workbook
- * order, each with its problems and open review items. While the rows of a source are known, a
- * file shows how many rows of that source it has, and files without any are dimmed. The rows may
- * be those of the last source while the selected one loads, so they name their own source.
+ * The tables of a study first, under the headings of their class of information (Subjects,
+ * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
+ * the color of its class, its problems, its open review items and its rows; then the sources of
+ * the study, with a thumbnail of their image.
  */
 const props = defineProps<{
   detail: StudyDetail;
   source: string | null;
   file: string | null;
-  rows: SourceRows | null;
 }>();
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
 
-const sourcesId = useId();
 const tablesId = useId();
+const sourcesId = useId();
 
 const counts = computed(() => fileCounts(props.detail));
-const raw = computed(() => rawTableFiles(props.detail));
-const sources = computed(() =>
-  props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
-);
 
-/** How many rows `file` has of the source of `rows`, and the text that names it; null for none. */
-function rowsIn(file: string): { count: number; text: string } | null {
-  const count = props.rows?.files.get(file);
-  return props.rows && count !== undefined ? { count, text: `${plural(count, "row")} of ${props.rows.source}` } : null;
+/** The name of a table file without `.tsv`. */
+function stem(file: string): string {
+  return file.endsWith(".tsv") ? file.slice(0, -".tsv".length) : file;
 }
 
-const files = computed(() =>
-  tableFiles(props.detail).map((file) => ({
-    file,
-    name: nameParts(file),
-    raw: raw.value.has(file),
-    errors: counts.value.problems.get(file)?.errors ?? 0,
-    warnings: counts.value.problems.get(file)?.warnings ?? 0,
-    items: counts.value.items.get(file) ?? 0,
-    rows: rowsIn(file),
-    other: props.rows !== null && !props.rows.files.has(file),
+function entryOf(table: TableEntry) {
+  return {
+    file: table.file,
+    name: stem(table.file),
+    errors: counts.value.problems.get(table.file)?.errors ?? 0,
+    warnings: counts.value.problems.get(table.file)?.warnings ?? 0,
+    items: counts.value.items.get(table.file) ?? 0,
+    rows: table.rows === null ? null : { count: table.rows, text: plural(table.rows, "row") },
+  };
+}
+
+/** The tables by class of information, without the classes that the study has no tables of. */
+const groups = computed(() =>
+  tablesByInfo(props.detail).map(({ info, tables }) => ({
+    info,
+    id: `${tablesId}-${info}`,
+    heading: INFO_HEADINGS[info],
+    entries: tables.map(entryOf),
   })),
+);
+
+const sources = computed(() =>
+  props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
 </script>
 
 <template>
-  <nav aria-label="Sources and tables" class="data-navigator">
+  <nav aria-label="Tables and sources" class="data-navigator">
+    <h3 :id="tablesId" class="nav-heading">Tables</h3>
+    <div v-for="group in groups" :key="group.info" class="nav-group">
+      <h4 :id="group.id" class="nav-group-heading">{{ group.heading }}</h4>
+      <ul :aria-labelledby="group.id" class="nav-list">
+        <li v-for="entry in group.entries" :key="entry.file">
+          <button
+            type="button"
+            class="nav-file"
+            :style="infoStyle(group.info)"
+            :aria-current="entry.file === file ? 'true' : undefined"
+            @click="emit('select-file', entry.file)"
+          >
+            <span class="nav-bar" aria-hidden="true"></span>
+            <!-- The name without .tsv, cut at its end; screen readers read the file name in full. -->
+            <span class="nav-name" :title="entry.file" aria-hidden="true">{{ entry.name }}</span>
+            <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
+            <NavigatorCounts :errors="entry.errors" :warnings="entry.warnings" :items="entry.items" />
+            <span v-if="entry.rows" class="nav-rows" :title="entry.rows.text">
+              <span class="d-sr-only">{{ entry.rows.text }}</span>
+              <span aria-hidden="true">{{ entry.rows.count }}</span>
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
     <h3 :id="sourcesId" class="nav-heading">Sources</h3>
-    <ul :aria-labelledby="sourcesId" aria-label="Sources" class="nav-list">
+    <ul :aria-labelledby="sourcesId" class="nav-list">
       <li v-for="{ summary, counts: count } in sources" :key="summary.source">
         <button
           type="button"
@@ -71,32 +102,6 @@ const files = computed(() =>
         </button>
       </li>
     </ul>
-    <h3 :id="tablesId" class="nav-heading">Tables</h3>
-    <ul :aria-labelledby="tablesId" aria-label="Tables" class="nav-list">
-      <li v-for="entry in files" :key="entry.file">
-        <button
-          type="button"
-          class="nav-file"
-          :class="{ 'nav-file--other': entry.other }"
-          :aria-current="entry.file === file ? 'true' : undefined"
-          @click="emit('select-file', entry.file)"
-        >
-          <i :class="entry.raw ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
-          <!-- The name without .tsv, whose start a cut shortens; screen readers read it in full. -->
-          <span class="nav-name nav-name--parts" :title="entry.file" aria-hidden="true"
-            ><span class="nav-name-start">{{ entry.name.start }}</span
-            ><span class="nav-name-end">{{ entry.name.end }}</span></span
-          >
-          <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
-          <span v-if="entry.raw" class="d-sr-only">, raw table</span>
-          <NavigatorCounts :errors="entry.errors" :warnings="entry.warnings" :items="entry.items" />
-          <span v-if="entry.rows" class="nav-rows" :title="entry.rows.text">
-            <span class="d-sr-only">{{ entry.rows.text }}</span>
-            <span aria-hidden="true">{{ entry.rows.count }}</span>
-          </span>
-        </button>
-      </li>
-    </ul>
   </nav>
 </template>
 
@@ -107,12 +112,19 @@ const files = computed(() =>
   padding: 4px;
   font-size: 12px;
 }
+/* The headings, the bars of the tables and the thumbnails of the sources share one left edge. */
 .nav-heading {
-  margin: 8px 6px 4px;
+  margin: 8px 5px 4px;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.nav-group-heading {
+  margin: 6px 5px 2px;
+  font-size: 11px;
+  font-weight: 600;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .nav-list {
@@ -138,7 +150,7 @@ const files = computed(() =>
   align-items: center;
   gap: 8px;
   min-height: 40px;
-  padding: 2px 6px;
+  padding: 2px 6px 2px 4px;
 }
 /* As high as the smallest target of the app, 24 px. */
 .nav-file {
@@ -146,7 +158,7 @@ const files = computed(() =>
   align-items: center;
   gap: 6px;
   min-height: 24px;
-  padding: 0 6px;
+  padding: 0 6px 0 4px;
 }
 .nav-source:hover,
 .nav-file:hover {
@@ -161,6 +173,15 @@ const files = computed(() =>
 .nav-file:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
+}
+/* The class of information of a table: a bar of 4 px in its color, 3:1 on the surface. */
+.nav-bar {
+  flex: none;
+  align-self: stretch;
+  width: 4px;
+  margin-block: 4px;
+  border-radius: 2px;
+  background: rgb(var(--info));
 }
 .nav-thumb {
   width: 48px;
@@ -195,27 +216,7 @@ const files = computed(() =>
 .nav-file .nav-name {
   flex: 1 1 auto;
 }
-/* The start of a table name shortens first; its end tells the files of a kind apart. */
-.nav-name--parts {
-  display: flex;
-}
-.nav-name-start {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.nav-name-end {
-  flex: none;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-/* Dimmed by its color, which keeps a contrast of 4.5:1; an opacity on top of the text color would not. */
-.nav-file--other .nav-name {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* The rows of the selected source in a file: a muted number on a tinted pill, apart from the
-   counts with their icons. */
+/* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. */
 .nav-rows {
   flex: none;
   min-width: 22px;
