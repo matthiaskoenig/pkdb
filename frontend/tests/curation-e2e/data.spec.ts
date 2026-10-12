@@ -156,6 +156,18 @@ test.describe("sources", () => {
   });
 });
 
+test("subjects.tsv shows all of its rows when it is chosen, whichever source is selected", async ({ app, page }) => {
+  // Fails while a shared table shows only the rows of the selected source (#922).
+  test.fail();
+  await app.open("#/studies/caffeine/Demo2020/data");
+  await navigatorButton(page, /^subjects\.tsv/).click();
+  // subjects.tsv of Demo2020 has one row, the group all, whose source is Text.
+  const rows = page.getByRole("region", { name: "Rows of subjects.tsv" });
+  await expect(rows.getByRole("rowheader", { name: "2", exact: true })).toBeVisible();
+  await expect(rows.getByRole("cell", { name: "all", exact: true })).toBeVisible();
+  await expect(page.getByText(/^No rows of /)).toHaveCount(0);
+});
+
 test("the app bar, the study header and the section tabs take at most 110 px of a 1600 × 1000 window", async ({
   app,
   page,
