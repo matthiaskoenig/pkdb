@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import type { TableResponse } from "../../src/curation-app/api/types";
 import RowsPane from "../../src/curation-app/components/RowsPane.vue";
+import type { RowFilter } from "../../src/curation-app/data";
 import { sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);
@@ -35,8 +36,7 @@ function mountPane(props: Record<string, unknown> = {}) {
       loading: false,
       error: null,
       focus: null,
-      source: "Tab2",
-      onlySource: true,
+      filter: { kind: "all" } satisfies RowFilter,
       hideEmpty: true,
       ...props,
     },
@@ -46,31 +46,65 @@ function mountPane(props: Record<string, unknown> = {}) {
 const lines = (wrapper: ReturnType<typeof mountPane>) =>
   wrapper.findAll("tbody tr:not([aria-hidden])").map((row) => row.get("th").text());
 
+const select = (wrapper: ReturnType<typeof mountPane>) => wrapper.get<HTMLSelectElement>("select.pane-head-select");
+
 describe("rows pane", () => {
-  it("shows the rows of the source of a shared table", () => {
+  it("shows every row of a shared table until the curator chooses a source", () => {
     const wrapper = mountPane();
+    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(wrapper.get(".pane-head").text()).toContain("3 rows");
+    expect(select(wrapper).element.value).toBe("all");
+  });
+
+  it("offers All, the sources of the rows and No source in the head", () => {
+    const wrapper = mountPane();
+    expect(select(wrapper).attributes("aria-label")).toBe("Source of the rows");
+    expect(select(wrapper).findAll("option").map((option) => [option.attributes("value"), option.text()])).toEqual([
+      ["all", "All (3)"],
+      ["source:Fig1", "Fig1 (1)"],
+      ["source:Tab2", "Tab2 (2)"],
+      ["none", "No source (0)"],
+    ]);
+  });
+
+  it("shows the rows of the chosen source, and tells the section the choice", async () => {
+    const wrapper = mountPane({ filter: { kind: "source", source: "Tab2" } });
     expect(lines(wrapper)).toEqual(["3", "4"]);
-    expect(wrapper.get(".pane-head").text()).toContain("2 of 3 rows");
-    // Screen readers hear the same count.
     expect(wrapper.get(".pane-head .d-sr-only").text()).toBe("2 of 3 rows.");
+    await select(wrapper).setValue("source:Fig1");
+    expect(wrapper.emitted("update:filter")).toEqual([[{ kind: "source", source: "Fig1" }]]);
   });
 
   it("shows the line of the route although the filter would hide it", () => {
-    const wrapper = mountPane({ focus: { line: 2 } });
+    const wrapper = mountPane({ filter: { kind: "source", source: "Tab2" }, focus: { line: 2 } });
     expect(lines(wrapper)).toEqual(["2", "3", "4"]);
     expect(wrapper.get(".pane-head").text()).toContain("Line 2");
   });
 
-  it("offers all rows when the source has none in the table", async () => {
-    const wrapper = mountPane({ source: "Other" });
-    expect(wrapper.get('[role="status"]').text()).toBe("No rows of Other in subjects.tsv.");
+  it("shows all rows for a source that the rows no longer name", () => {
+    const wrapper = mountPane({ filter: { kind: "source", source: "Fig9" } });
+    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(select(wrapper).element.value).toBe("all");
+  });
+
+  it("offers all rows when no row has the chosen filter", async () => {
+    const wrapper = mountPane({ filter: { kind: "none" } });
+    expect(wrapper.get('[role="status"]').text()).toBe("Every row of subjects.tsv names a source.");
     await wrapper.get(".pane-missing button").trigger("click");
-    expect(wrapper.emitted("show-all")).toHaveLength(1);
+    expect(wrapper.emitted("update:filter")).toEqual([[{ kind: "all" }]]);
+  });
+
+  it("has no Source select for a table of one source", () => {
+    const outputs = studyDetail({ tables: [tableEntry("outputs_Tab2.tsv", "outputs")] });
+    const table: TableResponse = { ...subjects, file: "outputs_Tab2.tsv" };
+    const wrapper = mountPane({ detail: outputs, rowsDetail: outputs, file: "outputs_Tab2.tsv", table });
+    expect(wrapper.find("select").exists()).toBe(false);
+    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
   });
 
   it("emits the line of a clicked row", async () => {
     const wrapper = mountPane();
     await wrapper.findAll("tbody tr:not([aria-hidden])")[0]!.trigger("click");
-    expect(wrapper.emitted("select-line")).toEqual([[3]]);
+    expect(wrapper.emitted("select-line")).toEqual([[2]]);
   });
 });

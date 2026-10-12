@@ -39,7 +39,7 @@ import { matchText, targetText } from "../../src/curation-app/review";
 import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
 import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
-import { defaultSource, fileForSource } from "../../src/curation-app/data";
+import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app/data";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
@@ -216,7 +216,9 @@ describe("sources contract", () => {
 
   it("opens each source on its own table, a text on its first shared one", () => {
     const study = { sources, tables, problems: [], review: studyDetail().review };
-    expect(defaultSource(study)?.source).toBe("Fig1");
+    expect(defaultFile(study)).toBe("subjects.tsv");
+    expect(sourceOfFile(study, "subjects.tsv")?.source).toBe("Fig1");
+    expect(sourceOfFile(study, "Demo2020_Tab2.tsv")?.source).toBe("Tab2");
     expect(sources.map((summary) => fileForSource(study, summary, null))).toEqual([
       "timecourses_Fig1.tsv",
       "outputs_Tab2.tsv",

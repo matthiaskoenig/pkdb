@@ -33,6 +33,7 @@ import {
   type TargetMatch,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
+import { ALL_ROWS, type RowFilter } from "../data";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
@@ -67,6 +68,8 @@ export const useStudyStore = defineStore("curation-study", () => {
   const acknowledging = ref<Record<string, AcknowledgedMark[]>>({});
   /** The result of the last sync of the open study from the app: Open tables, Sync or a resolved conflict. */
   const lastSync = shallowRef<TablesResult | null>(null);
+  /** The filter of the rows of each shared table of the open study, by file, which the Data section keeps while the study is open. */
+  const rowFilters = shallowRef<ReadonlyMap<string, RowFilter>>(new Map());
 
   // A report of a job queued after an acknowledgement ends its mark.
   watch(
@@ -118,6 +121,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     requests = new AbortController();
     identity.value = null;
     lastSync.value = null;
+    rowFilters.value = new Map();
     tables.clear();
     sources.clear();
   }
@@ -244,6 +248,15 @@ export const useStudyStore = defineStore("curation-study", () => {
     }
   }
 
+  /** The filter of the rows of the shared table `file`: All until the curator chooses another. */
+  function rowFilter(file: string): RowFilter {
+    return rowFilters.value.get(file) ?? ALL_ROWS;
+  }
+
+  function setRowFilter(file: string, filter: RowFilter): void {
+    rowFilters.value = new Map(rowFilters.value).set(file, filter);
+  }
+
   return {
     identity: computed(() => identity.value),
     detail: computed(() => polling.data.value),
@@ -266,5 +279,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     saveReference,
     markAcknowledged,
     acknowledgedKeys,
+    rowFilter,
+    setRowFilter,
   };
 });

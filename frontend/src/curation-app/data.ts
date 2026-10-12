@@ -1,16 +1,16 @@
 /**
- * The selection of the Data section and its rules: which source owns a table file, which file a
- * source opens, the source of a row, and the counts of the navigator.
+ * The selection of the Data section and its rules: the table that a source opens, the source of
+ * a table and of a row, the selection that the section opens on, the filter of the rows of a
+ * shared table, and the counts of the navigator.
  *
- * A shared table (subjects, interventions, characteristica) names the source of each row in its
- * `source` column; every other table, and a raw table, belongs to one source as a whole.
+ * The study page lists every table with its source: a table of one source, such as
+ * `outputs_Tab2.tsv` or the raw table `<name>_Tab2.tsv`, belongs to it as a whole; a shared table
+ * (subjects, characteristica, interventions) has none and names the source of each row in its
+ * `source` column.
  */
 import type { LocationQuery } from "vue-router";
-import type { SourceSummary, StudyDetail, TableResponse } from "./api/types";
+import type { SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
 import { tableFiles } from "./study";
-
-/** The kinds of the tables that name the source of each row. */
-export const SHARED_KINDS: ReadonlySet<string> = new Set(["subjects", "interventions", "characteristica"]);
 
 type Study = Pick<StudyDetail, "sources" | "tables">;
 type Counted = Pick<StudyDetail, "sources" | "tables" | "problems" | "review">;
@@ -48,21 +48,23 @@ export function selectionQuery(selection: Selection): Record<string, string> {
   return query;
 }
 
-/** Whether a table file of the study names the source of each row. */
+/** The entry of a table file in the study page; undefined for a file that the study does not have. */
+export function findTable(study: Pick<StudyDetail, "tables">, file: string): TableEntry | undefined {
+  return study.tables.find((table) => table.file === file);
+}
+
+/** Whether a table file of the study is shared by several sources, which it names per row. */
 export function isShared(study: Pick<StudyDetail, "tables">, file: string): boolean {
-  return study.tables.some((table) => table.file === file && SHARED_KINDS.has(table.kind));
+  return findTable(study, file)?.source === null;
 }
 
 /**
- * The source that a table file belongs to: the source of a raw extraction, or the one source
- * whose rows fill a table that is not shared. Null for a shared table or an unknown file.
+ * The source of the study that a table file belongs to as a whole: that of a table of one source
+ * or of a raw table. Null for a shared table, an unknown file, or a source the study lacks.
  */
 export function ownerOf(study: Study, file: string): string | null {
-  const raw = study.sources.find((source) => source.raw === file);
-  if (raw) return raw.source;
-  if (isShared(study, file)) return null;
-  const owners = study.sources.filter((source) => source.tables.includes(file));
-  return owners.length === 1 ? owners[0]!.source : null;
+  const source = findTable(study, file)?.source ?? null;
+  return source !== null && study.sources.some((entry) => entry.source === source) ? source : null;
 }
 
 /**
@@ -140,14 +142,25 @@ export function sourceCounts(detail: Counted, source: SourceSummary): Counts {
   );
 }
 
-/** Whether an entry has an error or a warning. */
-function hasProblems(counts: ProblemCounts): boolean {
-  return counts.errors + counts.warnings > 0;
+/** The first source of the navigator, which a shared table shows beside its rows when no source is chosen. */
+export function firstSource(study: Pick<StudyDetail, "sources">): SourceSummary | null {
+  return study.sources[0] ?? null;
 }
 
-/** The source that the Data section opens on: the first with problems, else the first. */
-export function defaultSource(detail: Counted): SourceSummary | null {
-  return detail.sources.find((source) => hasProblems(sourceCounts(detail, source))) ?? detail.sources[0] ?? null;
+/** The source that a table shows beside its rows when the route names none: its own, else the first source. */
+export function sourceOfFile(study: Study, file: string | null): SourceSummary | null {
+  const owner = file === null ? null : ownerOf(study, file);
+  return study.sources.find((entry) => entry.source === owner) ?? firstSource(study);
+}
+
+/** The table that the section opens on: the first with problems or open review items, else the first. */
+export function defaultFile(detail: Counted): string | null {
+  const counts = fileCounts(detail);
+  const flagged = detail.tables.find(({ file }) => {
+    const problems = counts.problems.get(file);
+    return (problems ? problems.errors + problems.warnings : 0) + (counts.items.get(file) ?? 0) > 0;
+  });
+  return (flagged ?? detail.tables[0])?.file ?? null;
 }
 
 /**
@@ -161,16 +174,62 @@ export interface SourceRows {
 
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */
 export function rowSource(table: TableResponse, line: number): string | null {
-  if (table.kind !== "table") return null;
-  const index = table.header.indexOf("source");
+  const index = sourceColumn(table);
   const row = table.rows.find((entry) => entry.line === line);
   return index < 0 || !row ? null : row.cells[index] || null;
 }
 
-/** The lines of the rows of a source; every line of a table without a `source` column. */
-export function sourceLines(table: TableResponse, source: string): Set<number> {
-  const index = table.kind === "table" ? table.header.indexOf("source") : -1;
-  return new Set(table.rows.filter((row) => index < 0 || row.cells[index] === source).map((row) => row.line));
+/** Which rows of a shared table show: all, those of one source, or those without a source. */
+export type RowFilter = { kind: "all" } | { kind: "source"; source: string } | { kind: "none" };
+
+export const ALL_ROWS: RowFilter = { kind: "all" };
+
+/** The value of a filter as an option of the Source select. */
+export function filterValue(filter: RowFilter): string {
+  return filter.kind === "source" ? `source:${filter.source}` : filter.kind;
+}
+
+/** The filter of an option of the Source select; All for a value it does not know. */
+export function filterOf(value: string): RowFilter {
+  if (value === "none") return { kind: "none" };
+  if (value.startsWith("source:")) return { kind: "source", source: value.slice("source:".length) };
+  return ALL_ROWS;
+}
+
+/** The index of the `source` column of a table; -1 for a raw table or a table without one. */
+function sourceColumn(table: TableResponse): number {
+  return table.kind === "table" ? table.header.indexOf("source") : -1;
+}
+
+/**
+ * The options of the Source select of a shared table, each with its number of rows: All, each
+ * source that the rows name in natural order, and No source. None for a table without a `source`
+ * column.
+ */
+export function filterChoices(table: TableResponse): { value: string; title: string }[] {
+  const index = sourceColumn(table);
+  if (index < 0) return [];
+  const counts = new Map<string, number>();
+  for (const row of table.rows) {
+    const source = row.cells[index] ?? "";
+    counts.set(source, (counts.get(source) ?? 0) + 1);
+  }
+  const named = [...counts.keys()]
+    .filter((source) => source !== "")
+    .sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+  return [
+    { value: filterValue(ALL_ROWS), title: `All (${table.rows.length})` },
+    ...named.map((source) => ({ value: filterValue({ kind: "source", source }), title: `${source} (${counts.get(source)})` })),
+    { value: filterValue({ kind: "none" }), title: `No source (${counts.get("") ?? 0})` },
+  ];
+}
+
+/** The lines of the rows that a filter shows; null shows every row, as for a table without a `source` column. */
+export function filteredLines(table: TableResponse, filter: RowFilter): Set<number> | null {
+  const index = sourceColumn(table);
+  if (filter.kind === "all" || index < 0) return null;
+  const wanted = filter.kind === "source" ? filter.source : "";
+  return new Set(table.rows.filter((row) => (row.cells[index] ?? "") === wanted).map((row) => row.line));
 }
 
 /** The characters at the end of a table name without an underscore that stay when the name is cut. */

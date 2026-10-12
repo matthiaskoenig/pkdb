@@ -511,19 +511,19 @@ afterEach(() => {
 });
 
 describe("sources", () => {
-  it("shows one navigator item per source and opens the first beside its rows", async () => {
+  it("opens the first table beside the first source when the study has no problems", async () => {
     await mountSection();
     expect(sources().map(nameOf)).toEqual(["Fig1", "Fig2", "Tab2", "Tab3"]);
     expect(sources()[0]?.attributes("aria-current")).toBe("true");
     expect(sourcePane().attributes("aria-label")).toBe("Source Fig1");
-    expect(rowsPane().attributes("aria-label")).toBe("Table timecourses_Fig1.tsv");
+    expect(rowsPane().attributes("aria-label")).toBe("Table subjects.tsv");
     expect(page().get('[role="separator"]').attributes("aria-label")).toBe("Resize the source and the rows");
     expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
     expect(fetched(`${EXAMPLE}/sources/Tab2`)).toBe(0);
   });
 
   it("puts the chosen source and its table in the route, and shows the rows of the table", async () => {
-    await mountSection();
+    await mountSection(detail(), {}, `${SECTION}?source=Fig1`);
     await choose("source", "Tab2");
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
     expect(sources()[2]?.attributes("aria-current")).toBe("true");
@@ -585,19 +585,20 @@ describe("table sources", () => {
     expect(rawGrid.findAll("tbody th").map((cell) => cell.text())).toEqual(["1", "2", "3"]);
   });
 
-  it("names the missing files of a paper table, and the rows pane has no rows of it", async () => {
+  it("names the missing files of a paper table, and the rows pane shows every row of the first table", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Tab3`);
     expect(sourcePane().text()).toContain("No image: add Example_Tab3.png");
     expect(sourcePane().text()).toContain("No raw extraction: add Example_Tab3.tsv with Add table.");
     expect(sourcePane().find("img").exists()).toBe(false);
-    // Tab3 has no table, so the section shows the first table, which has no rows of it.
-    expect(rowsPane().text()).toContain("No rows of Tab3 in subjects.tsv.");
+    // Tab3 has no table, so the section shows the first table, a shared one with all of its rows.
+    expect(rowsPane().attributes("aria-label")).toBe("Table subjects.tsv");
+    expect(lines()).toEqual(["2", "3", "4", "5"]);
   });
 });
 
 describe("figure sources", () => {
   it("draws the digitized figure with the overlay and lists the series without a dataset", async () => {
-    const wrapper = await mountSection();
+    const wrapper = await mountSection(detail(), {}, `${SECTION}?source=Fig1`);
     const overlays = wrapper.findAllComponents(OverlayStub);
     expect(overlays[0]?.props("view")).toEqual(digitized);
     expect(overlays[0]?.props("mode")).toBe("overlay");
@@ -765,7 +766,7 @@ describe("problems of a source", () => {
 });
 
 describe("linked selection", () => {
-  it("opens the first source with problems and its own table when the route names nothing", async () => {
+  it("opens the first table with problems beside its source when the route names nothing", async () => {
     await mountSection(detail({ problems: [problemAt("outputs_Tab2.tsv", 2)] }));
     expect(current("source")).toBe("Tab2");
     expect(current("file")).toBe("outputs_Tab2.tsv");
@@ -787,7 +788,7 @@ describe("linked selection", () => {
 
   it("writes no default selection into the route of another section", async () => {
     await mountSection(detail());
-    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
+    await routed({ source: "Fig1", file: "subjects.tsv" });
     await router.push("/studies/caffeine/Example/metadata");
     await flushPromises();
     expect(router.currentRoute.value.fullPath).toBe("/studies/caffeine/Example/metadata");
@@ -809,7 +810,6 @@ describe("linked selection", () => {
 
   it("switches the source with a row of a shared table that names another source", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
-    await toggle("Rows of Fig1 only");
     await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
     await flushPromises();
     await routed({ source: "Tab2", file: "subjects.tsv", line: "4" }, "partly");
@@ -818,7 +818,6 @@ describe("linked selection", () => {
   it("keeps the source for a row naming an unknown source", async () => {
     // subjects.tsv line 5 names "Fig9", which the study does not have.
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
-    await toggle("Rows of Fig1 only");
     await page().get('th[scope="row"] button[title="Select line 5"]').trigger("click");
     await flushPromises();
     await routed({ source: "Fig1", line: "5" }, "partly");
@@ -900,37 +899,41 @@ describe("linked selection", () => {
     expect(page().find(".nav-file--other").exists()).toBe(false);
   });
 
-  it("shows only the rows of the source in a shared table until the switch shows all", async () => {
-    await mountSection(detail(), {}, `${SECTION}?source=Tab2&file=subjects.tsv`);
-    expect(page().findAll(".rows-pane tbody tr[data-index]")).toHaveLength(2);
-    await toggle("Rows of Tab2 only");
-    expect(page().findAll(".rows-pane tbody tr[data-index]")).toHaveLength(4);
+  it("shows every row of a shared table, whichever source is selected", async () => {
+    await mountSection(detail(), {}, `${SECTION}?source=Fig2&file=subjects.tsv`);
+    expect(lines()).toEqual(["2", "3", "4", "5"]);
+    expect(page().find(".v-switch").text()).not.toContain("only");
   });
 
-  it("offers the source filter only while a shared table shows", async () => {
-    await mountSection(detail(), {}, `${SECTION}?source=Tab2`);
-    expect(page().text()).not.toContain("Rows of Tab2 only");
+  it("keeps the Source filter of each shared table while other tables are chosen", async () => {
+    await mountSection(detail(), {}, `${SECTION}?source=Tab2&file=subjects.tsv`);
+    const filter = () => page().get<HTMLSelectElement>(".rows-pane select.pane-head-select");
+    await filter().setValue("source:Tab2");
+    await flushPromises();
+    expect(lines()).toEqual(["2", "4"]);
+    await choose("file", "outputs_Tab2.tsv");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    // A table of one source has no filter.
+    expect(page().find(".rows-pane select").exists()).toBe(false);
     await choose("file", "subjects.tsv");
     await routed({ source: "Tab2", file: "subjects.tsv" });
-    expect(page().text()).toContain("Rows of Tab2 only");
+    expect(filter().element.value).toBe("source:Tab2");
+    expect(lines()).toEqual(["2", "4"]);
   });
 
-  it("offers Show all rows when the shared table has no row of the source", async () => {
+  it("offers Show all rows when no row of the shared table has the chosen source", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig2&file=subjects.tsv`);
-    expect(page().get(".rows-pane").text()).toContain("No rows of Fig2 in subjects.tsv.");
+    await page().get<HTMLSelectElement>(".rows-pane select.pane-head-select").setValue("none");
+    await flushPromises();
+    expect(rowsPane().text()).toContain("Every row of subjects.tsv names a source.");
     await click(/Show all rows/);
-    expect(page().findAll(".rows-pane tbody tr[data-index]")).toHaveLength(4);
-  });
-
-  it("shows the line of the route although the filter would hide it", async () => {
-    await mountSection(detail(), {}, `${SECTION}?source=Tab2&file=subjects.tsv&line=3`);
-    expect(page().find('th[scope="row"] button[title="Select line 3"]').exists()).toBe(true);
+    expect(lines()).toEqual(["2", "3", "4", "5"]);
   });
 
   it("falls back for a source and a file the study does not have", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig9&file=gone.tsv`);
     expect(page().get(".nav-source[aria-current='true']").text()).toContain("Fig1");
-    expect(page().get(".nav-file[aria-current='true']").text()).toContain("timecourses_Fig1.tsv");
+    expect(page().get(".nav-file[aria-current='true']").text()).toContain("subjects.tsv");
   });
 
   it("a study without sources shows its first table and says it has no sources", async () => {
@@ -959,14 +962,15 @@ describe("narrow windows", () => {
     const tableSelect = labeled(wrapper, VSelect, "Table");
     expect(sourceSelect.props("modelValue")).toBe("Fig1");
     expect(sourceSelect.props("items")).toEqual(["Fig1", "Fig2", "Tab2", "Tab3"]);
-    expect(tableSelect.props("modelValue")).toBe("timecourses_Fig1.tsv");
+    expect(tableSelect.props("modelValue")).toBe("subjects.tsv");
     // The panes stay side by side.
     expect(page().find('[role="separator"]').exists()).toBe(true);
 
+    // Tab2 has rows in the shared table, which stays; a table of Tab2 then keeps the source.
     await sourceSelect.setValue("Tab2");
-    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
-    await tableSelect.setValue("subjects.tsv");
     await routed({ source: "Tab2", file: "subjects.tsv" });
+    await tableSelect.setValue("outputs_Tab2.tsv");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
   });
 
   it("stacks the source above the rows without a separator below 960 px", async () => {

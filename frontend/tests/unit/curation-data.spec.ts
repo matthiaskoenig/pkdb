@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { Problem, StudyDetail, TableResponse } from "../../src/curation-app/api/types";
 import {
-  defaultSource,
+  ALL_ROWS,
+  defaultFile,
   fileCounts,
   fileForSource,
+  filterChoices,
+  filteredLines,
+  filterOf,
+  filterValue,
+  firstSource,
   isShared,
   nameParts,
   ownerOf,
@@ -11,7 +17,7 @@ import {
   selectionOf,
   selectionQuery,
   sourceCounts,
-  sourceLines,
+  sourceOfFile,
 } from "../../src/curation-app/data";
 import { reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
@@ -168,10 +174,23 @@ describe("counts", () => {
     expect(sourceCounts(shared, tab2)).toEqual({ errors: 0, warnings: 0, items: 0 });
   });
 
-  it("opens the first source with problems, else the first source, else none", () => {
-    expect(defaultSource(detail({ problems: [problem("outputs_Tab2.tsv")] }))?.source).toBe("Tab2");
-    expect(defaultSource(detail())?.source).toBe("Fig1");
-    expect(defaultSource(detail({ sources: [] }))).toBeNull();
+  it("opens the first table with problems or open review items, else the first table, else none", () => {
+    expect(defaultFile(detail({ problems: [problem("timecourses_Fig1.tsv", 2, "warning")] }))).toBe("timecourses_Fig1.tsv");
+    const review = studyDetail().review;
+    const items = { ...review, value: { ...review.value!, items: [reviewItem({ target: { file: "outputs_Tab2.tsv" } })] } };
+    expect(defaultFile(detail({ review: items }))).toBe("outputs_Tab2.tsv");
+    // A problem of an image counts for no table.
+    expect(defaultFile(detail({ problems: [problem("Example_Fig1.png")] }))).toBe("subjects.tsv");
+    expect(defaultFile(detail({ tables: [] }))).toBeNull();
+  });
+
+  it("shows a table beside its own source, and a shared table beside the first source", () => {
+    expect(sourceOfFile(detail(), "outputs_Tab2.tsv")?.source).toBe("Tab2");
+    expect(sourceOfFile(detail(), "Example_Tab2.tsv")?.source).toBe("Tab2");
+    expect(sourceOfFile(detail(), "subjects.tsv")?.source).toBe("Fig1");
+    expect(sourceOfFile(detail(), null)?.source).toBe("Fig1");
+    expect(firstSource(detail({ sources: [] }))).toBeNull();
+    expect(sourceOfFile(detail({ sources: [] }), "outputs_Tab2.tsv")).toBeNull();
   });
 });
 
@@ -183,9 +202,32 @@ describe("rows and their sources", () => {
     expect(rowSource({ file: "Example_Tab2.tsv", kind: "raw", rows: [{ line: 1, cells: ["a"] }] }, 1)).toBeNull();
   });
 
-  it("lists the lines of a source; a table without a source column keeps all its lines", () => {
-    expect([...sourceLines(subjects, "Tab2")]).toEqual([2]);
-    expect([...sourceLines({ file: "x.tsv", kind: "raw", rows: [{ line: 1, cells: [] }] }, "Tab2")]).toEqual([1]);
+  it("offers All, each source that the rows name in natural order, and No source, with their rows", () => {
+    const named: TableResponse = {
+      ...subjects,
+      rows: [...subjects.rows, { line: 5, cells: ["Example", "S15", "Tab10"] }, { line: 6, cells: ["Example", "S16", "Tab2"] }],
+    };
+    expect(filterChoices(named)).toEqual([
+      { value: "all", title: "All (5)" },
+      { value: "source:Fig1", title: "Fig1 (1)" },
+      { value: "source:Tab2", title: "Tab2 (2)" },
+      { value: "source:Tab10", title: "Tab10 (1)" },
+      { value: "none", title: "No source (1)" },
+    ]);
+    expect(filterChoices({ file: "x.tsv", kind: "raw", rows: [{ line: 1, cells: [] }] })).toEqual([]);
+  });
+
+  it("shows the lines of a source, of no source, or all of them", () => {
+    expect(filteredLines(subjects, ALL_ROWS)).toBeNull();
+    expect([...filteredLines(subjects, { kind: "source", source: "Tab2" })!]).toEqual([2]);
+    expect([...filteredLines(subjects, { kind: "none" })!]).toEqual([4]);
+    expect(filteredLines({ file: "x.tsv", kind: "raw", rows: [{ line: 1, cells: [] }] }, { kind: "none" })).toBeNull();
+  });
+
+  it("writes a filter as the value of an option and reads it back", () => {
+    for (const filter of [ALL_ROWS, { kind: "none" } as const, { kind: "source", source: "Tab2" } as const])
+      expect(filterOf(filterValue(filter))).toEqual(filter);
+    expect(filterOf("anything else")).toEqual(ALL_ROWS);
   });
 });
 

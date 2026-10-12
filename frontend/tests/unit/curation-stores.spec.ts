@@ -248,6 +248,16 @@ describe("useStudyStore", () => {
     expect(store.identity).toBeNull();
     expect(store.detail).toBeNull();
   });
+
+  it("keeps the row filter of each shared table until the study closes", () => {
+    const store = useStudyStore();
+    expect(store.rowFilter("subjects.tsv")).toEqual({ kind: "all" });
+    store.setRowFilter("subjects.tsv", { kind: "source", source: "Tab2" });
+    expect(store.rowFilter("subjects.tsv")).toEqual({ kind: "source", source: "Tab2" });
+    expect(store.rowFilter("characteristica.tsv")).toEqual({ kind: "all" });
+    store.close();
+    expect(store.rowFilter("subjects.tsv")).toEqual({ kind: "all" });
+  });
 });
 
 describe("useOverviewStore", () => {
