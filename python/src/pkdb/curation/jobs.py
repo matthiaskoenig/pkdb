@@ -7,7 +7,6 @@ methods _save, snapshot, _context, _connection_status, connect, scan, _sync_stat
 
 import hashlib
 import json
-import os
 import time
 from contextlib import ExitStack
 from datetime import UTC, datetime
@@ -22,6 +21,7 @@ from pkdb.cache import (
     select_vocabulary,
 )
 from pkdb.client import Client
+from pkdb.curation.errors import redact
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.domain.validation import PROCESSING_VERSION
@@ -778,15 +778,7 @@ class JobsMixin(EngineState):
                 self._save()
 
     def _safe(self, value):
-        secrets = (
-            self.api_key,
-            os.environ.get("GH_TOKEN"),
-            os.environ.get("GITHUB_TOKEN"),
-        )
-        for secret in secrets:
-            if secret:
-                value = value.replace(secret, "[redacted]")
-        return value
+        return redact(value, self.secrets())
 
     def resume(self, ids=None):
         with self.lock:

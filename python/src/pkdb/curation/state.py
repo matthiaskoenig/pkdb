@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from pkdb.cache import VocabularyCache
+from pkdb.curation.errors import ErrorLog
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.tree import SourceTree
 
@@ -55,9 +56,13 @@ class EngineState:
     queue: dict
     threads: list
     _connection_generation: int
+    # The log file of failures, and the tokens of the local server that it redacts.
+    log: ErrorLog
+    protected: list[str]
 
     if TYPE_CHECKING:
 
+        def secrets(self) -> list[str]: ...
         def _save(self) -> None: ...
         def snapshot(self) -> dict: ...
         def scan(self, initial: bool = False) -> Any: ...

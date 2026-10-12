@@ -1436,3 +1436,29 @@ def test_jobs_keep_study_name_after_workspace_switch(workspace, tmp_path):
     other.mkdir()
     engine.select_workspace(other)
     assert engine.snapshot()["jobs"][-1]["study_name"] == "Example"
+
+
+def test_the_engine_redacts_its_key_the_github_tokens_and_what_it_protects(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    monkeypatch.setenv("GH_TOKEN", "ghp_environment")
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    engine.api_key = "private-api-key"
+    engine.protect("session-token", "")
+    assert engine.secrets() == ["private-api-key", "ghp_environment", "session-token"]
+    assert (
+        engine._safe("private-api-key ghp_environment session-token")
+        == "[redacted] [redacted] [redacted]"
+    )
+
+
+def test_the_engine_logs_to_its_state_directory_and_closes_the_log(workspace):
+    engine, _ = workspace
+    path = engine.state_dir / "logs" / "curation.log"
+    assert engine.log.path == path and path.parent.is_dir()
+    assert engine.snapshot()["log_file"] == str(path)
+    engine.close()
+    body = {"request_id": "3f9c2a71", "action": "x", "detail": None, "error": "y"}
+    engine.log.failed(body, RuntimeError("y"))
+    assert not path.exists()
