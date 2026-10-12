@@ -6,6 +6,7 @@ import { bootstrap, launchToken } from "./api/session";
 import { initialTheme } from "./composables/useColorTheme";
 import { cspNonce } from "./csp";
 import { COMPACT_DEFAULTS } from "./density";
+import { INFO_THEMES } from "./info";
 import { makeRouter } from "./router";
 import { useOverviewStore } from "./stores/overview";
 import { makeVuetify } from "../plugins/vuetify";
@@ -46,7 +47,9 @@ export async function start(target: string | Element): Promise<VueApp> {
     .use(pinia)
     .use(router)
     // The theme of the first paint; the state of the local server may change it later.
-    .use(makeVuetify({ cspNonce: cspNonce(), defaultTheme: initialTheme(), defaults: COMPACT_DEFAULTS }));
+    .use(
+      makeVuetify({ cspNonce: cspNonce(), defaultTheme: initialTheme(), defaults: COMPACT_DEFAULTS, themes: INFO_THEMES }),
+    );
   app.mount(target);
   return app;
 }

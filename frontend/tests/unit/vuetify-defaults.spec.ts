@@ -23,4 +23,15 @@ describe("vuetify defaults", () => {
     expect(curation?.VRadio).toEqual({ density: "compact" });
     expect(curation?.VCheckboxBtn).toEqual({ density: "compact" });
   });
+
+  it("adds the colors of another app only when asked", () => {
+    expect(makeVuetify().theme.computedThemes.value.light!.colors["info-data"]).toBeUndefined();
+    const extended = makeVuetify({
+      themes: { light: { colors: { "info-data": "#6a3fb5" }, variables: { "info-cell-tint": "6%" } }, dark: { colors: {}, variables: {} } },
+    }).theme.computedThemes.value;
+    expect(extended.light!.colors["info-data"]).toBe("#6a3fb5");
+    expect(extended.light!.colors.primary).toBe("#176b70");
+    expect(extended.light!.variables["info-cell-tint"]).toBe("6%");
+    expect(extended.dark!.colors.primary).toBe("#79d5d6");
+  });
 });
