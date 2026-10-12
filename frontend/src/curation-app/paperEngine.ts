@@ -42,13 +42,27 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsAsset("pdf.worker.min.mjs");
  * PDF.js 6.4.299 cancels the request of a range twice when a PDF closes while the range loads:
  * once when its worker ends and once when it cancels all requests. The second cancel rejects with
  * the AbortError of the first, which nothing handles, so the browser would report an error for a
- * PDF that was closed on purpose. A cancelled request is no failure: an AbortError that nothing
- * handled is not reported.
+ * PDF that was closed on purpose. While a PDF is being destroyed, and for one task after that, as
+ * the browser reports a rejection that nothing handled after the task that made it, an AbortError
+ * that nothing handled is not reported. Any other time it is: an unhandled AbortError of the app
+ * is a bug.
  */
 function quietAbort(event: Event & { reason?: unknown }): void {
   if (isAbort(event.reason)) event.preventDefault();
 }
-window.addEventListener("unhandledrejection", quietAbort);
+
+/** How many PDFs are being destroyed. */
+let destroying = 0;
+
+/** `destroyed`, during which and one task after which a cancelled request is not reported. */
+function quietWhile(destroyed: Promise<void>): Promise<void> {
+  if (destroying++ === 0) window.addEventListener("unhandledrejection", quietAbort);
+  return destroyed.finally(() =>
+    setTimeout(() => {
+      if (--destroying === 0) window.removeEventListener("unhandledrejection", quietAbort);
+    }, 0),
+  );
+}
 
 /** The fit of a scale value of PDF.js; null for the scale of a zoom step. */
 function fitOf(value: string): Fit | null {
@@ -206,8 +220,8 @@ export const openPaper: OpenPaper = async (container, url, events, start, signal
   // after DESTROY_MS then, which stops whatever it still does.
   let destroyed: Promise<void> | null = null;
   function destroy(): Promise<void> {
-    destroyed ??= Promise.race([task.destroy().catch(() => undefined), delay(DESTROY_MS)]).then(() =>
-      worker.destroy(),
+    destroyed ??= quietWhile(
+      Promise.race([task.destroy().catch(() => undefined), delay(DESTROY_MS)]).then(() => worker.destroy()),
     );
     return destroyed;
   }

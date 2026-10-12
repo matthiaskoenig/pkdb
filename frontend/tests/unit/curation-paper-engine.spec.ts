@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as pdfjs from "pdfjs-dist";
 import type { PaperEvents, PaperStart } from "../../src/curation-app/paper";
 import { openPaper } from "../../src/curation-app/paperEngine";
@@ -139,6 +139,21 @@ function deferred<T>() {
   return { promise, resolve, reject };
 }
 
+/** Whether the page reports an unhandled rejection with `reason`, which it does unless a listener prevents it. */
+function reported(reason: unknown): boolean {
+  return window.dispatchEvent(Object.assign(new Event("unhandledrejection", { cancelable: true }), { reason }));
+}
+
+/** The error of a cancelled request. */
+function abort(): DOMException {
+  return new DOMException("signal is aborted without reason", "AbortError");
+}
+
+/** The next task, after the browser reported the rejections that nothing handled. */
+function nextTask(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
 /** A scroll container of the viewer as a layout makes it: its size, which is none while it is hidden. */
 interface Pane extends HTMLDivElement {
   resize(width: number, height: number): void;
@@ -197,6 +212,9 @@ beforeEach(() => {
   fake.state.options = null;
   fake.state.task = { promise: Promise.resolve({ numPages: 3 }), destroy: vi.fn(async () => undefined) };
 });
+
+// A PDF that a test closed is gone one task after its destroying settled: the next test starts without it.
+afterEach(() => nextTask());
 
 describe("the PDF.js engine of the paper viewer", () => {
   it("loads the worker of PDF.js from pdfjs/ beside the app", () => {
@@ -392,15 +410,41 @@ describe("the PDF.js engine of the paper viewer", () => {
     expect(fake.state.options).toBeNull();
   });
 
-  it("does not report a cancelled request of PDF.js that nothing handled, but any other rejection", () => {
-    const rejected = (reason: unknown) =>
-      Object.assign(new Event("unhandledrejection", { cancelable: true }), { reason });
-    const aborted = rejected(new DOMException("signal is aborted without reason", "AbortError"));
-    window.dispatchEvent(aborted);
-    expect(aborted.defaultPrevented).toBe(true);
-    const failed = rejected(new TypeError("Failed to fetch"));
-    window.dispatchEvent(failed);
-    expect(failed.defaultPrevented).toBe(false);
+  it("does not report a cancelled request that nothing handled while a PDF closes, but any other rejection", async () => {
+    // The app's own cancelled requests are reported while no PDF closes.
+    expect(reported(abort())).toBe(true);
+    const destroying = deferred<void>();
+    fake.state.task.destroy = vi.fn(() => destroying.promise);
+    const first = await openPaper(container(), URL_A, events(), START, signal());
+    const second = await openPaper(container(), URL_A, events(), START, signal());
+    const closed = [first.close(), second.close()];
+    expect(reported(abort())).toBe(false);
+    expect(reported(new TypeError("Failed to fetch"))).toBe(true);
+    destroying.resolve();
+    await Promise.all(closed);
+    // PDF.js reports its second cancel once the destroying has settled: the filter stays for one more task.
+    expect(reported(abort())).toBe(false);
+    await nextTask();
+    expect(reported(abort())).toBe(true);
+  });
+
+  it("keeps not reporting cancelled requests until the last of two closing PDFs is gone", async () => {
+    const firstDestroy = deferred<void>();
+    fake.state.task.destroy = vi.fn(() => firstDestroy.promise);
+    const first = await openPaper(container(), URL_A, events(), START, signal());
+    const secondDestroy = deferred<void>();
+    fake.state.task = { promise: Promise.resolve({ numPages: 3 }), destroy: vi.fn(() => secondDestroy.promise) };
+    const second = await openPaper(container(), URL_A, events(), START, signal());
+    const closingFirst = first.close();
+    const closingSecond = second.close();
+    firstDestroy.resolve();
+    await closingFirst;
+    await nextTask();
+    expect(reported(abort())).toBe(false);
+    secondDestroy.resolve();
+    await closingSecond;
+    await nextTask();
+    expect(reported(abort())).toBe(true);
   });
 
   it("closes the PDF and its worker, and the PDF leaves the container at once", async () => {
@@ -424,6 +468,8 @@ describe("the PDF.js engine of the paper viewer", () => {
       await vi.advanceTimersByTimeAsync(1);
       expect([closed, fake.state.worker!.destroyed]).toEqual([true, 1]);
     } finally {
+      // The task after the destroying, which ends the filter of cancelled requests.
+      await vi.runOnlyPendingTimersAsync();
       vi.useRealTimers();
     }
   });
