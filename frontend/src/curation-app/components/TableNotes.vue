@@ -128,6 +128,7 @@ watch(
             v-model:comments="notes.comments"
             :prefix="`notes.${kind}.`"
             :kind="kind"
+            :heading-level="5"
             :author="author"
             :profiles="profiles"
             :errors="draft.errors"

@@ -90,6 +90,17 @@ describe("notes of a table kind", () => {
     expect([...useStudyStore().draft.notesOpen]).toEqual(["subjects"]);
   });
 
+  it("heads its descriptions and comments one level below its own heading", async () => {
+    const wrapper = await mountNotes("outputs");
+    await wrapper.get(".table-notes-toggle").trigger("click");
+    const headings = wrapper.findAll("h4, h5").map((heading) => [heading.element.tagName, heading.text()]);
+    expect(headings).toEqual([
+      ["H4", "Notes of the outputs 1 description · 1 comment"],
+      ["H5", "Descriptions"],
+      ["H5", "Comments"],
+    ]);
+  });
+
   it("edits the notes of its kind in the draft of study.json", async () => {
     const wrapper = await mountNotes("outputs");
     await wrapper.get(".table-notes-toggle").trigger("click");

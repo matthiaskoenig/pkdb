@@ -414,6 +414,14 @@ describe("descriptions, comments and notes", () => {
       "Notes of the scatters 1 description",
     ]);
     await notes.get(".table-notes-toggle").trigger("click");
+    // The headings of the notes of the study are one level below the card, those of the panel below its own.
+    expect(notes.findAll("h4, h5").map((heading) => `${heading.element.tagName} ${heading.text()}`)).toEqual([
+      "H4 Descriptions",
+      "H4 Comments",
+      "H4 Notes of the scatters 1 description",
+      "H5 Descriptions",
+      "H5 Comments",
+    ]);
     await textArea("Description 1", notes.get(".table-notes").element).setValue("From Figure 4.");
     expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
     expect(tabLabel("Data")).toBe("Data");
