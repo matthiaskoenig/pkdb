@@ -24,6 +24,7 @@ import {
 } from "vuetify/components";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
 import type { DocumentState, Profile, StudyMetadata, TableKind, ValidationIssue } from "../api/types";
+import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
@@ -53,7 +54,7 @@ import {
 import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, messageOf, NOTICE_MS, releaseLabel, userHint } from "../study";
+import { failureOf, issuesFailure, knownProfiles, NOTICE_MS, releaseLabel, userHint, type ActionFailure } from "../study";
 import { TABLE_KIND_LABELS, TABLE_KINDS } from "../tableKinds";
 
 /**
@@ -90,7 +91,7 @@ const form = ref<MetadataForm | null>(null);
 
 const saving = ref(false);
 /** A refused save: why, and the issues that no field shows. */
-const failure = ref<{ text: string; issues: string[] } | null>(null);
+const failure = ref<ActionFailure | null>(null);
 /** The messages of a refused save by field. */
 const errors = ref<ReadonlyMap<string, string[]>>(new Map());
 /** Writes need a user: what to do about it. */
@@ -304,10 +305,10 @@ function removeAsset(index: number): void {
 function refused(issues: ValidationIssue[], sent: MetadataForm): void {
   const grouped = issuesByTarget(sent, issues);
   errors.value = grouped.fields;
-  failure.value = {
-    text: grouped.fields.size ? "study.json was not saved. Fix the marked fields." : "study.json was not saved.",
-    issues: grouped.general,
-  };
+  failure.value = issuesFailure(
+    grouped.fields.size ? "study.json was not saved. Fix the marked fields." : "study.json was not saved.",
+    grouped.general,
+  );
   // The notes of a table kind with an issue open, so that the issue shows.
   const kinds = TABLE_KINDS.filter((kind) => [...grouped.fields.keys()].some((key) => key.startsWith(`notes.${kind}.`)));
   openPanels.value = [...new Set([...openPanels.value, ...kinds])];
@@ -344,7 +345,7 @@ async function save(): Promise<void> {
       conflict.value = { revision: caught.body.revision, theirs: readStudyJson(caught.body.content) };
     else if (isValidationError(caught)) refused(caught.body.issues, sent);
     else if (isNoUser(caught)) noUser.value = userHint(caught);
-    else failure.value = { text: `study.json was not saved. ${messageOf(caught)}`, issues: [] };
+    else failure.value = failureOf(caught, "study.json was not saved.");
   } finally {
     saving.value = false;
   }
@@ -908,20 +909,7 @@ onBeforeUnmount(() => {
         </div>
       </VAlert>
       <UserHint v-if="noUser" :text="noUser" class="metadata-failure" />
-      <VAlert
-        v-if="failure"
-        type="error"
-        variant="tonal"
-        density="compact"
-        closable
-        class="status-alert metadata-failure"
-        @click:close="failure = null"
-      >
-        <p class="metadata-alert-text">{{ failure.text }}</p>
-        <ul v-if="failure.issues.length" class="metadata-alert-issues">
-          <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-        </ul>
-      </VAlert>
+      <ActionFailureAlert v-if="failure" :failure="failure" class="metadata-failure" @close="failure = null" />
       <div class="savebar-row">
         <span class="savebar-text">
           <i class="fas fa-circle savebar-dot" aria-hidden="true"></i>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, useId, watch } from "vue";
 import {
-  VAlert,
   VBtn,
   VChip,
   VChipGroup,
@@ -32,7 +31,8 @@ import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useOverviewFilters } from "../stores/overviewFilters";
 import { useStudyStore } from "../stores/study";
-import { findProfile, messageOf, profileMap } from "../study";
+import { failureOf, findProfile, profileMap, type ActionFailure } from "../study";
+import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 
 const overview = useOverviewStore();
 const dialogs = useDialogStore();
@@ -133,7 +133,7 @@ function clearFilters(): void {
 const selected = ref<string[]>([]);
 const mode = ref<SaveMode>("validate");
 const busy = ref<"validate" | "mode" | null>(null);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 /** The notice of the last action that succeeded; it disappears after a few seconds. */
 const { notice, announce } = useNotice();
 
@@ -171,7 +171,7 @@ watch(shown, (rows) => {
 
 async function run(kind: "validate" | "mode", action: () => Promise<string>): Promise<void> {
   busy.value = kind;
-  error.value = null;
+  failure.value = null;
   announce("");
   // Every change of the selection makes a new list.
   const selection = selected.value;
@@ -180,7 +180,7 @@ async function run(kind: "validate" | "mode", action: () => Promise<string>): Pr
     // A notice about studies that are no longer the selection would mislead.
     if (selected.value === selection) announce(text);
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = null;
   }
@@ -206,7 +206,7 @@ const upload = ref<{ open: boolean; studies: StudyRow[]; action: "upload" | "ena
 });
 
 function review(action: "upload" | "enable"): void {
-  error.value = null;
+  failure.value = null;
   announce("");
   upload.value = { open: true, studies: chosen.value, action };
 }
@@ -316,17 +316,7 @@ const format1Notice = computed(() =>
           </VChipGroup>
         </div>
 
-        <VAlert
-          v-if="error"
-          type="error"
-          variant="tonal"
-          density="compact"
-          closable
-          class="status-alert overview-error"
-          @click:close="error = null"
-        >
-          {{ error }}
-        </VAlert>
+        <ActionFailureAlert v-if="failure" :failure="failure" class="overview-error" @close="failure = null" />
 
         <section ref="panel" class="study-panel" aria-label="Studies">
           <div class="batch-toolbar">

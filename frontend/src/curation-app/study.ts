@@ -168,6 +168,11 @@ export function actionFailure(
   };
 }
 
+/** A failure that lists all of `messages`, for a refusal whose issues the curator fixes one by one. */
+export function issuesFailure(text: string, messages: string[]): ActionFailure {
+  return { text, issues: messages, more: 0, link: null, details: null };
+}
+
 /**
  * The failure of `caught` with the details of the local server. The message of the server names
  * the action when it has a detail; a refusal meant for the curator, which has none, follows `lead`.

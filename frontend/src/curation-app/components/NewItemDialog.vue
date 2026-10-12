@@ -25,6 +25,7 @@ import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { KIND_LABELS, KINDS, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
 import { tableFiles } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /** At most this many values of a column are offered for a row filter. */
@@ -326,12 +327,7 @@ async function add(): Promise<void> {
           {{ failure.text }}
         </VAlert>
         <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-        <VAlert v-else-if="failure" type="error" variant="tonal" density="compact" class="status-alert">
-          {{ failure.text }}
-          <ul v-if="failure.issues.length" class="new-item-issues">
-            <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-          </ul>
-        </VAlert>
+        <ActionFailureAlert v-else-if="failure" :failure="failure" @close="failure = null" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />
@@ -380,10 +376,6 @@ async function add(): Promise<void> {
 /* Empty, it stays in the page for screen readers but takes no gap. */
 .new-item-matches:empty {
   position: absolute;
-}
-.new-item-issues {
-  margin: 4px 0 0;
-  padding-inline-start: 20px;
 }
 /* On a phone the value goes below its column, and the filters stand further apart than a column
    and its value. */

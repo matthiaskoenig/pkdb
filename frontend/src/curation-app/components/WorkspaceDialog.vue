@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, shallowRef, useId, watch } from "vue";
 import {
-  VAlert,
   VBtn,
   VCard,
   VCardActions,
@@ -17,7 +16,8 @@ import {
 import type { Directories, FolderKind } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
@@ -35,7 +35,7 @@ const listing = shallowRef<Directories | null>(null);
 const typed = ref("");
 const loading = ref(false);
 const busy = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 // Only the answer to the latest listing counts.
 let request = 0;
 
@@ -68,12 +68,12 @@ async function browse(path?: string): Promise<boolean> {
     if (current === request) {
       listing.value = result;
       typed.value = result.path;
-      error.value = null;
+      failure.value = null;
       void nextTick(showPathEnd);
     }
     return true;
   } catch (caught) {
-    if (current === request) error.value = messageOf(caught);
+    if (current === request) failure.value = failureOf(caught);
     return false;
   } finally {
     if (current === request) loading.value = false;
@@ -83,12 +83,12 @@ async function browse(path?: string): Promise<boolean> {
 /** Show the workspace, or the folder that the server offers when the workspace cannot be listed. */
 async function start(): Promise<void> {
   listing.value = null;
-  error.value = null;
+  failure.value = null;
   const workspace = overview.snapshot?.workspace ?? "";
   typed.value = workspace;
   if (workspace && (await browse(workspace))) return;
-  const failure = error.value;
-  if ((await browse()) && failure) error.value = failure;
+  const first = failure.value;
+  if ((await browse()) && first) failure.value = first;
 }
 
 function go(): void {
@@ -98,12 +98,12 @@ function go(): void {
 
 async function run(action: () => Promise<unknown>, { close }: { close: boolean }): Promise<void> {
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     await action();
     if (close) open.value = false;
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -158,7 +158,7 @@ watch(
           </VBtn>
         </div>
         <VProgressLinear :active="loading" indeterminate color="primary" aria-label="Loading folders" />
-        <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
         <template v-if="listing">
           <p class="folder-current">
             <FolderPath :path="listing.path" class="folder-current-path" />

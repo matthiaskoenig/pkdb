@@ -4,7 +4,7 @@
 import { isNoUser, isRevisionConflict, isValidationError } from "./api/client";
 import type { ReviewItem, ReviewTarget, TableRow } from "./api/types";
 import { plural, type Tone } from "./overview";
-import { messageOf, userHint } from "./study";
+import { failureOf, issuesFailure, userHint, type ActionFailure } from "./study";
 
 export type ItemKind = ReviewItem["kind"];
 export type ItemState = ReviewItem["state"];
@@ -162,13 +162,13 @@ export const REVIEW_CONFLICT = "review.json changed on disk; the items were relo
 export type ReviewFailure =
   | { kind: "conflict"; text: string }
   | { kind: "user"; text: string }
-  | { kind: "error"; text: string; issues: string[] };
+  | ({ kind: "error" } & ActionFailure);
 
 /** The failure of a write; `refused` says what did not happen, such as `The item was not resolved.` */
 export function reviewFailure(caught: unknown, refused: string): ReviewFailure {
   if (isRevisionConflict(caught)) return { kind: "conflict", text: REVIEW_CONFLICT };
   if (isNoUser(caught)) return { kind: "user", text: userHint(caught) };
   if (isValidationError(caught) && caught.body.issues.length)
-    return { kind: "error", text: refused, issues: caught.body.issues.map((issue) => issue.message) };
-  return { kind: "error", text: `${refused} ${messageOf(caught)}`, issues: [] };
+    return { kind: "error", ...issuesFailure(refused, caught.body.issues.map((issue) => issue.message)) };
+  return { kind: "error", ...failureOf(caught, refused) };
 }

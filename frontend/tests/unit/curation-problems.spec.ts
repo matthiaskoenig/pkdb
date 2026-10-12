@@ -213,18 +213,18 @@ describe("links and acknowledgements", () => {
 
   it("says plainly that a warning is no longer in the files", () => {
     const gone = new ApiError(422, { error: "No warning [x] in a.tsv matches", issues: [], code: "no_such_warning" });
-    expect(acknowledgeFailure(gone)).toEqual({ kind: "error", text: NO_SUCH_WARNING, issues: [] });
+    expect(acknowledgeFailure(gone)).toEqual({ kind: "error", text: NO_SUCH_WARNING, issues: [], more: 0, link: null, details: null });
     expect(NO_SUCH_WARNING).toBe("This warning is not in the current files. Validate the study and try again.");
     const several = "2 warnings [x] match in a.tsv at line 3, line 4; give the line, column and key of one";
     const ambiguous = new ApiError(422, { error: several, issues: [], code: "ambiguous_warning" });
-    expect(acknowledgeFailure(ambiguous)).toEqual({ kind: "error", text: AMBIGUOUS_WARNING, issues: [] });
+    expect(acknowledgeFailure(ambiguous)).toEqual({ kind: "error", text: AMBIGUOUS_WARNING, issues: [], more: 0, link: null, details: null });
     expect(AMBIGUOUS_WARNING).toBe("Several warnings match this location. Validate the study and try again.");
     const inexact = new ApiError(422, {
       error: "The warning [x] in a.wpd.json has no row of a data table and no key, so it cannot be acknowledged alone.",
       issues: [],
       code: "no_exact_target",
     });
-    expect(acknowledgeFailure(inexact)).toEqual({ kind: "error", text: NO_EXACT_TARGET, issues: [] });
+    expect(acknowledgeFailure(inexact)).toEqual({ kind: "error", text: NO_EXACT_TARGET, issues: [], more: 0, link: null, details: null });
     expect(NO_EXACT_TARGET).toBe("This warning cannot be acknowledged on its own.");
     // Any other refusal keeps the message of the server after the lead.
     const other = new ApiError(422, { error: "Expected text in text", issues: [] });
@@ -232,6 +232,9 @@ describe("links and acknowledgements", () => {
       kind: "error",
       text: "The warning was not acknowledged. Expected text in text",
       issues: [],
+      more: 0,
+      link: null,
+      details: null,
     });
   });
 

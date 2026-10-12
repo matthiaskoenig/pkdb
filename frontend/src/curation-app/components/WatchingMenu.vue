@@ -2,8 +2,10 @@
 import { computed, ref, watch } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
+import { formatTime } from "../overview";
 import { useOverviewStore } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";
 
@@ -12,17 +14,22 @@ const props = withDefaults(defineProps<{ snapshot: Snapshot; location?: Anchor }
 const overview = useOverviewStore();
 const open = ref(false);
 const busy = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 
 // A failure belongs to the action that caused it, not to the next visit of the menu.
 watch(open, (value) => {
-  if (value) error.value = null;
+  if (value) failure.value = null;
 });
 
+/** The last failure of the watcher; it fails until a later check of the workspace succeeds. */
+const watcher = computed(() => props.snapshot.watcher_error);
+const failing = computed(() => watcher.value !== null && !watcher.value.recovered);
 const state = computed(() =>
-  props.snapshot.paused
-    ? { label: "Paused", tone: "warning" as const }
-    : { label: "Active", tone: "success" as const },
+  failing.value
+    ? { label: "Error", tone: "error" as const }
+    : props.snapshot.paused
+      ? { label: "Paused", tone: "warning" as const }
+      : { label: "Active", tone: "success" as const },
 );
 /** The local server does not answer: the menu shows the last known state and offers no actions. */
 const stale = computed(() => overview.error !== null);
@@ -32,12 +39,12 @@ const unknownUploads = computed(() => props.snapshot.studies.some((row) => row.s
 /** Pause the automatic actions, or check unknown uploads and resume them. */
 async function toggle(): Promise<void> {
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     if (props.snapshot.paused) await overview.resume();
     else await overview.pause(true);
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -73,7 +80,15 @@ async function toggle(): Promise<void> {
       <p v-if="snapshot.paused && unknownUploads" class="panel-note">
         Resume first checks the uploads with an unknown outcome on the server.
       </p>
-      <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+      <VAlert v-if="watcher && !watcher.recovered" type="error" variant="tonal" density="compact" class="status-alert watcher-error">
+        <p class="watcher-error-text">File watching failed at {{ formatTime(watcher.time) }}. It tries again every second.</p>
+        <pre v-if="watcher.detail" class="watcher-error-detail">{{ watcher.detail }}</pre>
+        <p class="watcher-error-log">The log has the traceback: {{ snapshot.log_file }}</p>
+      </VAlert>
+      <p v-else-if="watcher" class="panel-note watcher-recovered">
+        File watching works again after an error at {{ formatTime(watcher.time) }}.
+      </p>
+      <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
       <div class="panel-actions">
         <VBtn
           variant="tonal"
@@ -89,3 +104,21 @@ async function toggle(): Promise<void> {
     </VCard>
   </VMenu>
 </template>
+
+<style scoped>
+.watcher-error-text,
+.watcher-error-log {
+  margin: 0;
+}
+.watcher-error-detail {
+  margin: 2px 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.watcher-error-log {
+  overflow-wrap: anywhere;
+}
+</style>

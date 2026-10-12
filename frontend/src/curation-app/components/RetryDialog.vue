@@ -16,7 +16,8 @@ import type { StudyRow } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { uploadBlocker, webUrl } from "../overview";
 import { useOverviewStore } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -31,7 +32,7 @@ const titleId = useId();
 useReturnFocus(open, () => props.fallbackFocus?.());
 const acknowledged = ref(false);
 const busy = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 
 /** The upload with the unknown outcome. */
 const job = computed(
@@ -57,7 +58,7 @@ const inspectUrl = computed(() => {
 watch(open, (value) => {
   if (value) {
     acknowledged.value = false;
-    error.value = null;
+    failure.value = null;
   }
 });
 
@@ -65,13 +66,13 @@ async function confirm(): Promise<void> {
   const study = props.study;
   if (!study || !acknowledged.value) return;
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     await overview.retry(study.id, { acknowledgeUnknown: true });
     open.value = false;
     emit("done", study);
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -123,7 +124,7 @@ async function confirm(): Promise<void> {
           hide-details
           class="retry-acknowledge"
         />
-        <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />

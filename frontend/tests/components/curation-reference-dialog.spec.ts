@@ -18,6 +18,8 @@ import {
   type ServedRequest,
 } from "./curation-dom";
 
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
+
 enableAutoUnmount(afterEach);
 
 const EXAMPLE = "/local/studies/caffeine/Example";
@@ -207,5 +209,25 @@ describe("ReferenceDialog", () => {
     const wrapper = await mountDialog();
     await wrapper.setProps({ unsavedIdentifiers: true });
     expect(dialogText()).toContain("Save study.json first");
+  });
+
+  it("shows why reference.json could not be read, with the details, without a close button", async () => {
+    await mountDialog(studyDetail(), {
+      "POST /local/reference/read": () =>
+        json(
+          {
+            error: "Could not read reference.json of caffeine/Example.",
+            code: "invalid_request",
+            detail: "JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+            action: "Read reference.json (POST /local/reference/read)",
+            ...FAILED,
+          },
+          { status: 400 },
+        ),
+    });
+    const alert = page().get('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alert.get(".action-failure-text").text()).toBe("Could not read reference.json of caffeine/Example.");
+    expect(alert.get(".action-failure-detail").text()).toBe("JSONDecodeError: Expecting value: line 1 column 1 (char 0)");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });

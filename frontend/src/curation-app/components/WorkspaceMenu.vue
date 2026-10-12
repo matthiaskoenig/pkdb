@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { VAlert, VBtn, VCard, VMenu } from "vuetify/components";
+import { VBtn, VCard, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 import { splitPath } from "../paths";
 import { useOverviewStore } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
@@ -16,7 +17,7 @@ const emit = defineEmits<{ choose: [] }>();
 const overview = useOverviewStore();
 const open = ref(false);
 const busy = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 /** The header shows the folder name; the menu, the title and the accessible name the path. */
 const name = computed(() => splitPath(props.snapshot.workspace).name);
 /** The local server does not answer: the menu shows the last known state and offers no actions. */
@@ -24,17 +25,17 @@ const stale = computed(() => overview.error !== null);
 
 // A failure belongs to the action that caused it, not to the next visit of the menu.
 watch(open, (value) => {
-  if (value) error.value = null;
+  if (value) failure.value = null;
 });
 
 async function run(action: () => Promise<unknown>, { close }: { close: boolean }): Promise<void> {
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     await action();
     if (close) open.value = false;
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -64,7 +65,7 @@ function choose(): void {
       <h2>Workspace</h2>
       <p><FolderPath :path="snapshot.workspace" /></p>
       <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
-      <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+      <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
       <div class="panel-actions">
         <VBtn
           variant="tonal"

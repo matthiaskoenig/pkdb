@@ -11,9 +11,12 @@ import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
 import { initialTheme, servedTheme, useColorTheme } from "../../src/curation-app/composables/useColorTheme";
 import type { ConnectionStatus } from "../../src/curation-app/api/types";
 import { ApiError } from "../../src/curation-app/api/client";
+import { formatTime } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, snapshot, studyRow } from "../unit/curation-fixtures";
 import { afterMenuClosed, button, buttons, click, focusDialog, loadSnapshot, page, setViewport } from "./curation-dom";
+
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
 
 enableAutoUnmount(afterEach);
 
@@ -465,6 +468,56 @@ describe("AppHeader", () => {
     await click("Toggle color theme");
     expect(themeOf(wrapper)).toBe("v-theme--dark");
   });
+
+  it("shows that file watching fails, with the error and the log", async () => {
+    const time = "2026-10-12T14:03:11+02:00";
+    await loadSnapshot(snapshot({ watcher_error: { time, detail: "OSError: [Errno 5] Input/output error", recovered: false } }));
+    mountHeader();
+    await flushPromises();
+    expect(button("File watching: Error").get(".v-chip").classes()).toContain("text-error");
+    await click("File watching: Error");
+    const panel = page().get(".watching-panel");
+    expect(panel.get(".watcher-error-text").text()).toBe(`File watching failed at ${formatTime(time)}. It tries again every second.`);
+    expect(panel.get(".watcher-error-detail").text()).toBe("OSError: [Errno 5] Input/output error");
+    expect(panel.get(".watcher-error-log").text()).toBe(`The log has the traceback: ${snapshot().log_file}`);
+  });
+
+  it("tells that file watching works again after an error", async () => {
+    const time = "2026-10-12T14:03:11+02:00";
+    await loadSnapshot(snapshot({ watcher_error: { time, detail: "OSError: x", recovered: true } }));
+    mountHeader();
+    await flushPromises();
+    await click("File watching: Active");
+    expect(page().get(".watcher-recovered").text()).toBe(`File watching works again after an error at ${formatTime(time)}.`);
+    expect(page().find(".watcher-error").exists()).toBe(false);
+  });
+
+  it("shows what failed when a recent workspace cannot be opened", async () => {
+    await loadSnapshot(
+      snapshot({
+        recent_workspaces: [
+          { path: "/work/pkdb_data", exists: true },
+          { path: "/work/other", exists: true },
+        ],
+      }),
+    );
+    vi.spyOn(useOverviewStore(), "selectWorkspace").mockRejectedValue(
+      new ApiError(400, {
+        error: "Could not open the workspace.",
+        code: "file_error",
+        detail: "PermissionError: [Errno 13] Permission denied: '/work/other'",
+        action: "Choose the workspace (POST /local/workspace)",
+        ...FAILED,
+      }),
+    );
+    mountHeader();
+    await flushPromises();
+    await click("Workspace: /work/pkdb_data");
+    await click("Open other in /work");
+    const alert = page().get(".workspace-panel .action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not open the workspace.");
+    expect(alert.get(".action-failure-detail").text()).toBe("PermissionError: [Errno 13] Permission denied: '/work/other'");
+  });
 });
 
 describe("useColorTheme", () => {
@@ -563,12 +616,21 @@ describe("StatusBanner", () => {
 
   it("shows other failures of the state", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
-      json({ error: "The local action failed. Review workspace activity and retry." }, { status: 500 }),
+      json(
+        {
+          error: "Could not read the workspace state.",
+          code: "unexpected",
+          detail: "RuntimeError: boom",
+          action: "Read the workspace state (GET /local/state)",
+          ...FAILED,
+        },
+        { status: 500 },
+      ),
     );
     const wrapper = mountBanner();
     await useOverviewStore().refresh();
     await flushPromises();
-    expect(wrapper.text()).toContain("The local action failed. Review workspace activity and retry.");
+    expect(wrapper.text()).toContain("The state of the local server could not be loaded. Could not read the workspace state.");
   });
 });
 
