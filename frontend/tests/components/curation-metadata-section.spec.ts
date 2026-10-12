@@ -590,7 +590,7 @@ describe("saving", () => {
     await click("Save");
 
     expect(page().get(".savebar-conflict").text()).toContain(
-      "study.json changed on disk after you opened this form",
+      "study.json changed on disk after you started editing it",
     );
     expect(button("Save").element.disabled).toBe(true);
 

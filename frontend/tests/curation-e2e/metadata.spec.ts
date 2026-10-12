@@ -32,8 +32,8 @@ test("saves the metadata form to study.json and keeps the edits through a confli
   writeFileSync(path, `${JSON.stringify(changed, null, 2)}\n`);
   app.allowFailedRequest("/local/studies/metadata", 409);
   await save.click();
-  await expect(page.getByText("study.json changed on disk after you opened this form.")).toHaveText(
-    "study.json changed on disk after you opened this form. Reload it to keep your edits on top of the new version.",
+  await expect(page.getByText("study.json changed on disk after you started editing it.")).toHaveText(
+    "study.json changed on disk after you started editing it. Reload it to keep your edits on top of the new version.",
   );
   expect(onDisk()).toMatchObject({ licence: "open", descriptions: [EDITED, ON_DISK] });
 

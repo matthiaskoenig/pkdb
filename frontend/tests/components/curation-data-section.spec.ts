@@ -1693,6 +1693,27 @@ describe("notes of the tables", () => {
     ]);
   });
 
+  it("says in Data when study.json changed on disk after the edits started, and reloads it", async () => {
+    const disk = studyMetadata({ notes: { subjects: { descriptions: ["Healthy volunteers."], comments: [] } }, licence: "open" });
+    await mountSection(
+      withNotes(),
+      {
+        [`POST ${METADATA}`]: () =>
+          json({ error: "changed", file: "study.json", revision: "study-2", content: JSON.stringify(disk) }, { status: 409 }),
+      },
+      `${SECTION}?file=subjects.tsv`,
+    );
+    await toggle().trigger("click");
+    await textArea("Description 1", rowsPane().element).setValue("Edited.");
+    await click("Save");
+    expect(page().get(".data-section .savebar-conflict").text()).toBe(
+      "study.json changed on disk after you started editing it. Reload it to keep your edits on top of the new version. Reload",
+    );
+    await click("Reload");
+    expect(useStudyStore().draft.form?.licence).toBe("open");
+    expect(textArea("Description 1", rowsPane().element).element.value).toBe("Edited.");
+  });
+
   it("keeps the edits of the notes and the bar while another section opens", async () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
     await toggle().trigger("click");

@@ -65,7 +65,7 @@ const failure = computed(() => draft.failureIn(props.section, props.kind));
     <VAlert v-if="draft.conflict" type="warning" variant="tonal" density="compact" class="status-alert savebar-conflict">
       <div class="savebar-alert-row">
         <p class="savebar-alert-text">
-          study.json changed on disk after you opened this form.
+          study.json changed on disk after you started editing it.
           {{
             draft.conflict.theirs
               ? "Reload it to keep your edits on top of the new version."
