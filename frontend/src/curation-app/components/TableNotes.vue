@@ -17,7 +17,7 @@ import NotesFields from "./NotesFields.vue";
  * its body edits their descriptions and comments in the draft of study.json, which the save bar
  * saves. Notes belong to a kind, so every table of a kind shows the same notes. The panel starts
  * closed, opens by itself for an issue in its notes, and the draft keeps it open or closed while
- * the study is open. Without a readable study.json it says so and lists the issues of its notes.
+ * the study is open. While study.json is not valid it says so and lists the issues of its notes.
  */
 const props = withDefaults(
   defineProps<{
@@ -54,14 +54,14 @@ watch(
 const detail = computed(() => study.detail);
 /** The kind as the study page names it, in lower case, such as `subjects`. */
 const label = computed(() => (detail.value ? kindLabel(detail.value, props.kind) : props.kind).toLowerCase());
-/** The notes of the kind in the draft; null without a readable study.json. */
+/** The notes of the kind in the draft; null while study.json is not valid. */
 const notes = computed(() => draft.form?.notes[props.kind] ?? null);
 const open = computed(() => draft.notesOpen.has(props.kind));
 const changedOnDisk = computed(
   () => draft.marks.has(`notes.${props.kind}.descriptions`) || draft.marks.has(`notes.${props.kind}.comments`),
 );
 const summary = computed(() => {
-  if (!notes.value) return "study.json cannot be read";
+  if (!notes.value) return "study.json is not valid";
   return [notesSummary(notes.value), changedOnDisk.value ? "changed on disk" : ""].filter(Boolean).join(" · ");
 });
 /** The issues of study.json on disk in these notes, listed while the form cannot show them. */
@@ -137,7 +137,7 @@ watch(
             @use-disk="draft.useDisk"
           />
           <template v-else>
-            <p class="table-notes-text">study.json cannot be read, so its notes cannot show here. Fix it in your editor, or start a new one in <RouterLink :to="metadataRoute">Metadata</RouterLink>.</p>
+            <p class="table-notes-text">study.json is not valid, so its notes cannot show here. Fix it in your editor, or start a new one in <RouterLink :to="metadataRoute">Metadata</RouterLink>.</p>
             <ul v-if="fileIssues.length" class="table-notes-issues">
               <li v-for="(message, index) in fileIssues" :key="index">{{ message }}</li>
             </ul>

@@ -200,7 +200,7 @@ test("Show notes of a problem in the notes of the subjects opens them above subj
     const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
     await expect(toggle).toHaveAttribute("aria-expanded", "true");
     await expect(toggle).toBeFocused();
-    await expect(toggle).toHaveText("Notes of the subjects study.json cannot be read");
+    await expect(toggle).toHaveText("Notes of the subjects study.json is not valid");
     const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
     await expect(notes.getByRole("listitem")).toHaveText(["A user name has no spaces."]);
     await expect(notes.getByRole("link", { name: "Metadata" })).toBeVisible();

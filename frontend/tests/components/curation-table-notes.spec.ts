@@ -148,7 +148,7 @@ describe("notes of a table kind", () => {
     expect(wrapper.get(".descriptions-block").text()).toContain("Changed on disk");
   });
 
-  it("says that study.json cannot be read and lists the issues of its notes", async () => {
+  it("says that study.json is not valid and lists the issues of its notes", async () => {
     const broken = detail({
       metadata: {
         revision: "broken-1",
@@ -158,12 +158,12 @@ describe("notes of a table kind", () => {
     });
     const wrapper = await mountNotes("subjects", broken);
     const toggle = wrapper.get(".table-notes-toggle");
-    expect(toggle.text()).toBe("Notes of the subjects study.json cannot be read");
+    expect(toggle.text()).toBe("Notes of the subjects study.json is not valid");
     // It opened by itself for the issue in its notes.
     expect(toggle.attributes("aria-expanded")).toBe("true");
     const body = wrapper.get(".table-notes-body");
     expect(body.get(".table-notes-text").text()).toBe(
-      "study.json cannot be read, so its notes cannot show here. Fix it in your editor, or start a new one in Metadata.",
+      "study.json is not valid, so its notes cannot show here. Fix it in your editor, or start a new one in Metadata.",
     );
     expect(body.get("a").attributes("href")).toBe("#/studies/caffeine/Example/metadata");
     expect(body.findAll(".table-notes-issues li").map((item) => item.text())).toEqual(["A user name has no spaces."]);
