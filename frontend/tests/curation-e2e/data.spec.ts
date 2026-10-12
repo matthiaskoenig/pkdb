@@ -152,6 +152,30 @@ test.describe("sources", () => {
     await expect(page).toHaveURL(/file=timecourses_Fig1\.tsv/);
   });
 
+  test("the focus ring of an option of the Table menu lies inside the menu, in both themes", async ({ page }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
+    for (const scheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.locator(".data-select--table .v-field").click();
+      const menu = page.getByRole("listbox");
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("ArrowDown");
+      const option = menu.locator(".v-list-item:focus-visible");
+      await expect(option).toHaveCount(1);
+      const ring = await option.evaluate((element) => {
+        const style = getComputedStyle(element);
+        const reach = parseFloat(style.outlineOffset) + parseFloat(style.outlineWidth);
+        const box = element.getBoundingClientRect();
+        return { left: box.left - reach, right: box.right + reach };
+      });
+      const list = (await menu.boundingBox())!;
+      expect(ring.left).toBeGreaterThanOrEqual(list.x);
+      expect(ring.right).toBeLessThanOrEqual(list.x + list.width);
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+    }
+  });
+
   test("the Fig1 overlay shows the row of a mapped point and focuses it in the rows of the Data section", async ({ page }) => {
     await navigatorButton(page, /^Fig1/).click();
     const figure = page.getByRole("img", {
@@ -228,6 +252,16 @@ test("the navigator shows the whole name of a table beside a warning, an open re
       navigator.locator(selector).evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().left));
     expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
     expect(new Set(await lefts(".nav-file .nav-count:not(.nav-count--error, .nav-count--warning)")).size).toBe(1);
+    // A count of three digits (364 of the 1572 studies of pkdb_data have such a table) keeps the pill as wide.
+    const widths = () =>
+      navigator.locator(".nav-file .nav-rows").evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().width));
+    const narrow = await widths();
+    await navigator.locator(".nav-file .nav-rows").first().evaluate((element) => {
+      element.textContent = "364";
+    });
+    const wide = await widths();
+    expect(wide[0]).toBe(narrow[0]);
+    expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
   } finally {
     writeFileSync(file, original);
   }
@@ -502,6 +536,30 @@ test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px hea
   const fit = (await zoom.getByRole("button", { name: "Fit", exact: true }).boundingBox())!;
   expect(fit.y).toBeGreaterThanOrEqual(head.y);
   expect(fit.y + fit.height).toBeLessThanOrEqual(head.y + head.height);
+});
+
+test("the focus ring of the Source select lies inside the head of the rows pane, in both themes", async ({ app, page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const scheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await app.open("#/studies/caffeine/Demo2020/data?file=subjects.tsv");
+    const select = page.getByRole("combobox", { name: "Source of the rows" });
+    await select.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(select).toBeFocused();
+    const ring = await select.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const reach = parseFloat(style.outlineOffset) + parseFloat(style.outlineWidth);
+      const box = element.getBoundingClientRect();
+      return { top: box.top - reach, bottom: box.bottom + reach, left: box.left - reach, right: box.right + reach };
+    });
+    const head = (await page.locator(".rows-pane > .pane-head").boundingBox())!;
+    expect(ring.top).toBeGreaterThanOrEqual(head.y);
+    expect(ring.bottom).toBeLessThanOrEqual(head.y + head.height);
+    expect(ring.left).toBeGreaterThanOrEqual(head.x);
+    expect(ring.right).toBeLessThanOrEqual(head.x + head.width);
+  }
 });
 
 test("the source pane shows that more of it follows below, and scrolls to its end", async ({ app, page }) => {

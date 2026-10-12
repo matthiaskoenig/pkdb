@@ -29,6 +29,11 @@ summary {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: 3px;
 }
+/* The menu of a select clips its content at the edges of the list, so the ring of an option
+   would be cut off left and right: draw it inside the option. */
+.v-list-item:focus-visible {
+  outline-offset: -3px;
+}
 /* A focused text field shows a thick primary border instead of a ring: the notch of
    the border keeps the floating label clear. An error field keeps its error color. */
 .v-field :is(input, textarea):focus-visible {

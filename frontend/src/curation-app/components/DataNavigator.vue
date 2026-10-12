@@ -92,10 +92,10 @@ const sources = computed(() =>
           :aria-current="summary.source === source ? 'true' : undefined"
           @click="emit('select-source', summary.source)"
         >
-          <!-- Decoded while it is painted, which works around Chromium 153: with decoding="async"
-               it defers the decode of a large image (checker imaging) and paints the thumbnail
-               white until then, and in some loads it never decoded some of them, so that
-               Walther1983_Tab1 to _Tab3 stayed white for good. -->
+          <!-- Decoded while it is painted: observed in headless Chromium 153 under CPU throttling, a
+               large image with decoding="async" painted its thumbnail white until it was decoded, and
+               in some loads some stayed white (Walther1983_Tab1 to _Tab3). Not documented Chromium
+               behaviour, so the cause is unconfirmed; synchronous decoding avoided it. -->
           <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" class="nav-thumb" />
           <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="SOURCE_ICONS[summary.kind]"></i></span>
           <span class="nav-text">
@@ -221,12 +221,12 @@ const sources = computed(() =>
   flex: 1 1 auto;
 }
 /* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. Up
-   to 99 rows the pill has one width, so that the pills and the badges before them line up: two
+   to 999 rows the pill has one width, so that the pills and the badges before them line up: three
    digits, the padding, and a pixel for digits that a font draws a fraction wider than its 0. A
    longer count makes it wider. */
 .nav-rows {
   flex: none;
-  min-width: calc(2ch + 11px);
+  min-width: calc(3ch + 11px);
   padding: 0 5px;
   border-radius: 8px;
   background: rgba(var(--v-theme-on-surface), 0.07);

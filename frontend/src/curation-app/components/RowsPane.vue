@@ -280,7 +280,8 @@ const missingLine = computed(() => {
 }
 .pane-head-select:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
-  outline-offset: 1px;
+  /* The head clips its content, so the ring reaches 1 px outside the select, into the head's padding. */
+  outline-offset: -1px;
 }
 /* The notes stand 8 px from the edges, as in the source pane, which has a padding. */
 .rows-pane > .pane-note {
