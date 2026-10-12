@@ -215,12 +215,14 @@ class ErrorLog:
             f"Error {body['request_id']} in {label}: {type(cause).__name__} "
             f"(see {self.path})"
         )
-        if self._closed:
+        # pythonw on Windows has no console: sys.stderr is None.
+        if self._closed or sys.stderr is None:
             return
         try:
             sys.stderr.write(redact(line, self._secrets()) + "\n")
             sys.stderr.flush()
-        except OSError, ValueError:
+        except Exception:
+            # The line only points to the log; a console that cannot take it changes nothing.
             pass
 
     def failed(

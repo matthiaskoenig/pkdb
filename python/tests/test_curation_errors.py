@@ -253,3 +253,29 @@ def test_a_console_that_cannot_encode_the_line_does_not_fail_the_handling(
     log.failed(body, RuntimeError("x"))
     log.close()
     assert "Error 3f9c2a71" in log.path.read_text(encoding="utf-8")
+
+
+class BrokenConsole:
+    """A console whose stream fails in a way no console should."""
+
+    def write(self, text):
+        raise RuntimeError("the console is gone")
+
+    def flush(self):
+        pass
+
+
+@pytest.mark.parametrize(
+    "console", [None, BrokenConsole()], ids=["no console", "broken console"]
+)
+def test_a_missing_or_broken_console_does_not_fail_the_handling(
+    tmp_path, monkeypatch, console
+):
+    # pythonw on Windows has no console: sys.stderr is None.
+    monkeypatch.setattr("sys.stderr", console)
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [])
+    body = {"request_id": "3f9c2a71", "action": OPEN, "detail": None, "error": "x"}
+    log.failed(body, RuntimeError("x"))
+    log.unexpected(body, RuntimeError("x"), label="Open tables")
+    log.close()
+    assert log.path.read_text(encoding="utf-8").count("Error 3f9c2a71") == 2
