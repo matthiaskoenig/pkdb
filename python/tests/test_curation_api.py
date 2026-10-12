@@ -1968,8 +1968,9 @@ def test_a_symlinked_pdf_and_files_that_are_no_image_or_pdf_are_refused(api, tmp
         )
 
 
-@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="Named pipes are POSIX only")
 def test_a_named_pipe_named_like_a_pdf_is_refused_without_waiting_for_a_writer(api):
+    if sys.platform == "win32":
+        pytest.skip("Named pipes are POSIX only")
     server, engine, folder = api
     os.mkfifo(folder / "Pipe.pdf")
     engine.scan()
