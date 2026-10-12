@@ -22,12 +22,12 @@ import {
   changedFields,
   clone,
   copyField,
-  fieldLabel,
   fieldText,
   fromForm,
   issuesByTarget,
   mergeOnReload,
   readStudyJson,
+  targetLabel,
   toForm,
   unsavedSections,
   type FieldMark,
@@ -45,6 +45,9 @@ export interface DraftSource {
   /** Writes study.json over `revision`; a stale revision rejects with a revision conflict. */
   save: (revision: string, metadata: StudyMetadata) => Promise<MetadataWrite>;
 }
+
+/** The sections that edit the draft and show its save bar. */
+export type DraftSection = Extract<Section, "metadata" | "data">;
 
 /** study.json changed on disk: its revision, and its content as a form, null when it is no JSON object. */
 export interface DraftConflict {
@@ -69,6 +72,12 @@ export interface StudyDraft {
   barShown: ComputedRef<boolean>;
   /** A refused or failed save: why, and the issues that no field shows. Its alert closes it. */
   failure: Ref<ActionFailure | null>;
+  /**
+   * The failure of the last save as the bar of `section` shows it. A refused save asks to fix the
+   * fields that the section marks, and lists the issues of the others with their fields: Data
+   * shows the notes of `kind` above the selected table, Metadata the other fields of the form.
+   */
+  failureIn(section: DraftSection, kind?: TableKind | null): ActionFailure | null;
   /** The messages of a refused save by field. */
   errors: Readonly<Ref<ReadonlyMap<string, string[]>>>;
   /** Writes need a user: what to do about it. */
@@ -114,11 +123,6 @@ interface Discarded {
   adopted: string | null | undefined;
   marks: ReadonlyMap<string, FieldMark>;
   reloaded: string[] | null;
-}
-
-/** The field of a row of notes, such as `notes.outputs.descriptions` for `notes.outputs.descriptions.0`. */
-function notesField(key: string): string {
-  return key.split(".").slice(0, 3).join(".");
 }
 
 export function useStudyDraft(source: DraftSource): StudyDraft {
@@ -245,22 +249,32 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
   }
 
   /**
-   * A refused save: the issues at their fields, and the others in the bar. The issues of the
-   * notes of a kind with a table are listed with their field too, since Metadata does not show
-   * those fields; Metadata shows the notes of a kind without a table, with their issues. The notes
-   * with an issue open.
+   * A refused save: the issues by field, which the sections mark, and the issues of no field,
+   * which the bar lists. The notes with an issue open.
    */
   function refused(issues: ValidationIssue[], sent: MetadataForm): void {
     const grouped = issuesByTarget(sent, issues);
     errors.value = grouped.fields;
-    const notes = [...grouped.fields].flatMap(([key, messages]) =>
-      notesKindOf(key, tabled.value) ? messages.map((message) => `${fieldLabel(notesField(key))}: ${message}`) : [],
-    );
-    failure.value = issuesFailure(
-      grouped.fields.size ? "study.json was not saved. Fix the marked fields." : "study.json was not saved.",
-      [...grouped.general, ...notes],
-    );
+    failure.value = issuesFailure("study.json was not saved.", grouped.general);
     openNotes(notesKindsOf(grouped.fields.keys(), kinds.value));
+  }
+
+  /** Whether `section` shows the field `key` of the form: Data the notes of `kind`, Metadata the others. */
+  function shownIn(key: string, section: DraftSection, kind: TableKind | null): boolean {
+    if (section === "data") return kind !== null && notesKindOf(key, [kind]) !== null;
+    return notesKindOf(key, tabled.value) === null;
+  }
+
+  function failureIn(section: DraftSection, kind: TableKind | null = null): ActionFailure | null {
+    const value = failure.value;
+    // Only a refused save has issues by field, which every save, reload and discard clears first.
+    if (!value || !errors.value.size) return value;
+    const fields = [...errors.value];
+    const marked = fields.some(([key]) => shownIn(key, section, kind));
+    const listed = fields
+      .filter(([key]) => !shownIn(key, section, kind))
+      .flatMap(([key, messages]) => messages.map((message) => `${targetLabel(key)}: ${message}`));
+    return issuesFailure(marked ? `${value.text} Fix the marked fields.` : value.text, [...value.issues, ...listed]);
   }
 
   async function save(): Promise<void> {
@@ -403,6 +417,7 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     canSave,
     barShown,
     failure,
+    failureIn,
     errors,
     noUser,
     conflict,

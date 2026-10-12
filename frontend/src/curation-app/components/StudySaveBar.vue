@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
+import type { TableKind } from "../api/types";
+import type { DraftSection } from "../composables/useStudyDraft";
 import { fieldLabel } from "../metadata";
 import { useStudyStore } from "../stores/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
@@ -9,12 +12,22 @@ import UserHint from "./UserHint.vue";
  * The bar of the draft of study.json at the bottom of the Metadata and Data sections: the
  * unsaved changes with Save, Discard and Undo, and the outcome of the last save, reload or
  * reference change. Sticky, it stays in view at the bottom of the window while the section
- * scrolls; in a section that fills the window it ends the section.
+ * scrolls; in a section that fills the window it ends the section. A refused save lists the
+ * issues of the fields that its section does not show, such as a wrong PMID saved from Data.
  */
-withDefaults(defineProps<{ sticky?: boolean }>(), { sticky: true });
+const props = withDefaults(
+  defineProps<{
+    section: DraftSection;
+    /** In Data, the kind of the notes above the selected table; null for a raw table or none. */
+    kind?: TableKind | null;
+    sticky?: boolean;
+  }>(),
+  { kind: null, sticky: true },
+);
 
 const study = useStudyStore();
 const draft = study.draft;
+const failure = computed(() => draft.failureIn(props.section, props.kind));
 </script>
 
 <template>
@@ -65,8 +78,8 @@ const draft = study.draft;
       </div>
     </VAlert>
     <UserHint v-if="draft.noUser" :text="draft.noUser" class="savebar-failure" />
-    <div v-if="draft.failure" class="savebar-failure">
-      <ActionFailureAlert :failure="draft.failure" :study="study.identity" @close="draft.failure = null" />
+    <div v-if="failure" class="savebar-failure">
+      <ActionFailureAlert :failure="failure" :study="study.identity" @close="draft.failure = null" />
     </div>
     <div class="savebar-row">
       <span class="savebar-text">

@@ -138,11 +138,27 @@ export const MARK_TEXT: Record<FieldMark, string> = {
   conflict: "Changed on disk too. Your edit is kept.",
 };
 
+/** A field of the notes of a table kind, such as `notes.outputs.comments`. */
+const NOTES_FIELD = /^notes\.(\w+)\.(descriptions|comments)$/;
+
 /** The name of a field for a sentence, such as `Comments on outputs`. */
 export function fieldLabel(key: string): string {
-  const notes = /^notes\.(\w+)\.(descriptions|comments)$/.exec(key);
+  const notes = NOTES_FIELD.exec(key);
   if (notes) return notes[2] === "descriptions" ? `Descriptions of ${notes[1]}` : `Comments on ${notes[1]}`;
   return LABELS[key] ?? key;
+}
+
+/**
+ * The name of the field that shows the target of an issue (`issueTarget`), such as `Curators` for
+ * `curators.0.user` or `Descriptions of outputs` for `notes.outputs.descriptions.1`.
+ */
+export function targetLabel(target: string): string {
+  const parts = target.split(".");
+  for (let end = parts.length; end > 0; end -= 1) {
+    const key = parts.slice(0, end).join(".");
+    if (Object.hasOwn(LABELS, key) || NOTES_FIELD.test(key)) return fieldLabel(key);
+  }
+  return target;
 }
 
 // Reading

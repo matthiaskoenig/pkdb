@@ -550,7 +550,7 @@ const newFields = computed(() => {
       </VCard>
     </VForm>
 
-    <StudySaveBar />
+    <StudySaveBar section="metadata" />
 
     <ReferenceDialog
       v-model="referenceOpen"

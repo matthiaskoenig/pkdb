@@ -41,6 +41,7 @@ import {
   click,
   field,
   labeled,
+  messagesOf,
   page,
   radio,
   scrollLayout,
@@ -1565,6 +1566,21 @@ describe("notes of the tables", () => {
 
   const toggle = () => rowsPane().get(".table-notes-toggle");
 
+  /** Refuses study.json with the issues of `fields` and their messages, as the local server does. */
+  function refuse(fields: Record<string, string>): Handler {
+    const issues: ValidationIssue[] = Object.entries(fields).map(([at, detail]) => ({
+      code: "invalid_study_json",
+      severity: "error",
+      message: `${at}: ${detail}`,
+      field: at,
+      context: { detail },
+    }));
+    return () => json({ error: "Invalid study.json", issues }, { status: 422 });
+  }
+
+  /** The alert of the failed save in the bar of the Data section. */
+  const failure = () => page().get(".data-section .savebar-failure");
+
   it("shows the notes of the kind of a table between its head and its rows, and none for a raw table", async () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
     expect(toggle().text()).toBe("Notes of the subjects 1 description");
@@ -1616,6 +1632,65 @@ describe("notes of the tables", () => {
     ]);
     expect(page().get(".study-savebar").text()).toContain("study.json saved.");
     expect(tabLabel("Data")).toBe("Data");
+  });
+
+  it("lists the issues of a refused save that Data does not show, such as a wrong PMID, with their fields", async () => {
+    await mountSection(
+      withNotes(),
+      {
+        [`POST ${METADATA}`]: refuse({
+          "reference.pmid": "A PubMed ID has only digits.",
+          "curators.0.user": "A user name has no spaces.",
+        }),
+      },
+      `${SECTION}?file=subjects.tsv`,
+    );
+    // Edits of Metadata, saved from the bar of Data.
+    const form = useStudyStore().draft.form!;
+    form.reference.pmid = "abc";
+    form.curators = [{ user: "the curator", rating: 4 }];
+    await flushPromises();
+    await click("Save");
+
+    expect(failure().get(".action-failure-text").text()).toBe("study.json was not saved.");
+    expect(failure().findAll("li").map((item) => item.text())).toEqual([
+      "PMID: A PubMed ID has only digits.",
+      "Curators: A user name has no spaces.",
+    ]);
+  });
+
+  it("marks an issue in the notes of the selected table at its field, and lists those of other notes", async () => {
+    await mountSection(
+      detail({
+        metadata: {
+          revision: "study-1",
+          value: studyMetadata({
+            notes: {
+              subjects: { descriptions: ["Healthy volunteers."], comments: [] },
+              outputs: { descriptions: ["Read from Table 2."], comments: [] },
+            },
+          }),
+          issues: [],
+        },
+      }),
+      {
+        [`POST ${METADATA}`]: refuse({
+          "notes.subjects.descriptions.0": "Enter some text or remove this entry.",
+          "notes.outputs.descriptions.0": "Enter some text or remove this entry.",
+        }),
+      },
+      `${SECTION}?file=subjects.tsv`,
+    );
+    await toggle().trigger("click");
+    await textArea("Description 1", rowsPane().element).setValue(" ");
+    useStudyStore().draft.form!.notes.outputs.descriptions[0] = " ";
+    await click("Save");
+
+    expect(messagesOf(textArea("Description 1", rowsPane().element))).toBe("Enter some text or remove this entry.");
+    expect(failure().get(".action-failure-text").text()).toBe("study.json was not saved. Fix the marked fields.");
+    expect(failure().findAll("li").map((item) => item.text())).toEqual([
+      "Descriptions of outputs: Enter some text or remove this entry.",
+    ]);
   });
 
   it("keeps the edits of the notes and the bar while another section opens", async () => {

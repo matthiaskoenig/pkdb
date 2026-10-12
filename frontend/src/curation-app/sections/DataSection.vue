@@ -471,7 +471,7 @@ const conflictPanel = computed(() => {
         </div>
       </div>
       <!-- The draft of study.json, which the notes above a table and the Metadata section edit. -->
-      <StudySaveBar :sticky="stacked || limited" />
+      <StudySaveBar section="data" :kind="notesKind" :sticky="stacked || limited" />
 
       <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
     </template>

@@ -15,6 +15,7 @@ import {
   type MetadataForm,
   readStudyJson,
   startForm,
+  targetLabel,
   toForm,
   unsavedSections,
   withKind,
@@ -153,6 +154,15 @@ describe("changedFields", () => {
     expect(keys.map(fieldLabel)).not.toContain(undefined);
     expect(fieldLabel("notes.outputs.comments")).toBe("Comments on outputs");
     expect(fieldLabel("provenance.run_id")).toBe("Run ID");
+  });
+
+  it("names the field that shows the target of an issue", () => {
+    expect(targetLabel("reference.pmid")).toBe("PMID");
+    expect(targetLabel("curators.0.user")).toBe("Curators");
+    expect(targetLabel("descriptions.1")).toBe("Descriptions");
+    expect(targetLabel("provenance.assets.0.url")).toBe("Assets");
+    expect(targetLabel("notes.outputs.descriptions.1")).toBe("Descriptions of outputs");
+    expect(targetLabel("constructor")).toBe("constructor");
   });
 });
 

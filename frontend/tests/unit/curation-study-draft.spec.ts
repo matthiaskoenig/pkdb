@@ -127,7 +127,7 @@ describe("useStudyDraft", () => {
     expect(draft.referenceError.value).toBe("study.json saved; reference.json could not be refreshed: PubMed is offline");
   });
 
-  it("marks the fields of a refused save, lists the issues of the notes of a table by field and opens their notes", async () => {
+  it("marks the fields of a refused save, lists in each section the issues of the fields it does not show, and opens their notes", async () => {
     const draft = await draftOf();
     answer = () =>
       Promise.reject(
@@ -147,11 +147,25 @@ describe("useStudyDraft", () => {
 
     expect(draft.errors.value.get("notes.outputs.descriptions.0")).toEqual(["Enter some text or remove this entry."]);
     expect(draft.errors.value.get("notes.scatters.descriptions.0")).toEqual(["Enter some text or remove this entry."]);
-    expect(draft.failure.value?.text).toBe("study.json was not saved. Fix the marked fields.");
-    expect(draft.failure.value?.issues).toEqual([
-      "format: Input should be 2",
-      "Descriptions of outputs: Enter some text or remove this entry.",
-    ]);
+    expect(draft.failure.value?.text).toBe("study.json was not saved.");
+    expect(draft.failure.value?.issues).toEqual(["format: Input should be 2"]);
+    // Metadata shows the notes of a kind without a table; Data the notes of the selected table.
+    expect(draft.failureIn("metadata")).toMatchObject({
+      text: "study.json was not saved. Fix the marked fields.",
+      issues: ["format: Input should be 2", "Descriptions of outputs: Enter some text or remove this entry."],
+    });
+    expect(draft.failureIn("data", "outputs")).toMatchObject({
+      text: "study.json was not saved. Fix the marked fields.",
+      issues: ["format: Input should be 2", "Descriptions of scatters: Enter some text or remove this entry."],
+    });
+    expect(draft.failureIn("data", "subjects")).toMatchObject({
+      text: "study.json was not saved.",
+      issues: [
+        "format: Input should be 2",
+        "Descriptions of outputs: Enter some text or remove this entry.",
+        "Descriptions of scatters: Enter some text or remove this entry.",
+      ],
+    });
     expect([...draft.notesOpen.value]).toEqual(["outputs", "scatters"]);
     expect(draft.form.value?.notes.outputs.descriptions).toEqual([" "]);
   });
