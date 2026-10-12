@@ -23,6 +23,8 @@ export const PAPER = "paper";
 /** The selection of the Data section: the query of its route. */
 export interface Selection {
   source: string | null;
+  /** The PDF that the paper shows, while it shows (`source=paper`); none for the first. */
+  pdf: string | null;
   file: string | null;
   line: number | null;
   column: string | null;
@@ -37,6 +39,7 @@ export function selectionOf(query: LocationQuery): Selection {
   const line = typeof query.line === "string" ? Number(query.line) : Number.NaN;
   return {
     source: text(query.source),
+    pdf: text(query.pdf),
     file: text(query.file),
     line: Number.isInteger(line) && line >= 1 ? line : null,
     column: text(query.column),
@@ -47,6 +50,7 @@ export function selectionOf(query: LocationQuery): Selection {
 export function selectionQuery(selection: Selection): Record<string, string> {
   const query: Record<string, string> = {};
   if (selection.source !== null) query.source = selection.source;
+  if (selection.pdf !== null) query.pdf = selection.pdf;
   if (selection.file !== null) query.file = selection.file;
   if (selection.line !== null) query.line = String(selection.line);
   if (selection.column !== null) query.column = selection.column;

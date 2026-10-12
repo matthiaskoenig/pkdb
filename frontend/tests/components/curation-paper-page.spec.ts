@@ -42,7 +42,7 @@ describe("the paper in a tab of its own", () => {
     expect(wrapper.get("h1").text()).toBe("Example Supp.pdf");
     const study = wrapper.get("a.paper-page-study");
     expect(study.text()).toBe("caffeine/Example");
-    expect(study.attributes("href")).toBe("#/studies/caffeine/Example/data?source=paper");
+    expect(study.attributes("href")).toBe("#/studies/caffeine/Example/data?source=paper&pdf=Example+Supp.pdf");
     expect(wrapper.findComponent({ name: "PaperViewer" }).props()).toMatchObject({
       url: PAPERS[1]!.url,
       file: "Example Supp.pdf",

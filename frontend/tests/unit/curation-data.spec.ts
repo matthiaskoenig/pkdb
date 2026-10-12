@@ -72,17 +72,33 @@ describe("selection of the route", () => {
   it("reads source, file, a positive whole line and column, and drops empty values", () => {
     expect(selectionOf({ source: "Fig1", file: "subjects.tsv", line: "3", column: "name" })).toEqual({
       source: "Fig1",
+      pdf: null,
       file: "subjects.tsv",
       line: 3,
       column: "name",
     });
-    expect(selectionOf({ source: "", line: "0" })).toEqual({ source: null, file: null, line: null, column: null });
+    expect(selectionOf({ source: "paper", pdf: "Example_Supp.pdf" })).toEqual({
+      source: "paper",
+      pdf: "Example_Supp.pdf",
+      file: null,
+      line: null,
+      column: null,
+    });
+    expect(selectionOf({ source: "", line: "0" })).toEqual({ source: null, pdf: null, file: null, line: null, column: null });
     expect(selectionOf({ line: "2.5" }).line).toBeNull();
     expect(selectionOf({ line: ["2", "3"] }).line).toBeNull();
   });
 
   it("writes only the parts of a selection that it has", () => {
-    expect(selectionQuery({ source: "Fig1", file: null, line: 4, column: null })).toEqual({ source: "Fig1", line: "4" });
+    expect(selectionQuery({ source: "Fig1", pdf: null, file: null, line: 4, column: null })).toEqual({ source: "Fig1", line: "4" });
+    // The PDF of the paper follows the source in the address.
+    expect(
+      Object.entries(selectionQuery({ source: "paper", pdf: "Example_Supp.pdf", file: "subjects.tsv", line: null, column: null })),
+    ).toEqual([
+      ["source", "paper"],
+      ["pdf", "Example_Supp.pdf"],
+      ["file", "subjects.tsv"],
+    ]);
   });
 });
 

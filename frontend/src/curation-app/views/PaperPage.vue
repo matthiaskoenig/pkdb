@@ -25,7 +25,8 @@ const substance = computed(() => String(route.params.substance));
 const name = computed(() => String(route.params.name));
 const identity = computed(() => `${substance.value}/${name.value}`);
 const file = computed(() => String(route.params.file));
-const back = computed(() => sectionRoute(identity.value, "data", { source: PAPER }));
+/** The paper of the study in the Data section, showing this PDF. */
+const back = computed(() => sectionRoute(identity.value, "data", { source: PAPER, pdf: file.value }));
 
 watch(identity, () => void study.open(substance.value, name.value), { immediate: true });
 onBeforeUnmount(() => study.close());

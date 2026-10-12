@@ -89,7 +89,7 @@ test("a PDF opens in a tab of its own without the app bar", async ({ app, page }
   await expect(page.getByRole("heading", { name: "Demo2020.pdf", level: 1 })).toBeVisible();
   await expect(page.getByRole("link", { name: "caffeine/Demo2020" })).toHaveAttribute(
     "href",
-    "#/studies/caffeine/Demo2020/data?source=paper",
+    "#/studies/caffeine/Demo2020/data?source=paper&pdf=Demo2020.pdf",
   );
   await expect(page.getByRole("link", { name: "PK-DB Local curation" })).toHaveCount(0);
   const viewer = page.locator(".paper-viewer");
@@ -232,6 +232,30 @@ test("the paper keeps its page while a table of another source shows, and when t
     await expect(page.locator(".data-stack")).toBeVisible();
     await expect(drawnPage(pane, 3)).toBeInViewport();
     await expect(pageField).toHaveValue("3");
+  } finally {
+    rmSync(pdf);
+  }
+});
+
+test("the address names the PDF chosen in the head of the pane, so that a reload and the link back from its tab show it", async ({
+  app,
+  page,
+}) => {
+  const pdf = join(app.server.workspace, "caffeine/Demo2020/Demo2020_Long.pdf");
+  writeFileSync(pdf, pdfOf("the long paper", 3));
+  try {
+    await app.open("#/studies/caffeine/Demo2020/data?source=paper");
+    await page.getByRole("combobox", { name: "PDF of the paper" }).selectOption("Demo2020_Long.pdf");
+    const pane = paperPane(page, "Demo2020_Long.pdf");
+    await expect(drawnPage(pane)).toBeVisible();
+    await expect.poll(() => new URL(page.url()).hash).toContain("source=paper&pdf=Demo2020_Long.pdf");
+    await page.reload();
+    await expect(drawnPage(pane)).toBeVisible();
+    await expect(pane.locator(".textLayer").first()).toContainText("Page 1 of the long paper.");
+    await app.open("#/studies/caffeine/Demo2020/paper/Demo2020_Long.pdf");
+    await page.getByRole("link", { name: "caffeine/Demo2020" }).click();
+    await expect(drawnPage(pane)).toBeVisible();
+    await expect(pane.locator(".textLayer").first()).toContainText("Page 1 of the long paper.");
   } finally {
     rmSync(pdf);
   }

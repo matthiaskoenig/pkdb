@@ -1844,12 +1844,38 @@ describe("the paper in the Data section", () => {
     expect(paperPane().isVisible()).toBe(true);
   });
 
-  it("shows the PDF chosen in the head of the pane", async () => {
+  it("shows the PDF chosen in the head of the pane, which the address names", async () => {
     await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper`);
     await page().get<HTMLSelectElement>(".paper-pane select").setValue("Example_Supp.pdf");
-    await flushPromises();
+    await routed({ source: "paper", pdf: "Example_Supp.pdf" });
     expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
     expect(page().get(".paper-viewer-stub").attributes("data-url")).toBe(`${EXAMPLE}/files/Example_Supp.pdf`);
+  });
+
+  it("shows the PDF that the address names, as after a reload, and the first one for a PDF that the study lacks", async () => {
+    const reloaded = await mountSection(
+      detail({ papers: papers() }),
+      {},
+      `${SECTION}?source=paper&pdf=Example_Supp.pdf&file=subjects.tsv`,
+    );
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
+    // A row of the table keeps the PDF in the address.
+    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
+    await routed({ source: "paper", pdf: "Example_Supp.pdf", file: "subjects.tsv", line: "4" });
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
+    reloaded.unmount();
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&pdf=Gone.pdf`);
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example.pdf");
+  });
+
+  it("keeps the chosen PDF while another source shows, which leaves it out of the address, and names it again with the paper", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&pdf=Example_Supp.pdf&file=subjects.tsv`);
+    await choose("file", "outputs_Tab2.tsv");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    await page().get(".nav-paper").trigger("click");
+    await routed({ source: "paper", pdf: "Example_Supp.pdf", file: "outputs_Tab2.tsv" });
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
+    expect(paperViewer.mounts).toBe(1);
   });
 
   it("gives the viewer the version of the PDF, which changes when the PDF is written, also at the same size", async () => {

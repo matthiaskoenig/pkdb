@@ -57,7 +57,8 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * cannot show the sources and tables; the sync actions and the conflicts stay.
  * The first source is the paper, the PDFs of the folder: a shared table opens beside it, and its
  * pane stays mounted, hidden, while other sources show. The route has `source=paper` while it
- * shows.
+ * shows, and `pdf=<file>` once a PDF was chosen in the head of its pane: a PDF that the study
+ * lacks shows the first. The pane keeps the PDF while other sources show, whose routes leave it out.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
  * and Review sections can link to a row (`data.ts` has its rules). A link may name `notes=<kind>`,
@@ -101,6 +102,15 @@ const file = computed<string | null>(() => {
   const named = findSource(query.value.source);
   return named ? fileForSource(value, named, null) : defaultFile(value);
 });
+
+/** The PDF that the pane of the paper keeps while another source shows. */
+const keptPaper = ref<string | null>(null);
+/**
+ * The PDF that the pane of the paper shows, chosen in its head; null for the first, `<name>.pdf`.
+ * The route names it while the paper shows, and the pane keeps it while another source shows.
+ */
+const paperFile = computed(() => (query.value.source === PAPER ? query.value.pdf : keptPaper.value));
+watch(paperFile, (value) => (keptPaper.value = value), { immediate: true });
 
 /** The kind of the notes of the selected table in study.json; null for a raw table, which has none. */
 const notesKind = computed<TableKind | null>(() => {
@@ -190,8 +200,6 @@ const source = computed<SourceSummary | null>(() => findSource(sourceName.value)
 // The pane of the paper stays mounted once it showed, hidden while another source shows, so that
 // the viewer keeps its page and zoom; another study starts without it.
 const paperKept = ref(false);
-/** The PDF that the pane of the paper shows, chosen in its head; null for the first, `<name>.pdf`. */
-const paperFile = ref<string | null>(null);
 /**
  * Where the viewer of the paper stands, kept here because the pane mounts again when the panes
  * stack or stand side by side again: the viewer opens its PDF there again.
@@ -206,7 +214,7 @@ watch(
 );
 watch(identity, () => {
   paperKept.value = paperShown.value;
-  paperFile.value = null;
+  keptPaper.value = null;
   paperPlace.value = null;
 });
 
@@ -248,8 +256,14 @@ const focus = computed(() =>
 /** The selected row, whose point the plot or overlay of the source rings. */
 const selectedRow = computed(() => (focus.value && file.value ? { file: file.value, line: focus.value.line } : null));
 
-function go(selection: Selection): void {
-  void router.replace({ query: selectionQuery(selection) });
+/** Show `selection`; while it shows the paper, the route names its PDF, the one of the pane by default. */
+function go(selection: Omit<Selection, "pdf">, pdf = paperFile.value): void {
+  void router.replace({ query: selectionQuery({ ...selection, pdf: selection.source === PAPER ? pdf : null }) });
+}
+
+/** Show the PDF chosen in the head of the pane of the paper, which shows. */
+function selectPaper(name: string): void {
+  go(query.value, name);
 }
 
 function selectSource(name: string): void {
@@ -502,8 +516,9 @@ const conflictPanel = computed(() => {
             <PaperPane
               v-if="paperKept && detail.papers.length"
               v-show="paperShown"
-              v-model:file="paperFile"
+              :file="paperFile"
               v-model:place="paperPlace"
+              @update:file="selectPaper"
               :study="identity"
               :papers="detail.papers"
             />
@@ -536,8 +551,9 @@ const conflictPanel = computed(() => {
           <PaperPane
             v-if="paperKept && detail.papers.length"
             v-show="paperShown"
-            v-model:file="paperFile"
+            :file="paperFile"
             v-model:place="paperPlace"
+            @update:file="selectPaper"
             :study="identity"
             :papers="detail.papers"
           />
