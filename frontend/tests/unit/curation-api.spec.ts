@@ -4,6 +4,7 @@ import {
   ServerStopped,
   SessionMissing,
   UnexpectedResponse,
+  checkFile,
   csrfToken,
   getJson,
   isAbort,
@@ -287,6 +288,42 @@ describe("postJson", () => {
     expect(error).toBeInstanceOf(SessionMissing);
     expect(error instanceof Error && error.message).toBe("Open the launch URL printed in your terminal");
     await expect(getJson("/local/state", isRecord)).rejects.toBeInstanceOf(SessionMissing);
+  });
+});
+
+describe("checkFile", () => {
+  const FILE = "/local/studies/caffeine/Example/files/Example.pdf";
+
+  it("asks for the first byte of a file and resolves when the local server serves it", async () => {
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response("%", { status: 206, headers: { "Content-Range": "bytes 0-0/19507" } }));
+    await expect(checkFile(FILE)).resolves.toBeUndefined();
+    const { url, init, headers } = request(fetch);
+    expect(url).toBe(FILE);
+    expect(headers.get("Range")).toBe("bytes=0-0");
+    expect(init.credentials).toBe("same-origin");
+  });
+
+  it("throws the error of the local server for a file that it does not serve", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      json(
+        { error: "Could not read Example.pdf.", code: "file_error", detail: "PermissionError", request_id: "0a1b2c3d" },
+        { status: 400 },
+      ),
+    );
+    const error = await rejection(checkFile(FILE));
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error instanceof ApiError && [error.status, error.code, error.requestId]).toEqual([
+      400,
+      "file_error",
+      "0a1b2c3d",
+    ]);
+  });
+
+  it("throws ServerStopped when the local server cannot be reached", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
+    await expect(checkFile(FILE)).rejects.toBeInstanceOf(ServerStopped);
   });
 });
 

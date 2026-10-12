@@ -195,6 +195,17 @@ export async function getJson<T>(
   return { status: 200, etag: response.headers.get("ETag"), data: await content(response, accept, request) };
 }
 
+/**
+ * Ask for the first byte of the file at `path`: it resolves when the local server serves the
+ * file, and throws its error as `getJson` does otherwise. A viewer that reads a file without this
+ * client, as PDF.js does, learns from it why the file could not be read.
+ */
+export async function checkFile(path: string): Promise<void> {
+  const response = await send(path, { headers: { Range: "bytes=0-0" } });
+  if (!response.ok) return failure(response, `GET ${path}`);
+  await response.body?.cancel();
+}
+
 async function post<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
   const request = `POST ${path}`;
   const response = await send(path, {
