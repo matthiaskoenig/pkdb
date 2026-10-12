@@ -1,7 +1,11 @@
 """The read and write routes of a study page on a real loopback server over a real engine."""
 
 import json
+import os
 import re
+import shlex
+import subprocess
+import sys
 import threading
 from types import SimpleNamespace
 
@@ -1692,3 +1696,47 @@ def test_only_a_source_that_the_study_lacks_is_not_found(api, monkeypatch):
     body = json.loads(data)
     assert (status, body["code"]) == (500, "unexpected")
     assert "Traceback (most recent call last)" in body["traceback"]
+
+
+def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_and_stderr(
+    api, monkeypatch
+):
+    server, engine, folder = api
+    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+    opener = [
+        sys.executable,
+        "-c",
+        "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
+    ]
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", join(opener))
+    headers = authenticate(server)
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "open"},
+        headers,
+    )
+    body = json.loads(data)
+    assert status == 500
+    assert (body["error"], body["code"]) == (
+        "Could not open the tables of caffeine/Example.",
+        "open_failed",
+    )
+    program = sys.executable.replace("\\", "/").rsplit("/", 1)[-1]
+    assert body["detail"] == (
+        f"CalledProcessError: {program} exited with status 4\n"
+        "no method available for opening"
+    )
+    assert "traceback" not in body
+    entry = next(
+        job
+        for job in _detail(server, headers)["jobs"]
+        if job["id"] == body["activity_id"]
+    )
+    assert (entry["status"], entry["message"]) == (
+        "failed",
+        "Could not open the tables of caffeine/Example.",
+    )
+    assert entry["error"]["detail"] == body["detail"]
+    assert "exited with status 4" in engine.log.path.read_text(encoding="utf-8")

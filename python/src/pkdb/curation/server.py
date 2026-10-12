@@ -610,8 +610,13 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/local/files/open":
             from pkdb.curation.launch import open_path
 
-            target = engine.resolve_file(required(body, "study_id"), body.get("file"))
-            open_path(target, reveal=bool(body.get("reveal", False)))
+            study, file = required(body, "study_id"), body.get("file")
+            target = engine.resolve_file(study, file)
+            open_path(
+                target,
+                reveal=bool(body.get("reveal", False)),
+                subject=f"{file} of {study}" if file else f"the folder of {study}",
+            )
             return {"ok": True}
         if path == "/local/assignments/refresh":
             return engine.refresh_assignments()

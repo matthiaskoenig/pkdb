@@ -881,7 +881,7 @@ class StudiesMixin(EngineState):
             # A sync that failed is reported; the curator fixes it in the workbook.
             result["opened"] = sync.workbook.is_file()
             if result["opened"]:
-                open_path(sync.workbook)
+                open_path(sync.workbook, subject=f"the tables of {identity}")
         done = {
             "open": "Opened the workbook",
             "sync": "Synced the workbook and the tables",

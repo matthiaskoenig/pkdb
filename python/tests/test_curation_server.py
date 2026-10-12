@@ -16,6 +16,7 @@ from unittest.mock import Mock
 import pytest
 from curation_http import authenticate, error_body, request
 
+from pkdb.curation import launch
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine, WorkspaceError
 from pkdb.curation.errors import ActionFailed, MissingField
@@ -397,7 +398,7 @@ def test_open_action_resolves_registered_file(local_server, monkeypatch, tmp_pat
         == 200
     )
     engine.resolve_file.assert_called_once_with("study", "outputs.xlsx")
-    opener.assert_called_once_with(target, reveal=True)
+    opener.assert_called_once_with(target, reveal=True, subject="outputs.xlsx of study")
 
 
 def test_invalid_bootstrap_does_not_consume_valid_token(local_server):
@@ -1143,3 +1144,76 @@ def test_a_result_that_is_not_json_is_an_unexpected_500_before_any_200(local_ser
     engine.snapshot.return_value = {"studies": {1}}
     status, _, data = request(server, "GET", "/local/state", headers=headers)
     assert (status, json.loads(data)["code"]) == (500, "unexpected")
+
+
+def _command_line(arguments):
+    # Quoted as the shell of the platform quotes it.
+    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+    return join(arguments)
+
+
+FAILING_OPENER = [
+    sys.executable,
+    "-c",
+    "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
+]
+
+
+def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
+    tmp_path, monkeypatch
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", _command_line(FAILING_OPENER))
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file, subject="the tables of caffeine/Example")
+    assert failed.value.message == "Could not open the tables of caffeine/Example."
+    assert failed.value.code == "open_failed"
+    cause = failed.value.cause
+    assert isinstance(cause, subprocess.CalledProcessError)
+    assert cause.returncode == 4 and cause.stderr == b"no method available for opening"
+
+
+def test_a_missing_opener_says_to_set_the_open_command(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
+    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
+    runner = Mock(side_effect=FileNotFoundError(2, "No such file", "xdg-open"))
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file)
+    assert failed.value.code == "open_command_missing"
+    assert failed.value.message == (
+        "Could not open outputs.xlsx: xdg-open was not found. Set PKDB_OPEN_COMMAND "
+        "to a command that opens files, such as 'gio open'."
+    )
+
+
+def test_a_missing_open_command_is_named(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", "pkdb-no-such-opener")
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file)
+    assert failed.value.code == "open_command_missing"
+    assert "the command 'pkdb-no-such-opener' of PKDB_OPEN_COMMAND was not found" in (
+        failed.value.message
+    )
+
+
+def test_an_opener_that_does_not_return_is_named(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
+    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
+    runner = Mock(side_effect=subprocess.TimeoutExpired(["xdg-open", str(file)], 15))
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file)
+    assert failed.value.code == "open_timeout"
+    assert failed.value.message == (
+        "Could not open outputs.xlsx: the command did not return within 15 seconds. "
+        "Use a command that starts the program and returns."
+    )
+    assert launch.OPEN_TIMEOUT == 15
