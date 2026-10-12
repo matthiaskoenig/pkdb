@@ -68,7 +68,7 @@ async function mountViewer(props: Record<string, unknown> = {}) {
   const pinia = createPinia();
   setActivePinia(pinia);
   const wrapper = mount(PaperViewer, {
-    props: { url: URL_A, file: "Example.pdf", bytes: 1000, ...props },
+    props: { url: URL_A, file: "Example.pdf", version: "v1", ...props },
     attachTo: document.body,
     global: { plugins: [pinia] },
   });
@@ -377,7 +377,7 @@ describe("paper viewer", () => {
     const wrapper = await mountViewer();
     const first = await shown();
     first.session.close.mockRejectedValue(new Error("Worker was destroyed"));
-    await wrapper.setProps({ bytes: 2000 });
+    await wrapper.setProps({ version: "v2" });
     await flushPromises();
     expect(opened).toHaveLength(2);
     const second = await shown();
@@ -394,7 +394,7 @@ describe("paper viewer", () => {
     first.events.page(2);
     first.events.scale(1.5, "page-fit");
     await flushPromises();
-    await wrapper.setProps({ bytes: 2000 });
+    await wrapper.setProps({ version: "v2" });
     await flushPromises();
     expect(first.session.close).toHaveBeenCalledTimes(1);
     expect(opened).toHaveLength(2);
@@ -417,7 +417,7 @@ describe("paper viewer", () => {
             ? h(PaperViewer, {
                 url: props.url,
                 file: "Example.pdf",
-                bytes: 1000,
+                version: "v1",
                 place: place.value,
                 "onUpdate:place": (value: PaperPlace | null) => (place.value = value),
               })

@@ -601,6 +601,11 @@ export interface PaperFile {
   /** Where the local server serves it: whole, or in byte ranges as PDF.js reads it. */
   url: string;
   bytes: number;
+  /**
+   * The version of its content, which changes when the PDF is written, also at the same size:
+   * the viewer opens it again then, as PDF.js reads it in ranges, which must not mix two PDFs.
+   */
+  version: string;
 }
 
 export interface StudyDetail {

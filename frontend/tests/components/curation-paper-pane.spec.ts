@@ -43,7 +43,7 @@ describe("paper pane", () => {
     expect(wrapper.findComponent({ name: "PaperViewer" }).props()).toEqual({
       url: PAPERS[0]!.url,
       file: "Example.pdf",
-      bytes: 19_507,
+      version: PAPERS[0]!.version,
       place: null,
     });
   });

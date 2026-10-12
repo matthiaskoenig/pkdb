@@ -93,7 +93,7 @@ function openInProgram(): Promise<void> {
       v-model:place="place"
       :url="paper.url"
       :file="paper.file"
-      :bytes="paper.bytes"
+      :version="paper.version"
       class="paper-pane-viewer"
     />
   </section>

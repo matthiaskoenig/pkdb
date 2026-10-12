@@ -8,6 +8,7 @@ import subprocess
 import sys
 import threading
 from types import SimpleNamespace
+from unittest.mock import ANY
 from urllib.parse import quote
 
 import openpyxl
@@ -1998,7 +1999,12 @@ def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp
     engine.scan()
     detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
     assert detail["papers"] == [
-        {"file": name, "url": f"{DETAIL}/files/{name}", "bytes": sizes[name]}
+        {
+            "file": name,
+            "url": f"{DETAIL}/files/{name}",
+            "bytes": sizes[name],
+            "version": ANY,
+        }
         for name in (
             "Example.pdf",
             "appendix9.Pdf",
@@ -2007,6 +2013,26 @@ def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp
             "Zeta.PDF",
         )
     ]
+
+
+def test_the_version_of_a_pdf_changes_when_it_is_written_also_at_the_same_size(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    pdf = folder / "Example.pdf"
+    pdf.write_bytes(b"%PDF-1.7\n%first\n")
+    os.utime(pdf, ns=(1_700_000_000_000_000_000, 1_700_000_000_000_000_000))
+    engine.scan()
+    version = _detail(server, headers)["papers"][0]["version"]
+    assert isinstance(version, str) and version
+    engine.scan()
+    assert _detail(server, headers)["papers"][0]["version"] == version
+    # A PDF program saves another PDF of the same size: PDF.js must not mix their ranges.
+    pdf.write_bytes(b"%PDF-1.7\n%other\n")
+    os.utime(pdf, ns=(1_700_000_001_000_000_000, 1_700_000_001_000_000_000))
+    engine.scan()
+    paper = _detail(server, headers)["papers"][0]
+    assert paper["bytes"] == len(b"%PDF-1.7\n%first\n")
+    assert paper["version"] != version
 
 
 def test_the_study_page_lists_its_pdfs_beyond_the_upload_limits(api, monkeypatch):

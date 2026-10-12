@@ -75,7 +75,7 @@ onBeforeUnmount(() => {
       <span class="paper-page-separator" aria-hidden="true">/</span>
       <h1 class="paper-page-file" :title="file">{{ file }}</h1>
     </header>
-    <PaperViewer v-if="paper" :url="paper.url" :file="file" class="paper-page-viewer" />
+    <PaperViewer v-if="paper" :url="paper.url" :file="file" :version="paper.version" class="paper-page-viewer" />
     <!-- It goes when the PDF is there: no close button. -->
     <ActionFailureAlert v-else-if="failure" :failure="failure" :study="identity" :closable="false" class="paper-page-failure" />
     <VProgressLinear v-else indeterminate color="primary" aria-label="Loading the study" />

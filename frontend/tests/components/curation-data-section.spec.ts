@@ -1852,6 +1852,17 @@ describe("the paper in the Data section", () => {
     expect(page().get(".paper-viewer-stub").attributes("data-url")).toBe(`${EXAMPLE}/files/Example_Supp.pdf`);
   });
 
+  it("gives the viewer the version of the PDF, which changes when the PDF is written, also at the same size", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper`);
+    const viewer = () => page().get(".paper-viewer-stub");
+    expect(viewer().attributes("data-version")).toBe(papers()[0]!.version);
+    served = detail({ papers: [paperFile("Example.pdf", 19_507, "0b7c3f9d2e6a1458"), papers()[1]!] });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(viewer().attributes("data-version")).toBe("0b7c3f9d2e6a1458");
+    expect(paperViewer.mounts).toBe(1);
+  });
+
   it("gives the viewer its place back when the panes stack and stand side by side again", async () => {
     await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper`);
     await page().get(".paper-viewer-stub button").trigger("click");

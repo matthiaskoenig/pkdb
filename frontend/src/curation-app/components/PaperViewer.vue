@@ -30,10 +30,18 @@ import ActionFailureAlert from "./ActionFailureAlert.vue";
  * with the zoom (Fit width, Fit page, 100 %), and the find field: Enter goes to the next match,
  * Shift+Enter to the previous one, and Ctrl+F inside the viewer focuses the field. A PDF that is
  * missing, damaged or protected by a password shows the alert of a failed action, with Retry.
- * When its size changes, as when it was replaced on disk, the viewer opens the PDF again at its
+ * When its version changes, as when it was written on disk, the viewer opens the PDF again at its
  * place, on its page and zoom; another PDF starts on its first page at Fit width.
  */
-const props = withDefaults(defineProps<{ url: string; file: string; bytes?: number | null }>(), { bytes: null });
+const props = withDefaults(
+  defineProps<{
+    url: string;
+    file: string;
+    /** The version of the content of the PDF (`PaperFile.version`). */
+    version?: string | null;
+  }>(),
+  { version: null },
+);
 /**
  * Where the viewer stands in its PDF. A parent that keeps it with `v-model:place` gets the viewer
  * back on its page and zoom when the viewer mounts again, as after a change on disk.
@@ -153,8 +161,8 @@ async function open(): Promise<void> {
   }
 }
 
-// Once the scroll container exists, and again for another URL or size, and on Retry.
-watch([scroller, () => props.url, () => props.bytes, () => paperImport.attempt], () => void open(), {
+// Once the scroll container exists, and again for another URL or version, and on Retry.
+watch([scroller, () => props.url, () => props.version, () => paperImport.attempt], () => void open(), {
   flush: "post",
 });
 

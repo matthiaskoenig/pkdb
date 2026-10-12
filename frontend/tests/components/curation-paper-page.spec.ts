@@ -46,11 +46,20 @@ describe("the paper in a tab of its own", () => {
     expect(wrapper.findComponent({ name: "PaperViewer" }).props()).toMatchObject({
       url: PAPERS[1]!.url,
       file: "Example Supp.pdf",
+      version: PAPERS[1]!.version,
     });
     expect(wrapper.find(".action-failure").exists()).toBe(false);
     expect(document.title).toBe("Example Supp.pdf · caffeine/Example · PK-DB");
     wrapper.unmount();
     expect(document.title).toBe(title);
+  });
+
+  it("gives the viewer the version of the PDF, which changes when the PDF is written", async () => {
+    const wrapper = await mountTab("Example Supp.pdf");
+    served = studyDetail({ papers: [PAPERS[0]!, paperFile("Example Supp.pdf", 4_590_032, "0b7c3f9d2e6a1458")] });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(wrapper.findComponent({ name: "PaperViewer" }).props("version")).toBe("0b7c3f9d2e6a1458");
   });
 
   it("says that a file of the address that is no PDF of the study is none, instead of showing it", async () => {

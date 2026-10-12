@@ -345,10 +345,11 @@ describe("errors contract", () => {
 describe("papers contract", () => {
   const papers = contract<PaperFile[]>(sourcesFixture.papers);
 
-  it("lists the PDF of Demo2020 with the URL of the file route and its size", () => {
+  it("lists the PDF of Demo2020 with the URL of the file route, its size and the version of its content", () => {
     expect(papers).toHaveLength(1);
     expect(papers[0]).toMatchObject({ file: "Demo2020.pdf", url: "/local/studies/caffeine/Demo2020/files/Demo2020.pdf" });
     expect(papers[0]!.bytes).toBeGreaterThan(0);
-    expect(Object.keys(papers[0]!).sort()).toEqual(["bytes", "file", "url"]);
+    expect(papers[0]!.version).toMatch(/^[0-9a-f]{16}$/);
+    expect(Object.keys(papers[0]!).sort()).toEqual(["bytes", "file", "url", "version"]);
   });
 });

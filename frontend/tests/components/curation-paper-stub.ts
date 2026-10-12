@@ -13,14 +13,14 @@ export const PaperViewerStub = defineComponent({
   props: {
     url: { type: String, required: true },
     file: { type: String, required: true },
-    bytes: { type: Number as PropType<number | null>, default: null },
+    version: { type: String as PropType<string | null>, default: null },
     place: { type: Object as PropType<PaperPlace | null>, default: null },
   },
   emits: ["update:place"],
   setup(props, { emit }) {
     onMounted(() => (paperViewer.mounts += 1));
     return () =>
-      h("div", { class: "paper-viewer-stub", "data-url": props.url, "data-page": props.place?.page }, [
+      h("div", { class: "paper-viewer-stub", "data-url": props.url, "data-version": props.version, "data-page": props.place?.page }, [
         h(
           "button",
           { type: "button", onClick: () => emit("update:place", { url: props.url, page: 3, fit: null, scale: 1.25 }) },

@@ -479,6 +479,6 @@ export function conflictAnswer(
 }
 
 /** A PDF of the study `caffeine/Example` as its study page lists it. */
-export function paperFile(file: string, bytes = 19_507): PaperFile {
-  return { file, url: `/local/studies/caffeine/Example/files/${encodeURIComponent(file)}`, bytes };
+export function paperFile(file: string, bytes = 19_507, version = "5f1d0e2a9c3b7e41"): PaperFile {
+  return { file, url: `/local/studies/caffeine/Example/files/${encodeURIComponent(file)}`, bytes, version };
 }

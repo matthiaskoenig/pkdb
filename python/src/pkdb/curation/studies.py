@@ -472,8 +472,18 @@ def _tables(study: LoadedStudy) -> list[dict]:
     return entries
 
 
+def _content_version(status: os.stat_result) -> str:
+    """A version of the content of a file from its size and modification time, as the watcher
+    compares files: it changes when the file is written, also at the same size."""
+    key = f"{status.st_size}:{status.st_mtime_ns}".encode()
+    return hashlib.sha256(key).hexdigest()[:16]
+
+
 def _papers(identity: str, layout: Layout) -> list[dict]:
     """The PDFs at the top of the study folder: `<name>.pdf` first, then the others by name.
+
+    Each with its size and the version of its content, by which the viewer opens a PDF again
+    that was written while it showed it: PDF.js reads a PDF in ranges and must not mix two.
 
     The suffix counts in any case. A hidden file (also an AppleDouble `._name.pdf`), a symlink or a
     folder is no paper: the scan registers none of them as an attachment, and the file route
@@ -486,10 +496,17 @@ def _papers(identity: str, layout: Layout) -> list[dict]:
         files, key=lambda name: (Path(name).stem != layout.study, natural_key(name))
     ):
         try:
-            size = (layout.folder / name).stat(follow_symlinks=False).st_size
+            status = (layout.folder / name).stat(follow_symlinks=False)
         except OSError:
             continue
-        papers.append({"file": name, "url": _file_url(identity, name), "bytes": size})
+        papers.append(
+            {
+                "file": name,
+                "url": _file_url(identity, name),
+                "bytes": status.st_size,
+                "version": _content_version(status),
+            }
+        )
     return papers
 
 
