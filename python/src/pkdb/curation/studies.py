@@ -580,7 +580,12 @@ class StudiesMixin(EngineState):
         raise LookupError(f"{file} is not a table of {identity}")
 
     def study_source(self, identity: str, source: str) -> dict:
-        view = source_view(_bounded(self.study_folder(identity)), source)
+        try:
+            view = source_view(_bounded(self.study_folder(identity)), source)
+        except KeyError:
+            # source_view raises KeyError for a source the study lacks; the server treats a
+            # bare KeyError as a bug.
+            raise LookupError(f"{identity} has no source {source}") from None
         image_url = None if view.image is None else _file_url(identity, view.image)
         return {**dataclasses.asdict(view), "image_url": image_url}
 

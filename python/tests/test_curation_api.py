@@ -1,12 +1,13 @@
 """The read and write routes of a study page on a real loopback server over a real engine."""
 
 import json
+import re
 import threading
 from types import SimpleNamespace
 
 import openpyxl
 import pytest
-from curation_http import authenticate, request
+from curation_http import authenticate, error_body, request
 from digitize_fixtures import GOOD, png, project
 
 from pkdb.curation import studies
@@ -935,7 +936,11 @@ def test_the_author_is_the_account_of_a_checked_key(api):
 
 def test_writes_with_a_key_of_another_account_are_refused(api):
     server, engine, folder = api
-    engine.offline, engine.endpoint, engine.api_key = False, "https://pk-db.test", "key"
+    engine.offline, engine.endpoint, engine.api_key = (
+        False,
+        "https://pk-db.test",
+        "pk-secret-7",
+    )
     engine.user_mismatch = "The API key belongs to PK-DB user 'other'"
     headers = authenticate(server)
     review = _detail(server, headers)["review"]
@@ -953,9 +958,12 @@ def test_writes_with_a_key_of_another_account_are_refused(api):
         headers,
     )
     assert response[0] == 403
-    assert json.loads(response[2]) == {
+    assert error_body(response[2]) == {
         "error": "user_mismatch",
         "message": "The API key belongs to PK-DB user 'other'",
+        "code": "user_mismatch",
+        "detail": None,
+        "action": "Add a review item (POST /local/studies/review)",
     }
     assert read_review(folder).review.items == []
 
@@ -1038,19 +1046,23 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     status, _, data = request(server, "POST", "/local/studies/review", body, headers)
     assert status == 422
     # A line and a column that are left out match every line and column.
-    assert json.loads(data) == {
+    assert error_body(data) == {
         "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
         "column mean, line 4 column mean; give the line, column and key of one",
         "issues": [],
         "code": "ambiguous_warning",
+        "detail": None,
+        "action": "Acknowledge a warning (POST /local/studies/review)",
     }
     missing = {**body, "code": "missing_image"}
     status, _, data = request(server, "POST", "/local/studies/review", missing, headers)
     assert status == 422
-    assert json.loads(data) == {
+    assert error_body(data) == {
         "error": "No warning [missing_image] in timecourses_Fig1.tsv matches",
         "issues": [],
         "code": "no_such_warning",
+        "detail": None,
+        "action": "Acknowledge a warning (POST /local/studies/review)",
     }
     # A null line or column matches only warnings without one.
     for exact in ({"line": None}, {"column": None}, {"line": 4, "column": None}):
@@ -1095,11 +1107,13 @@ def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
     }
     status, _, data = request(server, "POST", "/local/studies/review", body, headers)
     assert status == 422
-    assert json.loads(data) == {
+    assert error_body(data) == {
         "error": "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json at key "
         "axis labels, key legend; give the line, column and key of one",
         "issues": [],
         "code": "ambiguous_warning",
+        "detail": None,
+        "action": "Acknowledge a warning (POST /local/studies/review)",
     }
     # A null key matches only warnings without one.
     status, _, data = request(
@@ -1584,3 +1598,81 @@ def test_a_write_succeeds_when_the_rescan_fails(api, monkeypatch):
         json.loads((folder / "study.json").read_text(encoding="utf-8"))["licence"]
         == "closed"
     )
+
+
+def test_an_unexpected_error_is_logged_with_its_traceback_and_named_in_the_terminal(
+    api, monkeypatch, capsys
+):
+    server, engine, folder = api
+    engine.api_key = "private-api-key"
+    headers = authenticate(server)
+
+    def broken(identity, payload):
+        raise RuntimeError(f"broken with private-api-key and {server.csrf_token}")
+
+    monkeypatch.setattr(engine, "table_preview", broken)
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables/preview",
+        {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"},
+        headers,
+    )
+    text = data.decode()
+    body = json.loads(data)
+    assert status == 500
+    assert body["error"] == "Could not preview the new table of caffeine/Example."
+    assert body["code"] == "unexpected"
+    assert body["detail"] == "RuntimeError: broken with [redacted] and [redacted]"
+    assert body["action"] == "Preview a table (POST /local/studies/tables/preview)"
+    assert "Traceback (most recent call last)" in body["traceback"]
+    assert "private-api-key" not in text and server.csrf_token not in text
+    # A preview writes nothing: no entry in the activity.
+    assert "activity_id" not in body
+    log = engine.log.path.read_text(encoding="utf-8")
+    assert f"Error {body['request_id']} in Preview a table" in log
+    assert "Traceback (most recent call last)" in log
+    assert "private-api-key" not in log and server.csrf_token not in log
+    # Request lines stay unlogged.
+    assert not re.search(r"HTTP/1\.[01]", log)
+    assert capsys.readouterr().err == (
+        f"Error {body['request_id']} in Preview a table: RuntimeError "
+        f"(see {engine.log.path})\n"
+    )
+
+
+def test_a_failed_write_is_listed_in_the_activity_without_its_traceback(
+    api, monkeypatch
+):
+    server, engine, folder = api
+    headers = authenticate(server)
+
+    def broken(identity, payload):
+        raise RuntimeError("the workbook library broke")
+
+    monkeypatch.setattr(engine, "tables_action", broken)
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "sync"},
+        headers,
+    )
+    body = json.loads(data)
+    assert status == 500
+    assert body["error"] == "Could not sync the workbook of caffeine/Example."
+    entry = next(
+        job
+        for job in _detail(server, headers)["jobs"]
+        if job["id"] == body["activity_id"]
+    )
+    assert (entry["action"], entry["status"], entry["message"]) == (
+        "write",
+        "failed",
+        "Could not sync the workbook of caffeine/Example.",
+    )
+    assert entry["error"] == {
+        key: value
+        for key, value in body.items()
+        if key not in {"traceback", "activity_id"}
+    }

@@ -89,4 +89,5 @@ class EngineState:
             message: str,
             status: str = "succeeded",
             item: str | None = None,
-        ) -> None: ...
+            error: dict | None = None,
+        ) -> str: ...

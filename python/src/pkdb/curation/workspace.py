@@ -14,6 +14,7 @@ from collections import Counter
 from pathlib import Path
 from uuid import uuid4
 
+from pkdb.curation.errors import required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
@@ -531,7 +532,7 @@ class WorkspaceMixin(EngineState):
         )
 
         with self.lock:
-            folder = self.resolve_file(body["id"])
+            folder = self.resolve_file(required(body, "id"))
             workspace = self.root
             offline = self.offline
             if action == "read":
@@ -544,7 +545,7 @@ class WorkspaceMixin(EngineState):
                     else {}
                 }
             if action == "save":
-                token = body["token"]
+                token = required(body, "token")
                 entry = self.reference_previews.get(token)
                 if not entry or entry[0] != folder:
                     raise ReferenceError("Reference preview expired; preview again")
@@ -558,7 +559,7 @@ class WorkspaceMixin(EngineState):
             offline=offline, refresh=body.get("refresh", False)
         )
         if action == "search":
-            return {"candidates": resolver.search(body["citation"])}
+            return {"candidates": resolver.search(required(body, "citation"))}
         if action != "preview":
             raise ReferenceError("Unknown reference action")
         preview = preview_reference(
@@ -568,7 +569,10 @@ class WorkspaceMixin(EngineState):
             reset_overrides=body.get("reset_overrides", False),
         )
         with self.lock:
-            if self.root != workspace or self.resolve_file(body["id"]) != folder:
+            if (
+                self.root != workspace
+                or self.resolve_file(required(body, "id")) != folder
+            ):
                 raise ReferenceError("Workspace changed during lookup; preview again")
             token = uuid4().hex
             while len(self.reference_previews) >= 20:

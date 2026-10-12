@@ -21,7 +21,7 @@ from pkdb.cache import (
     select_vocabulary,
 )
 from pkdb.client import Client
-from pkdb.curation.errors import redact
+from pkdb.curation.errors import redact, without_traceback
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.domain.validation import PROCESSING_VERSION
@@ -244,28 +244,42 @@ class JobsMixin(EngineState):
         kept, finished = self._partition_history()
         self.jobs = sorted(kept + finished[-100:], key=lambda j: j["created_at"])
 
-    def _record_write(self, identity, message, status="succeeded", item=None):
+    def _record_write(
+        self, identity, message, status="succeeded", item=None, error=None
+    ):
         """List a write of the app in the activity of the study; it starts nothing.
 
-        `item` is the review item that the message names, which the activity links.
+        `item` is the review item that the message names, which the activity links; `error`
+        is the error body of a failed write. Returns the id of the entry.
         """
+        entry = {
+            "id": uuid4().hex,
+            "study_id": identity,
+            "study_name": identity.rsplit("/", 1)[-1],
+            "workspace": str(self.root),
+            "action": "write",
+            "status": status,
+            "created_at": now(),
+            "message": message,
+            **({"item": item} if item else {}),
+            **({"error": error} if error else {}),
+            "automatic": False,
+            "report_id": None,
+        }
         with self.lock:
-            self._remember(
-                {
-                    "id": uuid4().hex,
-                    "study_id": identity,
-                    "study_name": identity.rsplit("/", 1)[-1],
-                    "workspace": str(self.root),
-                    "action": "write",
-                    "status": status,
-                    "created_at": now(),
-                    "message": message,
-                    **({"item": item} if item else {}),
-                    "automatic": False,
-                    "report_id": None,
-                }
-            )
+            self._remember(entry)
             self._save()
+        return entry["id"]
+
+    def record_failure(self, identity: str, error: dict) -> str:
+        """List a failed action of the app in the activity of the study.
+
+        The entry keeps the error body without the traceback, which stays in the log.
+        Returns the id of the entry, which the error body names as `activity_id`.
+        """
+        return self._record_write(
+            identity, error["error"], "failed", error=without_traceback(error)
+        )
 
     def enqueue(self, ids, action):
         if action not in {"validate", "validate_remote", "upload"}:

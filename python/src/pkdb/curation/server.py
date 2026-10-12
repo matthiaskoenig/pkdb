@@ -5,12 +5,22 @@ import json
 import mimetypes
 import secrets
 import threading
+from dataclasses import dataclass, field
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from pkdb.curation.actions import Action, action_of
 from pkdb.curation.engine import WorkspaceError
+from pkdb.curation.errors import (
+    ActionFailed,
+    MissingField,
+    describe,
+    new_request_id,
+    redact,
+    required,
+)
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
 from pkdb.curation.state import THEMES
@@ -78,6 +88,105 @@ def _route_version(version, route):
     return hashlib.sha256(json.dumps([version, *route]).encode()).hexdigest()
 
 
+@dataclass(frozen=True)
+class Outcome:
+    """How the server answers an error: the status, the code, and what else it does."""
+
+    status: int
+    code: str
+    #: The text of the error is the message for the curator, and no detail repeats it.
+    own_text: bool = False
+    #: Fields that the app reads besides the error body, such as the issues of a refusal.
+    extra: dict = field(default_factory=dict)
+    #: An error that the server did not expect: 500 with a traceback, logged and printed.
+    unexpected: bool = False
+    #: A failure that the log keeps with its traceback and the activity of its study lists.
+    logged: bool = False
+
+
+def _issues(issues) -> list[dict]:
+    return [issue.model_dump(mode="json") for issue in issues]
+
+
+def _outcome(error: Exception, *, reading: bool) -> Outcome:
+    """How the server answers `error`; `reading` for a GET, where a missing file is not found."""
+    match error:
+        case ActionFailed():
+            return Outcome(500, error.code, logged=True)
+        case RevisionConflict():
+            # The file changed since the app read it: the current document to reload.
+            extra = {
+                "file": error.file,
+                "revision": error.current,
+                "content": error.content,
+            }
+            return Outcome(409, "revision_conflict", own_text=True, extra=extra)
+        case MetadataError() | ReviewError():
+            code = (
+                error.code
+                if isinstance(error, ReviewError) and error.code
+                else "invalid_document"
+            )
+            extra = {"issues": _issues(error.issues)}
+            return Outcome(422, code, own_text=True, extra=extra)
+        case UserMismatch():
+            # `error` stays the code, as `pkdb study --json` reports it and the app reads it.
+            extra = {"error": UserMismatch.code, "message": str(error)}
+            return Outcome(403, UserMismatch.code, own_text=True, extra=extra)
+        case IdentityError():
+            extra = {"error": "no_user", "message": str(error)}
+            return Outcome(403, "no_user", own_text=True, extra=extra)
+        case AmbiguousStudy():
+            extra = {"paths": error.paths}
+            return Outcome(409, "ambiguous_study", own_text=True, extra=extra)
+        case BeyondLimits():
+            return Outcome(413, "beyond_limits", own_text=True)
+        case StudyValidationError():
+            extra = {"issues": _issues(error.report.issues)}
+            return Outcome(422, "unreadable_study", own_text=True, extra=extra)
+        case ReferenceError():
+            return Outcome(400, "reference_refused", own_text=True)
+        case WorkspaceError():
+            return Outcome(400, "workspace_refused", own_text=True)
+        case UnsafeFile():
+            return Outcome(400, "unsafe_file", own_text=True)
+        case ResumeRefused():
+            return Outcome(400, "resume_refused", own_text=True)
+        case MissingField():
+            return Outcome(400, "missing_field", own_text=True)
+        case KeyError():
+            # A field of the body is read with `required`: any other KeyError is a bug.
+            return Outcome(500, "unexpected", unexpected=True)
+        case LookupError():
+            return Outcome(404, "not_found", own_text=True)
+        case FileNotFoundError() if reading:
+            return Outcome(404, "not_found", own_text=True)
+        case ValueError() | TypeError():
+            return Outcome(400, "invalid_request", logged=True)
+        case OSError():
+            return Outcome(400, "file_error", logged=True)
+        case _:
+            return Outcome(500, "unexpected", unexpected=True)
+
+
+def _redacted(value, hidden):
+    """`value` with the secrets removed from every text of it, nested ones included."""
+    if isinstance(value, str):
+        return redact(value, hidden)
+    if isinstance(value, list):
+        return [_redacted(item, hidden) for item in value]
+    if isinstance(value, dict):
+        return {key: _redacted(item, hidden) for key, item in value.items()}
+    return value
+
+
+def _message(error: Exception) -> str | None:
+    """The message of a refusal for the curator; None keeps the text of the error."""
+    if isinstance(error, FileNotFoundError) and error.filename:
+        return f"{error.filename} does not exist"
+    return None
+
+
 class CurationServer(ThreadingHTTPServer):
     daemon_threads = True
     block_on_close = True
@@ -88,6 +197,8 @@ class CurationServer(ThreadingHTTPServer):
         self.bootstrap_token = secrets.token_urlsafe(32)
         self.session_token = secrets.token_urlsafe(32)
         self.csrf_token = secrets.token_urlsafe(32)
+        # The tokens never reach an error body, a report or the log.
+        engine.protect(self.bootstrap_token, self.session_token, self.csrf_token)
         super().__init__(("127.0.0.1", port), Handler)
         self.origin = f"http://127.0.0.1:{self.server_port}"
         # A browser keeps the cookies of 127.0.0.1 for all ports: the name of the session
@@ -148,11 +259,70 @@ class Handler(BaseHTTPRequestHandler):
         data = json.dumps(value).encode()
         self._versioned(hashlib.sha256(data).hexdigest(), lambda: data)
 
+    def _reject(self, status, message, *, code):
+        """Refuse a request before it runs, with the error body of the local API."""
+        action = action_of(self.command, urlsplit(self.path).path)
+        self._reply(
+            status,
+            describe(
+                ActionFailed(message, code=code),
+                action=action.text(),
+                request_id=new_request_id(),
+                secrets=self.server.engine.secrets(),
+            ),
+        )
+
+    def _fail(self, error: Exception, action: Action, *, reading: bool = False):
+        """Answer `error` with the error body of the local API.
+
+        A failure that the app does not explain itself goes to the log, and to the activity
+        of its study when the request wrote to the study or opened one of its files.
+        """
+        engine = self.server.engine
+        outcome = _outcome(error, reading=reading)
+        body = describe(
+            error,
+            action=action.text(),
+            request_id=new_request_id(),
+            message=_message(error) if outcome.own_text else action.failure(),
+            code=outcome.code,
+            detailed=not outcome.own_text,
+            unexpected=outcome.unexpected,
+            secrets=engine.secrets(),
+        )
+        # The extra fields carry texts of the error too: redact them like the rest.
+        body.update(_redacted(outcome.extra, engine.secrets()))
+        if outcome.unexpected:
+            engine.log.unexpected(body, error, label=action.label)
+        elif outcome.logged:
+            engine.log.failed(body, error)
+        if (outcome.unexpected or outcome.logged) and action.recorded and action.study:
+            if (activity := self._record(action.study, body)) is not None:
+                body["activity_id"] = activity
+        self._reply(outcome.status, body)
+
+    def _record(self, study: str, body: dict) -> str | None:
+        """List a failure in the activity of `study`; None when that fails too, logged."""
+        engine = self.server.engine
+        try:
+            return engine.record_failure(study, body)
+        except Exception as error:
+            failure = describe(
+                error,
+                action=f"Record the failure {body['request_id']}",
+                request_id=new_request_id(),
+                code="unexpected",
+                unexpected=True,
+                secrets=engine.secrets(),
+            )
+            engine.log.unexpected(failure, error, label="Record the failure")
+            return None
+
     def _study(self, path):
         engine = self.server.engine
         segments = _segments(path.removeprefix("/local/studies/"))
         if len(segments) < 2:
-            raise LookupError(path)
+            raise LookupError(f"Unknown resource {path}")
         substance, name, *rest = segments
         identity = f"{substance}/{name}"
         match rest:
@@ -175,20 +345,24 @@ class Handler(BaseHTTPRequestHandler):
                 data, media_type = engine.study_image(identity, file)
                 self._reply(200, data, content_type=media_type)
             case _:
-                raise LookupError(path)
+                raise LookupError(f"Unknown resource {path}")
 
     def _allowed(self, *, mutation=False):
         if self.headers.get_all("Host") != [self.server.origin.removeprefix("http://")]:
-            self._reply(403, {"error": "Unrecognized local host"})
+            self._reject(403, "Unrecognized local host", code="host_refused")
             return False
         origin = self.headers.get("Origin")
         if (mutation and origin != self.server.origin) or (
             origin and origin != self.server.origin
         ):
-            self._reply(403, {"error": "Cross-origin requests are not allowed"})
+            self._reject(
+                403, "Cross-origin requests are not allowed", code="origin_refused"
+            )
             return False
         if self.headers.get("Sec-Fetch-Site") == "cross-site":
-            self._reply(403, {"error": "Cross-site requests are not allowed"})
+            self._reject(
+                403, "Cross-site requests are not allowed", code="cross_site_refused"
+            )
             return False
         return True
 
@@ -200,14 +374,14 @@ class Handler(BaseHTTPRequestHandler):
             pass
         value = cookie.get(self.server.cookie_name)
         if not value or not _matches(value.value, self.server.session_token):
-            self._reply(401, {"error": "Open the launch URL printed in your terminal"})
+            self._reject(
+                401, "Open the launch URL printed in your terminal", code="no_session"
+            )
             return False
         if mutation and not _matches(
             self.headers.get("X-CSRF-Token", ""), self.server.csrf_token
         ):
-            self._reply(
-                403, {"error": "Missing or invalid action token", "code": ACTION_TOKEN}
-            )
+            self._reject(403, "Missing or invalid action token", code=ACTION_TOKEN)
             return False
         return True
 
@@ -218,6 +392,7 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith("/local/"):
             if not self._authenticated():
                 return
+            action = action_of("GET", path)
             try:
                 if path == "/local/state":
                     self._json(
@@ -227,29 +402,20 @@ class Handler(BaseHTTPRequestHandler):
                         }
                     )
                 elif path.startswith("/local/reports/"):
+                    name = unquote(path.removeprefix("/local/reports/"))
                     try:
-                        report = self.server.engine.report(
-                            unquote(path.removeprefix("/local/reports/"))
-                        )
+                        report = self.server.engine.report(name)
                     except ValueError, FileNotFoundError:
-                        raise LookupError(path) from None
+                        raise LookupError(f"Unknown report {name}") from None
                     self._json(report)
                 elif path.startswith("/local/studies/"):
                     self._study(path)
                 elif path == "/local/curators":
                     self._json({"curators": roster()})
                 else:
-                    self._reply(404, {"error": "Unknown resource"})
-            except AmbiguousStudy as error:
-                self._reply(409, {"error": str(error), "paths": error.paths})
-            except BeyondLimits as error:
-                self._reply(413, {"error": str(error)})
-            except StudyValidationError as error:
-                self._unreadable(error)
-            except LookupError, FileNotFoundError:
-                self._reply(404, {"error": "Resource is not available"})
-            except Exception:
-                self._reply(500, {"error": "Unable to read the local workspace state"})
+                    raise LookupError(f"Unknown resource {path}")
+            except Exception as error:
+                self._fail(error, action, reading=True)
             return
         if path.startswith("/avatars/"):
             root, name = AVATARS, unquote(path.removeprefix("/avatars/"))
@@ -263,7 +429,7 @@ class Handler(BaseHTTPRequestHandler):
             or not asset.is_file()
             or (root is AVATARS and not content_type.startswith("image/"))
         ):
-            self._reply(404, {"error": "Unknown resource"})
+            self._reject(404, "Unknown resource", code="not_found")
             return
         data, nonce = asset.read_bytes(), None
         if root is ASSETS and asset == (ASSETS / "index.html").resolve():
@@ -276,6 +442,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         path = urlsplit(self.path).path
+        # The words of the request before its body is read; the body names the study.
+        action = action_of("POST", path)
         if not self._allowed(mutation=True) or (
             path != "/local/session" and not self._authenticated(mutation=True)
         ):
@@ -290,15 +458,21 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Content length required")
             size = int(self.headers.get("Content-Length", "0"))
             if not 0 < size <= MAX_BODY:
-                self._refuse(413, "Request body is too large or empty", size)
+                self._refuse(
+                    413,
+                    "Request body is too large or empty",
+                    size,
+                    code="body_too_large",
+                )
                 return
             if self.headers.get_content_type() != "application/json":
-                self._refuse(415, "Use application/json", size)
+                self._refuse(415, "Use application/json", size, code="json_required")
                 return
             self.connection.settimeout(5)
             payload = json.loads(self.rfile.read(size))
             if not isinstance(payload, dict):
                 raise ValueError("Expected an object")
+            action = action_of("POST", path, payload)
             if path == "/local/session":
                 token = payload.get("token")
                 with self.server.bootstrap_lock:
@@ -307,7 +481,9 @@ class Handler(BaseHTTPRequestHandler):
                         or not self.server.bootstrap_token
                         or not _matches(token, self.server.bootstrap_token)
                     ):
-                        self._reply(403, {"error": "Launch token expired or invalid"})
+                        self._reject(
+                            403, "Launch token expired or invalid", code="launch_token"
+                        )
                         return
                     self.server.bootstrap_token = ""
                 self._reply(
@@ -318,75 +494,12 @@ class Handler(BaseHTTPRequestHandler):
                 return
             result = self._action(path, payload)
             self._reply(200, result if isinstance(result, dict) else {"ok": True})
-        except RevisionConflict as error:
-            # The file changed since the app read it: the current document to reload.
-            self._reply(
-                409,
-                {
-                    "error": str(error),
-                    "file": error.file,
-                    "revision": error.current,
-                    "content": error.content,
-                },
-            )
-        except (MetadataError, ReviewError) as error:
-            refused = (
-                {"code": error.code}
-                if isinstance(error, ReviewError) and error.code
-                else {}
-            )
-            self._reply(
-                422,
-                {
-                    "error": str(error),
-                    "issues": [issue.model_dump(mode="json") for issue in error.issues],
-                    **refused,
-                },
-            )
-        except UserMismatch as error:
-            self._reply(403, {"error": UserMismatch.code, "message": str(error)})
-        except IdentityError as error:
-            self._reply(403, {"error": "no_user", "message": str(error)})
-        except AmbiguousStudy as error:
-            self._reply(409, {"error": str(error), "paths": error.paths})
-        except BeyondLimits as error:
-            self._reply(413, {"error": str(error)})
-        except StudyValidationError as error:
-            self._unreadable(error)
-        except (ReferenceError, WorkspaceError, UnsafeFile, ResumeRefused) as error:
-            self._reply(400, {"error": str(error)})
-        except LookupError:
-            self._reply(404, {"error": "Unknown resource or study"})
-        except ValueError, TypeError, OSError:
-            self._reply(
-                400,
-                {
-                    "error": "Action could not be completed. Check the selection, settings, and file availability."
-                },
-            )
-        except Exception:
-            self._reply(
-                500,
-                {
-                    "error": "The local action failed. Review workspace activity and retry."
-                },
-            )
+        except Exception as error:
+            self._fail(error, action)
 
-    def _unreadable(self, error):
-        """Reply that the study cannot be read, with the issues of the library."""
-        self._reply(
-            422,
-            {
-                "error": str(error),
-                "issues": [
-                    issue.model_dump(mode="json") for issue in error.report.issues
-                ],
-            },
-        )
-
-    def _refuse(self, status, message, size):
+    def _refuse(self, status, message, size, *, code):
         """Reply without reading the body, then discard what the client sends."""
-        self._reply(status, {"error": message})
+        self._reject(status, message, code=code)
         self._discard_body(size)
 
     def _discard_body(self, size):
@@ -437,11 +550,12 @@ class Handler(BaseHTTPRequestHandler):
         }:
             return engine.reference_action(path.rsplit("/", 1)[-1], body)
         if path == "/local/workspace":
-            return engine.select_workspace(body["path"])
+            return engine.select_workspace(required(body, "path"))
         if path == "/local/workspace/forget":
-            if not isinstance(body["path"], str):
+            folder = required(body, "path")
+            if not isinstance(folder, str):
                 raise ValueError("Expected a folder path")
-            return engine.forget_workspace(body["path"])
+            return engine.forget_workspace(folder)
         if path == "/local/directories":
             folder = body.get("path")
             if folder is not None and not isinstance(folder, str):
@@ -460,32 +574,33 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Unknown setting")
             return engine.configure(**body)
         if path == "/local/mode":
-            return engine.set_mode(body["ids"], body["mode"])
+            return engine.set_mode(required(body, "ids"), required(body, "mode"))
         if path == "/local/jobs/cancel":
-            return engine.cancel_jobs(body["ids"])
+            return engine.cancel_jobs(required(body, "ids"))
         if path == "/local/history/clear":
             return engine.clear_history()
         if path == "/local/retry":
             return engine.retry_unknown(
-                body["id"], body.get("acknowledge_unknown", False)
+                required(body, "id"), body.get("acknowledge_unknown", False)
             )
         if path == "/local/jobs":
-            return engine.enqueue(body["ids"], body["action"])
+            return engine.enqueue(required(body, "ids"), required(body, "action"))
         if path == "/local/pause":
-            if not isinstance(body["paused"], bool):
+            paused = required(body, "paused")
+            if not isinstance(paused, bool):
                 raise ValueError("Expected a boolean")
-            return engine.set_paused(body["paused"])
+            return engine.set_paused(paused)
         if path == "/local/files/open":
             from pkdb.curation.launch import open_path
 
-            target = engine.resolve_file(body["study_id"], body.get("file"))
+            target = engine.resolve_file(required(body, "study_id"), body.get("file"))
             open_path(target, reveal=bool(body.get("reveal", False)))
             return {"ok": True}
         if path == "/local/assignments/refresh":
             return engine.refresh_assignments()
         if path == "/local/resume":
             return engine.resume(body.get("ids"))
-        raise LookupError(path)
+        raise LookupError(f"Unknown resource {path}")
 
 
 def create_server(engine, port=0):
