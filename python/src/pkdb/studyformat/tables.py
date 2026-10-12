@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass
+from typing import Literal
 
 from pkdb.studyformat import columns as c
 
@@ -187,6 +188,29 @@ KIND_ORDER = {
             "scatters",
         )
     )
+}
+InfoClass = Literal["subjects", "interventions", "data", "raw"]
+# The class of information of each table kind and of a raw table, by which the curation app
+# groups and colors the tables: the subjects with their characteristica, the interventions, the
+# data of the paper, and the paper tables as printed.
+INFO_CLASSES: dict[str, InfoClass] = {
+    "subjects": "subjects",
+    "characteristica": "subjects",
+    "interventions": "interventions",
+    "outputs": "data",
+    "timecourses": "data",
+    "scatters": "data",
+    RAW_KIND: "raw",
+}
+# The names of the table kinds and of a raw table in the curation app.
+KIND_LABELS = {
+    "subjects": "Subjects",
+    "characteristica": "Characteristica",
+    "interventions": "Interventions",
+    "outputs": "Outputs",
+    "timecourses": "Timecourses",
+    "scatters": "Scatters",
+    RAW_KIND: "Raw table",
 }
 
 

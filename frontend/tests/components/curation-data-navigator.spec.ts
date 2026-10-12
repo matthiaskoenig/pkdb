@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import DataNavigator from "../../src/curation-app/components/DataNavigator.vue";
 import type { Problem, StudyDetail } from "../../src/curation-app/api/types";
-import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixtures";
+import { reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);
 
@@ -21,10 +21,10 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
       sourceSummary({ source: "Tab2", raw: "Example_Tab2.tsv", raw_kind: "table", tables: ["outputs_Tab2.tsv"] }),
     ],
     tables: [
-      { file: "subjects.tsv", kind: "subjects" },
-      { file: "outputs_Tab2.tsv", kind: "outputs" },
-      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
-      { file: "Example_Tab2.tsv", kind: "raw" },
+      tableEntry("subjects.tsv", "subjects"),
+      tableEntry("outputs_Tab2.tsv", "outputs"),
+      tableEntry("timecourses_Fig1.tsv", "timecourses"),
+      tableEntry("Example_Tab2.tsv", "raw"),
     ],
     problems: [problem("outputs_Tab2.tsv"), problem("outputs_Tab2.tsv")],
     ...changes,

@@ -13,7 +13,7 @@ import {
   sourceCounts,
   sourceLines,
 } from "../../src/curation-app/data";
-import { reviewItem, sourceSummary, studyDetail } from "./curation-fixtures";
+import { reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
 const fig1 = sourceSummary({
   source: "Fig1",
@@ -40,11 +40,11 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
   return studyDetail({
     sources: [fig1, tab2, text],
     tables: [
-      { file: "subjects.tsv", kind: "subjects" },
-      { file: "interventions.tsv", kind: "interventions" },
-      { file: "outputs_Tab2.tsv", kind: "outputs" },
-      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
-      { file: "Example_Tab2.tsv", kind: "raw" },
+      tableEntry("subjects.tsv", "subjects"),
+      tableEntry("interventions.tsv", "interventions"),
+      tableEntry("outputs_Tab2.tsv", "outputs"),
+      tableEntry("timecourses_Fig1.tsv", "timecourses"),
+      tableEntry("Example_Tab2.tsv", "raw"),
     ],
     ...changes,
   });

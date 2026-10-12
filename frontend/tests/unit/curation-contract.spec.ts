@@ -13,6 +13,7 @@ import type {
   SourceView,
   Suggestion,
   TableEntry,
+  TableKindEntry,
   TablePreview,
   TargetMatch,
   ValidationIssue,
@@ -84,8 +85,31 @@ describe("tables contract", () => {
     expect(isRawTable({ tables }, "outputs_Tab2.tsv")).toBe(false);
   });
 
-  it("lists every table kind of the library", () => {
-    expect([...TABLE_KINDS]).toEqual(tablesFixture.table_kinds);
+  it("names the class of information, the source and the data rows of each table", () => {
+    expect(tables.map(({ file, kind, info, source, rows }) => [file, kind, info, source, rows])).toEqual([
+      ["subjects.tsv", "subjects", "subjects", null, 1],
+      ["characteristica.tsv", "characteristica", "subjects", null, 6],
+      ["interventions.tsv", "interventions", "interventions", null, 3],
+      ["outputs_Tab2.tsv", "outputs", "data", "Tab2", 8],
+      ["timecourses_Fig1.tsv", "timecourses", "data", "Fig1", 18],
+      ["Demo2020_Tab2.tsv", "raw", "raw", "Tab2", 6],
+    ]);
+  });
+
+  it("describes every kind of table, and Add table adds the kinds that the library adds", () => {
+    const kinds = contract<TableKindEntry[]>(tablesFixture.table_kinds);
+    expect(kinds.map((entry) => [entry.kind, entry.label, entry.info, entry.per_source, entry.addable])).toEqual([
+      ["subjects", "Subjects", "subjects", false, false],
+      ["characteristica", "Characteristica", "subjects", false, false],
+      ["interventions", "Interventions", "interventions", false, false],
+      ["outputs", "Outputs", "data", true, true],
+      ["timecourses", "Timecourses", "data", true, true],
+      ["scatters", "Scatters", "data", true, true],
+      ["raw", "Raw table", "raw", true, true],
+    ]);
+    expect(kinds.filter((entry) => entry.addable).map((entry) => entry.kind)).toEqual(tablePreviewFixture.kinds);
+    // The app still has its own list until it reads the kinds of the study page.
+    expect([...TABLE_KINDS]).toEqual(kinds.filter((entry) => entry.kind !== "raw").map((entry) => entry.kind));
   });
 
   it("compares the rows that both sides changed", () => {

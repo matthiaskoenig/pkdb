@@ -2,36 +2,97 @@
   "tables": [
     {
       "file": "subjects.tsv",
-      "kind": "subjects"
+      "kind": "subjects",
+      "info": "subjects",
+      "source": null,
+      "rows": 1
     },
     {
       "file": "characteristica.tsv",
-      "kind": "characteristica"
+      "kind": "characteristica",
+      "info": "subjects",
+      "source": null,
+      "rows": 6
     },
     {
       "file": "interventions.tsv",
-      "kind": "interventions"
+      "kind": "interventions",
+      "info": "interventions",
+      "source": null,
+      "rows": 3
     },
     {
       "file": "outputs_Tab2.tsv",
-      "kind": "outputs"
+      "kind": "outputs",
+      "info": "data",
+      "source": "Tab2",
+      "rows": 8
     },
     {
       "file": "timecourses_Fig1.tsv",
-      "kind": "timecourses"
+      "kind": "timecourses",
+      "info": "data",
+      "source": "Fig1",
+      "rows": 18
     },
     {
       "file": "Demo2020_Tab2.tsv",
-      "kind": "raw"
+      "kind": "raw",
+      "info": "raw",
+      "source": "Tab2",
+      "rows": 6
     }
   ],
   "table_kinds": [
-    "subjects",
-    "characteristica",
-    "interventions",
-    "outputs",
-    "timecourses",
-    "scatters"
+    {
+      "kind": "subjects",
+      "label": "Subjects",
+      "info": "subjects",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "characteristica",
+      "label": "Characteristica",
+      "info": "subjects",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "interventions",
+      "label": "Interventions",
+      "info": "interventions",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "outputs",
+      "label": "Outputs",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "timecourses",
+      "label": "Timecourses",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "scatters",
+      "label": "Scatters",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "raw",
+      "label": "Raw table",
+      "info": "raw",
+      "per_source": true,
+      "addable": true
+    }
   ],
   "conflicts": [
     {

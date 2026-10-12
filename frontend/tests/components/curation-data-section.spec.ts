@@ -31,6 +31,7 @@ import {
   sourceSummary,
   studyDetail,
   SUBJECTS_COLUMNS,
+  tableEntry,
 } from "../unit/curation-fixtures";
 import { button, click, labeled, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
@@ -289,13 +290,13 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
     ],
     files: [...base.files, "Example_Fig1.wpd.json", "Example_Fig2.png", "timecourses_Fig2.tsv"].sort(),
     tables: [
-      { file: "subjects.tsv", kind: "subjects" },
-      { file: "interventions.tsv", kind: "interventions" },
-      { file: "characteristica.tsv", kind: "characteristica" },
-      { file: "outputs_Tab2.tsv", kind: "outputs" },
-      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
-      { file: "timecourses_Fig2.tsv", kind: "timecourses" },
-      { file: "Example_Tab2.tsv", kind: "raw" },
+      tableEntry("subjects.tsv", "subjects"),
+      tableEntry("interventions.tsv", "interventions"),
+      tableEntry("characteristica.tsv", "characteristica"),
+      tableEntry("outputs_Tab2.tsv", "outputs"),
+      tableEntry("timecourses_Fig1.tsv", "timecourses"),
+      tableEntry("timecourses_Fig2.tsv", "timecourses"),
+      tableEntry("Example_Tab2.tsv", "raw"),
     ],
     ...changes,
   });

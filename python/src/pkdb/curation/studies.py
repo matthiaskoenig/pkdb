@@ -54,6 +54,7 @@ from pkdb.studyformat.revision import (
 )
 from pkdb.studyformat.sources import has_source, source_view, study_sources
 from pkdb.studyformat.sync import (
+    NEW_TABLE_KINDS,
     AddTableResult,
     SyncResult,
     add_table,
@@ -61,7 +62,15 @@ from pkdb.studyformat.sync import (
     preview_table,
     sync_study,
 )
-from pkdb.studyformat.tables import RAW_KIND, REVIEW_JSON, STUDY_JSON
+from pkdb.studyformat.tables import (
+    INFO_CLASSES,
+    KIND_LABELS,
+    KIND_ORDER,
+    RAW_KIND,
+    REVIEW_JSON,
+    STUDY_JSON,
+    TABLES,
+)
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
@@ -402,6 +411,53 @@ def _sync_activity(done: str, sync: SyncResult) -> tuple[str, str]:
     return f"{done}; the sync found errors", "failed"
 
 
+# The kinds of tables for the app, in the order of the workbook sheets with the raw table last:
+# their label and class of information, whether a table of the kind belongs to one source (the
+# others name the source of each row), and whether Add table adds one.
+TABLE_KINDS = tuple(
+    {
+        "kind": kind,
+        "label": KIND_LABELS[kind],
+        "info": INFO_CLASSES[kind],
+        "per_source": kind == RAW_KIND or TABLES[kind].per_source,
+        "addable": kind in NEW_TABLE_KINDS,
+    }
+    for kind in (*KIND_ORDER, RAW_KIND)
+)
+
+
+def _tables(study: LoadedStudy) -> list[dict]:
+    """The table files and raw tables of a study in the order of the workbook sheets.
+
+    Each names its kind, its class of information, the source it belongs to (None for a table
+    shared by several sources, which names the source of each row) and its number of data rows:
+    the rows of a table below its header, the non-empty lines of a raw table. A file that could
+    not be read has no count.
+    """
+    layout = study.layout
+    sources = {table.name: table.source for table in layout.tables} | {
+        raw.name: raw.source for raw in layout.raw_tables
+    }
+    entries = []
+    for file, kind in workbook_tables(layout):
+        if kind == RAW_KIND:
+            raw = study.raw(file)
+            rows = None if raw is None else len(raw_lines(raw))
+        else:
+            table = study.table(file)
+            rows = None if table is None else len(table.rows)
+        entries.append(
+            {
+                "file": file,
+                "kind": kind,
+                "info": INFO_CLASSES[kind],
+                "source": sources[file],
+                "rows": rows,
+            }
+        )
+    return entries
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -508,9 +564,7 @@ class StudiesMixin(EngineState):
                 for source in study_sources(study)
             ]
             files = sorted(layout.files, key=natural_key)
-            tables = [
-                {"file": file, "kind": kind} for file, kind in workbook_tables(layout)
-            ]
+            tables = _tables(study)
         review, review_document = _document(folder, layout, REVIEW_JSON, read_review)
         metadata, _ = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
@@ -538,6 +592,8 @@ class StudiesMixin(EngineState):
             "sources": sources,
             "files": files,
             "tables": tables,
+            # Also beyond the upload limits: Add table and the notes of study.json need them.
+            "table_kinds": [dict(kind) for kind in TABLE_KINDS],
             # The items of `review` with their targets, matched in the tables of this answer.
             "targets": _targets(study, review_document),
         }

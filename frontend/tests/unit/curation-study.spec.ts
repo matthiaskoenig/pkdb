@@ -38,7 +38,7 @@ import {
   tablesOutcome,
   userHint,
 } from "../../src/curation-app/study";
-import { beyondLimitsDetail, profile, roster, studyDetail } from "./curation-fixtures";
+import { beyondLimitsDetail, profile, roster, studyDetail, tableEntry } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {
   return {
@@ -133,13 +133,13 @@ describe("beyondLimits", () => {
 
 describe("tableFiles", () => {
   const tables: TableEntry[] = [
-    { file: "subjects.tsv", kind: "subjects" },
-    { file: "characteristica.tsv", kind: "characteristica" },
-    { file: "outputs_Tab2.tsv", kind: "outputs" },
-    { file: "outputs_Tab10.tsv", kind: "outputs" },
-    { file: "scatters_Fig2.tsv", kind: "scatters" },
-    { file: "Example_Tab2.tsv", kind: "raw" },
-    { file: "Example_Tab10.tsv", kind: "raw" },
+    tableEntry("subjects.tsv", "subjects"),
+    tableEntry("characteristica.tsv", "characteristica"),
+    tableEntry("outputs_Tab2.tsv", "outputs"),
+    tableEntry("outputs_Tab10.tsv", "outputs"),
+    tableEntry("scatters_Fig2.tsv", "scatters"),
+    tableEntry("Example_Tab2.tsv", "raw"),
+    tableEntry("Example_Tab10.tsv", "raw"),
   ];
 
   it("keeps the tables in the order of the workbook sheets, as the server lists them", () => {
