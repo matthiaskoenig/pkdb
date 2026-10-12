@@ -396,27 +396,54 @@ test("the JavaScript decoders draw the CCITT and JPEG 2000 images of a PDF witho
   }
 });
 
-test("an image of a study still refuses to show in a frame", async ({ app, context }) => {
+test("an image and a PDF of a study refuse to show in a frame, which the page of the app may show them in", async ({
+  app,
+  context,
+  playwright,
+}) => {
   await app.open("#/");
-  // Its own page, whose console error of the refused frame is no error of the tests of the app.
-  const probe = await context.newPage();
+  // Chromium itself, in a browser of its own: its headless shell, which runs the tests, has no PDF
+  // viewer and downloads a PDF in a frame, which is no frame to refuse. Its console errors of the
+  // refused frames are no errors of the tests of the app.
+  const browser = await playwright.chromium.launch({ channel: "chromium" });
   try {
+    const session = await browser.newContext();
+    await session.addCookies(await context.cookies());
+    const probe = await session.newPage();
     // A page of the app, whose policy allows frames of its own origin; the files of a study forbid them.
     await probe.goto(`${app.server.origin}/`);
-    const framed = await probe.evaluate(async (source) => {
-      const frame = document.createElement("iframe");
-      frame.src = source;
-      document.body.append(frame);
-      // An allowed frame shows the image in a document of this origin; a refused one shows the
-      // error page of the browser, from another origin.
-      for (let tries = 0; tries < 40; tries++) {
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        if (frame.contentDocument?.querySelector("img")) return true;
-      }
-      return false;
-    }, "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png");
-    expect(framed).toBe(false);
+    const shown = await probe.evaluate(
+      async ({ image, pdf }) => {
+        /** A frame with `attributes` in the page, once it has loaded, or after 3 s. */
+        const frameOf = async (attributes: Partial<HTMLIFrameElement>): Promise<HTMLIFrameElement> => {
+          const frame = Object.assign(document.createElement("iframe"), attributes);
+          const loaded = new Promise((resolve) => {
+            frame.addEventListener("load", resolve, { once: true });
+            setTimeout(resolve, 3000);
+          });
+          document.body.append(frame);
+          await loaded;
+          return frame;
+        };
+        /**
+         * Whether a frame of the file at `source` is refused: it then shows the error page of the
+         * browser, from another origin. An allowed frame shows the image, or the PDF in the PDF
+         * viewer, in a document of this origin.
+         */
+        const refused = async (source: string): Promise<boolean> => (await frameOf({ src: source })).contentDocument === null;
+        // The controls: both files are there, and the image shows in a frame of the page itself.
+        const answers = await Promise.all([image, pdf].map(async (source) => (await fetch(source)).status));
+        const own = await frameOf({ srcdoc: `<img src="${image}" alt="">` });
+        const control = (own.contentDocument?.querySelector("img")?.naturalWidth ?? 0) > 0;
+        return { answers, control, refused: [await refused(image), await refused(pdf)] };
+      },
+      {
+        image: "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png",
+        pdf: "/local/studies/caffeine/Demo2020/files/Demo2020.pdf",
+      },
+    );
+    expect(shown).toEqual({ answers: [200, 200], control: true, refused: [true, true] });
   } finally {
-    await probe.close();
+    await browser.close();
   }
 });
