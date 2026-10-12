@@ -21,7 +21,8 @@ from pkdb.cache import (
     select_vocabulary,
 )
 from pkdb.client import Client
-from pkdb.curation.errors import redact, without_traceback
+from pkdb.curation.errors import describe as describe_error
+from pkdb.curation.errors import new_request_id, redact, without_traceback
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.domain.validation import PROCESSING_VERSION
@@ -689,10 +690,12 @@ class JobsMixin(EngineState):
             except (OSError, StudyValidationError) as unreadable:
                 # A symlink or an unreadable file: the first scan that reads the files
                 # queues a job again, instead of a new job every second.
-                job.update(
-                    status="failed",
-                    message="Could not read the source files; see the study",
+                message = "Could not read the source files; see the study"
+                failure = self._job_error(
+                    job, unreadable, message=message, code="unreadable_source"
                 )
+                job.update(status="failed", message=message, error=failure)
+                outcome["error"] = failure
                 with self.lock:
                     self._wait(row, unreadable)
             else:
@@ -741,21 +744,39 @@ class JobsMixin(EngineState):
                 or error.report is None
             ):
                 self.paused = True
-        except OSError, ValueError:
-            job.update(
-                status="failed",
-                message="Could not read or validate source files; check paths and saved contents",
+        except (OSError, ValueError) as error:
+            message = (
+                f"The {ACTION_NAMES[job['action']]} of {job['study_id']} could not "
+                "read or validate the source files."
             )
+            failure = self._job_error(job, error, message=message, code="source_error")
+            job.update(status="failed", message=message, error=failure)
+            outcome["error"] = failure
             row.update(status="failed", stale=True)
-        except Exception:
+        except Exception as error:
             uncertain = maybe_sent(job) and outcome["persistence"] not in {
                 "created",
                 "replaced",
             }
+            message = (
+                f"The {ACTION_NAMES[job['action']]} of {job['study_id']} failed "
+                "unexpectedly."
+            )
+            if uncertain:
+                message += (
+                    " The server may have saved the study; review the upload before "
+                    "you upload it again."
+                )
+            failure = self._job_error(
+                job, error, message=message, code="unexpected", unexpected=True
+            )
             job.update(
                 status="unknown" if uncertain else "failed",
-                message="Unexpected job failure; inspect the report before retrying",
+                message=message,
+                error=without_traceback(failure),
             )
+            # The report keeps the traceback; the job and the activity do not.
+            outcome["error"] = failure
             if uncertain:
                 outcome["persistence"] = "unknown"
             row["_blocked"] = uncertain
@@ -793,6 +814,28 @@ class JobsMixin(EngineState):
 
     def _safe(self, value):
         return redact(value, self.secrets())
+
+    def _job_error(self, job, error, *, message, code, unexpected=False):
+        """The error body of a failed job, without secrets, for the job and its report.
+
+        Every failure goes to the log with its traceback; an unexpected one also gets the
+        traceback in its body, for the report, and one line in the terminal.
+        """
+        label = ACTION_NAMES[job["action"]].capitalize()
+        failure = describe_error(
+            error,
+            action=f"{label} of {job['study_id']}",
+            request_id=new_request_id(),
+            message=message,
+            code=code,
+            unexpected=unexpected,
+            secrets=self.secrets(),
+        )
+        if unexpected:
+            self.log.unexpected(failure, error, label=label)
+        else:
+            self.log.failed(failure, error)
+        return failure
 
     def resume(self, ids=None):
         with self.lock:

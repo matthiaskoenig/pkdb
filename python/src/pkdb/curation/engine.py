@@ -77,6 +77,10 @@ class CurationEngine(
         # The tokens of the local server, which error bodies, reports and the log never show.
         self.protected: list[str] = []
         self.log = ErrorLog(self.state_dir / "logs" / "curation.log", self.secrets)
+        # The last failure of the file watcher, which the File watching menu shows.
+        self.watcher_error = None
+        # When the watcher logged each distinct failure last (monotonic seconds).
+        self._watch_logged: dict[str | None, float] = {}
         self.user = user or os.environ.get("PKDB_USER") or saved.get("user") or ""
         configured_endpoint = (
             endpoint or os.environ.get("PKDB_ENDPOINT") or saved.get("endpoint")
@@ -274,6 +278,7 @@ class CurationEngine(
                         "recent_workspaces": recent,
                         # Where the traceback of a failure is, for the Details of the app.
                         "log_file": str(self.log.path),
+                        "watcher_error": self.watcher_error,
                     }
                 )
             )

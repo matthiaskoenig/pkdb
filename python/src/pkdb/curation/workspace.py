@@ -14,7 +14,7 @@ from collections import Counter
 from pathlib import Path
 from uuid import uuid4
 
-from pkdb.curation.errors import required
+from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
@@ -36,6 +36,10 @@ NOT_CHECKED_SYNC = {"status": "not_checked", "changes": 0, "conflicts": 0}
 # The workbooks that the watcher plans in one tick for rows that no job checks; a few per
 # tick keep the start of a large workspace fast.
 CHECK_LIMIT = 5
+
+#: A failure of the watcher that repeats one logged less than this many seconds ago is not
+#: logged again, so that a folder that fails every second does not flood the log.
+WATCH_LOG_SECONDS = 60
 
 
 class WorkspaceError(ValueError):
@@ -392,10 +396,48 @@ class WorkspaceMixin(EngineState):
                 self.scan()
                 self.schedule_changes()
                 self._check_workbooks()
-            except Exception:
-                # The watcher retries every second and must outlive any failure; nothing
-                # is logged, since errors can carry paths and settings.
-                continue
+            except Exception as error:
+                # The watcher retries every second and must outlive any failure.
+                self._watch_failed(error)
+            else:
+                self._watch_recovered()
+
+    def _watch_failed(self, error: Exception) -> None:
+        """Keep the failure for the File watching menu, and log it unless it repeats."""
+        body = describe(
+            error,
+            action="File watching",
+            request_id=new_request_id(),
+            message="File watching failed.",
+            code="watch_failed",
+            unexpected=True,
+            secrets=self.secrets(),
+        )
+        moment = time.monotonic()
+        with self.lock:
+            self.watcher_error = {
+                "time": body["time"],
+                "detail": body["detail"],
+                "recovered": False,
+            }
+            last = self._watch_logged.get(body["detail"])
+            repeated = last is not None and moment - last < WATCH_LOG_SECONDS
+            if not repeated:
+                # Only the failures of the last minute can still repeat.
+                self._watch_logged = {
+                    detail: logged
+                    for detail, logged in self._watch_logged.items()
+                    if moment - logged < WATCH_LOG_SECONDS
+                }
+                self._watch_logged[body["detail"]] = moment
+        if not repeated:
+            self.log.unexpected(body, error, label="File watching")
+
+    def _watch_recovered(self) -> None:
+        """A check of the workspace succeeded: the last failure of the watcher has passed."""
+        with self.lock:
+            if self.watcher_error is not None and not self.watcher_error["recovered"]:
+                self.watcher_error = {**self.watcher_error, "recovered": True}
 
     def _check_workbooks(self, limit=CHECK_LIMIT):
         """Plan the workbooks of rows that are not checked and that no job will check.

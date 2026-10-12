@@ -59,6 +59,9 @@ class EngineState:
     # The log file of failures, and the tokens of the local server that it redacts.
     log: ErrorLog
     protected: list[str]
+    # The last failure of the file watcher, and when each distinct failure was logged last.
+    watcher_error: dict | None
+    _watch_logged: dict[str | None, float]
 
     if TYPE_CHECKING:
 
