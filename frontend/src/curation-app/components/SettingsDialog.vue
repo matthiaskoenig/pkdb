@@ -168,7 +168,7 @@ watch(
             Offline, pkdb curate sends no network requests. It keeps the API key in memory only, and the browser
             never stores it.
           </p>
-          <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+          <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
         </VCardText>
         <VCardActions class="dialog-actions">
           <VSpacer />

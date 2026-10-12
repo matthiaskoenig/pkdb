@@ -186,7 +186,7 @@ async function add(): Promise<void> {
           :closable="false"
           :class="{ 'is-updating': preview.loading.value }"
         />
-        <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" @close="failure = null" />
+        <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" :closable="false" />
         <UserHint v-else-if="userText" :text="userText" />
       </VCardText>
       <VCardActions class="dialog-actions">

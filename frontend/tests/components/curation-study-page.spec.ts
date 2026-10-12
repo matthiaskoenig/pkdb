@@ -742,6 +742,8 @@ describe("StudyPage", () => {
       { study: "caffeine/Harder1988", action: "add", kind: "raw", source: "Tab4" },
     ]);
     expect(dialog().get(".v-alert").text()).toContain("Close the workbook first");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(dialog().find(".v-alert__close").exists()).toBe(false);
   });
 
   it("asks in Add table to set the user when the write needs one", async () => {

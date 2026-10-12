@@ -88,7 +88,7 @@ async function toggle(): Promise<void> {
       <p v-else-if="watcher" class="panel-note watcher-recovered">
         File watching works again after an error at {{ formatTime(watcher.time) }}.
       </p>
-      <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+      <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
       <div class="panel-actions">
         <VBtn
           variant="tonal"

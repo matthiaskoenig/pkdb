@@ -368,7 +368,7 @@ const previewed = computed(() => {
               </VBtn>
             </div>
             <p v-if="offline" class="reference-note">Offline: only searches made before are found.</p>
-            <ActionFailureAlert v-if="searchFailure" :failure="searchFailure" @close="searchFailure = null" />
+            <ActionFailureAlert v-if="searchFailure" :failure="searchFailure" :closable="false" />
             <ul v-if="shownCandidates.length" class="reference-candidates">
               <li v-for="candidate in shownCandidates" :key="candidate.doi" class="reference-candidate">
                 <div class="candidate-text">
@@ -448,7 +448,7 @@ const previewed = computed(() => {
             </div>
           </VForm>
 
-          <ActionFailureAlert v-if="previewFailure" :failure="previewFailure" @close="previewFailure = null" />
+          <ActionFailureAlert v-if="previewFailure" :failure="previewFailure" :closable="false" />
           <section v-if="previewed" class="reference-part reference-preview" :aria-labelledby="previewId">
             <h3 :id="previewId" class="reference-heading">Preview</h3>
             <p class="preview-title">{{ previewed.title }}</p>
@@ -462,7 +462,7 @@ const previewed = computed(() => {
             </ul>
             <p v-else class="reference-note">No changes. Saving keeps reference.json as it is.</p>
           </section>
-          <ActionFailureAlert v-if="saveFailure" :failure="saveFailure" :study="study.detail?.id ?? null" @close="saveFailure = null" />
+          <ActionFailureAlert v-if="saveFailure" :failure="saveFailure" :study="study.detail?.id ?? null" :closable="false" />
         </template>
       </VCardText>
       <VCardActions class="dialog-actions">

@@ -276,6 +276,8 @@ describe("AppHeader", () => {
     await click("File watching: Paused");
     await click("Resume automatic actions");
     expect(page().get(".watching-panel .v-alert").text()).toBe(reason);
+    // It goes with the next attempt and when the menu opens again: no close button, which would drop the focus.
+    expect(page().get(".watching-panel .v-alert").find(".v-alert__close").exists()).toBe(false);
   });
 
   it("tells that Resume first checks uploads with an unknown outcome", async () => {
@@ -520,6 +522,8 @@ describe("AppHeader", () => {
     const alert = page().get(".workspace-panel .action-failure");
     expect(alert.get(".action-failure-text").text()).toBe("Could not open the workspace.");
     expect(alert.get(".action-failure-detail").text()).toBe("PermissionError: [Errno 13] Permission denied: '/work/other'");
+    // It goes with the next attempt and when the menu opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });
 

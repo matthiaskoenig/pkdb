@@ -183,6 +183,8 @@ describe("SettingsDialog", () => {
     expect(alert.get(".action-failure-text").text()).toBe("Could not save the settings.");
     expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Enter an http or https URL");
     expect(alert.get("summary").text()).toBe("Details");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
     expect(wrapper.emitted("update:modelValue")).toBeUndefined();
     expect(field("PK-DB server").element.value).toBe("https://pk-db.com/?release=1");
   });

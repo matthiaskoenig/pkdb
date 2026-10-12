@@ -776,6 +776,8 @@ describe("acknowledgements", () => {
     expect(dialog().get(".acknowledge-failure").text()).toBe(
       "This warning is not in the current files. Validate the study and try again.",
     );
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(dialog().get(".acknowledge-failure").find(".v-alert__close").exists()).toBe(false);
   });
 
   it("acknowledges a warning of a whole file by its key", async () => {

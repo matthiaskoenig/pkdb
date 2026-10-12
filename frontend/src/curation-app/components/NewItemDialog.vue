@@ -340,7 +340,7 @@ async function add(): Promise<void> {
           {{ failure.text }}
         </VAlert>
         <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-        <ActionFailureAlert v-else-if="failure" :failure="failure" :study="study.detail?.id ?? null" @close="failure = null" />
+        <ActionFailureAlert v-else-if="failure" :failure="failure" :study="study.detail?.id ?? null" :closable="false" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />

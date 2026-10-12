@@ -255,5 +255,35 @@ describe("ReferenceDialog", () => {
     expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
     expect(alert.get("summary").text()).toBe("Details");
     expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed in a search and in a preview, without a close button", async () => {
+    const value = studyMetadata();
+    delete value.reference;
+    const manual = studyDetail({ metadata: { revision: "study-1", value, issues: [] } });
+    const failed = (error: string, action: string) => () =>
+      json({ error, code: "unexpected", detail: "RuntimeError: boom", action, ...FAILED }, { status: 500 });
+    await mountDialog(manual, {
+      "POST /local/reference/read": { reference: { sid: "Example", name: "Example", title: "Caffeine kinetics" } },
+      "POST /local/reference/search": failed(
+        "Could not search the publication of caffeine/Example.",
+        "Search the publication (POST /local/reference/search)",
+      ),
+      "POST /local/reference/preview": failed(
+        "Could not preview the reference of caffeine/Example.",
+        "Preview the reference (POST /local/reference/preview)",
+      ),
+    });
+    await click("Search");
+    await field("Title").setValue("Caffeine kinetics in smokers");
+    await click("Preview");
+    const alerts = page().findAll('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alerts.map((alert) => alert.get(".action-failure-text").text())).toEqual([
+      "Could not search the publication of caffeine/Example.",
+      "Could not preview the reference of caffeine/Example.",
+    ]);
+    expect(alerts.map((alert) => alert.find(".v-alert__close").exists())).toEqual([false, false]);
   });
 });

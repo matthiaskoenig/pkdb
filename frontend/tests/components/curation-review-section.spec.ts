@@ -661,6 +661,31 @@ describe("new item", () => {
     expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 
+  it("shows what failed when the item cannot be added, without a close button", async () => {
+    await mountSection(withReview(), {
+      [`POST ${REVIEW}`]: () =>
+        json(
+          {
+            error: "Could not add the review item to caffeine/Example.",
+            code: "file_error",
+            detail: "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/review.json'",
+            action: "Add a review item (POST /local/studies/review)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "act-7",
+          },
+          { status: 400 },
+        ),
+    });
+    await click("New item");
+    await textArea("Text").setValue("The subjects table lacks the smokers.");
+    await click("Add");
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not add the review item to caffeine/Example.");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
   it("adds an item about the whole study and selects it", async () => {
     await mountSection();
     await click("New item");

@@ -801,6 +801,8 @@ describe("OverviewPage", () => {
     expect(alert.get(".action-failure-text").text()).toBe("Could not start the upload.");
     expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Upload requires a connected endpoint and API key");
     expect(alert.get("summary").text()).toBe("Details");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 
   it("shows what failed in a batch action until it is closed", async () => {
@@ -852,5 +854,7 @@ describe("OverviewPage", () => {
     const alert = dialog().get(".action-failure");
     expect(alert.get(".action-failure-text").text()).toBe("Could not upload the study again.");
     expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Acknowledge the unknown outcome first");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });

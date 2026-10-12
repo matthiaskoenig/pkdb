@@ -65,7 +65,7 @@ function choose(): void {
       <h2>Workspace</h2>
       <p><FolderPath :path="snapshot.workspace" /></p>
       <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
-      <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+      <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
       <div class="panel-actions">
         <VBtn
           variant="tonal"

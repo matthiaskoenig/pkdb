@@ -158,7 +158,7 @@ watch(
           </VBtn>
         </div>
         <VProgressLinear :active="loading" indeterminate color="primary" aria-label="Loading folders" />
-        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+        <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
         <template v-if="listing">
           <p class="folder-current">
             <FolderPath :path="listing.path" class="folder-current-path" />

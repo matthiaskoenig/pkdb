@@ -94,7 +94,7 @@ async function confirm(): Promise<void> {
           replace the study on the server.
         </p>
         <p v-if="withErrors" class="upload-note">Studies with errors fail the validation and are not uploaded.</p>
-        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+        <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />

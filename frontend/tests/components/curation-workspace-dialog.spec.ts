@@ -231,5 +231,7 @@ describe("WorkspaceDialog", () => {
     const alert = dialog().get(".action-failure");
     expect(alert.get(".action-failure-text").text()).toBe("Could not list the folders.");
     expect(alert.get(".action-failure-detail").text()).toBe("PermissionError: [Errno 13] Permission denied: '/locked'");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });

@@ -124,7 +124,7 @@ async function confirm(): Promise<void> {
           hide-details
           class="retry-acknowledge"
         />
-        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+        <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />
