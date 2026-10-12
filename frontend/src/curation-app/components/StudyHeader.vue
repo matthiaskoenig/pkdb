@@ -14,7 +14,7 @@ import {
   SYNC_TONES,
   uploadBlocker,
 } from "../overview";
-import { paperName } from "../paper";
+import { mainPaper, paperName } from "../paper";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
@@ -77,7 +77,8 @@ const pmid = computed(() => {
 const problems = computed(() => problemLabels(props.detail));
 const activity = computed(() => activityLabel(props.detail));
 const pdf = computed(() => paperName(props.detail));
-const hasPdf = computed(() => props.detail.files.includes(pdf.value));
+/** The PDF named after the study among its PDFs, which the study page lists also beyond the upload limits. */
+const mainPdf = computed(() => mainPaper(props.detail));
 
 // Review status
 const STATUS_ITEMS = (Object.keys(REVIEW_LABELS) as ReviewStatus[]).map((value) => ({
@@ -167,7 +168,8 @@ function openFolder(): Promise<void> {
 }
 
 function openPdf(): Promise<void> {
-  return run("pdf", () => overview.openFile(props.detail.id, pdf.value));
+  const file = mainPdf.value?.file;
+  return file ? run("pdf", () => overview.openFile(props.detail.id, file)) : Promise.resolve();
 }
 
 function copyPath(): Promise<void> {
@@ -363,12 +365,12 @@ function added(table: string): void {
                 variant="text"
                 prepend-icon="fas fa-file-pdf"
                 class="header-control"
-                :disabled="stale || !hasPdf"
+                :disabled="stale || !mainPdf"
                 @click="fromMenu(openPdf)"
               >
                 Open PDF
               </VBtn>
-              <p v-if="!hasPdf" class="study-menu-note">No {{ pdf }} in the folder</p>
+              <p v-if="!mainPdf" class="study-menu-note">No {{ pdf }} in the folder</p>
               <VBtn
                 variant="text"
                 prepend-icon="fas fa-plus"

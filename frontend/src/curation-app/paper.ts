@@ -6,7 +6,7 @@
 import { reactive } from "vue";
 import type { RouteLocationRaw } from "vue-router";
 import { ApiError, checkFile, NO_SESSION, SessionMissing } from "./api/client";
-import type { StudyDetail } from "./api/types";
+import type { PaperFile, StudyDetail } from "./api/types";
 import type { FailureDetails } from "./failures";
 import { actionFailure, studyName, type ActionFailure } from "./study";
 
@@ -133,6 +133,15 @@ export async function loadPaperEngine(): Promise<{ openPaper: OpenPaper }> {
 /** The PDF named after the study, `<name>.pdf`, which Open PDF of the study header opens too. */
 export function paperName(study: Pick<StudyDetail, "id">): string {
   return `${studyName(study)}.pdf`;
+}
+
+/**
+ * The PDF named after the study among the PDFs of its folder: `<name>.pdf`, with its suffix in
+ * any case, which the local server lists first; null when the folder lacks it.
+ */
+export function mainPaper(study: Pick<StudyDetail, "id" | "papers">): PaperFile | null {
+  const stem = studyName(study);
+  return study.papers.find((paper) => paper.file.startsWith(stem) && paper.file.toLowerCase() === `${stem.toLowerCase()}.pdf`) ?? null;
 }
 
 /** The line below Paper in the navigator: its PDF and how many more there are, or the PDF that the folder lacks. */

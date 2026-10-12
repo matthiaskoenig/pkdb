@@ -3,6 +3,7 @@ import { ApiError, NO_SESSION, SessionMissing } from "../../src/curation-app/api
 import {
   findText,
   formatBytes,
+  mainPaper,
   paperAnswer,
   paperFailure,
   PaperImportFailed,
@@ -41,6 +42,13 @@ function json(body: unknown, status: number): Response {
 }
 
 describe("the paper of a study", () => {
+  it("finds the PDF named after the study, with its suffix in any case, among the PDFs of the folder", () => {
+    const supplement = paperFile("Example_Supp.pdf");
+    expect(mainPaper(studyDetail({ papers: [paperFile("Example.PDF"), supplement] }))?.file).toBe("Example.PDF");
+    expect(mainPaper(studyDetail({ papers: [supplement] }))).toBeNull();
+    expect(mainPaper(studyDetail())).toBeNull();
+  });
+
   it("names the PDF of the study, and says in the navigator which PDFs the folder has", () => {
     expect(paperName(studyDetail())).toBe("Example.pdf");
     expect(paperLine(studyDetail())).toBe("No Example.pdf");
