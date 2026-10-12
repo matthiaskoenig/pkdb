@@ -97,7 +97,8 @@ async function copy(): Promise<void> {
   margin: 0;
   overflow-wrap: anywhere;
 }
-/* 10 lines of 1.4em, with the padding and the border of the box: then it scrolls. */
+/* 10 lines of 1.4em, with the padding and the border of the box: then it scrolls. Long lines
+   wrap, so that no horizontal scrollbar covers the last line. */
 .failure-traceback {
   box-sizing: border-box;
   max-height: calc(10 * 1.4em + 10px);
@@ -109,7 +110,8 @@ async function copy(): Promise<void> {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.75rem;
   line-height: 1.4;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 /* The text button keeps its padding outside the content edge, as the actions of the activity. */
 .failure-actions {
