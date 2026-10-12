@@ -217,8 +217,11 @@ const sources = computed(() =>
   font-size: 11px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+/* With the gap, 8 px from the badges after it, twice the space between them, also in the entry
+   whose name gives the navigator its width. */
 .nav-file .nav-name {
   flex: 1 1 auto;
+  margin-inline-end: 4px;
 }
 /* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. Up
    to 999 rows the pill has one width, so that the pills and the badges before them line up: three

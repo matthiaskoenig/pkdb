@@ -531,9 +531,14 @@ const conflictPanel = computed(() => {
   border-radius: 6px;
   background: rgb(var(--v-theme-surface));
 }
-/* Wide enough for a table name such as timecourses_Fig1 beside a warning, an open review item and its rows. */
+/* As wide as its longest name beside its badges, whatever font the machine draws it in (DejaVu Sans
+   is about 14 % wider than Noto Sans), from 232 px up to 320 px; a longer name ends with an
+   ellipsis and its title gives it whole. A scrollbar widens it instead of cutting a name. */
 .data-navigator-pane {
-  flex: 0 0 232px;
+  flex: none;
+  width: max-content;
+  min-width: 232px;
+  max-width: 320px;
   border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .data-split {

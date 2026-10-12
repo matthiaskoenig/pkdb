@@ -246,6 +246,13 @@ test("the navigator shows the whole name of a table beside a warning, an open re
     const name = entry.locator(".nav-name");
     await expect(name).toHaveText("timecourses_Fig1");
     expect(await name.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    // The drawn name keeps 8 px from the warning after it, twice the space between the badges.
+    const apart = await entry.evaluate((element) => {
+      const text = document.createRange();
+      text.selectNodeContents(element.querySelector(".nav-name")!);
+      return element.querySelector(".nav-count")!.getBoundingClientRect().left - text.getBoundingClientRect().right;
+    });
+    expect(apart).toBeGreaterThanOrEqual(8);
     // A pill of one or two digits has the width of two, so that the pills and the badges before them line up.
     const navigator = page.getByRole("navigation", { name: "Tables and sources" });
     const lefts = (selector: string) =>
@@ -265,6 +272,35 @@ test("the navigator shows the whole name of a table beside a warning, an open re
   } finally {
     writeFileSync(file, original);
   }
+});
+
+test("the navigator takes the width of its longest name up to 320 px, beyond which the name ends with an ellipsis", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data");
+  const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+  const width = async () => (await navigator.boundingBox())!.width;
+  const entry = navigatorButton(page, /^timecourses_Fig1\.tsv/);
+  const name = entry.locator(".nav-name");
+  // At least 232 px, whatever font the machine draws the names in: with DejaVu Sans, the sans-serif
+  // of the Linux runners of continuous integration, it is wider than with Noto Sans.
+  await expect(entry.locator(".nav-count--warning")).toHaveAttribute("title", "1 warning");
+  const short = await width();
+  expect(short).toBeGreaterThanOrEqual(232);
+  expect(short).toBeLessThan(320);
+  await name.evaluate((element) => {
+    element.textContent = "timecourses_Fig1_caffeine_paraxanthine_theophylline";
+  });
+  await expect.poll(width).toBe(320);
+  expect(await name.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+  await expect(name).toHaveCSS("text-overflow", "ellipsis");
+  await expect(name).toHaveAttribute("title", "timecourses_Fig1.tsv");
+  // The warning and the rows keep their place at the end of the entry, inside the navigator.
+  const rows = (await entry.locator(".nav-rows").boundingBox())!;
+  const button = (await entry.boundingBox())!;
+  expect(rows.x + rows.width).toBeLessThanOrEqual(button.x + button.width);
+  await expect(entry.locator(".nav-count--warning")).toBeInViewport({ ratio: 1 });
 });
 
 test("subjects.tsv shows all of its rows when it is chosen, whichever source is selected", async ({ app, page }) => {
