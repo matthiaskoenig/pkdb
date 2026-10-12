@@ -195,7 +195,7 @@ test.describe("sources", () => {
   });
 });
 
-test("the navigator shows the whole name of a table beside a warning, an open review item and its rows", async ({
+test("the navigator shows the whole name of a table beside a warning, an open review item and its rows, all lined up", async ({
   app,
   page,
 }) => {
@@ -222,6 +222,12 @@ test("the navigator shows the whole name of a table beside a warning, an open re
     const name = entry.locator(".nav-name");
     await expect(name).toHaveText("timecourses_Fig1");
     expect(await name.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    // A pill of one or two digits has the width of two, so that the pills and the badges before them line up.
+    const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+    const lefts = (selector: string) =>
+      navigator.locator(selector).evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().left));
+    expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
+    expect(new Set(await lefts(".nav-file .nav-count:not(.nav-count--error, .nav-count--warning)")).size).toBe(1);
   } finally {
     writeFileSync(file, original);
   }

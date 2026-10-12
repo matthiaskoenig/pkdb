@@ -216,10 +216,13 @@ const sources = computed(() =>
 .nav-file .nav-name {
   flex: 1 1 auto;
 }
-/* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. */
+/* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. Up
+   to 99 rows the pill has one width, so that the pills and the badges before them line up: two
+   digits, the padding, and a pixel for digits that a font draws a fraction wider than its 0. A
+   longer count makes it wider. */
 .nav-rows {
   flex: none;
-  min-width: 20px;
+  min-width: calc(2ch + 11px);
   padding: 0 5px;
   border-radius: 8px;
   background: rgba(var(--v-theme-on-surface), 0.07);
