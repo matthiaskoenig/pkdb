@@ -171,6 +171,12 @@ describe("data navigator", () => {
     expect(wrapper.findAll(".nav-source")[1]!.find("img").exists()).toBe(false);
   });
 
+  it("lets the browser decode a thumbnail while it paints it, which never leaves a large image white", () => {
+    const thumbnail = mountNavigator().get(".nav-source img");
+    expect(thumbnail.attributes("loading")).toBe("lazy");
+    expect(thumbnail.attributes("decoding")).toBeUndefined();
+  });
+
   it("emits the chosen source and file", async () => {
     const wrapper = mountNavigator();
     await wrapper.findAll(".nav-source")[1]!.trigger("click");

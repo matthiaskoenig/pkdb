@@ -92,7 +92,11 @@ const sources = computed(() =>
           :aria-current="summary.source === source ? 'true' : undefined"
           @click="emit('select-source', summary.source)"
         >
-          <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" decoding="async" class="nav-thumb" />
+          <!-- Decoded while it is painted, which works around Chromium 153: with decoding="async"
+               it defers the decode of a large image (checker imaging) and paints the thumbnail
+               white until then, and in some loads it never decoded some of them, so that
+               Walther1983_Tab1 to _Tab3 stayed white for good. -->
+          <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" class="nav-thumb" />
           <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="SOURCE_ICONS[summary.kind]"></i></span>
           <span class="nav-text">
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
