@@ -52,11 +52,12 @@ const preview = usePreview(
     return { study: detail.id, files: detail.files, answering: study.error === null, kind: kind.value, source: name };
   },
   (value) => study.previewTable(value.kind, value.source),
+  "The table could not be previewed.",
 );
 /** The new table as the server previews it: for the current kind and source, or the last one while that loads. */
 const table = computed(() => preview.shown.value);
-/** Why the table cannot be added: the refusal of the server, or a failed preview. */
-const problem = computed(() => table.value?.issues[0]?.message ?? preview.shownError.value);
+/** Why the table cannot be added: the refusal of the server; a failed preview has its alert. */
+const problem = computed(() => table.value?.issues[0]?.message ?? null);
 /** Only the answer for the current kind and source can add a table. */
 const canAdd = computed(() => {
   const current = preview.data.value;
@@ -177,6 +178,14 @@ async function add(): Promise<void> {
           <dd v-else>None for the text of the paper</dd>
         </dl>
         <span role="status" aria-live="polite" class="d-sr-only" :aria-busy="preview.loading.value">{{ ready }}</span>
+        <!-- It goes with the next preview that the local server answers: no close button. -->
+        <ActionFailureAlert
+          v-if="preview.shownError.value"
+          :failure="preview.shownError.value"
+          :study="study.detail?.id ?? null"
+          :closable="false"
+          :class="{ 'is-updating': preview.loading.value }"
+        />
         <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" @close="failure = null" />
         <UserHint v-else-if="userText" :text="userText" />
       </VCardText>

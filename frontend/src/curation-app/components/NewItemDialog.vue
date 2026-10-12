@@ -98,15 +98,13 @@ const {
   },
   (name) => study.table(name),
   () => version.value,
+  (name) => `The columns of ${name} could not be loaded.`,
 );
 /** The header and rows of the chosen table; null for another file or a raw table. */
 const table = computed(() => {
   const content = loadedTable.value?.content;
   return content?.kind === "table" ? { header: content.header, rows: content.rows } : null;
 });
-const tableError = computed(() =>
-  tableFailure.value ? `The columns of ${file.value} could not be loaded. ${tableFailure.value}` : null,
-);
 
 watch(open, (value) => {
   if (value) failure.value = null;
@@ -159,6 +157,7 @@ const preview = usePreview(
     return { study: detail.id, version: version.value, answering: study.error === null, target: draft.value };
   },
   (value) => study.previewTarget(value.target),
+  "The rows could not be matched.",
 );
 /**
  * How many rows the row filters match, of the rows of the same version of the table, as the
@@ -166,8 +165,8 @@ const preview = usePreview(
  * current ones loads; null without filters.
  */
 const matches = computed(() => {
-  const failed = preview.shownError.value;
-  if (failed) return { matched: null, text: `The rows could not be matched. ${failed}` };
+  // A failure shows in the alert below the count.
+  if (preview.shownError.value) return null;
   const answer = preview.shown.value;
   if (!answer || answer.lines === null || answer.total === null) return null;
   return { matched: answer.lines.length, text: matchText(answer.lines.length, answer.total) };
@@ -248,7 +247,13 @@ async function add(): Promise<void> {
           </div>
           <VSelect v-model="file" :items="files" label="File" clearable hide-details />
           <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${file}`" />
-          <p v-else-if="tableError" class="field-error">{{ tableError }}</p>
+          <!-- It goes when the table loads again: no close button. -->
+          <ActionFailureAlert
+            v-else-if="tableFailure"
+            :failure="tableFailure"
+            :study="study.detail?.id ?? null"
+            :closable="false"
+          />
           <template v-else-if="table">
             <div class="field-block">
               <div>
@@ -290,11 +295,19 @@ async function add(): Promise<void> {
                 class="new-item-matches"
                 :class="{
                   'new-item-matches--none': matches?.matched === 0,
-                  'field-error': matches?.matched === null,
                   'is-updating': preview.loading.value,
                 }"
                 :aria-busy="preview.loading.value"
               >{{ matches?.text ?? "" }}</p>
+              <!-- It goes with the next count that the local server answers: no close button. -->
+              <ActionFailureAlert
+                v-if="preview.shownError.value"
+                :failure="preview.shownError.value"
+                :study="study.detail?.id ?? null"
+                :closable="false"
+                class="new-item-matches-failure"
+                :class="{ 'is-updating': preview.loading.value }"
+              />
               <VBtn
                 variant="text"
                 color="primary"

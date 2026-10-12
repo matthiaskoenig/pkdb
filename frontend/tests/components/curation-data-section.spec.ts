@@ -659,6 +659,57 @@ describe("loading", () => {
   });
 });
 
+describe("a failed read of the local server", () => {
+  /** The error body of the local server for a file of caffeine/Example that it cannot read. */
+  function unreadable(error: string, path: string) {
+    return json(
+      {
+        error,
+        code: "file_error",
+        detail: "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/outputs_Tab2.tsv'",
+        action: `Read (GET ${path})`,
+        request_id: "3f9c2a71",
+        time: "2026-10-12T14:03:11+02:00",
+      },
+      { status: 400 },
+    );
+  }
+
+  /** The alert of `pane`: the message once, what went wrong, Details, Retry and no close button. */
+  function expectFailure(pane: ReturnType<typeof rowsPane>, message: string) {
+    const alert = pane.get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe(message);
+    expect(alert.get(".action-failure-detail").text()).toBe(
+      "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/outputs_Tab2.tsv'",
+    );
+    expect(alert.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(pane.text().split(message)).toHaveLength(2);
+    expect(pane.text()).not.toContain("could not be loaded");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+    expect(alert.findAll("button").map((button) => button.text())).toContain("Retry");
+  }
+
+  it("says once why a table could not be read, with what went wrong and Details", async () => {
+    const path = `${EXAMPLE}/tables/outputs_Tab2.tsv`;
+    await mountSection(
+      detail(),
+      { [`GET ${path}`]: () => unreadable("Could not read outputs_Tab2.tsv of caffeine/Example.", path) },
+      `${SECTION}?source=Tab2`,
+    );
+    expectFailure(rowsPane(), "Could not read outputs_Tab2.tsv of caffeine/Example.");
+  });
+
+  it("says once why a source could not be read, with what went wrong and Details", async () => {
+    const path = `${EXAMPLE}/sources/Tab2`;
+    await mountSection(
+      detail(),
+      { [`GET ${path}`]: () => unreadable("Could not read the source Tab2 of caffeine/Example.", path) },
+      `${SECTION}?source=Tab2`,
+    );
+    expectFailure(sourcePane(), "Could not read the source Tab2 of caffeine/Example.");
+  });
+});
+
 describe("problems of a source", () => {
   const mismatch: Problem = {
     code: "digitized_mismatch",

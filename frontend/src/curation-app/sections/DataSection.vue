@@ -80,6 +80,7 @@ const {
   () => file.value,
   (name) => study.table(name),
   () => study.detail,
+  (name) => `${name} could not be loaded.`,
 );
 /** The rows of the selected file; null while another one is shown or it loads. */
 const table = computed(() => (rows.value && rows.value.key === file.value ? rows.value.content : null));
@@ -119,6 +120,7 @@ const {
   () => source.value?.source ?? null,
   (name) => study.source(name),
   () => study.detail,
+  (name) => `${name} could not be loaded.`,
 );
 /** The view of the selected source; null while another one is shown or it loads. */
 const sourceView = computed(() =>

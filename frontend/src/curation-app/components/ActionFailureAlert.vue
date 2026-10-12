@@ -7,7 +7,8 @@ import FailureDetails from "./FailureDetails.vue";
 /**
  * A failed action: what could not be done, in bold, and why below it; some of its issues with a
  * link to the section with all of them; and what the local server said about it in Details, with
- * Copy details and Show in Activity. The links need `study`, the study of the page.
+ * Copy details and Show in Activity. The links need `study`, the study of the page. The slot
+ * `append` puts an action, such as Retry, at the end of the alert.
  */
 withDefaults(
   defineProps<{
@@ -60,6 +61,9 @@ const emit = defineEmits<{ close: [] }>();
         Show in Activity
       </RouterLink>
     </FailureDetails>
+    <template v-if="$slots.append" #append>
+      <slot name="append" />
+    </template>
   </VAlert>
 </template>
 

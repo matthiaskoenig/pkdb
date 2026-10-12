@@ -614,7 +614,7 @@ describe("StatusBanner", () => {
     expect(wrapper.text()).toContain("This page has no session. Open the link that pkdb curate printed.");
   });
 
-  it("shows other failures of the state", async () => {
+  it("says once why the state could not be read, with what went wrong and Details", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
       json(
         {
@@ -630,7 +630,13 @@ describe("StatusBanner", () => {
     const wrapper = mountBanner();
     await useOverviewStore().refresh();
     await flushPromises();
-    expect(wrapper.text()).toContain("The state of the local server could not be loaded. Could not read the workspace state.");
+    const banner = wrapper.get(".status-banner");
+    expect(banner.get(".action-failure-text").text()).toBe("Could not read the workspace state.");
+    expect(banner.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(banner.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(wrapper.text().split("Could not read the workspace state.")).toHaveLength(2);
+    expect(wrapper.text()).not.toContain("could not be loaded");
+    expect(banner.find(".v-alert__close").exists()).toBe(false);
   });
 });
 
