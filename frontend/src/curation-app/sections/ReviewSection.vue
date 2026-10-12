@@ -319,7 +319,7 @@ function added(item: ReviewItem | null): void {
             {{ failure.text }}
           </VAlert>
           <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-          <ActionFailureAlert v-else-if="failure" :failure="failure" class="review-failure" @close="failure = null" />
+          <ActionFailureAlert v-else-if="failure" :failure="failure" :study="study.detail?.id ?? null" class="review-failure" @close="failure = null" />
           <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
           <span role="status" aria-live="polite" class="review-notice">{{ notice }}</span>
           <TargetView v-if="selected" :item="selected" />

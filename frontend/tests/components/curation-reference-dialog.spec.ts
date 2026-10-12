@@ -3,6 +3,7 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import type { StudyDetail } from "../../src/curation-app/api/types";
 import ReferenceDialog from "../../src/curation-app/components/ReferenceDialog.vue";
+import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { json, snapshot, studyDetail, studyMetadata } from "../unit/curation-fixtures";
@@ -57,7 +58,7 @@ async function mountDialog(detail: StudyDetail = studyDetail(), routes: Record<s
   const wrapper = mount(ReferenceDialog, {
     props: { modelValue: true, unsavedIdentifiers: false },
     attachTo: document.body,
-    global: { plugins: [pinia] },
+    global: { plugins: [pinia, makeRouter()] },
   });
   await flushPromises();
   return wrapper;
@@ -229,5 +230,30 @@ describe("ReferenceDialog", () => {
     expect(alert.get(".action-failure-text").text()).toBe("Could not read reference.json of caffeine/Example.");
     expect(alert.get(".action-failure-detail").text()).toBe("JSONDecodeError: Expecting value: line 1 column 1 (char 0)");
     expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed in a save, with Details and a link to its entry in the Activity", async () => {
+    await mountDialog(studyDetail(), {
+      "POST /local/reference/preview": preview,
+      "POST /local/reference/save": () =>
+        json(
+          {
+            error: "Could not save reference.json.",
+            code: "unexpected",
+            detail: "RuntimeError: boom",
+            action: "Save reference.json (POST /local/reference/save)",
+            ...FAILED,
+            activity_id: "act-7",
+          },
+          { status: 500 },
+        ),
+    });
+    await field("Title").setValue("Caffeine kinetics in smokers");
+    await click("Preview");
+    await click("Save reference");
+    const alert = page().get('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(alert.get("summary").text()).toBe("Details");
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
   });
 });

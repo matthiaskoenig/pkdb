@@ -177,7 +177,7 @@ async function add(): Promise<void> {
           <dd v-else>None for the text of the paper</dd>
         </dl>
         <span role="status" aria-live="polite" class="d-sr-only" :aria-busy="preview.loading.value">{{ ready }}</span>
-        <ActionFailureAlert v-if="failure" :failure="failure" @close="failure = null" />
+        <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" @close="failure = null" />
         <UserHint v-else-if="userText" :text="userText" />
       </VCardText>
       <VCardActions class="dialog-actions">

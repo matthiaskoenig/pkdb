@@ -636,6 +636,30 @@ describe("saving", () => {
     expect(saveBar().exists()).toBe(false);
   });
 
+  it("shows what failed in a save, with Details and a link to its entry in the Activity", async () => {
+    await mountSection(studyDetail(), {
+      [`POST ${METADATA}`]: () =>
+        json(
+          {
+            error: "Could not do it.",
+            code: "unexpected",
+            detail: "RuntimeError: boom",
+            action: "Save study.json (POST /local/studies/metadata)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "act-7",
+          },
+          { status: 500 },
+        ),
+    });
+    await field("DOI").setValue("10.1000/xyz");
+    await click("Save");
+    const alert = page().get(".metadata-failure");
+    expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(alert.get("summary").text()).toBe("Details");
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
+  });
+
   it("asks to set the user when a save needs one", async () => {
     await mountSection(studyDetail(), {
       [`POST ${METADATA}`]: () =>

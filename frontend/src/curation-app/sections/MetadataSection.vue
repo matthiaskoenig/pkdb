@@ -909,7 +909,7 @@ onBeforeUnmount(() => {
         </div>
       </VAlert>
       <UserHint v-if="noUser" :text="noUser" class="metadata-failure" />
-      <ActionFailureAlert v-if="failure" :failure="failure" class="metadata-failure" @close="failure = null" />
+      <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" class="metadata-failure" @close="failure = null" />
       <div class="savebar-row">
         <span class="savebar-text">
           <i class="fas fa-circle savebar-dot" aria-hidden="true"></i>

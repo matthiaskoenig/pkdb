@@ -462,7 +462,7 @@ const previewed = computed(() => {
             </ul>
             <p v-else class="reference-note">No changes. Saving keeps reference.json as it is.</p>
           </section>
-          <ActionFailureAlert v-if="saveFailure" :failure="saveFailure" @close="saveFailure = null" />
+          <ActionFailureAlert v-if="saveFailure" :failure="saveFailure" :study="study.detail?.id ?? null" @close="saveFailure = null" />
         </template>
       </VCardText>
       <VCardActions class="dialog-actions">

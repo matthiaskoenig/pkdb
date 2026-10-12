@@ -1141,6 +1141,29 @@ describe("failures", () => {
     expect(page().find(".review-failure").exists()).toBe(false);
   });
 
+  it("shows what failed in a review write, with Details and a link to its entry in the Activity", async () => {
+    await mountSection(withReview(), {
+      [`POST ${REVIEW}`]: () =>
+        json(
+          {
+            error: "Could not do it.",
+            code: "unexpected",
+            detail: "RuntimeError: boom",
+            action: "Resolve the item (POST /local/studies/review)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "act-7",
+          },
+          { status: 500 },
+        ),
+    });
+    await click("Resolve");
+    const alert = page().get(".review-failure");
+    expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(alert.get("summary").text()).toBe("Details");
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
+  });
+
   it("waits with New item while an item changes, and with the items while a new one is added", async () => {
     let finish = () => undefined as void;
     await mountSection(withReview(), {
