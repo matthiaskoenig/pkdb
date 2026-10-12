@@ -388,24 +388,38 @@ describe("descriptions, comments and notes", () => {
     expect(page().find(".savebar-failure").exists()).toBe(false);
   });
 
-  it("keeps notes per table kind", async () => {
+  it("says that the notes of a table are in Data, above the table", async () => {
     await mountSection(withMetadata(fullStudyMetadata()));
-    const notes = card("Notes per table");
-    expect(notes.findAll(".v-expansion-panel-title").map((title) => title.text())).toEqual([
-      "Subjects No notes",
-      "Characteristica No notes",
-      "Interventions No notes",
-      "Outputs 1 description, 1 comment",
-      "Timecourses 1 description",
-      "Scatters No notes",
+    expect(page().findAll(".metadata-card h3").map((heading) => heading.text())).toEqual([
+      "Reference",
+      "People",
+      "Access and provenance",
+      "Issue and release",
+      "Descriptions and comments",
     ]);
-    await notes.findAll(".v-expansion-panel-title")[0]!.trigger("click");
-    await flushPromises();
-    await click("Add description to subjects");
-    await textArea("Description 1", notes.findAll(".v-expansion-panel")[0]!.element).setValue("Healthy volunteers.");
+    const hint = card("Descriptions and comments").get(".metadata-notes-hint");
+    expect(hint.text()).toBe("Notes of a table are in Data, above the table.");
+    expect(hint.get("a").attributes("href")).toBe("#/studies/caffeine/Example/data");
+    // outputs and timecourses have tables, so their notes show in Data only.
+    expect(card("Descriptions and comments").find(".table-notes").exists()).toBe(false);
+  });
+
+  it("keeps the notes of a kind without a table in Metadata, where they are edited and saved", async () => {
+    await mountSection(
+      withMetadata(fullStudyMetadata({ notes: { scatters: { descriptions: ["From Figure 3."], comments: [] } } })),
+    );
+    const notes = card("Descriptions and comments");
+    expect(notes.get(".metadata-orphans").text()).toContain("The study has no table of these kinds, so their notes are here:");
+    expect(notes.findAll(".table-notes-toggle").map((toggle) => toggle.text())).toEqual([
+      "Notes of the scatters 1 description",
+    ]);
+    await notes.get(".table-notes-toggle").trigger("click");
+    await textArea("Description 1", notes.get(".table-notes").element).setValue("From Figure 4.");
+    expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
+    expect(tabLabel("Data")).toBe("Data");
     await click("Save");
     expect(posted(METADATA)[0]?.metadata).toMatchObject({
-      notes: { subjects: { descriptions: ["Healthy volunteers."], comments: [] } },
+      notes: { scatters: { descriptions: ["From Figure 4."], comments: [] } },
     });
   });
 });

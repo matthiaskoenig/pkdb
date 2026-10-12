@@ -63,3 +63,21 @@ test("the avatar of a person stays clear of the label on the outline of its fiel
   expect(room.top).toBeGreaterThanOrEqual(4);
   expect(room.bottom).toBeGreaterThanOrEqual(4);
 });
+
+test("the card of the descriptions and comments takes the whole last row and points to the notes in Data", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/metadata");
+  const card = page.getByRole("region", { name: "Descriptions and comments" });
+  await expect(card).toContainText("Notes of a table are in Data, above the table.");
+  await expect(page.getByRole("region", { name: "Notes per table" })).toHaveCount(0);
+  // Five cards in two columns: the last one closes the gap of its row.
+  const form = await page.locator(".metadata-form").boundingBox();
+  const box = await card.boundingBox();
+  expect(Math.round(box!.width)).toBe(Math.round(form!.width));
+  // Demo2020 has notes of the subjects only, and a subjects table: none show here.
+  await expect(card.getByRole("button", { name: /^Notes of the/ })).toHaveCount(0);
+  await card.getByRole("link", { name: "Data" }).click();
+  await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data/);
+});

@@ -8,29 +8,27 @@ import {
   VCardText,
   VCardTitle,
   VChip,
-  VExpansionPanel,
-  VExpansionPanels,
-  VExpansionPanelText,
-  VExpansionPanelTitle,
   VForm,
   VRadio,
   VRadioGroup,
   VSelect,
   VTextField,
 } from "vuetify/components";
-import type { Profile, TableKind } from "../api/types";
+import type { Profile } from "../api/types";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import StudySaveBar from "../components/StudySaveBar.vue";
+import TableNotes from "../components/TableNotes.vue";
 import { sectionHeading } from "../composables/useReturnFocus";
 import { markMessage, PROVENANCE_LABELS, startForm, withKind, type ProvenanceKind } from "../metadata";
+import { hasNotes, kindsWithTable } from "../notes";
 import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, releaseLabel } from "../study";
-import { kindLabel, noteKinds } from "../tableKinds";
+import { knownProfiles, releaseLabel, sectionRoute } from "../study";
+import { noteKinds } from "../tableKinds";
 
 /**
  * The form of study.json. It edits the draft of the study store, which the Data section edits
@@ -48,7 +46,6 @@ const ids = {
   access: useId(),
   release: useId(),
   notes: useId(),
-  tables: useId(),
 };
 
 const detail = computed(() => study.detail);
@@ -62,17 +59,20 @@ const marks = computed(() => draft.marks);
 const disk = computed(() => draft.disk);
 const referenceOpen = ref(false);
 
-/** The table kinds with notes in study.json and their labels, as the study page describes them. */
-const notesKinds = computed(() => {
+/** The Data section, which shows the notes of each table above it. */
+const dataRoute = computed(() => sectionRoute(detail.value?.id ?? "", "data"));
+/**
+ * The kinds with notes in study.json but no table in the study, such as after a table was
+ * removed or beyond the upload limits: the Data section cannot show them, so Metadata does.
+ */
+const orphanKinds = computed(() => {
   const value = detail.value;
-  return value ? noteKinds(value).map((kind) => ({ kind, label: kindLabel(value, kind) })) : [];
-});
-/** The open panels of the notes per table, which the draft keeps while the study is open. */
-const openPanels = computed<TableKind[]>({
-  get: () => notesKinds.value.map((entry) => entry.kind).filter((kind) => draft.notesOpen.has(kind)),
-  set: (kinds) => {
-    for (const { kind } of notesKinds.value) draft.setNotesOpen(kind, kinds.includes(kind));
-  },
+  if (!value) return [];
+  const kinds = noteKinds(value);
+  const tabled = kindsWithTable(value, kinds);
+  return kinds.filter(
+    (kind) => !tabled.includes(kind) && (hasNotes(draft.base?.notes[kind]) || hasNotes(draft.form?.notes[kind])),
+  );
 });
 
 // Profiles: the roster, and the people of the study who are not in it.
@@ -169,17 +169,6 @@ const accessMessages = computed(() => [
   ...(form.value?.release ? [] : ["Public needs a release."]),
   ...markAt("access"),
 ]);
-
-function notesSummary(kind: TableKind): string {
-  const notes = form.value?.notes[kind];
-  if (!notes) return "";
-  const parts = [
-    notes.descriptions.length ? plural(notes.descriptions.length, "description") : "",
-    notes.comments.length ? plural(notes.comments.length, "comment") : "",
-  ].filter(Boolean);
-  const changed = marks.value.has(`notes.${kind}.descriptions`) || marks.value.has(`notes.${kind}.comments`);
-  return [parts.join(", ") || "No notes", changed ? "changed on disk" : ""].filter(Boolean).join(" · ");
-}
 
 function setKind(kind: unknown): void {
   const chosen = kindItems.value.find((item) => item.value === kind)?.value;
@@ -552,36 +541,11 @@ const newFields = computed(() => {
             :disk="disk"
             @use-disk="useDisk"
           />
-        </VCardText>
-      </VCard>
-
-      <VCard tag="section" border class="metadata-card" :aria-labelledby="ids.tables">
-        <VCardItem class="metadata-card-head">
-          <VCardTitle :id="ids.tables" tag="h3" class="metadata-card-title">Notes per table</VCardTitle>
-        </VCardItem>
-        <VCardText class="metadata-card-body">
-          <VExpansionPanels v-model="openPanels" multiple variant="accordion" class="notes-panels">
-            <VExpansionPanel v-for="{ kind, label } in notesKinds" :key="kind" :value="kind" elevation="0">
-              <!-- The space keeps the kind and the summary apart for screen readers. -->
-              <VExpansionPanelTitle class="notes-title">
-                <span class="notes-kind">{{ label }}</span> <span class="notes-summary">{{ notesSummary(kind) }}</span>
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <NotesFields
-                  v-model:descriptions="form.notes[kind].descriptions"
-                  v-model:comments="form.notes[kind].comments"
-                  :prefix="`notes.${kind}.`"
-                  :kind="kind"
-                  :author="author"
-                  :profiles="profiles"
-                  :errors="errors"
-                  :marks="marks"
-                  :disk="disk"
-                  @use-disk="useDisk"
-                />
-              </VExpansionPanelText>
-            </VExpansionPanel>
-          </VExpansionPanels>
+          <p class="field-note metadata-notes-hint">Notes of a table are in <RouterLink :to="dataRoute">Data</RouterLink>, above the table.</p>
+          <div v-if="orphanKinds.length" class="metadata-orphans">
+            <p class="field-note">The study has no table of these kinds, so their notes are here:</p>
+            <TableNotes v-for="kind in orphanKinds" :key="kind" :kind="kind" class="metadata-orphan-notes" />
+          </div>
         </VCardText>
       </VCard>
     </VForm>
@@ -629,6 +593,21 @@ const newFields = computed(() => {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 36rem), 1fr));
   align-items: stretch;
   gap: 12px;
+}
+/* Five cards leave the last one alone in its row of two: it takes the whole row. */
+.metadata-form > .metadata-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+.metadata-orphans {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* A panel of notes in a card has a frame of its own instead of the line below it in the rows pane. */
+.metadata-orphan-notes.table-notes {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  overflow: hidden;
 }
 .metadata-card-head {
   padding-bottom: 0;
@@ -700,21 +679,6 @@ const newFields = computed(() => {
   font-size: 0.875rem;
 }
 .reference-source {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.notes-panels {
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  overflow: hidden;
-}
-.notes-title {
-  gap: 12px;
-}
-.notes-kind {
-  font-weight: 600;
-}
-.notes-summary {
-  font-size: 0.875rem;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 @media (max-width: 599.98px) {
