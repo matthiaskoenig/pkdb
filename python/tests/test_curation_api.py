@@ -2115,7 +2115,9 @@ def test_a_pdf_that_vanished_since_the_check_is_no_longer_in_the_study_folder(
 
 def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
     server, engine, folder = api
-    for name in ("Example.pdf", "Example.PDF", "Example_Supp.pdf", "Zeta.Pdf"):
+    # four names that stay four files on the case-insensitive file systems of
+    # macOS and Windows
+    for name in ("Example.pdf", "Appendix.PDF", "Example_Supp.pdf", "Zeta.Pdf"):
         (folder / name).write_bytes(PDF)
     engine.scan()
     headers = authenticate(server)
