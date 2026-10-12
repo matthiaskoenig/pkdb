@@ -7,6 +7,7 @@ import type {
   AcknowledgedWarning,
   ConflictData,
   Job,
+  PaperFile,
   Problem,
   ReviewItem,
   SourceSummary,
@@ -336,5 +337,16 @@ describe("errors contract", () => {
       code: "open_failed",
       detail: "CalledProcessError: false exited with status 1",
     });
+  });
+});
+
+describe("papers contract", () => {
+  const papers = contract<PaperFile[]>(sourcesFixture.papers);
+
+  it("lists the PDF of Demo2020 with the URL of the file route and its size", () => {
+    expect(papers).toHaveLength(1);
+    expect(papers[0]).toMatchObject({ file: "Demo2020.pdf", url: "/local/studies/caffeine/Demo2020/files/Demo2020.pdf" });
+    expect(papers[0]!.bytes).toBeGreaterThan(0);
+    expect(Object.keys(papers[0]!).sort()).toEqual(["bytes", "file", "url"]);
   });
 });

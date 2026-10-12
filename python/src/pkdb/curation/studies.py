@@ -471,6 +471,25 @@ def _tables(study: LoadedStudy) -> list[dict]:
     return entries
 
 
+def _papers(identity: str, layout: Layout) -> list[dict]:
+    """The PDFs at the top of the study folder: `<name>.pdf` first, then the others by name.
+
+    The suffix counts in any case. A hidden file, a symlink or a folder is no paper, as the scan
+    registers none of them as an attachment; a file that went away since the scan is left out.
+    """
+    files = [name for name in layout.attachments if Path(name).suffix.lower() == ".pdf"]
+    papers = []
+    for name in sorted(
+        files, key=lambda name: (Path(name).stem != layout.study, natural_key(name))
+    ):
+        try:
+            size = (layout.folder / name).stat(follow_symlinks=False).st_size
+        except OSError:
+            continue
+        papers.append({"file": name, "url": _file_url(identity, name), "bytes": size})
+    return papers
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -604,6 +623,8 @@ class StudiesMixin(EngineState):
             "conflicts": self._conflicts(folder) if conflicted else [],
             "sources": sources,
             "files": files,
+            # The PDFs of the folder, also beyond the upload limits: the paper of the Data section.
+            "papers": _papers(identity, layout),
             "tables": tables,
             # Also beyond the upload limits: Add table and the notes of study.json need them.
             "table_kinds": [dict(kind) for kind in TABLE_KINDS],

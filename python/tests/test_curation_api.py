@@ -1929,3 +1929,42 @@ def test_a_named_pipe_named_like_a_pdf_is_refused_without_waiting_for_a_writer(a
         server, "GET", f"{DETAIL}/files/Pipe.pdf", headers=authenticate(server)
     )[0]
     assert status == 404
+
+
+def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp_path):
+    server, engine, folder = api
+    sizes = {
+        "Example.PDF": 30,
+        "Example_Supp.pdf": 20,
+        "appendix10.pdf": 10,
+        "appendix9.Pdf": 5,
+        ".hidden.pdf": 1,
+        "notes.txt": 3,
+    }
+    (folder / "Example.pdf").unlink()  # the fixture study has a paper of its own
+    for name, size in sizes.items():
+        (folder / name).write_bytes(b"%" * size)
+    outside = tmp_path / "outside.pdf"
+    outside.write_bytes(b"%PDF")
+    (folder / "Linked.pdf").symlink_to(outside)
+    engine.scan()
+    detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
+    assert detail["papers"] == [
+        {"file": name, "url": f"{DETAIL}/files/{name}", "bytes": sizes[name]}
+        for name in (
+            "Example.PDF",
+            "appendix9.Pdf",
+            "appendix10.pdf",
+            "Example_Supp.pdf",
+        )
+    ]
+
+
+def test_the_study_page_lists_its_pdfs_beyond_the_upload_limits(api, monkeypatch):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(b"%PDF-1.7\n")
+    engine.scan()
+    monkeypatch.setattr(studies, "MAX_FILES", 2)
+    detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
+    assert detail["problems"][0]["code"] == "file_limit"
+    assert [paper["file"] for paper in detail["papers"]] == ["Example.pdf"]

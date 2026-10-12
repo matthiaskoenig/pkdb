@@ -41,5 +41,12 @@
       "missing_raw": null,
       "image_url": null
     }
+  ],
+  "papers": [
+    {
+      "file": "Demo2020.pdf",
+      "url": "/local/studies/caffeine/Demo2020/files/Demo2020.pdf",
+      "bytes": 19507
+    }
   ]
 }
