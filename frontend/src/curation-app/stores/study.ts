@@ -26,6 +26,7 @@ import {
   type SourceView,
   type StudyDetail,
   type StudyMetadata,
+  type TableFileKind,
   type TablePreview,
   type TableResponse,
   type TablesResult,
@@ -33,7 +34,6 @@ import {
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
-import type { NewTableKind } from "../tableKinds";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
 
@@ -201,7 +201,7 @@ export const useStudyStore = defineStore("curation-study", () => {
   }
 
   /** What Add table would add for `kind` and `source`, and why the server would refuse it; writes nothing. */
-  function previewTable(kind: NewTableKind, source: string): Promise<TablePreview> {
+  function previewTable(kind: TableFileKind, source: string): Promise<TablePreview> {
     return postJson("/local/studies/tables/preview", { study: opened(), kind, source }, isTablePreview);
   }
 

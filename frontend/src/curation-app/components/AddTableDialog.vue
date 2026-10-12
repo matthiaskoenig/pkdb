@@ -15,11 +15,12 @@ import {
   VTextField,
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
+import type { TableFileKind } from "../api/types";
 import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useStudyStore } from "../stores/study";
 import { failureOf, issuesFailure, userHint, type ActionFailure } from "../study";
-import { NEW_TABLE_KINDS, type NewTableKind } from "../tableKinds";
+import { addableKinds } from "../tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
@@ -33,7 +34,9 @@ const emit = defineEmits<{ added: [table: string] }>();
 const study = useStudyStore();
 const titleId = useId();
 useReturnFocus(open, () => props.fallbackFocus?.());
-const kind = ref<NewTableKind>("outputs");
+/** The kinds that Add table adds, as the study page describes them. */
+const kinds = computed(() => (study.detail ? addableKinds(study.detail) : []));
+const kind = ref<TableFileKind>("outputs");
 const source = ref("");
 const busy = ref(false);
 /** Why the table was not added, with the issues of the API. */
@@ -81,7 +84,7 @@ watch(
   open,
   (value) => {
     if (!value) return;
-    kind.value = "outputs";
+    kind.value = kinds.value[0]?.value ?? "outputs";
     source.value = "";
     failure.value = null;
     userText.value = null;
@@ -133,7 +136,7 @@ async function add(): Promise<void> {
           workbook.
         </p>
         <VRadioGroup v-model="kind" label="Kind" inline hide-details>
-          <VRadio v-for="item in NEW_TABLE_KINDS" :key="item.value" :value="item.value" :label="item.label" />
+          <VRadio v-for="item in kinds" :key="item.value" :value="item.value" :label="item.label" />
         </VRadioGroup>
         <!-- While the answer for the current kind and source loads, the last one stays, marked as
              updating: the messages of the field, the facts and the status line, not the field. -->

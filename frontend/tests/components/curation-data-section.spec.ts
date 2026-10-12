@@ -33,7 +33,7 @@ import {
   SUBJECTS_COLUMNS,
   tableEntry,
 } from "../unit/curation-fixtures";
-import { button, click, labeled, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
+import { button, click, labeled, page, radio, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -1265,6 +1265,18 @@ describe("beyond the upload limits", () => {
     expect(page().get(".data-notice").text()).toBe("The workbook and the tables conflict.");
     // The rows of a study beyond the limits are not read.
     expect(requests.filter((request) => /\/(tables|sources)\//.test(request.path))).toEqual([]);
+  });
+
+  it("offers the kinds of a new table, which the study page describes without listing tables", async () => {
+    await mountSection(beyondLimitsDetail());
+    await press("Add table");
+    expect(["Outputs", "Timecourses", "Scatters", "Raw table"].map((label) => radio(label).disabled)).toEqual([
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect(radio("Outputs").checked).toBe(true);
   });
 });
 

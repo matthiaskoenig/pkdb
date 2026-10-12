@@ -37,7 +37,7 @@ import {
 } from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
 import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
-import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
+import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
 import { defaultSource, fileForSource } from "../../src/curation-app/data";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
@@ -108,8 +108,15 @@ describe("tables contract", () => {
       ["raw", "Raw table", "raw", true, true],
     ]);
     expect(kinds.filter((entry) => entry.addable).map((entry) => entry.kind)).toEqual(tablePreviewFixture.kinds);
-    // The app still has its own list until it reads the kinds of the study page.
-    expect([...TABLE_KINDS]).toEqual(kinds.filter((entry) => entry.kind !== "raw").map((entry) => entry.kind));
+    const detail = { table_kinds: kinds };
+    expect(noteKinds(detail)).toEqual(["subjects", "characteristica", "interventions", "outputs", "timecourses", "scatters"]);
+    expect(addableKinds(detail)).toEqual([
+      { value: "outputs", label: "Outputs" },
+      { value: "timecourses", label: "Timecourses" },
+      { value: "scatters", label: "Scatters" },
+      { value: "raw", label: "Raw table" },
+    ]);
+    expect(kindLabel(detail, "characteristica")).toBe("Characteristica");
   });
 
   it("compares the rows that both sides changed", () => {
@@ -136,7 +143,8 @@ describe("tables contract", () => {
 
 describe("table preview contract", () => {
   it("offers every kind of a new table that the library adds", () => {
-    expect(NEW_TABLE_KINDS.map((kind) => kind.value)).toEqual(tablePreviewFixture.kinds);
+    const detail = { table_kinds: contract<TableKindEntry[]>(tablesFixture.table_kinds) };
+    expect(addableKinds(detail).map((kind) => kind.value)).toEqual(tablePreviewFixture.kinds);
   });
 
   it("accepts every preview answer", () => {

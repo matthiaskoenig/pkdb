@@ -10,15 +10,20 @@ import type {
   StudyRow,
   TableEntry,
   TableFileKind,
+  TableKind,
   TableKindEntry,
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import { noteKinds } from "../../src/curation-app/tableKinds";
 import limitsFixture from "../fixtures/curation-contract/limits.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 
 /** The kinds of tables as the local server describes them (python/tests/test_curation_contract.py). */
 export const TABLE_KIND_ENTRIES = tablesFixture.table_kinds as TableKindEntry[];
+
+/** The table kinds with notes in study.json, as the study page describes them. */
+export const NOTE_KINDS: TableKind[] = noteKinds({ table_kinds: TABLE_KIND_ENTRIES });
 
 /**
  * A table of `GET /local/studies/<id>`: its class of information from its kind, as the local
