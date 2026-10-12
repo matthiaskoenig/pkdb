@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasNotes, kindsWithTable, notesKindOf, notesKindsOf } from "../../src/curation-app/notes";
+import { hasNotes, kindsWithTable, notesKindOf, notesKindsOf, notesSummary } from "../../src/curation-app/notes";
 import { NOTE_KINDS, tableEntry } from "./curation-fixtures";
 
 describe("notesKindOf", () => {
@@ -49,5 +49,15 @@ describe("hasNotes", () => {
     expect(hasNotes({ descriptions: [], comments: [{ user: "curator", text: "" }] })).toBe(true);
     expect(hasNotes({ descriptions: [], comments: [] })).toBe(false);
     expect(hasNotes(undefined)).toBe(false);
+  });
+});
+
+describe("notesSummary", () => {
+  it("counts the descriptions and comments of the notes of a kind", () => {
+    const comment = { user: "curator", text: "Checked." };
+    expect(notesSummary({ descriptions: ["a", "b"], comments: [comment] })).toBe("2 descriptions · 1 comment");
+    expect(notesSummary({ descriptions: ["a"], comments: [] })).toBe("1 description");
+    expect(notesSummary({ descriptions: [], comments: [comment, comment] })).toBe("2 comments");
+    expect(notesSummary({ descriptions: [], comments: [] })).toBe("No notes");
   });
 });

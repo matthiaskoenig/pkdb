@@ -5,6 +5,7 @@
  */
 import type { StudyDetail, TableKind } from "./api/types";
 import type { NotesForm } from "./metadata";
+import { plural } from "./overview";
 
 /**
  * The table kind of a field of study.json in its notes, such as `subjects` for
@@ -30,4 +31,13 @@ export function kindsWithTable(detail: Pick<StudyDetail, "tables">, kinds: reado
 /** Whether notes have a description or a comment, also one that was just added and is empty. */
 export function hasNotes(notes: NotesForm | undefined): boolean {
   return notes !== undefined && (notes.descriptions.length > 0 || notes.comments.length > 0);
+}
+
+/** What the notes of a kind hold, such as `2 descriptions · 1 comment`, or `No notes`. */
+export function notesSummary(notes: NotesForm): string {
+  const parts = [
+    notes.descriptions.length ? plural(notes.descriptions.length, "description") : "",
+    notes.comments.length ? plural(notes.comments.length, "comment") : "",
+  ].filter(Boolean);
+  return parts.join(" · ") || "No notes";
 }
