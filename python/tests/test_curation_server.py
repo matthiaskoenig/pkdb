@@ -1174,6 +1174,22 @@ def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
     assert cause.returncode == 4 and cause.stderr == b"no method available for opening"
 
 
+def test_a_folder_that_cannot_be_shown_says_so(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", _command_line(FAILING_OPENER))
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file, reveal=True, subject="outputs.xlsx of caffeine/Example")
+    assert failed.value.message == (
+        "Could not show outputs.xlsx of caffeine/Example in its folder."
+    )
+    assert failed.value.code == "open_failed"
+    # A folder has no folder to be shown in: it opens, and says so when it cannot.
+    with pytest.raises(ActionFailed) as failed:
+        open_path(tmp_path, reveal=True, subject="the folder of caffeine/Example")
+    assert failed.value.message == "Could not open the folder of caffeine/Example."
+
+
 def test_a_missing_opener_says_to_set_the_open_command(tmp_path, monkeypatch):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
