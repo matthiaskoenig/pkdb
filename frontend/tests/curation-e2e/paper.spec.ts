@@ -63,6 +63,8 @@ declare global {
   interface Window {
     /** The Content Security Policy violations of a tab that New tab opened. */
     __tabViolations: string[];
+    /** The tops of an element in the animation frames after a navigation, while it is there. */
+    __tops: number[];
   }
 }
 
@@ -96,6 +98,50 @@ test("a PDF opens in a tab of its own without the app bar", async ({ app, page }
   await expect(drawnPage(viewer)).toBeVisible();
   await expect(viewer.locator(".textLayer")).toContainText("Demo2020 is a synthetic test study of the PK-DB curation app.");
   await expect(page).toHaveTitle("Demo2020.pdf · caffeine/Demo2020 · PK-DB");
+});
+
+/**
+ * Record the top of `selector` in each animation frame of the next 400 ms, from the frame that
+ * shows it; `window.__tops` holds them.
+ */
+async function sampleTops(page: Page, selector: string): Promise<void> {
+  await page.evaluate((target) => {
+    window.__tops = [];
+    const start = performance.now();
+    const sample = (): void => {
+      const element = document.querySelector(target);
+      if (element) window.__tops.push(Math.round(element.getBoundingClientRect().top));
+      if (performance.now() - start < 400) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  }, selector);
+}
+
+/** The tops that `sampleTops` recorded, once its 400 ms are over. */
+async function sampledTops(page: Page): Promise<number[]> {
+  await page.waitForTimeout(500);
+  return page.evaluate(() => window.__tops);
+}
+
+test("the pages of the app stand still when the app bar comes and goes between the tab of a PDF and the study", async ({
+  app,
+  page,
+}) => {
+  await app.open(PAPER_TAB);
+  await expect(drawnPage(page.locator(".paper-viewer"))).toBeVisible();
+  // The link back to the study: its header is below the app bar from the first frame on.
+  await sampleTops(page, ".study-header");
+  await page.getByRole("link", { name: "caffeine/Demo2020" }).click();
+  const study = await sampledTops(page);
+  expect(study.length).toBeGreaterThan(5);
+  expect(new Set(study)).toEqual(new Set([study.at(-1)]));
+  expect(study.at(-1)).toBeGreaterThanOrEqual(36);
+  // Back in the history to the tab: its head is at the top from the first frame on.
+  await sampleTops(page, ".paper-page-head");
+  await page.goBack();
+  const tab = await sampledTops(page);
+  expect(tab.length).toBeGreaterThan(5);
+  expect(new Set(tab)).toEqual(new Set([0]));
 });
 
 for (const scheme of ["light", "dark"] as const) {

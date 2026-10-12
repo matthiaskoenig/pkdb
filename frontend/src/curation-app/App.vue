@@ -22,9 +22,18 @@ onBeforeUnmount(() => overview.stop());
 <template>
   <VApp>
     <AppHeader v-if="!bare" />
-    <VMain>
+    <VMain class="app-main">
       <StatusBanner />
       <RouterView />
     </VMain>
   </VApp>
 </template>
+
+<style scoped>
+/* Vuetify slides the main area for 0.2 s when its padding changes. Its padding changes only when
+   the app bar comes or goes with the route, between a PDF in a tab of its own and the other
+   pages: the next page stands where it belongs from its first frame on. */
+.app-main {
+  transition: none;
+}
+</style>
