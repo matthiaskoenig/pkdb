@@ -8,13 +8,21 @@ export interface PixelStats {
   dominant: [number, number, number];
 }
 
+/** A part of an element, in CSS pixels from its top left corner. */
+export interface Area {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 /**
- * The painted pixels of `locator`: a screenshot, decoded in a blank page of the same browser
- * context, which has no Content Security Policy. A screenshot shows what the browser painted,
- * unlike the image data of the page.
+ * The painted pixels of `locator`, or of an `area` of it: a screenshot, decoded in a blank page
+ * of the same browser context, which has no Content Security Policy. A screenshot shows what the
+ * browser painted, unlike the image data of the page.
  */
-export async function pixelStats(locator: Locator): Promise<PixelStats> {
-  const shot = await locator.screenshot();
+export async function pixelStats(locator: Locator, area?: Area): Promise<PixelStats> {
+  const shot = area ? await areaShot(locator, area) : await locator.screenshot();
   const probe = await locator.page().context().newPage();
   try {
     return await probe.evaluate(async (data) => {
@@ -46,4 +54,11 @@ export async function pixelStats(locator: Locator): Promise<PixelStats> {
   } finally {
     await probe.close();
   }
+}
+
+async function areaShot(locator: Locator, area: Area): Promise<Buffer> {
+  await locator.scrollIntoViewIfNeeded();
+  const box = await locator.boundingBox();
+  if (!box) throw new Error("The element of the area is not visible");
+  return locator.page().screenshot({ clip: { ...area, x: box.x + area.x, y: box.y + area.y } });
 }

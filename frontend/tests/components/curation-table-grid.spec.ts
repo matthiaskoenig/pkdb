@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
@@ -49,6 +51,29 @@ function lines(wrapper: VueWrapper): string[] {
 
 function region(wrapper: VueWrapper): HTMLElement {
   return wrapper.get<HTMLElement>('[role="region"]').element;
+}
+
+/**
+ * The rules of the style of TableGrid, read from its source, as jsdom applies no style of a
+ * component. Scoped selectors match without their attribute.
+ */
+function gridRules(): CSSStyleRule[] {
+  // In a variable: Vite turns `new URL` of a literal into the URL of an asset.
+  const source = "../../src/curation-app/components/TableGrid.vue";
+  const path = fileURLToPath(new URL(source, import.meta.url).href);
+  const style = document.createElement("style");
+  style.textContent = /<style scoped>([\s\S]*)<\/style>/.exec(readFileSync(path, "utf8"))![1]!;
+  document.head.append(style);
+  const rules = [...style.sheet!.cssRules].filter((rule): rule is CSSStyleRule => "selectorText" in rule);
+  style.remove();
+  return rules;
+}
+
+/** What the rules of TableGrid that match `element` declare for `property`, in their order; jsdom matches no `:hover`. */
+function declared(element: Element, property: string): string[] {
+  return gridRules()
+    .filter((rule) => rule.style.getPropertyValue(property) && !rule.selectorText.includes("::") && element.matches(rule.selectorText))
+    .map((rule) => rule.style.getPropertyValue(property));
 }
 
 /** The text of the elements that describe `element`. */
@@ -216,6 +241,19 @@ describe("TableGrid with many rows", () => {
     element.dispatchEvent(new Event("scroll"));
     await flushPromises();
     expect(element.classList).not.toContain("rows-scroll--stuck");
+  });
+
+  it("tints the rendered rows and the spacers of a large tinted table", async () => {
+    const wrapper = mount(TableGrid, { props: { table: large(), tinted: true } });
+    const element = region(wrapper);
+    element.scrollTop = 2100 * 22;
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    const spacers = wrapper.findAll("tbody tr[aria-hidden] > td");
+    expect(spacers).toHaveLength(2);
+    const row = wrapper.get("tbody tr[data-index]");
+    for (const cell of [...spacers, ...row.findAll("td"), row.get("th")])
+      expect(declared(cell.element, "background-color")).toEqual([expect.stringContaining("var(--v-info-cell-tint)")]);
   });
 
   it("renders every row up to 500 rows", () => {
@@ -406,6 +444,15 @@ describe("selection and the line filter", () => {
     const wrapper = mountGrid({ visibleLines: new Set([2, 4]) });
     expect(wrapper.findAll("tbody tr[data-index]").map((row) => row.get("th").text())).toEqual(["2", "4"]);
     expect(wrapper.get("table").attributes("aria-rowcount")).toBe("3");
+  });
+
+  it("frames the only cell of the selected row on all four sides", () => {
+    const names: TableResponse = { ...small, header: ["label"], rows: small.rows.map(({ line, cells }) => ({ line, cells: [cells[2]!] })) };
+    const wrapper = mount(TableGrid, { props: { table: names, lineHeader: null, focus: { line: 3 } } });
+    const cell = wrapper.get("tr.grid-row--focus > td").element;
+    // The first cell draws the start of the frame and the last its end: the only cell both.
+    expect(declared(cell, "--grid-frame-start")).toEqual(["1px"]);
+    expect(declared(cell, "--grid-frame-end")).toEqual(["1px"]);
   });
 
   it("tints the row of the focus", () => {

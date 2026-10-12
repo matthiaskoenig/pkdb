@@ -38,6 +38,17 @@ test("the data of a figure are violet", async ({ app, page }) => {
   expectColor((await pixelStats(header)).dominant, over("#6a3fb5", 0.16));
 });
 
+test("the header row fades out to its own tint where more columns follow", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
+  const rows = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
+  await expect(rows.getByRole("columnheader", { name: "label", exact: true })).toBeVisible();
+  await expect(page.locator(".rows-pane .table-grid")).toHaveClass(/table-grid--more/);
+  const { width } = (await rows.boundingBox())!;
+  // Ten pixels at the end of the header row, below the top of the fade and above the line of the row.
+  const end = await pixelStats(rows, { x: width - 12, y: 8, width: 10, height: 12 });
+  expectColor(end.dominant, over("#6a3fb5", 0.16));
+});
+
 test("the selected row has a frame of 1 px, and a problem in it keeps its outline inside the frame", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv&line=6");
   const row = page

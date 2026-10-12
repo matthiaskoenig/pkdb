@@ -109,14 +109,16 @@ const start = ref(0);
 /** Whether rows scroll below the header, which then needs its background. */
 const scrolled = ref(false);
 /**
- * Whether more columns follow at the end of the region, which the rows then fade out to, and the
- * sizes of its scroll bars, which the fade leaves free.
+ * Whether more columns follow at the end of the region, which the rows then fade out to, the
+ * sizes of its scroll bars, which the fade leaves free, and the height of the header row, which a
+ * tinted grid fades out to its own tint.
  */
 const more = ref(false);
 const scrollbars = ref({ x: 0, y: 0 });
 const fade = computed(() => ({
   "--grid-scrollbar-x": `${scrollbars.value.x}px`,
   "--grid-scrollbar-y": `${scrollbars.value.y}px`,
+  "--grid-head-height": `${headerHeight.value}px`,
 }));
 
 function windowEnd(first: number): number {
@@ -513,9 +515,19 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
    table in the color `--info` (the RGB of a theme color): the header row over the surface at
    `--v-info-head-tint`, the cells at `--v-info-cell-tint`, opaque on the line column, which
    covers the rows that scroll below it, and a hovered row at the tint of the header. The amber
-   rows of open review items and the selected row keep their own tints. */
+   rows of open review items and the selected row keep their own tints. Where more columns
+   follow, the header row fades out to its own tint and the rows to the surface. */
+.table-grid--tinted {
+  --grid-head: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+}
 .table-grid--tinted .rows-table thead th {
-  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+  background-color: var(--grid-head);
+}
+.table-grid--tinted.table-grid--more::after {
+  background:
+    linear-gradient(to left, var(--grid-head), transparent) top / 100% var(--grid-head-height) no-repeat,
+    linear-gradient(to left, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0)) bottom / 100%
+      calc(100% - var(--grid-head-height)) no-repeat;
 }
 .table-grid--tinted td {
   background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-cell-tint), transparent);
@@ -593,15 +605,18 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   --grid-outline: inset 0 0 0 2px var(--grid-amber);
 }
 /* The selected row: a frame of 1 px in the primary color around its tint, which keeps it apart
-   on the green and violet tints of the tables. */
+   on the green and violet tints of the tables. Every cell draws its top and bottom, the first cell
+   the start and the last cell the end; a cell that is both draws both. */
 .rows-table .grid-row--focus > * {
-  --grid-frame: inset 0 1px rgb(var(--v-theme-primary)), inset 0 -1px rgb(var(--v-theme-primary));
+  --grid-frame:
+    inset var(--grid-frame-start, 0px) 1px rgb(var(--v-theme-primary)),
+    inset calc(-1 * var(--grid-frame-end, 0px)) -1px rgb(var(--v-theme-primary));
 }
 .rows-table .grid-row--focus > :first-child {
-  --grid-frame: inset 1px 1px rgb(var(--v-theme-primary)), inset 0 -1px rgb(var(--v-theme-primary));
+  --grid-frame-start: 1px;
 }
 .rows-table .grid-row--focus > :last-child {
-  --grid-frame: inset -1px -1px rgb(var(--v-theme-primary)), inset 0 1px rgb(var(--v-theme-primary));
+  --grid-frame-end: 1px;
 }
 /* The marked column: a tint over the cell, so that the header keeps its background below it. */
 .rows-table .grid-cell--marked {

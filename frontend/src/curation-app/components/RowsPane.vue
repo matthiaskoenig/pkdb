@@ -300,4 +300,9 @@ const missingLine = computed(() => {
   border-radius: 0;
   border-inline: 0;
 }
+/* The fade of more columns ends at the edge of the region, which has no radius and no side borders here. */
+.rows-pane-grid.table-grid--more::after {
+  inset-inline-end: var(--grid-scrollbar-y, 0px);
+  border-radius: 0;
+}
 </style>
