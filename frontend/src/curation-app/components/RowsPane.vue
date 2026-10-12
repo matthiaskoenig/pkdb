@@ -293,12 +293,14 @@ const missingLine = computed(() => {
 .rows-pane > .status-alert {
   margin: 8px;
 }
-/* The rows take what the head, the notes and the conflicts leave of the pane, and at least room for
-   their header and four rows of 22 px with a scroll bar: the panels above them shrink first and
-   scroll on their own. */
+/* The rows take the room that they need, and what the head, the notes and the conflicts leave of
+   the pane: open notes grow into the room below a short table. In a pane too short for all, the
+   rows give up their room first, down to their header and four rows of 22 px with a scroll bar:
+   their factor of shrinking outweighs that of the notes, which outweighs that of the conflicts.
+   Then the panels above them shrink and scroll on their own. */
 .rows-pane-grid {
   --rows-max-height: 100%;
-  flex: 1;
+  flex: 1 1000000 auto;
   min-height: 120px;
 }
 .rows-pane-grid :deep(.rows-scroll) {

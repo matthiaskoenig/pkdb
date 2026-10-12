@@ -38,6 +38,18 @@ const body = ref<HTMLElement | null>(null);
 const content = ref<HTMLElement | null>(null);
 /** Whether more of the open body follows below its view, which a fade at its bottom shows. */
 const { more, scrollbar } = useMoreBelow(body, content);
+/** The height of the open body whole, which the panel grows to at most; null until it is measured. */
+const contentHeight = ref<number | null>(null);
+watch(
+  content,
+  (element, _, onCleanup) => {
+    if (!element) return;
+    const observer = new ResizeObserver(() => (contentHeight.value = element.offsetHeight));
+    observer.observe(element);
+    onCleanup(() => observer.disconnect());
+  },
+  { immediate: true, flush: "post" },
+);
 
 const detail = computed(() => study.detail);
 /** The kind as the study page names it, in lower case, such as `subjects`. */
@@ -85,7 +97,12 @@ watch(
 </script>
 
 <template>
-  <section class="table-notes" :aria-labelledby="headingId">
+  <section
+    class="table-notes"
+    :class="{ 'table-notes--open': open }"
+    :style="contentHeight === null ? undefined : { '--table-notes-content': `${contentHeight}px` }"
+    :aria-labelledby="headingId"
+  >
     <h4 :id="headingId" class="table-notes-heading">
       <button
         ref="toggle"
@@ -104,7 +121,7 @@ watch(
          scrolls on its own, and while more of it follows below, a fade at its bottom shows it. -->
     <div v-show="open" class="table-notes-frame">
       <div :id="bodyId" ref="body" class="table-notes-body">
-        <div ref="content">
+        <div ref="content" class="table-notes-content">
           <NotesFields
             v-if="notes"
             v-model:descriptions="notes.descriptions"
@@ -132,16 +149,23 @@ watch(
 </template>
 
 <style scoped>
-/* In a short pane, the open notes give up their room before the conflicts above them: they shrink
-   down to their header and its border, and their body scrolls, rather than push the rows out of
-   the pane. The header has the height of the head of the rows pane. */
+/* The header has the height of the head of the rows pane. */
 .table-notes {
   --table-notes-head: 26px;
   display: flex;
-  flex: 0 1000 auto;
+  flex: 0 0 auto;
   flex-direction: column;
   min-height: calc(var(--table-notes-head) + 1px);
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+/* Open in the rows pane, the notes take the room that the rows leave, up to their whole height
+   (the measured height of their content): above a short table they show whole. Above a long table,
+   whose rows give up their room first (RowsPane.vue), they keep 40 % of the window, at most 28rem,
+   and their body scrolls. In a short pane they then shrink down to their header and its border
+   before the conflicts above them, rather than push the rows out of the pane. */
+.table-notes--open {
+  flex: 1000 1000 calc(var(--table-notes-head) + 1px + min(40vh, 28rem));
+  max-height: calc(var(--table-notes-head) + 1px + var(--table-notes-content));
 }
 .table-notes-heading {
   flex: 0 0 auto;
@@ -199,15 +223,18 @@ watch(
 .table-notes-frame {
   position: relative;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
 }
-/* Open, the notes leave most of the pane to the rows and scroll on their own. */
 .table-notes-body {
+  flex: 1 1 auto;
   min-height: 0;
-  max-height: min(40vh, 28rem);
   overflow-y: auto;
+}
+/* The padding is part of the content, whose height the panel grows to. */
+.table-notes-content {
   padding: 8px 12px 12px;
 }
 .table-notes-text {
