@@ -19,7 +19,7 @@ from curation_http import authenticate, error_body, request
 from pkdb.curation import launch
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine, WorkspaceError
-from pkdb.curation.errors import ActionFailed, MissingField
+from pkdb.curation.errors import ActionFailed, ErrorLog, MissingField
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.launch import open_path, windows_quoted
 from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
@@ -867,6 +867,33 @@ def test_every_failure_of_an_action_has_the_error_body(
     # The settings belong to no study: no entry in an activity.
     assert "activity_id" not in body
     engine.record_failure.assert_not_called()
+
+
+def test_a_failed_read_that_the_app_polls_is_logged_once_a_minute(
+    local_server, tmp_path, capsys
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    engine.log = ErrorLog(tmp_path / "logs" / "curation.log", engine.secrets)
+    engine.study_detail.side_effect = PermissionError(
+        13, "Permission denied", "/w/caffeine/Demo2020/outputs_Tab2.tsv"
+    )
+    # The app asks for the study detail every 1.5 seconds.
+    for _ in range(3):
+        status, _, data = request(
+            server, "GET", "/local/studies/caffeine/Demo2020", headers=headers
+        )
+        assert (status, json.loads(data)["code"]) == (400, "file_error")
+    engine.log.close()
+    text = engine.log.path.read_text(encoding="utf-8")
+    assert text.count("Traceback") == 1
+    assert text.count("repeats Error") == 2
+    lines = capsys.readouterr().err.splitlines()
+    assert len(lines) == 1
+    assert re.fullmatch(
+        r"Error [0-9a-f]{8} in Read the study: PermissionError \(see .*curation\.log\)",
+        lines[0],
+    )
 
 
 def test_failures_reach_the_log_as_they_deserve(local_server):

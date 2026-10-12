@@ -8,6 +8,8 @@ are never logged: their URLs can carry the launch token.
 
 import logging
 import sys
+import threading
+import time
 import traceback
 from collections.abc import Callable, Iterable
 from datetime import datetime
@@ -24,6 +26,10 @@ STDERR_TAIL = 2048
 #: The size of the log file before it rotates, and how many old files it keeps.
 LOG_BYTES = 1024 * 1024
 LOG_BACKUPS = 3
+#: A failure that repeats one logged less than this many seconds ago, with the same label,
+#: message and detail, is not logged again with its traceback nor named in the terminal: a
+#: read that the app polls or a file watcher that fails every second does not flood them.
+REPEAT_SECONDS = 60
 
 
 def redact(text: str, secrets: Iterable[str | None]) -> str:
@@ -177,9 +183,17 @@ class ErrorLog:
 
     The file is `logs/curation.log` of the state directory; it rotates at 1 MB and keeps
     three old files. Each instance has a logger of its own, so engines never share a file.
+    A failure is logged with its traceback and named in the terminal once a minute: a repeat
+    gets one line in the file that names the request id of the failure it repeats.
     """
 
-    def __init__(self, path: Path, secrets: Callable[[], Iterable[str | None]]):
+    def __init__(
+        self,
+        path: Path,
+        secrets: Callable[[], Iterable[str | None]],
+        *,
+        clock: Callable[[], float] = time.monotonic,
+    ):
         self.path = path
         self._secrets = secrets
         self._closed = False
@@ -195,6 +209,43 @@ class ErrorLog:
         # Not registered with logging.getLogger: no other logger reaches this file.
         self._logger = logging.Logger("pkdb.curation", logging.INFO)
         self._logger.addHandler(self.handler)
+        self._clock = clock
+        # The failures logged in the last minute: when, and their request id, by their label,
+        # message and detail. The server, the jobs and the watcher log from their threads.
+        self._lock = threading.Lock()
+        self._logged: dict[tuple[str, str, str | None], tuple[float, str]] = {}
+
+    def _repeats(self, body: dict, label: str) -> str | None:
+        """The request id of the same failure logged less than a minute ago, if any.
+
+        Otherwise this failure is the one that the next minute repeats.
+        """
+        key = (label, body["error"], body["detail"])
+        moment = self._clock()
+        with self._lock:
+            logged = self._logged.get(key)
+            if logged is not None and moment - logged[0] < REPEAT_SECONDS:
+                return logged[1]
+            self._logged = {
+                other: value
+                for other, value in self._logged.items()
+                if moment - value[0] < REPEAT_SECONDS
+            }
+            self._logged[key] = (moment, body["request_id"])
+        return None
+
+    def _log(self, level: int, body: dict, error: BaseException, label: str) -> None:
+        if (first := self._repeats(body, label)) is not None:
+            self._logger.log(
+                level,
+                "Error %s in %s repeats Error %s, which the log has with its traceback",
+                body["request_id"],
+                body["action"],
+                first,
+            )
+            return
+        self._write(level, body, error)
+        self._terminal(body, error, label)
 
     def _write(self, level: int, body: dict, error: BaseException) -> None:
         self._logger.log(
@@ -230,15 +281,17 @@ class ErrorLog:
     ) -> None:
         """Log a failure that the app explains, with its traceback, and name it in one terminal line.
 
-        The label of the line is the action of the body unless given.
+        The label of the line is the action of the body unless given. A repeat within a
+        minute gets one line in the file.
         """
-        self._write(logging.WARNING, body, error)
-        self._terminal(body, error, label or body["action"])
+        self._log(logging.WARNING, body, error, label or body["action"])
 
     def unexpected(self, body: dict, error: BaseException, *, label: str) -> None:
-        """Log an unexpected error with its traceback, and name it in one terminal line."""
-        self._write(logging.ERROR, body, error)
-        self._terminal(body, error, label)
+        """Log an unexpected error with its traceback, and name it in one terminal line.
+
+        A repeat within a minute gets one line in the file.
+        """
+        self._log(logging.ERROR, body, error, label)
 
     def close(self) -> None:
         """Close the file; later records go nowhere, not even to the last resort handler."""

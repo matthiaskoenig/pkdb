@@ -38,10 +38,6 @@ NOT_CHECKED_SYNC = {"status": "not_checked", "changes": 0, "conflicts": 0}
 # tick keep the start of a large workspace fast.
 CHECK_LIMIT = 5
 
-#: A failure of the watcher that repeats one logged less than this many seconds ago is not
-#: logged again, so that a folder that fails every second does not flood the log.
-WATCH_LOG_SECONDS = 60
-
 
 class WorkspaceError(ValueError):
     """A workspace or folder request that the curator can correct."""
@@ -408,7 +404,10 @@ class WorkspaceMixin(EngineState):
                 self._watch_recovered()
 
     def _watch_failed(self, error: Exception) -> None:
-        """Keep the failure for the File watching menu, and log it unless it repeats."""
+        """Keep the failure for the File watching menu, and log it.
+
+        The log keeps a failure that repeats every second with its traceback once a minute.
+        """
         body = describe(
             error,
             action="File watching",
@@ -418,25 +417,13 @@ class WorkspaceMixin(EngineState):
             unexpected=True,
             secrets=self.secrets(),
         )
-        moment = time.monotonic()
         with self.lock:
             self.watcher_error = {
                 "time": body["time"],
                 "detail": body["detail"],
                 "recovered": False,
             }
-            last = self._watch_logged.get(body["detail"])
-            repeated = last is not None and moment - last < WATCH_LOG_SECONDS
-            if not repeated:
-                # Only the failures of the last minute can still repeat.
-                self._watch_logged = {
-                    detail: logged
-                    for detail, logged in self._watch_logged.items()
-                    if moment - logged < WATCH_LOG_SECONDS
-                }
-                self._watch_logged[body["detail"]] = moment
-        if not repeated:
-            self.log.unexpected(body, error, label="File watching")
+        self.log.unexpected(body, error, label="File watching")
 
     def _watch_unrecorded(self, recording: Exception) -> None:
         """Keep a minimal failure when the failure of the watcher could not be described."""

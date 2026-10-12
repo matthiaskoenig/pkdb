@@ -1651,10 +1651,10 @@ def test_the_same_watcher_error_after_a_recovery_is_logged_once_but_kept(
             times.append(dict(engine.watcher_error))
 
     monkeypatch.setattr(engine, "scan", scan)
-    monkeypatch.setattr(workspace_module.time, "monotonic", lambda: 1000.0)
     engine._watch()
     # The first check after the failure still holds it unrecovered; the repeat after the
-    # recovery is not logged again, but the kept error is replaced and unrecovered again.
+    # recovery, within the minute, is not logged again with its traceback, but the kept
+    # error is replaced and unrecovered again.
     assert times[0]["recovered"] is False
     assert times[1]["recovered"] is False
     assert engine.watcher_error["recovered"] is True

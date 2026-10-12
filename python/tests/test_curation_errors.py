@@ -10,6 +10,7 @@ import pytest
 from pkdb.curation.errors import (
     LOG_BACKUPS,
     LOG_BYTES,
+    REPEAT_SECONDS,
     STDERR_TAIL,
     ActionFailed,
     ErrorLog,
@@ -279,3 +280,67 @@ def test_a_missing_or_broken_console_does_not_fail_the_handling(
     log.unexpected(body, RuntimeError("x"), label="Open tables")
     log.close()
     assert log.path.read_text(encoding="utf-8").count("Error 3f9c2a71") == 2
+
+
+class Clock:
+    """A clock whose seconds pass when the test says so."""
+
+    def __init__(self):
+        self.now = 1000.0
+
+    def __call__(self):
+        return self.now
+
+
+def _read_failure(request_id, detail="PermissionError: outputs_Tab2.tsv"):
+    """The body of a failed read of the study detail, which the app polls."""
+    return {
+        "error": "Could not read caffeine/Demo2020.",
+        "code": "file_error",
+        "detail": detail,
+        "action": "Read the study (GET /local/studies/caffeine/Demo2020)",
+        "request_id": request_id,
+    }
+
+
+def test_a_repeated_failure_is_logged_and_named_once_a_minute(tmp_path, capsys):
+    clock = Clock()
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [], clock=clock)
+    try:
+        raise PermissionError(13, "Permission denied")
+    except PermissionError as raised:
+        error = raised
+    # The app polls the study every 1.5 seconds: the same failure, again and again.
+    for index, request_id in enumerate(["00000001", "00000002", "00000003"]):
+        clock.now = 1000.0 + 1.5 * index
+        log.failed(_read_failure(request_id), error, label="Read the study")
+    # The same detail of another action, and another detail of the same action.
+    log.failed(_read_failure("00000004"), error, label="Read a table")
+    log.failed(
+        _read_failure("00000005", "PermissionError: other"),
+        error,
+        label="Read the study",
+    )
+    # A minute after it was logged, the failure is logged again.
+    clock.now = 1000.0 + REPEAT_SECONDS
+    log.failed(_read_failure("00000006"), error, label="Read the study")
+    log.close()
+    text = log.path.read_text(encoding="utf-8")
+    assert text.count("Traceback") == 4
+    # A repeat names the failure that the log keeps with its traceback, in one line.
+    repeat = (
+        "WARNING Error {} in Read the study (GET /local/studies/caffeine/Demo2020) "
+        "repeats Error 00000001, which the log has with its traceback"
+    )
+    assert repeat.format("00000002") in text
+    assert repeat.format("00000003") in text
+    terminal = [
+        line.split(" (see ")[0] for line in capsys.readouterr().err.splitlines()
+    ]
+    assert terminal == [
+        "Error 00000001 in Read the study: PermissionError",
+        "Error 00000004 in Read a table: PermissionError",
+        "Error 00000005 in Read the study: PermissionError",
+        "Error 00000006 in Read the study: PermissionError",
+    ]
+    assert REPEAT_SECONDS == 60

@@ -79,8 +79,6 @@ class CurationEngine(
         self.log = ErrorLog(self.state_dir / "logs" / "curation.log", self.secrets)
         # The last failure of the file watcher, which the File watching menu shows.
         self.watcher_error = None
-        # When the watcher logged each distinct failure last (monotonic seconds).
-        self._watch_logged: dict[str | None, float] = {}
         self.user = user or os.environ.get("PKDB_USER") or saved.get("user") or ""
         configured_endpoint = (
             endpoint or os.environ.get("PKDB_ENDPOINT") or saved.get("endpoint")
