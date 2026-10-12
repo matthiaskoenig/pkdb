@@ -836,6 +836,18 @@ describe("linked selection", () => {
     expect(rowsPane().attributes("aria-label")).toBe("Table outputs_Tab2.tsv");
   });
 
+  it("opens the first table naming a chosen source without tables of its own, from a table of another source", async () => {
+    const text = sourceSummary({ source: "Text", kind: "text", tables: ["subjects.tsv"] });
+    await mountSection(
+      detail({ sources: [...detail().sources, text] }),
+      { [`GET ${EXAMPLE}/sources/Text`]: { ...missing, source: "Text" } },
+      `${SECTION}?source=Tab2&file=outputs_Tab2.tsv`,
+    );
+    await choose("source", "Text");
+    await routed({ source: "Text", file: "subjects.tsv" });
+    expect(rowsPane().attributes("aria-label")).toBe("Table subjects.tsv");
+  });
+
   it("keeps the shared table for a chosen source without tables of its own", async () => {
     // A text has no tables of its own; its rows live in the shared tables.
     const text = sourceSummary({ source: "Text", kind: "text", tables: ["subjects.tsv"] });

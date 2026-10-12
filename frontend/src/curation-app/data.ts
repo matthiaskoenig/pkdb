@@ -81,17 +81,19 @@ export function ownerOf(study: Study, file: string): string | null {
 
 /**
  * The table file that a source opens: the current one when the source owns it, else its first
- * own table in the order of the study page, its raw table last. A shared table that shows every
- * row stays only for a source without tables of its own, such as a text, which keeps a valid
- * current file; without one it opens the first table that names the source in its rows, else
- * the first table of the study.
+ * own table in the order of the study page, its raw table last. A source without tables of its
+ * own, such as a text, keeps the current table only when it is a shared table, which shows the
+ * rows of every source; else it opens the first table that names the source in its rows, else
+ * the current table, else the first table of the study.
  */
 export function fileForSource(study: Study, source: SourceSummary, current: string | null): string | null {
   const files = tableFiles(study);
   const valid = current !== null && files.includes(current) ? current : null;
   if (valid !== null && ownerOf(study, valid) === source.source) return valid;
   const own = files.find((file) => ownerOf(study, file) === source.source);
-  return own ?? valid ?? files.find((file) => source.tables.includes(file)) ?? files[0] ?? null;
+  if (own !== undefined) return own;
+  if (valid !== null && isShared(study, valid)) return valid;
+  return files.find((file) => source.tables.includes(file)) ?? valid ?? files[0] ?? null;
 }
 
 /** The problems of a navigator entry by severity. */

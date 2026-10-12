@@ -117,10 +117,17 @@ describe("the file of a source", () => {
     expect(fileForSource(rawOnly, tab2, "subjects.tsv")).toBe("Example_Tab2.tsv");
   });
 
-  it("keeps a valid current file for a source without tables of its own, else opens the first table naming it", () => {
+  it("keeps a shared current table for a source without tables of its own, else opens the first table naming it", () => {
     const named = sourceSummary({ source: "Text", kind: "text", tables: ["interventions.tsv"] });
     expect(fileForSource(detail(), named, "subjects.tsv")).toBe("subjects.tsv");
-    expect(fileForSource(detail(), named, "outputs_Tab2.tsv")).toBe("outputs_Tab2.tsv");
+    expect(fileForSource(detail(), named, "interventions.tsv")).toBe("interventions.tsv");
+    // A table of another source is not kept: its rows all name that other source.
+    expect(fileForSource(detail(), named, "outputs_Tab2.tsv")).toBe("interventions.tsv");
+    expect(fileForSource(detail(), named, "Example_Tab2.tsv")).toBe("interventions.tsv");
+    const textual = sourceSummary({ source: "Text", kind: "text", tables: ["subjects.tsv"] });
+    expect(fileForSource(detail(), textual, "outputs_Tab2.tsv")).toBe("subjects.tsv");
+    const unnamed = sourceSummary({ source: "Text", kind: "text" });
+    expect(fileForSource(detail(), unnamed, "outputs_Tab2.tsv")).toBe("outputs_Tab2.tsv");
     expect(fileForSource(detail(), named, "gone.tsv")).toBe("interventions.tsv");
     expect(fileForSource(detail(), named, null)).toBe("interventions.tsv");
     expect(fileForSource(detail(), text, null)).toBe("subjects.tsv");
