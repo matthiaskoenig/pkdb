@@ -9,6 +9,7 @@ import type {
   SourcePoint,
   SourceView,
   StudyDetail,
+  StudyMetadata,
   SyncState,
   TableResponse,
   TablesResult,
@@ -30,16 +31,30 @@ import {
   snapshot,
   sourceSummary,
   studyDetail,
+  studyMetadata,
   SUBJECTS_COLUMNS,
   tableEntry,
 } from "../unit/curation-fixtures";
-import { button, click, labeled, page, radio, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
+import {
+  button,
+  buttons,
+  click,
+  labeled,
+  page,
+  radio,
+  serveApi,
+  setViewport,
+  textArea,
+  type Handler,
+  type ServedRequest,
+} from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
 const EXAMPLE = "/local/studies/caffeine/Example";
 const TABLES = "/local/studies/tables";
 const SECTION = "/studies/caffeine/Example/data";
+const METADATA = "/local/studies/metadata";
 
 const OUTPUTS_HEADER = ["study", "source", "label", "measurement", "mean", "sd", "unit", "comment"];
 const TIMECOURSES_HEADER = ["study", "source", "label", "time", "time_unit", "mean", "unit", "error_bar"];
@@ -1508,5 +1523,111 @@ describe("loading of the rows", () => {
     await click("Retry");
     expect(rowsPane().text()).not.toContain("could not be loaded");
     expect(lines()).toEqual(["2", "3", "4"]);
+  });
+});
+
+describe("notes of the tables", () => {
+  /** The label of the tab of a section with what screen readers hear after it. */
+  function tabLabel(label: string): string | undefined {
+    return page()
+      .findAll('nav[aria-label="Study sections"] .section-tab-label')
+      .map((entry) => entry.text())
+      .find((text) => text === label || text.startsWith(`${label},`));
+  }
+
+  /** The study with a description of the subjects in study.json. */
+  function withNotes(): StudyDetail {
+    return detail({
+      metadata: {
+        revision: "study-1",
+        value: studyMetadata({ notes: { subjects: { descriptions: ["Healthy volunteers."], comments: [] } } }),
+        issues: [],
+      },
+    });
+  }
+
+  /** Writes study.json as the local server would: the detail has the new revision afterwards. */
+  const write: Handler = (body) => {
+    served = { ...served, metadata: { revision: "study-2", value: body?.metadata as StudyMetadata, issues: [] } };
+    return json({ revision: "study-2", reference: null, reference_error: null });
+  };
+
+  const toggle = () => rowsPane().get(".table-notes-toggle");
+
+  it("shows the notes of the kind of a table between its head and its rows, and none for a raw table", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
+    expect(toggle().text()).toBe("Notes of the subjects 1 description");
+    const order = [...rowsPane().element.children].map((child) => child.classList);
+    expect(order.findIndex((classes) => classes.contains("pane-head"))).toBe(0);
+    expect(order.findIndex((classes) => classes.contains("table-notes"))).toBeLessThan(
+      order.findIndex((classes) => classes.contains("rows-pane-grid")),
+    );
+
+    await choose("file", "Example_Tab2.tsv");
+    await routed({ file: "Example_Tab2.tsv" }, "partly");
+    expect(rowsPane().find(".table-notes").exists()).toBe(false);
+  });
+
+  it("shows the same notes for every table of a kind, open or closed", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=timecourses_Fig1.tsv`);
+    expect(toggle().text()).toBe("Notes of the timecourses No notes");
+    await toggle().trigger("click");
+    await choose("file", "timecourses_Fig2.tsv");
+    await routed({ file: "timecourses_Fig2.tsv" }, "partly");
+    expect(toggle().text()).toBe("Notes of the timecourses No notes");
+    expect(toggle().attributes("aria-expanded")).toBe("true");
+    await choose("file", "subjects.tsv");
+    await routed({ file: "subjects.tsv" }, "partly");
+    expect(toggle().attributes("aria-expanded")).toBe("false");
+  });
+
+  it("edits the notes in the draft of study.json, marks the Data tab and saves from the bar at the bottom", async () => {
+    await mountSection(withNotes(), { [`POST ${METADATA}`]: write }, `${SECTION}?file=subjects.tsv`);
+    expect(page().find(".study-savebar").exists()).toBe(false);
+    await toggle().trigger("click");
+    await textArea("Description 1", rowsPane().element).setValue("Healthy adult volunteers.");
+
+    const bar = page().get(".data-section .study-savebar");
+    expect(bar.text()).toContain("Unsaved changes in study.json");
+    // The panes fill the window: the bar ends the section instead of sticking to the window.
+    expect(bar.classes()).toContain("study-savebar--static");
+    expect(tabLabel("Data")).toBe("Data, unsaved changes");
+    expect(tabLabel("Metadata")).toBe("Metadata");
+
+    await click("Save");
+    const saves = requests.filter((request) => request.method === "POST" && request.path === METADATA);
+    expect(saves.map(({ body }) => body)).toEqual([
+      {
+        study: "caffeine/Example",
+        revision: "study-1",
+        metadata: { ...studyMetadata(), notes: { subjects: { descriptions: ["Healthy adult volunteers."], comments: [] } } },
+      },
+    ]);
+    expect(page().get(".study-savebar").text()).toContain("study.json saved.");
+    expect(tabLabel("Data")).toBe("Data");
+  });
+
+  it("keeps the edits of the notes and the bar while another section opens", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
+    await toggle().trigger("click");
+    await textArea("Description 1", rowsPane().element).setValue("Edited.");
+
+    await router.push("/studies/caffeine/Example/metadata");
+    await flushPromises();
+    expect(buttons("Stay")).toHaveLength(0);
+    expect(page().get(".study-savebar").text()).toContain("Unsaved changes in study.json");
+
+    await router.push(`${SECTION}?file=subjects.tsv`);
+    await flushPromises();
+    expect(toggle().attributes("aria-expanded")).toBe("true");
+    expect(textArea("Description 1", rowsPane().element).element.value).toBe("Edited.");
+  });
+
+  it("sticks the bar to the window when the panes stack", async () => {
+    setViewport(900);
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
+    await toggle().trigger("click");
+    await textArea("Description 1", rowsPane().element).setValue("Edited.");
+    expect(page().get(".study-savebar").classes()).not.toContain("study-savebar--static");
   });
 });

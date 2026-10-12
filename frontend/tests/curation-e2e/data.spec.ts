@@ -725,6 +725,43 @@ test.describe("tables", () => {
     expect(cellOf(workspace, 7, "mean")).toBe("1.08");
   });
 
+  test("in a short window, the conflicts and the open notes above the rows scroll on their own and leave rows in view", async ({
+    app,
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1366, height: 640 });
+    const workspace = app.server.workspace;
+    // Both sides change line 8 before a sync runs.
+    await setAutomaticActions(page, true);
+    await editWorkbook(workspace, 8, "mean", "0.91");
+    editTable(workspace, 8, "mean", "0.92");
+    await setAutomaticActions(page, false);
+    const panel = page.getByRole("region", { name: "Conflicting rows", exact: true });
+    await expect(panel).toBeVisible();
+    const pane = page.getByRole("region", { name: `Table ${TABLE}`, exact: true });
+    const toggle = pane.getByRole("button", { name: /^Notes of the timecourses/ });
+    const notes = pane.getByRole("region", { name: /^Notes of the timecourses/ });
+    await toggle.click();
+    await expect(notes.getByRole("button", { name: "Add description" })).toBeAttached();
+
+    const rows = pane.getByRole("region", { name: `Rows of ${TABLE}`, exact: true });
+    const [conflicts, open, head, grid, header, section] = await Promise.all(
+      [panel, notes, toggle, rows, rows.getByRole("row").first(), pane].map(async (part) => (await part.boundingBox())!),
+    );
+    const bottom = (box: { y: number; height: number }) => box.y + box.height;
+    expect(bottom(conflicts!)).toBeLessThanOrEqual(open!.y);
+    // The header of the notes stays whole above their body.
+    expect(bottom(head!)).toBeLessThanOrEqual(bottom(open!));
+    expect(bottom(open!)).toBeLessThanOrEqual(grid!.y);
+    expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
+    // The rows keep their header and four rows in view.
+    expect(grid!.height).toBeGreaterThanOrEqual(5 * header!.height);
+
+    // Keeping the workbook leaves the tables in sync for the next test.
+    await panel.getByRole("button", { name: "Keep workbook" }).click();
+    await expect(syncStatus(page, "In sync")).toBeVisible();
+  });
+
   test("Add table previews the new table on the local server while the curator types, then adds its sheet", async ({ page }) => {
     await page.getByRole("button", { name: "Add table", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Add table" });

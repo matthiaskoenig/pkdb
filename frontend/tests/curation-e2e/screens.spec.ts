@@ -67,6 +67,17 @@ const SCREENS: Screen[] = [
     },
   },
   {
+    name: "notes of a table",
+    hash: `${STUDY}/data?file=subjects.tsv`,
+    ready: async (page) => {
+      const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+      const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+      // The panel keeps its state when the window narrows, so it opens once.
+      if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
+      await expect(pane.getByRole("textbox", { name: "Description 1" })).toBeVisible();
+    },
+  },
+  {
     name: "activity",
     hash: `${STUDY}/activity`,
     ready: async (page) => {

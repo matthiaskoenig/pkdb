@@ -26,8 +26,9 @@ const detail = studyDetail({
   tables: [tableEntry("subjects.tsv", "subjects")],
 });
 
-function mountPane(props: Record<string, unknown> = {}) {
+function mountPane(props: Record<string, unknown> = {}, slots: Record<string, string> = {}) {
   return mount(RowsPane, {
+    slots,
     props: {
       detail,
       file: "subjects.tsv",
@@ -115,5 +116,13 @@ describe("rows pane", () => {
     expect(chip.text()).toBe("Subjects");
     expect(chip.classes()).toEqual(expect.arrayContaining(["text-info-subjects", "status-chip"]));
     expect(wrapper.get(".table-grid").classes()).toContain("table-grid--tinted");
+  });
+
+  it("puts the content of the section below the head and the sentences about the rows right above the grid", () => {
+    const rows = subjects.rows.map((row) => ({ ...row, cells: [...row.cells.slice(0, 3), ""] }));
+    const wrapper = mountPane({ table: { ...subjects, rows } }, { default: '<div class="section-content">Notes</div>' });
+    expect(wrapper.get(".rows-pane-notes").text()).toBe("1 empty column is hidden.");
+    const order = [...wrapper.get("section").element.children].map((child) => child.classList[0]);
+    expect(order).toEqual(["pane-head", "section-content", "rows-pane-notes", "table-grid"]);
   });
 });

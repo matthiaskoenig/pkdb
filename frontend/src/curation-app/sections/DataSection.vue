@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
-import type { SourceSummary, SourceView, StudyDetail, TableResponse } from "../api/types";
+import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
 import ConflictPanel from "../components/ConflictPanel.vue";
@@ -11,6 +11,8 @@ import DataNavigator from "../components/DataNavigator.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
+import StudySaveBar from "../components/StudySaveBar.vue";
+import TableNotes from "../components/TableNotes.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useLoaded } from "../composables/useLoaded";
@@ -20,6 +22,7 @@ import {
   ALL_ROWS,
   defaultFile,
   fileForSource,
+  findTable,
   isShared,
   ownerOf,
   rowSource,
@@ -33,6 +36,7 @@ import {
 import { INFO_HEADINGS, infoStyle } from "../info";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
+import { noteKinds } from "../tableKinds";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 
 /**
@@ -42,6 +46,8 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
  * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
  * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * Below it, the notes of the kind of the table in study.json open and close above the rows; they
+ * edit the draft of the study store, whose save bar ends the section while it has unsaved changes.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
  * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
@@ -88,6 +94,13 @@ const file = computed<string | null>(() => {
   if (query.value.file !== null && files.value.includes(query.value.file)) return query.value.file;
   const named = findSource(query.value.source);
   return named ? fileForSource(value, named, null) : defaultFile(value);
+});
+
+/** The kind of the notes of the selected table in study.json; null for a raw table, which has none. */
+const notesKind = computed<TableKind | null>(() => {
+  const value = detail.value;
+  const entry = value && file.value ? findTable(value, file.value) : undefined;
+  return value && entry ? (noteKinds(value).find((kind) => kind === entry.kind) ?? null) : null;
 });
 
 const {
@@ -407,6 +420,7 @@ const conflictPanel = computed(() => {
               @update:filter="setFilter"
             >
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+              <TableNotes v-if="notesKind" :kind="notesKind" />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet. Add table adds a sheet to the workbook.
@@ -424,12 +438,15 @@ const conflictPanel = computed(() => {
             @update:filter="setFilter"
           >
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+            <TableNotes v-if="notesKind" :kind="notesKind" />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
             The study has no tables yet. Add table adds a sheet to the workbook.
           </p>
         </div>
       </div>
+      <!-- The draft of study.json, which the notes above a table and the Metadata section edit. -->
+      <StudySaveBar :sticky="stacked || limited" />
 
       <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
     </template>

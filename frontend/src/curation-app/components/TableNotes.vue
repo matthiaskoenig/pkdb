@@ -119,11 +119,17 @@ watch(
 </template>
 
 <style scoped>
+/* In a short pane, the open notes shrink to their header and its border, and their body scrolls,
+   rather than push the rows out of the pane. */
 .table-notes {
-  flex: 0 0 auto;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-height: 27px;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .table-notes-heading {
+  flex: 0 0 auto;
   margin: 0;
   font-size: inherit;
   font-weight: inherit;
@@ -176,6 +182,7 @@ watch(
 }
 /* Open, the notes leave most of the pane to the rows and scroll on their own. */
 .table-notes-body {
+  min-height: 0;
   max-height: min(40vh, 28rem);
   overflow-y: auto;
   padding: 8px 12px 12px;
