@@ -236,7 +236,7 @@ function reload(): void {
         </button>
         <input
           :id="`${id}-page`"
-          class="paper-field paper-page"
+          class="paper-field paper-number"
           type="number"
           inputmode="numeric"
           min="1"
@@ -384,7 +384,9 @@ function reload(): void {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
 }
-.paper-page {
+/* The page field. Not `.paper-page`: that is the view of a PDF in a tab of its own (PaperPage.vue),
+   which makes the window a column that does not scroll, and the viewer shows in the Data section too. */
+.paper-number {
   width: 4.5em;
   text-align: end;
 }

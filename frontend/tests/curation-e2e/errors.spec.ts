@@ -51,6 +51,9 @@ for (const theme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme: theme });
     await app.open(`${STUDY}/data`);
     await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
+    // The section opens its first table beside the paper: axe checks it once PDF.js has drawn page 1.
+    const paperPage = page.locator('.page[data-page-number="1"][data-loaded="true"]');
+    await expect(paperPage).toBeVisible();
     app.allowFailedRequest("/local/studies/tables", 500);
     await page.getByRole("button", { name: "Open tables" }).click();
     const alert = page.locator(".study-alert");
@@ -61,6 +64,7 @@ for (const theme of ["light", "dark"] as const) {
 
     await page.setViewportSize(NARROW);
     await expect(alert.locator(".failure-facts")).toBeVisible();
+    await expect(paperPage).toBeVisible();
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth))
       .toBe(0);

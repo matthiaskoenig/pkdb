@@ -14,6 +14,7 @@ import {
   SYNC_TONES,
   uploadBlocker,
 } from "../overview";
+import { paperName } from "../paper";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
@@ -75,7 +76,7 @@ const pmid = computed(() => {
 });
 const problems = computed(() => problemLabels(props.detail));
 const activity = computed(() => activityLabel(props.detail));
-const pdf = computed(() => `${name.value}.pdf`);
+const pdf = computed(() => paperName(props.detail));
 const hasPdf = computed(() => props.detail.files.includes(pdf.value));
 
 // Review status

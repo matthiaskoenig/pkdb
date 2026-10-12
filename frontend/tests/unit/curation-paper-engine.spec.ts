@@ -43,7 +43,10 @@ const fake = vi.hoisted(() => {
     }
   }
   class PDFViewer {
-    currentScaleValue = "auto";
+    #scaleValue = "auto";
+    /** The scale values that the engine set, in their order. */
+    readonly scaleValues: string[] = [];
+    updates = 0;
     currentPageNumber = 1;
     readonly pagesCount = 3;
     readonly options: Record<string, unknown>;
@@ -62,7 +65,16 @@ const fake = vi.hoisted(() => {
     decreaseScale(): void {
       this.steps.push(-1);
     }
-    update(): void {}
+    get currentScaleValue(): string {
+      return this.#scaleValue;
+    }
+    set currentScaleValue(value: string) {
+      this.scaleValues.push(value);
+      this.#scaleValue = value;
+    }
+    update(): void {
+      this.updates += 1;
+    }
   }
   class PDFLinkService {
     readonly options: Record<string, unknown>;
@@ -127,14 +139,58 @@ function deferred<T>() {
   return { promise, resolve, reject };
 }
 
-/** The scroll container of the viewer with its empty `div.pdfViewer`. */
-function container(): HTMLDivElement {
-  const element = document.createElement("div");
+/** A scroll container of the viewer as a layout makes it: its size, which is none while it is hidden. */
+interface Pane extends HTMLDivElement {
+  resize(width: number, height: number): void;
+}
+
+/** The scroll container of the viewer with its empty `div.pdfViewer`, 600 x 800 px. */
+function container(width = 600, height = 800): Pane {
+  const element = document.createElement("div") as Pane;
   element.append(document.createElement("div"));
+  let size = [width, height] as const;
+  Object.defineProperty(element, "clientWidth", { get: () => size[0] });
+  Object.defineProperty(element, "clientHeight", { get: () => size[1] });
+  element.resize = (newWidth, newHeight) => {
+    size = [newWidth, newHeight];
+  };
   return element;
 }
 
+/** The callbacks of the resize observers of the test, which a test calls as a layout would. */
+let observers: ResizeObserverCallback[] = [];
+/** The animation frames that wait; `frames()` runs them. */
+let waiting: FrameRequestCallback[] = [];
+
+function frames(): void {
+  const due = waiting;
+  waiting = [];
+  for (const callback of due) callback(0);
+}
+
+/** A change of the size of the pane: the observers report it, and the next frame comes. */
+function resized(pane: Pane, width: number, height: number): void {
+  pane.resize(width, height);
+  for (const callback of observers) callback([], {} as ResizeObserver);
+  frames();
+}
+
 beforeEach(() => {
+  observers = [];
+  waiting = [];
+  vi.stubGlobal(
+    "ResizeObserver",
+    class {
+      constructor(callback: ResizeObserverCallback) {
+        observers.push(callback);
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    },
+  );
+  vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => waiting.push(callback));
+  vi.stubGlobal("cancelAnimationFrame", () => undefined);
   fake.state.bus = null;
   fake.state.viewer = null;
   fake.state.worker = null;
@@ -189,6 +245,50 @@ describe("the PDF.js engine of the paper viewer", () => {
     expect(reported.found).toHaveBeenLastCalledWith({ status: "found", current: 1, total: 3 });
     bus.dispatch("updatefindcontrolstate", { state: 1, matchesCount: { current: 0, total: 0 } });
     expect(reported.found).toHaveBeenLastCalledWith({ status: "missing", current: 0, total: 0 });
+  });
+
+  it("refits the pages when the pane changes its size", async () => {
+    const pane = container();
+    await openPaper(pane, URL_A, events(), START, signal());
+    const viewer = fake.state.viewer!;
+    fake.state.bus!.dispatch("pagesinit", {});
+    resized(pane, 500, 800);
+    expect(viewer.scaleValues).toEqual(["page-width", "page-width"]);
+    expect(viewer.updates).toBe(1);
+  });
+
+  it("waits with the fit and the first page until the pane, hidden while the PDF opened, shows", async () => {
+    const pane = container(0, 0);
+    const reported = events();
+    await openPaper(pane, URL_A, reported, { page: 2, fit: "page-width", scale: 1 }, signal());
+    const viewer = fake.state.viewer!;
+    fake.state.bus!.dispatch("pagesinit", {});
+    expect(viewer.scaleValues).toEqual([]);
+    expect(viewer.currentPageNumber).toBe(1);
+    expect(reported.page).not.toHaveBeenCalled();
+    resized(pane, 600, 800);
+    expect(viewer.scaleValues).toEqual(["page-width"]);
+    expect(viewer.currentPageNumber).toBe(2);
+    expect(reported.page).toHaveBeenLastCalledWith(2);
+  });
+
+  it("keeps the pages where they were while the pane is hidden, without fitting them to no size", async () => {
+    const pane = container();
+    await openPaper(pane, URL_A, events(), START, signal());
+    const viewer = fake.state.viewer!;
+    fake.state.bus!.dispatch("pagesinit", {});
+    pane.scrollTop = 1500;
+    pane.dispatchEvent(new Event("scroll"));
+    // Hidden, the pane has no size and the browser forgets how far it was scrolled.
+    pane.scrollTop = 0;
+    resized(pane, 0, 0);
+    pane.dispatchEvent(new Event("scroll"));
+    expect(viewer.scaleValues).toEqual(["page-width"]);
+    expect(viewer.updates).toBe(0);
+    resized(pane, 600, 800);
+    expect(pane.scrollTop).toBe(1500);
+    expect(viewer.scaleValues).toEqual(["page-width", "page-width"]);
+    expect(viewer.updates).toBe(1);
   });
 
   it("starts at the scale of zoom steps without a fit", async () => {

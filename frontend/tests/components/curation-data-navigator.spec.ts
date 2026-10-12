@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import DataNavigator from "../../src/curation-app/components/DataNavigator.vue";
 import type { Problem, StudyDetail } from "../../src/curation-app/api/types";
-import { reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
+import { PAPER } from "../../src/curation-app/data";
+import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);
 
@@ -183,5 +184,30 @@ describe("data navigator", () => {
     await wrapper.findAll(".nav-file")[0]!.trigger("click");
     expect(wrapper.emitted("select-source")).toEqual([["Tab2"]]);
     expect(wrapper.emitted("select-file")).toEqual([["subjects.tsv"]]);
+  });
+
+  it("lists the paper first among the sources, with its PDF, and emits it", async () => {
+    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf")] }), source: PAPER });
+    const entries = wrapper.findAll(".nav-paper, .nav-source");
+    expect(entries.map((entry) => entry.get(".nav-name").text())).toEqual(["Paper", "Fig1", "Tab2"]);
+    const paper = entries[0]!;
+    expect(paper.classes()).toContain("nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example.pdf");
+    expect(paper.attributes("disabled")).toBeUndefined();
+    expect(paper.attributes("aria-current")).toBe("true");
+    expect(wrapper.findAll(".nav-source").some((entry) => entry.attributes("aria-current") === "true")).toBe(false);
+    await paper.trigger("click");
+    expect(wrapper.emitted("select-source")).toEqual([[PAPER]]);
+  });
+
+  it("names the first PDF and how many more the folder has", () => {
+    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf"), paperFile("Example_Supp.pdf")] }) });
+    expect(wrapper.get(".nav-paper .nav-kind").text()).toBe("Example.pdf and 1 more");
+  });
+
+  it("shows the paper of a study without a PDF as a disabled entry that names the missing PDF", () => {
+    const paper = mountNavigator().get(".nav-paper");
+    expect(paper.attributes("disabled")).toBeDefined();
+    expect(paper.get(".nav-kind").text()).toBe("No Example.pdf");
   });
 });

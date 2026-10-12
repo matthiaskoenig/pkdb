@@ -12,6 +12,7 @@ import {
   firstSource,
   isShared,
   ownerOf,
+  PAPER,
   rowSource,
   selectionOf,
   selectionQuery,
@@ -19,7 +20,7 @@ import {
   sourceOfFile,
   tablesByInfo,
 } from "../../src/curation-app/data";
-import { reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
+import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
 const fig1 = sourceSummary({
   source: "Fig1",
@@ -199,12 +200,16 @@ describe("counts", () => {
     expect(defaultFile(detail({ tables: [] }))).toBeNull();
   });
 
-  it("shows a table beside its own source, and a shared table beside the first source", () => {
-    expect(sourceOfFile(detail(), "outputs_Tab2.tsv")?.source).toBe("Tab2");
-    expect(sourceOfFile(detail(), "Example_Tab2.tsv")?.source).toBe("Tab2");
-    expect(sourceOfFile(detail(), "subjects.tsv")?.source).toBe("Fig1");
-    expect(sourceOfFile(detail(), null)?.source).toBe("Fig1");
+  it("shows a table beside its own source, and a shared table beside the paper, else the first source", () => {
+    const withPaper = detail({ papers: [paperFile("Example.pdf")] });
+    expect(sourceOfFile(withPaper, "outputs_Tab2.tsv")).toBe("Tab2");
+    expect(sourceOfFile(withPaper, "Example_Tab2.tsv")).toBe("Tab2");
+    expect(sourceOfFile(withPaper, "subjects.tsv")).toBe(PAPER);
+    expect(sourceOfFile(withPaper, null)).toBe(PAPER);
+    expect(sourceOfFile(detail(), "subjects.tsv")).toBe("Fig1");
+    expect(sourceOfFile(detail(), null)).toBe("Fig1");
     expect(firstSource(detail({ sources: [] }))).toBeNull();
+    expect(firstSource(detail({ sources: [], papers: [paperFile("Example.pdf")] }))).toBe(PAPER);
     expect(sourceOfFile(detail({ sources: [] }), "outputs_Tab2.tsv")).toBeNull();
   });
 });

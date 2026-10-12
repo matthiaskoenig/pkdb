@@ -6,7 +6,8 @@
  * The study page lists every table with its source: a table of one source, such as
  * `outputs_Tab2.tsv` or the raw table `<name>_Tab2.tsv`, belongs to it as a whole; a shared table
  * (subjects, characteristica, interventions) has none and names the source of each row in its
- * `source` column.
+ * `source` column. The paper, the PDFs of the folder, comes first among the sources: a shared
+ * table shows beside it when the study has a PDF.
  */
 import type { LocationQuery } from "vue-router";
 import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
@@ -158,15 +159,17 @@ export function sourceCounts(detail: Counted, source: SourceSummary): Counts {
   );
 }
 
-/** The first source of the navigator, which a shared table shows beside its rows when no source is chosen. */
-export function firstSource(study: Pick<StudyDetail, "sources">): SourceSummary | null {
-  return study.sources[0] ?? null;
+/** The first entry of the Sources list of the navigator: the paper when the study has a PDF, else its first source. */
+export function firstSource(study: Pick<StudyDetail, "sources" | "papers">): string | null {
+  return study.papers.length ? PAPER : (study.sources[0]?.source ?? null);
 }
 
-/** The source that a table shows beside its rows when the route names none: its own, else the first source. */
-export function sourceOfFile(study: Study, file: string | null): SourceSummary | null {
-  const owner = file === null ? null : ownerOf(study, file);
-  return study.sources.find((entry) => entry.source === owner) ?? firstSource(study);
+/** The source that a table shows beside its rows when the route names none: its own, else the paper, else the first source. */
+export function sourceOfFile(
+  study: Pick<StudyDetail, "sources" | "tables" | "papers">,
+  file: string | null,
+): string | null {
+  return (file === null ? null : ownerOf(study, file)) ?? firstSource(study);
 }
 
 /** The table that the section opens on: the first with problems or open review items, else the first. */

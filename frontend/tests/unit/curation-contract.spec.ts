@@ -215,11 +215,13 @@ describe("sources contract", () => {
     for (const summary of sources) expect(summary.image_url === null).toBe(summary.image === null);
   });
 
-  it("opens each source on its own table, a text on its first shared one", () => {
-    const study = { sources, tables, problems: [], review: studyDetail().review };
+  it("opens each source on its own table, a text on its first shared one, and a shared table beside the paper", () => {
+    const papers = contract<PaperFile[]>(sourcesFixture.papers);
+    const study = { sources, tables, papers, problems: [], review: studyDetail().review };
     expect(defaultFile(study)).toBe("subjects.tsv");
-    expect(sourceOfFile(study, "subjects.tsv")?.source).toBe("Fig1");
-    expect(sourceOfFile(study, "Demo2020_Tab2.tsv")?.source).toBe("Tab2");
+    expect(sourceOfFile(study, "subjects.tsv")).toBe("paper");
+    expect(sourceOfFile(study, "Demo2020_Tab2.tsv")).toBe("Tab2");
+    expect(sourceOfFile({ ...study, papers: [] }, "subjects.tsv")).toBe("Fig1");
     expect(sources.map((summary) => fileForSource(study, summary, null))).toEqual([
       "timecourses_Fig1.tsv",
       "outputs_Tab2.tsv",

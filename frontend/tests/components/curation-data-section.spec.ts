@@ -24,6 +24,7 @@ import {
   FILE_DELETED_CONFLICT,
   json,
   OUTPUTS_COLUMNS,
+  paperFile,
   REGION_CONFLICT,
   REGION_ISSUE,
   reviewItem,
@@ -51,6 +52,7 @@ import {
   type Handler,
   type ServedRequest,
 } from "./curation-dom";
+import { paperViewer, PaperViewerStub } from "./curation-paper-stub";
 
 enableAutoUnmount(afterEach);
 
@@ -415,7 +417,7 @@ async function mountSection(value: StudyDetail = detail(), routes: Record<string
   await router.isReady();
   const wrapper = mount(RouterView, {
     attachTo: document.body,
-    global: { plugins: [pinia, router], stubs: { SourceOverlay: OverlayStub } },
+    global: { plugins: [pinia, router], stubs: { SourceOverlay: OverlayStub, PaperViewer: PaperViewerStub } },
   });
   await flushPromises();
   return wrapper;
@@ -520,6 +522,7 @@ async function press(name: string): Promise<void> {
 
 beforeEach(() => {
   setViewport(1440);
+  paperViewer.mounts = 0;
   pinia = createPinia();
   setActivePinia(pinia);
 });
@@ -968,7 +971,13 @@ describe("narrow windows", () => {
       { type: "item", title: "Example_Tab2.tsv", value: "Example_Tab2.tsv", info: "raw" },
     ]);
     expect(sourceSelect.props("modelValue")).toBe("Fig1");
-    expect(sourceSelect.props("items")).toEqual(["Fig1", "Fig2", "Tab2", "Tab3"]);
+    expect(sourceSelect.props("items")).toEqual([
+      { title: "No Example.pdf", value: "paper", props: { disabled: true } },
+      { title: "Fig1", value: "Fig1" },
+      { title: "Fig2", value: "Fig2" },
+      { title: "Tab2", value: "Tab2" },
+      { title: "Tab3", value: "Tab3" },
+    ]);
     expect(tableSelect.props("modelValue")).toBe("subjects.tsv");
     // The panes stay side by side.
     expect(page().find('[role="separator"]').exists()).toBe(true);
@@ -1775,5 +1784,124 @@ describe("notes of the tables", () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv&notes=unknown`);
     await routed({ file: "subjects.tsv" });
     expect(toggle().attributes("aria-expanded")).toBe("false");
+  });
+});
+
+describe("the paper in the Data section", () => {
+  const papers = () => [paperFile("Example.pdf"), paperFile("Example_Supp.pdf", 4_200_000)];
+  const paperPane = () => page().find(".paper-pane");
+
+  it("opens a shared table beside the paper when the study has a PDF", async () => {
+    await mountSection(detail({ papers: papers() }));
+    await routed({ source: "paper", file: "subjects.tsv" });
+    expect(paperPane().isVisible()).toBe(true);
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example.pdf");
+    expect(page().find(".source-pane").exists()).toBe(false);
+    expect(page().get(".nav-paper").attributes("aria-current")).toBe("true");
+    expect(requests.some((request) => request.path.startsWith(`${EXAMPLE}/sources/`))).toBe(false);
+  });
+
+  it("shows a table of one source beside it and keeps the viewer of the paper mounted until the paper shows again", async () => {
+    await mountSection(detail({ papers: papers() }));
+    await routed({ source: "paper", file: "subjects.tsv" });
+    await choose("file", "outputs_Tab2.tsv");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    expect(paperPane().isVisible()).toBe(false);
+    expect(page().get(".source-pane").attributes("aria-label")).toBe("Source Tab2");
+    // A shared table keeps the source.
+    await choose("file", "subjects.tsv");
+    await routed({ source: "Tab2", file: "subjects.tsv" });
+    await page().get(".nav-paper").trigger("click");
+    await routed({ source: "paper", file: "subjects.tsv" });
+    expect(paperPane().isVisible()).toBe(true);
+    expect(paperViewer.mounts).toBe(1);
+  });
+
+  it("keeps the table and its row when the paper is chosen, and a shared table keeps the paper", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=Fig1&file=subjects.tsv&line=3`);
+    await page().get(".nav-paper").trigger("click");
+    await routed({ source: "paper", file: "subjects.tsv", line: "3" });
+    await choose("file", "interventions.tsv");
+    await routed({ source: "paper", file: "interventions.tsv" });
+  });
+
+  it("keeps the paper when a row of a shared table that names a source is selected beside it", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&file=subjects.tsv`);
+    // Line 4 names Tab2: the curator reads the paper against the rows.
+    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
+    await routed({ source: "paper", file: "subjects.tsv", line: "4" });
+    expect(paperPane().isVisible()).toBe(true);
+    expect(page().find(".source-pane").exists()).toBe(false);
+  });
+
+  it("shows the source of a linked row of a shared table without drawing the paper while the rows load", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=4`);
+    expect(page().get(".source-pane").attributes("aria-label")).toBe("Source Tab2");
+    expect(paperPane().exists()).toBe(false);
+    expect(paperViewer.mounts).toBe(0);
+    // A row without a known source shows the paper, as the table would without a row.
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=5`);
+    expect(paperPane().isVisible()).toBe(true);
+  });
+
+  it("shows the PDF chosen in the head of the pane", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper`);
+    await page().get<HTMLSelectElement>(".paper-pane select").setValue("Example_Supp.pdf");
+    await flushPromises();
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
+    expect(page().get(".paper-viewer-stub").attributes("data-url")).toBe(`${EXAMPLE}/files/Example_Supp.pdf`);
+  });
+
+  it("gives the viewer its place back when the panes stack and stand side by side again", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper`);
+    await page().get(".paper-viewer-stub button").trigger("click");
+    setViewport(900);
+    await flushPromises();
+    expect(page().find(".data-stack .paper-pane").exists()).toBe(true);
+    expect(page().get(".paper-viewer-stub").attributes("data-page")).toBe("3");
+    setViewport(1440);
+    await flushPromises();
+    expect(page().find(".data-split .paper-pane").exists()).toBe(true);
+    expect(page().get(".paper-viewer-stub").attributes("data-page")).toBe("3");
+    expect(paperViewer.mounts).toBe(3);
+  });
+
+  it("falls back to the sources for source=paper without a PDF, whose entry is disabled", async () => {
+    await mountSection(detail(), {}, `${SECTION}?source=paper&file=subjects.tsv`);
+    expect(paperPane().exists()).toBe(false);
+    expect(page().get(".source-pane").attributes("aria-label")).toBe("Source Fig1");
+    const entry = page().get(".nav-paper");
+    expect(entry.attributes("disabled")).toBeDefined();
+    expect(entry.text()).toContain("No Example.pdf");
+  });
+
+  it("offers Paper first in the Source select below 1100 px, disabled without a PDF", async () => {
+    setViewport(1000);
+    const sources = [
+      { title: "Fig1", value: "Fig1" },
+      { title: "Fig2", value: "Fig2" },
+      { title: "Tab2", value: "Tab2" },
+      { title: "Tab3", value: "Tab3" },
+    ];
+    const withPaper = await mountSection(detail({ papers: papers() }));
+    expect(labeled(withPaper, VSelect, "Source").props("items")).toEqual([{ title: "Paper", value: "paper" }, ...sources]);
+    expect(labeled(withPaper, VSelect, "Source").props("modelValue")).toBe("paper");
+    withPaper.unmount();
+    const without = await mountSection(detail());
+    expect(labeled(without, VSelect, "Source").props("items")).toEqual([
+      { title: "No Example.pdf", value: "paper", props: { disabled: true } },
+      ...sources,
+    ]);
+  });
+
+  it("offers no Source select below 1100 px for a study without sources and a PDF, and the paper alone for one with a PDF", async () => {
+    setViewport(1000);
+    const without = await mountSection(detail({ sources: [] }));
+    expect(() => labeled(without, VSelect, "Source")).toThrow('No field "Source"');
+    expect(page().get(".data-pane-note").text()).toBe("The study has no sources yet.");
+    without.unmount();
+    const withPaper = await mountSection(detail({ sources: [], papers: papers() }));
+    expect(labeled(withPaper, VSelect, "Source").props("items")).toEqual([{ title: "Paper", value: "paper" }]);
+    expect(paperPane().isVisible()).toBe(true);
   });
 });

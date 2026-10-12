@@ -121,7 +121,7 @@ test.describe("sources", () => {
     await expect(names("Interventions")).toHaveText(["interventions.tsv"]);
     await expect(names("Data")).toHaveText(["outputs_Tab2.tsv", "timecourses_Fig1.tsv"]);
     await expect(names("Raw extractions")).toHaveText(["Demo2020_Tab2.tsv"]);
-    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Fig1", "Tab2", "Text"]);
+    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Paper", "Fig1", "Tab2", "Text"]);
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-rows")).toHaveAttribute("title", "18 rows");
     await expect(navigatorButton(page, /^subjects\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(29, 95, 184)");
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(106, 63, 181)");

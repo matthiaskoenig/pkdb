@@ -4,6 +4,15 @@ import { expect, expectAccessible, test } from "./fixtures.ts";
 const STUDY = "#/studies/caffeine/Demo2020";
 const NARROW = { width: 390, height: 844 };
 
+/**
+ * Wait until the viewer of the paper has drawn page 1, which the Data section shows beside a
+ * shared table: axe checks the page as the curator sees it, not while PDF.js still draws.
+ */
+async function paperDrawn(page: Page): Promise<void> {
+  await expect(page.locator('.page[data-page-number="1"][data-loaded="true"]')).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find in the paper" })).toBeEnabled();
+}
+
 interface Screen {
   name: string;
   hash: string;
@@ -61,17 +70,21 @@ const SCREENS: Screen[] = [
   {
     name: "paper in a tab of its own",
     hash: `${STUDY}/paper/Demo2020.pdf`,
-    ready: async (page) => {
-      await expect(page.locator('.page[data-page-number="1"][data-loaded="true"]')).toBeVisible();
-      await expect(page.getByRole("searchbox", { name: "Find in the paper" })).toBeEnabled();
-    },
+    ready: paperDrawn,
   },
   {
+    name: "data of the paper",
+    hash: `${STUDY}/data?source=paper`,
+    ready: paperDrawn,
+  },
+  {
+    // Beside the paper, the first source.
     name: "data of a shared table",
     hash: `${STUDY}/data?file=subjects.tsv`,
     ready: async (page) => {
       await expect(page.getByRole("combobox", { name: "Source of the rows" })).toBeVisible();
       await expect(page.getByRole("region", { name: "Rows of subjects.tsv" })).toBeVisible();
+      await paperDrawn(page);
     },
   },
   {
@@ -83,6 +96,7 @@ const SCREENS: Screen[] = [
       // The panel keeps its state when the window narrows, so it opens once.
       if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
       await expect(pane.getByRole("textbox", { name: "Description 1" })).toBeVisible();
+      await paperDrawn(page);
     },
   },
   {
@@ -139,7 +153,11 @@ const DIALOGS: Dialog[] = [
   {
     name: "Add table",
     hash: `${STUDY}/data`,
-    open: (page) => page.getByRole("button", { name: "Add table", exact: true }).click(),
+    open: async (page) => {
+      // The section opens its first table beside the paper.
+      await paperDrawn(page);
+      await page.getByRole("button", { name: "Add table", exact: true }).click();
+    },
   },
 ];
 

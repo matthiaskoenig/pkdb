@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import type { StudyDetail, TableEntry } from "../api/types";
-import { fileCounts, sourceCounts, tablesByInfo } from "../data";
+import { fileCounts, PAPER, sourceCounts, tablesByInfo } from "../data";
 import { INFO_HEADINGS, infoStyle } from "../info";
 import { plural } from "../overview";
+import { paperLine } from "../paper";
 import { SOURCE_ICONS } from "../sources";
 import NavigatorCounts from "./NavigatorCounts.vue";
 
@@ -11,7 +12,8 @@ import NavigatorCounts from "./NavigatorCounts.vue";
  * The tables of a study first, under the headings of their class of information (Subjects,
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
  * the color of its class, its problems, its open review items and its rows; then the sources of
- * the study, with a thumbnail of their image.
+ * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
+ * the folder, or a disabled entry that names `<name>.pdf` when the folder has none.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -54,6 +56,9 @@ const groups = computed(() =>
 const sources = computed(() =>
   props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
+
+/** The entry of the paper, first among the sources: its PDFs, or the PDF that the folder lacks. */
+const paper = computed(() => ({ line: paperLine(props.detail), shown: props.detail.papers.length > 0 }));
 </script>
 
 <template>
@@ -85,6 +90,21 @@ const sources = computed(() =>
     </div>
     <h3 :id="sourcesId" class="nav-heading">Sources</h3>
     <ul :aria-labelledby="sourcesId" class="nav-list">
+      <li>
+        <button
+          type="button"
+          class="nav-paper"
+          :disabled="!paper.shown"
+          :aria-current="source === PAPER ? 'true' : undefined"
+          @click="emit('select-source', PAPER)"
+        >
+          <span class="nav-thumb nav-thumb--icon" aria-hidden="true"><i class="fas fa-file-pdf"></i></span>
+          <span class="nav-text">
+            <span class="nav-name">Paper</span>
+            <span class="nav-kind" :title="paper.line">{{ paper.line }}</span>
+          </span>
+        </button>
+      </li>
       <li v-for="{ summary, counts: count } in sources" :key="summary.source">
         <button
           type="button"
@@ -137,6 +157,7 @@ const sources = computed(() =>
   list-style: none;
 }
 .nav-source,
+.nav-paper,
 .nav-file {
   width: 100%;
   border: 1px solid transparent;
@@ -148,7 +169,8 @@ const sources = computed(() =>
   cursor: pointer;
 }
 /* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. */
-.nav-source {
+.nav-source,
+.nav-paper {
   display: grid;
   grid-template-columns: 48px 1fr auto auto;
   align-items: center;
@@ -165,15 +187,18 @@ const sources = computed(() =>
   padding: 0 6px 0 4px;
 }
 .nav-source:hover,
+.nav-paper:enabled:hover,
 .nav-file:hover {
   background: rgba(var(--v-theme-on-surface), 0.05);
 }
 .nav-source[aria-current="true"],
+.nav-paper[aria-current="true"],
 .nav-file[aria-current="true"] {
   background: rgba(var(--v-theme-primary), 0.12);
   border-color: rgba(var(--v-theme-primary), 0.35);
 }
 .nav-source:focus-visible,
+.nav-paper:focus-visible,
 .nav-file:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
@@ -238,5 +263,15 @@ const sources = computed(() =>
   text-align: center;
   font-variant-numeric: tabular-nums;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* The paper without a PDF: a disabled entry, whose line names the PDF that the folder lacks. */
+.nav-paper:disabled {
+  cursor: default;
+  color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
+}
+.nav-paper .nav-kind {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

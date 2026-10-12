@@ -269,22 +269,6 @@ const missingLine = computed(() => {
   gap: 4px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.pane-head-select {
-  height: 22px;
-  max-width: 12rem;
-  padding-inline: 4px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.42);
-  border-radius: 4px;
-  background: rgb(var(--v-theme-surface));
-  color: rgb(var(--v-theme-on-surface));
-  font: inherit;
-  appearance: auto;
-}
-.pane-head-select:focus-visible {
-  outline: 2px solid rgb(var(--v-theme-primary));
-  /* The head clips its content, so the ring reaches 1 px outside the select, into the head's padding. */
-  outline-offset: -1px;
-}
 /* The notes stand 8 px from the edges, as in the source pane, which has a padding. */
 .rows-pane > .pane-note {
   padding: 4px 8px;

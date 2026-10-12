@@ -111,11 +111,33 @@ export const openPaper: OpenPaper = async (container, url, events, start, signal
   const viewer = new PDFViewer(options);
   linkService.setViewer(viewer);
 
+  // A hidden pane (`display: none`, as the Data section hides the paper while another source
+  // shows) has no size, and the browser forgets how far it was scrolled. A fit to no size would
+  // give the pages a scale below 0 and scroll a page that has no place: the fit and the first page
+  // wait until the pane shows, and then the pages come back where they were.
+  const sized = (): boolean => container.clientWidth > 0 && container.clientHeight > 0;
+  let hidden = !sized();
+  let scrolled = { top: 0, left: 0 };
+  container.addEventListener(
+    "scroll",
+    () => {
+      if (!hidden && sized()) scrolled = { top: container.scrollTop, left: container.scrollLeft };
+    },
+    { signal },
+  );
+
   // PDF.js reports no page for the first one: the page in view is reported once the pages exist.
-  eventBus.on("pagesinit", () => {
+  let started = false;
+  function begin(): void {
+    started = true;
     viewer.currentScaleValue = start.fit ?? String(start.scale);
     if (start.page > 1) viewer.currentPageNumber = Math.min(start.page, viewer.pagesCount);
     events.page(viewer.currentPageNumber);
+  }
+  let initialized = false;
+  eventBus.on("pagesinit", () => {
+    initialized = true;
+    if (sized()) begin();
   });
   eventBus.on("pagechanging", ({ pageNumber }: { pageNumber: number }) => events.page(pageNumber));
   eventBus.on("scalechanging", ({ scale }: { scale: number }) => events.scale(scale, fitOf(viewer.currentScaleValue)));
@@ -137,9 +159,23 @@ export const openPaper: OpenPaper = async (container, url, events, start, signal
   // PDF.js keeps a fit only until the size changes: the fit follows the pane, as in a PDF program.
   let frame = 0;
   const resized = new ResizeObserver(() => {
+    if (!sized()) {
+      hidden = true;
+      return;
+    }
+    if (hidden) {
+      hidden = false;
+      container.scrollTop = scrolled.top;
+      container.scrollLeft = scrolled.left;
+    }
     if (frame) return;
     frame = requestAnimationFrame(() => {
       frame = 0;
+      if (!sized()) return;
+      if (!started) {
+        if (initialized) begin();
+        return;
+      }
       const value = viewer.currentScaleValue;
       if (value === "page-width" || value === "page-fit") viewer.currentScaleValue = value;
       viewer.update();
