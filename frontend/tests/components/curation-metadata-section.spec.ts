@@ -409,7 +409,7 @@ describe("descriptions, comments and notes", () => {
       withMetadata(fullStudyMetadata({ notes: { scatters: { descriptions: ["From Figure 3."], comments: [] } } })),
     );
     const notes = card("Descriptions and comments");
-    expect(notes.get(".metadata-orphans").text()).toContain("The study has no table of these kinds, so their notes are here:");
+    expect(notes.get(".metadata-orphans").text()).toContain("The study has no table of this kind, so its notes are here:");
     expect(notes.findAll(".table-notes-toggle").map((toggle) => toggle.text())).toEqual([
       "Notes of the scatters 1 description",
     ]);
@@ -429,6 +429,32 @@ describe("descriptions, comments and notes", () => {
     expect(posted(METADATA)[0]?.metadata).toMatchObject({
       notes: { scatters: { descriptions: ["From Figure 4."], comments: [] } },
     });
+  });
+});
+
+describe("notes of kinds without a table", () => {
+  it("names the kinds without a table in the plural when there are several", async () => {
+    await mountSection(
+      withMetadata(
+        fullStudyMetadata({
+          notes: {
+            scatters: { descriptions: ["From Figure 3."], comments: [] },
+            characteristica: { descriptions: ["From Table 1."], comments: [] },
+          },
+        }),
+        "study-1",
+        // Without characteristica.tsv.
+        { tables: studyDetail().tables.filter((table) => table.kind !== "characteristica") },
+      ),
+    );
+    const notes = card("Descriptions and comments");
+    expect(notes.get(".metadata-orphans > .field-note").text()).toBe(
+      "The study has no table of these kinds, so their notes are here:",
+    );
+    expect(notes.findAll(".table-notes-toggle").map((toggle) => toggle.text())).toEqual([
+      "Notes of the characteristica 1 description",
+      "Notes of the scatters 1 description",
+    ]);
   });
 });
 

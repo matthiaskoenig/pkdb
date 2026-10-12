@@ -543,7 +543,13 @@ const newFields = computed(() => {
           />
           <p class="field-note metadata-notes-hint">Notes of a table are in <RouterLink :to="dataRoute">Data</RouterLink>, above the table.</p>
           <div v-if="orphanKinds.length" class="metadata-orphans">
-            <p class="field-note">The study has no table of these kinds, so their notes are here:</p>
+            <p class="field-note">
+              {{
+                orphanKinds.length === 1
+                  ? "The study has no table of this kind, so its notes are here:"
+                  : "The study has no table of these kinds, so their notes are here:"
+              }}
+            </p>
             <TableNotes v-for="kind in orphanKinds" :key="kind" :kind="kind" card />
           </div>
         </VCardText>
