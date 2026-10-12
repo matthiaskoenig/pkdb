@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { VBtn } from "vuetify/components";
 import {
   failureFacts,
@@ -22,6 +22,9 @@ const facts = computed(() =>
 );
 
 async function copy(): Promise<void> {
+  // Empty while it copies, so that the live region announces the same text again.
+  copied.value = "";
+  await nextTick();
   try {
     await navigator.clipboard.writeText(
       failureMarkdown(props.text, props.details),

@@ -160,6 +160,29 @@ describe("ActionFailureAlert", () => {
     expect(page().get(".failure-copied").text()).toBe("Details copied.");
   });
 
+  it("announces every copy, the second one too", async () => {
+    let copied = () => {};
+    stubClipboard(
+      () =>
+        new Promise<void>((resolve) => {
+          copied = resolve;
+        }),
+    );
+    await mountAlert(failureOf(new ApiError(500, OPEN_FAILED)));
+    const status = () => page().get(".failure-copied").text();
+    await click("Copy details");
+    copied();
+    await flushPromises();
+    expect(status()).toBe("Details copied.");
+    await click("Copy details");
+    // The live region empties while the details are copied, so that it announces the
+    // same text again.
+    expect(status()).toBe("");
+    copied();
+    await flushPromises();
+    expect(status()).toBe("Details copied.");
+  });
+
   it("says when the details could not be copied", async () => {
     stubClipboard(() => Promise.reject(new Error("Denied")));
     await mountAlert(failureOf(new ApiError(500, OPEN_FAILED)));
