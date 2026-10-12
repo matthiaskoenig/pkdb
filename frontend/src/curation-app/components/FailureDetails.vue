@@ -97,8 +97,10 @@ async function copy(): Promise<void> {
   margin: 0;
   overflow-wrap: anywhere;
 }
+/* 10 lines of 1.4em, with the padding and the border of the box: then it scrolls. */
 .failure-traceback {
-  max-height: calc(10 * 1.4em + 8px);
+  box-sizing: border-box;
+  max-height: calc(10 * 1.4em + 10px);
   margin: 6px 0 0;
   padding: 4px 6px;
   overflow: auto;
