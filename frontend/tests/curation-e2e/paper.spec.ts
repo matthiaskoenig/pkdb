@@ -2,7 +2,7 @@ import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from "nod
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { expect, runTool, test } from "./fixtures.ts";
-import { pixelStats } from "./pixels.ts";
+import { inkColumns, pixelStats } from "./pixels.ts";
 
 /** The source pane of the paper in the Data section, named after the PDF that it shows. */
 function paperPane(page: Page, file: string): Locator {
@@ -120,6 +120,12 @@ test("find highlights the matches of a word, and Enter and Shift+Enter go throug
   await find.fill("the");
   await expect(count).toHaveText("1 of 3");
   await expect(pane.locator(".textLayer .highlight")).toHaveCount(3);
+  // The highlights lie on the drawn words: the text layer covers the drawn page exactly.
+  const [canvas, text] = await Promise.all([
+    drawnPage(pane).locator("canvas").boundingBox(),
+    drawnPage(pane).locator(".textLayer").boundingBox(),
+  ]);
+  for (const side of ["x", "y", "width", "height"] as const) expect(Math.abs(canvas![side] - text![side])).toBeLessThan(0.5);
   await expect(pane.locator(".textLayer .highlight.selected")).toHaveCount(1);
   await find.press("Enter");
   await expect(count).toHaveText("2 of 3");
@@ -130,6 +136,44 @@ test("find highlights the matches of a word, and Enter and Shift+Enter go throug
   await find.fill("");
   await expect(count).toHaveText("");
   await expect(pane.locator(".textLayer .highlight")).toHaveCount(0);
+});
+
+test("a double click on a word that the page shows selects that word", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/data?source=paper");
+  const drawn = drawnPage(paperPane(page, "Demo2020.pdf"));
+  await expect(drawn).toBeVisible();
+  // The line "Demo2020 is a synthetic test study of the PK-DB curation app." of the text layer
+  // gives the band of the line; its words are where the canvas has ink.
+  const line = drawn.locator(".textLayer span", { hasText: "synthetic test study" });
+  const canvas = drawn.locator("canvas");
+  const [lineBox, canvasBox] = [(await line.boundingBox())!, (await canvas.boundingBox())!];
+  const top = Math.round(lineBox.y - canvasBox.y);
+  const ink = await inkColumns(canvas, { x: 0, y: top, width: Math.floor(canvasBox.width), height: Math.round(lineBox.height) });
+  // The last word, "app.": its letters stand at most 2 px apart, the words at least 3 px.
+  const end = ink.lastIndexOf(true);
+  let start = end;
+  while (ink.slice(Math.max(start - 3, 0), start).includes(true)) start = ink.lastIndexOf(true, start - 1);
+  await page.mouse.dblclick(canvasBox.x + (start + end) / 2, canvasBox.y + top + lineBox.height / 2);
+  expect(await page.evaluate(() => document.getSelection()?.toString().trim())).toBe("app");
+});
+
+for (const width of [1440, 800, 390]) {
+  test(`at Fit width the pages of the paper fit into the pane of a window ${width} px wide`, async ({ app, page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await app.open("#/studies/caffeine/Demo2020/data?source=paper");
+    const pane = paperPane(page, "Demo2020.pdf");
+    await expect(drawnPage(pane)).toBeVisible();
+    await expect(pane.getByRole("combobox", { name: "Zoom" })).toHaveValue("page-width");
+    const scroll = pane.locator(".paper-scroll");
+    expect(await scroll.evaluate((element) => element.scrollWidth - element.clientWidth)).toBe(0);
+  });
+}
+
+test("at Fit width the pages of the paper fit into a tab of its own", async ({ app, page }) => {
+  await app.open(PAPER_TAB);
+  const viewer = page.locator(".paper-viewer");
+  await expect(drawnPage(viewer)).toBeVisible();
+  expect(await viewer.locator(".paper-scroll").evaluate((element) => element.scrollWidth - element.clientWidth)).toBe(0);
 });
 
 test("Ctrl+F in the paper focuses its find field", async ({ app, page }) => {
