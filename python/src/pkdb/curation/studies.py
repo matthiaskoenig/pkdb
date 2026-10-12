@@ -24,6 +24,7 @@ from pydantic import ValidationError
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
 from pkdb.curation.state import EngineState
+from pkdb.curation.tree import SourceTree
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
 from pkdb.references import ReferenceResolver
@@ -492,6 +493,15 @@ def _papers(identity: str, layout: Layout) -> list[dict]:
     return papers
 
 
+def _files_now(root: Path, folder: Path) -> tuple:
+    """The signature of the files of a study folder that the watcher compares, read now.
+
+    A tree of its own reads the folder, so that any thread can call this while a scan runs.
+    """
+    tree = SourceTree(root)
+    return (tree.files(folder), tree.workbook_open(folder))
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -521,7 +531,12 @@ class StudiesMixin(EngineState):
         """A key of everything the study page shows, cheap enough for every poll.
 
         The fingerprint hashes every file of the study, so the key also versions its tables and
-        sources.
+        sources. The fingerprint is the one of the last scan, while the page, a table and a
+        source are read from the folder as it is: the key also has the files as they are now,
+        their names, sizes and modification times and whether the workbook is open, as the
+        watcher compares them. A file that changes and changes back before the next scan then
+        changes the key twice, and an answer is never kept for content that the folder no
+        longer has. The files are read before the content that the key versions.
         """
         with self.lock:
             row = self._study_row(identity)
@@ -537,8 +552,9 @@ class StudiesMixin(EngineState):
                 "last_upload": row["last_upload"],
                 "jobs": self._study_jobs(identity),
             }
-            data = json.dumps(key, sort_keys=True, default=str).encode()
         _unlinked(folder, root)
+        key["files"] = _files_now(root, folder)
+        data = json.dumps(key, sort_keys=True, default=str).encode()
         return hashlib.sha256(data).hexdigest()
 
     def study_detail(self, identity: str) -> dict:

@@ -253,6 +253,54 @@ def test_study_detail_lists_a_table_that_cannot_be_read_without_a_row_count(api)
     assert tables["outputs_Tab2.tsv"]["rows"] == 1
 
 
+def test_detail_etag_follows_a_file_that_changes_and_changes_back_between_two_scans(
+    api,
+):
+    # The engine runs no watcher: the scan of the files is older than both changes.
+    server, engine, folder = api
+    headers = authenticate(server)
+    study_json = folder / "study.json"
+    original = study_json.read_text(encoding="utf-8")
+    study_json.write_text(
+        original.replace('"open"', '"closed"'), encoding="utf-8", newline=""
+    )
+    status, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    assert status == 200
+    assert json.loads(data)["metadata"]["value"]["licence"] == "closed"
+    study_json.write_text(original, encoding="utf-8", newline="")
+    status, _, data = request(
+        server,
+        "GET",
+        DETAIL,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert status == 200
+    assert json.loads(data)["metadata"]["value"]["licence"] == "open"
+
+
+def test_table_etag_follows_a_table_that_changes_and_changes_back_between_two_scans(
+    api,
+):
+    server, engine, folder = api
+    headers = authenticate(server)
+    path = f"{DETAIL}/tables/Example_Tab2.tsv"
+    table = folder / "Example_Tab2.tsv"
+    original = table.read_text(encoding="utf-8")
+    table.write_text("cmax\t3.5 ± 0.5\n", encoding="utf-8", newline="")
+    status, response_headers, data = request(server, "GET", path, headers=headers)
+    assert status == 200
+    assert json.loads(data)["rows"][0]["cells"] == ["cmax", "3.5 ± 0.5"]
+    table.write_text(original, encoding="utf-8", newline="")
+    status, _, data = request(
+        server,
+        "GET",
+        path,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert status == 200
+    assert json.loads(data)["rows"][0]["cells"] == ["cmax", "2.5 ± 0.5"]
+
+
 def test_detail_etag_changes_with_a_job(api):
     server, engine, folder = api
     headers = authenticate(server)
