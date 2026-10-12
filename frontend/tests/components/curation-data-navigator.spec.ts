@@ -200,9 +200,21 @@ describe("data navigator", () => {
     expect(wrapper.emitted("select-source")).toEqual([[PAPER]]);
   });
 
-  it("names the first PDF and how many more the folder has", () => {
-    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf"), paperFile("Example_Supp.pdf")] }) });
-    expect(wrapper.get(".nav-paper .nav-kind").text()).toBe("Example.pdf and 1 more");
+  it("names the first PDF, and how many more the folder has in a count of its own, which a long name never cuts", () => {
+    const wrapper = mountNavigator({
+      detail: detail({ papers: [paperFile("Example.pdf"), paperFile("Example_Supp.pdf"), paperFile("Example_Errata.pdf")] }),
+    });
+    const paper = wrapper.get(".nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example.pdf");
+    const more = paper.get(".nav-more");
+    expect(more.get("[aria-hidden='true']").text()).toBe("+2");
+    expect(more.get(".d-sr-only").text()).toBe("and 2 more PDFs");
+    expect(more.attributes("title")).toBe("Example_Supp.pdf, Example_Errata.pdf");
+  });
+
+  it("shows no count for a folder with one PDF", () => {
+    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf")] }) });
+    expect(wrapper.find(".nav-paper .nav-more").exists()).toBe(false);
   });
 
   it("shows the paper of a study without a PDF as a disabled entry that names the missing PDF", () => {

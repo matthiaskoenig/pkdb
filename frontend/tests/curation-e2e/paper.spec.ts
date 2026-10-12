@@ -245,6 +245,7 @@ test("the address names the PDF chosen in the head of the pane, so that a reload
   writeFileSync(pdf, pdfOf("the long paper", 3));
   try {
     await app.open("#/studies/caffeine/Demo2020/data?source=paper");
+    await expect(navigatorButton(page, /^Paper\b/)).toHaveAccessibleName("Paper Demo2020.pdf and 1 more PDF");
     await page.getByRole("combobox", { name: "PDF of the paper" }).selectOption("Demo2020_Long.pdf");
     const pane = paperPane(page, "Demo2020_Long.pdf");
     await expect(drawnPage(pane)).toBeVisible();

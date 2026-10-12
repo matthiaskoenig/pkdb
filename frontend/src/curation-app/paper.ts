@@ -144,11 +144,9 @@ export function mainPaper(study: Pick<StudyDetail, "id" | "papers">): PaperFile 
   return study.papers.find((paper) => paper.file.startsWith(stem) && paper.file.toLowerCase() === `${stem.toLowerCase()}.pdf`) ?? null;
 }
 
-/** The line below Paper in the navigator: its PDF and how many more there are, or the PDF that the folder lacks. */
+/** The line below Paper in the navigator: the PDF that the paper shows first, or the PDF that the folder lacks. */
 export function paperLine(study: Pick<StudyDetail, "id" | "papers">): string {
-  const [first, ...others] = study.papers;
-  if (!first) return `No ${paperName(study)}`;
-  return others.length ? `${first.file} and ${others.length} more` : first.file;
+  return study.papers[0]?.file ?? `No ${paperName(study)}`;
 }
 
 /** The route of a PDF of the study `id` in a tab of its own. */

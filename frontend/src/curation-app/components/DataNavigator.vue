@@ -13,7 +13,8 @@ import NavigatorCounts from "./NavigatorCounts.vue";
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
  * the color of its class, its problems, its open review items and its rows; then the sources of
  * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
- * the folder, or a disabled entry that names `<name>.pdf` when the folder has none.
+ * the folder, the first by name with a count of the others, or a disabled entry that names
+ * `<name>.pdf` when the folder has none.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -57,8 +58,16 @@ const sources = computed(() =>
   props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
 
-/** The entry of the paper, first among the sources: its PDFs, or the PDF that the folder lacks. */
-const paper = computed(() => ({ line: paperLine(props.detail), shown: props.detail.papers.length > 0 }));
+/** The entry of the paper, first among the sources: its first PDF and the others, or the PDF that the folder lacks. */
+const paper = computed(() => {
+  const others = props.detail.papers.slice(1).map((entry) => entry.file);
+  return {
+    line: paperLine(props.detail),
+    shown: props.detail.papers.length > 0,
+    others,
+    more: others.length ? `and ${plural(others.length, "more PDF")}` : "",
+  };
+});
 </script>
 
 <template>
@@ -103,6 +112,11 @@ const paper = computed(() => ({ line: paperLine(props.detail), shown: props.deta
             <span class="nav-name">Paper</span>
             <span class="nav-kind" :title="paper.line">{{ paper.line }}</span>
           </span>
+          <!-- The other PDFs as a count of their own, which a long name of the first never cuts. -->
+          <span v-if="paper.others.length" class="nav-more" :title="paper.others.join(', ')">
+            <span class="d-sr-only">{{ paper.more }}</span>
+            <span aria-hidden="true">+{{ paper.others.length }}</span>
+          </span>
         </button>
       </li>
       <li v-for="{ summary, counts: count } in sources" :key="summary.source">
@@ -122,7 +136,9 @@ const paper = computed(() => ({ line: paperLine(props.detail), shown: props.deta
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
-          <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
+          <span class="nav-badges">
+            <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
+          </span>
         </button>
       </li>
     </ul>
@@ -168,11 +184,12 @@ const paper = computed(() => ({ line: paperLine(props.detail), shown: props.deta
   text-align: start;
   cursor: pointer;
 }
-/* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. */
+/* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. The badges end where the
+   pills of the rows of the tables end. */
 .nav-source,
 .nav-paper {
   display: grid;
-  grid-template-columns: 48px 1fr auto auto;
+  grid-template-columns: 48px 1fr auto;
   align-items: center;
   gap: 8px;
   min-height: 40px;
@@ -248,11 +265,17 @@ const paper = computed(() => ({ line: paperLine(props.detail), shown: props.deta
   flex: 1 1 auto;
   margin-inline-end: 4px;
 }
-/* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. Up
-   to 999 rows the pill has one width, so that the pills and the badges before them line up: three
-   digits, the padding, and a pixel for digits that a font draws a fraction wider than its 0. A
-   longer count makes it wider. */
-.nav-rows {
+.nav-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* The rows of a table and the other PDFs of the paper: a muted number on a tinted pill, apart from
+   the counts with their icons. Up to 999 rows the pill has one width, so that the pills and the
+   badges before them line up: three digits, the padding, and a pixel for digits that a font draws
+   a fraction wider than its 0. A longer count makes it wider. */
+.nav-rows,
+.nav-more {
   flex: none;
   min-width: calc(3ch + 11px);
   padding: 0 5px;

@@ -49,13 +49,13 @@ describe("the paper of a study", () => {
     expect(mainPaper(studyDetail())).toBeNull();
   });
 
-  it("names the PDF of the study, and says in the navigator which PDFs the folder has", () => {
+  it("names the PDF of the study, and says in the navigator which PDF the paper shows first", () => {
     expect(paperName(studyDetail())).toBe("Example.pdf");
     expect(paperLine(studyDetail())).toBe("No Example.pdf");
     expect(paperLine(studyDetail({ papers: [paperFile("Example.pdf")] }))).toBe("Example.pdf");
-    expect(
-      paperLine(studyDetail({ papers: [paperFile("Example.pdf"), paperFile("a.pdf"), paperFile("b.pdf")] })),
-    ).toBe("Example.pdf and 2 more");
+    expect(paperLine(studyDetail({ papers: [paperFile("Example.pdf"), paperFile("a.pdf"), paperFile("b.pdf")] }))).toBe(
+      "Example.pdf",
+    );
   });
 
   it("routes a PDF to a tab of its own", () => {
