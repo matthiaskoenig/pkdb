@@ -684,7 +684,9 @@ class StudiesMixin(EngineState):
         """An image or a PDF of the study, open for reading; the caller closes its stream.
 
         Only a regular file at the top of the folder that the scan registers, never through a
-        symlink, also not one placed after the check: LookupError for any other file.
+        symlink, also not one placed after the check: LookupError for any other file and for
+        one that is gone, the OSError of one that cannot be opened (a symlink placed after the
+        check fails to open too).
         """
         folder = self.study_folder(identity)
         media_type = FILE_TYPES.get(Path(file).suffix.lower())
@@ -711,8 +713,10 @@ class StudiesMixin(EngineState):
                 | getattr(os, "O_BINARY", 0)
                 | nonblocking,
             )
-        except OSError:
-            raise LookupError(f"{file} cannot be read") from None
+        except FileNotFoundError:
+            # Gone since the scan. Any other error, such as a file without read permission, is
+            # a file error with its reason, as for a page of the app: not a missing file.
+            raise LookupError(f"{file} is no longer in the study folder") from None
         stream = os.fdopen(descriptor, "rb")
         try:
             status = os.fstat(stream.fileno())

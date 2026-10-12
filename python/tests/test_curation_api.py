@@ -1984,6 +1984,61 @@ def test_a_hidden_pdf_and_a_hidden_image_are_refused_by_the_file_route(api):
         )
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32" or os.geteuid() == 0,
+    reason="Windows ignores the file mode, and root reads any file",
+)
+def test_a_pdf_that_cannot_be_read_is_a_file_error_and_not_a_missing_file(api):
+    server, engine, folder = api
+    pdf = folder / "Example.pdf"
+    pdf.write_bytes(PDF)
+    engine.scan()
+    pdf.chmod(0o000)
+    try:
+        status, _, data = request(
+            server, "GET", f"{DETAIL}/files/Example.pdf", headers=authenticate(server)
+        )
+    finally:
+        pdf.chmod(0o644)
+    # The viewer says that the PDF cannot be read, with the reason of the server; a 404 would
+    # say that it is gone.
+    assert status == 400
+    body = error_body(data)
+    assert (body["error"], body["code"]) == (
+        "Could not read Example.pdf of caffeine/Example.",
+        "file_error",
+    )
+    assert body["detail"].startswith("PermissionError: [Errno 13] Permission denied")
+    assert body["action"] == f"Read a file (GET {DETAIL}/files/Example.pdf)"
+
+
+def test_a_pdf_that_vanished_since_the_check_is_no_longer_in_the_study_folder(
+    api, monkeypatch
+):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(PDF)
+    engine.scan()
+    real_open = os.open
+
+    def vanished(path, flags, *args, **kwargs):
+        # Deleted after the scan listed it, before the file route opened it.
+        if os.fspath(path).endswith("Example.pdf"):
+            raise FileNotFoundError(2, "No such file or directory", os.fspath(path))
+        return real_open(path, flags, *args, **kwargs)
+
+    monkeypatch.setattr(studies.os, "open", vanished)
+    status, _, data = request(
+        server, "GET", f"{DETAIL}/files/Example.pdf", headers=authenticate(server)
+    )
+    assert status == 404
+    body = error_body(data)
+    assert (body["error"], body["code"], body["detail"]) == (
+        "Example.pdf is no longer in the study folder",
+        "not_found",
+        None,
+    )
+
+
 def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
     server, engine, folder = api
     for name in ("Example.pdf", "Example.PDF", "Example_Supp.pdf", "Zeta.Pdf"):
