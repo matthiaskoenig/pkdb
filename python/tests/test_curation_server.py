@@ -1121,3 +1121,25 @@ def test_a_client_that_disconnects_before_the_reply_leaves_no_failure(
     engine.record_failure.assert_not_called()
     engine.log.failed.assert_not_called()
     engine.log.unexpected.assert_not_called()
+
+
+def test_a_result_that_is_not_json_is_an_unexpected_500_before_any_200(local_server):
+    server, engine = local_server
+    headers = authenticate(server)
+    engine.tables_action.return_value = {"rows": {1, 2}}
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "open"},
+        headers,
+    )
+    body = json.loads(data)
+    assert (status, body["code"]) == (500, "unexpected")
+    assert "Traceback (most recent call last)" in body["traceback"]
+    assert "not JSON" in body["detail"]
+    engine.log.unexpected.assert_called_once()
+    engine.record_failure.assert_called_once()
+    engine.snapshot.return_value = {"studies": {1}}
+    status, _, data = request(server, "GET", "/local/state", headers=headers)
+    assert (status, json.loads(data)["code"]) == (500, "unexpected")

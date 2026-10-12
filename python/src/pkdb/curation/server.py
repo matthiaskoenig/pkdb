@@ -104,6 +104,18 @@ class Outcome:
     logged: bool = False
 
 
+class UnserializableResult(RuntimeError):
+    """A result of the app that is not JSON: a bug, so an unexpected error, not a bad request."""
+
+
+def _dump(value) -> bytes:
+    """The JSON of a result; the one place where a result that is no JSON is classified."""
+    try:
+        return json.dumps(value).encode()
+    except (TypeError, ValueError) as error:
+        raise UnserializableResult(f"The result is not JSON: {error}") from error
+
+
 def _issues(issues) -> list[dict]:
     return [issue.model_dump(mode="json") for issue in issues]
 
@@ -228,7 +240,7 @@ class Handler(BaseHTTPRequestHandler):
         etag=None,
         nonce=None,
     ):
-        data = value if isinstance(value, bytes) else json.dumps(value).encode()
+        data = value if isinstance(value, bytes) else _dump(value)
         self.send_response(status)
         if status != 304:
             self.send_header("Content-Type", content_type)
@@ -261,7 +273,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _json(self, value):
         """Reply with a JSON value whose ETag is the hash of its JSON."""
-        data = json.dumps(value).encode()
+        data = _dump(value)
         self._versioned(hashlib.sha256(data).hexdigest(), lambda: data)
 
     def _reject(self, status, message, *, code):
