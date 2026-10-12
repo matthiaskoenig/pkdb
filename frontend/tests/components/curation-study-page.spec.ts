@@ -136,7 +136,10 @@ let pinia: Pinia;
 let router: Router;
 let requests: ServedRequest[];
 
-/** The study page at `path` of the hash router, with `routes` of the local API besides the defaults. */
+/**
+ * The study page at `path` of the hash router, with `routes` of the local API besides the defaults. It
+ * renders in the view of the router, as in the app, so that its guards of leaving the study apply.
+ */
 async function mountPage(path: string, routes: Record<string, unknown> = {}, state: Snapshot = snapshot()) {
   requests = serveApi({
     "GET /local/state": state,
@@ -148,7 +151,10 @@ async function mountPage(path: string, routes: Record<string, unknown> = {}, sta
   router = makeRouter();
   await router.push(path);
   await router.isReady();
-  const wrapper = mount(StudyPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
+  const wrapper = mount(defineComponent({ render: () => h(RouterView) }), {
+    attachTo: document.body,
+    global: { plugins: [pinia, router] },
+  });
   await flushPromises();
   return wrapper;
 }
