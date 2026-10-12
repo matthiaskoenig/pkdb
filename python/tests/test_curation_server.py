@@ -793,6 +793,16 @@ SETTINGS = "Save the settings (POST /local/settings)"
             },
         ),
         (
+            # Like a KeyError: an index of the server out of range is a bug.
+            IndexError("list index out of range"),
+            500,
+            {
+                "error": "Could not save the settings.",
+                "code": "unexpected",
+                "detail": "IndexError: list index out of range",
+            },
+        ),
+        (
             RuntimeError("boom"),
             500,
             {
@@ -818,6 +828,7 @@ def test_every_failure_of_an_action_has_the_error_body(
     if "detail" not in expected:
         assert body["detail"] is None
     assert ("traceback" in body) == (expected["code"] == "unexpected")
+    assert engine.log.unexpected.called == (expected["code"] == "unexpected")
     # The settings belong to no study: no entry in an activity.
     assert "activity_id" not in body
     engine.record_failure.assert_not_called()

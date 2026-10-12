@@ -166,8 +166,9 @@ def _outcome(error: Exception, *, reading: bool) -> Outcome:
             return Outcome(400, "resume_refused", own_text=True)
         case MissingField():
             return Outcome(400, "missing_field", own_text=True)
-        case KeyError():
-            # A field of the body is read with `required`: any other KeyError is a bug.
+        case KeyError() | IndexError():
+            # A field of the body is read with `required`: any other KeyError is a bug, and
+            # so is an index out of range.
             return Outcome(500, "unexpected", unexpected=True)
         case LookupError():
             return Outcome(404, "not_found", own_text=True)
