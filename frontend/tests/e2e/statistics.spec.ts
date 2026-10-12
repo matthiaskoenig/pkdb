@@ -5,6 +5,11 @@ test("landing statistics renders interactive coverage charts on desktop and mobi
   await page.route("**/api/v2/statistics", route => route.fulfill({ json: fixture }));
   await page.goto("/");
   await expect(page.locator(".statistic-grid a")).toHaveCount(7);
+  // Each total starts at the left edge of its label, as the counts of the cards above do.
+  for (const total of await page.locator(".coverage-totals > div").all()) {
+    const [label, value] = await Promise.all([total.locator("dt").boundingBox(), total.locator("dd").boundingBox()]);
+    expect(value!.x).toBeCloseTo(label!.x, 0);
+  }
   await expect(page.locator(".statistics-chart .main-svg").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Cumulative studies", exact: true })).toBeVisible();
   await page.getByRole("checkbox", { name: "Cumulative studies and substances" }).uncheck();
