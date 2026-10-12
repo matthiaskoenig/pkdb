@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
@@ -502,6 +502,32 @@ test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px hea
   const fit = (await zoom.getByRole("button", { name: "Fit", exact: true }).boundingBox())!;
   expect(fit.y).toBeGreaterThanOrEqual(head.y);
   expect(fit.y + fit.height).toBeLessThanOrEqual(head.y + head.height);
+});
+
+test("the source pane shows that more of it follows below, and scrolls to its end", async ({ app, page }) => {
+  // Without its WebPlotDigitizer project Fig1 shows the note "No digitization" at the end of the
+  // pane; in a short window (the section keeps its least height of 480 px) the pane is taller than its view.
+  const project = join(app.server.workspace, "caffeine/Demo2020/Demo2020_Fig1.wpd.json");
+  renameSync(project, `${project}.away`);
+  try {
+    await page.setViewportSize({ width: 1440, height: 640 });
+    await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
+    const pane = page.getByRole("region", { name: "Source Fig1" });
+    const body = pane.locator(".pane-body");
+    await expect(pane.getByText("No digitization:")).toBeAttached();
+    await expect(pane.locator(".pane-more")).toBeVisible();
+    // The problems of the study may still arrive after the first scroll and lengthen the pane: scroll again.
+    await expect(async () => {
+      await body.evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
+      await expect(pane.locator(".pane-more")).toBeHidden({ timeout: 500 });
+      const last = (await pane.locator(".pane-content > *").last().boundingBox())!;
+      const view = (await body.boundingBox())!;
+      expect(last.y + last.height).toBeLessThanOrEqual(view.y + view.height);
+    }).toPass();
+    await expect(pane.getByText("No digitization:")).toBeInViewport({ ratio: 1 });
+  } finally {
+    renameSync(`${project}.away`, project);
+  }
 });
 
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {

@@ -155,3 +155,37 @@ describe("problems of the source", () => {
     study.close();
   });
 });
+
+describe("scrolling", () => {
+  /** Gives the body of the pane a view of 300 px over `content` px scrolled to `top`, as a layout would. */
+  function layout(wrapper: ReturnType<typeof mountPane>, content: number, top = 0): HTMLElement {
+    const body = wrapper.get(".pane-body").element as HTMLElement;
+    Object.defineProperty(body, "clientHeight", { configurable: true, value: 300 });
+    Object.defineProperty(body, "scrollHeight", { configurable: true, value: content });
+    Object.defineProperty(body, "scrollTop", { configurable: true, writable: true, value: top });
+    return body;
+  }
+
+  it("fades out at the bottom while more of the pane follows below, and not at its end", async () => {
+    const wrapper = mountPane();
+    const body = layout(wrapper, 900);
+    await wrapper.get(".pane-body").trigger("scroll");
+    expect(wrapper.get(".pane-more").attributes("aria-hidden")).toBe("true");
+    body.scrollTop = 600;
+    await wrapper.get(".pane-body").trigger("scroll");
+    expect(wrapper.find(".pane-more").exists()).toBe(false);
+  });
+
+  it("does not fade out a pane that fits", async () => {
+    const wrapper = mountPane();
+    layout(wrapper, 300);
+    await wrapper.get(".pane-body").trigger("scroll");
+    expect(wrapper.find(".pane-more").exists()).toBe(false);
+  });
+
+  it("keeps the content in one column inside the body that scrolls and takes the focus", () => {
+    const wrapper = mountPane();
+    expect(wrapper.get(".pane-body").attributes("tabindex")).toBe("0");
+    expect(wrapper.find(".pane-body > .pane-content").exists()).toBe(true);
+  });
+});

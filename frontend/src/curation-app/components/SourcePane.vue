@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
@@ -91,6 +91,32 @@ const problemCount = computed(() => problemGroups.value.reduce((sum, group) => s
 const automatic = computed(() =>
   detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
 );
+
+// More of the pane below its view: a fade at its bottom shows it, inside its scroll bar.
+
+const body = ref<HTMLElement | null>(null);
+const content = ref<HTMLElement | null>(null);
+/** Whether more of the pane follows below its view. */
+const more = ref(false);
+/** The width of the vertical scroll bar of the body, which the fade leaves free. */
+const scrollbar = ref(0);
+
+function updateMore(): void {
+  const element = body.value;
+  if (!element) return;
+  more.value = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+  scrollbar.value = element.offsetWidth - element.clientWidth;
+}
+
+let observer: ResizeObserver | undefined;
+onMounted(() => {
+  updateMore();
+  // The body changes with the window and the separator, the content with a loaded view or image.
+  observer = new ResizeObserver(updateMore);
+  if (body.value) observer.observe(body.value);
+  if (content.value) observer.observe(content.value);
+});
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 
 <template>
@@ -107,131 +133,137 @@ const automatic = computed(() =>
       </div>
     </div>
 
-    <!-- It scrolls on its own and takes the focus, so that a keyboard can scroll it: its first content is no control. -->
-    <div class="pane-body" tabindex="0">
-      <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
-      <!-- It goes when the view loads again, after Retry or a change of the study: no close button. -->
-      <ActionFailureAlert v-else-if="error" :failure="error" :study="study.detail?.id ?? null" :closable="false">
-        <template #append>
-          <VBtn variant="text" size="small" @click="emit('retry')">Retry</VBtn>
-        </template>
-      </ActionFailureAlert>
+    <!-- The body scrolls on its own and takes the focus, so that a keyboard can scroll it: its
+         first content is no control. While more of it follows below, a fade at its bottom shows it. -->
+    <div class="pane-frame">
+      <div ref="body" class="pane-body" tabindex="0" @scroll.passive="updateMore">
+        <div ref="content" class="pane-content">
+          <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
+          <!-- It goes when the view loads again, after Retry or a change of the study: no close button. -->
+          <ActionFailureAlert v-else-if="error" :failure="error" :study="study.detail?.id ?? null" :closable="false">
+            <template #append>
+              <VBtn variant="text" size="small" @click="emit('retry')">Retry</VBtn>
+            </template>
+          </ActionFailureAlert>
 
-      <template v-else-if="view">
-        <!-- The overlay draws the raw extraction of a figure on its image. -->
-        <section v-if="calibrated" class="pane-block" :aria-labelledby="`${id}-overlay`">
-          <h4 :id="`${id}-overlay`" class="pane-heading">Digitization on the image</h4>
-          <SourceOverlay :view="view" mode="overlay" :selected="selected" @select-row="emit('select-row', $event)" />
-        </section>
-        <section
-          v-if="calibrated && view.unmatched.length"
-          class="pane-block source-unmatched"
-          :aria-labelledby="`${id}-unmatched`"
-        >
-          <h4 :id="`${id}-unmatched`" class="pane-heading">Not digitized: {{ view.unmatched.join(", ") }}</h4>
-          <p class="pane-note">{{ unmatchedNote }}</p>
-          <SourceOverlay
-            v-if="plotted.length"
-            :view="view"
-            mode="plot"
-            :selected="selected"
-            @select-row="emit('select-row', $event)"
-          />
-        </section>
-
-        <template v-if="showsImage">
-          <section class="pane-block" :aria-labelledby="`${id}-image`">
-            <h4 :id="`${id}-image`" class="pane-heading">Image</h4>
-            <div v-if="view.image_url" class="image-scroll">
-              <img
-                :src="view.image_url"
-                :alt="alt"
-                :width="view.image_size?.[0]"
-                :height="view.image_size?.[1]"
-                class="source-image"
-                :class="{ 'source-image--figure': kind === 'figure', 'source-image--full': zoom === 'full' }"
+          <template v-else-if="view">
+            <!-- The overlay draws the raw extraction of a figure on its image. -->
+            <section v-if="calibrated" class="pane-block" :aria-labelledby="`${id}-overlay`">
+              <h4 :id="`${id}-overlay`" class="pane-heading">Digitization on the image</h4>
+              <SourceOverlay :view="view" mode="overlay" :selected="selected" @select-row="emit('select-row', $event)" />
+            </section>
+            <section
+              v-if="calibrated && view.unmatched.length"
+              class="pane-block source-unmatched"
+              :aria-labelledby="`${id}-unmatched`"
+            >
+              <h4 :id="`${id}-unmatched`" class="pane-heading">Not digitized: {{ view.unmatched.join(", ") }}</h4>
+              <p class="pane-note">{{ unmatchedNote }}</p>
+              <SourceOverlay
+                v-if="plotted.length"
+                :view="view"
+                mode="plot"
+                :selected="selected"
+                @select-row="emit('select-row', $event)"
               />
-            </div>
-            <p v-else class="pane-missing">
+            </section>
+
+            <template v-if="showsImage">
+              <section class="pane-block" :aria-labelledby="`${id}-image`">
+                <h4 :id="`${id}-image`" class="pane-heading">Image</h4>
+                <div v-if="view.image_url" class="image-scroll">
+                  <img
+                    :src="view.image_url"
+                    :alt="alt"
+                    :width="view.image_size?.[0]"
+                    :height="view.image_size?.[1]"
+                    class="source-image"
+                    :class="{ 'source-image--figure': kind === 'figure', 'source-image--full': zoom === 'full' }"
+                  />
+                </div>
+                <p v-else class="pane-missing">
+                  <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
+                  <span class="pane-missing-text"
+                    ><b>No image:</b> add {{ summary.missing_image }}.
+                    <span class="pane-missing-hint">Save it from the paper as a PNG image.</span></span
+                  >
+                </p>
+              </section>
+
+              <section v-if="kind === 'table'" class="pane-block" :aria-labelledby="`${id}-raw`">
+                <h4 :id="`${id}-raw`" class="pane-heading">Raw extraction</h4>
+                <TableGrid v-if="raw" :table="raw" :label="`Raw extraction ${raw.file}`" class="source-raw" />
+                <p v-else class="pane-missing">
+                  <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
+                  <span class="pane-missing-text"
+                    ><b>No raw extraction:</b> add {{ summary.missing_raw }}
+                    <span class="pane-missing-hint">with Add table.</span></span
+                  >
+                </p>
+              </section>
+
+              <section v-else class="pane-block" :aria-labelledby="`${id}-plot`">
+                <h4 :id="`${id}-plot`" class="pane-heading">Plot of the mapped rows</h4>
+                <SourceOverlay
+                  v-if="plotted.length"
+                  :view="view"
+                  mode="plot"
+                  :selected="selected"
+                  @select-row="emit('select-row', $event)"
+                />
+                <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
+              </section>
+            </template>
+
+            <p v-if="kind === 'text'" class="pane-note">The rows of this source cite the text of the paper.</p>
+
+            <p v-if="kind === 'figure' && summary.missing_raw" class="pane-missing">
               <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
               <span class="pane-missing-text"
-                ><b>No image:</b> add {{ summary.missing_image }}.
-                <span class="pane-missing-hint">Save it from the paper as a PNG image.</span></span
+                ><b>No digitization:</b> add {{ summary.missing_raw }}.
+                <span class="pane-missing-hint"
+                  >Digitize it in WebPlotDigitizer and import it with pkdb digitize import.</span
+                ></span
               >
             </p>
-          </section>
 
-          <section v-if="kind === 'table'" class="pane-block" :aria-labelledby="`${id}-raw`">
-            <h4 :id="`${id}-raw`" class="pane-heading">Raw extraction</h4>
-            <TableGrid v-if="raw" :table="raw" :label="`Raw extraction ${raw.file}`" class="source-raw" />
-            <p v-else class="pane-missing">
-              <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-              <span class="pane-missing-text"
-                ><b>No raw extraction:</b> add {{ summary.missing_raw }}
-                <span class="pane-missing-hint">with Add table.</span></span
+            <!-- Open for each source, also after the curator closed them for the last one. -->
+            <details v-if="problemGroups.length" :key="summary.source" open class="source-problems">
+              <summary>Problems ({{ problemCount }})</summary>
+              <!-- As in the Problems section: by file, the files with errors first. -->
+              <section
+                v-for="(group, groupIndex) in problemGroups"
+                :key="group.file ?? ''"
+                class="problem-group"
+                :aria-labelledby="`${id}-file-${groupIndex}`"
               >
-            </p>
-          </section>
-
-          <section v-else class="pane-block" :aria-labelledby="`${id}-plot`">
-            <h4 :id="`${id}-plot`" class="pane-heading">Plot of the mapped rows</h4>
-            <SourceOverlay
-              v-if="plotted.length"
-              :view="view"
-              mode="plot"
-              :selected="selected"
-              @select-row="emit('select-row', $event)"
-            />
-            <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
-          </section>
-        </template>
-
-        <p v-if="kind === 'text'" class="pane-note">The rows of this source cite the text of the paper.</p>
-
-        <p v-if="kind === 'figure' && summary.missing_raw" class="pane-missing">
-          <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-          <span class="pane-missing-text"
-            ><b>No digitization:</b> add {{ summary.missing_raw }}.
-            <span class="pane-missing-hint"
-              >Digitize it in WebPlotDigitizer and import it with pkdb digitize import.</span
-            ></span
-          >
-        </p>
-
-        <!-- Open for each source, also after the curator closed them for the last one. -->
-        <details v-if="problemGroups.length" :key="summary.source" open class="source-problems">
-          <summary>Problems ({{ problemCount }})</summary>
-          <!-- As in the Problems section: by file, the files with errors first. -->
-          <section
-            v-for="(group, groupIndex) in problemGroups"
-            :key="group.file ?? ''"
-            class="problem-group"
-            :aria-labelledby="`${id}-file-${groupIndex}`"
-          >
-            <div class="problem-group-head">
-              <div class="problem-group-title">
-                <h5 :id="`${id}-file-${groupIndex}`" class="problem-file">{{ group.file }}</h5>
-                <span class="problem-group-counts">{{ groupCounts(group.issues) }}</span>
-              </div>
-            </div>
-            <ul class="problem-list">
-              <ProblemItem
-                v-for="(issue, index) in group.issues"
-                :key="index"
-                :issue="issue"
-                :study="identity"
-                :id-base="`${id}-problem-${groupIndex}-${index}`"
-                :showable="tables.has(group.file ?? '')"
-                :pending="study.acknowledgedKeys.includes(locationKey(issue))"
-                :automatic="automatic"
-                :disabled="false"
-                :validating="false"
-                :offers-acknowledge="false"
-              />
-            </ul>
-          </section>
-        </details>
-      </template>
+                <div class="problem-group-head">
+                  <div class="problem-group-title">
+                    <h5 :id="`${id}-file-${groupIndex}`" class="problem-file">{{ group.file }}</h5>
+                    <span class="problem-group-counts">{{ groupCounts(group.issues) }}</span>
+                  </div>
+                </div>
+                <ul class="problem-list">
+                  <ProblemItem
+                    v-for="(issue, index) in group.issues"
+                    :key="index"
+                    :issue="issue"
+                    :study="identity"
+                    :id-base="`${id}-problem-${groupIndex}-${index}`"
+                    :showable="tables.has(group.file ?? '')"
+                    :pending="study.acknowledgedKeys.includes(locationKey(issue))"
+                    :automatic="automatic"
+                    :disabled="false"
+                    :validating="false"
+                    :offers-acknowledge="false"
+                  />
+                </ul>
+              </section>
+            </details>
+          </template>
+        </div>
+      </div>
+      <div v-if="more" class="pane-more" :style="{ '--pane-scrollbar': `${scrollbar}px` }" aria-hidden="true"></div>
     </div>
   </section>
 </template>
@@ -269,14 +301,33 @@ const automatic = computed(() =>
   border-color: rgb(var(--v-theme-primary));
   color: rgb(var(--v-theme-on-primary));
 }
-.pane-body {
+.pane-frame {
+  position: relative;
   display: flex;
-  flex-direction: column;
   flex: 1;
-  gap: 10px;
+  flex-direction: column;
+  min-height: 0;
+}
+.pane-body {
+  flex: 1;
   min-height: 0;
   padding: 8px;
   overflow: auto;
+}
+.pane-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+/* More follows below: the content fades out into the surface at the bottom of the view. */
+.pane-more {
+  position: absolute;
+  inset-inline: 0 var(--pane-scrollbar, 0px);
+  bottom: 0;
+  height: 32px;
+  background: linear-gradient(to top, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0));
+  pointer-events: none;
 }
 .pane-block {
   display: flex;
