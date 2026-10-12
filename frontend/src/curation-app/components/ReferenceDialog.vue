@@ -21,7 +21,8 @@ import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus"
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 /**
  * Corrections of `reference.json` of the open study: the title, the authors, the journal and the
@@ -84,15 +85,15 @@ const refetch = ref(false);
 const resetOverrides = ref(false);
 const citation = ref("");
 const loading = ref(false);
-const loadError = ref("");
+const loadFailure = ref<ActionFailure | null>(null);
 const searching = ref(false);
-const searchError = ref("");
+const searchFailure = ref<ActionFailure | null>(null);
 const candidates = ref<ReferenceRecord[] | null>(null);
 const previewing = ref(false);
-const previewError = ref("");
+const previewFailure = ref<ActionFailure | null>(null);
 const preview = ref<ReferencePreview | null>(null);
 const saving = ref(false);
-const saveError = ref("");
+const saveFailure = ref<ActionFailure | null>(null);
 /** Counts the edits: a preview that answers after an edit is dropped. */
 let edits = 0;
 
@@ -194,7 +195,7 @@ function previewInput() {
 function invalidate(): void {
   edits += 1;
   preview.value = null;
-  previewError.value = "";
+  previewFailure.value = null;
   previewing.value = false;
 }
 
@@ -206,9 +207,9 @@ async function load(): Promise<void> {
   resetOverrides.value = false;
   citation.value = "";
   candidates.value = null;
-  searchError.value = "";
-  saveError.value = "";
-  loadError.value = "";
+  searchFailure.value = null;
+  saveFailure.value = null;
+  loadFailure.value = null;
   loading.value = true;
   try {
     const reference = await study.readReference();
@@ -216,7 +217,7 @@ async function load(): Promise<void> {
     fields.value = { ...initial };
     citation.value = citationOf(reference);
   } catch (caught) {
-    loadError.value = `reference.json could not be read. ${messageOf(caught)}`;
+    loadFailure.value = failureOf(caught, "reference.json could not be read.");
   } finally {
     loading.value = false;
   }
@@ -229,12 +230,12 @@ async function search(): Promise<void> {
   const text = citation.value.trim();
   if (!text || searching.value) return;
   searching.value = true;
-  searchError.value = "";
+  searchFailure.value = null;
   try {
     candidates.value = await study.searchReference(text);
   } catch (caught) {
     candidates.value = null;
-    searchError.value = messageOf(caught);
+    searchFailure.value = failureOf(caught);
   } finally {
     searching.value = false;
   }
@@ -248,8 +249,8 @@ function useDoi(doi: string): void {
 async function runPreview(): Promise<void> {
   const at = edits;
   previewing.value = true;
-  previewError.value = "";
-  saveError.value = "";
+  previewFailure.value = null;
+  saveFailure.value = null;
   preview.value = null;
   try {
     const result = await study.previewReference(previewInput(), {
@@ -258,7 +259,7 @@ async function runPreview(): Promise<void> {
     });
     if (at === edits) preview.value = result;
   } catch (caught) {
-    if (at === edits) previewError.value = messageOf(caught);
+    if (at === edits) previewFailure.value = failureOf(caught);
   } finally {
     if (at === edits) previewing.value = false;
   }
@@ -268,7 +269,7 @@ async function save(): Promise<void> {
   const token = preview.value?.token;
   if (!token || saving.value) return;
   saving.value = true;
-  saveError.value = "";
+  saveFailure.value = null;
   try {
     await study.saveReference(token);
     emit("saved");
@@ -276,7 +277,7 @@ async function save(): Promise<void> {
   } catch (caught) {
     // A refused token is used up or stale: the next save needs a new preview.
     preview.value = null;
-    saveError.value = `reference.json was not saved. ${messageOf(caught)}`;
+    saveFailure.value = failureOf(caught, "reference.json was not saved.");
   } finally {
     saving.value = false;
   }
@@ -350,9 +351,7 @@ const previewed = computed(() => {
         </VAlert>
 
         <VProgressLinear v-if="loading" indeterminate color="primary" aria-label="Reading reference.json" />
-        <VAlert v-else-if="loadError" type="error" variant="tonal" density="compact" class="status-alert">
-          {{ loadError }}
-        </VAlert>
+        <ActionFailureAlert v-else-if="loadFailure" :failure="loadFailure" :closable="false" />
         <template v-else>
           <section v-if="manual" class="reference-part" :aria-labelledby="searchId">
             <h3 :id="searchId" class="reference-heading">Find the publication</h3>
@@ -369,9 +368,7 @@ const previewed = computed(() => {
               </VBtn>
             </div>
             <p v-if="offline" class="reference-note">Offline: only searches made before are found.</p>
-            <VAlert v-if="searchError" type="error" variant="tonal" density="compact" class="status-alert">
-              {{ searchError }}
-            </VAlert>
+            <ActionFailureAlert v-if="searchFailure" :failure="searchFailure" :closable="false" />
             <ul v-if="shownCandidates.length" class="reference-candidates">
               <li v-for="candidate in shownCandidates" :key="candidate.doi" class="reference-candidate">
                 <div class="candidate-text">
@@ -451,9 +448,7 @@ const previewed = computed(() => {
             </div>
           </VForm>
 
-          <VAlert v-if="previewError" type="error" variant="tonal" density="compact" class="status-alert">
-            {{ previewError }}
-          </VAlert>
+          <ActionFailureAlert v-if="previewFailure" :failure="previewFailure" :closable="false" />
           <section v-if="previewed" class="reference-part reference-preview" :aria-labelledby="previewId">
             <h3 :id="previewId" class="reference-heading">Preview</h3>
             <p class="preview-title">{{ previewed.title }}</p>
@@ -467,9 +462,7 @@ const previewed = computed(() => {
             </ul>
             <p v-else class="reference-note">No changes. Saving keeps reference.json as it is.</p>
           </section>
-          <VAlert v-if="saveError" type="error" variant="tonal" density="compact" class="status-alert">
-            {{ saveError }}
-          </VAlert>
+          <ActionFailureAlert v-if="saveFailure" :failure="saveFailure" :study="study.detail?.id ?? null" :closable="false" />
         </template>
       </VCardText>
       <VCardActions class="dialog-actions">

@@ -1,8 +1,10 @@
 """Save generations, immutable inputs, and recovery in the local workspace."""
 
 import json
+import re
 import shutil
 import threading
+from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -587,6 +589,15 @@ def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
                 action="write",
                 message="Added review item 01M2FC4AG038NKRKAYDXR834N3",
             ),
+            job_entry(
+                "failed_write",
+                "failed",
+                action="write",
+                message="Could not resolve the review item of caffeine/Example.",
+                error={
+                    "error": "Could not resolve the review item of caffeine/Example."
+                },
+            ),
             job_entry("queued", "canceled", message="Queued"),
             job_entry("canceled", "canceled", message="Canceled before starting"),
         ]
@@ -604,6 +615,8 @@ def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
             {"text": "Added "},
             {"item": "01M2FC4AG038NKRKAYDXR834N3"},
         ]
+        # A recorded failure names no review item, whatever its message says.
+        assert "item" not in jobs["failed_write"]
         # One wording for a job canceled before it started, whichever version saved it.
         assert jobs["queued"]["message"] == "Canceled before it started"
         assert jobs["canceled"]["message"] == "Canceled before it started"
@@ -1101,14 +1114,15 @@ def test_a_key_of_another_account_refuses_writes_until_it_matches(
     assert engine.snapshot()["author"] == {"user": "curator", "reason": None}
 
 
+class Ticks(threading.Event):
+    """A stop event whose wait returns at once."""
+
+    def wait(self, timeout=None):
+        return self.is_set()
+
+
 def test_the_watcher_survives_an_unexpected_scan_failure(workspace, monkeypatch):
     engine, _ = workspace
-
-    class Ticks(threading.Event):
-        """A stop event whose wait returns at once."""
-
-        def wait(self, timeout=None):
-            return self.is_set()
 
     engine.stop = Ticks()
     scans = []
@@ -1128,12 +1142,6 @@ def test_the_watcher_plans_the_workbook_of_a_row_without_a_job(workspace, monkey
     engine, _ = workspace
     engine.set_mode([row(engine)["id"]], "off")
     assert row(engine)["sync"]["status"] == "not_checked"
-
-    class Ticks(threading.Event):
-        """A stop event whose wait returns at once."""
-
-        def wait(self, timeout=None):
-            return self.is_set()
 
     engine.stop = Ticks()
     monkeypatch.setattr(engine, "scan", engine.stop.set)
@@ -1436,3 +1444,243 @@ def test_jobs_keep_study_name_after_workspace_switch(workspace, tmp_path):
     other.mkdir()
     engine.select_workspace(other)
     assert engine.snapshot()["jobs"][-1]["study_name"] == "Example"
+
+
+def test_the_engine_redacts_its_key_the_github_tokens_and_what_it_protects(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    monkeypatch.setenv("GH_TOKEN", "ghp_environment")
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    engine.api_key = "private-api-key"
+    engine.protect("session-token", "")
+    assert engine.secrets() == ["private-api-key", "ghp_environment", "session-token"]
+    assert (
+        engine._safe("private-api-key ghp_environment session-token")
+        == "[redacted] [redacted] [redacted]"
+    )
+
+
+def test_the_engine_logs_to_its_state_directory_and_closes_the_log(workspace):
+    engine, _ = workspace
+    path = engine.state_dir / "logs" / "curation.log"
+    assert engine.log.path == path and path.parent.is_dir()
+    assert engine.snapshot()["log_file"] == str(path)
+    engine.close()
+    body = {"request_id": "3f9c2a71", "action": "x", "detail": None, "error": "y"}
+    engine.log.failed(body, RuntimeError("y"))
+    assert not path.exists()
+
+
+def test_an_unexpected_job_failure_keeps_its_error_and_logs_the_traceback(
+    workspace, monkeypatch, capsys
+):
+    engine, _ = workspace
+    engine.api_key = "private-api-key"
+
+    def broken(folder, vocabulary, **kwargs):
+        raise RuntimeError("broken with private-api-key")
+
+    monkeypatch.setattr(jobs, "sync_and_format", broken)
+    settle(engine)
+    job = run_next(engine)
+    identity = job["study_id"]
+    assert job["status"] == "failed"
+    assert job["message"] == f"The validation of {identity} failed unexpectedly."
+    assert job["error"]["code"] == "unexpected"
+    assert job["error"]["detail"] == "RuntimeError: broken with [redacted]"
+    assert job["error"]["action"] == f"Validation of {identity}"
+    assert "traceback" not in job["error"]
+    report = engine.report(job["report_id"])
+    assert "RuntimeError: broken with [redacted]" in report["error"]["traceback"]
+    assert "private-api-key" not in json.dumps(report)
+    log = engine.log.path.read_text(encoding="utf-8")
+    assert "Traceback (most recent call last)" in log
+    assert "private-api-key" not in log
+    path = re.escape(str(engine.log.path))
+    assert re.fullmatch(
+        rf"Error [0-9a-f]{{8}} in Validation: RuntimeError \(see {path}\)\n",
+        capsys.readouterr().err,
+    )
+
+
+def test_an_unexpected_upload_failure_says_that_the_server_may_have_the_study(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    _, factory = enable_upload(engine, monkeypatch, None)
+
+    def upload(_):
+        factory.call_args.kwargs["progress"](ProgressEvent("transfer"))
+        raise RuntimeError("interrupted")
+
+    factory.return_value.upload.side_effect = upload
+    engine.enqueue([row(engine)["id"]], "upload")
+    job = run_next(engine)
+    assert job["status"] == "unknown"
+    assert job["message"] == (
+        f"The upload of {job['study_id']} failed unexpectedly. The server may have "
+        "saved the study; review the upload before you upload it again."
+    )
+    assert job["error"]["detail"] == "RuntimeError: interrupted"
+
+
+def test_the_watcher_logs_a_failure_once_a_minute_and_keeps_it_for_the_menu(
+    workspace, monkeypatch, capsys
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    seen = []
+
+    def scan():
+        if len(seen) < 2:
+            seen.append(engine.watcher_error)
+            raise OSError("disk unavailable")
+        seen.append(dict(engine.watcher_error))
+        engine.stop.set()
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    # The first scan finds no error; the second finds the error of the first, and the
+    # third the error of the second, neither recovered yet.
+    assert seen[0] is None
+    assert seen[1]["recovered"] is False
+    assert seen[2]["recovered"] is False
+    error = engine.snapshot()["watcher_error"]
+    assert error["detail"] == "OSError: disk unavailable"
+    assert error["recovered"] is True
+    datetime.fromisoformat(error["time"])
+    # The same error twice within a minute: one traceback, one terminal line.
+    assert engine.log.path.read_text(encoding="utf-8").count("Traceback") == 1
+    lines = capsys.readouterr().err.splitlines()
+    assert len(lines) == 1
+    assert re.fullmatch(
+        r"Error [0-9a-f]{8} in File watching: OSError \(see .*curation\.log\)",
+        lines[0],
+    )
+
+
+def test_a_watcher_that_fails_every_second_writes_one_traceback_a_minute_and_nothing_else(
+    workspace, monkeypatch, capsys
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    ticks = []
+
+    def scan():
+        ticks.append(None)
+        if len(ticks) > 5:
+            engine.stop.set()
+            return
+        raise OSError("disk unavailable")
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    # Five failing ticks within the minute: the menu has no request id that a line of
+    # the log could name, so the repeats write nothing.
+    log = engine.log.path.read_text(encoding="utf-8")
+    assert log.count("Traceback") == 1
+    assert "repeats Error" not in log
+    assert len(re.findall(r"^\d{4}-\d\d-\d\d ", log, re.MULTILINE)) == 1
+    assert len(capsys.readouterr().err.splitlines()) == 1
+
+
+def test_the_watcher_rate_limits_every_distinct_error_on_its_own(
+    workspace, monkeypatch, capsys
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    details = ["first", "second", "first", "second"]
+    calls = []
+
+    def scan():
+        calls.append(None)
+        if len(calls) > len(details):
+            engine.stop.set()
+            return
+        raise OSError(details[len(calls) - 1])
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    # Alternating errors are logged once each, not on every change of the error.
+    log = engine.log.path.read_text(encoding="utf-8")
+    assert log.count("Traceback") == 2
+    assert len(capsys.readouterr().err.splitlines()) == 2
+    assert engine.watcher_error["detail"] == "OSError: second"
+    assert engine.watcher_error["recovered"] is True
+
+
+def test_a_watcher_failure_that_cannot_be_described_keeps_the_watcher_looping(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    scans = []
+
+    def scan():
+        scans.append(None)
+        if len(scans) == 1:
+            raise RuntimeError("unexpected")
+        engine.stop.set()
+
+    def broken(*args, **kwargs):
+        raise ValueError("odd exception")
+
+    monkeypatch.setattr(engine, "scan", scan)
+    monkeypatch.setattr(workspace_module, "describe", broken)
+    engine._watch()
+    assert len(scans) == 2
+    assert engine.watcher_error["detail"] == (
+        "ValueError while recording a watcher failure"
+    )
+    assert engine.watcher_error["recovered"] is True
+
+
+def test_a_job_failure_that_cannot_be_recorded_still_fails_the_job(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+
+    def broken(*args, **kwargs):
+        raise ValueError("odd exception")
+
+    def unexpected(*args, **kwargs):
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr(jobs, "sync_and_format", unexpected)
+    monkeypatch.setattr(jobs, "describe_error", broken)
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "failed"
+    assert job["error"]["detail"] == "ValueError while recording a job failure"
+    assert job["error"]["code"] == "unexpected"
+
+
+def test_the_same_watcher_error_after_a_recovery_is_logged_once_but_kept(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    engine.stop = Ticks()
+    outcomes = ["fail", "ok", "fail", "stop"]
+    times = []
+
+    def scan():
+        outcome = outcomes.pop(0)
+        if outcome == "fail":
+            raise OSError("disk unavailable")
+        if outcome == "stop":
+            times.append(dict(engine.watcher_error))
+            engine.stop.set()
+        else:
+            times.append(dict(engine.watcher_error))
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    # The first check after the failure still holds it unrecovered; the repeat after the
+    # recovery, within the minute, is not logged again with its traceback, but the kept
+    # error is replaced and unrecovered again.
+    assert times[0]["recovered"] is False
+    assert times[1]["recovered"] is False
+    assert engine.watcher_error["recovered"] is True
+    assert engine.log.path.read_text(encoding="utf-8").count("Traceback") == 1

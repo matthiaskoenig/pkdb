@@ -9,6 +9,7 @@ import { plural } from "../overview";
 import { matchText, rowsAt, shownColumns, targetText } from "../review";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
 
@@ -42,6 +43,7 @@ const {
   () => tableFile.value,
   (name) => study.table(name),
   () => study.detail,
+  (name) => `The rows of ${name} could not be loaded.`,
 );
 /**
  * The lines of the target as the local server matched them for the study page that the rows were
@@ -66,6 +68,7 @@ const {
   () => series.value?.source ?? null,
   (name) => study.source(name),
   () => study.detail,
+  (name) => `Figure ${name} could not be loaded.`,
 );
 
 /** A clicked mapped point of the figure opens its row in the Data section. */
@@ -131,9 +134,13 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
           color="primary"
           :aria-label="`Loading ${tableFile}`"
         />
-        <p v-else-if="tableError" class="field-error">
-          The rows of {{ tableFile }} could not be loaded. {{ tableError }}
-        </p>
+        <!-- It goes when the rows load again with the next change of the study: no close button. -->
+        <ActionFailureAlert
+          v-else-if="tableError"
+          :failure="tableError"
+          :study="study.detail?.id ?? null"
+          :closable="false"
+        />
         <p v-else-if="rawTable" class="field-note">
           This is a raw table. <RouterLink :to="tableRoute()">Show in table</RouterLink>
         </p>
@@ -173,9 +180,12 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
           color="primary"
           :aria-label="`Loading figure ${series.source}`"
         />
-        <p v-else-if="figureError" class="field-error">
-          Figure {{ series.source }} could not be loaded. {{ figureError }}
-        </p>
+        <ActionFailureAlert
+          v-else-if="figureError"
+          :failure="figureError"
+          :study="study.detail?.id ?? null"
+          :closable="false"
+        />
         <SourceOverlay
           v-else-if="figure"
           :view="figure.content"

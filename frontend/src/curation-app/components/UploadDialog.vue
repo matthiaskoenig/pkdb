@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from "vue";
 import {
-  VAlert,
   VBtn,
   VCard,
   VCardActions,
@@ -16,7 +15,8 @@ import type { StudyRow } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -32,27 +32,27 @@ const overview = useOverviewStore();
 const titleId = useId();
 useReturnFocus(open, () => props.fallbackFocus?.());
 const busy = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 
 const title = computed(() => (props.action === "upload" ? "Review upload" : "Turn on upload on save"));
 const confirmLabel = computed(() => (props.action === "upload" ? "Validate and upload" : "Turn on upload on save"));
 const withErrors = computed(() => props.studies.some((study) => study.counts.errors > 0));
 
 watch(open, (value) => {
-  if (value) error.value = null;
+  if (value) failure.value = null;
 });
 
 async function confirm(): Promise<void> {
   const ids = props.studies.map((study) => study.id);
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     if (props.action === "upload") await overview.enqueue(ids, "upload");
     else await overview.setMode(ids, "upload");
     open.value = false;
     emit("done", ids.length);
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -94,7 +94,7 @@ async function confirm(): Promise<void> {
           replace the study on the server.
         </p>
         <p v-if="withErrors" class="upload-note">Studies with errors fail the validation and are not uploaded.</p>
-        <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+        <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />

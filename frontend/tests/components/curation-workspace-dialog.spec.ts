@@ -8,6 +8,8 @@ import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { snapshot } from "../unit/curation-fixtures";
 import { button, buttons, click, field, loadSnapshot, page, setViewport } from "./curation-dom";
 
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
+
 enableAutoUnmount(afterEach);
 
 let pinia: Pinia;
@@ -209,5 +211,27 @@ describe("WorkspaceDialog", () => {
     answer(directories("/slow"));
     await flushPromises();
     expect(field("Folder on this computer").element.value).toBe("/home/curator");
+  });
+
+  it("shows what failed when a folder cannot be listed, with the details", async () => {
+    vi.spyOn(useOverviewStore(), "listDirectories").mockImplementation(async (path) => {
+      if (path === "/locked")
+        throw new ApiError(400, {
+          error: "Could not list the folders.",
+          code: "file_error",
+          detail: "PermissionError: [Errno 13] Permission denied: '/locked'",
+          action: "List folders (POST /local/directories)",
+          ...FAILED,
+        });
+      return directories(path ?? "/work");
+    });
+    await openDialog();
+    await field("Folder on this computer").setValue("/locked");
+    await click("Go");
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not list the folders.");
+    expect(alert.get(".action-failure-detail").text()).toBe("PermissionError: [Errno 13] Permission denied: '/locked'");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });

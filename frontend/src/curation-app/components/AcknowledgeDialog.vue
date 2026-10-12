@@ -18,6 +18,7 @@ import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { acknowledgeFailure, acknowledgement, location, locationKey } from "../problems";
 import type { ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**
@@ -121,18 +122,13 @@ async function submit(): Promise<void> {
           {{ failure.text }}
         </VAlert>
         <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-        <VAlert
+        <ActionFailureAlert
           v-else-if="failure"
-          type="error"
-          variant="tonal"
-          density="compact"
-          class="status-alert acknowledge-failure"
-        >
-          {{ failure.text }}
-          <ul v-if="failure.issues.length" class="acknowledge-issues">
-            <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-          </ul>
-        </VAlert>
+          :failure="failure"
+          :study="study.detail?.id ?? null"
+          :closable="false"
+          class="acknowledge-failure"
+        />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />
@@ -157,10 +153,5 @@ async function submit(): Promise<void> {
 .acknowledge-code {
   font-size: 0.875rem;
   font-weight: 600;
-}
-.acknowledge-issues {
-  margin: 4px 0 0;
-  padding-inline-start: 20px;
-  overflow-wrap: anywhere;
 }
 </style>

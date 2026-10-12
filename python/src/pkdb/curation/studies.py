@@ -52,7 +52,7 @@ from pkdb.studyformat.revision import (
     read_revision,
     revision_of,
 )
-from pkdb.studyformat.sources import source_view, study_sources
+from pkdb.studyformat.sources import has_source, source_view, study_sources
 from pkdb.studyformat.sync import (
     AddTableResult,
     SyncResult,
@@ -580,7 +580,11 @@ class StudiesMixin(EngineState):
         raise LookupError(f"{file} is not a table of {identity}")
 
     def study_source(self, identity: str, source: str) -> dict:
-        view = source_view(_bounded(self.study_folder(identity)), source)
+        study = _bounded(self.study_folder(identity))
+        if not has_source(study, source):
+            raise LookupError(f"{identity} has no source {source}")
+        # A KeyError from here on is a bug, not a missing source.
+        view = source_view(study, source)
         image_url = None if view.image is None else _file_url(identity, view.image)
         return {**dataclasses.asdict(view), "image_url": image_url}
 
@@ -877,7 +881,7 @@ class StudiesMixin(EngineState):
             # A sync that failed is reported; the curator fixes it in the workbook.
             result["opened"] = sync.workbook.is_file()
             if result["opened"]:
-                open_path(sync.workbook)
+                open_path(sync.workbook, subject=f"the tables of {identity}")
         done = {
             "open": "Opened the workbook",
             "sync": "Synced the workbook and the tables",

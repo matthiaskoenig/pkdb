@@ -21,7 +21,7 @@ import {
   approvalRefusal,
   folderPath,
   issueLabel,
-  messageOf,
+  failureOf,
   openItems,
   provenanceLabel,
   releaseLabel,
@@ -121,7 +121,7 @@ function statusFailure(caught: unknown): ActionFailure {
   }
   if (isRevisionConflict(caught))
     return actionFailure("review.json changed on disk, so the status was not set. Check the review and set it again.");
-  return actionFailure(messageOf(caught));
+  return failureOf(caught);
 }
 
 function setStatus(value: ReviewStatus | null): Promise<void> | void {

@@ -7,6 +7,8 @@ import sys
 import webbrowser
 from pathlib import Path
 
+from pkdb.curation.errors import ActionFailed
+
 
 def windows_quoted(path: str) -> str:
     """A Windows path in double quotes, as programs and `cmd /c` read an argument.
@@ -19,25 +21,73 @@ def windows_quoted(path: str) -> str:
     return f'"{path}{"\\" * trailing}"'
 
 
-def open_path(path: Path, *, reveal=False):
+#: How long the command that opens a file may run; it should start a program and return.
+OPEN_TIMEOUT = 15
+
+
+def open_path(path: Path, *, reveal=False, subject: str | None = None):
+    """Open `path`, or its folder with `reveal`, with the program of the system.
+
+    PKDB_OPEN_COMMAND replaces the program of the system. ActionFailed says what could not
+    be opened or shown in its folder, `subject`, by default the name of the file, and what
+    to do when the command is missing or does not return; its cause holds the command, its
+    exit status and its stderr.
+    """
     path = Path(path).resolve(strict=True)
-    if reveal and path.is_file():
+    # A folder has no folder to be shown in: it opens.
+    shown = reveal and path.is_file()
+    failed = (
+        f"Could not show {subject or path.name} in its folder"
+        if shown
+        else f"Could not open {subject or path.name}"
+    )
+    if shown:
         path = path.parent
-    if command := os.environ.get("PKDB_OPEN_COMMAND"):
-        if os.name == "nt":
-            # Windows gets the command line as written, so a program path in double
-            # quotes may hold spaces, and backslashes stay.
-            arguments = f"{command} {windows_quoted(str(path))}"
+    command = os.environ.get("PKDB_OPEN_COMMAND")
+    executable = "open" if sys.platform == "darwin" else "xdg-open"
+    try:
+        if command:
+            if os.name == "nt":
+                # Windows gets the command line as written, so a program path in double
+                # quotes may hold spaces, and backslashes stay.
+                arguments = f"{command} {windows_quoted(str(path))}"
+            else:
+                arguments = [*shlex.split(command), str(path)]
+            subprocess.run(
+                arguments, check=True, timeout=OPEN_TIMEOUT, capture_output=True
+            )
+        elif sys.platform == "win32":
+            os.startfile(str(path))
         else:
-            arguments = [*shlex.split(command), str(path)]
-        subprocess.run(arguments, check=True, timeout=15, capture_output=True)
-    elif sys.platform == "win32":
-        os.startfile(str(path))
-    else:
-        executable = "open" if sys.platform == "darwin" else "xdg-open"
-        subprocess.run(
-            [executable, str(path)], check=True, timeout=15, capture_output=True
+            subprocess.run(
+                [executable, str(path)],
+                check=True,
+                timeout=OPEN_TIMEOUT,
+                capture_output=True,
+            )
+    except subprocess.CalledProcessError as error:
+        raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
+    except subprocess.TimeoutExpired as error:
+        raise ActionFailed(
+            f"{failed}: the command did not return within "
+            f"{OPEN_TIMEOUT} seconds. Use a command that starts the program and returns.",
+            code="open_timeout",
+            cause=error,
+        ) from error
+    except FileNotFoundError as error:
+        if not command and sys.platform == "win32":
+            raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
+        missing = (
+            f"the command {command!r} of PKDB_OPEN_COMMAND" if command else executable
         )
+        raise ActionFailed(
+            f"{failed}: {missing} was not found. Set PKDB_OPEN_COMMAND "
+            "to a command that opens files, such as 'gio open'.",
+            code="open_command_missing",
+            cause=error,
+        ) from error
+    except OSError as error:
+        raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
 
 
 def unbuilt_app_message(assets: Path) -> str:

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, useId, watch, type Component } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { VAlert, VContainer, VProgressLinear } from "vuetify/components";
+import { VContainer, VProgressLinear } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../api/client";
+import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import ActivitySection from "../sections/ActivitySection.vue";
@@ -16,6 +17,7 @@ import {
   defaultSection,
   duplicateFolders,
   duplicateHeading,
+  failureOf,
   isSection,
   lastUploadUrl,
   SECTION_LABELS,
@@ -69,7 +71,7 @@ const duplicateAdvice = computed(() =>
 const loadError = computed(() => {
   const error = study.error;
   if (error === null || failure.value || error instanceof ServerStopped || error instanceof SessionMissing) return null;
-  return `The study could not be loaded. ${error.message}`;
+  return failureOf(error, "The study could not be loaded.");
 });
 const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
 
@@ -126,9 +128,14 @@ watch(
     </section>
 
     <template v-else>
-      <VAlert v-if="loadError" type="error" variant="tonal" density="compact" class="status-alert">
-        {{ loadError }}
-      </VAlert>
+      <!-- It goes once the study loads again: no close button. -->
+      <ActionFailureAlert
+        v-if="loadError"
+        :failure="loadError"
+        :study="identity"
+        :closable="false"
+        class="study-load-failure"
+      />
       <template v-if="detail">
         <StudyHeader :detail="detail" :stale="study.error !== null" />
         <SectionTabs

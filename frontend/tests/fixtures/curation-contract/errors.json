@@ -1,0 +1,28 @@
+{
+  "open_failed": {
+    "error": "Could not open the tables of caffeine/Demo2020.",
+    "code": "open_failed",
+    "detail": "CalledProcessError: false exited with status 1",
+    "action": "Open tables (POST /local/studies/tables)",
+    "request_id": "3f9c2a71",
+    "time": "2026-10-12T14:03:11+02:00",
+    "activity_id": "00000000000000000000000000000000"
+  },
+  "activity": {
+    "action": "write",
+    "status": "failed",
+    "message": "Could not open the tables of caffeine/Demo2020.",
+    "automatic": false,
+    "report_id": null,
+    "id": "00000000000000000000000000000000",
+    "created_at": "2026-10-12T12:03:11.000000+00:00",
+    "error": {
+      "error": "Could not open the tables of caffeine/Demo2020.",
+      "code": "open_failed",
+      "detail": "CalledProcessError: false exited with status 1",
+      "action": "Open tables (POST /local/studies/tables)",
+      "request_id": "3f9c2a71",
+      "time": "2026-10-12T14:03:11+02:00"
+    }
+  }
+}

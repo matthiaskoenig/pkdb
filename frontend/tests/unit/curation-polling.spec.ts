@@ -105,7 +105,7 @@ describe("usePolling", () => {
     const load = vi
       .fn<Load>()
       .mockResolvedValueOnce({ status: 200, etag: '"v1"', data: "before" })
-      .mockRejectedValueOnce(new ServerStopped("The local server stopped. Start pkdb curate again."))
+      .mockRejectedValueOnce(new ServerStopped("GET /local/state"))
       .mockResolvedValue({ status: 200, etag: '"v2"', data: "after restart" });
     const { wrapper, polling } = mountPolling(load);
     await vi.advanceTimersByTimeAsync(0);

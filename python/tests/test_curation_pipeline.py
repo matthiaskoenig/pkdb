@@ -804,7 +804,19 @@ def test_a_failing_workbook_plan_never_leaves_the_row_syncing(
     assert row(engine)["sync"]["status"] == "unknown"
     monkeypatch.setattr(jobs, "sync_and_format", failing)
     settle(engine)
-    assert run_next(engine)["status"] == "failed"
+    job = run_next(engine)
+    assert job["status"] == "failed"
+    assert job["message"] == (
+        f"The validation of {job['study_id']} could not read or validate the source "
+        "files."
+    )
+    assert (job["error"]["code"], job["error"]["detail"]) == (
+        "source_error",
+        "OSError: disk unavailable",
+    )
+    assert engine.report(job["report_id"])["error"]["code"] == "source_error"
+    # An expected failure keeps its traceback in the log file only.
+    assert "OSError: disk unavailable" in engine.log.path.read_text(encoding="utf-8")
     assert row(engine)["sync"]["status"] == "unknown"
 
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick, ref, watch, type Ref } from "vue";
+import { ApiError } from "../../src/curation-app/api/client";
 import { usePreview } from "../../src/curation-app/composables/usePreview";
 
 /** A request that the test answers when it wants. */
@@ -49,13 +50,38 @@ describe("usePreview", () => {
     expect(preview.loading.value).toBe(false);
   });
 
+  it("keeps what the local server said about a failure, after the lead only for a refusal without detail", async () => {
+    const input = ref<string | null>("Tab3");
+    const { answers, load } = recorder();
+    const preview = usePreview(() => input.value, load, "The table could not be previewed.");
+    const body = {
+      error: "Could not preview the new table of caffeine/Example.",
+      code: "file_error",
+      detail: "PermissionError: [Errno 13] Permission denied",
+      action: "Preview a table (POST /local/studies/tables/preview)",
+      request_id: "3f9c2a71",
+      time: "2026-10-12T14:03:11+02:00",
+    };
+    answers.get("Tab3")?.reject(new ApiError(400, body));
+    await flushPromises();
+    expect(preview.error.value?.text).toBe("Could not preview the new table of caffeine/Example.");
+    expect(preview.error.value?.details?.detail).toBe("PermissionError: [Errno 13] Permission denied");
+    expect(preview.error.value?.details?.requestId).toBe("3f9c2a71");
+
+    input.value = "Tab4";
+    await nextTick();
+    answers.get("Tab4")?.reject(new ApiError(404, { ...body, error: "caffeine/Example is not a study", detail: null }));
+    await flushPromises();
+    expect(preview.error.value?.text).toBe("The table could not be previewed. caffeine/Example is not a study");
+  });
+
   it("clears without input and keeps the message of a failure", async () => {
     const input = ref<string | null>("Tab3");
     const { answers, load } = recorder();
     const preview = usePreview(() => input.value, load);
     answers.get("Tab3")?.reject(new Error("The local server stopped."));
     await flushPromises();
-    expect(preview.error.value).toBe("The local server stopped.");
+    expect(preview.error.value?.text).toBe("The local server stopped.");
     input.value = null;
     await nextTick();
     expect([preview.data.value, preview.error.value, preview.loading.value]).toEqual([null, null, false]);
@@ -106,7 +132,7 @@ describe("the shown preview", () => {
     await flushPromises();
     input.value = "Tab3";
     await nextTick();
-    expect([preview.error.value, preview.shownError.value]).toEqual([null, "The local server stopped."]);
+    expect([preview.error.value, preview.shownError.value?.text]).toEqual([null, "The local server stopped."]);
     answers.get("Tab3")?.resolve("outputs_Tab3");
     await flushPromises();
     expect([preview.shown.value, preview.shownError.value]).toEqual(["outputs_Tab3", null]);

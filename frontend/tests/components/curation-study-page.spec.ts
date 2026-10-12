@@ -742,6 +742,8 @@ describe("StudyPage", () => {
       { study: "caffeine/Harder1988", action: "add", kind: "raw", source: "Tab4" },
     ]);
     expect(dialog().get(".v-alert").text()).toContain("Close the workbook first");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(dialog().find(".v-alert__close").exists()).toBe(false);
   });
 
   it("asks in Add table to set the user when the write needs one", async () => {
@@ -936,7 +938,7 @@ describe("StudyPage", () => {
     await click("Add table");
     await field("Source").setValue("Tab3");
     await flushPromises();
-    expect(dialog().text()).toContain("The local server stopped. Start pkdb curate again.");
+    expect(dialog().text()).toContain("Could not reach the local server.");
     expect(button("Add").attributes("disabled")).toBeDefined();
 
     // The next poll fails too; once a poll succeeds, the preview is asked for again.
@@ -947,6 +949,37 @@ describe("StudyPage", () => {
     await flushPromises();
     expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
     expect(button("Add").attributes("disabled")).toBeUndefined();
+  });
+
+  it("says once why the preview of a new table failed, with what went wrong and Details", async () => {
+    const denied = "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Harder1988'";
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": () =>
+        json(
+          {
+            error: "Could not preview the new table of caffeine/Harder1988.",
+            code: "file_error",
+            detail: denied,
+            action: "Preview a table (POST /local/studies/tables/preview)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+          },
+          { status: 400 },
+        ),
+    });
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not preview the new table of caffeine/Harder1988.");
+    expect(alert.get(".action-failure-detail").text()).toBe(denied);
+    expect(alert.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(dialog().text().split("Could not preview the new table")).toHaveLength(2);
+    // The field is not wrong: its messages keep the hint.
+    expect(dialog().find(".v-messages").text()).toBe("A paper table such as Tab3, a figure such as Fig2A, or Text.");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+    expect(button("Add").attributes("disabled")).toBeDefined();
   });
 
   it("drops a late preview of the study that was open before", async () => {
@@ -999,5 +1032,62 @@ describe("StudyPage", () => {
     expect(back.text()).toBe("Back to the studies");
     expect(back.attributes("href")).toBe("#/");
     expect(buttons("Open tables")).toHaveLength(0);
+  });
+
+  it("says once why the study could not be read, with what went wrong and Details", async () => {
+    const denied = "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Harder1988/outputs_Tab2.tsv'";
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: () =>
+        json(
+          {
+            error: "Could not read caffeine/Harder1988.",
+            code: "file_error",
+            detail: denied,
+            action: "Read the study (GET /local/studies/caffeine/Harder1988)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+          },
+          { status: 400 },
+        ),
+    });
+    const alert = page().get(".study-load-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not read caffeine/Harder1988.");
+    expect(alert.get(".action-failure-detail").text()).toBe(denied);
+    expect(alert.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(alert.get(".failure-facts").text()).toContain("3f9c2a71");
+    expect(page().text().split("Could not read caffeine/Harder1988.")).toHaveLength(2);
+    expect(page().text()).not.toContain("could not be loaded");
+    // It goes once the study can be read again: it has no close button.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed when Open tables fails, with a link to its entry in the activity", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables": () =>
+        json(
+          {
+            error: "Could not open the tables of caffeine/Harder1988.",
+            code: "open_failed",
+            detail:
+              "CalledProcessError: xdg-open exited with status 4\nno method available for opening",
+            action: "Open tables (POST /local/studies/tables)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "0123456789abcdef0123456789abcdef",
+          },
+          { status: 500 },
+        ),
+    });
+    await click("Open tables");
+    const alert = page().get(".study-alert");
+    expect(alert.get(".action-failure-text").text()).toBe(
+      "Could not open the tables of caffeine/Harder1988.",
+    );
+    expect(alert.get(".action-failure-detail").text()).toBe(
+      "CalledProcessError: xdg-open exited with status 4\nno method available for opening",
+    );
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe(
+      "#/studies/caffeine/Harder1988/activity?entry=0123456789abcdef0123456789abcdef",
+    );
   });
 });

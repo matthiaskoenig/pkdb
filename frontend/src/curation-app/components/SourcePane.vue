@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
-import { VAlert, VBtn, VProgressLinear } from "vuetify/components";
+import { VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -8,7 +8,8 @@ import { rawTable } from "../grid";
 import { drawsOnImage, plottedSeries, type SelectedRow } from "../overlay";
 import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
 import { SOURCE_ICONS, sourceProblems } from "../sources";
-import { tableFiles } from "../study";
+import { tableFiles, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import ProblemItem from "./ProblemItem.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
@@ -25,7 +26,8 @@ const props = defineProps<{
   /** The view of the source; null while it loads or failed to load. */
   view: SourceView | null;
   loading: boolean;
-  error: string | null;
+  /** Why the view could not be loaded, with what the local server said about it. */
+  error: ActionFailure | null;
   /** The row that the curator selected, whose point gets a ring. */
   selected: SelectedRow;
 }>();
@@ -108,12 +110,12 @@ const automatic = computed(() =>
     <!-- It scrolls on its own and takes the focus, so that a keyboard can scroll it: its first content is no control. -->
     <div class="pane-body" tabindex="0">
       <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
-      <VAlert v-else-if="error" type="error" variant="tonal" density="compact" class="status-alert">
-        {{ summary.source }} could not be loaded. {{ error }}
+      <!-- It goes when the view loads again, after Retry or a change of the study: no close button. -->
+      <ActionFailureAlert v-else-if="error" :failure="error" :study="study.detail?.id ?? null" :closable="false">
         <template #append>
           <VBtn variant="text" size="small" @click="emit('retry')">Retry</VBtn>
         </template>
-      </VAlert>
+      </ActionFailureAlert>
 
       <template v-else-if="view">
         <!-- The overlay draws the raw extraction of a figure on its image. -->

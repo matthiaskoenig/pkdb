@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { VAlert, VBtn, VProgressLinear } from "vuetify/components";
+import { VBtn, VProgressLinear } from "vuetify/components";
 import type { StudyDetail, TableResponse } from "../api/types";
 import { sourceLines, isShared } from "../data";
 import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
 import { plural } from "../overview";
+import type { ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
 
 /**
@@ -21,7 +23,8 @@ const props = defineProps<{
   /** The study page that the rows were loaded for, whose review items and targets belong to them. */
   rowsDetail: StudyDetail | null;
   loading: boolean;
-  error: string | null;
+  /** Why the rows could not be loaded, with what the local server said about it. */
+  error: ActionFailure | null;
   /** The cell of the route: its line, and its column when it names one. */
   focus: { line: number; column?: string } | null;
   source: string | null;
@@ -134,12 +137,12 @@ const missingLine = computed(() => {
     <slot></slot>
 
     <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${file}`" />
-    <VAlert v-else-if="error" type="error" variant="tonal" density="compact" class="status-alert">
-      {{ file }} could not be loaded. {{ error }}
+    <!-- It goes when the rows load again, after Retry or a change of the study: no close button. -->
+    <ActionFailureAlert v-else-if="error" :failure="error" :study="detail.id" :closable="false">
       <template #append>
         <VBtn variant="text" size="small" @click="emit('retry')">Retry</VBtn>
       </template>
-    </VAlert>
+    </ActionFailureAlert>
     <template v-else-if="table">
       <p v-if="missingLine !== null" class="pane-note">
         Line {{ missingLine }} is not a row of {{ table.file }}. The table may have changed since the last

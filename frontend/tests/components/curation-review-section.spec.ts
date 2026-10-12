@@ -633,6 +633,59 @@ describe("selected item", () => {
 });
 
 describe("new item", () => {
+  it("says once why the columns of the chosen table could not be read, with what went wrong and Details", async () => {
+    const path = `${EXAMPLE}/tables/timecourses_Fig1.tsv`;
+    const denied = "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/timecourses_Fig1.tsv'";
+    const wrapper = await mountSection(withReview(), {
+      [`GET ${path}`]: () =>
+        json(
+          {
+            error: "Could not read timecourses_Fig1.tsv of caffeine/Example.",
+            code: "file_error",
+            detail: denied,
+            action: `Read a table (GET ${path})`,
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+          },
+          { status: 400 },
+        ),
+    });
+    await click("New item");
+    await labeled(wrapper, VSelect, "File").setValue("timecourses_Fig1.tsv");
+    await flushPromises();
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not read timecourses_Fig1.tsv of caffeine/Example.");
+    expect(alert.get(".action-failure-detail").text()).toBe(denied);
+    expect(alert.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(dialog().text()).not.toContain("could not be loaded");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed when the item cannot be added, without a close button", async () => {
+    await mountSection(withReview(), {
+      [`POST ${REVIEW}`]: () =>
+        json(
+          {
+            error: "Could not add the review item to caffeine/Example.",
+            code: "file_error",
+            detail: "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/review.json'",
+            action: "Add a review item (POST /local/studies/review)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "act-7",
+          },
+          { status: 400 },
+        ),
+    });
+    await click("New item");
+    await textArea("Text").setValue("The subjects table lacks the smokers.");
+    await click("Add");
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not add the review item to caffeine/Example.");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
   it("adds an item about the whole study and selects it", async () => {
     await mountSection();
     await click("New item");
@@ -854,8 +907,12 @@ describe("new item count", () => {
     await labeled(wrapper, VSelect, "Column 1").setValue("label");
     await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D150");
     await flushPromises();
-    expect(count().text()).toBe("The rows could not be matched. The local server stopped. Start pkdb curate again.");
-    expect(count().classes()).toContain("field-error");
+    // The count says nothing; the alert below it says what failed.
+    expect(count().text()).toBe("");
+    const alert = dialog().get(".new-item-matches-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not reach the local server.");
+    expect(alert.get(".action-failure-detail").text()).toBe("TypeError: Failed to fetch");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
 
     // The next poll fails too; once a poll succeeds, the count is asked for again.
     await useStudyStore().refresh();
@@ -865,7 +922,7 @@ describe("new item count", () => {
     await useStudyStore().refresh();
     await flushPromises();
     expect(count().text()).toBe("Matches 2 of 3 rows.");
-    expect(count().classes()).not.toContain("field-error");
+    expect(dialog().find(".new-item-matches-failure").exists()).toBe(false);
   });
 
   it("asks for nothing while the dialog is closed and the local server stops and answers again", async () => {
@@ -941,6 +998,31 @@ describe("new item filters", () => {
 });
 
 describe("target", () => {
+  it("says once why the rows of the target could not be read, with what went wrong and Details", async () => {
+    const path = `${EXAMPLE}/tables/outputs_Tab2.tsv`;
+    const denied = "PermissionError: [Errno 13] Permission denied: '/work/caffeine/Example/outputs_Tab2.tsv'";
+    await mountSection(withReview(), {
+      [`GET ${path}`]: () =>
+        json(
+          {
+            error: "Could not read outputs_Tab2.tsv of caffeine/Example.",
+            code: "file_error",
+            detail: denied,
+            action: `Read a table (GET ${path})`,
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+          },
+          { status: 400 },
+        ),
+    });
+    const alert = target().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not read outputs_Tab2.tsv of caffeine/Example.");
+    expect(alert.get(".action-failure-detail").text()).toBe(denied);
+    expect(alert.findAll(".failure-summary").map((summary) => summary.text())).toEqual(["Details"]);
+    expect(target().text()).not.toContain("could not be loaded");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
   it("lists the rows of the target table and marks its column", async () => {
     await mountSection();
     expect(target().text()).toContain("outputs_Tab2.tsv · column mean");
@@ -1139,6 +1221,29 @@ describe("failures", () => {
     );
     await select("The error bars");
     expect(page().find(".review-failure").exists()).toBe(false);
+  });
+
+  it("shows what failed in a review write, with Details and a link to its entry in the Activity", async () => {
+    await mountSection(withReview(), {
+      [`POST ${REVIEW}`]: () =>
+        json(
+          {
+            error: "Could not do it.",
+            code: "unexpected",
+            detail: "RuntimeError: boom",
+            action: "Resolve the item (POST /local/studies/review)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "act-7",
+          },
+          { status: 500 },
+        ),
+    });
+    await click("Resolve");
+    const alert = page().get(".review-failure");
+    expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(alert.get("summary").text()).toBe("Details");
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
   });
 
   it("waits with New item while an item changes, and with the items while a new one is added", async () => {

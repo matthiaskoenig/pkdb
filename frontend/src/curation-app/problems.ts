@@ -16,6 +16,7 @@ import type {
 } from "./api/types";
 import { plural } from "./overview";
 import { reviewFailure, type ReviewFailure } from "./review";
+import { issuesFailure } from "./study";
 
 /** The severity chips above the issues. */
 export type SeverityFilter = ValidationIssue["severity"] | "all";
@@ -214,7 +215,7 @@ const ACKNOWLEDGE_REFUSALS: ReadonlyMap<string, string> = new Map([
 /** The failure of an acknowledgement; a refusal of the warning itself gets a plain sentence. */
 export function acknowledgeFailure(caught: unknown): ReviewFailure {
   const text = isValidationError(caught) ? ACKNOWLEDGE_REFUSALS.get(caught.body.code ?? "") : undefined;
-  if (text) return { kind: "error", text, issues: [] };
+  if (text) return { kind: "error", ...issuesFailure(text, []) };
   return reviewFailure(caught, "The warning was not acknowledged.");
 }
 

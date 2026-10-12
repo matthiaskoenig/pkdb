@@ -3,6 +3,7 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import type { StudyDetail } from "../../src/curation-app/api/types";
 import ReferenceDialog from "../../src/curation-app/components/ReferenceDialog.vue";
+import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { json, snapshot, studyDetail, studyMetadata } from "../unit/curation-fixtures";
@@ -17,6 +18,8 @@ import {
   type Handler,
   type ServedRequest,
 } from "./curation-dom";
+
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
 
 enableAutoUnmount(afterEach);
 
@@ -55,7 +58,7 @@ async function mountDialog(detail: StudyDetail = studyDetail(), routes: Record<s
   const wrapper = mount(ReferenceDialog, {
     props: { modelValue: true, unsavedIdentifiers: false },
     attachTo: document.body,
-    global: { plugins: [pinia] },
+    global: { plugins: [pinia, makeRouter()] },
   });
   await flushPromises();
   return wrapper;
@@ -207,5 +210,80 @@ describe("ReferenceDialog", () => {
     const wrapper = await mountDialog();
     await wrapper.setProps({ unsavedIdentifiers: true });
     expect(dialogText()).toContain("Save study.json first");
+  });
+
+  it("shows why reference.json could not be read, with the details, without a close button", async () => {
+    await mountDialog(studyDetail(), {
+      "POST /local/reference/read": () =>
+        json(
+          {
+            error: "Could not read reference.json of caffeine/Example.",
+            code: "invalid_request",
+            detail: "JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+            action: "Read reference.json (POST /local/reference/read)",
+            ...FAILED,
+          },
+          { status: 400 },
+        ),
+    });
+    const alert = page().get('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alert.get(".action-failure-text").text()).toBe("Could not read reference.json of caffeine/Example.");
+    expect(alert.get(".action-failure-detail").text()).toBe("JSONDecodeError: Expecting value: line 1 column 1 (char 0)");
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed in a save, with Details and a link to its entry in the Activity", async () => {
+    await mountDialog(studyDetail(), {
+      "POST /local/reference/preview": preview,
+      "POST /local/reference/save": () =>
+        json(
+          {
+            error: "Could not save reference.json.",
+            code: "unexpected",
+            detail: "RuntimeError: boom",
+            action: "Save reference.json (POST /local/reference/save)",
+            ...FAILED,
+            activity_id: "act-7",
+          },
+          { status: 500 },
+        ),
+    });
+    await field("Title").setValue("Caffeine kinetics in smokers");
+    await click("Preview");
+    await click("Save reference");
+    const alert = page().get('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
+    expect(alert.get("summary").text()).toBe("Details");
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed in a search and in a preview, without a close button", async () => {
+    const value = studyMetadata();
+    delete value.reference;
+    const manual = studyDetail({ metadata: { revision: "study-1", value, issues: [] } });
+    const failed = (error: string, action: string) => () =>
+      json({ error, code: "unexpected", detail: "RuntimeError: boom", action, ...FAILED }, { status: 500 });
+    await mountDialog(manual, {
+      "POST /local/reference/read": { reference: { sid: "Example", name: "Example", title: "Caffeine kinetics" } },
+      "POST /local/reference/search": failed(
+        "Could not search the publication of caffeine/Example.",
+        "Search the publication (POST /local/reference/search)",
+      ),
+      "POST /local/reference/preview": failed(
+        "Could not preview the reference of caffeine/Example.",
+        "Preview the reference (POST /local/reference/preview)",
+      ),
+    });
+    await click("Search");
+    await field("Title").setValue("Caffeine kinetics in smokers");
+    await click("Preview");
+    const alerts = page().findAll('.v-overlay--active[role="dialog"] .action-failure');
+    expect(alerts.map((alert) => alert.get(".action-failure-text").text())).toEqual([
+      "Could not search the publication of caffeine/Example.",
+      "Could not preview the reference of caffeine/Example.",
+    ]);
+    expect(alerts.map((alert) => alert.find(".v-alert__close").exists())).toEqual([false, false]);
   });
 });

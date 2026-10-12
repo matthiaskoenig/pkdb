@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from "vue";
 import {
-  VAlert,
   VBtn,
   VCard,
   VCardActions,
@@ -19,8 +18,9 @@ import { isNoUser } from "../api/client";
 import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useStudyStore } from "../stores/study";
-import { messageOf, userHint } from "../study";
+import { failureOf, issuesFailure, userHint, type ActionFailure } from "../study";
 import { NEW_TABLE_KINDS, type NewTableKind } from "../tableKinds";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 const open = defineModel<boolean>({ default: false });
@@ -37,7 +37,7 @@ const kind = ref<NewTableKind>("outputs");
 const source = ref("");
 const busy = ref(false);
 /** Why the table was not added, with the issues of the API. */
-const failure = ref<{ text: string; issues: string[] } | null>(null);
+const failure = ref<ActionFailure | null>(null);
 /** What to do when the write was refused without a user. */
 const userText = ref<string | null>(null);
 
@@ -52,11 +52,12 @@ const preview = usePreview(
     return { study: detail.id, files: detail.files, answering: study.error === null, kind: kind.value, source: name };
   },
   (value) => study.previewTable(value.kind, value.source),
+  "The table could not be previewed.",
 );
 /** The new table as the server previews it: for the current kind and source, or the last one while that loads. */
 const table = computed(() => preview.shown.value);
-/** Why the table cannot be added: the refusal of the server, or a failed preview. */
-const problem = computed(() => table.value?.issues[0]?.message ?? preview.shownError.value);
+/** Why the table cannot be added: the refusal of the server; a failed preview has its alert. */
+const problem = computed(() => table.value?.issues[0]?.message ?? null);
 /** Only the answer for the current kind and source can add a table. */
 const canAdd = computed(() => {
   const current = preview.data.value;
@@ -106,14 +107,14 @@ async function add(): Promise<void> {
       open.value = false;
       emit("added", result.table ?? chosen.table);
     } else {
-      failure.value = {
-        text: `${chosen.table} was not added.`,
-        issues: result.issues.map((issue) => issue.message),
-      };
+      failure.value = issuesFailure(
+        `${chosen.table} was not added.`,
+        result.issues.map((issue) => issue.message),
+      );
     }
   } catch (caught) {
     if (isNoUser(caught)) userText.value = userHint(caught);
-    else failure.value = { text: messageOf(caught), issues: [] };
+    else failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -177,12 +178,15 @@ async function add(): Promise<void> {
           <dd v-else>None for the text of the paper</dd>
         </dl>
         <span role="status" aria-live="polite" class="d-sr-only" :aria-busy="preview.loading.value">{{ ready }}</span>
-        <VAlert v-if="failure" type="error" variant="tonal" density="compact" class="status-alert">
-          {{ failure.text }}
-          <ul v-if="failure.issues.length" class="add-table-issues">
-            <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-          </ul>
-        </VAlert>
+        <!-- It goes with the next preview that the local server answers: no close button. -->
+        <ActionFailureAlert
+          v-if="preview.shownError.value"
+          :failure="preview.shownError.value"
+          :study="study.detail?.id ?? null"
+          :closable="false"
+          :class="{ 'is-updating': preview.loading.value }"
+        />
+        <ActionFailureAlert v-if="failure" :failure="failure" :study="study.detail?.id ?? null" :closable="false" />
         <UserHint v-else-if="userText" :text="userText" />
       </VCardText>
       <VCardActions class="dialog-actions">
@@ -223,9 +227,5 @@ async function add(): Promise<void> {
 }
 .table-image-note {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.add-table-issues {
-  margin: 4px 0 0;
-  padding-inline-start: 20px;
 }
 </style>

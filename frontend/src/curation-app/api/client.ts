@@ -22,27 +22,68 @@ export function csrfToken(): string {
   return token;
 }
 
-/** A refusal of the local API with its JSON body `{error, ...}`. */
-export class ApiError extends Error {
-  override readonly name = "ApiError";
+/** A text field of an error body; null when it is missing, empty or no string. */
+function field(value: unknown): string | null {
+  return typeof value === "string" && value ? value : null;
+}
 
+/**
+ * A failed request to the local API with the error body of the server (`describe` in
+ * python/src/pkdb/curation/errors.py): what could not be done (the message), why (`detail`)
+ * and which request failed when (`action`, `requestId`, `time`).
+ */
+export class ApiError extends Error {
+  override readonly name: string = "ApiError";
+  /** The failure in snake case, such as `open_failed`. */
+  readonly code: string | null;
+  /** The type and the text of the error, or the command, its exit status and its stderr. */
+  readonly detail: string | null;
+  /** The request: its label with its method and path, such as `Open tables (POST /local/studies/tables)`. */
+  readonly action: string | null;
+  /** The 8 hex characters that name the failure in the log of pkdb curate. */
+  readonly requestId: string | null;
+  /** When it failed: ISO 8601 in the time zone of the local server. */
+  readonly time: string | null;
+  /** The traceback of an unexpected error, which the log has too. */
+  readonly traceback: string | null;
+  /** The entry of the failure in the activity of the study. */
+  readonly activityId: string | null;
+
+  /** `request` names the request, such as `POST /local/studies/tables`, for a body without `action`. */
   constructor(
     readonly status: number,
     readonly body: Record<string, unknown>,
+    request: string | null = null,
   ) {
-    super(
-      typeof body.message === "string"
-        ? body.message
-        : typeof body.error === "string"
-          ? body.error
-          : `Request failed (${status}).`,
-    );
+    super(field(body.message) ?? field(body.error) ?? `Request failed (${status}).`);
+    this.code = field(body.code);
+    this.detail = field(body.detail);
+    this.action = field(body.action) ?? request;
+    this.requestId = field(body.request_id);
+    this.time = field(body.time);
+    this.traceback = field(body.traceback);
+    this.activityId = field(body.activity_id);
   }
 }
 
-/** The local server cannot be reached: `pkdb curate` stopped or restarts. */
-export class ServerStopped extends Error {
-  override readonly name = "ServerStopped";
+/** The message of a request that did not reach the local server. */
+export const UNREACHABLE = "Could not reach the local server.";
+
+/** The local server cannot be reached: `pkdb curate` stopped or restarts. Its status is 0. */
+export class ServerStopped extends ApiError {
+  override readonly name: string = "ServerStopped";
+
+  constructor(request: string, cause?: unknown) {
+    super(
+      0,
+      {
+        error: UNREACHABLE,
+        code: "unreachable",
+        detail: cause instanceof Error ? `${cause.name}: ${cause.message}` : null,
+      },
+      request,
+    );
+  }
 }
 
 /** The browser has no session cookie of the running server (401). */
@@ -100,33 +141,33 @@ export function studyPath(identity: string, ...parts: string[]): string {
 
 export type Fetched<T> = { status: 200; etag: string | null; data: T } | { status: 304; etag: string };
 
-/** `read()`, with the network failure of fetch (a TypeError) as ServerStopped. */
-async function reaching<T>(read: () => Promise<T>): Promise<T> {
+/** `read()`, with the network failure of fetch (a TypeError) as ServerStopped of `request`. */
+async function reaching<T>(request: string, read: () => Promise<T>): Promise<T> {
   try {
     return await read();
   } catch (error) {
-    if (error instanceof TypeError) throw new ServerStopped("The local server stopped. Start pkdb curate again.");
+    if (error instanceof TypeError) throw new ServerStopped(request, error);
     throw error;
   }
 }
 
 function send(path: string, init: RequestInit): Promise<Response> {
-  return reaching(() => fetch(path, { ...init, credentials: "same-origin" }));
+  return reaching(`${init.method ?? "GET"} ${path}`, () => fetch(path, { ...init, credentials: "same-origin" }));
 }
 
-async function failure(response: Response): Promise<never> {
+async function failure(response: Response, request: string): Promise<never> {
   const body: unknown = await response.json().catch(() => ({}));
   const record = isRecord(body) ? body : {};
   if (response.status === 401)
     throw new SessionMissing(
       typeof record.error === "string" ? record.error : "Open the launch URL printed in your terminal",
     );
-  throw new ApiError(response.status, record);
+  throw new ApiError(response.status, record, request);
 }
 
 /** The JSON body of a successful response, checked by `accept`; it keeps a new CSRF token. */
-async function content<T>(response: Response, accept: Guard<T>): Promise<T> {
-  const text = await reaching(() => response.text());
+async function content<T>(response: Response, accept: Guard<T>, request: string): Promise<T> {
+  const text = await reaching(request, () => response.text());
   let value: unknown;
   try {
     value = JSON.parse(text);
@@ -148,19 +189,21 @@ export async function getJson<T>(
     headers: { Accept: "application/json", ...(etag ? { "If-None-Match": etag } : {}) },
     signal,
   });
+  const request = `GET ${path}`;
   if (response.status === 304) return { status: 304, etag: response.headers.get("ETag") ?? etag ?? "" };
-  if (!response.ok) return failure(response);
-  return { status: 200, etag: response.headers.get("ETag"), data: await content(response, accept) };
+  if (!response.ok) return failure(response, request);
+  return { status: 200, etag: response.headers.get("ETag"), data: await content(response, accept, request) };
 }
 
 async function post<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
+  const request = `POST ${path}`;
   const response = await send(path, {
     method: "POST",
     headers: { Accept: "application/json", "Content-Type": "application/json", "X-CSRF-Token": token },
     body: JSON.stringify(body),
   });
-  if (!response.ok) return failure(response);
-  return content(response, accept);
+  if (!response.ok) return failure(response, request);
+  return content(response, accept, request);
 }
 
 /**

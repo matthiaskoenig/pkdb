@@ -7,6 +7,8 @@ import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { snapshot } from "../unit/curation-fixtures";
 import { button, buttons, click, field, loadSnapshot, page, setViewport } from "./curation-dom";
 
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
+
 enableAutoUnmount(afterEach);
 
 let pinia: Pinia;
@@ -164,16 +166,25 @@ describe("SettingsDialog", () => {
     expect(key().element.value).toBe("");
   });
 
-  it("shows a refusal inline and stays open", async () => {
+  it("shows what failed inline, with its details, and stays open", async () => {
     vi.spyOn(useOverviewStore(), "configure").mockRejectedValue(
-      new ApiError(400, { error: "Action could not be completed. Check the selection, settings, and file availability." }),
+      new ApiError(400, {
+        error: "Could not save the settings.",
+        code: "invalid_request",
+        detail: "ValueError: Enter an http or https URL",
+        action: "Save the settings (POST /local/settings)",
+        ...FAILED,
+      }),
     );
     const wrapper = await openDialog();
     await field("PK-DB server").setValue("https://pk-db.com/?release=1");
     await click("Save settings");
-    expect(page().get('[role="dialog"] .v-alert').text()).toContain(
-      "Action could not be completed. Check the selection, settings, and file availability.",
-    );
+    const alert = page().get('[role="dialog"] .action-failure');
+    expect(alert.get(".action-failure-text").text()).toBe("Could not save the settings.");
+    expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Enter an http or https URL");
+    expect(alert.get("summary").text()).toBe("Details");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
     expect(wrapper.emitted("update:modelValue")).toBeUndefined();
     expect(field("PK-DB server").element.value).toBe("https://pk-db.com/?release=1");
   });

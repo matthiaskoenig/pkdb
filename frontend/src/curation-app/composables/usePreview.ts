@@ -1,5 +1,5 @@
 import { ref, shallowRef, watch, type Ref, type ShallowRef } from "vue";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
 
 /** The preview of the local server for the current input of a dialog. */
 export interface Preview<O> {
@@ -7,8 +7,8 @@ export interface Preview<O> {
   data: ShallowRef<O | null>;
   /** Whether the answer for the current input is still to come. */
   loading: Ref<boolean>;
-  /** Why the preview of the current input failed, or null. */
-  error: Ref<string | null>;
+  /** Why the preview of the current input failed, with what the local server said about it, or null. */
+  error: Ref<ActionFailure | null>;
   /**
    * What the dialog shows: the answer of the last input that settled, kept while the answer for a
    * newer input loads, when the dialog marks it as updating; null without input. Never the answer
@@ -16,7 +16,7 @@ export interface Preview<O> {
    */
   shown: ShallowRef<O | null>;
   /** The failure of the last input that settled, kept like `shown`. */
-  shownError: Ref<string | null>;
+  shownError: Ref<ActionFailure | null>;
 }
 
 /**
@@ -26,14 +26,20 @@ export interface Preview<O> {
  * answer for the current input is kept. A null input clears the preview.
  *
  * While an answer loads, the dialog shows the last settled answer marked as updating, so that it
- * neither empties and fills again nor announces the same message again at every key.
+ * neither empties and fills again nor announces the same message again at every key. A failure
+ * starts with `lead`, such as `The rows could not be matched.`, unless the message of the local
+ * server says what could not be previewed.
  */
-export function usePreview<I, O>(input: () => I | null, load: (value: I) => Promise<O>): Preview<O> {
+export function usePreview<I, O>(
+  input: () => I | null,
+  load: (value: I) => Promise<O>,
+  lead = "",
+): Preview<O> {
   const data = shallowRef<O | null>(null);
   const loading = ref(false);
-  const error = ref<string | null>(null);
+  const error = ref<ActionFailure | null>(null);
   const shown = shallowRef<O | null>(null);
-  const shownError = ref<string | null>(null);
+  const shownError = ref<ActionFailure | null>(null);
   let wanted: I | null = null;
   let version = 0;
   let running = false;
@@ -44,11 +50,11 @@ export function usePreview<I, O>(input: () => I | null, load: (value: I) => Prom
       const asked = version;
       const value: I = wanted;
       let answer: O | null = null;
-      let failure: string | null = null;
+      let failure: ActionFailure | null = null;
       try {
         answer = await load(value);
       } catch (caught) {
-        failure = messageOf(caught);
+        failure = failureOf(caught, lead);
       }
       // The input changed meanwhile: ask for the newest one, if any.
       if (asked !== version) continue;

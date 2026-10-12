@@ -11,9 +11,11 @@ import os
 import sys
 import time
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
+from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
@@ -391,10 +393,53 @@ class WorkspaceMixin(EngineState):
                 self.scan()
                 self.schedule_changes()
                 self._check_workbooks()
-            except Exception:
-                # The watcher retries every second and must outlive any failure; nothing
-                # is logged, since errors can carry paths and settings.
-                continue
+            except Exception as error:
+                # The watcher retries every second and must outlive any failure.
+                try:
+                    self._watch_failed(error)
+                except Exception as recording:
+                    # Recording the failure failed too: the loop still continues.
+                    self._watch_unrecorded(recording)
+            else:
+                self._watch_recovered()
+
+    def _watch_failed(self, error: Exception) -> None:
+        """Keep the failure for the File watching menu, and log it.
+
+        The log keeps a failure that repeats every second with its traceback once a minute,
+        and nothing in between: the menu shows no request id that a line could name.
+        """
+        body = describe(
+            error,
+            action="File watching",
+            request_id=new_request_id(),
+            message="File watching failed.",
+            code="watch_failed",
+            unexpected=True,
+            secrets=self.secrets(),
+        )
+        with self.lock:
+            self.watcher_error = {
+                "time": body["time"],
+                "detail": body["detail"],
+                "recovered": False,
+            }
+        self.log.unexpected(body, error, label="File watching", quiet_repeats=True)
+
+    def _watch_unrecorded(self, recording: Exception) -> None:
+        """Keep a minimal failure when the failure of the watcher could not be described."""
+        detail = f"{type(recording).__name__} while recording a watcher failure"
+        self.watcher_error = {
+            "time": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "detail": detail,
+            "recovered": False,
+        }
+
+    def _watch_recovered(self) -> None:
+        """A check of the workspace succeeded: the last failure of the watcher has passed."""
+        with self.lock:
+            if self.watcher_error is not None and not self.watcher_error["recovered"]:
+                self.watcher_error = {**self.watcher_error, "recovered": True}
 
     def _check_workbooks(self, limit=CHECK_LIMIT):
         """Plan the workbooks of rows that are not checked and that no job will check.
@@ -531,7 +576,7 @@ class WorkspaceMixin(EngineState):
         )
 
         with self.lock:
-            folder = self.resolve_file(body["id"])
+            folder = self.resolve_file(required(body, "id"))
             workspace = self.root
             offline = self.offline
             if action == "read":
@@ -544,7 +589,7 @@ class WorkspaceMixin(EngineState):
                     else {}
                 }
             if action == "save":
-                token = body["token"]
+                token = required(body, "token")
                 entry = self.reference_previews.get(token)
                 if not entry or entry[0] != folder:
                     raise ReferenceError("Reference preview expired; preview again")
@@ -558,7 +603,7 @@ class WorkspaceMixin(EngineState):
             offline=offline, refresh=body.get("refresh", False)
         )
         if action == "search":
-            return {"candidates": resolver.search(body["citation"])}
+            return {"candidates": resolver.search(required(body, "citation"))}
         if action != "preview":
             raise ReferenceError("Unknown reference action")
         preview = preview_reference(
@@ -568,7 +613,10 @@ class WorkspaceMixin(EngineState):
             reset_overrides=body.get("reset_overrides", False),
         )
         with self.lock:
-            if self.root != workspace or self.resolve_file(body["id"]) != folder:
+            if (
+                self.root != workspace
+                or self.resolve_file(required(body, "id")) != folder
+            ):
                 raise ReferenceError("Workspace changed during lookup; preview again")
             token = uuid4().hex
             while len(self.reference_previews) >= 20:

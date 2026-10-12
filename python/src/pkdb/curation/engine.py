@@ -14,6 +14,7 @@ from pkdb.cache import (
     endpoint_root,
 )
 from pkdb.curation.connection import ConnectionMixin
+from pkdb.curation.errors import ErrorLog
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
 from pkdb.curation.jobs import (
@@ -73,6 +74,11 @@ class CurationEngine(
         except OSError, ValueError:
             saved = {}
         self.api_key = api_key or os.environ.get("PKDB_API_KEY")
+        # The tokens of the local server, which error bodies, reports and the log never show.
+        self.protected: list[str] = []
+        self.log = ErrorLog(self.state_dir / "logs" / "curation.log", self.secrets)
+        # The last failure of the file watcher, which the File watching menu shows.
+        self.watcher_error = None
         self.user = user or os.environ.get("PKDB_USER") or saved.get("user") or ""
         configured_endpoint = (
             endpoint or os.environ.get("PKDB_ENDPOINT") or saved.get("endpoint")
@@ -137,8 +143,14 @@ class CurationEngine(
                 "Canceled before starting",
             }:
                 job["message"] = CANCELED_BEFORE_START
-            if job.get("action") == "write" and "item" not in job:
-                # Saved before writes recorded the review item that their message names.
+            if (
+                job.get("action") == "write"
+                and "item" not in job
+                and "error" not in job
+                and job.get("status") == "succeeded"
+            ):
+                # Saved before writes recorded the review item that their message names;
+                # a failure names none, whatever its message says.
                 if found := SAVED_ITEM.search(job.get("message", "")):
                     job["item"] = found.group(1)
         self.modes = saved.get("modes", {})
@@ -192,6 +204,21 @@ class CurationEngine(
         if isinstance(saved, dict):
             state = {**saved, **state}
         atomic_json(path, state)
+
+    def secrets(self) -> list[str]:
+        """What error bodies, reports and the log replace with [redacted]: the API key, the
+        GitHub tokens of the environment and the tokens that the local server protects."""
+        values = [
+            self.api_key,
+            os.environ.get("GH_TOKEN"),
+            os.environ.get("GITHUB_TOKEN"),
+            *self.protected,
+        ]
+        return [value for value in values if value]
+
+    def protect(self, *values: str) -> None:
+        """Add tokens, such as the session token of the local server, to the secrets."""
+        self.protected.extend(value for value in values if value)
 
     def snapshot(self):
         with self.lock:
@@ -247,6 +274,9 @@ class CurationEngine(
                         # What Clear finished history would remove.
                         "clearable_jobs": len(self._clearable()),
                         "recent_workspaces": recent,
+                        # Where the traceback of a failure is, for the Details of the app.
+                        "log_file": str(self.log.path),
+                        "watcher_error": self.watcher_error,
                     }
                 )
             )
@@ -259,3 +289,4 @@ class CurationEngine(
             self._save()
         for thread in self.threads:
             thread.join(timeout=2)
+        self.log.close()

@@ -2,16 +2,20 @@
 
 import json
 import shutil
+import subprocess
+import threading
 from pathlib import Path
 
 import openpyxl
 import pytest
 from curation_contract import check_contract
+from curation_http import authenticate, request
 
 import pkdb.studyformat.review_edit as review_edit
 from pkdb.cache import bundled_vocabulary
-from pkdb.curation import studies
+from pkdb.curation import launch, studies
 from pkdb.curation.engine import CurationEngine
+from pkdb.curation.server import create_server
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.load import load_study
@@ -446,3 +450,58 @@ def test_acknowledgements_contract(workspace, engine_on, monkeypatch):
             "refusals": refusals,
         },
     )
+
+
+REQUEST_ID = "3f9c2a71"
+FAILED_AT = "2026-10-12T14:03:11+02:00"
+ACTIVITY_ID = "0" * 32
+
+
+def test_errors_contract(workspace, engine_on, monkeypatch):
+    """The error body of an Open tables whose open command fails, and its activity entry.
+
+    The command is `false`, on every platform the same answer: a fake runner raises what
+    `false` makes subprocess raise. The request id, the time and the ids are fixed.
+    """
+    engine = engine_on(workspace)
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", "false")
+
+    def fail(arguments, **kwargs):
+        raise subprocess.CalledProcessError(
+            1, ["false", "Demo2020.xlsx"], output=b"", stderr=b""
+        )
+
+    monkeypatch.setattr(launch.subprocess, "run", fail)
+    server = create_server(engine)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        status, _, data = request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": DEMO, "action": "open"},
+            authenticate(server),
+        )
+        body = json.loads(data)
+        entry = next(
+            job
+            for job in engine.study_detail(DEMO)["jobs"]
+            if job["id"] == body["activity_id"]
+        )
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=3)
+    assert status == 500
+    body.update(request_id=REQUEST_ID, time=FAILED_AT, activity_id=ACTIVITY_ID)
+    activity = {
+        key: entry[key]
+        for key in ("action", "status", "message", "automatic", "report_id")
+    }
+    activity.update(
+        id=ACTIVITY_ID,
+        created_at="2026-10-12T12:03:11.000000+00:00",
+        error={**entry["error"], "request_id": REQUEST_ID, "time": FAILED_AT},
+    )
+    check_contract("errors", {"open_failed": body, "activity": activity})

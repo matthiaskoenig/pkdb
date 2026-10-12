@@ -13,6 +13,8 @@ import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
 import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
 
+const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
+
 enableAutoUnmount(afterEach);
 
 let pinia: Pinia;
@@ -779,5 +781,80 @@ describe("OverviewPage", () => {
     const start = vi.spyOn(useOverviewStore(), "start");
     await mountPage(snapshot());
     expect(start).not.toHaveBeenCalled();
+  });
+
+  it("keeps the upload dialog open with what failed on the server", async () => {
+    vi.spyOn(useOverviewStore(), "enqueue").mockRejectedValue(
+      new ApiError(400, {
+        error: "Could not start the upload.",
+        code: "invalid_request",
+        detail: "ValueError: Upload requires a connected endpoint and API key",
+        action: "Upload (POST /local/jobs)",
+        ...FAILED,
+      }),
+    );
+    await mountPage(snapshot({ can_upload: true }));
+    await check("Select caffeine/Example");
+    await click("Upload");
+    await click("Validate and upload");
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not start the upload.");
+    expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Upload requires a connected endpoint and API key");
+    expect(alert.get("summary").text()).toBe("Details");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+
+  it("shows what failed in a batch action until it is closed", async () => {
+    vi.spyOn(useOverviewStore(), "enqueue").mockRejectedValue(
+      new ApiError(400, {
+        error: "Could not start the validation.",
+        code: "invalid_request",
+        detail: "ValueError: Reconcile unknown uploads first",
+        action: "Validate (POST /local/jobs)",
+        ...FAILED,
+      }),
+    );
+    await mountPage(snapshot());
+    await check("Select caffeine/Example");
+    await click("Validate");
+    const alert = page().get(".overview-error");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not start the validation.");
+    expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Reconcile unknown uploads first");
+    await alert.get('button[aria-label="Close"]').trigger("click");
+    await flushPromises();
+    expect(page().find(".overview-error").exists()).toBe(false);
+  });
+
+  it("keeps the retry dialog open with what failed", async () => {
+    vi.spyOn(useOverviewStore(), "retry").mockRejectedValue(
+      new ApiError(400, {
+        error: "Could not upload the study again.",
+        code: "invalid_request",
+        detail: "ValueError: Acknowledge the unknown outcome first",
+        action: "Upload again (POST /local/retry)",
+        ...FAILED,
+      }),
+    );
+    await mountPage(
+      snapshot({
+        studies: [studyRow({ status: "unknown" })],
+        jobs: [unknownJob()],
+        can_upload: true,
+        offline: false,
+        authenticated: true,
+        connection: "connected",
+        endpoint: "https://beta.pk-db.com",
+      }),
+    );
+    await click("Review uncertain upload of caffeine/Example");
+    await dialog().get('input[type="checkbox"]').trigger("click");
+    await flushPromises();
+    await click("Validate and upload again");
+    const alert = dialog().get(".action-failure");
+    expect(alert.get(".action-failure-text").text()).toBe("Could not upload the study again.");
+    expect(alert.get(".action-failure-detail").text()).toBe("ValueError: Acknowledge the unknown outcome first");
+    // It goes with the next attempt and when the dialog opens again: no close button, which would drop the focus.
+    expect(alert.find(".v-alert__close").exists()).toBe(false);
   });
 });

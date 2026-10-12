@@ -15,7 +15,8 @@ import {
 } from "vuetify/components";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore, type Settings } from "../stores/overview";
-import { messageOf } from "../study";
+import { failureOf, type ActionFailure } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -33,7 +34,7 @@ const form = reactive({ endpoint: "", user: "", offline: false });
 const apiKey = ref("");
 const busy = ref(false);
 const removing = ref(false);
-const error = ref<string | null>(null);
+const failure = ref<ActionFailure | null>(null);
 
 const keyHint = computed(() =>
   overview.snapshot?.authenticated ? "A key is set. Leave this empty to keep it." : "No key is set.",
@@ -45,7 +46,7 @@ function prefill(): void {
   initial.user = form.user = snapshot?.user ?? "";
   initial.offline = form.offline = snapshot?.offline ?? false;
   apiKey.value = "";
-  error.value = null;
+  failure.value = null;
 }
 
 /** The changed settings, and the API key when one was typed. */
@@ -64,12 +65,12 @@ function changes(): Settings {
 /** Remove the API key from pkdb curate; the dialog stays open with the other settings. */
 async function removeKey(): Promise<void> {
   removing.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     await overview.configure({ api_key: "" });
     apiKey.value = "";
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     removing.value = false;
   }
@@ -83,12 +84,12 @@ async function submit(): Promise<void> {
     return;
   }
   busy.value = true;
-  error.value = null;
+  failure.value = null;
   try {
     await overview.configure(settings);
     open.value = false;
   } catch (caught) {
-    error.value = messageOf(caught);
+    failure.value = failureOf(caught);
   } finally {
     busy.value = false;
   }
@@ -167,7 +168,7 @@ watch(
             Offline, pkdb curate sends no network requests. It keeps the API key in memory only, and the browser
             never stores it.
           </p>
-          <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
+          <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />
         </VCardText>
         <VCardActions class="dialog-actions">
           <VSpacer />

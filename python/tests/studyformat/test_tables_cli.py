@@ -5,7 +5,9 @@ import os
 import shlex
 import shutil
 import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import openpyxl
 import pytest
@@ -410,13 +412,22 @@ def test_open_reports_a_failed_sync_and_still_opens(
 def test_open_reports_an_application_that_cannot_open(
     study, vocabulary, capsys, monkeypatch
 ):
-    def fail(path, **kwargs):
-        raise subprocess.CalledProcessError(4, ["xdg-open", str(path)])
-
-    monkeypatch.setattr("pkdb.curation.launch.open_path", fail)
+    opener = [
+        sys.executable,
+        "-c",
+        "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
+    ]
+    # Quoted as the shell of the platform quotes it.
+    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", join(opener))
 
     assert tables("open", study, *vocabulary) == 1
-    assert "Cannot open" in capsys.readouterr().err
+    program = Path(sys.executable).name
+    assert capsys.readouterr().err.splitlines() == [
+        f"Could not open {workbook_path(study)}.",
+        f"CalledProcessError: {program} exited with status 4",
+        "no method available for opening",
+    ]
 
 
 @pytest.mark.parametrize(

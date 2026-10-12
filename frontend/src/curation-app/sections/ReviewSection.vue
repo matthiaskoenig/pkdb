@@ -7,6 +7,7 @@ import NewItemDialog from "../components/NewItemDialog.vue";
 import ReviewItemCard from "../components/ReviewItemCard.vue";
 import ReviewItemDetail from "../components/ReviewItemDetail.vue";
 import TargetView from "../components/TargetView.vue";
+import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
@@ -318,20 +319,7 @@ function added(item: ReviewItem | null): void {
             {{ failure.text }}
           </VAlert>
           <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-          <VAlert
-            v-else-if="failure"
-            type="error"
-            variant="tonal"
-            density="compact"
-            closable
-            class="status-alert review-failure"
-            @click:close="failure = null"
-          >
-            <p class="review-alert-text">{{ failure.text }}</p>
-            <ul v-if="failure.issues.length" class="review-alert-issues">
-              <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-            </ul>
-          </VAlert>
+          <ActionFailureAlert v-else-if="failure" :failure="failure" :study="study.detail?.id ?? null" class="review-failure" @close="failure = null" />
           <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
           <span role="status" aria-live="polite" class="review-notice">{{ notice }}</span>
           <TargetView v-if="selected" :item="selected" />

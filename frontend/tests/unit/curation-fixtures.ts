@@ -74,6 +74,8 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     jobs: [],
     clearable_jobs: 0,
     recent_workspaces: [{ path: "/work/pkdb_data", exists: true }],
+    log_file: "/home/curator/.cache/pkdb/curation/logs/curation.log",
+    watcher_error: null,
     ...changes,
   };
 }
