@@ -54,7 +54,7 @@ function redact(text) {
   return token ? text.replaceAll(token, "<launch token>") : text;
 }
 
-/** Capture the five images; the paths of the files. */
+/** Capture the six images; the paths of the files. */
 async function render() {
   const written = [];
   const browser = await chromium.launch();
@@ -124,7 +124,21 @@ async function render() {
     await sections.getByRole("link", { name: /^Metadata\b/ }).click();
     await page.getByRole("slider", { name: "Rating of curator" }).press("ArrowRight");
     await capture("metadata.png", [page.getByText("Unsaved changes in study.json")]);
-    await page.getByRole("button", { name: "Discard", exact: true }).click();
+    // The bar of the draft shows in Data too: its notice of the discard must be gone first.
+    await discardDraft(page);
+
+    // Data: the notes of the subjects opened above their rows, with an unsaved edit, discarded afterwards.
+    await sections.getByRole("link", { name: /^Data\b/ }).click();
+    await navigator.getByRole("button", { name: /^subjects\.tsv/ }).click();
+    const subjects = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+    await subjects.getByRole("button", { name: /^Notes of the subjects/ }).click();
+    const description = subjects.getByRole("textbox", { name: "Description 1" });
+    await description.fill(`${await description.inputValue()} Smokers were excluded.`);
+    await capture("data-notes.png", [
+      subjects.getByRole("region", { name: "Rows of subjects.tsv", exact: true }),
+      page.getByText("Unsaved changes in study.json"),
+    ]);
+    await discardDraft(page);
 
     // Data in a conflict: the panel of the conflict between the workbook and the TSV file at the top of the rows.
     await sections.getByRole("link", { name: /^Data\b/ }).click();
@@ -257,6 +271,17 @@ async function hoverMappedRow(page, source, line) {
   const box = await figure.boundingBox();
   const [width, height] = view.image_size;
   await page.mouse.move(box.x + (point.px * box.width) / width, box.y + (point.py * box.height) / height);
+}
+
+/**
+ * Discard the unsaved edits of study.json and wait until the bar has gone: Undo shows for a few
+ * seconds after a discard, in every section that shows the bar.
+ */
+async function discardDraft(page) {
+  await page.getByRole("button", { name: "Discard", exact: true }).click();
+  const undo = page.getByRole("button", { name: "Undo", exact: true });
+  await undo.waitFor();
+  await undo.waitFor({ state: "hidden" });
 }
 
 /** Pause or resume the automatic actions from the File watching menu of the header. */
