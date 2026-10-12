@@ -181,6 +181,44 @@ test("open notes take the room that the rows of a short table leave, and keep th
   }
 });
 
+test("open notes grow with their content without a loop of resize observers", async ({ app, page }) => {
+  // A size changed inside a callback of a ResizeObserver that resizes what another observes makes
+  // the browser fire an error event on the window, which the fixture collects.
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    const notes = JSON.parse(original) as StudyJson;
+    notes.notes = { ...notes.notes, interventions: { descriptions: LONG_DESCRIPTIONS, comments: [] } };
+    writeFileSync(path, `${JSON.stringify(notes, null, 2)}\n`);
+    // Above interventions.tsv the notes have room to grow; above subjects.tsv they are short.
+    for (const [file, kind] of [
+      ["interventions.tsv", "interventions"],
+      ["subjects.tsv", "subjects"],
+    ] as const) {
+      await app.open(`${STUDY}/data?file=${file}`);
+      const pane = rowsPane(page, file);
+      const toggle = pane.getByRole("button", { name: new RegExp(`^Notes of the ${kind}`) });
+      await toggle.click();
+      const panel = pane.getByRole("region", { name: new RegExp(`^Notes of the ${kind}`) });
+      const description = panel.getByRole("textbox", { name: "Description 1" });
+      await expect(description).toBeVisible();
+      const before = (await panel.boundingBox())!.height;
+      // A longer description wraps to more lines: the notes grow with it.
+      await description.press("End");
+      await description.pressSequentially(
+        " These two sentences wrap the description to more lines in the pane. The text area and the notes grow with them.",
+      );
+      await expect.poll(async () => (await panel.boundingBox())!.height).toBeGreaterThan(before);
+      await toggle.click();
+      await page.getByRole("button", { name: "Discard" }).click();
+      await expect(page.locator(".study-savebar")).toContainText("Changes discarded.");
+    }
+    expect(await page.evaluate(() => window.__windowErrors)).toEqual([]);
+  } finally {
+    writeFileSync(path, original);
+  }
+});
+
 test("the long notes of a kind without a table show whole in Metadata, which scrolls as a page", async ({ app, page }) => {
   const path = studyJsonPath(app.server.workspace);
   const original = readFileSync(path, "utf8");

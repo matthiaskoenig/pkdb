@@ -45,18 +45,6 @@ const body = ref<HTMLElement | null>(null);
 const content = ref<HTMLElement | null>(null);
 /** Whether more of the open body follows below its view, which a fade at its bottom shows. */
 const { more, scrollbar } = useMoreBelow(body, content);
-/** The height of the open body whole, which the panel grows to at most; null until it is measured. */
-const contentHeight = ref<number | null>(null);
-watch(
-  content,
-  (element, _, onCleanup) => {
-    if (!element) return;
-    const observer = new ResizeObserver(() => (contentHeight.value = element.offsetHeight));
-    observer.observe(element);
-    onCleanup(() => observer.disconnect());
-  },
-  { immediate: true, flush: "post" },
-);
 
 const detail = computed(() => study.detail);
 /** The kind as the study page names it, in lower case, such as `subjects`. */
@@ -64,6 +52,40 @@ const label = computed(() => (detail.value ? kindLabel(detail.value, props.kind)
 /** The notes of the kind in the draft; null while study.json is not valid. */
 const notes = computed(() => draft.form?.notes[props.kind] ?? null);
 const open = computed(() => draft.notesOpen.has(props.kind));
+
+/**
+ * The height of the open body whole, which the panel grows to at most; null until it is measured.
+ * Closed, the body has no height, and the last one stays.
+ */
+const contentHeight = ref<number | null>(null);
+
+function measure(): void {
+  const height = content.value?.offsetHeight ?? 0;
+  if (height > 0) contentHeight.value = height;
+}
+
+// The panel measures its content when it opens, before the browser paints it, and in the next
+// frame after the content changed its size, such as a description that wraps to one more line.
+// Within a callback of a ResizeObserver, a new height of the panel would resize its body, which
+// `useMoreBelow` observes, in the same frame: the browser reports that as a loop of observers.
+watch(open, (value) => value && measure(), { immediate: true, flush: "post" });
+watch(
+  content,
+  (element, _, onCleanup) => {
+    if (!element) return;
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    });
+    observer.observe(element);
+    onCleanup(() => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    });
+  },
+  { immediate: true, flush: "post" },
+);
 const changedOnDisk = computed(
   () => draft.marks.has(`notes.${props.kind}.descriptions`) || draft.marks.has(`notes.${props.kind}.comments`),
 );
