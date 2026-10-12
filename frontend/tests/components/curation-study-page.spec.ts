@@ -1000,4 +1000,34 @@ describe("StudyPage", () => {
     expect(back.attributes("href")).toBe("#/");
     expect(buttons("Open tables")).toHaveLength(0);
   });
+
+  it("shows what failed when Open tables fails, with a link to its entry in the activity", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables": () =>
+        json(
+          {
+            error: "Could not open the tables of caffeine/Harder1988.",
+            code: "open_failed",
+            detail:
+              "CalledProcessError: xdg-open exited with status 4\nno method available for opening",
+            action: "Open tables (POST /local/studies/tables)",
+            request_id: "3f9c2a71",
+            time: "2026-10-12T14:03:11+02:00",
+            activity_id: "0123456789abcdef0123456789abcdef",
+          },
+          { status: 500 },
+        ),
+    });
+    await click("Open tables");
+    const alert = page().get(".study-alert");
+    expect(alert.get(".action-failure-text").text()).toBe(
+      "Could not open the tables of caffeine/Harder1988.",
+    );
+    expect(alert.get(".action-failure-detail").text()).toBe(
+      "CalledProcessError: xdg-open exited with status 4\nno method available for opening",
+    );
+    expect(alert.get(".action-failure-activity").attributes("href")).toBe(
+      "#/studies/caffeine/Harder1988/activity?entry=0123456789abcdef0123456789abcdef",
+    );
+  });
 });

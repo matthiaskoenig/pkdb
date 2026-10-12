@@ -9,7 +9,6 @@ const OPEN_FAILED = "Could not open the tables of caffeine/Demo2020.";
 const DETAIL = "CalledProcessError: false exited with status 1";
 
 test("a failing Open tables says what failed and lists the failure in the activity", async ({ app, page }) => {
-  test.fail(true, "#919: the alert of a failed Open tables shows a generic text; Task 7 of the plan removes this line");
   await app.open(`${STUDY}/data`);
   // The local server answers the failed action with 500, which the browser logs.
   app.allowFailedRequest("/local/studies/tables", 500);

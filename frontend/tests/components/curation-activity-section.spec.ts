@@ -102,6 +102,19 @@ const HISTORY: Job[] = [
   job("validate-1", { automatic: true, created_at: at(0) }),
 ];
 
+const OPEN_FAILED = {
+  error: "Could not open the tables of caffeine/Example.",
+  code: "open_failed",
+  detail: "CalledProcessError: xdg-open exited with status 4",
+  action: "Open tables (POST /local/studies/tables)",
+  request_id: "3f9c2a71",
+  time: "2026-10-12T14:03:11+02:00",
+};
+const FAILED_WRITE = write("write-failed", OPEN_FAILED.error, at(50), {
+  status: "failed",
+  error: OPEN_FAILED,
+});
+
 const REPORT: JobReport = {
   job: HISTORY[1]!,
   persistence: "created",
@@ -134,6 +147,7 @@ async function mountSection(
   routes: Record<string, unknown> = {},
   changes: Partial<Snapshot> = {},
   study: Partial<StudyDetail> = {},
+  path = SECTION,
 ) {
   served = studyDetail({ jobs, ...study });
   state = workspace(jobs, changes);
@@ -146,7 +160,7 @@ async function mountSection(
   });
   await useOverviewStore().refresh();
   const router = makeRouter();
-  await router.push(SECTION);
+  await router.push(path);
   await router.isReady();
   const wrapper = mount(RouterView, { attachTo: document.body, global: { plugins: [pinia, router] } });
   await flushPromises();
@@ -602,5 +616,70 @@ describe("an upload with an unknown outcome", () => {
     expect(retry).toHaveBeenCalledWith("caffeine/Example", { acknowledgeUnknown: true });
     expect(dialogOpen()).toBe(false);
     expect(notice()).toBe("Upload queued again.");
+  });
+
+  it("shows a failed change in the app with its detail and its details", async () => {
+    await mountSection([FAILED_WRITE, ...HISTORY]);
+    const failed = entry(OPEN_FAILED.error);
+    expect(failed.get(".activity-status").text()).toBe("Failed");
+    expect(failed.get(".activity-detail").text()).toBe(OPEN_FAILED.detail);
+    expect(failed.get(".failure-disclosure summary").text()).toBe("Details");
+    expect(failed.get(".failure-facts").text()).toContain(
+      "Open tables (POST /local/studies/tables)",
+    );
+    expect(failed.get(".failure-facts").text()).toContain("3f9c2a71");
+    expect(entry("Saved study.json").find(".failure-details").exists()).toBe(
+      false,
+    );
+  });
+
+  it("shows the error of a failed job and keeps its report", async () => {
+    const crashed = job("crashed-1", {
+      status: "failed",
+      created_at: at(45),
+      message: "The validation of caffeine/Example failed unexpectedly.",
+      error: {
+        ...OPEN_FAILED,
+        error: "The validation of caffeine/Example failed unexpectedly.",
+        code: "unexpected",
+        detail: "RuntimeError: boom",
+        action: "Validation of caffeine/Example",
+      },
+    });
+    await mountSection([crashed, ...HISTORY]);
+    const failed = entry(
+      "The validation of caffeine/Example failed unexpectedly.",
+    );
+    expect(failed.get(".activity-detail").text()).toBe("RuntimeError: boom");
+    expect(failed.findAll("button").map((item) => item.text())).toContain(
+      "Download report",
+    );
+  });
+
+  it("focuses the entry that a link names", async () => {
+    await mountSection(
+      [FAILED_WRITE, ...HISTORY],
+      {},
+      {},
+      {},
+      `${SECTION}?entry=write-failed`,
+    );
+    await flushPromises();
+    const failed = entry(OPEN_FAILED.error);
+    expect(document.activeElement).toBe(failed.element);
+    expect(failed.classes()).toContain("activity-entry-linked");
+  });
+
+  it("ignores a link to an entry that is not listed", async () => {
+    await mountSection(
+      HISTORY,
+      {},
+      {},
+      {},
+      `${SECTION}?entry=${encodeURIComponent('"] , *')}`,
+    );
+    await flushPromises();
+    expect(page().findAll(".activity-entry-linked")).toHaveLength(0);
+    expect(document.activeElement).toBe(document.body);
   });
 });

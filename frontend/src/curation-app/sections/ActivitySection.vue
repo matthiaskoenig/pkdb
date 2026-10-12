@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId } from "vue";
+import { computed, nextTick, ref, useId, watch } from "vue";
+import { useRoute } from "vue-router";
 import {
   VBtn,
   VCard,
@@ -26,15 +27,17 @@ import {
 import { ApiError } from "../api/client";
 import type { Job } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import FailureDetails from "../components/FailureDetails.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { useReturnFocus } from "../composables/useReturnFocus";
+import { detailsOfBody } from "../failures";
 import { formatTime, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, messageOf, sectionRoute } from "../study";
+import { actionFailure, failureOf, sectionRoute } from "../study";
 
 /**
  * The jobs of the study in the current workspace, newest first: validations and uploads of the
@@ -63,7 +66,34 @@ const entries = computed(() =>
     url: uploadUrl(job),
     cancelable: job.status === "queued",
     reviewable: job.action === "upload" && job.status === "unknown",
+    // A failed job or change in the app: what the local server said about it.
+    details: job.error ? detailsOfBody(job.error) : null,
   })),
+);
+
+const route = useRoute();
+/** The entry that a link names, such as Show in Activity of a failed action: `?entry=<id>`. */
+const linked = computed(() =>
+  typeof route.query.entry === "string" ? route.query.entry : null,
+);
+/** The linked entry that took the focus already; a poll that lists it again leaves the focus. */
+let focusedEntry: string | null = null;
+
+// The entry may come with a later poll than the route: it takes the focus once it is listed.
+watch(
+  [linked, entries],
+  async ([id]) => {
+    if (id === null || id === focusedEntry) return;
+    await nextTick();
+    const element = [
+      ...(root.value?.querySelectorAll<HTMLElement>("[data-job]") ?? []),
+    ].find((candidate) => candidate.dataset.job === id);
+    if (!element) return;
+    focusedEntry = id;
+    element.scrollIntoView({ block: "nearest" });
+    element.focus();
+  },
+  { immediate: true },
 );
 
 /** The overview row of the study, which the review of an uncertain upload needs. */
@@ -114,11 +144,9 @@ function download(job: Job): Promise<void> | void {
       return `Downloaded ${name}.`;
     },
     (caught) =>
-      actionFailure(
-        caught instanceof ApiError && caught.status === 404
-          ? "The report of this job is no longer available."
-          : `The report could not be downloaded. ${messageOf(caught)}`,
-      ),
+      caught instanceof ApiError && caught.status === 404
+        ? actionFailure("The report of this job is no longer available.")
+        : failureOf(caught, "The report could not be downloaded."),
   );
 }
 
@@ -208,7 +236,13 @@ async function retried(): Promise<void> {
       No activity yet. Validations, uploads and changes in the app appear here.
     </p>
     <ol v-else tabindex="-1" class="activity-list">
-      <li v-for="entry in entries" :key="entry.job.id" :data-job="entry.job.id" tabindex="-1" class="activity-entry">
+      <li
+        v-for="entry in entries"
+        :key="entry.job.id"
+        :data-job="entry.job.id"
+        tabindex="-1"
+        :class="['activity-entry', { 'activity-entry-linked': entry.job.id === linked }]"
+      >
         <i :class="[ACTION_ICONS[entry.job.action], 'activity-icon']" aria-hidden="true"></i>
         <div class="activity-body">
           <div class="activity-head">
@@ -233,6 +267,9 @@ async function retried(): Promise<void> {
               {{ JOB_STATUS_LABELS[entry.job.status] }}
             </VChip>
           </div>
+          <pre v-if="entry.job.error?.detail" class="activity-detail">{{
+            entry.job.error.detail
+          }}</pre>
           <p :id="entry.metaId" class="activity-meta">
             <span class="activity-action">{{ ACTION_LABELS[entry.job.action] }}</span>
             <template v-if="entry.persistence">
@@ -242,6 +279,11 @@ async function retried(): Promise<void> {
             <template v-if="entry.job.automatic"> · automatic</template>
             · <time :datetime="datetime(entry.job.created_at)" class="activity-time">{{ formatTime(entry.job.created_at) }}</time>
           </p>
+          <FailureDetails
+            v-if="entry.details"
+            :text="entry.job.message"
+            :details="entry.details"
+          />
           <div
             v-if="entry.reviewable || entry.cancelable || entry.url || entry.job.report_id"
             class="activity-actions"
@@ -404,6 +446,18 @@ async function retried(): Promise<void> {
 /* The time stays with its date. */
 .activity-time {
   white-space: nowrap;
+}
+/* The entry that Show in Activity of a failed action opened. */
+.activity-entry-linked {
+  background-color: rgba(var(--v-theme-primary), 0.08);
+}
+.activity-detail {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 /* The icons of the buttons start where the text above does: 8 px of padding sit outside the
    content edge, then the 1rem wide icon and its 8 px gap, as the actions of an issue. */
