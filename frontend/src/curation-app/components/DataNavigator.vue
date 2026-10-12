@@ -156,7 +156,7 @@ const sources = computed(() =>
 .nav-file {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-height: 24px;
   padding: 0 6px 0 4px;
 }
@@ -219,7 +219,7 @@ const sources = computed(() =>
 /* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. */
 .nav-rows {
   flex: none;
-  min-width: 22px;
+  min-width: 20px;
   padding: 0 5px;
   border-radius: 8px;
   background: rgba(var(--v-theme-on-surface), 0.07);

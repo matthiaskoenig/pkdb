@@ -195,6 +195,38 @@ test.describe("sources", () => {
   });
 });
 
+test("the navigator shows the whole name of a table beside a warning, an open review item and its rows", async ({
+  app,
+  page,
+}) => {
+  // An open review item about the table, beside the warning of its misplaced point.
+  const file = join(app.server.workspace, "caffeine/Demo2020/review.json");
+  const original = readFileSync(file, "utf8");
+  const review = JSON.parse(original) as { items: object[] };
+  review.items.push({
+    id: "01M2Z8Q4KX0T9V3B6N1C5D7E2F",
+    kind: "question",
+    state: "open",
+    target: { file: TABLE },
+    text: "Are the times after the first or the second dose?",
+    author: "demo-reviewer",
+    created: "2026-09-20T09:00:00+02:00",
+  });
+  writeFileSync(file, `${JSON.stringify(review, null, 2)}\n`);
+  try {
+    await app.open("#/studies/caffeine/Demo2020/data");
+    const entry = navigatorButton(page, /^timecourses_Fig1\.tsv/);
+    await expect(entry.locator(".nav-count--warning")).toHaveAttribute("title", "1 warning");
+    await expect(entry.locator(".nav-count:not(.nav-count--warning)")).toHaveAttribute("title", "1 open review item");
+    await expect(entry.locator(".nav-rows")).toHaveAttribute("title", "18 rows");
+    const name = entry.locator(".nav-name");
+    await expect(name).toHaveText("timecourses_Fig1");
+    expect(await name.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+  } finally {
+    writeFileSync(file, original);
+  }
+});
+
 test("subjects.tsv shows all of its rows when it is chosen, whichever source is selected", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data");
   await navigatorButton(page, /^subjects\.tsv/).click();

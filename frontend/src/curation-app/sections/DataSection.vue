@@ -531,8 +531,9 @@ const conflictPanel = computed(() => {
   border-radius: 6px;
   background: rgb(var(--v-theme-surface));
 }
+/* Wide enough for a table name such as timecourses_Fig1 beside a warning, an open review item and its rows. */
 .data-navigator-pane {
-  flex: 0 0 184px;
+  flex: 0 0 232px;
   border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .data-split {
