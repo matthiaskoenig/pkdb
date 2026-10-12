@@ -107,4 +107,13 @@ describe("rows pane", () => {
     await wrapper.findAll("tbody tr:not([aria-hidden])")[0]!.trigger("click");
     expect(wrapper.emitted("select-line")).toEqual([[2]]);
   });
+
+  it("shows the kind of the table in the color of its class, which tints its grid", () => {
+    const wrapper = mountPane();
+    expect(wrapper.get("section").attributes("style")).toContain("--info: var(--v-theme-info-subjects)");
+    const chip = wrapper.get(".pane-head-kind");
+    expect(chip.text()).toBe("Subjects");
+    expect(chip.classes()).toEqual(expect.arrayContaining(["text-info-subjects", "status-chip"]));
+    expect(wrapper.get(".table-grid").classes()).toContain("table-grid--tinted");
+  });
 });

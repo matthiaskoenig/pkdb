@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { VBtn, VProgressLinear } from "vuetify/components";
+import { VBtn, VChip, VProgressLinear } from "vuetify/components";
 import type { StudyDetail, TableResponse } from "../api/types";
-import { ALL_ROWS, filterChoices, filteredLines, filterOf, filterValue, isShared, type RowFilter } from "../data";
+import {
+  ALL_ROWS,
+  filterChoices,
+  filteredLines,
+  filterOf,
+  filterValue,
+  findTable,
+  isShared,
+  type RowFilter,
+} from "../data";
 import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
+import { infoColor, infoStyle } from "../info";
 import { plural } from "../overview";
 import type { ActionFailure } from "../study";
+import { kindLabel } from "../tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
 
@@ -16,6 +27,10 @@ import TableGrid from "./TableGrid.vue";
  * rows, those of one source, or those without a source; the line of the route always shows, so
  * that a link to a row never lands on a hidden one. The default slot renders between the head
  * and the grid, where the section puts its conflict panel.
+ *
+ * The pane tints its table and shows its kind in the color of its class of information. Its head
+ * wraps rather than cut what it shows in a narrow pane, and the notes about the rows follow below
+ * it as sentences that wrap.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -34,6 +49,9 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ "select-line": [line: number]; retry: []; "update:filter": [filter: RowFilter] }>();
 defineSlots<{ default?: () => unknown }>();
+
+/** The table in the study page: its kind and class of information. */
+const entry = computed(() => findTable(props.detail, props.file));
 
 /** The options of the Source select; only a shared table has them. */
 const choices = computed(() => (props.table && isShared(props.detail, props.file) ? filterChoices(props.table) : []));
@@ -103,13 +121,11 @@ const count = computed(() => {
   return `${shown.toLocaleString("en-US")} of ${plural(total, "row")}`;
 });
 
-/** The rows, the targets, the cells with problems and the hidden columns, in sentences, for screen readers. */
-const caption = computed(() => {
-  if (!props.table) return "";
-  const parts = [`${count.value}.`, ...notes.value];
-  if (hiddenColumns.value) parts.push(hiddenText.value);
-  return parts.join(" ");
-});
+/** The targets, the cells with problems and the hidden columns, in sentences, which show below the head. */
+const sentences = computed(() => (hiddenColumns.value ? [...notes.value, hiddenText.value] : notes.value));
+
+/** The rows and the sentences, for screen readers. */
+const caption = computed(() => (props.table ? [`${count.value}.`, ...sentences.value].join(" ") : ""));
 
 /** Whether the filtered table has no row and no focus. */
 const empty = computed(() => visible.value !== null && !props.table?.rows.some((row) => visible.value!.has(row.line)));
@@ -130,12 +146,18 @@ const missingLine = computed(() => {
 
 <template>
   <!-- Named apart from its grid, the region "Rows of <file>", so that each landmark has its own name. -->
-  <section class="rows-pane" :aria-label="`Table ${file}`">
+  <section class="rows-pane" :aria-label="`Table ${file}`" :style="entry ? infoStyle(entry.info) : undefined">
+    <!-- A narrow pane wraps the head rather than clip its parts; the file name keeps its icon beside it. -->
     <div class="pane-head">
-      <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
-      <h3 class="pane-head-name">{{ file }}</h3>
+      <div class="pane-head-title">
+        <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
+        <h3 class="pane-head-name" :title="file">{{ file }}</h3>
+      </div>
+      <!-- The kind in the color of the class of information of the table; its text stays in the text color. -->
+      <VChip v-if="entry" size="x-small" variant="tonal" :color="infoColor(entry.info)" class="status-chip pane-head-kind">
+        {{ kindLabel(detail, entry.kind) }}
+      </VChip>
       <template v-if="table">
-        <!-- The file name, the count of rows and the Source select keep their room; the notes after them shorten first. -->
         <span class="pane-head-part pane-head-part--fixed" aria-hidden="true">{{ count }}</span>
         <label v-if="choices.length" class="pane-head-filter">
           <span aria-hidden="true">Source</span>
@@ -143,14 +165,14 @@ const missingLine = computed(() => {
             <option v-for="choice in choices" :key="choice.value" :value="choice.value">{{ choice.title }}</option>
           </select>
         </label>
-        <span v-if="hiddenColumns" class="pane-head-part" aria-hidden="true">
-          {{ hiddenColumns === 1 ? "1 empty column hidden" : `${hiddenColumns} empty columns hidden` }}
-        </span>
-        <span v-for="note in notes" :key="note" class="pane-head-part" aria-hidden="true">{{ note }}</span>
         <span v-if="focus" class="pane-head-line">Line {{ focus.line }}</span>
         <p class="d-sr-only">{{ caption }}</p>
       </template>
     </div>
+    <!-- The sentences of the caption after the count, whole: each wraps to a line of its own rather than be cut. -->
+    <p v-if="table && sentences.length" class="rows-pane-notes" aria-hidden="true">
+      <span v-for="sentence in sentences" :key="sentence">{{ sentence }}</span>
+    </p>
 
     <slot></slot>
 
@@ -180,6 +202,7 @@ const missingLine = computed(() => {
         :focus="focus"
         :hide-empty="hideEmpty"
         :visible-lines="visible"
+        :tinted="entry !== undefined"
         selectable
         :label="table.kind === 'raw' ? `Raw table ${table.file}` : `Rows of ${table.file}`"
         class="rows-pane-grid"
@@ -197,9 +220,39 @@ const missingLine = computed(() => {
   min-height: 0;
   height: 100%;
 }
-/* The head clips what a narrow pane has no room for, after the notes have shortened. */
+/* The head is one line of 26 px, as the head of the source pane beside it, until a narrow pane
+   wraps it: the parts move to a second line whole. Only the file name ends in an ellipsis, when
+   it has a line of its own and still no room. */
 .rows-pane > .pane-head {
+  flex-wrap: wrap;
+  row-gap: 2px;
+  height: auto;
+  min-height: 26px;
+  padding-block: 1px;
   overflow: hidden;
+}
+.pane-head-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.pane-head-title > .pane-head-name {
+  flex-shrink: 1;
+  min-width: 0;
+}
+.pane-head-kind {
+  flex: 0 0 auto;
+}
+/* The notes below the head: sentences in the size of the head, 8 px from the edges. */
+.rows-pane > .rows-pane-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin: 0;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .pane-head-line {
   flex: 0 0 auto;

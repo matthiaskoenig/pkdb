@@ -454,6 +454,39 @@ test("the pane heads keep the source and the count of rows whole while a pane is
   await expect.poll(() => count.evaluate(whole)).toBe(true);
 });
 
+test("the head of the rows pane shows its kind, count, Source select and notes without cutting a word, also at its narrowest", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data?file=interventions.tsv");
+  const pane = page.getByRole("region", { name: "Table interventions.tsv" });
+  await expect(pane.getByRole("combobox", { name: "Source of the rows" })).toBeVisible();
+  await expect(pane.getByText("1 problem is outlined.", { exact: true })).toBeVisible();
+  // What the head and its notes cut or clip, apart from the file name, which may end in an ellipsis in a narrow pane.
+  const cut = () =>
+    pane.evaluate((section) => {
+      const box = section.getBoundingClientRect();
+      const parts = ".pane-head-name, .pane-head-kind, .pane-head-part, .pane-head-filter, .pane-head-line, .rows-pane-notes > *";
+      return [...section.querySelectorAll<HTMLElement>(parts)]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          const clipped = rect.left < box.left || rect.right > box.right;
+          const name = element.classList.contains("pane-head-name");
+          return clipped || (!name && element.scrollWidth > element.clientWidth);
+        })
+        .map((element) => element.textContent?.trim());
+    });
+  expect(await cut()).toEqual([]);
+  await expect(pane.locator(".pane-head-kind")).toHaveText("Interventions");
+  // Where it has room, the head is one line of 26 px, as the head of the source pane beside it.
+  expect((await pane.locator(".pane-head").boundingBox())!.height).toBe(26);
+  const separator = page.getByRole("separator", { name: "Resize the source and the rows" });
+  await separator.focus();
+  await page.keyboard.press("End");
+  await expect.poll(() => pane.evaluate((section) => section.getBoundingClientRect().width)).toBeLessThan(300);
+  expect(await cut()).toEqual([]);
+});
+
 test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px head of the source pane", async ({
   app,
   page,

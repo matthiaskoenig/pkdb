@@ -174,6 +174,13 @@ describe("TableGrid", () => {
     expect(wrapper.find("tbody th").exists()).toBe(false);
     expect(region(wrapper).classList).not.toContain("rows-scroll--sticky-line");
   });
+
+  it("tints its rows only when asked", () => {
+    expect(mount(TableGrid, { props: { table: small } }).get(".table-grid").classes()).not.toContain("table-grid--tinted");
+    expect(mount(TableGrid, { props: { table: small, tinted: true } }).get(".table-grid").classes()).toContain(
+      "table-grid--tinted",
+    );
+  });
 });
 
 describe("TableGrid with many rows", () => {

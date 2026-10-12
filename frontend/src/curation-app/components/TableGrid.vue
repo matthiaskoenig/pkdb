@@ -25,6 +25,9 @@ const STEP = 10;
  * `focus` line scrolls into view with its cell marked and focused. The line buttons of a
  * selectable grid are one Tab stop: the arrow keys move the focus to the row above or below,
  * Home and End to the first and the last row.
+ *
+ * A tinted grid shows the class of information of its table: its header row and its cells in the
+ * color `--info` of its pane.
  */
 const props = withDefaults(
   defineProps<{
@@ -47,6 +50,8 @@ const props = withDefaults(
     selectable?: boolean;
     /** The lines of the rows to show; null shows every row. */
     visibleLines?: ReadonlySet<number> | null;
+    /** Whether the rows show the class of information of their table in the color `--info` of an ancestor. */
+    tinted?: boolean;
   }>(),
   {
     highlightLines: () => new Set<number>(),
@@ -60,6 +65,7 @@ const props = withDefaults(
     lineHeader: "Line",
     selectable: false,
     visibleLines: null,
+    tinted: false,
   },
 );
 const emit = defineEmits<{ "select-line": [line: number] }>();
@@ -375,7 +381,11 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 </script>
 
 <template>
-  <div class="table-grid" :class="{ 'table-grid--more': more, 'table-grid--selectable': selectable }" :style="fade">
+  <div
+    class="table-grid"
+    :class="{ 'table-grid--more': more, 'table-grid--selectable': selectable, 'table-grid--tinted': tinted }"
+    :style="fade"
+  >
     <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
     <div
       ref="region"
@@ -499,6 +509,20 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   background: linear-gradient(to left, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0));
   pointer-events: none;
 }
+/* A tinted grid, such as the rows of the Data section, shows the class of information of its
+   table in the color `--info` (the RGB of a theme color): the header row over the surface at
+   `--v-info-head-tint`, the cells at `--v-info-cell-tint`, opaque on the line column, which
+   covers the rows that scroll below it, and a hovered row at the tint of the header. The amber
+   rows of open review items and the selected row keep their own tints. */
+.table-grid--tinted .rows-table thead th {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+}
+.table-grid--tinted td {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-cell-tint), transparent);
+}
+.table-grid--tinted tbody .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-cell-tint), rgb(var(--v-theme-surface)));
+}
 /* Rows that open review items target: a tint that lets the shadows of the sides show through,
    and an opaque tint on the line column, which covers the rows that scroll below it. The line
    has a bar, so that the rows stand out without the color. */
@@ -535,6 +559,17 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .table-grid--selectable .rows-scroll .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
   background-color: color-mix(in srgb, rgb(var(--v-theme-on-surface)) 5%, rgb(var(--v-theme-surface)));
 }
+.table-grid--tinted.table-grid--selectable .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > td {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), transparent);
+}
+.table-grid--tinted.table-grid--selectable
+  .rows-scroll
+  .rows-table
+  tbody
+  tr:not(.grid-row--target, .grid-row--focus):hover
+  > .rows-line {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+}
 /* Its line is a button that looks like the line. */
 .grid-line-button {
   all: unset;
@@ -545,12 +580,28 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
 }
-/* A cell with a problem has an outline inside, which leaves the content and the lines in place. */
+/* A cell with a problem has an outline inside, which leaves the content and the lines in place,
+   and a cell of the selected row the lines of its frame. Both are inset shadows, so that a
+   problem of the selected row keeps its outline inside the frame. */
+.rows-table :is(td, th) {
+  box-shadow: var(--grid-outline, 0 0 transparent), var(--grid-frame, 0 0 transparent);
+}
 .rows-table .grid-cell--error {
-  box-shadow: inset 0 0 0 2px rgb(var(--v-theme-error));
+  --grid-outline: inset 0 0 0 2px rgb(var(--v-theme-error));
 }
 .rows-table .grid-cell--warning {
-  box-shadow: inset 0 0 0 2px var(--grid-amber);
+  --grid-outline: inset 0 0 0 2px var(--grid-amber);
+}
+/* The selected row: a frame of 1 px in the primary color around its tint, which keeps it apart
+   on the green and violet tints of the tables. */
+.rows-table .grid-row--focus > * {
+  --grid-frame: inset 0 1px rgb(var(--v-theme-primary)), inset 0 -1px rgb(var(--v-theme-primary));
+}
+.rows-table .grid-row--focus > :first-child {
+  --grid-frame: inset 1px 1px rgb(var(--v-theme-primary)), inset 0 -1px rgb(var(--v-theme-primary));
+}
+.rows-table .grid-row--focus > :last-child {
+  --grid-frame: inset -1px -1px rgb(var(--v-theme-primary)), inset 0 1px rgb(var(--v-theme-primary));
 }
 /* The marked column: a tint over the cell, so that the header keeps its background below it. */
 .rows-table .grid-cell--marked {
