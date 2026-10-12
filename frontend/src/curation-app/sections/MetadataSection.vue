@@ -544,7 +544,7 @@ const newFields = computed(() => {
           <p class="field-note metadata-notes-hint">Notes of a table are in <RouterLink :to="dataRoute">Data</RouterLink>, above the table.</p>
           <div v-if="orphanKinds.length" class="metadata-orphans">
             <p class="field-note">The study has no table of these kinds, so their notes are here:</p>
-            <TableNotes v-for="kind in orphanKinds" :key="kind" :kind="kind" class="metadata-orphan-notes" />
+            <TableNotes v-for="kind in orphanKinds" :key="kind" :kind="kind" card />
           </div>
         </VCardText>
       </VCard>
@@ -602,12 +602,6 @@ const newFields = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-/* A panel of notes in a card has a frame of its own instead of the line below it in the rows pane. */
-.metadata-orphan-notes.table-notes {
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  overflow: hidden;
 }
 .metadata-card-head {
   padding-bottom: 0;

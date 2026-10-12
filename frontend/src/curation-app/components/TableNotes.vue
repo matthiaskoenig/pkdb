@@ -18,14 +18,20 @@ import NotesFields from "./NotesFields.vue";
  * saves. Notes belong to a kind, so every table of a kind shows the same notes. The panel starts
  * closed, opens by itself for an issue in its notes, and the draft keeps it open or closed while
  * the study is open. While study.json is not valid it says so and lists the issues of its notes.
+ *
+ * Above the rows of a table it shares the rows pane with them, and its body scrolls on its own.
+ * In a card of the Metadata section, which shows the notes of a kind without a table, it has a
+ * frame of its own and shows its notes whole in the page, which scrolls.
  */
 const props = withDefaults(
   defineProps<{
     kind: TableKind;
     /** Whether a link opened the notes: the toggle takes the focus. */
     focused?: boolean;
+    /** Whether the panel stands in a card, rather than above the rows of a table. */
+    card?: boolean;
   }>(),
-  { focused: false },
+  { focused: false, card: false },
 );
 
 const study = useStudyStore();
@@ -99,7 +105,7 @@ watch(
 <template>
   <section
     class="table-notes"
-    :class="{ 'table-notes--open': open }"
+    :class="{ 'table-notes--open': open, 'table-notes--card': card }"
     :style="contentHeight === null ? undefined : { '--table-notes-content': `${contentHeight}px` }"
     :aria-labelledby="headingId"
   >
@@ -164,9 +170,19 @@ watch(
    whose rows give up their room first (RowsPane.vue), they keep 40 % of the window, at most 28rem,
    and their body scrolls. In a short pane they then shrink down to their header and its border
    before the conflicts above them, rather than push the rows out of the pane. */
-.table-notes--open {
+.table-notes--open:not(.table-notes--card) {
   flex: 1000 1000 calc(var(--table-notes-head) + 1px + min(40vh, 28rem));
   max-height: calc(var(--table-notes-head) + 1px + var(--table-notes-content));
+}
+/* In a card, the panel has a frame of its own instead of the line below it in the rows pane, and
+   its body no scroll of its own: the page scrolls. */
+.table-notes--card {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  overflow: hidden;
+}
+.table-notes--card .table-notes-body {
+  overflow-y: visible;
 }
 .table-notes-heading {
   flex: 0 0 auto;

@@ -181,6 +181,28 @@ test("open notes take the room that the rows of a short table leave, and keep th
   }
 });
 
+test("the long notes of a kind without a table show whole in Metadata, which scrolls as a page", async ({ app, page }) => {
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    // Demo2020 has no table of scatters: Metadata shows their notes.
+    const notes = JSON.parse(original) as StudyJson;
+    notes.notes = { ...notes.notes, scatters: { descriptions: LONG_DESCRIPTIONS, comments: [] } };
+    writeFileSync(path, `${JSON.stringify(notes, null, 2)}\n`);
+    await app.open(`${STUDY}/metadata`);
+    const panel = page.getByRole("region", { name: /^Notes of the scatters/ });
+    await panel.getByRole("button", { name: /^Notes of the scatters 3 descriptions/ }).click();
+    await expect(panel.getByRole("textbox", { name: "Description 3" })).toHaveValue(LONG_DESCRIPTIONS[2]!);
+    // Longer than 40 % of the window, the body still has no scroll of its own and no fade.
+    const body = panel.locator(".table-notes-body");
+    expect(await body.evaluate((element) => element.scrollHeight)).toBeGreaterThan(0.4 * 900);
+    expect(await body.evaluate((element) => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(1);
+    await expect(panel.locator(".pane-more")).toHaveCount(0);
+  } finally {
+    writeFileSync(path, original);
+  }
+});
+
 test("Show notes of a problem in the notes of the subjects opens them above subjects.tsv", async ({ app, page }) => {
   const path = studyJsonPath(app.server.workspace);
   const original = readFileSync(path, "utf8");
