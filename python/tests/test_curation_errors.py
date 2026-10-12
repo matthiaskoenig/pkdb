@@ -206,7 +206,7 @@ def test_the_log_keeps_the_traceback_without_secrets_and_names_it_in_the_termina
     assert (LOG_BYTES, LOG_BACKUPS) == (1024 * 1024, 3)
 
 
-def test_an_expected_failure_goes_to_the_file_only(tmp_path, capsys):
+def test_an_expected_failure_goes_to_the_file_and_the_terminal(tmp_path, capsys):
     log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [])
     cause = subprocess.CalledProcessError(1, ["false", "/x"], stderr=b"")
     try:
@@ -222,7 +222,9 @@ def test_an_expected_failure_goes_to_the_file_only(tmp_path, capsys):
     text = log.path.read_text(encoding="utf-8")
     assert f"WARNING Error 0badc0de in {OPEN}: CalledProcessError" in text
     assert "subprocess.CalledProcessError" in text
-    assert capsys.readouterr().err == ""
+    assert capsys.readouterr().err == (
+        f"Error 0badc0de in {OPEN}: ActionFailed (see {log.path})\n"
+    )
 
 
 def test_a_closed_log_writes_nothing_anywhere(tmp_path, capsys):
@@ -233,3 +235,21 @@ def test_a_closed_log_writes_nothing_anywhere(tmp_path, capsys):
     assert not log.path.exists()
     # The last resort handler of logging would print the record unredacted.
     assert capsys.readouterr().err == ""
+
+
+def test_a_console_that_cannot_encode_the_line_does_not_fail_the_handling(
+    tmp_path, monkeypatch
+):
+    class Console:
+        def write(self, text):
+            raise UnicodeEncodeError("ascii", text, 0, 1, "no")
+
+        def flush(self):
+            pass
+
+    monkeypatch.setattr("sys.stderr", Console())
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [])
+    body = {"request_id": "3f9c2a71", "action": OPEN, "detail": None, "error": "x"}
+    log.failed(body, RuntimeError("x"))
+    log.close()
+    assert "Error 3f9c2a71" in log.path.read_text(encoding="utf-8")

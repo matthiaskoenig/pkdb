@@ -182,6 +182,7 @@ class ErrorLog:
     def __init__(self, path: Path, secrets: Callable[[], Iterable[str | None]]):
         self.path = path
         self._secrets = secrets
+        self._closed = False
         path.parent.mkdir(parents=True, exist_ok=True)
         self.handler = RotatingFileHandler(
             path,
@@ -205,21 +206,38 @@ class ErrorLog:
             exc_info=error,
         )
 
-    def failed(self, body: dict, error: BaseException) -> None:
-        """Log a failure that the app explains, with its traceback; the terminal stays quiet."""
-        self._write(logging.WARNING, body, error)
-
-    def unexpected(self, body: dict, error: BaseException, *, label: str) -> None:
-        """Log an unexpected error with its traceback, and name it in one terminal line."""
-        self._write(logging.ERROR, body, error)
+    def _terminal(self, body: dict, error: BaseException, label: str) -> None:
+        """One redacted line to the terminal; a console that cannot take it is ignored."""
         line = (
             f"Error {body['request_id']} in {label}: {type(error).__name__} "
             f"(see {self.path})"
         )
-        print(redact(line, self._secrets()), file=sys.stderr, flush=True)
+        if self._closed:
+            return
+        try:
+            sys.stderr.write(redact(line, self._secrets()) + "\n")
+            sys.stderr.flush()
+        except OSError, ValueError:
+            pass
+
+    def failed(
+        self, body: dict, error: BaseException, *, label: str | None = None
+    ) -> None:
+        """Log a failure that the app explains, with its traceback, and name it in one terminal line.
+
+        The label of the line is the action of the body unless given.
+        """
+        self._write(logging.WARNING, body, error)
+        self._terminal(body, error, label or body["action"])
+
+    def unexpected(self, body: dict, error: BaseException, *, label: str) -> None:
+        """Log an unexpected error with its traceback, and name it in one terminal line."""
+        self._write(logging.ERROR, body, error)
+        self._terminal(body, error, label)
 
     def close(self) -> None:
         """Close the file; later records go nowhere, not even to the last resort handler."""
+        self._closed = True
         self._logger.removeHandler(self.handler)
         self.handler.close()
         if not self._logger.handlers:
