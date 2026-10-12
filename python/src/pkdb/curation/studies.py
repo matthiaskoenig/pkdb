@@ -9,6 +9,7 @@ takes `folder_lock`; anything that takes the engine lock runs before it.
 
 import dataclasses
 import hashlib
+import io
 import json
 import os
 import stat
@@ -82,10 +83,22 @@ IMAGE_TYPES = {
     ".jpeg": "image/jpeg",
     ".webp": "image/webp",
 }
+#: The media types of the files that the file route serves: the images of the sources and the PDFs.
+FILE_TYPES = {**IMAGE_TYPES, ".pdf": "application/pdf"}
 
 
 class UnsafeFile(ValueError):
     """A file of the study that the app refuses to open or write, such as a symlink."""
+
+
+@dataclasses.dataclass(frozen=True)
+class StudyFile:
+    """A file of a study open for reading, which the file route sends in pieces and closes."""
+
+    name: str
+    stream: io.BufferedIOBase
+    size: int
+    media_type: str
 
 
 class AmbiguousStudy(ValueError):
@@ -644,12 +657,17 @@ class StudiesMixin(EngineState):
         image_url = None if view.image is None else _file_url(identity, view.image)
         return {**dataclasses.asdict(view), "image_url": image_url}
 
-    def study_image(self, identity: str, file: str) -> tuple[bytes, str]:
+    def study_file(self, identity: str, file: str) -> StudyFile:
+        """An image or a PDF of the study, open for reading; the caller closes its stream.
+
+        Only a regular file at the top of the folder that the scan registers, never through a
+        symlink, also not one placed after the check: LookupError for any other file.
+        """
         folder = self.study_folder(identity)
-        media_type = IMAGE_TYPES.get(Path(file).suffix.lower())
+        media_type = FILE_TYPES.get(Path(file).suffix.lower())
         # Registered files are regular files at the top level of the folder, never symlinks.
         if media_type is None or file not in scan_folder(folder).files:
-            raise LookupError(f"{file} is not an image of {identity}")
+            raise LookupError(f"{file} is not an image or a PDF of {identity}")
         path = folder / file
         if not path.resolve().is_relative_to(folder.resolve()):
             raise LookupError(f"{file} is outside the study folder")
@@ -661,10 +679,15 @@ class StudiesMixin(EngineState):
             )
         except OSError:
             raise LookupError(f"{file} cannot be read") from None
-        with os.fdopen(descriptor, "rb") as stream:
-            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+        stream = os.fdopen(descriptor, "rb")
+        try:
+            status = os.fstat(stream.fileno())
+            if not stat.S_ISREG(status.st_mode):
                 raise LookupError(f"{file} is not a regular file")
-            return stream.read(), media_type
+        except BaseException:
+            stream.close()
+            raise
+        return StudyFile(file, stream, status.st_size, media_type)
 
     def _rescan(self) -> None:
         """Rescan, so that the study ETag changes at once after a write or a stale write.

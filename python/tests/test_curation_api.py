@@ -8,6 +8,7 @@ import subprocess
 import sys
 import threading
 from types import SimpleNamespace
+from urllib.parse import quote
 
 import openpyxl
 import pytest
@@ -1856,3 +1857,63 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     )
     assert entry["error"]["detail"] == body["detail"]
     assert "exited with status 4" in engine.log.path.read_text(encoding="utf-8")
+
+
+#: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
+PDF = b"%PDF-1.7\n" + bytes(range(256)) * 400 + b"%%EOF\n"
+
+
+def test_a_pdf_of_the_study_is_served_inline_whole_and_in_ranges(api):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(PDF)
+    engine.scan()
+    headers = authenticate(server)
+    url = f"{DETAIL}/files/Example.pdf"
+    status, answer, body = request(server, "GET", url, headers=headers)
+    assert (status, body) == (200, PDF)
+    assert (
+        answer["Content-Type"],
+        answer["Content-Disposition"],
+        answer["Accept-Ranges"],
+    ) == ("application/pdf", 'inline; filename="Example.pdf"', "bytes")
+    status, answer, body = request(
+        server, "GET", url, headers={**headers, "Range": "bytes=-6"}
+    )
+    assert (status, body) == (206, b"%%EOF\n")
+    assert answer["Content-Range"] == f"bytes {len(PDF) - 6}-{len(PDF) - 1}/{len(PDF)}"
+    over = {**headers, "Range": f"bytes={len(PDF)}-"}
+    assert request(server, "GET", url, headers=over)[0] == 416
+    several = {**headers, "Range": "bytes=0-1,4-5"}
+    status, answer, body = request(server, "GET", url, headers=several)
+    assert (status, body) == (200, PDF)
+    assert "Content-Range" not in answer
+
+
+def test_a_pdf_named_beyond_ascii_is_served_with_both_names(api):
+    server, engine, folder = api
+    (folder / "Müller Supp.pdf").write_bytes(PDF)
+    engine.scan()
+    status, answer, body = request(
+        server,
+        "GET",
+        f"{DETAIL}/files/{quote('Müller Supp.pdf')}",
+        headers=authenticate(server),
+    )
+    assert (status, body) == (200, PDF)
+    assert answer["Content-Disposition"] == (
+        "inline; filename=\"M_ller Supp.pdf\"; filename*=UTF-8''M%C3%BCller%20Supp.pdf"
+    )
+
+
+def test_a_symlinked_pdf_and_files_that_are_no_image_or_pdf_are_refused(api, tmp_path):
+    server, engine, folder = api
+    outside = tmp_path / "outside.pdf"
+    outside.write_bytes(PDF)
+    (folder / "Linked.pdf").symlink_to(outside)
+    (folder / "notes.txt").write_text("A note", encoding="utf-8")
+    engine.scan()
+    headers = authenticate(server)
+    for file in ("Linked.pdf", "notes.txt", "subjects.tsv", "Missing.pdf"):
+        assert (
+            request(server, "GET", f"{DETAIL}/files/{file}", headers=headers)[0] == 404
+        )

@@ -3,13 +3,14 @@
 import hashlib
 import json
 import mimetypes
+import re
 import secrets
 import threading
 from dataclasses import dataclass, field
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 from pkdb.curation.actions import Action, action_of
 from pkdb.curation.engine import WorkspaceError
@@ -24,7 +25,7 @@ from pkdb.curation.errors import (
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
 from pkdb.curation.state import THEMES
-from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
+from pkdb.curation.studies import AmbiguousStudy, StudyFile, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
@@ -45,6 +46,15 @@ THEME_PLACEHOLDER = b"__PKDB_THEME__"
 # The `code` of the 403 for a missing or stale CSRF token; the app then takes a fresh token from
 # the state and sends the action once more.
 ACTION_TOKEN = "action_token"
+#: The size of the pieces in which the file route sends a file: 64 kB, the size of the ranges
+#: that PDF.js asks for.
+CHUNK = 64 * 1024
+#: The media types of the scripts of the app, whatever the table of the system says: a module
+#: script, such as the worker of PDF.js, runs only as JavaScript, and `mimetypes` reads the
+#: Windows registry, which can map `.js` to text/plain.
+SCRIPT_TYPES = {".js": "text/javascript", ".mjs": "text/javascript"}
+#: One byte range of a Range header (RFC 9110): its first and last byte, or its last bytes.
+BYTE_RANGE = re.compile(r"bytes=(\d*)-(\d*)", re.ASCII | re.IGNORECASE)
 
 
 def _csp(nonce: str | None) -> str:
@@ -86,6 +96,54 @@ def _route_version(version, route):
     The study version covers every file of the study, so it versions each table and source too.
     """
     return hashlib.sha256(json.dumps([version, *route]).encode()).hexdigest()
+
+
+class RangeNotSatisfiable(ValueError):
+    """A Range header whose one range starts at or beyond the end of the file (416)."""
+
+
+def byte_range(header: str | None, size: int) -> tuple[int, int] | None:
+    """The one byte range `(start, end)`, end exclusive, that a Range header asks of `size` bytes.
+
+    None asks for the whole file: no header, another unit, several ranges, or a range that is
+    not valid, all of which RFC 9110 lets a server answer with the whole file; so do a number
+    of more digits than `int` reads and the last bytes of an empty file. RangeNotSatisfiable
+    for a range that starts at or beyond the end, or for the last 0 bytes.
+    """
+    if header is None:
+        return None
+    match = BYTE_RANGE.fullmatch(header.strip())
+    if match is None:
+        return None
+    try:
+        first, last = (int(digits) if digits else None for digits in match.groups())
+    except ValueError:
+        # More digits than `int` reads (4300).
+        return None
+    if first is None:
+        # `bytes=-N`: the last N bytes.
+        if last is None:
+            return None
+        if last == 0:
+            raise RangeNotSatisfiable(header)
+        # RFC 9110 lets an empty file satisfy it, but no Content-Range can name its bytes.
+        return None if size == 0 else (max(0, size - last), size)
+    if last is not None and last < first:
+        return None
+    if first >= size:
+        raise RangeNotSatisfiable(header)
+    return first, size if last is None else min(last + 1, size)
+
+
+def content_disposition(name: str) -> str:
+    """`inline` with the name of the file: printable ASCII in `filename`, the exact name in
+    `filename*` (RFC 6266), so that any name makes a valid header."""
+    fallback = "".join(
+        char if " " <= char <= "~" and char not in '"\\' else "_" for char in name
+    )
+    if fallback == name:
+        return f'inline; filename="{name}"'
+    return f"inline; filename=\"{fallback}\"; filename*=UTF-8''{quote(name, safe='')}"
 
 
 @dataclass(frozen=True)
@@ -231,21 +289,28 @@ class Handler(BaseHTTPRequestHandler):
         # Request URLs and payloads must never leak bootstrap tokens or API keys.
         pass
 
-    def _reply(
+    def _head(
         self,
         status,
-        value,
         *,
         content_type="application/json",
+        length=0,
         cookie=None,
         etag=None,
         nonce=None,
+        headers=None,
     ):
-        data = value if isinstance(value, bytes) else _dump(value)
+        """Send the status and the headers of a reply, with the security headers of every reply.
+
+        `headers` adds headers of the reply, such as its Content-Range. OSError when the client
+        went away or stopped reading.
+        """
         self.send_response(status)
         if status != 304:
             self.send_header("Content-Type", content_type)
-            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Content-Length", str(length))
+        for name, value in (headers or {}).items():
+            self.send_header(name, value)
         if etag:
             self.send_header("ETag", etag)
         self.send_header("Cache-Control", "no-store")
@@ -255,8 +320,30 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Security-Policy", _csp(nonce))
         if cookie:
             self.send_header("Set-Cookie", cookie)
+        self.end_headers()
+
+    def _reply(
+        self,
+        status,
+        value,
+        *,
+        content_type="application/json",
+        cookie=None,
+        etag=None,
+        nonce=None,
+        headers=None,
+    ):
+        data = value if isinstance(value, bytes) else _dump(value)
         try:
-            self.end_headers()
+            self._head(
+                status,
+                content_type=content_type,
+                length=len(data),
+                cookie=cookie,
+                etag=etag,
+                nonce=nonce,
+                headers=headers,
+            )
             if status != 304:
                 self.wfile.write(data)
         except OSError:
@@ -278,7 +365,7 @@ class Handler(BaseHTTPRequestHandler):
         data = _dump(value)
         self._versioned(hashlib.sha256(data).hexdigest(), lambda: data)
 
-    def _reject(self, status, message, *, code):
+    def _reject(self, status, message, *, code, headers=None):
         """Refuse a request before it runs, with the error body of the local API."""
         action = action_of(self.command, urlsplit(self.path).path)
         self._reply(
@@ -289,6 +376,7 @@ class Handler(BaseHTTPRequestHandler):
                 request_id=new_request_id(),
                 secrets=self.server.engine.secrets(),
             ),
+            headers=headers,
         )
 
     def _fail(self, error: Exception, action: Action, *, reading: bool = False):
@@ -337,6 +425,82 @@ class Handler(BaseHTTPRequestHandler):
             engine.log.unexpected(failure, error, label="Record the failure")
             return None
 
+    def _send_file(self, opened: StudyFile) -> None:
+        """Send a file of a study in pieces of CHUNK bytes: the whole file, or the one byte
+        range that the request asks for (206), in which PDF.js reads a large PDF.
+
+        A range beyond the end answers 416. The size is the one of the file when it was opened:
+        a file that grew since sends no more, one that shrank ends the answer short. A browser
+        that stops reading, as PDF.js does with its first request once it knows that ranges
+        work, ends the answer quietly; a file that cannot be read to its end after the headers
+        ends it short and is logged.
+        """
+        with opened.stream as stream:
+            header = self.headers.get("Range")
+            try:
+                span = byte_range(header, opened.size)
+            except RangeNotSatisfiable:
+                self._reject(
+                    416,
+                    f"{header} lies beyond the {opened.size} bytes of {opened.name}",
+                    code="range_not_satisfiable",
+                    headers={"Content-Range": f"bytes */{opened.size}"},
+                )
+                return
+            start, end = span or (0, opened.size)
+            headers = {"Accept-Ranges": "bytes"}
+            if span is not None:
+                headers["Content-Range"] = f"bytes {start}-{end - 1}/{opened.size}"
+            if opened.media_type == "application/pdf":
+                headers["Content-Disposition"] = content_disposition(opened.name)
+            # Before the headers: a file that cannot seek fails with its error body.
+            stream.seek(start)
+            remaining = end - start
+            try:
+                self._head(
+                    200 if span is None else 206,
+                    content_type=opened.media_type,
+                    length=remaining,
+                    headers=headers,
+                )
+                while remaining > 0:
+                    try:
+                        piece = stream.read(min(CHUNK, remaining))
+                    except OSError as error:
+                        self._interrupted(error)
+                        break
+                    if not piece:
+                        # The file got shorter since it was opened.
+                        break
+                    self.wfile.write(piece)
+                    remaining -= len(piece)
+            except OSError:
+                # The browser went away or stopped reading: as for any reply, neither a
+                # failure nor worth a log record.
+                self.close_connection = True
+                return
+            if remaining:
+                # The answer is shorter than its Content-Length: closing the connection ends it.
+                self.close_connection = True
+
+    def _interrupted(self, error: OSError) -> None:
+        """Log a file that failed after its headers were sent; the browser sees a short answer.
+
+        The answer can no longer carry an error body: only the log keeps the failure.
+        """
+        engine = self.server.engine
+        action = action_of(self.command, urlsplit(self.path).path)
+        body = describe(
+            error,
+            action=action.text(),
+            request_id=new_request_id(),
+            message=action.failure(),
+            code="file_error",
+            unexpected=True,
+            secrets=engine.secrets(),
+        )
+        engine.log.unexpected(body, error, label=action.label)
+
     def _study(self, path):
         engine = self.server.engine
         segments = _segments(path.removeprefix("/local/studies/"))
@@ -361,8 +525,7 @@ class Handler(BaseHTTPRequestHandler):
                     lambda: engine.study_source(identity, source),
                 )
             case ["files", file]:
-                data, media_type = engine.study_image(identity, file)
-                self._reply(200, data, content_type=media_type)
+                self._send_file(engine.study_file(identity, file))
             case _:
                 raise LookupError(f"Unknown resource {path}")
 
@@ -456,7 +619,11 @@ class Handler(BaseHTTPRequestHandler):
         except ValueError:
             # A NUL in the name.
             raise LookupError("Unknown resource") from None
-        content_type = mimetypes.guess_type(asset.name)[0] or "application/octet-stream"
+        content_type = (
+            SCRIPT_TYPES.get(asset.suffix.lower())
+            or mimetypes.guess_type(asset.name)[0]
+            or "application/octet-stream"
+        )
         if (
             not asset.is_relative_to(root.resolve())
             or not asset.is_file()
