@@ -101,7 +101,7 @@ The old addresses `#/studies/<substance>/<name>/sources` and `.../tables` open t
 
 The Metadata section edits `study.json` in forms.
 
-[![The Metadata section with the Reference and People cards, and the bar with Save and Discard after the rating of a curator was changed.](images/curation/metadata.png)](images/curation/metadata.png)
+[![The Metadata section with its cards Reference, People, Access and provenance, Issue and release, and Descriptions and comments, which ends with the line that the notes of a table are in Data, and below them the bar with Save and Discard after the rating of a curator was changed.](images/curation/metadata.png)](images/curation/metadata.png)
 
 - **Reference**: the PMID and the DOI, whether `reference.json` matches them, and the title, the authors and the journal of `reference.json`. **Correct title, authors, journal...** opens the Reference dialog.
 - **People**: the creator, the curators with a rating from 0 to 5 stars in half steps, and the collaborators, offered from the curator roster.
