@@ -1,7 +1,8 @@
 import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
-import { expect, test } from "./fixtures.ts";
+import { expect, runTool, test } from "./fixtures.ts";
+import { pixelStats } from "./pixels.ts";
 
 /** The source pane of the paper in the Data section, named after the PDF that it shows. */
 function paperPane(page: Page, file: string): Locator {
@@ -292,4 +293,62 @@ test("the paper beside the rows leaves the layout of the page to the Data sectio
   await rows.scrollIntoViewIfNeeded();
   await expect(rows).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollTop)).toBeGreaterThan(0);
+});
+
+test("the JavaScript decoders draw the CCITT and JPEG 2000 images of a PDF without WebAssembly", async ({ app, page }) => {
+  // In Draft2021, so that the PDFs of Demo2020 stay as the other tests expect them; removed again below.
+  const pdf = join(app.server.workspace, "caffeine/Draft2021/Draft2021_Decoders.pdf");
+  await runTool("decoders_pdf.py", pdf);
+  try {
+    const requests: string[] = [];
+    page.on("request", (request) => requests.push(new URL(request.url()).pathname));
+    // The worker of PDF.js has its own console; a violation there never reaches the listener of the page.
+    const policy: string[] = [];
+    page.on("console", (message) => {
+      if (message.worker() && /content security policy/i.test(message.text())) policy.push(message.text());
+    });
+    await app.open("#/studies/caffeine/Draft2021/data?source=paper");
+    const pane = page.getByRole("region", { name: /^Paper / });
+    await pane.getByRole("combobox", { name: "PDF of the paper" }).selectOption("Draft2021_Decoders.pdf");
+    await expect(drawnPage(pane, 1)).toBeVisible();
+    const black = (await pixelStats(pane.locator('.page[data-page-number="1"] canvas'))).dominant;
+    expect(Math.max(...black)).toBeLessThan(30);
+    await pane.getByRole("button", { name: "Next page" }).click();
+    await expect(pane.getByRole("spinbutton", { name: "Page" })).toHaveValue("2");
+    await expect(drawnPage(pane, 2)).toBeVisible();
+    const [red, green, blue] = (await pixelStats(pane.locator('.page[data-page-number="2"] canvas'))).dominant;
+    expect([red > 200, green < 30, blue < 30]).toEqual([true, true, true]);
+    expect(requests).toEqual(
+      expect.arrayContaining(["/pdfjs/wasm/jbig2_nowasm_fallback.js", "/pdfjs/wasm/openjpeg_nowasm_fallback.js"]),
+    );
+    expect(requests.filter((path) => path.endsWith(".wasm"))).toEqual([]);
+    expect(policy).toEqual([]);
+  } finally {
+    rmSync(pdf, { force: true });
+  }
+});
+
+test("an image of a study still refuses to show in a frame", async ({ app, context }) => {
+  await app.open("#/");
+  // Its own page, whose console error of the refused frame is no error of the tests of the app.
+  const probe = await context.newPage();
+  try {
+    // A page of the app, whose policy allows frames of its own origin; the files of a study forbid them.
+    await probe.goto(`${app.server.origin}/`);
+    const framed = await probe.evaluate(async (source) => {
+      const frame = document.createElement("iframe");
+      frame.src = source;
+      document.body.append(frame);
+      // An allowed frame shows the image in a document of this origin; a refused one shows the
+      // error page of the browser, from another origin.
+      for (let tries = 0; tries < 40; tries++) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        if (frame.contentDocument?.querySelector("img")) return true;
+      }
+      return false;
+    }, "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png");
+    expect(framed).toBe(false);
+  } finally {
+    await probe.close();
+  }
 });
