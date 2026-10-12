@@ -186,6 +186,11 @@ def _expected_raw(study: LoadedStudy, source: str) -> str | None:
     return digitization_file(study.name, source) if kind == "figure" else None
 
 
+def has_source(study: LoadedStudy, source: str) -> bool:
+    """Whether the study has the source."""
+    return source in _all_sources(study)
+
+
 def study_sources(study: LoadedStudy) -> list[SourceSummary]:
     """Every source of a study in natural order."""
     summaries = []

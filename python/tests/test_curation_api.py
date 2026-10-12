@@ -1676,3 +1676,19 @@ def test_a_failed_write_is_listed_in_the_activity_without_its_traceback(
         for key, value in body.items()
         if key not in {"traceback", "activity_id"}
     }
+
+
+def test_only_a_source_that_the_study_lacks_is_not_found(api, monkeypatch):
+    server, engine, folder = api
+    headers = authenticate(server)
+    missing = request(server, "GET", f"{DETAIL}/sources/Fig9", headers=headers)
+    assert (missing[0], error_body(missing[2])["code"]) == (404, "not_found")
+
+    def broken(study, source):
+        raise KeyError("series")
+
+    monkeypatch.setattr(studies, "source_view", broken)
+    status, _, data = request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)
+    body = json.loads(data)
+    assert (status, body["code"]) == (500, "unexpected")
+    assert "Traceback (most recent call last)" in body["traceback"]

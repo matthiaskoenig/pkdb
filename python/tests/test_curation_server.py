@@ -836,6 +836,7 @@ def test_failures_reach_the_log_as_they_deserve(local_server):
     assert (body["code"], type(error)) == ("unexpected", RuntimeError)
     fail(ValueError("Unknown theme"))
     assert engine.log.failed.call_args.args[0]["detail"] == "ValueError: Unknown theme"
+    assert engine.log.failed.call_args.kwargs == {"label": "Save the settings"}
     # Refusals that the app explains are answered, not logged.
     fail(WorkspaceError("Folder does not exist: /x"))
     assert (engine.log.unexpected.call_count, engine.log.failed.call_count) == (1, 1)
@@ -1093,3 +1094,30 @@ def test_the_extra_fields_of_an_error_body_are_redacted(local_server):
     assert status == 409
     assert b"secret-api-key" not in data
     assert error_body(data)["content"] == '{"key": "[redacted]"}'
+
+
+def test_a_client_that_disconnects_before_the_reply_leaves_no_failure(
+    local_server, monkeypatch
+):
+    server, engine = local_server
+    headers = authenticate(server)
+
+    def gone(self):
+        raise BrokenPipeError(32, "Broken pipe")
+
+    monkeypatch.setattr(transport.Handler, "end_headers", gone)
+    engine.tables_action.return_value = {"ok": True}
+    try:
+        request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", "action": "open"},
+            headers,
+        )
+    except OSError, ValueError:
+        pass  # http.client sees the closed connection; the server must stay silent
+    engine.tables_action.assert_called_once()
+    engine.record_failure.assert_not_called()
+    engine.log.failed.assert_not_called()
+    engine.log.unexpected.assert_not_called()

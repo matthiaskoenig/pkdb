@@ -141,8 +141,14 @@ class CurationEngine(
                 "Canceled before starting",
             }:
                 job["message"] = CANCELED_BEFORE_START
-            if job.get("action") == "write" and "item" not in job:
-                # Saved before writes recorded the review item that their message names.
+            if (
+                job.get("action") == "write"
+                and "item" not in job
+                and "error" not in job
+                and job.get("status") == "succeeded"
+            ):
+                # Saved before writes recorded the review item that their message names;
+                # a failure names none, whatever its message says.
                 if found := SAVED_ITEM.search(job.get("message", "")):
                     job["item"] = found.group(1)
         self.modes = saved.get("modes", {})

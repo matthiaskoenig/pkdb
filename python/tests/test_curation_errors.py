@@ -223,7 +223,7 @@ def test_an_expected_failure_goes_to_the_file_and_the_terminal(tmp_path, capsys)
     assert f"WARNING Error 0badc0de in {OPEN}: CalledProcessError" in text
     assert "subprocess.CalledProcessError" in text
     assert capsys.readouterr().err == (
-        f"Error 0badc0de in {OPEN}: ActionFailed (see {log.path})\n"
+        f"Error 0badc0de in {OPEN}: CalledProcessError (see {log.path})\n"
     )
 
 

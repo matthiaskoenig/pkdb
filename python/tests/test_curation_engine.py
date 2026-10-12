@@ -587,6 +587,15 @@ def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
                 action="write",
                 message="Added review item 01M2FC4AG038NKRKAYDXR834N3",
             ),
+            job_entry(
+                "failed_write",
+                "failed",
+                action="write",
+                message="Could not resolve the review item of caffeine/Example.",
+                error={
+                    "error": "Could not resolve the review item of caffeine/Example."
+                },
+            ),
             job_entry("queued", "canceled", message="Queued"),
             job_entry("canceled", "canceled", message="Canceled before starting"),
         ]
@@ -604,6 +613,8 @@ def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
             {"text": "Added "},
             {"item": "01M2FC4AG038NKRKAYDXR834N3"},
         ]
+        # A recorded failure names no review item, whatever its message says.
+        assert "item" not in jobs["failed_write"]
         # One wording for a job canceled before it started, whichever version saved it.
         assert jobs["queued"]["message"] == "Canceled before it started"
         assert jobs["canceled"]["message"] == "Canceled before it started"

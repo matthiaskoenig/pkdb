@@ -242,9 +242,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Security-Policy", _csp(nonce))
         if cookie:
             self.send_header("Set-Cookie", cookie)
-        self.end_headers()
-        if status != 304:
-            self.wfile.write(data)
+        try:
+            self.end_headers()
+            if status != 304:
+                self.wfile.write(data)
+        except ConnectionError:
+            # The client went away: the action is done or failed on its own, and a reply
+            # that nobody reads is neither a failure of it nor worth a log record.
+            self.close_connection = True
 
     def _versioned(self, version, build):
         """Reply with the JSON that `build` returns, or 304 when the client has `version`."""
@@ -295,7 +300,7 @@ class Handler(BaseHTTPRequestHandler):
         if outcome.unexpected:
             engine.log.unexpected(body, error, label=action.label)
         elif outcome.logged:
-            engine.log.failed(body, error)
+            engine.log.failed(body, error, label=action.label)
         if (outcome.unexpected or outcome.logged) and action.recorded and action.study:
             if (activity := self._record(action.study, body)) is not None:
                 body["activity_id"] = activity

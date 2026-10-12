@@ -208,8 +208,11 @@ class ErrorLog:
 
     def _terminal(self, body: dict, error: BaseException, label: str) -> None:
         """One redacted line to the terminal; a console that cannot take it is ignored."""
+        cause = (
+            error.cause if isinstance(error, ActionFailed) and error.cause else error
+        )
         line = (
-            f"Error {body['request_id']} in {label}: {type(error).__name__} "
+            f"Error {body['request_id']} in {label}: {type(cause).__name__} "
             f"(see {self.path})"
         )
         if self._closed:
