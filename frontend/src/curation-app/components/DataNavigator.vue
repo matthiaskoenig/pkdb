@@ -217,8 +217,8 @@ const sources = computed(() =>
   font-size: 11px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/* With the gap, 8 px from the badges after it, twice the space between them, also in the entry
-   whose name gives the navigator its width. */
+/* The name keeps 8 px from the badges (the 4 px gap plus this margin), twice the space between
+   badges, also in the entry that sets the navigator's width. */
 .nav-file .nav-name {
   flex: 1 1 auto;
   margin-inline-end: 4px;
