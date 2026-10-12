@@ -31,6 +31,9 @@ export function makeRouter(): Router {
       },
       // Without a section, the study page shows the section that the study needs first.
       { path: "/studies/:substance/:name/:section?", name: "Study", component: StudyPage },
+      // An address that the app does not know, such as a launch URL pasted into the open app,
+      // shows the overview; the guard of the launch token takes the token first.
+      { path: "/:unknown(.*)*", redirect: "/" },
     ],
   });
 }

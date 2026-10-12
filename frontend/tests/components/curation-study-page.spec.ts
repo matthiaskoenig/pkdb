@@ -244,6 +244,14 @@ describe("routes", () => {
     expect(routes.resolve("/").matched[0]?.components?.default).toBe(OverviewPage);
     expect(routes.resolve("/studies/caffeine/Example/review").matched[0]?.components?.default).toBe(StudyPage);
   });
+
+  it("shows the overview for an address that the app does not know, such as a pasted launch URL", async () => {
+    const routes = makeRouter();
+    for (const path of ["/token=pasted", "/studies", "/studies/caffeine/Example/data/more"]) {
+      await routes.push(path);
+      expect(routes.currentRoute.value.name).toBe("Overview");
+    }
+  });
 });
 
 describe("StudyPage", () => {
