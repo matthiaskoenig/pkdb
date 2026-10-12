@@ -106,3 +106,25 @@ test("the skip link is hidden, also from full-page screenshots, until it has foc
   await page.keyboard.press("Tab");
   await expect(skip).toHaveCSS("clip-path", /inset\(50%\)/);
 });
+
+test("text, also in Vuetify's typography classes, is set in the bundled Inter", async ({ page }) => {
+  await page.goto("/request-password-reset");
+  const heading = page.getByRole("heading", { level: 1 });
+  await expect(heading).toHaveClass(/(^| )text-h5( |$)/);
+  const font = await heading.evaluate(async (element) => {
+    await document.fonts.ready;
+    const inter = [...document.fonts].filter((face) => face.family.replaceAll('"', "") === "Inter Variable");
+    return {
+      body: getComputedStyle(document.body).fontFamily,
+      heading: getComputedStyle(element).fontFamily,
+      loaded: inter.some((face) => face.status === "loaded"),
+    };
+  });
+  expect(font.body).toMatch(/^"Inter Variable",/);
+  expect(font.heading).toMatch(/^"Inter Variable",/);
+  expect(font.loaded).toBe(true);
+  // The license of the font is served beside it.
+  const license = await page.request.get("/assets/Inter-LICENSE.txt");
+  expect(license.status()).toBe(200);
+  expect(await license.text()).toContain("SIL OPEN FONT LICENSE");
+});

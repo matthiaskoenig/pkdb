@@ -256,7 +256,7 @@ Every failed request answers the same JSON body: `error` says what could not be 
 
 ## Build from source
 
-A published `pkdb` package contains the built app, so curators need no Node. The app bundles PDF.js (Apache-2.0), the viewer of the paper; the build copies its worker, character maps, standard fonts and JavaScript image decoders with their licenses to `pdfjs/` beside `index.html`. A source checkout needs Node once, to build the app into `python/src/pkdb/curation/static/` (Node **24.21.0** and npm **12.1.0**):
+A published `pkdb` package contains the built app, so curators need no Node. The app bundles PDF.js (Apache-2.0), the viewer of the paper, and the Inter font (SIL Open Font License 1.1), so that text has the same width on every system; the build copies the worker, character maps, standard fonts and JavaScript image decoders of PDF.js with their licenses to `pdfjs/` beside `index.html`, and the licenses of the fonts to `assets/`. A source checkout needs Node once, to build the app into `python/src/pkdb/curation/static/` (Node **24.21.0** and npm **12.1.0**):
 
 ```bash
 cd frontend

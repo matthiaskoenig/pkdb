@@ -216,3 +216,25 @@ for (const theme of ["light", "dark"] as const) {
     });
   }
 }
+
+test("text is set in the bundled Inter, so that it has the same width on every system", async ({ app, page }) => {
+  await app.open("#/");
+  await expect(page.getByRole("table", { name: "Studies of the workspace" })).toBeVisible();
+  const font = await page.evaluate(async () => {
+    await document.fonts.ready;
+    const inter = [...document.fonts].filter((face) => face.family.replaceAll('"', "") === "Inter Variable");
+    return {
+      body: getComputedStyle(document.body).fontFamily,
+      loaded: inter.some((face) => face.status === "loaded"),
+    };
+  });
+  expect(font.body).toMatch(/^"Inter Variable",/);
+  expect(font.loaded).toBe(true);
+  // The license of the font is served beside it.
+  const license = await page.evaluate(async () => {
+    const response = await fetch("assets/Inter-LICENSE.txt");
+    return { status: response.status, text: await response.text() };
+  });
+  expect(license.status).toBe(200);
+  expect(license.text).toContain("SIL OPEN FONT LICENSE");
+});
