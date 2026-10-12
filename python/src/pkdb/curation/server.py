@@ -436,20 +436,33 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as error:
                 self._fail(error, action, reading=True)
             return
+        try:
+            self._page(path)
+        except Exception as error:
+            self._fail(error, action_of("GET", path), reading=True)
+
+    def _page(self, path):
+        """Reply with a file of the app or the avatar of a curator.
+
+        LookupError for a name outside their folders, or one that no file can have.
+        """
         if path.startswith("/avatars/"):
             root, name = AVATARS, unquote(path.removeprefix("/avatars/"))
         else:
             root = ASSETS
             name = unquote(path).removeprefix("/static/").lstrip("/") or "index.html"
-        asset = (root / name).resolve()
+        try:
+            asset = (root / name).resolve()
+        except ValueError:
+            # A NUL in the name.
+            raise LookupError("Unknown resource") from None
         content_type = mimetypes.guess_type(asset.name)[0] or "application/octet-stream"
         if (
             not asset.is_relative_to(root.resolve())
             or not asset.is_file()
             or (root is AVATARS and not content_type.startswith("image/"))
         ):
-            self._reject(404, "Unknown resource", code="not_found")
-            return
+            raise LookupError("Unknown resource")
         data, nonce = asset.read_bytes(), None
         if root is ASSETS and asset == (ASSETS / "index.html").resolve():
             nonce = secrets.token_urlsafe(16)

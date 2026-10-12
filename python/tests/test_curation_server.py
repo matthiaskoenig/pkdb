@@ -458,6 +458,41 @@ def test_bundled_curator_avatars_are_served_as_images():
         thread.join(timeout=3)
 
 
+@pytest.mark.parametrize(
+    "path", ["/static/%00", "/static/a%00b.js", "/avatars/%00.webp"]
+)
+def test_a_page_name_that_no_file_can_have_is_not_found(local_server, capsys, path):
+    server, engine = local_server
+    status, _, data = request(server, "GET", path)
+    assert status == 404
+    body = error_body(data)
+    assert (body["error"], body["code"]) == ("Unknown resource", "not_found")
+    assert body["action"] == f"Read a page (GET {path})"
+    engine.log.failed.assert_not_called()
+    engine.log.unexpected.assert_not_called()
+    # Not the traceback of socketserver for a request that failed.
+    assert capsys.readouterr().err == ""
+
+
+def test_a_page_that_cannot_be_read_is_a_logged_failure(local_server, monkeypatch):
+    server, engine = local_server
+
+    read = transport.Path.read_bytes
+
+    def unreadable(self):
+        if self.name == "app.js":
+            raise PermissionError(13, "Permission denied", str(self))
+        return read(self)
+
+    monkeypatch.setattr(transport.Path, "read_bytes", unreadable)
+    status, _, data = request(server, "GET", "/static/app.js")
+    assert status == 400
+    body = error_body(data)
+    assert (body["error"], body["code"]) == ("Could not read the page.", "file_error")
+    assert body["detail"].startswith("PermissionError: [Errno 13] Permission denied")
+    engine.log.failed.assert_called_once()
+
+
 def _style_src(headers):
     policy = headers["Content-Security-Policy"]
     return next(
