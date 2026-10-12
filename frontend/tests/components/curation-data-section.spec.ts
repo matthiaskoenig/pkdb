@@ -1735,6 +1735,21 @@ describe("notes of the tables", () => {
     expect(document.activeElement).toBe(toggle().element);
   });
 
+  it("focuses the notes of a link once, also when the panes stack afterwards", async () => {
+    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv&notes=subjects`);
+    await routed({ file: "subjects.tsv" });
+    expect(document.activeElement).toBe(toggle().element);
+    const sync = button("Sync").element;
+    sync.focus();
+
+    // The rows pane and its notes mount again below the source pane.
+    setViewport(900);
+    await flushPromises();
+    expect(page().find(".data-stack .table-notes").exists()).toBe(true);
+    expect(toggle().attributes("aria-expanded")).toBe("true");
+    expect(document.activeElement).toBe(sync);
+  });
+
   it("ignores a link to the notes of a kind that the study does not describe", async () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv&notes=unknown`);
     await routed({ file: "subjects.tsv" });

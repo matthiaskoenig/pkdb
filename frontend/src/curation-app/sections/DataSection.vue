@@ -105,9 +105,9 @@ const notesKind = computed<TableKind | null>(() => {
 });
 
 /**
- * The notes that a link of the Problems section opened, whose toggle takes the focus. The link
- * names them as `notes=<kind>`; the section opens them, which the draft keeps, and leaves only the
- * selection in the address.
+ * The notes that a link of the Problems section opened, whose toggle takes the focus once: not
+ * again when the panes stack or stand side by side. The link names them as `notes=<kind>`; the
+ * section opens them, which the draft keeps, and leaves only the selection in the address.
  */
 const linkedNotes = ref<TableKind | null>(null);
 watch(
@@ -445,7 +445,12 @@ const conflictPanel = computed(() => {
               @update:filter="setFilter"
             >
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
-              <TableNotes v-if="notesKind" :kind="notesKind" :focused="linkedNotes === notesKind" />
+              <TableNotes
+                v-if="notesKind"
+                :kind="notesKind"
+                :focused="linkedNotes === notesKind"
+                @took-focus="linkedNotes = null"
+              />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet. Add table adds a sheet to the workbook.
@@ -463,7 +468,12 @@ const conflictPanel = computed(() => {
             @update:filter="setFilter"
           >
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
-            <TableNotes v-if="notesKind" :kind="notesKind" :focused="linkedNotes === notesKind" />
+            <TableNotes
+              v-if="notesKind"
+              :kind="notesKind"
+              :focused="linkedNotes === notesKind"
+              @took-focus="linkedNotes = null"
+            />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
             The study has no tables yet. Add table adds a sheet to the workbook.

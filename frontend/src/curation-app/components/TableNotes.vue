@@ -26,13 +26,14 @@ import NotesFields from "./NotesFields.vue";
 const props = withDefaults(
   defineProps<{
     kind: TableKind;
-    /** Whether a link opened the notes: the toggle takes the focus. */
+    /** Whether a link opened the notes: the toggle takes the focus, and says so with `took-focus`. */
     focused?: boolean;
     /** Whether the panel stands in a card, rather than above the rows of a table. */
     card?: boolean;
   }>(),
   { focused: false, card: false },
 );
+const emit = defineEmits<{ "took-focus": [] }>();
 
 const study = useStudyStore();
 const overview = useOverviewStore();
@@ -97,6 +98,7 @@ watch(
     if (!value) return;
     await nextTick();
     toggle.value?.focus();
+    emit("took-focus");
   },
   { immediate: true },
 );

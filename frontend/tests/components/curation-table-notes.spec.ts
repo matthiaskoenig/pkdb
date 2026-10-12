@@ -194,5 +194,7 @@ describe("notes of a table kind", () => {
     const wrapper = await mountNotes("subjects", detail(), {}, { focused: true });
     await flushPromises();
     expect(document.activeElement).toBe(wrapper.get(".table-notes-toggle").element);
+    // The section passes the focus once.
+    expect(wrapper.emitted("took-focus")).toHaveLength(1);
   });
 });
