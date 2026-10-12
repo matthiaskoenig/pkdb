@@ -829,6 +829,26 @@ describe("linked selection", () => {
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
   });
 
+  it("opens the first table of a chosen source, also from a shared table that has rows of it", async () => {
+    await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
+    await choose("source", "Tab2");
+    await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    expect(rowsPane().attributes("aria-label")).toBe("Table outputs_Tab2.tsv");
+  });
+
+  it("keeps the shared table for a chosen source without tables of its own", async () => {
+    // A text has no tables of its own; its rows live in the shared tables.
+    const text = sourceSummary({ source: "Text", kind: "text", tables: ["subjects.tsv"] });
+    await mountSection(
+      detail({ sources: [...detail().sources, text] }),
+      { [`GET ${EXAMPLE}/sources/Text`]: { ...missing, source: "Text" } },
+      `${SECTION}?source=Fig1&file=subjects.tsv`,
+    );
+    await choose("source", "Text");
+    await routed({ source: "Text", file: "subjects.tsv" });
+    expect(rowsPane().attributes("aria-label")).toBe("Table subjects.tsv");
+  });
+
   it("keeps the source for a clicked shared table", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig1`);
     await choose("file", "subjects.tsv");
@@ -902,7 +922,7 @@ describe("linked selection", () => {
   it("shows every row of a shared table, whichever source is selected", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig2&file=subjects.tsv`);
     expect(lines()).toEqual(["2", "3", "4", "5"]);
-    expect(page().find(".v-switch").text()).not.toContain("only");
+    expect(page().text()).not.toContain("Rows of Fig2 only");
   });
 
   it("keeps the Source filter of each shared table while other tables are chosen", async () => {
@@ -966,11 +986,10 @@ describe("narrow windows", () => {
     // The panes stay side by side.
     expect(page().find('[role="separator"]').exists()).toBe(true);
 
-    // Tab2 has rows in the shared table, which stays; a table of Tab2 then keeps the source.
     await sourceSelect.setValue("Tab2");
-    await routed({ source: "Tab2", file: "subjects.tsv" });
-    await tableSelect.setValue("outputs_Tab2.tsv");
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
+    await tableSelect.setValue("timecourses_Fig1.tsv");
+    await routed({ source: "Fig1", file: "timecourses_Fig1.tsv" });
   });
 
   it("stacks the source above the rows without a separator below 960 px", async () => {

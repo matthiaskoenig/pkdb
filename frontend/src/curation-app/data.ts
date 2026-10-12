@@ -68,19 +68,18 @@ export function ownerOf(study: Study, file: string): string | null {
 }
 
 /**
- * The table file that a source opens: the current one when the source owns it or has rows in
- * it as a shared table; else its first own table in workbook order, its raw table, or its first
- * table; a source without tables keeps a valid current file, else the first table of the study.
+ * The table file that a source opens: the current one when the source owns it, else its first
+ * own table in the order of the study page, its raw table last. A shared table that shows every
+ * row stays only for a source without tables of its own, such as a text, which keeps a valid
+ * current file; without one it opens the first table that names the source in its rows, else
+ * the first table of the study.
  */
 export function fileForSource(study: Study, source: SourceSummary, current: string | null): string | null {
   const files = tableFiles(study);
   const valid = current !== null && files.includes(current) ? current : null;
-  if (valid !== null && (ownerOf(study, valid) === source.source || (isShared(study, valid) && source.tables.includes(valid))))
-    return valid;
-  const own = files.find((file) => source.tables.includes(file) && !isShared(study, file));
-  if (own) return own;
-  if (source.raw !== null && files.includes(source.raw)) return source.raw;
-  return files.find((file) => source.tables.includes(file)) ?? valid ?? files[0] ?? null;
+  if (valid !== null && ownerOf(study, valid) === source.source) return valid;
+  const own = files.find((file) => ownerOf(study, file) === source.source);
+  return own ?? valid ?? files.find((file) => source.tables.includes(file)) ?? files[0] ?? null;
 }
 
 /** The problems of a navigator entry by severity. */

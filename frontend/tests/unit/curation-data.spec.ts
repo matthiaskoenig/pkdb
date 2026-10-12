@@ -101,21 +101,29 @@ describe("owners of table files", () => {
 });
 
 describe("the file of a source", () => {
-  it("keeps the current file when the source owns it or has rows in the shared table", () => {
+  it("keeps the current file when the source owns it", () => {
     expect(fileForSource(detail(), tab2, "Example_Tab2.tsv")).toBe("Example_Tab2.tsv");
-    expect(fileForSource(detail(), fig1, "subjects.tsv")).toBe("subjects.tsv");
   });
 
-  it("opens the first own table in workbook order, else the raw table, else the first table", () => {
+  it("leaves a shared table for the first table of the source, although the source has rows in it", () => {
+    expect(fileForSource(detail(), fig1, "subjects.tsv")).toBe("timecourses_Fig1.tsv");
+    expect(fileForSource(detail(), tab2, "subjects.tsv")).toBe("outputs_Tab2.tsv");
+  });
+
+  it("opens the first table of the source in the order of the study page, its raw table last", () => {
     expect(fileForSource(detail(), tab2, "timecourses_Fig1.tsv")).toBe("outputs_Tab2.tsv");
     expect(fileForSource(detail(), fig1, null)).toBe("timecourses_Fig1.tsv");
-    const rawOnly = sourceSummary({ source: "Tab2", raw: "Example_Tab2.tsv", raw_kind: "table" });
-    expect(fileForSource(detail(), rawOnly, null)).toBe("Example_Tab2.tsv");
+    const rawOnly = detail({ tables: detail().tables.filter((table) => table.file !== "outputs_Tab2.tsv") });
+    expect(fileForSource(rawOnly, tab2, "subjects.tsv")).toBe("Example_Tab2.tsv");
   });
 
-  it("keeps a valid current file, else the first table, for a source without tables", () => {
-    expect(fileForSource(detail(), text, "outputs_Tab2.tsv")).toBe("outputs_Tab2.tsv");
-    expect(fileForSource(detail(), text, "gone.tsv")).toBe("subjects.tsv");
+  it("keeps a valid current file for a source without tables of its own, else opens the first table naming it", () => {
+    const named = sourceSummary({ source: "Text", kind: "text", tables: ["interventions.tsv"] });
+    expect(fileForSource(detail(), named, "subjects.tsv")).toBe("subjects.tsv");
+    expect(fileForSource(detail(), named, "outputs_Tab2.tsv")).toBe("outputs_Tab2.tsv");
+    expect(fileForSource(detail(), named, "gone.tsv")).toBe("interventions.tsv");
+    expect(fileForSource(detail(), named, null)).toBe("interventions.tsv");
+    expect(fileForSource(detail(), text, null)).toBe("subjects.tsv");
     expect(fileForSource(detail({ tables: [] }), text, null)).toBeNull();
   });
 });
