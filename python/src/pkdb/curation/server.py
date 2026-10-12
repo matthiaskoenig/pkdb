@@ -259,9 +259,10 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             if status != 304:
                 self.wfile.write(data)
-        except ConnectionError:
-            # The client went away: the action is done or failed on its own, and a reply
-            # that nobody reads is neither a failure of it nor worth a log record.
+        except OSError:
+            # The client went away or stopped reading, such as a socket that timed out: the
+            # action is done or failed on its own, and a reply that nobody reads is neither a
+            # failure of it nor worth a log record.
             self.close_connection = True
 
     def _versioned(self, version, build):

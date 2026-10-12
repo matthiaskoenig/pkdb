@@ -1108,31 +1108,40 @@ def test_the_extra_fields_of_an_error_body_are_redacted(local_server):
     assert error_body(data)["content"] == '{"key": "[redacted]"}'
 
 
+@pytest.mark.parametrize(
+    "gone",
+    [BrokenPipeError(32, "Broken pipe"), TimeoutError("timed out")],
+    ids=["disconnected", "timed out"],
+)
 def test_a_client_that_disconnects_before_the_reply_leaves_no_failure(
-    local_server, monkeypatch
+    local_server, monkeypatch, capsys, gone
 ):
     server, engine = local_server
     headers = authenticate(server)
 
-    def gone(self):
-        raise BrokenPipeError(32, "Broken pipe")
+    def send(self):
+        raise gone
 
-    monkeypatch.setattr(transport.Handler, "end_headers", gone)
+    monkeypatch.setattr(transport.Handler, "end_headers", send)
     engine.tables_action.return_value = {"ok": True}
-    try:
-        request(
-            server,
+    for method, path, body in [
+        (
             "POST",
             "/local/studies/tables",
             {"study": "caffeine/Example", "action": "open"},
-            headers,
-        )
-    except OSError, ValueError:
-        pass  # http.client sees the closed connection; the server must stay silent
+        ),
+        ("GET", "/local/state", None),
+    ]:
+        try:
+            request(server, method, path, body, headers)
+        except OSError, ValueError:
+            pass  # http.client sees the closed connection; the server must stay silent
     engine.tables_action.assert_called_once()
     engine.record_failure.assert_not_called()
     engine.log.failed.assert_not_called()
     engine.log.unexpected.assert_not_called()
+    # Not even the traceback of socketserver for a request that failed.
+    assert capsys.readouterr().err == ""
 
 
 def test_a_result_that_is_not_json_is_an_unexpected_500_before_any_200(local_server):
