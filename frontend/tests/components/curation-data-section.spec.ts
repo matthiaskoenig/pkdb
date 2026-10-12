@@ -1903,6 +1903,26 @@ describe("the paper in the Data section", () => {
     expect(paperViewer.mounts).toBe(3);
   });
 
+  it("shows the source of the table while the PDF is gone from the folder, and the paper again once it is back", async () => {
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&file=subjects.tsv`);
+    expect(paperPane().isVisible()).toBe(true);
+    served = detail({ papers: [] });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(paperPane().exists()).toBe(false);
+    expect(page().get(".source-pane").attributes("aria-label")).toBe("Source Fig1");
+    expect(page().get(".nav-paper").attributes("disabled")).toBeDefined();
+    // The address still asks for the paper, which shows again with its PDF.
+    expect(router.currentRoute.value.query).toEqual({ source: "paper", file: "subjects.tsv" });
+    served = detail({ papers: papers() });
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(paperPane().isVisible()).toBe(true);
+    expect(paperPane().attributes("aria-label")).toBe("Paper Example.pdf");
+    expect(page().find(".source-pane").exists()).toBe(false);
+    expect(page().get(".nav-paper").attributes("aria-current")).toBe("true");
+  });
+
   it("falls back to the sources for source=paper without a PDF, whose entry is disabled", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=paper&file=subjects.tsv`);
     expect(paperPane().exists()).toBe(false);
