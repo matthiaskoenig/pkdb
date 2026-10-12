@@ -59,6 +59,14 @@ const SCREENS: Screen[] = [
     },
   },
   {
+    name: "paper in a tab of its own",
+    hash: `${STUDY}/paper/Demo2020.pdf`,
+    ready: async (page) => {
+      await expect(page.locator('.page[data-page-number="1"][data-loaded="true"]')).toBeVisible();
+      await expect(page.getByRole("searchbox", { name: "Find in the paper" })).toBeEnabled();
+    },
+  },
+  {
     name: "data of a shared table",
     hash: `${STUDY}/data?file=subjects.tsv`,
     ready: async (page) => {

@@ -1,0 +1,12 @@
+/*
+ * pdf_viewer.css of PDF.js gives the root of the page `color-scheme: light dark`, outside any
+ * cascade layer, so it wins over the color scheme of the theme, which Vuetify sets in a layer:
+ * the scroll bars and form controls of the page would follow the system instead of the theme of
+ * the app. The root keeps the scheme of the theme.
+ */
+:root:has(.v-application.v-theme--light) {
+  color-scheme: light;
+}
+:root:has(.v-application.v-theme--dark) {
+  color-scheme: dark;
+}

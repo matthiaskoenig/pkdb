@@ -27,6 +27,7 @@ import {
   PDFViewer,
 } from "pdfjs-dist/web/pdf_viewer.mjs";
 import "pdfjs-dist/web/pdf_viewer.css";
+import "./paper.css";
 import { isAbort } from "./api/client";
 import { FITS, type Fit, type FindResult, type OpenPaper, type PaperSession } from "./paper";
 

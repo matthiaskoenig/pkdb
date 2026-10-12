@@ -16,6 +16,9 @@ import { tableFiles } from "./study";
 type Study = Pick<StudyDetail, "sources" | "tables">;
 type Counted = Pick<StudyDetail, "sources" | "tables" | "problems" | "review">;
 
+/** The `source` of the route that shows the paper; no source of a study has this name (`SOURCE_PATTERN` of the study format). */
+export const PAPER = "paper";
+
 /** The selection of the Data section: the query of its route. */
 export interface Selection {
   source: string | null;
