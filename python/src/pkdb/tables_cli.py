@@ -9,7 +9,6 @@ and its sync state file.
 
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 
@@ -348,11 +347,20 @@ def _open(args) -> int:
             if result.ok:
                 say(f"{result.workbook} does not exist", file=sys.stderr)
             return 1
+        from pkdb.curation.errors import ActionFailed, detail_of
         from pkdb.curation.launch import open_path
 
         try:
-            open_path(result.workbook)
-        except (OSError, subprocess.SubprocessError) as error:
+            open_path(result.workbook, subject=str(result.workbook))
+        except ActionFailed as error:
+            # What could not be opened, then the command, its exit status and its stderr.
+            say(error.message, file=sys.stderr)
+            if error.cause is not None:
+                for line in detail_of(error.cause).splitlines():
+                    say(line, file=sys.stderr)
+            return 1
+        except OSError as error:
+            # The workbook went away before the command started.
             say(f"Cannot open {result.workbook}: {error}", file=sys.stderr)
             return 1
         say(f"Opened {result.workbook}")
