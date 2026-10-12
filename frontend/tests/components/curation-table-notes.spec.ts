@@ -8,7 +8,7 @@ import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { fullStudyMetadata, json, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
-import { click, serveApi, setViewport, textArea } from "./curation-dom";
+import { click, scrollLayout, serveApi, setViewport, textArea } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -162,6 +162,21 @@ describe("notes of a table kind", () => {
     const outputs = mountPanel("outputs");
     expect(outputs.get(".table-notes-toggle").attributes("aria-expanded")).toBe("false");
     expect(outputs.find(".table-notes-issues").exists()).toBe(false);
+  });
+
+  it("fades out at the bottom of its body while more of its notes follow below, and not at their end", async () => {
+    const wrapper = await mountNotes("outputs");
+    await wrapper.get(".table-notes-toggle").trigger("click");
+    const body = wrapper.get(".table-notes-body").element;
+    await scrollLayout(body, 200, 500);
+    expect(wrapper.get(".table-notes-frame > .pane-more").attributes("aria-hidden")).toBe("true");
+    await scrollLayout(body, 200, 500, 300);
+    expect(wrapper.find(".pane-more").exists()).toBe(false);
+
+    // A closed panel has no body to fade.
+    await scrollLayout(body, 200, 500);
+    await wrapper.get(".table-notes-toggle").trigger("click");
+    expect(wrapper.find(".pane-more").exists()).toBe(false);
   });
 
   it("focuses its toggle when a link opened it", async () => {

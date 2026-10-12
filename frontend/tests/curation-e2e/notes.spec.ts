@@ -104,7 +104,8 @@ test("open notes leave rows of the table in view in a short window, with the sav
   const bar = page.locator(".study-savebar");
   await expect(bar).toContainText("Unsaved changes in study.json");
 
-  const notes = (await pane.getByRole("region", { name: /^Notes of the subjects/ }).boundingBox())!;
+  const panel = pane.getByRole("region", { name: /^Notes of the subjects/ });
+  const notes = (await panel.boundingBox())!;
   const rows = pane.getByRole("region", { name: "Rows of subjects.tsv" });
   const grid = (await rows.boundingBox())!;
   const header = (await rows.getByRole("row").first().boundingBox())!;
@@ -115,4 +116,10 @@ test("open notes leave rows of the table in view in a short window, with the sav
   expect(grid.height).toBeGreaterThanOrEqual(5 * header.height);
   // The bar ends the section below the panes rather than cover them.
   expect((await bar.boundingBox())!.y).toBeGreaterThanOrEqual(section.y + section.height);
+
+  // The cut notes fade out at the bottom of their body until it scrolls to its end.
+  const fade = panel.locator(".pane-more");
+  await expect(fade).toBeVisible();
+  await panel.locator(".table-notes-body").evaluate((body) => body.scrollTo(0, body.scrollHeight));
+  await expect(fade).toBeHidden();
 });

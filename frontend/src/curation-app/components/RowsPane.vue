@@ -246,12 +246,6 @@ const missingLine = computed(() => {
 .pane-head-kind {
   flex: 0 0 auto;
 }
-/* What the section puts between the head and the rows, such as the notes and the conflicts, shrinks
-   and scrolls on its own in a short pane rather than push the rows out of it: a flex item that
-   scrolls may shrink below its content. */
-.rows-pane > :slotted(*) {
-  overflow-y: auto;
-}
 /* The notes above the grid: sentences in the size of the head, 8 px from the edges. */
 .rows-pane > .rows-pane-notes {
   display: flex;
@@ -300,7 +294,8 @@ const missingLine = computed(() => {
   margin: 8px;
 }
 /* The rows take what the head, the notes and the conflicts leave of the pane, and at least room for
-   their header and four rows of 22 px with a scroll bar: the panels above them shrink first. */
+   their header and four rows of 22 px with a scroll bar: the panels above them shrink first and
+   scroll on their own. */
 .rows-pane-grid {
   --rows-max-height: 100%;
   flex: 1;

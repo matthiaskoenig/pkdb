@@ -725,30 +725,43 @@ test.describe("tables", () => {
     expect(cellOf(workspace, 7, "mean")).toBe("1.08");
   });
 
-  test("in a short window, the conflicts and the open notes above the rows scroll on their own and leave rows in view", async ({
+  test("the conflicts keep their room above the open notes, and in a short window scroll with a fade and leave rows in view", async ({
     app,
     page,
   }) => {
-    await page.setViewportSize({ width: 1366, height: 640 });
     const workspace = app.server.workspace;
-    // Both sides change line 8 before a sync runs.
+    await app.open("#/studies/caffeine/Demo2020/data?file=subjects.tsv");
+    // Both sides change line 8 of the timecourses before a sync runs.
     await setAutomaticActions(page, true);
     await editWorkbook(workspace, 8, "mean", "0.91");
     editTable(workspace, 8, "mean", "0.92");
     await setAutomaticActions(page, false);
     const panel = page.getByRole("region", { name: "Conflicting rows", exact: true });
     await expect(panel).toBeVisible();
-    const pane = page.getByRole("region", { name: `Table ${TABLE}`, exact: true });
-    const toggle = pane.getByRole("button", { name: /^Notes of the timecourses/ });
-    const notes = pane.getByRole("region", { name: /^Notes of the timecourses/ });
+    const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+    const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+    const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
     await toggle.click();
-    await expect(notes.getByRole("button", { name: "Add description" })).toBeAttached();
+    // An unsaved edit adds the save bar below the panes.
+    await notes.getByRole("textbox", { name: "Description 1" }).fill("Edited.");
+    await expect(page.locator(".study-savebar")).toContainText("Unsaved changes in study.json");
+    const box = async (part: Locator) => (await part.boundingBox())!;
+    const bottom = (rect: { y: number; height: number }) => rect.y + rect.height;
 
-    const rows = pane.getByRole("region", { name: `Rows of ${TABLE}`, exact: true });
+    // In a window of 1440 x 900 px the notes give up their room first: the conflicts show whole.
+    const lastVersion = panel.getByRole("row").last();
+    await expect(lastVersion).toContainText("Tables line 8");
+    expect(bottom(await box(lastVersion))).toBeLessThanOrEqual(bottom(await box(panel)));
+    await expect(panel.locator(".pane-more")).toHaveCount(0);
+    await expect(notes.locator(".pane-more")).toBeVisible();
+
+    // In a short window the notes keep their header, and the conflicts scroll and fade out at their bottom.
+    await page.setViewportSize({ width: 1366, height: 640 });
+    await expect(panel.locator(".pane-more")).toBeVisible();
+    const rows = pane.getByRole("region", { name: "Rows of subjects.tsv", exact: true });
     const [conflicts, open, head, grid, header, section] = await Promise.all(
-      [panel, notes, toggle, rows, rows.getByRole("row").first(), pane].map(async (part) => (await part.boundingBox())!),
+      [panel, notes, toggle, rows, rows.getByRole("row").first(), pane].map(box),
     );
-    const bottom = (box: { y: number; height: number }) => box.y + box.height;
     expect(bottom(conflicts!)).toBeLessThanOrEqual(open!.y);
     // The header of the notes stays whole above their body.
     expect(bottom(head!)).toBeLessThanOrEqual(bottom(open!));

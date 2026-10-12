@@ -39,9 +39,11 @@ import {
   button,
   buttons,
   click,
+  field,
   labeled,
   page,
   radio,
+  scrollLayout,
   serveApi,
   setViewport,
   textArea,
@@ -1197,6 +1199,15 @@ describe("conflicts", () => {
     expect(requests.some((request) => request.path.endsWith("/scatters_Fig2.tsv"))).toBe(false);
   });
 
+  it("fades out the bottom of the conflicts while more of them follow below, and not at their end", async () => {
+    await mountSection(reviewed({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), CONFLICT_TABLES);
+    const body = rowsPane().get(".conflict-panel > .conflict-body").element;
+    await scrollLayout(body, 150, 400);
+    expect(rowsPane().get(".conflict-panel > .pane-more").attributes("aria-hidden")).toBe("true");
+    await scrollLayout(body, 150, 400, 250);
+    expect(rowsPane().find(".conflict-panel .pane-more").exists()).toBe(false);
+  });
+
   it("offers to keep a side when the conflicting rows cannot be read", async () => {
     await mountSection(reviewed({ ...sync("conflict"), conflicts: [] }), {
       [`POST ${TABLES}`]: (() => {
@@ -1621,6 +1632,17 @@ describe("notes of the tables", () => {
     await flushPromises();
     expect(toggle().attributes("aria-expanded")).toBe("true");
     expect(textArea("Description 1", rowsPane().element).element.value).toBe("Edited.");
+  });
+
+  it("shows the bar of an edit in Metadata, which marks the Metadata tab", async () => {
+    await mountSection(withNotes(), {}, "/studies/caffeine/Example/metadata");
+    await field("Source key").setValue("pkdb.edited");
+    await router.push(`${SECTION}?file=subjects.tsv`);
+    await flushPromises();
+
+    expect(page().get(".data-section .study-savebar").text()).toContain("Unsaved changes in study.json");
+    expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
+    expect(tabLabel("Data")).toBe("Data");
   });
 
   it("sticks the bar to the window when the panes stack", async () => {

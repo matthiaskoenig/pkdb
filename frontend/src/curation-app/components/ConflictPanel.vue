@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, shallowRef, useId, watch } from "vue";
+import { computed, ref, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { ConflictData } from "../api/types";
+import { useMoreBelow } from "../composables/useMoreBelow";
 import { useStudyStore } from "../stores/study";
 import { conflictView, type Side } from "../tables";
+import MoreBelow from "./MoreBelow.vue";
 import TableGrid from "./TableGrid.vue";
 
 /**
@@ -11,7 +13,8 @@ import TableGrid from "./TableGrid.vue";
  * conflicting file in one grid: a row per version (the last sync, the rows of the sheet, the
  * lines of the file) under the table header, the changed columns first and marked. Keep workbook
  * and Keep tables resolve every conflict of the study, also when its rows cannot be read; Open
- * workbook opens it to combine the rows.
+ * workbook opens it to combine the rows. Where it has less room than it needs, such as above the
+ * rows in a short window, it scrolls on its own and fades out at its bottom.
  */
 const props = defineProps<{
   conflicts: ConflictData[];
@@ -65,94 +68,117 @@ const shown = computed(() =>
   })),
 );
 const many = computed(() => files.value.length > 1);
+
+const body = ref<HTMLElement | null>(null);
+const content = ref<HTMLElement | null>(null);
+/** Whether more of the panel follows below its view, which a fade at its bottom shows. */
+const { more, scrollbar } = useMoreBelow(body, content);
 </script>
 
 <template>
   <section class="conflict-panel" :aria-labelledby="`${id}-heading`">
-    <div class="conflict-intro">
-      <h3 :id="`${id}-heading`" class="conflict-heading">Conflicting rows</h3>
-      <p class="conflict-text">
-        The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit
-        the rows in the workbook, save it, and then keep the workbook.
-        <template v-if="unresolved.length">The columns that differ come first and are marked.</template>
-        <!-- The space between the sentences, which the template compiler drops between elements. -->
-        <template v-if="many">{{ " " }}Keep workbook and Keep tables resolve all conflicts.</template>
-      </p>
-      <p v-if="!unresolved.length" class="conflict-text">
-        The conflicting rows could not be read. Open the workbook to see them, or keep one side.
-      </p>
-    </div>
-    <div class="conflict-actions">
-      <VBtn
-        variant="tonal"
-        color="primary"
-        :disabled="disabled"
-        :loading="busy === 'workbook'"
-        @click="emit('keep', 'workbook')"
-      >
-        Keep workbook
-      </VBtn>
-      <VBtn
-        variant="tonal"
-        color="primary"
-        :disabled="disabled"
-        :loading="busy === 'tables'"
-        @click="emit('keep', 'tables')"
-      >
-        Keep tables
-      </VBtn>
-      <VBtn
-        variant="text"
-        color="primary"
-        prepend-icon="fas fa-arrow-up-right-from-square"
-        :disabled="disabled"
-        :loading="busy === 'open'"
-        @click="emit('open')"
-      >
-        Open workbook
-      </VBtn>
-    </div>
+    <!-- The frame keeps the border and the fade, its body scrolls. -->
+    <div ref="body" class="conflict-body">
+      <div ref="content" class="conflict-content">
+        <div class="conflict-intro">
+          <h3 :id="`${id}-heading`" class="conflict-heading">Conflicting rows</h3>
+          <p class="conflict-text">
+            The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit
+            the rows in the workbook, save it, and then keep the workbook.
+            <template v-if="unresolved.length">The columns that differ come first and are marked.</template>
+            <!-- The space between the sentences, which the template compiler drops between elements. -->
+            <template v-if="many">{{ " " }}Keep workbook and Keep tables resolve all conflicts.</template>
+          </p>
+          <p v-if="!unresolved.length" class="conflict-text">
+            The conflicting rows could not be read. Open the workbook to see them, or keep one side.
+          </p>
+        </div>
+        <div class="conflict-actions">
+          <VBtn
+            variant="tonal"
+            color="primary"
+            :disabled="disabled"
+            :loading="busy === 'workbook'"
+            @click="emit('keep', 'workbook')"
+          >
+            Keep workbook
+          </VBtn>
+          <VBtn
+            variant="tonal"
+            color="primary"
+            :disabled="disabled"
+            :loading="busy === 'tables'"
+            @click="emit('keep', 'tables')"
+          >
+            Keep tables
+          </VBtn>
+          <VBtn
+            variant="text"
+            color="primary"
+            prepend-icon="fas fa-arrow-up-right-from-square"
+            :disabled="disabled"
+            :loading="busy === 'open'"
+            @click="emit('open')"
+          >
+            Open workbook
+          </VBtn>
+        </div>
 
-    <VProgressLinear v-if="loading" indeterminate color="primary" aria-label="Loading the conflicting rows" />
-    <template v-else>
-      <section
-        v-for="({ conflict, view }, index) in shown"
-        :key="`${conflict.file}-${index}`"
-        class="conflict-file"
-        :aria-labelledby="`${id}-${index}`"
-      >
-        <h4 :id="`${id}-${index}`" class="conflict-file-head">
-          <span class="conflict-file-name">{{ conflict.file }}</span>
-          <span class="conflict-sheet">sheet {{ conflict.sheet }}</span>
-        </h4>
-        <p v-if="view.note" class="field-note conflict-note">{{ view.note }}</p>
-        <TableGrid
-          :table="view.table"
-          :columns="view.columns"
-          :mark-column="view.changed"
-          mark-text="changed"
-          line-header="Version"
-          :label="`Conflicting rows of ${conflict.file}`"
-          class="conflict-grid"
-        >
-          <template #line="{ line }">{{ view.labels.get(line) }}</template>
-        </TableGrid>
-      </section>
-    </template>
+        <VProgressLinear v-if="loading" indeterminate color="primary" aria-label="Loading the conflicting rows" />
+        <template v-else>
+          <section
+            v-for="({ conflict, view }, index) in shown"
+            :key="`${conflict.file}-${index}`"
+            class="conflict-file"
+            :aria-labelledby="`${id}-${index}`"
+          >
+            <h4 :id="`${id}-${index}`" class="conflict-file-head">
+              <span class="conflict-file-name">{{ conflict.file }}</span>
+              <span class="conflict-sheet">sheet {{ conflict.sheet }}</span>
+            </h4>
+            <p v-if="view.note" class="field-note conflict-note">{{ view.note }}</p>
+            <TableGrid
+              :table="view.table"
+              :columns="view.columns"
+              :mark-column="view.changed"
+              mark-text="changed"
+              line-header="Version"
+              :label="`Conflicting rows of ${conflict.file}`"
+              class="conflict-grid"
+            >
+              <template #line="{ line }">{{ view.labels.get(line) }}</template>
+            </TableGrid>
+          </section>
+        </template>
+      </div>
+    </div>
+    <MoreBelow v-if="more" :scrollbar="scrollbar" />
   </section>
 </template>
 
 <style scoped>
-/* A card in the error color of the status above it. */
+/* A card in the error color of the status above it. It may shrink below its content, which then
+   scrolls inside its border. */
 .conflict-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px;
+  min-height: 0;
+  overflow: hidden;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-inline-start: 3px solid rgb(var(--v-theme-error));
   border-radius: 8px;
   background-color: rgb(var(--v-theme-surface));
+}
+.conflict-body {
+  min-height: 0;
+  overflow-y: auto;
+}
+.conflict-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
 }
 .conflict-intro {
   display: flex;

@@ -20,6 +20,18 @@ export function setViewport(width = 1280, height = 800): void {
   window.dispatchEvent(new Event("resize"));
 }
 
+/**
+ * Gives `element` a view of `view` px over `content` px scrolled to `top`, as a layout would, and
+ * tells it that it scrolled; jsdom has no layout.
+ */
+export async function scrollLayout(element: Element, view: number, content: number, top = 0): Promise<void> {
+  Object.defineProperty(element, "clientHeight", { configurable: true, value: view });
+  Object.defineProperty(element, "scrollHeight", { configurable: true, value: content });
+  Object.defineProperty(element, "scrollTop", { configurable: true, writable: true, value: top });
+  element.dispatchEvent(new Event("scroll"));
+  await flushPromises();
+}
+
 /** Loads `value` into the overview store as the next `GET /local/state` would. */
 export async function loadSnapshot(value: Snapshot): Promise<void> {
   vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(value));

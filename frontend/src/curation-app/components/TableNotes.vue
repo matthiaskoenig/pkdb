@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId, watch } from "vue";
 import type { Profile, TableKind } from "../api/types";
+import { useMoreBelow } from "../composables/useMoreBelow";
 import { issueMessage } from "../metadata";
 import { notesKindOf, notesSummary } from "../notes";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { knownProfiles, sectionRoute } from "../study";
 import { kindLabel, noteKinds } from "../tableKinds";
+import MoreBelow from "./MoreBelow.vue";
 import NotesFields from "./NotesFields.vue";
 
 /**
@@ -32,6 +34,10 @@ const draft = study.draft;
 const headingId = useId();
 const bodyId = useId();
 const toggle = ref<HTMLButtonElement | null>(null);
+const body = ref<HTMLElement | null>(null);
+const content = ref<HTMLElement | null>(null);
+/** Whether more of the open body follows below its view, which a fade at its bottom shows. */
+const { more, scrollbar } = useMoreBelow(body, content);
 
 const detail = computed(() => study.detail);
 /** The kind as the study page names it, in lower case, such as `subjects`. */
@@ -94,38 +100,47 @@ watch(
         <i class="fas fa-chevron-down table-notes-chevron" aria-hidden="true"></i>
       </button>
     </h4>
-    <div v-show="open" :id="bodyId" class="table-notes-body">
-      <NotesFields
-        v-if="notes"
-        v-model:descriptions="notes.descriptions"
-        v-model:comments="notes.comments"
-        :prefix="`notes.${kind}.`"
-        :kind="kind"
-        :author="author"
-        :profiles="profiles"
-        :errors="draft.errors"
-        :marks="draft.marks"
-        :disk="draft.disk"
-        @use-disk="draft.useDisk"
-      />
-      <template v-else>
-        <p class="table-notes-text">study.json cannot be read, so its notes cannot show here. Fix it in your editor, or start a new one in <RouterLink :to="metadataRoute">Metadata</RouterLink>.</p>
-        <ul v-if="fileIssues.length" class="table-notes-issues">
-          <li v-for="(message, index) in fileIssues" :key="index">{{ message }}</li>
-        </ul>
-      </template>
+    <!-- The frame clips the body and the fade below the header when the panel shrinks; the body
+         scrolls on its own, and while more of it follows below, a fade at its bottom shows it. -->
+    <div v-show="open" class="table-notes-frame">
+      <div :id="bodyId" ref="body" class="table-notes-body">
+        <div ref="content">
+          <NotesFields
+            v-if="notes"
+            v-model:descriptions="notes.descriptions"
+            v-model:comments="notes.comments"
+            :prefix="`notes.${kind}.`"
+            :kind="kind"
+            :author="author"
+            :profiles="profiles"
+            :errors="draft.errors"
+            :marks="draft.marks"
+            :disk="draft.disk"
+            @use-disk="draft.useDisk"
+          />
+          <template v-else>
+            <p class="table-notes-text">study.json cannot be read, so its notes cannot show here. Fix it in your editor, or start a new one in <RouterLink :to="metadataRoute">Metadata</RouterLink>.</p>
+            <ul v-if="fileIssues.length" class="table-notes-issues">
+              <li v-for="(message, index) in fileIssues" :key="index">{{ message }}</li>
+            </ul>
+          </template>
+        </div>
+      </div>
+      <MoreBelow v-if="open && more" :scrollbar="scrollbar" />
     </div>
   </section>
 </template>
 
 <style scoped>
-/* In a short pane, the open notes shrink to their header and its border, and their body scrolls,
-   rather than push the rows out of the pane. */
+/* In a short pane, the open notes give up their room before the conflicts above them: they shrink
+   down to their header and its border, and their body scrolls, rather than push the rows out of
+   the pane. The header has the height of the head of the rows pane. */
 .table-notes {
+  --table-notes-head: 26px;
   display: flex;
-  flex: 0 1 auto;
+  flex: 0 1000 auto;
   flex-direction: column;
-  min-height: 27px;
+  min-height: calc(var(--table-notes-head) + 1px);
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .table-notes-heading {
@@ -135,13 +150,14 @@ watch(
   font-weight: inherit;
   line-height: inherit;
 }
-/* As high as the head of the rows pane above it, with the same padding and text size. */
+/* One line as high as the head of the rows pane above it, with the same padding and text size,
+   which the panel keeps whole when it shrinks. */
 .table-notes-toggle {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
-  min-height: 26px;
+  height: var(--table-notes-head);
   padding: 2px 8px;
   border: 0;
   background: none;
@@ -179,6 +195,13 @@ watch(
 }
 .table-notes-toggle[aria-expanded="true"] .table-notes-chevron {
   transform: rotate(180deg);
+}
+.table-notes-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 /* Open, the notes leave most of the pane to the rows and scroll on their own. */
 .table-notes-body {
