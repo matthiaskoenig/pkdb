@@ -113,6 +113,19 @@ html {
   flex: 0 0 auto;
 }
 
+/* What went wrong in a failure, such as the stderr of a command, in an alert, the Activity and the
+   File watching menu: at most 6 lines; the rest scrolls, with the keyboard too (tabindex="0"), and
+   Copy details has all of it. */
+.failure-detail {
+  max-height: calc(6 * 1.45em);
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;

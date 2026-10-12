@@ -623,6 +623,9 @@ describe("an upload with an unknown outcome", () => {
     const failed = entry(OPEN_FAILED.error);
     expect(failed.get(".activity-status").text()).toBe("Failed");
     expect(failed.get(".activity-detail").text()).toBe(OPEN_FAILED.detail);
+    // At most 6 lines, as in the alert of the action; the rest scrolls, with the keyboard too.
+    expect(failed.get(".activity-detail").classes()).toContain("failure-detail");
+    expect(failed.get(".activity-detail").attributes("tabindex")).toBe("0");
     expect(failed.get(".failure-disclosure summary").text()).toBe("Details");
     expect(failed.get(".failure-facts").text()).toContain(
       "Open tables (POST /local/studies/tables)",

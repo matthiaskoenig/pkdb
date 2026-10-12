@@ -36,7 +36,7 @@ const emit = defineEmits<{ close: [] }>();
     <p class="action-failure-text">{{ failure.text }}</p>
     <pre
       v-if="failure.details?.detail"
-      class="action-failure-detail"
+      class="action-failure-detail failure-detail"
       tabindex="0"
       >{{ failure.details.detail }}</pre>
     <ul v-if="failure.issues.length" class="action-failure-issues">
@@ -72,16 +72,9 @@ const emit = defineEmits<{ close: [] }>();
   margin: 0;
   font-weight: 600;
 }
-/* At most 6 lines of stderr; the rest scrolls, and Copy details has all of it. */
+/* The lines of the detail are capped by .failure-detail in styles.css. */
 .action-failure-detail {
-  max-height: calc(6 * 1.45em);
   margin: 2px 0 0;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 .action-failure-issues {
   margin: 4px 0 0;

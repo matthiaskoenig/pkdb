@@ -267,7 +267,7 @@ async function retried(): Promise<void> {
               {{ JOB_STATUS_LABELS[entry.job.status] }}
             </VChip>
           </div>
-          <pre v-if="entry.job.error?.detail" class="activity-detail">{{
+          <pre v-if="entry.job.error?.detail" class="activity-detail failure-detail" tabindex="0">{{
             entry.job.error.detail
           }}</pre>
           <p :id="entry.metaId" class="activity-meta">
@@ -451,13 +451,9 @@ async function retried(): Promise<void> {
 .activity-entry-linked {
   background-color: rgba(var(--v-theme-primary), 0.08);
 }
+/* The lines of the detail are capped by .failure-detail in styles.css. */
 .activity-detail {
   margin: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 /* The icons of the buttons start where the text above does: 8 px of padding sit outside the
    content edge, then the 1rem wide icon and its 8 px gap, as the actions of an issue. */

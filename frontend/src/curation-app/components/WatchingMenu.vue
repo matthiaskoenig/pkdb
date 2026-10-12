@@ -82,7 +82,7 @@ async function toggle(): Promise<void> {
       </p>
       <VAlert v-if="watcher && !watcher.recovered" type="error" variant="tonal" density="compact" class="status-alert watcher-error">
         <p class="watcher-error-text">File watching failed at {{ formatTime(watcher.time) }}. It tries again every second.</p>
-        <pre v-if="watcher.detail" class="watcher-error-detail">{{ watcher.detail }}</pre>
+        <pre v-if="watcher.detail" class="watcher-error-detail failure-detail" tabindex="0">{{ watcher.detail }}</pre>
         <p class="watcher-error-log">The log has the traceback: {{ snapshot.log_file }}</p>
       </VAlert>
       <p v-else-if="watcher" class="panel-note watcher-recovered">
@@ -110,13 +110,9 @@ async function toggle(): Promise<void> {
 .watcher-error-log {
   margin: 0;
 }
+/* The lines of the detail are capped by .failure-detail in styles.css. */
 .watcher-error-detail {
   margin: 2px 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 .watcher-error-log {
   overflow-wrap: anywhere;

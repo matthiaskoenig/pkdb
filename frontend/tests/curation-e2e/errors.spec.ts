@@ -17,6 +17,9 @@ test("a failing Open tables says what failed and lists the failure in the activi
   const alert = page.locator(".study-alert");
   await expect(alert.locator(".action-failure-text")).toHaveText(OPEN_FAILED);
   await expect(alert.locator(".action-failure-detail")).toHaveText(DETAIL);
+  // At most 6 lines of the detail show; the rest scrolls.
+  const cap = await alert.locator(".action-failure-detail").evaluate((element) => getComputedStyle(element).maxHeight);
+  expect(cap).not.toBe("none");
   await alert.getByText("Details", { exact: true }).click();
   const facts = alert.locator(".failure-facts");
   await expect(facts).toContainText("Open tables (POST /local/studies/tables)");
@@ -32,6 +35,8 @@ test("a failing Open tables says what failed and lists the failure in the activi
   await expect(entry).toBeFocused();
   await expect(entry.locator(".activity-status")).toHaveText("Failed");
   await expect(entry.locator(".activity-detail")).toHaveText(DETAIL);
+  // The entry caps its detail as the alert does.
+  await expect(entry.locator(".activity-detail")).toHaveCSS("max-height", cap);
 });
 
 // The alert with its details open, as screens.spec.ts checks the other screens: both themes, wide and

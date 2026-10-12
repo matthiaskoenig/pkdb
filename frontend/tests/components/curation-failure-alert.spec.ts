@@ -96,6 +96,13 @@ describe("ActionFailureAlert", () => {
     const alert = page().get(".action-failure");
     expect(alert.get(".action-failure-text").text()).toBe(OPEN_FAILED.error);
     expect(alert.get(".action-failure-detail").text()).toBe(OPEN_FAILED.detail);
+    // At most 6 lines, as in the Activity; the rest scrolls, with the keyboard too.
+    expect(alert.get(".action-failure-detail").classes()).toContain(
+      "failure-detail",
+    );
+    expect(alert.get(".action-failure-detail").attributes("tabindex")).toBe(
+      "0",
+    );
     expect(alert.get(".failure-disclosure summary").text()).toBe("Details");
     const facts = alert.findAll(".failure-facts dt").map((term) => term.text());
     expect(facts).toEqual([

@@ -479,6 +479,9 @@ describe("AppHeader", () => {
     const panel = page().get(".watching-panel");
     expect(panel.get(".watcher-error-text").text()).toBe(`File watching failed at ${formatTime(time)}. It tries again every second.`);
     expect(panel.get(".watcher-error-detail").text()).toBe("OSError: [Errno 5] Input/output error");
+    // At most 6 lines, as in the alert of an action; the rest scrolls, with the keyboard too.
+    expect(panel.get(".watcher-error-detail").classes()).toContain("failure-detail");
+    expect(panel.get(".watcher-error-detail").attributes("tabindex")).toBe("0");
     expect(panel.get(".watcher-error-log").text()).toBe(`The log has the traceback: ${snapshot().log_file}`);
   });
 
