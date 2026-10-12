@@ -447,6 +447,7 @@ const conflictPanel = computed(() => {
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
               <TableNotes
                 v-if="notesKind"
+                :key="notesKind"
                 :kind="notesKind"
                 :focused="linkedNotes === notesKind"
                 @took-focus="linkedNotes = null"
@@ -470,6 +471,7 @@ const conflictPanel = computed(() => {
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
             <TableNotes
               v-if="notesKind"
+              :key="notesKind"
               :kind="notesKind"
               :focused="linkedNotes === notesKind"
               @took-focus="linkedNotes = null"

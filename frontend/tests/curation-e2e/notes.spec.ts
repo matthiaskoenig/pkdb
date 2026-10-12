@@ -9,6 +9,13 @@ const DESCRIPTION = "Healthy adult volunteers who abstained from caffeine for 48
 const COMMENT = "The paper gives no sex distribution of the group.";
 const EDITED = "Healthy adult volunteers who abstained from caffeine for 72 hours before the study day.";
 
+/** Three descriptions of several lines each, as the notes of a real study have them. */
+const LONG_DESCRIPTIONS = [
+  "In a preliminary trial six volunteers rinsed their mouths for 5 s with 2 ml of a solution that contained 400 mg of caffeine sodium salicylate. After spitting it out, they rinsed twice for 10 s with 25 ml of water each.",
+  "In the first part of the study eight volunteers took 7 mg/kg of caffeine in soft gelatine capsules under standardized conditions. After the dose with 200 ml of water at body temperature, they rinsed their mouths, and a sample of saliva was taken as the blank value, to rule out absorption in the mouth and to check the abstinence from caffeine.",
+  "In the second part of the study five volunteers received 220 mg of caffeine as caffeine sodium salicylate by intravenous injection.",
+];
+
 interface Notes {
   descriptions?: string[];
   comments?: { user: string; text: string }[];
@@ -96,40 +103,60 @@ test("open notes leave rows of the table in view in a short window, with the sav
   app,
   page,
 }) => {
-  await page.setViewportSize({ width: 1366, height: 600 });
-  await app.open(`${STUDY}/data?file=subjects.tsv`);
-  const pane = rowsPane(page, "subjects.tsv");
-  await pane.getByRole("button", { name: /^Notes of the subjects/ }).click();
-  await pane.getByRole("textbox", { name: "Description 1" }).fill(EDITED);
-  const bar = page.locator(".study-savebar");
-  await expect(bar).toContainText("Unsaved changes in study.json");
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    const value = JSON.parse(original) as StudyJson;
+    value.notes = { ...value.notes, timecourses: { descriptions: LONG_DESCRIPTIONS, comments: [] } };
+    writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
+    await page.setViewportSize({ width: 1366, height: 600 });
+    const box = async (part: Locator) => (await part.boundingBox())!;
+    const bottom = (rect: { y: number; height: number }) => rect.y + rect.height;
 
-  const panel = pane.getByRole("region", { name: /^Notes of the subjects/ });
-  const notes = (await panel.boundingBox())!;
-  const rows = pane.getByRole("region", { name: "Rows of subjects.tsv" });
-  const grid = (await rows.boundingBox())!;
-  const header = (await rows.getByRole("row").first().boundingBox())!;
-  const section = (await pane.boundingBox())!;
-  // The notes scroll on their own rather than push the rows out of the pane, which keeps their header and four rows.
-  expect(notes.y + notes.height).toBeLessThanOrEqual(grid.y);
-  expect(grid.y + grid.height).toBeLessThanOrEqual(section.y + section.height);
-  expect(grid.height).toBeGreaterThanOrEqual(5 * header.height);
-  // The bar ends the section below the panes rather than cover them.
-  expect((await bar.boundingBox())!.y).toBeGreaterThanOrEqual(section.y + section.height);
+    // timecourses_Fig1.tsv has 18 rows.
+    await app.open(`${STUDY}/data?file=timecourses_Fig1.tsv`);
+    const pane = rowsPane(page, "timecourses_Fig1.tsv");
+    await pane.getByRole("button", { name: /^Notes of the timecourses/ }).click();
+    await pane.getByRole("textbox", { name: "Description 1" }).fill(EDITED);
+    const bar = page.locator(".study-savebar");
+    await expect(bar).toContainText("Unsaved changes in study.json");
 
-  // The cut notes fade out at the bottom of their body until it scrolls to its end.
-  const fade = panel.locator(".pane-more");
-  await expect(fade).toBeVisible();
-  await panel.locator(".table-notes-body").evaluate((body) => body.scrollTo(0, body.scrollHeight));
-  await expect(fade).toBeHidden();
+    const panel = pane.getByRole("region", { name: /^Notes of the timecourses/ });
+    const rows = pane.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
+    const [notes, grid, header, section] = await Promise.all([panel, rows, rows.getByRole("row").first(), pane].map(box));
+    // The notes scroll on their own rather than push the rows out of the pane, which keeps their header and four rows.
+    expect(bottom(notes!)).toBeLessThanOrEqual(grid!.y);
+    expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
+    expect(grid!.height).toBeGreaterThanOrEqual(5 * header!.height);
+    // The bar ends the section below the panes rather than cover them.
+    expect((await box(bar)).y).toBeGreaterThanOrEqual(bottom(section!));
+
+    // The cut notes fade out at the bottom of their body until it scrolls to its end.
+    const fade = panel.locator(".pane-more");
+    await expect(fade).toBeVisible();
+    await panel.locator(".table-notes-body").evaluate((body) => body.scrollTo(0, body.scrollHeight));
+    await expect(fade).toBeHidden();
+
+    // subjects.tsv has one row: the rows keep their header and that row, and leave the rest to the
+    // notes, which start at their top.
+    await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("button", { name: /^subjects\.tsv/ }).click();
+    const subjects = rowsPane(page, "subjects.tsv");
+    await subjects.getByRole("button", { name: /^Notes of the subjects/ }).click();
+    const short = subjects.getByRole("region", { name: /^Notes of the subjects/ });
+    const row = subjects.getByRole("region", { name: "Rows of subjects.tsv" });
+    await expect(row.getByRole("row")).toHaveCount(2);
+    expect(await short.locator(".table-notes-body").evaluate((body) => body.scrollTop)).toBe(0);
+    await expect(short.locator(".pane-more")).toBeVisible();
+    const [cut, region, last, whole] = await Promise.all([short, row, row.getByRole("row").last(), subjects].map(box));
+    expect(bottom(cut!)).toBeLessThanOrEqual(region!.y);
+    expect(bottom(last!)).toBeLessThanOrEqual(bottom(region!));
+    // No room stays empty below the row while the notes are cut: only the border of the region.
+    expect(bottom(region!) - bottom(last!)).toBeLessThanOrEqual(2);
+    expect(bottom(region!)).toBeLessThanOrEqual(bottom(whole!));
+  } finally {
+    writeFileSync(path, original);
+  }
 });
-
-/** Three descriptions of several lines each, as the notes of a real study have them. */
-const LONG_DESCRIPTIONS = [
-  "In a preliminary trial six volunteers rinsed their mouths for 5 s with 2 ml of a solution that contained 400 mg of caffeine sodium salicylate. After spitting it out, they rinsed twice for 10 s with 25 ml of water each.",
-  "In the first part of the study eight volunteers took 7 mg/kg of caffeine in soft gelatine capsules under standardized conditions. After the dose with 200 ml of water at body temperature, they rinsed their mouths, and a sample of saliva was taken as the blank value, to rule out absorption in the mouth and to check the abstinence from caffeine.",
-  "In the second part of the study five volunteers received 220 mg of caffeine as caffeine sodium salicylate by intravenous injection.",
-];
 
 test("open notes take the room that the rows of a short table leave, and keep their cap above a long table", async ({
   app,
@@ -166,6 +193,15 @@ test("open notes take the room that the rows of a short table leave, and keep th
     expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
     // The rows show whole: the last one ends inside their region.
     expect(bottom(await box(rows.getByRole("row").last()))).toBeLessThanOrEqual(bottom(grid!));
+
+    // In a window of 1366 x 680 px the notes are cut; the three rows keep only their own room.
+    await page.setViewportSize({ width: 1366, height: 680 });
+    await expect(panel.locator(".pane-more")).toBeVisible();
+    const [cut, shorter, last] = await Promise.all([panel, rows, rows.getByRole("row").last()].map(box));
+    expect(bottom(cut!)).toBeLessThanOrEqual(shorter!.y);
+    expect(bottom(last!)).toBeLessThanOrEqual(bottom(shorter!));
+    expect(bottom(shorter!) - bottom(last!)).toBeLessThanOrEqual(2);
+    await page.setViewportSize({ width: 1440, height: 900 });
 
     // timecourses_Fig1.tsv needs the room for its rows: the same notes take at most 40 % of the
     // window, and scroll with a fade at their bottom.

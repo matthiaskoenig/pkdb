@@ -757,19 +757,20 @@ test.describe("tables", () => {
     await expect(notes.locator(".pane-more")).toBeVisible();
 
     // In a short window the notes keep their header, and the conflicts scroll and fade out at their bottom.
-    await page.setViewportSize({ width: 1366, height: 640 });
+    await page.setViewportSize({ width: 1366, height: 560 });
     await expect(panel.locator(".pane-more")).toBeVisible();
     const rows = pane.getByRole("region", { name: "Rows of subjects.tsv", exact: true });
-    const [conflicts, open, head, grid, header, section] = await Promise.all(
-      [panel, notes, toggle, rows, rows.getByRole("row").first(), pane].map(box),
+    const [conflicts, open, head, grid, header, row, section] = await Promise.all(
+      [panel, notes, toggle, rows, rows.getByRole("row").first(), rows.getByRole("row").last(), pane].map(box),
     );
     expect(bottom(conflicts!)).toBeLessThanOrEqual(open!.y);
     // The header of the notes stays whole above their body.
     expect(bottom(head!)).toBeLessThanOrEqual(bottom(open!));
     expect(bottom(open!)).toBeLessThanOrEqual(grid!.y);
     expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
-    // The rows keep their header and four rows in view.
-    expect(grid!.height).toBeGreaterThanOrEqual(5 * header!.height);
+    // The rows keep their header and their one row in view (a longer table keeps four rows, notes.spec.ts).
+    expect(grid!.height).toBeGreaterThanOrEqual(2 * header!.height);
+    expect(bottom(row!)).toBeLessThanOrEqual(bottom(grid!));
 
     // Keeping the workbook leaves the tables in sync for the next test.
     await panel.getByRole("button", { name: "Keep workbook" }).click();
