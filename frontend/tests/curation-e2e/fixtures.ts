@@ -2,6 +2,7 @@ import { execFile, spawn, type ChildProcess } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { promisify } from "node:util";
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test as base, type BrowserContext, type ConsoleMessage, type Cookie, type Page } from "@playwright/test";
 import { PYTHON_VARIABLE, ROOT_VARIABLE, testing } from "./paths.ts";
 
@@ -365,3 +366,15 @@ export const test = base.extend<
 });
 
 export { expect };
+
+export async function expectAccessible(page: Page): Promise<void> {
+  // A fading menu or dialog would have a lower contrast than it shows once it stands still.
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length),
+    )
+    .toBe(0);
+  const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+  const found = violations.map((violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(" ")).join(", ")}`);
+  expect(found, "axe violations").toEqual([]);
+}

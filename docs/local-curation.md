@@ -23,7 +23,7 @@ The path is the workspace: a `pkdb_data` checkout, a substance folder or a singl
 | `--endpoint URL` | The PK-DB server for checks and uploads (default `PKDB_ENDPOINT`). |
 | `--port PORT` | The port of the local server (default: a free port). |
 | `--no-browser` | Print the launch URL without opening it. |
-| `--state-dir DIR` | Keep the settings and the activity in `DIR`, outside the workspace (default: `curation` in the PK-DB cache directory). |
+| `--state-dir DIR` | Keep the settings, the activity and the log in `DIR`, outside the workspace (default: `curation` in the PK-DB cache directory, such as `~/.cache/pkdb/curation` on Linux). |
 | `--repository OWNER/NAME` | The GitHub repository of the study issues (default `matthiaskoenig/pkdb_data`). |
 
 ```bash
@@ -59,6 +59,8 @@ The **Connection** badge shows the state of the PK-DB server. The app checks the
 | Rejected API key | The server rejected the API key. |
 | Update pkdb | The server needs a newer `pkdb`. Stop the app, run `pkdb update`, and start it again. |
 | Error | The server check failed. The menu shows the error. |
+
+**File watching** shows **Error** while the watcher of the workspace fails, for example on a folder that cannot be read. Its menu shows the error, when it happened and the log file with the traceback. The watcher tries again every second, and the menu says when it works again.
 
 To switch the workspace without a restart, open the workspace menu, the folder name in the header, and choose **Choose workspace**. The dialog browses the folders of your computer: select a folder to go into it, use **Up** or **Home**, or type a path and press **Go**. Folders with `studies/` are marked **Repository**, and folders with `study.json` are marked **Study**. **Open** beside a folder, or **Open this folder**, makes it the workspace. Hidden folders are not listed, and the dialog never shows the contents of files. The app remembers the last ten workspaces under **Recent workspaces**. A folder that no longer exists is marked **Unavailable**; its remove button takes it off the list.
 
@@ -168,7 +170,7 @@ When the workbook and the tables conflict, the panel **Conflicting rows** shows 
 
 ### Activity
 
-The Activity section lists the jobs of the study, newest first: validations, uploads, and the changes made in the app, such as `Saved study.json` or a sync of the workbook. An entry shows its status, such as **Succeeded**, **Problems found**, **Failed**, **Canceled**, **Conflict** or **Outcome unknown**, and **automatic** when the app started it by itself. **Cancel** cancels a queued job, **Download report** saves the validation report as a JSON file, **Open on PK-DB** opens an uploaded study, and **Review** opens an upload with an unknown outcome.
+The Activity section lists the jobs of the study, newest first: validations, uploads, and the changes made in the app, such as `Saved study.json` or a sync of the workbook. An entry shows its status, such as **Succeeded**, **Problems found**, **Failed**, **Canceled**, **Conflict** or **Outcome unknown**, and **automatic** when the app started it by itself. **Cancel** cancels a queued job, **Download report** saves the validation report as a JSON file, **Open on PK-DB** opens an uploaded study, and **Review** opens an upload with an unknown outcome. A failed change in the app, such as an **Open tables** whose program did not start, and a failed job show what went wrong below their message, with **Details** and **Copy details** as in the alert of the action, see [Errors and the log](#errors-and-the-log).
 
 The app keeps the last 100 finished jobs of all workspaces. **Clear finished history** removes the finished jobs of the current workspace and deletes their reports, after you confirm it. It keeps the queued and running jobs, the uploads with an unknown outcome, the last upload of each study, which the overview shows as **Last upload**, and the current report of each study. The button is disabled when there is nothing to clear.
 
@@ -243,6 +245,8 @@ This section is for developers. The front end talks to the local server through 
 
 A stale revision answers `409` with the current document, and an invalid document answers `422` with its issues. A study beyond the upload limits answers `413` on the routes that read its tables and sources, and its study page lists the limit as the first problem, without tables, sources or review targets. A study that cannot be read answers `422` with its issues. Writes are refused with `403` and `no_user` without a user, or `user_mismatch` when the API key belongs to another account than the configured user. Every write of the app shows as a finished entry in the activity of the study. It starts no job of its own; the watcher validates the changed files as after any save.
 
+Every failed request answers the same JSON body: `error` says what could not be done, such as `Could not open the tables of caffeine/Demo2020.`; `code` names the failure in snake case, such as `open_failed`; `detail` is the type and the text of the error, or for a command its name, its exit status and the last 2 kB of its stderr; `action` names the request, such as `Open tables (POST /local/studies/tables)`; `request_id` has 8 hex characters, which the log names too; `time` is ISO 8601 in the local time zone. Only an unexpected error has a `traceback`, and a failed write or opened file of a study has the `activity_id` of its entry in the activity. Refusals keep their own fields (`issues`, `file`, `revision`, `content`, `paths`); a write refused without a user keeps its code `no_user` or `user_mismatch` in `error` and its text in `message`. No body, report or log line contains the API key, `GH_TOKEN`, `GITHUB_TOKEN` or the tokens of the session.
+
 ## Build from source
 
 A published `pkdb` package contains the built app, so curators need no Node. A source checkout needs Node once, to build the app into `python/src/pkdb/curation/static/` (Node **24.21.0** and npm **12.1.0**):
@@ -266,12 +270,23 @@ Then open `http://localhost:8090/` followed by the `#token=...` part of the laun
 
 ## Troubleshooting
 
+### Errors and the log
+
+When an action fails, its alert says what could not be done, in bold, and below it what went wrong, such as `CalledProcessError: xdg-open exited with status 4` followed by what the command printed. **Details** shows the request with its method and path, the status and the code, the type of the error, the request id and the time, the log file and, for an unexpected error, its traceback. **Copy details** copies the message, the detail, the request, the status, the code, the request id, the time and the traceback as Markdown, ready for a GitHub issue. A failed change of a study is also listed in its Activity; **Show in Activity** opens its entry.
+
+`pkdb curate` writes every failure with its traceback to `logs/curation.log` in its state directory: `~/.cache/pkdb/curation/logs/curation.log` on Linux, `~/Library/Caches/pkdb/curation/logs/curation.log` on macOS and `%LOCALAPPDATA%\pkdb\curation\logs\curation.log` on Windows, or below `--state-dir`. The file rotates at 1 MB and keeps three older files. An unexpected error also prints one line in the terminal, such as `Error 3f9c2a71 in Open tables: RuntimeError (see /home/you/.cache/pkdb/curation/logs/curation.log)`; search the log for the request id to find its traceback. The log contains no request lines and no secrets.
+
+### What you see and what to do
+
 | What you see | What to do |
 | --- | --- |
 | The local server stopped. Start pkdb curate again. | The `pkdb curate` process ended. Start it again and open the new launch URL. |
+| Could not reach the local server. | The request did not reach `pkdb curate`: it stopped or restarts. Start it again and open the new launch URL. |
 | This page has no session. Open the link that pkdb curate printed. | The page was opened without its launch URL, or the app was restarted on the same port. Open the launch URL that `pkdb curate` printed; pasting it into the open page works too. A launch URL works once: in the browser that opened it, reload the page instead. For another browser, restart `pkdb curate`. |
 | The curation app is not built: ... has no index.html. | The `pkdb` that runs is a source checkout without the built app, or was installed from one. The message names the folder of that `pkdb`. When a release of `pkdb` is installed too, a virtual environment of the checkout is probably active: deactivate it, or build the app as [Build from source](#build-from-source) describes. |
 | Unable to start curation. Application state must be outside the selected source workspace | Choose a `--state-dir` outside the workspace. |
 | The header offers **Set user**. | Set your PK-DB user in **Settings**, or start the app with `--user` or `PKDB_USER`. |
 | **Upload** is disabled. | Hover it to see why: offline mode, no API key, no connected server, or an account that may not upload. |
-| **Open tables**, **Open folder**, **Open PDF** or **Open** opens nothing, or the wrong program. | The app opens files with `xdg-open` on Linux, `open` on macOS and the file associations on Windows. To use another command, set `PKDB_OPEN_COMMAND` before you start the app, for example `PKDB_OPEN_COMMAND='gio open'`. The app adds the absolute path of the file or folder as the last argument. On Linux and macOS it splits the command like a shell command. On Windows the program gets the command line as written, followed by the path in double quotes, so a program path with spaces goes in double quotes; Command Prompt does not run it, so use `cmd /c start ""` for its built-in commands. The command must exit within 15 seconds, so use one that starts the program and returns. |
+| **Open tables**, **Open folder**, **Open PDF** or **Open** opens nothing, opens the wrong program, or says `Could not open ...`. | The alert names the command, its exit status and what it printed, such as `xdg-open exited with status 4`; when it says that `xdg-open` was not found, install `xdg-utils` or set `PKDB_OPEN_COMMAND`. The app opens files with `xdg-open` on Linux, `open` on macOS and the file associations on Windows. To use another command, set `PKDB_OPEN_COMMAND` before you start the app, for example `PKDB_OPEN_COMMAND='gio open'`. The app adds the absolute path of the file or folder as the last argument. On Linux and macOS it splits the command like a shell command. On Windows the program gets the command line as written, followed by the path in double quotes, so a program path with spaces goes in double quotes; Command Prompt does not run it, so use `cmd /c start ""` for its built-in commands. The command must exit within 15 seconds, so use one that starts the program and returns. |
+| **File watching** shows **Error**. | Open its menu: it names the error and the log file. A folder of the workspace that cannot be read, such as an unmounted network drive, is a frequent cause. The watcher tries again every second. |
+| An action says `Could not ...` and you need help. | Open **Details**, choose **Copy details** and paste it into a GitHub issue, with the lines of the log file around its request id. |

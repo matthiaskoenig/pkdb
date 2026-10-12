@@ -1,6 +1,5 @@
-import AxeBuilder from "@axe-core/playwright";
 import type { Page, TestInfo } from "@playwright/test";
-import { expect, test } from "./fixtures.ts";
+import { expect, expectAccessible, test } from "./fixtures.ts";
 
 const STUDY = "#/studies/caffeine/Demo2020";
 const NARROW = { width: 390, height: 844 };
@@ -116,18 +115,6 @@ const DIALOGS: Dialog[] = [
     open: (page) => page.getByRole("button", { name: "Add table", exact: true }).click(),
   },
 ];
-
-async function expectAccessible(page: Page): Promise<void> {
-  // A fading menu or dialog would have a lower contrast than it shows once it stands still.
-  await expect
-    .poll(() =>
-      page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length),
-    )
-    .toBe(0);
-  const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
-  const found = violations.map((violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(" ")).join(", ")}`);
-  expect(found, "axe violations").toEqual([]);
-}
 
 /** Attach a screenshot of the whole page, or of the window, where an open dialog and its scrim are. */
 async function attachScreenshot(page: Page, testInfo: TestInfo, name: string, fullPage = true): Promise<void> {
