@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
-import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
+import { enableAutoUnmount, flushPromises, mount, type DOMWrapper, type VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { defineComponent, h, ref } from "vue";
 import PaperViewer from "../../src/curation-app/components/PaperViewer.vue";
@@ -95,6 +95,13 @@ function responseError(status: number): Error {
   });
 }
 
+/** The field of the viewer that its label `name` names, as the browser associates them. */
+function labelled<T extends Element>(wrapper: VueWrapper, name: string): Omit<DOMWrapper<T>, "exists"> {
+  const label = wrapper.findAll("label").find((candidate) => candidate.text() === name);
+  if (!label) throw new Error(`The viewer has no label ${name}`);
+  return wrapper.get<T>(`[id="${label.attributes("for")}"]`);
+}
+
 describe("paper viewer", () => {
   it("opens the PDF in its scroll container on page 1 at Fit width, and shows the page of the pages", async () => {
     const wrapper = await mountViewer();
@@ -104,7 +111,7 @@ describe("paper viewer", () => {
     expect(pdf.container.classList.contains("paper-scroll")).toBe(true);
     expect(pdf.container.firstElementChild?.className).toBe("pdfViewer");
     expect(pdf.start).toEqual({ page: 1, fit: "page-width", scale: 1 });
-    expect(wrapper.get<HTMLInputElement>("input[aria-label='Page']").element.value).toBe("1");
+    expect(labelled<HTMLInputElement>(wrapper, "Page").element.value).toBe("1");
     expect(wrapper.get(".paper-of").text()).toBe("of 3");
     expect(wrapper.get("button[aria-label='Previous page']").attributes("disabled")).toBeDefined();
     expect(wrapper.get("button[aria-label='Next page']").attributes("disabled")).toBeUndefined();
@@ -119,7 +126,7 @@ describe("paper viewer", () => {
     await flushPromises();
     await wrapper.get("button[aria-label='Previous page']").trigger("click");
     expect(pdf.session.goTo).toHaveBeenLastCalledWith(1);
-    const field = wrapper.get<HTMLInputElement>("input[aria-label='Page']");
+    const field = labelled<HTMLInputElement>(wrapper, "Page");
     field.element.value = "3";
     await field.trigger("change");
     expect(pdf.session.goTo).toHaveBeenLastCalledWith(3);
@@ -132,7 +139,7 @@ describe("paper viewer", () => {
   it("zooms out and in by a step, chooses a fit, and shows the scale of a step in the zoom select", async () => {
     const wrapper = await mountViewer();
     const pdf = await shown();
-    const zoom = wrapper.get<HTMLSelectElement>("select[aria-label='Zoom']");
+    const zoom = labelled<HTMLSelectElement>(wrapper, "Zoom");
     expect(zoom.findAll("option").map((option) => option.text())).toEqual(["Fit width", "Fit page", "100 %"]);
     expect(zoom.element.value).toBe("page-width");
     await wrapper.get("button[aria-label='Zoom in']").trigger("click");
@@ -151,7 +158,7 @@ describe("paper viewer", () => {
   it("finds as the curator types, Enter goes to the next match and Shift+Enter to the previous one, with the count", async () => {
     const wrapper = await mountViewer();
     const pdf = await shown();
-    const field = wrapper.get<HTMLInputElement>("input[aria-label='Find in the paper']");
+    const field = labelled<HTMLInputElement>(wrapper, "Find in the paper");
     const count = wrapper.get(".paper-count");
     expect(count.attributes("role")).toBe("status");
     await field.setValue("the");
@@ -180,18 +187,31 @@ describe("paper viewer", () => {
     const pressed = new KeyboardEvent("keydown", { key: "f", ctrlKey: true, bubbles: true, cancelable: true });
     wrapper.get(".paper-scroll").element.dispatchEvent(pressed);
     expect(pressed.defaultPrevented).toBe(true);
-    expect(document.activeElement).toBe(wrapper.get("input[aria-label='Find in the paper']").element);
+    expect(document.activeElement).toBe(labelled(wrapper, "Find in the paper").element);
   });
 
   it("leaves Ctrl+F to the browser while no PDF is shown", async () => {
     engine.openPaper.mockImplementationOnce(() => new Promise(() => undefined));
     const wrapper = await mountViewer();
-    const field = wrapper.get<HTMLInputElement>("input[aria-label='Find in the paper']");
+    const field = labelled<HTMLInputElement>(wrapper, "Find in the paper");
     expect(field.element.disabled).toBe(true);
     const pressed = new KeyboardEvent("keydown", { key: "f", ctrlKey: true, bubbles: true, cancelable: true });
     wrapper.get(".paper-scroll").element.dispatchEvent(pressed);
     expect(pressed.defaultPrevented).toBe(false);
     expect(document.activeElement).not.toBe(field.element);
+  });
+
+  it("labels its page, zoom and find fields with labels that only screen readers show", async () => {
+    const wrapper = await mountViewer();
+    const fields = ["Page", "Zoom", "Find in the paper"].map((name) => {
+      const label = wrapper.findAll("label").find((candidate) => candidate.text() === name);
+      return [label?.classes("d-sr-only"), (label?.element as HTMLLabelElement | undefined)?.control?.tagName];
+    });
+    expect(fields).toEqual([
+      [true, "INPUT"],
+      [true, "SELECT"],
+      [true, "INPUT"],
+    ]);
   });
 
   it("names its pages for screen readers, and keeps Zoom out and Zoom in within the zoom of PDF.js", async () => {

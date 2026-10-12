@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<{ url: string; file: string; bytes?: numb
  */
 const place = defineModel<PaperPlace | null>("place", { default: null });
 
-/** The fields have ids, which a browser expects of a form field. */
+/** The fields have ids, which a browser expects of a form field, and labels that only screen readers show. */
 const id = useId();
 const scroller = ref<HTMLDivElement | null>(null);
 const findField = ref<HTMLInputElement | null>(null);
@@ -234,6 +234,7 @@ function reload(): void {
         >
           <i class="fas fa-chevron-down" aria-hidden="true"></i>
         </button>
+        <label :for="`${id}-page`" class="d-sr-only">Page</label>
         <input
           :id="`${id}-page`"
           class="paper-field paper-number"
@@ -242,7 +243,6 @@ function reload(): void {
           min="1"
           :max="Math.max(pages, 1)"
           :value="page"
-          aria-label="Page"
           :disabled="!session"
           @change="typedPage"
         />
@@ -269,10 +269,10 @@ function reload(): void {
         >
           <i class="fas fa-magnifying-glass-plus" aria-hidden="true"></i>
         </button>
+        <label :for="`${id}-zoom`" class="d-sr-only">Zoom</label>
         <select
           :id="`${id}-zoom`"
           class="paper-field paper-zoom"
-          aria-label="Zoom"
           :value="fit ?? 'custom'"
           :disabled="!session"
           @change="chooseZoom"
@@ -282,13 +282,13 @@ function reload(): void {
         </select>
       </span>
       <span class="paper-find">
+        <label :for="`${id}-find`" class="d-sr-only">Find in the paper</label>
         <input
           :id="`${id}-find`"
           ref="findField"
           v-model="query"
           class="paper-field paper-find-field"
           type="search"
-          aria-label="Find in the paper"
           placeholder="Find"
           :disabled="!session"
           @keydown.enter.prevent="findAgain"

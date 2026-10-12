@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useId } from "vue";
 import { VBtn, VChip, VProgressLinear } from "vuetify/components";
 import type { StudyDetail, TableResponse } from "../api/types";
 import {
@@ -53,6 +53,8 @@ defineSlots<{ default?: () => unknown }>();
 /** The table in the study page: its kind and class of information. */
 const entry = computed(() => findTable(props.detail, props.file));
 
+/** The id of the Source select, which a browser expects of a form field. */
+const filterId = useId();
 /** The options of the Source select; only a shared table has them. */
 const choices = computed(() => (props.table && isShared(props.detail, props.file) ? filterChoices(props.table) : []));
 /** The filter that applies: one whose source the rows no longer name shows all rows. */
@@ -161,7 +163,13 @@ const missingLine = computed(() => {
         <span class="pane-head-part pane-head-part--fixed" aria-hidden="true">{{ count }}</span>
         <label v-if="choices.length" class="pane-head-filter">
           <span aria-hidden="true">Source</span>
-          <select class="pane-head-select" aria-label="Source of the rows" :value="filterValue(applied)" @change="choose">
+          <select
+            :id="filterId"
+            class="pane-head-select"
+            aria-label="Source of the rows"
+            :value="filterValue(applied)"
+            @change="choose"
+          >
             <option v-for="choice in choices" :key="choice.value" :value="choice.value">{{ choice.title }}</option>
           </select>
         </label>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import type { PaperFile } from "../api/types";
 import { useAction } from "../composables/useAction";
@@ -28,6 +28,8 @@ const emit = defineEmits<{ "update:file": [file: string] }>();
 /** Where the viewer stands in its PDF, which the section keeps with `v-model:place`. */
 const place = defineModel<PaperPlace | null>("place", { default: null });
 
+/** The id of the select of the PDFs, which a browser expects of a form field. */
+const fileId = useId();
 const router = useRouter();
 const overview = useOverviewStore();
 const { notice, announce } = useNotice();
@@ -56,6 +58,7 @@ function openInProgram(): Promise<void> {
       <h3 class="pane-head-name">Paper</h3>
       <select
         v-if="papers.length > 1"
+        :id="fileId"
         class="pane-head-select paper-file"
         aria-label="PDF of the paper"
         :value="paper.file"
