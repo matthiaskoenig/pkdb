@@ -23,6 +23,7 @@ import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-a
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
 import { ApiError } from "../../src/curation-app/api/client";
+import { detailsOfBody } from "../../src/curation-app/failures";
 import {
   acknowledgeFailure,
   acknowledgement,
@@ -38,6 +39,7 @@ import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } fro
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
 import { defaultSource, fileForSource } from "../../src/curation-app/data";
+import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
@@ -275,5 +277,30 @@ describe("acknowledgements contract", () => {
     expect(text(ambiguous)).toBe(AMBIGUOUS_WARNING);
     expect(text(missing)).toBe(NO_SUCH_WARNING);
     expect(text(inexact)).toBe(NO_EXACT_TARGET);
+  });
+});
+
+describe("errors contract", () => {
+  it("reads the error body of a failed Open tables", () => {
+    const error = new ApiError(500, errorsFixture.open_failed);
+    expect(error.message).toBe("Could not open the tables of caffeine/Demo2020.");
+    expect([error.code, error.detail, error.action, error.requestId, error.traceback]).toEqual([
+      "open_failed",
+      "CalledProcessError: false exited with status 1",
+      "Open tables (POST /local/studies/tables)",
+      "3f9c2a71",
+      null,
+    ]);
+    expect(error.activityId).toBe(errorsFixture.activity.id);
+  });
+
+  it("shows the failure in the activity with its detail", () => {
+    const job = contract<Job>(errorsFixture.activity);
+    expect(jobText(job)).toBe("Could not open the tables of caffeine/Demo2020.");
+    expect(job.error && detailsOfBody(job.error)).toMatchObject({
+      status: null,
+      code: "open_failed",
+      detail: "CalledProcessError: false exited with status 1",
+    });
   });
 });

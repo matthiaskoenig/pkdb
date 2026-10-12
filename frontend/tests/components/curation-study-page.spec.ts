@@ -936,7 +936,7 @@ describe("StudyPage", () => {
     await click("Add table");
     await field("Source").setValue("Tab3");
     await flushPromises();
-    expect(dialog().text()).toContain("The local server stopped. Start pkdb curate again.");
+    expect(dialog().text()).toContain("Could not reach the local server.");
     expect(button("Add").attributes("disabled")).toBeDefined();
 
     // The next poll fails too; once a poll succeeds, the preview is asked for again.

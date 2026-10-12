@@ -351,6 +351,31 @@ export interface StudyRow {
   report_incomplete?: boolean;
 }
 
+// Errors
+
+/** The error body of the local API, `describe` in python/src/pkdb/curation/errors.py. */
+export interface ErrorBody {
+  /** What could not be done, such as `Could not open the tables of caffeine/Demo2020.` */
+  error: string;
+  code: string;
+  detail: string | null;
+  /** `Open tables (POST /local/studies/tables)` */
+  action: string;
+  request_id: string;
+  time: string;
+  /** Only of an unexpected error; the activity keeps the body without it. */
+  traceback?: string;
+  /** The entry of a failed action of a study in its activity. */
+  activity_id?: string;
+}
+
+/** The last failure of the file watcher of pkdb curate; `recovered` once a later check succeeded. */
+export interface WatcherError {
+  time: string;
+  detail: string | null;
+  recovered: boolean;
+}
+
 // Jobs
 
 export type JobAction = "validate" | "validate_remote" | "upload" | "write";
@@ -391,6 +416,8 @@ export interface Job {
   report_id: string | null;
   upload?: Upload;
   sid?: string;
+  /** The error of a failed job or of a failed change in the app, without its traceback. */
+  error?: ErrorBody;
   source_digest?: string;
 }
 
@@ -477,6 +504,10 @@ export interface Snapshot {
   /** The finished jobs of the workspace that Clear finished history removes. */
   clearable_jobs: number;
   recent_workspaces: { path: string; exists: boolean }[];
+  /** The log file of pkdb curate, which has the traceback of every failure. */
+  log_file: string;
+  /** The last failure of the file watcher, null when it never failed. */
+  watcher_error: WatcherError | null;
   /** Only in `GET /local/state`, not in the snapshots that actions return. */
   csrf_token?: string;
 }
@@ -775,6 +806,8 @@ export const isSnapshot = hasKeys<Snapshot>(
   "jobs",
   "clearable_jobs",
   "recent_workspaces",
+  "log_file",
+  "watcher_error",
 );
 
 export const isStudyDetail = hasKeys<StudyDetail>(

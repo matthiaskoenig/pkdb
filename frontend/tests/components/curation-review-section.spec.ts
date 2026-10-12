@@ -854,7 +854,7 @@ describe("new item count", () => {
     await labeled(wrapper, VSelect, "Column 1").setValue("label");
     await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D150");
     await flushPromises();
-    expect(count().text()).toBe("The rows could not be matched. The local server stopped. Start pkdb curate again.");
+    expect(count().text()).toBe("The rows could not be matched. Could not reach the local server.");
     expect(count().classes()).toContain("field-error");
 
     // The next poll fails too; once a poll succeeds, the count is asked for again.

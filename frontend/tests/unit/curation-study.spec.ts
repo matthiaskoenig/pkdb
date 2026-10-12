@@ -15,6 +15,7 @@ import {
   defaultSection,
   duplicateFolders,
   duplicateHeading,
+  failureOf,
   findProfile,
   folderPath,
   isLimitIssue,
@@ -272,6 +273,7 @@ describe("failures", () => {
       issues: ["a", "b", "c"],
       more: 2,
       link: null,
+      details: null,
     });
   });
 
@@ -303,6 +305,32 @@ describe("failures", () => {
         label: "Show the conflicts",
       }),
     );
+  });
+
+  it("takes the details of the local server into a failure, after a lead for a refusal only", () => {
+    const failed = new ApiError(500, {
+      error: "Could not read reference.json of caffeine/Example.",
+      code: "invalid_request",
+      detail: "JSONDecodeError: Expecting value",
+      action: "Read reference.json (POST /local/reference/read)",
+      request_id: "3f9c2a71",
+      time: "2026-10-12T14:03:11+02:00",
+    });
+    const failure = failureOf(failed, "reference.json could not be read.");
+    expect(failure.text).toBe("Could not read reference.json of caffeine/Example.");
+    expect(failure.details?.detail).toBe("JSONDecodeError: Expecting value");
+    const refused = new ApiError(400, {
+      error: "Reference preview expired; preview again",
+      code: "reference_refused",
+      detail: null,
+      action: "Save reference.json (POST /local/reference/save)",
+      request_id: "0badc0de",
+      time: "2026-10-12T14:03:11+02:00",
+    });
+    expect(failureOf(refused, "reference.json was not saved.").text).toBe(
+      "reference.json was not saved. Reference preview expired; preview again",
+    );
+    expect(failureOf(new Error("Disk full"))).toEqual(actionFailure("Disk full"));
   });
 });
 

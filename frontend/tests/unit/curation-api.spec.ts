@@ -225,12 +225,58 @@ describe("postJson", () => {
     expect(isNoUser(await rejection(postJson("/local/studies/review", {}, isRecord)))).toBe(false);
   });
 
-  it("reports a stopped server when fetch fails", async () => {
+  it("reports an unreachable server as a failure with status 0 that names the request", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
     const error = await rejection(postJson("/local/jobs", {}, isRecord));
     expect(error).toBeInstanceOf(ServerStopped);
-    expect(error instanceof Error && error.message).toBe("The local server stopped. Start pkdb curate again.");
-    await expect(getJson("/local/state", isRecord)).rejects.toBeInstanceOf(ServerStopped);
+    expect(error).toBeInstanceOf(ApiError);
+    if (!(error instanceof ApiError)) return;
+    expect(error.message).toBe("Could not reach the local server.");
+    expect([error.status, error.code, error.action, error.detail]).toEqual([
+      0,
+      "unreachable",
+      "POST /local/jobs",
+      "TypeError: Failed to fetch",
+    ]);
+    const read = await rejection(getJson("/local/state", isRecord));
+    expect(read instanceof ApiError && read.action).toBe("GET /local/state");
+  });
+
+  it("keeps every field of the error body of the local server", async () => {
+    const body = {
+      error: "Could not open the tables of caffeine/Example.",
+      code: "open_failed",
+      detail: "CalledProcessError: xdg-open exited with status 4",
+      action: "Open tables (POST /local/studies/tables)",
+      request_id: "3f9c2a71",
+      time: "2026-10-12T14:03:11+02:00",
+      traceback: "Traceback (most recent call last):",
+      activity_id: "0123456789abcdef0123456789abcdef",
+    };
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(json(body, { status: 500 }));
+    const error = await rejection(postJson("/local/studies/tables", {}, isRecord));
+    expect(error).toBeInstanceOf(ApiError);
+    if (!(error instanceof ApiError)) return;
+    expect(error.message).toBe(body.error);
+    expect([error.code, error.detail, error.action, error.requestId, error.time, error.traceback, error.activityId]).toEqual([
+      body.code,
+      body.detail,
+      body.action,
+      body.request_id,
+      body.time,
+      body.traceback,
+      body.activity_id,
+    ]);
+  });
+
+  it("names the request of an answer without the error body", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(json({ error: "Bad gateway" }, { status: 502 }));
+    const error = await rejection(postJson("/local/jobs", {}, isRecord));
+    expect(error instanceof ApiError && [error.action, error.requestId, error.detail]).toEqual([
+      "POST /local/jobs",
+      null,
+      null,
+    ]);
   });
 
   it("reports a missing session for 401", async () => {
@@ -256,7 +302,7 @@ describe("studyPath", () => {
 describe("isAbort", () => {
   it("recognizes a canceled request", () => {
     expect(isAbort(new DOMException("The study was closed", "AbortError"))).toBe(true);
-    expect(isAbort(new ServerStopped("The local server stopped. Start pkdb curate again."))).toBe(false);
+    expect(isAbort(new ServerStopped("GET /local/state"))).toBe(false);
     expect(isAbort(undefined)).toBe(false);
   });
 });

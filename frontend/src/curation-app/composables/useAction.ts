@@ -1,6 +1,6 @@
 import { computed, ref, type ComputedRef, type Ref } from "vue";
 import { isNoUser } from "../api/client";
-import { actionFailure, messageOf, userHint, type ActionFailure } from "../study";
+import { failureOf, userHint, type ActionFailure } from "../study";
 
 export interface Action<A extends string> {
   /** The running action. */
@@ -34,7 +34,7 @@ export function useAction<A extends string>(announce: (text: string) => void, wa
   async function run(
     action: A,
     work: () => Promise<string | void>,
-    explain: (caught: unknown) => ActionFailure = (caught) => actionFailure(messageOf(caught)),
+    explain: (caught: unknown) => ActionFailure = failureOf,
   ): Promise<void> {
     if (working.value) return;
     busy.value = action;
