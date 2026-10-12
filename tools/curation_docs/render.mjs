@@ -56,7 +56,7 @@ function redact(text) {
   return token ? text.replaceAll(token, "<launch token>") : text;
 }
 
-/** Capture the six images; the paths of the files. */
+/** Capture the seven images; the paths of the files. */
 async function render() {
   const written = [];
   const browser = await chromium.launch();
@@ -121,6 +121,13 @@ async function render() {
       pointer: true,
     });
 
+    // Data with the paper: page 1 of the PDF of the study, with the matches of a find.
+    await navigator.getByRole("button", { name: /^Paper\b/ }).click();
+    const paper = page.getByRole("region", { name: `Paper ${STUDY.split("/")[1]}.pdf` });
+    await paper.locator('.page[data-page-number="1"][data-loaded="true"]').waitFor();
+    await paper.getByRole("searchbox", { name: "Find in the paper" }).fill("the");
+    await capture("data-paper.png", [paper.locator(".paper-count").filter({ hasText: "1 of 3" })]);
+
     // Metadata: the forms of study.json with an unsaved change, which is discarded afterwards. The
     // whole page fits into the window, so that the save bar ends the form rather than cover its end.
     await page.setViewportSize({ width: WIDTH, height: METADATA_HEIGHT });
@@ -136,6 +143,8 @@ async function render() {
     // Data: the notes of the subjects opened above their rows, with an unsaved edit, discarded afterwards.
     await sections.getByRole("link", { name: /^Data\b/ }).click();
     await navigator.getByRole("button", { name: /^subjects\.tsv/ }).click();
+    // A shared table opens beside the paper; the text is the source of its row, as the rows name.
+    await navigator.getByRole("button", { name: /^Text\b/ }).click();
     const subjects = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
     await subjects.getByRole("button", { name: /^Notes of the subjects/ }).click();
     const description = subjects.getByRole("textbox", { name: "Description 1" });
