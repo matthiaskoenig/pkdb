@@ -6,6 +6,7 @@ import mimetypes
 import re
 import secrets
 import threading
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -49,6 +50,9 @@ ACTION_TOKEN = "action_token"
 #: The size of the pieces in which the file route sends a file: 64 kB, the size of the ranges
 #: that PDF.js asks for.
 CHUNK = 64 * 1024
+#: The seconds that the file route waits for a browser to take one piece: one that keeps the
+#: connection but stops reading frees its thread and the file then, as if it went away.
+SEND_TIMEOUT = 30
 #: The media types of the scripts of the app, whatever the table of the system says: a module
 #: script, such as the worker of PDF.js, runs only as JavaScript, and `mimetypes` reads the
 #: Windows registry, which can map `.js` to text/plain.
@@ -432,10 +436,11 @@ class Handler(BaseHTTPRequestHandler):
         A range beyond the end answers 416. The size is the one of the file when it was opened:
         a file that grew since sends no more, one that shrank ends the answer short. A browser
         that stops reading, as PDF.js does with its first request once it knows that ranges
-        work, ends the answer quietly; a file that cannot be read to its end after the headers
-        ends it short and is logged.
+        work, ends the answer quietly, and so does one that takes no piece for SEND_TIMEOUT
+        seconds; a file that cannot be read to its end after the headers ends it short and is
+        logged. Nothing but the bytes of the file ever follows the headers.
         """
-        with opened.stream as stream:
+        with opened.stream as stream, self._timeout(SEND_TIMEOUT):
             header = self.headers.get("Range")
             try:
                 span = byte_range(header, opened.size)
@@ -483,23 +488,38 @@ class Handler(BaseHTTPRequestHandler):
                 # The answer is shorter than its Content-Length: closing the connection ends it.
                 self.close_connection = True
 
+    @contextmanager
+    def _timeout(self, seconds: float):
+        """Let each write to the client wait at most `seconds`, after which it counts as gone."""
+        previous = self.connection.gettimeout()
+        self.connection.settimeout(seconds)
+        try:
+            yield
+        finally:
+            self.connection.settimeout(previous)
+
     def _interrupted(self, error: OSError) -> None:
         """Log a file that failed after its headers were sent; the browser sees a short answer.
 
-        The answer can no longer carry an error body: only the log keeps the failure.
+        The answer can no longer carry an error body: only the log keeps the failure. Never
+        raises, since an error body of a log that fails too would follow the headers.
         """
         engine = self.server.engine
         action = action_of(self.command, urlsplit(self.path).path)
-        body = describe(
-            error,
-            action=action.text(),
-            request_id=new_request_id(),
-            message=action.failure(),
-            code="file_error",
-            unexpected=True,
-            secrets=engine.secrets(),
-        )
-        engine.log.unexpected(body, error, label=action.label)
+        try:
+            body = describe(
+                error,
+                action=action.text(),
+                request_id=new_request_id(),
+                message=action.failure(),
+                code="file_error",
+                unexpected=True,
+                secrets=engine.secrets(),
+            )
+            engine.log.unexpected(body, error, label=action.label)
+        except Exception:
+            # Nowhere else to tell: the answer still ends short and the connection closes.
+            pass
 
     def _study(self, path):
         engine = self.server.engine

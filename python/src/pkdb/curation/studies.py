@@ -671,11 +671,16 @@ class StudiesMixin(EngineState):
         path = folder / file
         if not path.resolve().is_relative_to(folder.resolve()):
             raise LookupError(f"{file} is outside the study folder")
+        # A named pipe placed after the check would block the open until a writer comes.
+        nonblocking = getattr(os, "O_NONBLOCK", 0)
         try:
             # A symlink placed after the check is not followed either.
             descriptor = os.open(
                 path,
-                os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_BINARY", 0),
+                os.O_RDONLY
+                | getattr(os, "O_NOFOLLOW", 0)
+                | getattr(os, "O_BINARY", 0)
+                | nonblocking,
             )
         except OSError:
             raise LookupError(f"{file} cannot be read") from None
@@ -684,6 +689,9 @@ class StudiesMixin(EngineState):
             status = os.fstat(stream.fileno())
             if not stat.S_ISREG(status.st_mode):
                 raise LookupError(f"{file} is not a regular file")
+            if nonblocking:
+                # Only the open was not to wait: the reads block as on any file.
+                os.set_blocking(stream.fileno(), True)
         except BaseException:
             stream.close()
             raise

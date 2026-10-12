@@ -1600,6 +1600,66 @@ def test_a_file_whose_size_changed_since_it_was_opened_sends_its_size_and_ends(
     engine.log.failed.assert_not_called()
 
 
+@pytest.mark.parametrize(
+    "broken",
+    [RuntimeError("The log is broken"), OSError(28, "No space left on device")],
+    ids=["error", "os error"],
+)
+def test_a_failure_to_log_a_failed_file_sends_nothing_after_its_bytes(
+    local_server, monkeypatch, broken
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    data = os.urandom(3 * transport.CHUNK)
+    stream = serve_file(engine, data, fail_after=1)
+    # Only the first record fails, so that a second answer after the headers would be logged.
+    engine.log.unexpected.side_effect = [broken, None]
+    finished = finished_requests(monkeypatch)
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
+    connection.request("GET", FILE, headers={"Origin": server.origin, **headers})
+    response = connection.getresponse()
+    assert response.status == 200
+    with pytest.raises(IncompleteRead) as short:
+        response.read()
+    # The bytes of the file and nothing else follow the headers: no second status line.
+    assert short.value.partial == data[: transport.CHUNK]
+    connection.close()
+    assert stream.closed_by_server.wait(3)
+    assert finished.wait(3)
+    engine.log.unexpected.assert_called_once()
+    engine.log.failed.assert_not_called()
+    assert request(server, "GET", "/local/state", headers=headers)[0] == 200
+
+
+def test_a_browser_that_stalls_frees_its_thread_and_the_file_after_a_timeout(
+    local_server, monkeypatch
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    monkeypatch.setattr(transport, "SEND_TIMEOUT", 0.5)
+    stream = serve_file(engine, bytes(32 * 1024 * 1024))
+    finished = finished_requests(monkeypatch)
+    with socket.socket() as client:
+        # A small window, so that the server soon has nothing more to send into.
+        client.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 64 * 1024)
+        client.settimeout(3)
+        client.connect(("127.0.0.1", server.server_port))
+        client.sendall(
+            (
+                f"GET {FILE} HTTP/1.1\r\nHost: 127.0.0.1:{server.server_port}\r\n"
+                f"Cookie: {headers['Cookie']}\r\n\r\n"
+            ).encode()
+        )
+        assert client.recv(12).startswith(b"HTTP/1.")
+        # The browser keeps the connection open and reads no more.
+        assert stream.closed_by_server.wait(5)
+        assert finished.wait(5)
+    assert len(stream.reads) < 32 * 1024 * 1024 // transport.CHUNK
+    engine.log.unexpected.assert_not_called()
+    engine.log.failed.assert_not_called()
+    assert request(server, "GET", "/local/state", headers=headers)[0] == 200
+
+
 def test_the_scripts_of_the_app_are_javascript_whatever_the_system_table_says(
     local_server, monkeypatch
 ):

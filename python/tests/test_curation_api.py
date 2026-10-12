@@ -1917,3 +1917,15 @@ def test_a_symlinked_pdf_and_files_that_are_no_image_or_pdf_are_refused(api, tmp
         assert (
             request(server, "GET", f"{DETAIL}/files/{file}", headers=headers)[0] == 404
         )
+
+
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="Named pipes are POSIX only")
+def test_a_named_pipe_named_like_a_pdf_is_refused_without_waiting_for_a_writer(api):
+    server, engine, folder = api
+    os.mkfifo(folder / "Pipe.pdf")
+    engine.scan()
+    # The request times out after 3 s if opening the pipe waits for a writer.
+    status = request(
+        server, "GET", f"{DETAIL}/files/Pipe.pdf", headers=authenticate(server)
+    )[0]
+    assert status == 404
