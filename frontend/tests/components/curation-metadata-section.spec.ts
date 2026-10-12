@@ -887,6 +887,32 @@ describe("leaving the study with unsaved changes", () => {
     expect(field("DOI").element.value).toBe("10.1000/xyz");
   });
 
+  it("shows the study.json of another study after Discard and leave", async () => {
+    const other = studyDetail({
+      id: "caffeine/Other",
+      path: "caffeine/Other",
+      metadata: {
+        revision: "other-1",
+        value: studyMetadata({ reference: { doi: "10.1000/other" }, licence: "closed" }),
+        issues: [],
+      },
+    });
+    await mountSection(studyDetail(), { "GET /local/studies/caffeine/Other": other });
+    await field("DOI").setValue("10.1000/xyz");
+    const leave = router.push("/studies/caffeine/Other/metadata");
+    await leaveDialog();
+    await click("Discard and leave");
+    await leave;
+    await flushPromises();
+
+    expect(router.currentRoute.value.params.name).toBe("Other");
+    expect(field("DOI").element.value).toBe("10.1000/other");
+    expect(radio("Closed").checked).toBe(true);
+    expect(saveBar().exists()).toBe(false);
+    expect(tabLabel("Metadata")).toBe("Metadata");
+    expect(useStudyStore().draft.dirty).toBe(false);
+  });
+
   it("leaves without asking when nothing changed", async () => {
     await mountSection();
     await router.push("/");
