@@ -1,5 +1,6 @@
 """Every test gets a copy of a migrated template database of its own."""
 
+import time
 from uuid import uuid4
 
 import pytest
@@ -8,7 +9,12 @@ from sqlalchemy.exc import OperationalError
 
 from pkdb_server.app import SCHEMA_REVISION
 from pkdb_server.db.models.users import User
-from tests.db_fixtures import CLONE_PROPERTY, STALE_SECONDS, owned_database
+from tests.db_fixtures import (
+    CLONE_PROPERTY,
+    STALE_SECONDS,
+    DatabaseServer,
+    owned_database,
+)
 
 
 def test_a_test_database_is_a_migrated_copy_of_the_template(
@@ -74,8 +80,53 @@ def test_a_connection_left_open_does_not_keep_the_database(
     forgotten = create_engine(url)
     try:
         with owned_database(database_server, url) as factory:
-            factory.kw["bind"].connect()
-            forgotten.connect()
+            held = factory.kw["bind"].connect()
+            forgotten_connection = forgotten.connect()
+            assert not held.closed and not forgotten_connection.closed
         assert url.database not in database_server.names()
     finally:
         forgotten.dispose()
+
+
+def test_a_run_drops_a_stale_template_and_keeps_what_is_not_its_own(database_server):
+    prefix = database_server.prefix
+    stale_template = f"{prefix}_tpl_1000000000_{uuid4().hex[:12]}"
+    # these only look old: they do not match the whole naming scheme
+    lookalikes = [
+        f"{prefix}_x_1000000000_{uuid4().hex[:12]}",
+        f"{prefix}_1000000000_{uuid4().hex[:12]}_more",
+        f"{prefix}_100000000_{uuid4().hex[:12]}",
+    ]
+    for name in (stale_template, *lookalikes):
+        database_server.create(name=name)
+    try:
+        dropped = database_server.drop_stale(now=1000000000 + STALE_SECONDS + 1)
+        names = database_server.names()
+        assert dropped == [stale_template]
+        assert stale_template not in names
+        assert set(lookalikes) <= names
+        assert prefix in names
+    finally:
+        for name in (stale_template, *lookalikes):
+            database_server.drop(name)
+
+
+def test_a_run_never_drops_the_databases_of_a_run_that_is_alive(database_server):
+    stale = f"{database_server.prefix}_1000000000_{uuid4().hex[:12]}"
+    later = 1000000000 + STALE_SECONDS + 1
+    other = DatabaseServer(database_server.url)
+    try:
+        other.create(name=stale)
+        assert database_server.drop_stale(now=later) == []
+        assert stale in database_server.names()
+        other.close()
+        # the server notices the closed connections a moment later
+        deadline = time.monotonic() + 10
+        dropped = database_server.drop_stale(now=later)
+        while not dropped and time.monotonic() < deadline:
+            time.sleep(0.05)
+            dropped = database_server.drop_stale(now=later)
+        assert dropped == [stale]
+    finally:
+        other.close()
+        database_server.drop(stale)

@@ -51,7 +51,17 @@ class DatabaseServer:
             raise ValueError("PKDB_TEST_DATABASE_URL names no database")
         self.url = url
         self.prefix = url.database
-        self.admin = create_engine(url, isolation_level="AUTOCOMMIT")
+        # Every connection of this run names its run, so that another run sees it.
+        self._owner = f"pkdbt:{self.prefix}:{uuid4().hex[:8]}"
+        if len(self._owner.encode()) > 63:
+            raise ValueError(f"{self._owner} is longer than an application name may be")
+        self.admin = create_engine(
+            url,
+            isolation_level="AUTOCOMMIT",
+            connect_args={"application_name": self._owner},
+        )
+        # kept open until close(), so that the run stays visible to other runs
+        self._keepalive = self.admin.connect()
         self._ours = re.compile(
             rf"{re.escape(self.prefix)}_(?:tpl_)?(\d{{10}})_[0-9a-f]{{12}}"
         )
@@ -68,6 +78,10 @@ class DatabaseServer:
         name = name or self.name()
         with self.admin.connect() as connection:
             connection.execute(text(f'CREATE DATABASE "{name}" TEMPLATE "{template}"'))
+            # the run that owns the database, for drop_stale
+            connection.execute(
+                text(f"COMMENT ON DATABASE \"{name}\" IS '{self._owner}'")
+            )
         return self.url.set(database=name)
 
     def drop(self, name: str) -> None:
@@ -81,19 +95,41 @@ class DatabaseServer:
             return set(connection.scalars(text("SELECT datname FROM pg_database")))
 
     def drop_stale(self, now: float | None = None) -> list[str]:
-        """Drop the test databases older than STALE_SECONDS and return their names."""
+        """Drop the test databases older than STALE_SECONDS and return their names.
+
+        A database whose creating run is still alive is never dropped, so a run that
+        lasts longer than STALE_SECONDS keeps its databases. The run is alive while it
+        keeps a connection named after it open, as DatabaseServer does until close().
+        A database without a recorded run counts as left by a killed run.
+        """
         now = time.time() if now is None else now
+        with self.admin.connect() as connection:
+            alive = set(
+                connection.scalars(
+                    text("SELECT DISTINCT application_name FROM pg_stat_activity")
+                )
+            )
+            owners = dict(
+                connection.execute(
+                    text(
+                        "SELECT datname, shobj_description(oid, 'pg_database') "
+                        "FROM pg_database"
+                    )
+                ).all()
+            )
         stale = sorted(
             name
-            for name in self.names()
+            for name, owner in owners.items()
             if (match := self._ours.fullmatch(name))
             and now - int(match.group(1)) > STALE_SECONDS
+            and (owner == self._owner or owner not in alive)
         )
         for name in stale:
             self.drop(name)
         return stale
 
     def close(self) -> None:
+        self._keepalive.close()
         self.admin.dispose()
 
 

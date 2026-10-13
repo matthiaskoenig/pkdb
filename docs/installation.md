@@ -188,14 +188,14 @@ uv sync --project backend --locked --python 3.14
 uv run --project backend pre-commit install
 docker compose -f compose.test.yaml up -d --wait
 export PKDB_TEST_DATABASE_URL=postgresql+psycopg://pkdb_test:local-test-only@127.0.0.1:15439/pkdb_test
-uv run --project backend pytest backend/tests -q -x -n auto --dist loadfile
+uv run --project backend pytest backend/tests -q -x -n auto --dist worksteal
 uv run --project backend python -m pytest tools/backend_migration -q -x
 uv run --project backend ruff check .
 uv run --project backend ruff format --check .
 uv run --project backend ty check --project backend
 ```
 
-The test database uses temporary container storage. Tests create isolated schemas, so `-n auto` (pytest-xdist) runs them in parallel, as CI does; `--dist loadfile` keeps a test file on one worker, which builds its module fixtures only once. CI adds `--durations=15` to list the slowest tests. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
+The test database keeps its data in temporary container storage and runs without durable writes (`fsync`, `synchronous_commit` and `full_page_writes` are off), which suits only disposable data. Each pytest process migrates a template database once, and every test gets a copy of it (`CREATE DATABASE ... TEMPLATE`, a few milliseconds), so `-n auto` (pytest-xdist) runs the tests in parallel, as CI does; the tests of the migrations migrate an empty database themselves. At the end, the run reports how long the copies took (`test databases: ... copies of the template, median ... ms`). `--dist worksteal` lets an idle worker take tests from a busy one, which was faster than keeping a test file on one worker. CI adds `--durations=15` to list the slowest tests. The user of `PKDB_TEST_DATABASE_URL` needs the right to create databases (`CREATEDB`); the users of `compose.test.yaml` and CI are superusers. The test databases are named after the configured one (`pkdb_test_<time>_<id>`), and a run drops those that a killed run left more than six hours ago, unless the run that created them is still alive. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`; after a change of `compose.test.yaml`, `docker compose -f compose.test.yaml up -d --wait` recreates it.
 
 Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14; for Python 3.15 run them locally against the Python 3.15 runtime image above, with `PKDB_TEST_IMAGE_PYTHON=3.15`. Corpus tests require explicitly configured source data and are not part of the default suite.
 
