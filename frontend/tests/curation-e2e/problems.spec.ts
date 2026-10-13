@@ -68,8 +68,6 @@ test("Show in table opens the Data section with the cell of the problem focused"
 });
 
 test("a problem names its line, counted from the header line 0, and its workbook cell (#938)", async ({ page }) => {
-  // Fails until the app numbers the header of a table line 0 and names the workbook cell.
-  test.fail();
   const mismatch = problem(page, "digitized_mismatch");
   // The misplaced mean is entry 5 of timecourses_Fig1.tsv, in row 6 of its sheet.
   await expect(mismatch).toContainText("line 5 · mean · workbook cell O6");

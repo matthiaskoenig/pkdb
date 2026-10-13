@@ -738,15 +738,15 @@ describe("problems of a source", () => {
     code: "digitized_mismatch",
     severity: "warning",
     acknowledgeable: true,
-    message: "Line 3 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
-    source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 3, column: "F", cell: "F3", header: "mean" },
+    message: "Line 2 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
+    source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 2, column: "F", cell: "F3", header: "mean" },
   };
   const other: Problem = {
     code: "unused_intervention",
     severity: "warning",
     acknowledgeable: true,
     message: "'caf_po_300' is not referenced by any row",
-    source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
+    source: { file: "interventions.tsv", sheet: "interventions", row: 2, column: "B", cell: "B3", header: "name" },
   };
 
   it("lists the problems of the files of the source with a link to the cell", async () => {
@@ -757,7 +757,7 @@ describe("problems of a source", () => {
     expect(problems.text()).not.toContain("unused_intervention");
     const link = problems.get("a");
     expect(link.text()).toBe("Show in table");
-    expect(link.attributes("href")).toBe("#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=3&column=mean");
+    expect(link.attributes("href")).toBe("#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=2&column=mean");
   });
 
   it("shows the problems as the Problems section does: by file, errors first, without Acknowledge", async () => {
@@ -775,7 +775,7 @@ describe("problems of a source", () => {
       "timecourses_Fig1.tsv",
     ]);
     expect(problems.findAll(".problem-severity").map((chip) => chip.text())).toEqual(["Error", "Warning"]);
-    expect(problems.get(".problem-location").text()).toBe("line 3 · mean · sheet cell timecourses_Fig1!F3");
+    expect(problems.get(".problem-location").text()).toBe("line 2 · mean · workbook cell F3");
     expect(problems.findAll("button").filter((control) => control.text() === "Acknowledge")).toHaveLength(0);
   });
 
@@ -1477,7 +1477,7 @@ describe("tables", () => {
       .find((entry) => entry.text().includes("Hide empty columns"))!;
     expect(hideEmpty.get("input").element).toHaveProperty("checked", true);
     expect(rowsPane().findAll("thead th").map((cell) => cell.text())).toEqual([
-      "Line",
+      "Line 0",
       "study",
       "source",
       "label",

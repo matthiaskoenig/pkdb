@@ -46,6 +46,11 @@ const props = withDefaults(
     label?: string | null;
     /** The header of the line column, such as Row for the rows of a sheet; null leaves the column out. */
     lineHeader?: string | null;
+    /**
+     * Whether the header row is line 0 of the file, so that its line cell shows 0; a raw table has
+     * no header line, and a grid of other rows, such as the versions of a conflict, sets it false.
+     */
+    headerLine?: boolean;
     /** Whether a click on a row selects its line: the line cell becomes a button. */
     selectable?: boolean;
     /** The lines of the rows to show; null shows every row. */
@@ -63,6 +68,7 @@ const props = withDefaults(
     columns: null,
     label: null,
     lineHeader: "Line",
+    headerLine: true,
     selectable: false,
     visibleLines: null,
     tinted: false,
@@ -84,6 +90,8 @@ const shownRows = computed(() =>
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
+/** Whether the line cell of the header row shows 0, the line of the header of a table. */
+const numberedHeader = computed(() => props.headerLine && !raw.value);
 
 const marked = computed(
   () => new Set(typeof props.markColumn === "string" ? [props.markColumn] : (props.markColumn ?? [])),
@@ -419,7 +427,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :class="headerClass(-1, null)"
               :aria-describedby="described(headerNote(-1)?.id)"
             >
-              {{ lineHeader }}
+              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> 0</template>
+              <template v-else>{{ lineHeader }}</template>
             </th>
             <th
               v-for="column in headers"

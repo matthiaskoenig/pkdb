@@ -88,7 +88,7 @@ function description(element: Element): string {
 describe("TableGrid", () => {
   it("shows the header and the rows with their lines in the file", () => {
     const wrapper = mount(TableGrid, { props: { table: small } });
-    expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual(["Line", ...HEADER]);
+    expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual(["Line 0", ...HEADER]);
     expect(lines(wrapper)).toEqual(["2", "3", "4"]);
     expect(wrapper.findAll("tbody tr")[1]?.findAll("td").map((cell) => cell.text())).toEqual([
       "Example",
@@ -127,6 +127,17 @@ describe("TableGrid", () => {
     expect(cell.text()).toBe("3.1");
   });
 
+  it("shows line 0 in the line cell of the header of a table, and the title of the column otherwise", () => {
+    const table = mount(TableGrid, { props: { table: small } });
+    const corner = table.get("thead th.rows-line");
+    expect(corner.text()).toBe("Line 0");
+    expect(corner.get(".d-sr-only").text()).toBe("Line");
+    const raw: TableResponse = { file: "Example_Tab2.tsv", kind: "raw", rows: [{ line: 1, cells: ["a"] }] };
+    expect(mount(TableGrid, { props: { table: raw } }).get("thead th.rows-line").text()).toBe("Line");
+    const versions = mount(TableGrid, { props: { table: small, lineHeader: "Version", headerLine: false } });
+    expect(versions.get("thead th.rows-line").text()).toBe("Version");
+  });
+
   it("outlines a header cell with a problem of the header, line 0 of a table", () => {
     const issues: IssueCells = new Map([
       [0, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["Unknown column 'meen'."] }]])],
@@ -143,7 +154,7 @@ describe("TableGrid", () => {
     ]);
     const wrapper = mount(TableGrid, { props: { table: small, markColumn: "mean", hideEmpty: true } });
     expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual([
-      "Line",
+      "Line 0",
       "study",
       "source",
       "label",
@@ -167,7 +178,7 @@ describe("TableGrid", () => {
 
   it("shows the columns that it is given in their order", () => {
     const wrapper = mount(TableGrid, { props: { table: small, columns: [4, 2] } });
-    expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual(["Line", "mean", "label"]);
+    expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual(["Line 0", "mean", "label"]);
   });
 
   it("shows a raw table as printed, with the column letters of its sheet", () => {

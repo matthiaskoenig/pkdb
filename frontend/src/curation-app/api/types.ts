@@ -26,9 +26,11 @@ export function hasKeys<T extends object>(...keys: (keyof T & string)[]): Guard<
 export interface SourceLocation {
   file: string;
   sheet?: string | null;
+  /** The line of a table file (its header is line 0, a raw table starts at line 1), the row of a sheet of the workbook, or the line of a JSON file. */
   row?: number | null;
   column?: string | null;
   path?: (string | number)[];
+  /** The address of the cell in the workbook, such as Y97. */
   cell?: string;
   header?: string;
   /** Names the place of an issue in a file without rows: a dataset of a WebPlotDigitizer project, a review item. */
@@ -662,7 +664,7 @@ export interface DigitizedSeries {
 /** What a review target selects, as the local server matches it. */
 export interface TargetMatch {
   /**
-   * The TSV lines of the rows that its row filter matches in a data table, in file order; null
+   * The lines (from 1, below the header line 0) of the rows that its row filter matches in a data table, in file order; null
    * for a target without a row filter or of a file that is no data table, such as a raw table.
    */
   lines: number[] | null;
@@ -673,7 +675,7 @@ export interface TargetMatch {
 }
 
 export interface TableRow {
-  /** The line of the row in the TSV file. */
+  /** The line of the row: the first row of a table is line 1, below its header, line 0; a raw table starts at line 1. */
   line: number;
   cells: string[];
 }
@@ -686,7 +688,7 @@ export interface MappedTable {
   file: string;
   kind: string;
   header: string[];
-  /** The TSV line and the cells in header order. */
+  /** The line (from 1, below the header line 0) and the cells in header order. */
   rows: [number, string[]][];
   /** Whether the table names the source of each row, as subjects.tsv does; else all its rows belong to the source. */
   shared: boolean;

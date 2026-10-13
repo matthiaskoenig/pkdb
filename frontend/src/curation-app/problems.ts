@@ -83,13 +83,15 @@ export function groupByFile<I extends ValidationIssue>(issues: readonly I[]): Is
     .toSorted(([, a], [, b]) => errors(a) - errors(b))
     .map(([file, entries]) => ({
       file,
-      issues: entries.toSorted((a, b) => (a.source?.row ?? 0) - (b.source?.row ?? 0)),
+      // The issues of the whole file come first, then those of the header, line 0, and of each line.
+      issues: entries.toSorted((a, b) => (a.source?.row ?? -1) - (b.source?.row ?? -1)),
     }));
 }
 
 /**
- * Where an issue is: `timecourses_Fig1.tsv · line 6 · mean · sheet cell timecourses_Fig1!O6`.
- * A table names its TSV line and the cell of its workbook sheet; the workbook names the row of
+ * Where an issue is: `timecourses_Fig1.tsv · line 5 · mean · workbook cell O6`.
+ * A table names its line, counted from its header, line 0 (a raw table from line 1), and the
+ * address of the cell in the workbook; the workbook names the row of its sheet and the cell with
  * its sheet; a file without rows names the key of the issue, such as a dataset of a
  * WebPlotDigitizer project. Without `file`, the location starts after the file, which a group
  * names already.
@@ -102,7 +104,7 @@ export function location(issue: ValidationIssue, { file = true }: { file?: boole
   if (source.row != null) parts.push(`${workbook ? "row" : "line"} ${source.row}`);
   if (source.header) parts.push(source.header);
   if (source.key) parts.push(source.key);
-  if (source.sheet && source.cell) parts.push(`sheet cell ${source.sheet}!${source.cell}`);
+  if (source.cell) parts.push(`workbook cell ${workbook && source.sheet ? `${source.sheet}!` : ""}${source.cell}`);
   else if (source.sheet && workbook) parts.push(`sheet ${source.sheet}`);
   return parts.join(" · ");
 }
