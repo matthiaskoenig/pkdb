@@ -1689,9 +1689,11 @@ def test_open_tables_names_a_view_problem_plainly_and_logs_its_detail(
         "be changed. Go to sheet timecourses_Fig1, cell O6."
     )
     engine.log.handler.flush()
-    assert "the sheet timecourses_Fig1 has no view" in engine.log.path.read_text(
-        encoding="utf-8"
-    )
+    # The log names the request as it names a later failure of the open command.
+    assert (
+        "in Open tables (POST /local/studies/tables): "
+        "ViewError: the sheet timecourses_Fig1 has no view"
+    ) in engine.log.path.read_text(encoding="utf-8")
 
 
 def test_open_tables_opens_the_workbook_whatever_fails_in_the_view(opened, monkeypatch):
@@ -1710,7 +1712,9 @@ def test_open_tables_opens_the_workbook_whatever_fails_in_the_view(opened, monke
     )
     assert paths == [workbook_path(folder)] * 2
     engine.log.handler.flush()
-    assert "RuntimeError" in engine.log.path.read_text(encoding="utf-8")
+    text = engine.log.path.read_text(encoding="utf-8")
+    assert "in Open tables (POST /local/studies/tables): " in text
+    assert "RuntimeError" in text
 
 
 def test_open_tables_at_a_cell_while_a_job_of_the_study_runs(opened):

@@ -21,7 +21,7 @@ from urllib.parse import quote
 
 from pydantic import ValidationError
 
-from pkdb.curation.actions import action_of
+from pkdb.curation.actions import Action, action_of
 from pkdb.curation.errors import describe, new_request_id
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
@@ -990,14 +990,21 @@ class StudiesMixin(EngineState):
             self._rescan()
 
     def _open_at(
-        self, folder: Path, workbook: Path, sheet: str, cell: str | None
+        self,
+        folder: Path,
+        workbook: Path,
+        sheet: str,
+        cell: str | None,
+        *,
+        opening: Action,
     ) -> str | None:
         """Make the workbook open at `sheet` with `cell` selected; a notice when it cannot.
 
         A workbook that a spreadsheet program has open cannot be switched from outside: it
         opens as it is, and the notice names the sheet and the cell to go to. So does a
         workbook of a study with a running job, which a rewrite would stop. The rewrite
-        changes no cell, so the watcher takes it as seen and starts no job for it.
+        changes no cell, so the watcher takes it as seen and starts no job for it. The log
+        names a failure by `opening`, the request that opens the workbook.
         """
         if open_lock(workbook) is not None:
             return f"The workbook is already open. {_go_to(sheet, cell)}"
@@ -1015,7 +1022,7 @@ class StudiesMixin(EngineState):
         except NoSheet:
             return f"The workbook has no sheet {sheet}."
         except ViewError as error:
-            self._log_open_failure(error)
+            self._log_open_failure(error, opening)
             return (
                 f"Could not select sheet {sheet}: the view of the workbook could not be "
                 f"changed. {_go_to(sheet, cell)}"
@@ -1026,24 +1033,24 @@ class StudiesMixin(EngineState):
             return f"Could not select sheet {sheet}: {reason}. {_go_to(sheet, cell)}"
         except Exception as error:
             # A problem of the view never blocks the open: the workbook opens as it is.
-            self._log_open_failure(error)
+            self._log_open_failure(error, opening)
             return f"Could not select sheet {sheet}. {_go_to(sheet, cell)}"
         return None
 
-    def _log_open_failure(self, error: BaseException) -> None:
+    def _log_open_failure(self, error: BaseException, opening: Action) -> None:
         """Keep the technical detail of a failed view change in the error log."""
         body = describe(
             error,
-            action="open_tables",
+            action=opening.text(),
             request_id=new_request_id(),
             code="view_error",
             unexpected=not isinstance(error, ViewError),
             secrets=self.secrets(),
         )
         if isinstance(error, ViewError):
-            self.log.failed(body, error, label="Open workbook")
+            self.log.failed(body, error, label=opening.label)
         else:
-            self.log.unexpected(body, error, label="Open workbook")
+            self.log.unexpected(body, error, label=opening.label)
 
     def table_preview(self, identity: str, payload: dict) -> dict:
         """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""
@@ -1129,13 +1136,15 @@ class StudiesMixin(EngineState):
             result["opened"] = sync.workbook.is_file()
             result["notice"] = None
             if result["opened"]:
-                if place is not None:
-                    result["notice"] = self._open_at(folder, sync.workbook, *place)
                 opening = action_of(
                     "POST",
                     "/local/studies/tables",
                     {"study": identity, "action": "open"},
                 )
+                if place is not None:
+                    result["notice"] = self._open_at(
+                        folder, sync.workbook, *place, opening=opening
+                    )
                 open_path(
                     sync.workbook,
                     subject=f"the tables of {identity}",
