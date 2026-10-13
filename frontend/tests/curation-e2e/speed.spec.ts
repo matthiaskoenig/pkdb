@@ -14,20 +14,18 @@ const SURNAME = "dahlqvist";
 const MATCHES = 25;
 /** Typing rounds of the search: one warm-up round that is not measured, then the measured ones. */
 const WARM_UP_ROUNDS = 1;
-const ROUNDS = 6;
+const ROUNDS = 5;
 /** How long without a long task counts as quiet, a little more than two polls of the app. */
 const QUIET_MS = 3500;
 /** How long the jobs that were already running may need to finish after the pause. */
-const QUIET_TIMEOUT_MS = 300_000;
+const QUIET_TIMEOUT_MS = 60_000;
 /** How long the polls are watched while jobs run. */
 const WATCH_MS = 10_000;
-/** How long the server may need to pause its automatic actions while it validates 1,000 studies. */
-const PAUSE_MS = 120_000;
 
 test.use({ studies: STUDIES });
 // The tests share the server and run in order; playwright.curation.config.ts runs this file in a
 // project of its own after all other spec files, so nothing else loads the processor.
-test.describe.configure({ mode: "serial", timeout: PAUSE_MS + QUIET_TIMEOUT_MS + 90_000 });
+test.describe.configure({ mode: "serial", timeout: QUIET_TIMEOUT_MS + 90_000 });
 
 interface Latency {
   /** For each recorded input event, the milliseconds until the paint after it. */
@@ -123,6 +121,12 @@ async function waitForQuiet(page: Page): Promise<void> {
   }).toPass({ timeout: QUIET_TIMEOUT_MS, intervals: [0] });
 }
 
+/** The value that `fraction` of the values do not exceed. */
+function percentile(values: number[], fraction: number): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.ceil(fraction * sorted.length) - 1]!;
+}
+
 function median(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const middle = Math.floor(sorted.length / 2);
@@ -149,13 +153,9 @@ test("while jobs run, a poll never blocks the page for more than 200 ms", async 
 
 test("typing in Search studies paints each keystroke and the result within 100 ms", async ({ page }, testInfo) => {
   test.fail(true, "#936: the overview filters and renders every study on each keystroke");
-  // The server is busy with the validations, so the pause takes longer than the default timeout.
-  if (await page.getByRole("button", { name: "File watching: Active" }).isVisible()) {
-    await page.getByRole("button", { name: "File watching: Active" }).click();
-    await page.getByRole("button", { name: "Pause automatic actions" }).click();
-    await expect(page.getByRole("button", { name: "File watching: Paused" })).toBeVisible({ timeout: PAUSE_MS });
-    await page.keyboard.press("Escape");
-  }
+  // The validations of the 1,000 studies run for minutes, and every poll of the state would load
+  // the page again. This test measures the keystrokes, so the polls answer "nothing changed".
+  await page.route("**/local/state", (route) => route.fulfill({ status: 304 }));
   const search = page.getByRole("textbox", { name: "Search studies" });
   await search.click();
   await installLatencyProbe(page);
@@ -165,6 +165,8 @@ test("typing in Search studies paints each keystroke and the result within 100 m
   for (let round = 0; round < WARM_UP_ROUNDS + ROUNDS; round++) {
     const measured = round >= WARM_UP_ROUNDS;
     await resetLatency(page, measured);
+    // The next round replaces the text of the last one: its first letter filters again at once.
+    await page.keyboard.press("Control+A");
     await page.keyboard.type(SURNAME, { delay: 60 });
     await expect.poll(async () => (await readLatency(page)).result).not.toBeNull();
     await expect(page.getByText(`${MATCHES} of ${STUDIES.toLocaleString("en-US")} studies`)).toBeVisible();
@@ -173,14 +175,18 @@ test("typing in Search studies paints each keystroke and the result within 100 m
       inputs.push(...latency.inputs);
       results.push(latency.result! - SEARCH_DELAY_MS);
     }
-    // Clear the field for the next round.
-    await resetLatency(page, false);
-    await search.fill("");
-    await expect(page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, { exact: true })).toBeVisible();
   }
-  const summary = { inputs, results, medianInput: median(inputs), medianResult: median(results) };
+  const summary = {
+    inputs,
+    results,
+    medianInput: median(inputs),
+    p90Input: percentile(inputs, 0.9),
+    medianResult: median(results),
+  };
   await testInfo.attach("latency.json", { body: JSON.stringify(summary, null, 2), contentType: "application/json" });
   // The median, so that one pause of the garbage collector does not decide.
   expect(summary.medianInput, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
+  // The 90th percentile, so that the slow first keystroke of a search does not hide behind the fast ones.
+  expect(summary.p90Input, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
   expect(summary.medianResult, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
 });
