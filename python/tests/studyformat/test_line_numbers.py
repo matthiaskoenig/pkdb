@@ -68,7 +68,9 @@ def test_a_raw_table_starts_at_line_1_and_row_1():
 def test_a_record_points_to_its_line_and_its_workbook_cell(valid_study):
     study = read_study(load_study(valid_study))
     records = {record.key: record for record in study.measurements}
-    source = records["outputs_Tab2.tsv:1"].source
+    record = records.get("outputs_Tab2.tsv:1")
+    assert record is not None, f"no record outputs_Tab2.tsv:1 in {sorted(records)}"
+    source = record.source
     assert source is not None and source.row == 1
     assert source.for_header("mean").cell == "N2"
 

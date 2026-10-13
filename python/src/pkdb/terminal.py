@@ -22,6 +22,20 @@ def safe_text(value: object) -> str:
     return re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", str(value))[:2000]
 
 
+def _is_table(source: dict) -> bool:
+    """Whether a location is a line of a format 2 table.
+
+    Format 2 issues name the file stem as the sheet; the hidden TSV sources of
+    format 1 studies have no sheet and keep their cell or row.
+    """
+    file = source.get("file")
+    return (
+        isinstance(file, str)
+        and file.endswith(".tsv")
+        and source.get("sheet") == file.removesuffix(".tsv")
+    )
+
+
 def _place(source: dict) -> list[str | None]:
     """The file and the place of an issue, as `pkdb validate` prints them.
 
@@ -32,7 +46,7 @@ def _place(source: dict) -> list[str | None]:
     from pkdb.studyformat.issues import table_place
 
     file, row = source.get("file"), source.get("row")
-    if isinstance(file, str) and file.endswith(".tsv"):
+    if _is_table(source):
         return [file, *table_place(row, source.get("header"), source.get("cell"))]
     return [
         file,
@@ -43,8 +57,8 @@ def _place(source: dict) -> list[str | None]:
 
 def _occurrence(source: dict) -> str:
     """One place of a repeated issue: the line in a table file, else the cell or row."""
-    file, row = source.get("file"), source.get("row")
-    if isinstance(file, str) and file.endswith(".tsv"):
+    row = source.get("row")
+    if _is_table(source):
         return "?" if row is None else f"line {row}"
     return source.get("cell") or ("?" if row is None else str(row))
 

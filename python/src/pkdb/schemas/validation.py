@@ -266,7 +266,7 @@ class ValidationReport(BaseModel):
             key=lambda i: (
                 i.source.file if i.source else "",
                 i.source.sheet or "" if i.source else "",
-                i.source.row or 0 if i.source else 0,
+                -1 if i.source is None or i.source.row is None else i.source.row,
                 i.source.column or "" if i.source else "",
                 i.code,
             )

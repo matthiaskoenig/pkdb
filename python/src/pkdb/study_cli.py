@@ -148,7 +148,7 @@ def register_review(commands) -> None:
     acknowledge.add_argument(
         "--line",
         type=int,
-        help="Line of the warning; the header of a table is line 0 and its first row line 1",
+        help="Line of the warning; the header of a table is line 0 and its first entry line 1",
     )
     acknowledge.add_argument("--column")
     acknowledge.add_argument(
