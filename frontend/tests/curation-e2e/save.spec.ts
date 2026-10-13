@@ -90,6 +90,29 @@ test("Ctrl+S saves study.json from the field just edited, and without changes wr
   }
 });
 
+test("Ctrl+S saves a collaborator that is typed but not yet added, and the field keeps the focus", async ({
+  app,
+  page,
+}) => {
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    await app.open(`${STUDY}/metadata`);
+    const collaborators = page.getByRole("combobox", { name: "Collaborators" });
+    await collaborators.focus();
+    await collaborators.pressSequentially("Jane Doe");
+    // The typed name is the only change: the field adds it to the list on Enter or blur.
+    await collaborators.press("Control+s");
+    await expect.poll(() => onDisk(path).collaborators).toContain("Jane Doe");
+    await expect(page.locator(".unsaved-banner")).toContainText("study.json saved.");
+    await expect(collaborators).toBeFocused();
+    await expect(collaborators).toHaveValue("");
+    await expect(page.locator(".collaborators-field .v-chip")).toContainText(["Jane Doe"]);
+  } finally {
+    writeFileSync(path, original);
+  }
+});
+
 test("the banner under the tabs names the change, stays in view while the form scrolls, and Ctrl+S saves", async ({
   app,
   page,

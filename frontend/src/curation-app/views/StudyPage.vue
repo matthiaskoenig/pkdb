@@ -155,9 +155,7 @@ onBeforeUnmount(() => {
 
 // Ctrl+S (Cmd+S on macOS) saves the draft of study.json from any section; the draft saves only
 // what it can: nothing without changes, during a save, or before the Reload of a conflict.
-useSaveShortcut(() => {
-  if (study.draft.canSave) void study.draft.save();
-});
+useSaveShortcut(() => void study.draft.save());
 
 // Without a valid section, the page shows the section that the study needs first.
 watch(

@@ -1213,6 +1213,21 @@ describe("the save shortcut", () => {
     expect(useStudyStore().draft.dirty).toBe(false);
   });
 
+  it("adds a collaborator that is typed but not yet added before it saves, and keeps the focus in the field", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    const collaborators = field("Collaborators");
+    collaborators.element.focus();
+    await collaborators.setValue("Jane Doe");
+    // The typed name is the only change: the combobox adds it to the list on Enter or blur.
+    expect(useStudyStore().draft.dirty).toBe(false);
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(posted(METADATA)[0]?.metadata).toMatchObject({ collaborators: ["Jane Doe"] });
+    expect(document.activeElement).toBe(collaborators.element);
+    expect(collaborators.element.value).toBe("");
+  });
+
   it("leaves Ctrl+S to the browser once the study page closed", async () => {
     await mountPage("/studies/caffeine/Example/metadata");
     await router.push("/");
