@@ -57,7 +57,15 @@ def test_a_test_records_how_long_copying_its_database_took(request, session_fact
     assert 0 <= seconds[0] < 60
 
 
+def isolated_prefix(database_server) -> str:
+    """A name prefix of one test alone, so that no other test or worker sees its names."""
+    return f"{database_server.prefix}_{uuid4().hex[:8]}"
+
+
 def test_a_run_drops_the_databases_that_a_killed_run_left(database_server):
+    database_server = DatabaseServer(
+        database_server.url, isolated_prefix(database_server)
+    )
     stale = f"{database_server.prefix}_1000000000_{uuid4().hex[:12]}"
     recent = database_server.name()
     for name in (stale, recent):
@@ -70,6 +78,7 @@ def test_a_run_drops_the_databases_that_a_killed_run_left(database_server):
     finally:
         for name in (stale, recent):
             database_server.drop(name)
+        database_server.close()
 
 
 def test_a_connection_left_open_does_not_keep_the_database(
@@ -89,6 +98,10 @@ def test_a_connection_left_open_does_not_keep_the_database(
 
 
 def test_a_run_drops_a_stale_template_and_keeps_what_is_not_its_own(database_server):
+    configured = database_server.url.database
+    database_server = DatabaseServer(
+        database_server.url, isolated_prefix(database_server)
+    )
     prefix = database_server.prefix
     stale_template = f"{prefix}_tpl_1000000000_{uuid4().hex[:12]}"
     # these only look old: they do not match the whole naming scheme
@@ -105,23 +118,26 @@ def test_a_run_drops_a_stale_template_and_keeps_what_is_not_its_own(database_ser
         assert dropped == [stale_template]
         assert stale_template not in names
         assert set(lookalikes) <= names
-        assert prefix in names
+        assert configured in names
     finally:
         for name in (stale_template, *lookalikes):
             database_server.drop(name)
+        database_server.close()
 
 
 def test_a_run_never_drops_the_databases_of_a_run_that_is_alive(database_server):
-    stale = f"{database_server.prefix}_1000000000_{uuid4().hex[:12]}"
+    prefix = isolated_prefix(database_server)
+    database_server = DatabaseServer(database_server.url, prefix)
+    stale = f"{prefix}_1000000000_{uuid4().hex[:12]}"
     later = 1000000000 + STALE_SECONDS + 1
-    other = DatabaseServer(database_server.url)
+    other = DatabaseServer(database_server.url, prefix)
     try:
         other.create(name=stale)
         assert database_server.drop_stale(now=later) == []
         assert stale in database_server.names()
         other.close()
         # the server notices the closed connections a moment later
-        deadline = time.monotonic() + 10
+        deadline = time.monotonic() + 30
         dropped = database_server.drop_stale(now=later)
         while not dropped and time.monotonic() < deadline:
             time.sleep(0.05)
@@ -130,3 +146,4 @@ def test_a_run_never_drops_the_databases_of_a_run_that_is_alive(database_server)
     finally:
         other.close()
         database_server.drop(stale)
+        database_server.close()

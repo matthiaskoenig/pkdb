@@ -46,11 +46,12 @@ class DatabaseServer:
     runs of several checkouts on one server never touch each other's databases.
     """
 
-    def __init__(self, url: URL) -> None:
+    def __init__(self, url: URL, prefix: str | None = None) -> None:
         if not url.database:
             raise ValueError("PKDB_TEST_DATABASE_URL names no database")
         self.url = url
-        self.prefix = url.database
+        # a prefix of its own keeps the databases of a test of this class apart
+        self.prefix = prefix or url.database
         # Every connection of this run names its run, so that another run sees it.
         self._owner = f"pkdbt:{self.prefix}:{uuid4().hex[:8]}"
         if len(self._owner.encode()) > 63:
