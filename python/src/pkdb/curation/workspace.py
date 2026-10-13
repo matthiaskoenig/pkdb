@@ -478,10 +478,17 @@ class WorkspaceMixin(EngineState):
                 for row in self.studies.values()
                 if row["_tables"] is not None
             }
-        # Also drops what the file keeps of studies that are gone.
+        # Drops what the file keeps of studies that are gone under this root; keeps
+        # what it keeps of other workspaces, for a later switch back.
         if read != self._saved_substances:
+            path = self.state_dir / SUBSTANCES_FILE
             try:
-                save_substances(self.state_dir / SUBSTANCES_FILE, read)
+                kept = {
+                    folder: entry
+                    for folder, entry in load_substances(path).items()
+                    if not Path(folder).is_relative_to(root)
+                }
+                save_substances(path, {**kept, **read})
             except Exception as error:
                 self._substances_failed("Saving the substances of the studies", error)
             else:

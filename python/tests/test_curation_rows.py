@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import shutil
 import sys
 import threading
 import time
@@ -496,6 +497,31 @@ def test_the_start_reads_no_table_and_serves_the_substances_read_before(
         again.close()
 
 
+def test_a_workspace_switch_keeps_the_saved_substances_of_the_old_workspace(
+    two_substances, tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    other = tmp_path_factory.mktemp("other")
+    study = other / "codeine" / "Third"
+    shutil.copytree(folder, study)
+    name_in_interventions(study, "drug", "midazolam")
+    engine.select_workspace(str(other))
+    engine._read_substances()
+    saved = json.loads(saved_substances(engine).read_text(encoding="utf-8"))
+    assert str(folder) in saved["studies"]
+    assert str(study) in saved["studies"]
+    engine.close()
+    no_reads(monkeypatch)
+    again = start_engine(tmp_path, engine.state_dir)
+    try:
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+        again.stop.set()
+        again._read_substances()
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+    finally:
+        again.close()
+
+
 def test_tables_that_changed_while_stopped_are_read_again(
     two_substances, tmp_path, make_study, valid_files, monkeypatch
 ):
@@ -837,7 +863,7 @@ def test_a_read_stops_when_the_engine_stops(two_substances, monkeypatch):
 
 def test_saved_substances_keep_folder_names_that_are_no_text(tmp_path):
     # A path on Linux with a byte that is no UTF-8, as Python decodes it.
-    folder = os.fsdecode(b"/data/studies/caf\xe9/Example")
+    folder = "/data/studies/caf\udce9/Example"
     read = {folder: ((("interventions.tsv", 1, 2),), ("caffeine", "drug"))}
     path = tmp_path / "substances.json"
     workspace_module.save_substances(path, read)

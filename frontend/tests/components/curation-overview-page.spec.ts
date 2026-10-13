@@ -170,6 +170,9 @@ function openTooltip() {
   return page().find(".v-tooltip.v-overlay--active");
 }
 
+/** The wait for a tooltip of an identity, which opens 300 ms after the pointer enters it, also under load. */
+const TOOLTIP_WAIT = { timeout: 3000 };
+
 /** The calls of `rowItem` for studies; the rows that size the columns (StudyTable.vue) have no identity. */
 function studyItemCalls() {
   return vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
@@ -378,13 +381,13 @@ describe("OverviewPage", () => {
     // One tooltip: the identity has no native one besides it.
     expect(link.attributes("title")).toBeUndefined();
     await link.trigger("mouseenter");
-    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"));
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"), TOOLTIP_WAIT);
     await link.trigger("mouseleave");
-    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false));
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
     const duplicate = rowOf("caffeine/Example").get("span.study-identity");
     expect(duplicate.attributes("title")).toBeUndefined();
     await duplicate.trigger("mouseenter");
-    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"));
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"), TOOLTIP_WAIT);
   });
 
   it("opens the study page when a row is clicked", async () => {
@@ -986,13 +989,13 @@ describe("OverviewPage", () => {
 
     // The tooltip of the identity names the other substance folders below it.
     await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseenter");
-    await vi.waitFor(() => expect(openTooltip().find(".study-substances-more").text()).toBe("+ caffeine"));
+    await vi.waitFor(() => expect(openTooltip().find(".study-substances-more").text()).toBe("+ caffeine"), TOOLTIP_WAIT);
     expect(openTooltip().text()).toMatch(/^codeine\/Pair2002\s*\+ caffeine$/);
     await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseleave");
-    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false));
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
     // A study that names none has the identity alone.
     await rowOf("caffeine/Example").get(".study-identity").trigger("mouseenter");
-    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"));
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"), TOOLTIP_WAIT);
     expect(openTooltip().find(".study-substances-more").exists()).toBe(false);
   });
 

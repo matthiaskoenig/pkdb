@@ -45,6 +45,20 @@ def test_an_intervention_that_names_another_substance_folder_adds_it(tmp_path):
     ]
 
 
+def test_two_spellings_of_a_substance_count_once(tmp_path):
+    folder = study(tmp_path, "caffeine/A")
+    table(
+        folder,
+        "interventions.tsv",
+        [
+            DOSING | {"substance": "Midazolam"},
+            DOSING | {"name": "D2", "substance": "midazolam"},
+        ],
+    )
+    # In the first spelling.
+    assert study_substances(folder) == ("Midazolam",)
+
+
 def test_a_substance_without_a_folder_is_left_out(tmp_path):
     folder = study(tmp_path, "caffeine/A")
     table(

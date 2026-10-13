@@ -32,8 +32,13 @@ function addMidazolam(workspace: string): void {
   const [header = "", first = "", ...rest] = readFileSync(path, "utf8").split("\n");
   const columns = header.split("\t");
   const cells = first.split("\t");
-  cells[columns.indexOf("name")] = "D300";
-  cells[columns.indexOf("substance")] = "midazolam";
+  const name = columns.indexOf("name");
+  const substance = columns.indexOf("substance");
+  if (name < 0 || substance < 0) {
+    throw new Error(`interventions.tsv of Draft2021 has no name or substance column: ${header}`);
+  }
+  cells[name] = "D300";
+  cells[substance] = "midazolam";
   writeFileSync(path, [header, first, cells.join("\t"), ...rest].join("\n"));
 }
 
