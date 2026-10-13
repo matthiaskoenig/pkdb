@@ -7,7 +7,7 @@ import { sectionRoute } from "../study";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and
- * suggestions, with Show in table, Show notes and Acknowledge. A component of its own, so that a long list
+ * suggestions, with Show in table, Open in tables, Show notes and Acknowledge. A component of its own, so that a long list
  * renders only the issues whose props changed.
  */
 const props = withDefaults(
@@ -31,10 +31,16 @@ const props = withDefaults(
     offersAcknowledge?: boolean;
     /** The query of the Data section that shows the notes of the issue above their table; null for another issue. */
     notesQuery?: Record<string, string> | null;
+    /** Whether Open in tables opens the workbook at the place of the issue: only tables of the study. */
+    opensTables?: boolean;
+    /** Whether Open in tables of this issue runs. */
+    opening?: boolean;
+    /** Whether another action runs, so that Open in tables waits. */
+    openDisabled?: boolean;
   }>(),
-  { offersAcknowledge: true, notesQuery: null },
+  { offersAcknowledge: true, notesQuery: null, opensTables: false, opening: false, openDisabled: false },
 );
-const emit = defineEmits<{ acknowledge: []; validate: [] }>();
+const emit = defineEmits<{ acknowledge: []; validate: []; "open-tables": [] }>();
 
 const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
@@ -90,7 +96,10 @@ const describedBy = computed(() =>
           : "Acknowledged. Validate the study to update this list."
       }}</span>
     </p>
-    <div v-if="showable || notesRoute || (acknowledgeable && (!pending || !automatic))" class="problem-actions">
+    <div
+      v-if="showable || opensTables || notesRoute || (acknowledgeable && (!pending || !automatic))"
+      class="problem-actions"
+    >
       <VBtn
         v-if="showable"
         :to="tableRoute"
@@ -100,6 +109,19 @@ const describedBy = computed(() =>
         :aria-describedby="describedBy"
       >
         Show in table
+      </VBtn>
+      <VBtn
+        v-if="opensTables"
+        variant="text"
+        color="primary"
+        prepend-icon="fas fa-table"
+        :disabled="openDisabled"
+        :loading="opening"
+        :aria-describedby="describedBy"
+        class="problem-open-tables"
+        @click="emit('open-tables')"
+      >
+        Open in tables
       </VBtn>
       <VBtn
         v-if="notesRoute"

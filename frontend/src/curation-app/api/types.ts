@@ -788,6 +788,11 @@ export interface TablesResult {
   issues: ValidationIssue[];
   /** `open`: whether the workbook exists and was opened. */
   opened?: boolean;
+  /**
+   * `open` at a `file`: what to do when the workbook could not be switched to the sheet, such as
+   * `The workbook is already open. Go to sheet outputs_Fig6, cell Y97.`; null when it opened there.
+   */
+  notice?: string | null;
   /** `add`: the name of the added table. */
   table?: string;
 }

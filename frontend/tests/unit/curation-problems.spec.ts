@@ -16,6 +16,7 @@ import {
   NO_SUCH_WARNING,
   noIssuesText,
   notesQuery,
+  openPlace,
   problemsText,
   reportAfter,
   scopeText,
@@ -418,5 +419,13 @@ describe("problemsText", () => {
     expect(problemsText(issues)).toBe(
       "Warning: Problem 0. Warning: Problem 1. Warning: Problem 2. Warning: Problem 3. Warning: Problem 4. And 2 more.",
     );
+  });
+});
+
+describe("openPlace", () => {
+  it("opens the workbook at the sheet of the table of an issue, with its cell when it has one", () => {
+    expect(openPlace(mean)).toEqual({ file: "timecourses_Fig1.tsv", cell: "O6" });
+    expect(openPlace(header)).toEqual({ file: "outputs_Tab2.tsv" });
+    expect(openPlace(limit)).toBeNull();
   });
 });

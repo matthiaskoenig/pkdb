@@ -18,6 +18,7 @@ import {
   locationKey,
   noIssuesText,
   notesQuery,
+  openPlace,
   scopeText,
   SEVERITY_CHIPS,
   severityCounts,
@@ -31,7 +32,7 @@ import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles, table
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the
- * tables, Open tables, and Acknowledge for warnings; below them the warnings that review items
+ * tables, Open in tables, Open tables, and Acknowledge for warnings; below them the warnings that review items
  * acknowledge. A study beyond the upload limits names the limit first.
  */
 const study = useStudyStore();
@@ -216,10 +217,32 @@ function afterAcknowledge(): HTMLElement | null | undefined {
  */
 const { busy, working, failure, userText, run } = useAction<string>(announce, () => acknowledging.value);
 
+/** What to do in the workbook after an open found it open already; it stays until it is closed or the next open. */
+const openNotice = ref<string | null>(null);
+
 function openTables(): Promise<void> {
   return run("tables", async () => {
+    openNotice.value = null;
     const result = await study.tablesAction("open");
     failure.value = tablesOutcome(result);
+    return result.opened ? "The workbook opened." : "";
+  });
+}
+
+/** The action of Open in tables of an issue, one per place. */
+function openKey(issue: ValidationIssue): string {
+  return `open:${locationKey(issue)}`;
+}
+
+/** Open the workbook at the sheet of the table of an issue, with its cell selected when it has one. */
+function openAt(issue: ValidationIssue): Promise<void> {
+  const place = openPlace(issue);
+  if (!place) return Promise.resolve();
+  return run(openKey(issue), async () => {
+    openNotice.value = null;
+    const result = await study.tablesAction("open", place);
+    failure.value = tablesOutcome(result);
+    openNotice.value = result.notice ?? null;
     return result.opened ? "The workbook opened." : "";
   });
 }
@@ -301,6 +324,18 @@ function openFile(file: string): Promise<void> {
       @close="failure = null"
     />
     <UserHint v-else-if="userText" :text="userText" />
+    <VAlert
+      v-if="openNotice"
+      type="info"
+      variant="tonal"
+      density="compact"
+      closable
+      role="status"
+      class="status-alert problems-open-notice"
+      @click:close="openNotice = null"
+    >
+      {{ openNotice }}
+    </VAlert>
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="problems-notice">{{ notice }}</span>
 
@@ -345,6 +380,10 @@ function openFile(file: string): Promise<void> {
             :automatic="automatic"
             :disabled="blocked !== null || working"
             :validating="busy === 'validate'"
+            :opens-tables="showable(issue)"
+            :opening="busy === openKey(issue)"
+            :open-disabled="working"
+            @open-tables="openAt(issue)"
             @acknowledge="acknowledge(issue)"
             @validate="validate"
           />
