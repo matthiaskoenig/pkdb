@@ -421,6 +421,11 @@ function added(item: ReviewItem | null): void {
   /* Below the app bar when it scrolls into view. */
   scroll-margin-top: 80px;
 }
+/* The page keeps the room of the app bar and of the banner of unsaved changes while the banner
+   shows (UnsavedBanner): the item scrolls to just below the banner. */
+:global(html:has(.unsaved-banner) .review-selected) {
+  scroll-margin-top: 0;
+}
 .review-notice {
   font-size: 0.875rem;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { TableKind } from "../api/types";
 import { saveShortcut } from "../composables/useSaveShortcut";
@@ -14,8 +14,9 @@ import UserHint from "./UserHint.vue";
  * The banner of the draft of study.json under the section tabs, in every section of the study
  * page. While the draft has unsaved changes it is amber and names the changed fields, with Undo,
  * Discard and Save; afterwards it shows the outcome of the last save, reload, discard or
- * reference change. It sticks below the app bar while the page scrolls and publishes its height
- * as `--unsaved-banner-height`, so that what scrolls into view or sticks stays below it. A
+ * reference change. It sticks below the app bar while the page scrolls, with square top corners,
+ * and publishes where it sticks and its height as `--unsaved-banner-top` and
+ * `--unsaved-banner-height`, so that what scrolls into view or sticks stays below it. A
  * refused save lists the issues of the fields that `section` does not show, such as a wrong PMID
  * saved from Data. Ctrl+S (Cmd+S on macOS) saves too (useSaveShortcut).
  */
@@ -44,13 +45,31 @@ const fields = computed(() => {
 const shortcut = saveShortcut();
 
 const root = ref<HTMLElement | null>(null);
+/** Whether the banner sticks below the app bar, with the page scrolled under it. */
+const stuck = ref(false);
 let observer: ResizeObserver | undefined;
 
-/** Sets `--unsaved-banner-height` on the root element; removes it for a hidden banner. */
-function publish(height: number): void {
+/**
+ * Sets on the root element where the banner sticks, below the app bar (`--unsaved-banner-top`),
+ * and its height (`--unsaved-banner-height`); removes both for a hidden banner.
+ */
+function publish(element: HTMLElement | null): void {
   const style = document.documentElement.style;
-  if (height > 0) style.setProperty("--unsaved-banner-height", `${Math.ceil(height)}px`);
-  else style.removeProperty("--unsaved-banner-height");
+  const height = element ? element.getBoundingClientRect().height : 0;
+  if (element && height > 0) {
+    style.setProperty("--unsaved-banner-top", getComputedStyle(element).top);
+    style.setProperty("--unsaved-banner-height", `${Math.ceil(height)}px`);
+  } else {
+    style.removeProperty("--unsaved-banner-top");
+    style.removeProperty("--unsaved-banner-height");
+  }
+}
+
+/** Notes whether the page has scrolled the banner up to where it sticks. */
+function measureStuck(): void {
+  const element = root.value;
+  stuck.value =
+    element !== null && element.getBoundingClientRect().top <= Number.parseFloat(getComputedStyle(element).top) + 0.5;
 }
 
 watch(
@@ -58,17 +77,23 @@ watch(
   (element) => {
     observer?.disconnect();
     observer = undefined;
-    publish(element ? element.getBoundingClientRect().height : 0);
+    publish(element);
+    measureStuck();
     if (!element) return;
-    observer = new ResizeObserver(() => publish(element.getBoundingClientRect().height));
+    observer = new ResizeObserver(() => {
+      publish(element);
+      measureStuck();
+    });
     observer.observe(element);
   },
   { flush: "post" },
 );
 
+onMounted(() => window.addEventListener("scroll", measureStuck, { passive: true }));
 onBeforeUnmount(() => {
+  window.removeEventListener("scroll", measureStuck);
   observer?.disconnect();
-  publish(0);
+  publish(null);
 });
 </script>
 
@@ -80,7 +105,7 @@ onBeforeUnmount(() => {
     v-if="draft.bannerShown && draft.form"
     ref="root"
     class="unsaved-banner"
-    :class="{ 'unsaved-banner--dirty': draft.dirty }"
+    :class="{ 'unsaved-banner--dirty': draft.dirty, 'unsaved-banner--stuck': stuck }"
   >
     <div class="unsaved-banner-row">
       <p class="unsaved-banner-text">
@@ -162,8 +187,8 @@ onBeforeUnmount(() => {
 <style scoped>
 /* Under the section tabs. It sticks below the app bar while the page scrolls, opaque, since the
    form scrolls under it, and scrolls on its own when its alerts are taller than half the window.
-   Amber while study.json has unsaved changes (the theme colors unsaved and unsaved-tint), the
-   surface otherwise. */
+   Amber while study.json has unsaved changes (the theme colors amber and amber-tint), the surface
+   otherwise. */
 .unsaved-banner {
   position: sticky;
   top: var(--v-layout-top, 0px);
@@ -181,12 +206,17 @@ onBeforeUnmount(() => {
   background: rgb(var(--v-theme-surface));
 }
 .unsaved-banner--dirty {
-  border-color: rgb(var(--v-theme-unsaved));
-  background: rgb(var(--v-theme-unsaved-tint));
+  border-color: rgb(var(--v-theme-amber));
+  background: rgb(var(--v-theme-amber-tint));
 }
-/* What scrolls into view, such as a focused field, stops below the app bar (36 px) and the banner. */
+/* Stuck below the app bar, it hangs from it: square top corners, where nothing shows through. */
+.unsaved-banner--stuck {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* What scrolls into view, such as a focused field, stops 8 px below the stuck banner. */
 :global(html:has(.unsaved-banner)) {
-  scroll-padding-top: calc(36px + var(--unsaved-banner-height, 0px) + 8px);
+  scroll-padding-top: calc(var(--unsaved-banner-top, 0px) + var(--unsaved-banner-height, 0px) + 8px);
 }
 .unsaved-banner-row {
   display: flex;
@@ -205,7 +235,7 @@ onBeforeUnmount(() => {
   overflow-wrap: anywhere;
 }
 .unsaved-banner--dirty .unsaved-banner-text {
-  color: rgb(var(--v-theme-unsaved));
+  color: rgb(var(--v-theme-amber));
 }
 .unsaved-banner-dot {
   font-size: 0.5rem;

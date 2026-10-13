@@ -26,10 +26,10 @@ import {
   PAPER,
   rowSource,
   selectedFile,
+  selectedNotesKind,
   selectionOf,
   selectionQuery,
   sourceOfFile,
-  tableNotesKind,
   tablesByInfo,
   type RowFilter,
   type Selection,
@@ -106,7 +106,7 @@ const paperFile = computed(() => (query.value.source === PAPER ? query.value.pdf
 watch(paperFile, (value) => (keptPaper.value = value), { immediate: true });
 
 /** The kind of the notes of the selected table in study.json; null for a raw table, which has none. */
-const notesKind = computed<TableKind | null>(() => (detail.value ? tableNotesKind(detail.value, file.value) : null));
+const notesKind = computed<TableKind | null>(() => (detail.value ? selectedNotesKind(detail.value, query.value) : null));
 
 /**
  * The notes that a link of the Problems section opened, whose toggle takes the focus once: not

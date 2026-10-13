@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./fixtures.ts";
 
 const STUDY = "#/studies/caffeine/Demo2020";
@@ -22,8 +22,26 @@ function onDisk(path: string): StudyJson {
 
 const EDITED_KEY = "pkdb.manual.edited";
 
-/** The height of the app bar (AppHeader), below which the banner sticks. */
-const APP_BAR = 36;
+/** The height that the layout keeps for the app bar (AppHeader), below which the banner sticks. */
+async function appBarBottom(page: Page): Promise<number> {
+  const top = await page.locator(".v-main").evaluate((main) => getComputedStyle(main).getPropertyValue("--v-layout-top"));
+  expect(top).toMatch(/^\d+px$/);
+  return Number.parseFloat(top);
+}
+
+/** The left and the right edge of `part`, in whole pixels. */
+async function edges(part: Locator): Promise<number[]> {
+  const box = (await part.boundingBox())!;
+  return [Math.round(box.x), Math.round(box.x + box.width)];
+}
+
+/** Edits the source key in Metadata, which shows the banner of unsaved changes. */
+async function editSourceKey(page: Page): Promise<Locator> {
+  await page.getByRole("textbox", { name: "Source key" }).fill(EDITED_KEY);
+  const banner = page.locator(".unsaved-banner");
+  await expect(banner).toContainText("Unsaved changes to study.json: Source key");
+  return banner;
+}
 
 /** The bodies of the writes of study.json that the page sends from now on. */
 function metadataWrites(page: Page): string[] {
@@ -90,13 +108,20 @@ test("the banner under the tabs names the change, stays in view while the form s
     const below = placed.y - (tabs.y + tabs.height);
     expect(below).toBeGreaterThanOrEqual(0);
     expect(below).toBeLessThanOrEqual(12);
-    const cards = (await page.locator(".metadata-form").boundingBox())!;
-    expect([placed.x, placed.x + placed.width]).toEqual([cards.x, cards.x + cards.width]);
+    expect(await edges(banner)).toEqual(await edges(page.locator(".metadata-form")));
+    await expect(banner).toHaveCSS("border-top-left-radius", "8px");
 
-    // It sticks below the app bar while the form scrolls under it.
+    // It sticks below the app bar while the form scrolls under it, with square top corners, so
+    // that nothing shows through there.
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-    await expect.poll(async () => Math.round((await banner.boundingBox())!.y)).toBe(APP_BAR);
+    const appBar = await appBarBottom(page);
+    await expect.poll(async () => Math.round((await banner.boundingBox())!.y)).toBe(appBar);
+    await expect(banner).toHaveCSS("border-top-left-radius", "0px");
+    await expect(banner).toHaveCSS("border-top-right-radius", "0px");
+    await expect(banner).toHaveCSS("border-bottom-left-radius", "8px");
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(banner).toHaveCSS("border-top-left-radius", "8px");
 
     await page.keyboard.press("Control+s");
     await expect(banner).toContainText("study.json saved.");
@@ -135,7 +160,7 @@ test("a field that the keyboard focuses or that scrolls into view stops below th
   /** How far the top of the outline of DOI is below the stuck banner. */
   const clearance = async () => {
     const [stuck, field] = [(await banner.boundingBox())!, (await outline.boundingBox())!];
-    expect(Math.round(stuck.y)).toBe(APP_BAR);
+    expect(Math.round(stuck.y)).toBe(await appBarBottom(page));
     return field.y - (stuck.y + stuck.height);
   };
 
@@ -150,4 +175,76 @@ test("a field that the keyboard focuses or that scrolls into view stops below th
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   await outline.evaluate((field) => field.scrollIntoView({ block: "start" }));
   await expect.poll(clearance).toBeGreaterThanOrEqual(0);
+});
+
+test("the banner is as wide as the content of each section in windows of 1280, 1440 and 1920 px", async ({ app, page }) => {
+  await app.open(`${STUDY}/metadata`);
+  const banner = await editSourceKey(page);
+  const sections = page.getByRole("navigation", { name: "Study sections" });
+  // The cards of Metadata end at 100rem; Review and Data take the whole width.
+  for (const [section, content] of [
+    ["Metadata", ".metadata-form"],
+    ["Review", ".review"],
+    ["Data", ".data-section"],
+  ] as const) {
+    await sections.getByRole("link", { name: new RegExp(`^${section}\\b`) }).click();
+    for (const width of [1280, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      const offsets = async () => {
+        const [outer, inner] = [await edges(banner), await edges(page.locator(content))];
+        return [outer[0]! - inner[0]!, outer[1]! - inner[1]!];
+      };
+      await expect.poll(offsets, `${section} at ${width} px`).toEqual([0, 0]);
+    }
+  }
+});
+
+test("a review item chosen below the cards scrolls to just below the banner", async ({ app, page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  // A short window, so that the page can scroll the item up while its target still loads.
+  await page.setViewportSize({ width: 700, height: 450 });
+  await app.open(`${STUDY}/metadata`);
+  const banner = await editSourceKey(page);
+  await page.getByRole("navigation", { name: "Study sections" }).getByRole("link", { name: /^Review\b/ }).click();
+  const uncertainty = page.getByRole("list", { name: "Review items" }).getByRole("button", { name: /^Uncertainty/ });
+  await uncertainty.click();
+  const detail = page.locator(".review-selected");
+  await expect(detail).toContainText("Table 2 gives the AUC from zero to infinity");
+  // The detail stands below the cards in a narrow section, and the page scrolls to its start.
+  expect((await detail.boundingBox())!.x).toBe((await uncertainty.boundingBox())!.x);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect
+    .poll(async () => {
+      const [stuck, item] = [(await banner.boundingBox())!, (await detail.boundingBox())!];
+      return Math.round(item.y - (stuck.y + stuck.height));
+    })
+    .toBe(8);
+});
+
+test("the banner stays above the sticky parts of the rows while stacked panes scroll under it", async ({ app, page }) => {
+  await page.setViewportSize({ width: 700, height: 700 });
+  await app.open(`${STUDY}/metadata`);
+  const banner = await editSourceKey(page);
+  await page.evaluate(() => (window.location.hash = "#/studies/caffeine/Demo2020/data?file=outputs_Tab2.tsv&source=Tab2"));
+  await expect(page.getByRole("region", { name: "Rows of outputs_Tab2.tsv", exact: true }).getByRole("row").nth(1)).toBeVisible();
+  // The source pane above the rows shows the raw table of Tab2: its header row, with the sticky
+  // line number and the fade of the columns that follow, goes under the stuck banner.
+  const grid = page.locator(".rows-scroll--sticky-line").first();
+  await expect(grid.getByRole("row").nth(1)).toBeVisible();
+  const appBar = await appBarBottom(page);
+  const top = await grid.evaluate((region) => region.getBoundingClientRect().top + window.scrollY);
+  await page.evaluate((y) => window.scrollTo(0, y), top - appBar - 10);
+  await expect.poll(async () => Math.round((await banner.boundingBox())!.y)).toBe(appBar);
+  const box = (await banner.boundingBox())!;
+  expect((await grid.boundingBox())!.y).toBeLessThan(box.y + box.height);
+  const covered = await page.evaluate(({ x, y, width, height }) => {
+    const points: string[] = [];
+    for (let left = x + 2; left < x + width - 2; left += 8)
+      for (const top of [y + 2, y + height / 2, y + height - 2]) {
+        const hit = document.elementFromPoint(left, top);
+        if (!hit?.closest(".unsaved-banner")) points.push(`${left},${top}: ${hit?.tagName}.${hit?.className}`);
+      }
+    return points;
+  }, box);
+  expect(covered).toEqual([]);
 });

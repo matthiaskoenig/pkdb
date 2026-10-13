@@ -486,13 +486,10 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 
 <style scoped>
 .table-grid {
-  /* Amber of the bar of a targeted row and of the outline of a warning: 3:1 on the surface and
-     on the rows of open review items in both themes; the theme's warning color is lighter. */
-  --grid-amber: #8f5300;
+  /* The amber of the app (themes.ts) for the bar of a targeted row and the outline of a warning:
+     3:1 on the surface and on the rows of open review items in both themes. */
+  --grid-amber: rgb(var(--v-theme-amber));
   min-width: 0;
-}
-.v-theme--dark .table-grid {
-  --grid-amber: #ffb547;
 }
 /* More columns follow: the rows fade out at the end of the region, above the cells and inside its
    border and scroll bars, so that a cut word shows that the rows scroll. */

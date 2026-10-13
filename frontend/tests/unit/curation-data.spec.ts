@@ -15,6 +15,7 @@ import {
   PAPER,
   rowSource,
   selectedFile,
+  selectedNotesKind,
   selectionOf,
   selectionQuery,
   sourceCounts,
@@ -310,5 +311,12 @@ describe("the table that Data shows", () => {
     expect(tableNotesKind(detail(), "Example_Tab2.tsv")).toBeNull();
     expect(tableNotesKind(detail(), "gone.tsv")).toBeNull();
     expect(tableNotesKind(detail(), null)).toBeNull();
+  });
+
+  it("gives the kind of the notes above the table that a route selects", () => {
+    expect(selectedNotesKind(detail(), selectionOf({ file: "subjects.tsv" }))).toBe("subjects");
+    expect(selectedNotesKind(detail(), selectionOf({ source: "Fig1", file: "gone.tsv" }))).toBe("timecourses");
+    expect(selectedNotesKind(detail(), selectionOf({ file: "Example_Tab2.tsv" }))).toBeNull();
+    expect(selectedNotesKind(detail({ tables: [] }), selectionOf({}))).toBeNull();
   });
 });

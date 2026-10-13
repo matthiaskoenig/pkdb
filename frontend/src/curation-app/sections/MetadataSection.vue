@@ -584,15 +584,11 @@ const newFields = computed(() => {
 </template>
 
 <style scoped>
+/* The study page sets its width, at most 100rem. */
 .metadata {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 100rem;
-}
-/* The banner of unsaved changes of the study page ends where the cards below it end. */
-:global(.study-page:has(.metadata) .unsaved-banner) {
-  max-width: 100rem;
 }
 .metadata-alert-text,
 .metadata-text {

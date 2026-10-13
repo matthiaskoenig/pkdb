@@ -34,21 +34,23 @@ describe("the themes of the curation app", () => {
     }
   });
 
-  it("add the amber of unsaved changes, in the dark theme a tint of 12 % over the page", () => {
-    expect([themes.light!.colors.unsaved, themes.light!.colors["unsaved-tint"]]).toEqual(["#8f5300", "#fff4e0"]);
-    expect([themes.dark!.colors.unsaved, themes.dark!.colors["unsaved-tint"]]).toEqual(["#ffb547", "#2d3027"]);
-    const amber = rgb(themes.dark!.colors.unsaved);
+  it("add the amber of the app and its tint, in the dark theme a tint of 12 % over the page", () => {
+    expect([themes.light!.colors.amber, themes.light!.colors["amber-tint"]]).toEqual(["#8f5300", "#fff4e0"]);
+    expect([themes.dark!.colors.amber, themes.dark!.colors["amber-tint"]]).toEqual(["#ffb547", "#2d3027"]);
+    const amber = rgb(themes.dark!.colors.amber);
     const page = rgb(themes.dark!.colors.background);
     const tint = amber.map((value, index) => Math.round(value * 0.12 + page[index]! * 0.88));
-    expect(rgb(themes.dark!.colors["unsaved-tint"])).toEqual(tint);
+    expect(rgb(themes.dark!.colors["amber-tint"])).toEqual(tint);
   });
 
-  it.each(["light", "dark"] as const)("keep 4.5:1 for the amber text on its tint, and 3:1 for the border, in the %s theme", (name) => {
+  it.each(["light", "dark"] as const)("keep 4.5:1 for the amber text on its tint, and 3:1 for amber marks, in the %s theme", (name) => {
     const { colors } = themes[name]!;
-    const amber = rgb(colors.unsaved);
-    expect(contrast(amber, rgb(colors["unsaved-tint"]))).toBeGreaterThanOrEqual(4.5);
+    const amber = rgb(colors.amber);
+    expect(contrast(amber, rgb(colors["amber-tint"]))).toBeGreaterThanOrEqual(4.5);
+    // The border of the banner on the page, the warnings of the navigator and the grid on the surface.
     expect(contrast(amber, rgb(colors.background))).toBeGreaterThanOrEqual(3);
+    expect(contrast(amber, rgb(colors.surface))).toBeGreaterThanOrEqual(3);
     // Undo, a text button in the primary color.
-    expect(contrast(rgb(colors.primary), rgb(colors["unsaved-tint"]))).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(rgb(colors.primary), rgb(colors["amber-tint"]))).toBeGreaterThanOrEqual(4.5);
   });
 });

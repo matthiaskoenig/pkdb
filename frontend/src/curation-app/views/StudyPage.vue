@@ -20,7 +20,7 @@ import StudyHeader from "../components/StudyHeader.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
-import { selectedFile, selectionOf, tableNotesKind } from "../data";
+import { selectedNotesKind, selectionOf } from "../data";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
@@ -92,11 +92,9 @@ const loadError = computed(() => {
 const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
 
 /** In Data, the kind of the notes above the selected table, whose fields a refused save marks there; null elsewhere. */
-const notesKind = computed(() => {
-  const value = detail.value;
-  if (section.value !== "data" || !value) return null;
-  return tableNotesKind(value, selectedFile(value, selectionOf(route.query)));
-});
+const notesKind = computed(() =>
+  section.value === "data" && detail.value ? selectedNotesKind(detail.value, selectionOf(route.query)) : null,
+);
 
 /** The facts of the study at the end of the line of tabs. */
 const facts = computed(() => {
@@ -176,7 +174,7 @@ watch(
 </script>
 
 <template>
-  <VContainer fluid class="study-page">
+  <VContainer fluid class="study-page" :class="section && `study-page--${section}`">
     <section v-if="failure" class="study-failure">
       <template v-if="failure.kind === 'missing'">
         <h1>This study is not in the workspace</h1>
@@ -249,12 +247,21 @@ watch(
   gap: 0;
   padding: 2px 12px 8px;
 }
+/* A stacking context of its own: nothing that a section raises, such as the sticky header of a
+   table, rises above the banner of unsaved changes, which the section scrolls under. */
 .study-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
   padding-top: 8px;
+  isolation: isolate;
+}
+/* The cards of Metadata take at most 100rem, and the banner of unsaved changes above them ends
+   where they end; the other sections and their banner take the whole width. */
+.study-page--metadata > .study-section,
+.study-page--metadata > :deep(.unsaved-banner) {
+  max-width: 100rem;
 }
 .study-failure {
   display: flex;

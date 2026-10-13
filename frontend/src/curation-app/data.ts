@@ -206,6 +206,17 @@ export function tableNotesKind(
   return entry ? (noteKinds(study).find((kind) => kind === entry.kind) ?? null) : null;
 }
 
+/**
+ * The kind of the notes above the table that the Data section shows for the route `selection`,
+ * whose fields a refused save marks there; null for a raw table or none.
+ */
+export function selectedNotesKind(
+  study: Counted & Pick<StudyDetail, "table_kinds">,
+  selection: Pick<Selection, "source" | "file">,
+): TableKind | null {
+  return tableNotesKind(study, selectedFile(study, selection));
+}
+
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */
 export function rowSource(table: TableResponse, line: number): string | null {
   const index = sourceColumn(table);
