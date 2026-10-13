@@ -2,6 +2,8 @@
  * One tooltip for the cells of a grid. The cells that have one carry `data-tip`, whose value names
  * what the tooltip shows. The tooltip follows the pointer and the keyboard focus, as the tooltips
  * of Vuetify do, but one tooltip serves every cell, so that a large table renders none per cell.
+ * Escape hides it; a tooltip of the pointer that Escape hid shows again once the pointer left its
+ * cell.
  */
 import { onScopeDispose, ref, shallowRef, type Ref } from "vue";
 
@@ -64,6 +66,10 @@ export function useCellTip(): CellTip {
   let opener: "pointer" | "focus" | null = null;
   /** The cell that the pointer rests on while its tooltip waits for `TIP_DELAY`. */
   let waiting: HTMLElement | null = null;
+  /** The cell whose tooltip of the pointer Escape hid: it shows again once the pointer left the cell. */
+  let dismissed: HTMLElement | null = null;
+  /** Whether the scope ended: then nothing shows any more. */
+  let disposed = false;
   let showTimer: ReturnType<typeof setTimeout> | undefined;
   let hideTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -76,10 +82,13 @@ export function useCellTip(): CellTip {
   }
 
   function escape(event: KeyboardEvent): void {
-    if (event.key === "Escape") hide();
+    if (event.key !== "Escape") return;
+    if (opener === "pointer") dismissed = cell.value;
+    hide();
   }
 
   function show(target: HTMLElement, by: "pointer" | "focus"): void {
+    if (disposed) return;
     stopTimers();
     if (cell.value === null) document.addEventListener("keydown", escape, true);
     cell.value = target;
@@ -102,7 +111,7 @@ export function useCellTip(): CellTip {
 
   function over(event: MouseEvent): void {
     const target = cellOf(event.target);
-    if (!target || target === waiting) return;
+    if (disposed || !target || target === waiting || target === dismissed) return;
     if (target === cell.value) {
       clearTimeout(hideTimer);
       return;
@@ -120,6 +129,7 @@ export function useCellTip(): CellTip {
   function out(event: MouseEvent): void {
     const from = cellOf(event.target);
     if (!from || (event.relatedTarget instanceof Node && from.contains(event.relatedTarget))) return;
+    if (from === dismissed) dismissed = null;
     if (from === waiting) {
       clearTimeout(showTimer);
       waiting = null;
@@ -128,6 +138,7 @@ export function useCellTip(): CellTip {
   }
 
   function focusIn(event: FocusEvent): void {
+    if (disposed) return;
     const target = cellOf(event.target);
     if (target && event.target instanceof Element && focusVisible(event.target)) show(target, "focus");
   }
@@ -154,6 +165,9 @@ export function useCellTip(): CellTip {
     else if (view && outside(current.getBoundingClientRect(), view.getBoundingClientRect())) hide();
   }
 
-  onScopeDispose(hide);
+  onScopeDispose(() => {
+    disposed = true;
+    hide();
+  });
   return { cell, key, over, out, focusIn, focusOut, enterTip, leaveTip, scrolled, hide };
 }

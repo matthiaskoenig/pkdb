@@ -150,6 +150,34 @@ describe("useCellTip", () => {
     expect(tip.cell.value).toBeNull();
   });
 
+  it("shows no tip again at a cell whose tip Escape hid until the pointer left the cell", () => {
+    const { first, inner, plain } = cells();
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    leave(first, inner);
+    enter(inner, first);
+    vi.advanceTimersByTime(1000);
+    expect(tip.cell.value).toBeNull();
+    leave(inner, plain);
+    enter(plain, inner);
+    leave(plain, first);
+    enter(first, plain);
+    vi.advanceTimersByTime(TIP_DELAY);
+    expect(tip.cell.value).toBe(first);
+  });
+
+  it("shows the tip of a cell whose tip Escape hid when the keyboard focuses it", () => {
+    const { lineButton } = cells();
+    const line = lineButton.closest("th")!;
+    enter(lineButton);
+    vi.advanceTimersByTime(TIP_DELAY);
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    focusRing(true);
+    lineButton.focus();
+    expect(tip.cell.value).toBe(line);
+  });
+
   it("hides a tip of the pointer when the cells scroll, and a tip of the focus once its cell left the view", () => {
     const { first } = cells();
     enter(first);
@@ -184,5 +212,19 @@ describe("useCellTip", () => {
     scope.stop();
     expect(tip.cell.value).toBeNull();
     expect(remove).toHaveBeenCalledWith("keydown", expect.any(Function), true);
+  });
+
+  it("shows no tip and listens to no key after its scope ended", () => {
+    focusRing(true);
+    const add = vi.spyOn(document, "addEventListener");
+    const { first, second } = cells();
+    enter(first);
+    scope.stop();
+    vi.advanceTimersByTime(TIP_DELAY);
+    enter(second, first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    second.focus();
+    expect(tip.cell.value).toBeNull();
+    expect(add).not.toHaveBeenCalledWith("keydown", expect.any(Function), true);
   });
 });
