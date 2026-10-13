@@ -366,12 +366,18 @@ describe("OverviewPage", () => {
     expect(row.findAll(".study-row-line")).toHaveLength(1);
   });
 
+  it("names the whole identity of a study in its link and its tooltip, as a narrow cell cuts it", async () => {
+    await mountPage(snapshot({ studies: [harder, studyRow({ duplicate: true, path: "archive/caffeine/Example" })] }));
+    const link = rowOf("caffeine/Harder1988").get("a.study-identity");
+    expect(link.text()).toBe("caffeine/Harder1988");
+    expect(link.attributes("title")).toBe("caffeine/Harder1988");
+    expect(rowOf("caffeine/Example").get("span.study-identity").attributes("title")).toBe("caffeine/Example");
+  });
+
   it("opens the study page when a row is clicked", async () => {
     await mountPage(snapshot());
     const identity = rowOf("caffeine/Example").get(".study-identity");
     expect(identity.attributes("href")).toBe("#/studies/caffeine/Example");
-    // A long identity wraps after the slash rather than inside a name.
-    expect(identity.findAll("wbr")).toHaveLength(1);
     await rowOf("caffeine/Example").get(".cell-sync").trigger("click");
     await vi.waitFor(() => expect(window.location.hash).toBe("#/studies/caffeine/Example"));
   });

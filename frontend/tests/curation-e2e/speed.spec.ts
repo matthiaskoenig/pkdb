@@ -288,6 +288,46 @@ test("the taller rows of a large font follow the mouse wheel as well, and the pa
   expect(await wheelThroughTable(page)).toEqual([]);
 });
 
+/**
+ * The identities of the rendered rows: the text, whether the row shows less of it than it needs
+ * (its own box or its cell cuts it), its tooltip, and how it overflows.
+ */
+function identities(page: Page) {
+  return page.locator("tr.study-row .study-identity").evaluateAll((elements) =>
+    elements.map((element) => {
+      const style = getComputedStyle(element);
+      const box = element.getBoundingClientRect();
+      const cell = element.closest("td")!;
+      const end = cell.getBoundingClientRect().right - parseFloat(getComputedStyle(cell).paddingRight);
+      return {
+        text: element.textContent ?? "",
+        cut: element.scrollWidth > Math.min(box.right, end) - box.left + 1,
+        title: element.getAttribute("title"),
+        overflow: [style.overflow, style.textOverflow, style.whiteSpace].join(" "),
+      };
+    }),
+  );
+}
+
+test("a study identity that its cell cuts ends with an ellipsis and stays whole in its name and tooltip", async ({
+  page,
+}) => {
+  // The longest substance of the generated workspace.
+  await page.getByRole("textbox", { name: "Search studies" }).fill("dextromethorphan");
+  await expect(page.getByText(/^\d+ of 1,000 studies$/)).toBeVisible();
+  // At the default font size every identity fits a window of 1440 px.
+  expect((await identities(page)).filter((identity) => identity.cut)).toEqual([]);
+  // A narrower window and a larger font leave the study column its least width, 12 rem.
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await page.evaluate(() => document.documentElement.style.setProperty("font-size", "21px"));
+  await expect.poll(async () => (await identities(page)).filter((identity) => identity.cut).length).toBeGreaterThan(0);
+  for (const identity of (await identities(page)).filter((candidate) => candidate.cut)) {
+    expect(identity.overflow).toBe("hidden ellipsis nowrap");
+    expect(identity.title).toBe(identity.text);
+    await expect(page.getByRole("link", { name: identity.text, exact: true })).toBeVisible();
+  }
+});
+
 test("Select all selects every shown study, also the rows that are not rendered", async ({ page }) => {
   await page.getByRole("checkbox", { name: "Select all shown studies" }).check();
   await expect(page.getByText("1,000 studies selected")).toBeVisible();

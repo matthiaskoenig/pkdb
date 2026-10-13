@@ -21,6 +21,8 @@ const emit = defineEmits<{ toggle: []; retry: [] }>();
 /** A sizer row: hidden, inert, without a checkbox, an identity or a place in the table. */
 const sizer = computed(() => props.rowIndex === null);
 
+const identity = computed(() => `${props.item.row.substance}/${props.item.row.name}`);
+
 const router = useRouter();
 
 /**
@@ -58,11 +60,13 @@ function open(event: MouseEvent): void {
     </td>
     <td class="cell-study">
       <div v-if="!sizer" class="study-row-line">
-        <!-- A long identity stays on its line; the title after it is cut with an ellipsis. -->
-        <span v-if="item.row.duplicate" class="study-identity">{{ item.row.substance }}/{{ item.row.name }}</span>
-        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity"
-          >{{ item.row.substance }}/<wbr />{{ item.row.name }}</RouterLink
-        >
+        <!-- The study keeps one line: the title after the identity is cut with an ellipsis first, the
+             identity only when it alone is wider than its cell, as with a large font; its tooltip
+             and the name of its link keep it whole. -->
+        <span v-if="item.row.duplicate" class="study-identity" :title="identity">{{ identity }}</span>
+        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity" :title="identity">{{
+          identity
+        }}</RouterLink>
         <VChip
           v-if="item.row.duplicate"
           size="x-small"
@@ -219,7 +223,11 @@ td.cell-open {
   height: 23px;
 }
 .study-identity {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 600;
 }
 a.study-identity {
