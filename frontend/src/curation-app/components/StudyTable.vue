@@ -4,7 +4,16 @@ import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
 import type { Profile, StudyRow } from "../api/types";
 import { useWindowPosition } from "../composables/useWindowPosition";
 import type { SortKey, StudySort } from "../overview";
-import { bodyParts, ROW_HEIGHT, rowItem, sameParts, sizerRows, type BodyPart, type RowItem } from "../studyTable";
+import {
+  bodyParts,
+  keepSizerRows,
+  ROW_HEIGHT,
+  rowItem,
+  sameParts,
+  sizerRows,
+  type BodyPart,
+  type RowItem,
+} from "../studyTable";
 import StudyTableRow from "./StudyTableRow.vue";
 
 const props = defineProps<{
@@ -91,9 +100,11 @@ function itemOf(row: StudyRow): RowItem {
 }
 
 const body = useTemplateRef<HTMLElement>("body");
-const { position, schedule } = useWindowPosition(body);
+const { position, schedule } = useWindowPosition(body, "tr.study-row");
 // The filters above the table wrap differently with other counts and move the table.
 watch(() => props.rows, schedule, { flush: "post" });
+/** The height of every study row: ROW_HEIGHT at the default font size, more with a larger one. */
+const rowHeight = computed(() => position.value.rowHeight ?? ROW_HEIGHT);
 
 /** The folder of the study whose row has the keyboard focus: it stays rendered wherever it is. */
 const focusedPath = ref<string | null>(null);
@@ -106,17 +117,15 @@ const pinned = computed(() => {
 
 /** The rendered rows and the spaces between them; the same list while scrolling keeps them. */
 const parts = computed<BodyPart[]>((previous) => {
-  const next = bodyParts({
-    count: props.rows.length,
-    top: position.value.top,
-    height: position.value.height,
-    pinned: pinned.value,
-  });
+  const next = bodyParts(
+    { count: props.rows.length, top: position.value.top, height: position.value.height, pinned: pinned.value },
+    rowHeight.value,
+  );
   return previous && sameParts(previous, next) ? previous : next;
 });
 
-/** Hidden rows that give the columns the widths of all shown rows. */
-const sizers = computed(() => sizerRows(props.rows));
+/** Hidden rows that give the columns the widths of all shown rows; those that stay render once. */
+const sizers = computed<readonly StudyRow[]>((previous) => keepSizerRows(previous ?? [], sizerRows(props.rows)));
 
 function focusIn(event: FocusEvent): void {
   const row = event.target instanceof Element ? event.target.closest("tr[aria-rowindex]") : null;
@@ -124,8 +133,12 @@ function focusIn(event: FocusEvent): void {
   focusedPath.value = props.rows[index]?.path ?? null;
 }
 
-function focusOut(event: FocusEvent): void {
-  if (!(event.relatedTarget instanceof Node && body.value?.contains(event.relatedTarget))) focusedPath.value = null;
+function focusOut(): void {
+  // Once the focus moved: when the window loses the focus, as to another application, the event
+  // names no new target while the row keeps the focus of the page.
+  setTimeout(() => {
+    if (!body.value?.contains(document.activeElement)) focusedPath.value = null;
+  });
 }
 </script>
 
@@ -169,7 +182,7 @@ function focusOut(event: FocusEvent): void {
             <StudyTableRow v-for="row in sizers" :key="row.path" :item="itemOf(row)" :selected="false" :row-index="null" />
             <template v-for="part in parts" :key="part.kind === 'row' ? rows[part.index]!.path : part.key">
               <tr v-if="part.kind === 'space'" class="study-space" aria-hidden="true">
-                <td :colspan="columns.length + 1" :style="{ height: `${part.rows * ROW_HEIGHT}px` }" />
+                <td :colspan="columns.length + 1" :style="{ height: `${part.rows * rowHeight}px` }" />
               </tr>
               <StudyTableRow
                 v-else
@@ -266,6 +279,12 @@ th[aria-sort] .sort-icon {
   width: 24px;
   height: 24px;
 }
+/* The window renders other rows as the page scrolls. Should a row ever not have the height that
+   the window measured, the browser must not anchor the scroll position to a row: it would pull the
+   page back across the edge of a row, and the window would follow, without end. */
+.study-table tbody {
+  overflow-anchor: none;
+}
 /* The sizer rows (StudyTableRow.vue without a row index) take no height but keep the widths of
    their cells, and the space of the rows that are not rendered draws nothing. A space takes its
    height at once: Vuetify animates the height of cells, which would move the rendered rows away
@@ -277,5 +296,11 @@ th[aria-sort] .sort-icon {
   padding: 0;
   border: 0;
   transition: none;
+}
+/* A printed overview shows the rendered rows, without the pages of the space of the others. */
+@media print {
+  .study-table tr.study-space {
+    display: none;
+  }
 }
 </style>

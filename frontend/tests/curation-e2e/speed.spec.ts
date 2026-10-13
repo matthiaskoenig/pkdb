@@ -152,6 +152,8 @@ test("while jobs run, a poll never blocks the page for more than 200 ms", async 
   await page.waitForTimeout(WATCH_MS);
   const { longTasks } = await readLatency(page);
   await testInfo.attach("long-tasks.json", { body: JSON.stringify(longTasks), contentType: "application/json" });
+  // The margin in the output of a passing run too: the attachments are kept only on failures.
+  console.log(`polls: ${longTasks.length} long tasks, the longest ${Math.round(Math.max(0, ...longTasks))} ms`);
   expect(Math.max(0, ...longTasks), JSON.stringify(longTasks)).toBeLessThanOrEqual(LONG_TASK_MS);
 });
 
@@ -190,6 +192,10 @@ test("typing in Search studies paints each keystroke and the result within 100 m
     medianResult: median(results),
   };
   await testInfo.attach("latency.json", { body: JSON.stringify(summary, null, 2), contentType: "application/json" });
+  console.log(
+    `search: keystroke median ${summary.medianInput.toFixed(1)} ms, p90 ${summary.p90Input.toFixed(1)} ms, ` +
+      `result median ${summary.medianResult.toFixed(1)} ms after the delay`,
+  );
   // The median, so that one pause of the garbage collector does not decide.
   expect(summary.medianInput, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
   // The 90th percentile, so that the slow first keystroke of a search does not hide behind the fast ones.
@@ -206,7 +212,10 @@ function rendered(page: Page) {
   return page.locator("tr.study-row");
 }
 
-/** The most rows that a window of 900 px renders: the rows in view, the overscan, the pinned row. */
+/**
+ * The most rows that a window of 900 px renders: the rows in view, one more as the edges of the
+ * window cut a row at the top and one at the bottom, and the overscan beyond each edge.
+ */
 const MOST_ROWS = Math.ceil(900 / ROW_HEIGHT) + 2 * OVERSCAN + 1;
 
 test("renders only the rows in view and reaches the last study by scrolling", async ({ page }) => {
@@ -218,38 +227,65 @@ test("renders only the rows in view and reaches the last study by scrolling", as
   await expectAccessible(page);
 });
 
-test("the rendered rows follow the mouse wheel at their places, without a blank band", async ({ page }) => {
-  // After each painted frame: a rendered row that is not at its place in the table, or a part of
-  // the window (its top, middle or bottom) that shows the space of the rows that are not rendered.
-  await page.evaluate((rowHeight) => {
-    const faults: string[] = [];
-    (window as unknown as { __faults: string[] }).__faults = faults;
+/**
+ * Scroll the table with the mouse wheel, a notch of 100 px every 50 ms, expect the page to scroll by
+ * every notch and then to come to rest, and return the faults of the painted frames: a rendered row
+ * that is not at its place in the table, or a part of the window (its top, middle or bottom) that
+ * shows the space of the rows that are not rendered.
+ */
+async function wheelThroughTable(page: Page): Promise<string[]> {
+  await page.evaluate(() => {
+    const probe = { faults: [] as string[], scrolls: 0 };
+    (window as unknown as { __wheel: typeof probe }).__wheel = probe;
+    document.addEventListener("scroll", () => probe.scrolls++, { capture: true, passive: true });
     const afterPaint = (done: () => void) => requestAnimationFrame(() => setTimeout(done, 0));
     const check = () => {
       const at = Math.round(window.scrollY);
       const body = document.querySelector(".study-table tbody")!.getBoundingClientRect().top;
       const rows = [...document.querySelectorAll("tr.study-row")];
+      // Every row has the height of the first one, at any font size.
+      const height = rows[0]!.getBoundingClientRect().height;
       for (const row of [rows[0]!, rows.at(-1)!]) {
-        const place = (Number(row.getAttribute("aria-rowindex")) - 2) * rowHeight;
+        const place = (Number(row.getAttribute("aria-rowindex")) - 2) * height;
         const offset = row.getBoundingClientRect().top - body;
-        if (Math.abs(offset - place) > 0.5) faults.push(`${at}: row at ${Math.round(offset)} px, not ${place} px`);
+        if (Math.abs(offset - place) > 0.5) probe.faults.push(`${at}: row at ${offset} px, not ${place} px`);
       }
       for (const y of [0.3, 0.6, 0.99].map((part) => Math.round(window.innerHeight * part))) {
-        if (document.elementFromPoint(720, y)?.closest("tr.study-space")) faults.push(`${at}: space at ${y} px`);
+        if (document.elementFromPoint(720, y)?.closest("tr.study-space")) probe.faults.push(`${at}: space at ${y} px`);
       }
       afterPaint(check);
     };
     afterPaint(check);
-  }, ROW_HEIGHT);
+  });
+  const probe = () => page.evaluate(() => (window as unknown as { __wheel: { faults: string[]; scrolls: number } }).__wheel);
   await page.mouse.move(720, 500);
-  // A quick hand on the wheel: a notch of 100 px every 50 ms.
+  // A quick hand on the wheel.
   for (let notch = 0; notch < 40; notch++) {
     await page.mouse.wheel(0, 100);
     await page.waitForTimeout(50);
   }
   // The page scrolled by every notch at once: the browser did not pull it back as rows came and went.
   await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 1000 }).toBe(4000);
-  expect(await page.evaluate(() => (window as unknown as { __faults: string[] }).__faults)).toEqual([]);
+  // And it rests: nothing scrolls it once the wheel stopped.
+  const scrolls = (await probe()).scrolls;
+  await page.waitForTimeout(1000);
+  expect((await probe()).scrolls - scrolls, "scroll events in the second after the wheel stopped").toBe(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(4000);
+  return (await probe()).faults;
+}
+
+test("the rendered rows follow the mouse wheel at their places, without a blank band", async ({ page }) => {
+  expect(await wheelThroughTable(page)).toEqual([]);
+});
+
+test("the taller rows of a large font follow the mouse wheel as well, and the page comes to rest", async ({ page }) => {
+  // 87.5 % of the browser's font size "Very large", 24 px, as the app sets it. The content security
+  // policy of the app refuses a style element, not a style set through the object model.
+  await page.evaluate(() => document.documentElement.style.setProperty("font-size", "21px"));
+  await expect
+    .poll(() => page.evaluate(() => document.querySelector("tr.study-row")!.getBoundingClientRect().height))
+    .toBeGreaterThan(ROW_HEIGHT);
+  expect(await wheelThroughTable(page)).toEqual([]);
 });
 
 test("Select all selects every shown study, also the rows that are not rendered", async ({ page }) => {

@@ -80,7 +80,10 @@ export function aiTitle(row: StudyRow): string {
 
 // The window of the body
 
-/** The height of a row in pixels: every study keeps one line (StudyTable.vue). */
+/**
+ * The height of a row in pixels at the default font size: every study keeps one line. StudyTable.vue
+ * measures a rendered row, as a larger font makes rows taller, and takes this height until it can.
+ */
 export const ROW_HEIGHT = 24;
 /** The rows rendered beyond each edge of the window, so that scrolling and Tab meet rendered rows. */
 export const OVERSCAN = 10;
@@ -243,4 +246,26 @@ export function sizerRows(rows: readonly StudyRow[], limit = SIZER_LIMIT): Study
       { ...first, id: "", name: "", path: `sizer-${place}`, duplicate: false },
     ),
   );
+}
+
+/** The cells that a sizer row shows: the fields of the row and of its summary that the columns show. */
+function shownCells(row: StudyRow): string {
+  return JSON.stringify(
+    SIZED_COLUMNS.flatMap((column) => [
+      ...(column.fields ?? []).map((key) => row[key]),
+      ...(column.summary ?? []).map((key) => row.summary[key]),
+    ]),
+  );
+}
+
+/**
+ * `next` with the rows of `previous` that show the same cells at their places, or `previous` itself
+ * when all of them do: a row that stays renders only once, also through the new objects of a poll.
+ */
+export function keepSizerRows(previous: readonly StudyRow[], next: readonly StudyRow[]): readonly StudyRow[] {
+  const kept = next.map((row, place) => {
+    const old = previous[place];
+    return old && shownCells(old) === shownCells(row) ? old : row;
+  });
+  return kept.length === previous.length && kept.every((row, place) => row === previous[place]) ? previous : kept;
 }

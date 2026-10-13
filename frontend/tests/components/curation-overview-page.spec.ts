@@ -195,6 +195,12 @@ function rowIndices(): number[] {
   return rows().map((row) => Number(row.attributes("aria-rowindex")));
 }
 
+/** Waits for the next task, after the updates and promises before it. */
+async function afterTask(): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve));
+  await flushPromises();
+}
+
 /**
  * Moves the body of the study table to `top` px from the top of the window, as scrolling the page
  * would, and waits for the frame that measures it; jsdom has no layout.
@@ -778,21 +784,39 @@ describe("OverviewPage", () => {
     input.focus();
     // The body scrolled 2,400 px above the window: rows 100 to 116 are in view.
     await scrollBody(-2400);
-    const window = Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2);
-    expect(rowIndices()).toEqual([2, ...window]);
+    const inView = Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2);
+    expect(rowIndices()).toEqual([2, ...inView]);
     // A space between the focused row and the window, and one below the window.
     expect(page().findAll("tr.study-space")).toHaveLength(2);
     expect(document.activeElement).toBe(input);
 
     // The focus moves within the row: it stays.
-    rows()[0]!.get<HTMLAnchorElement>("a.study-identity").element.focus();
-    await flushPromises();
-    expect(rowIndices()).toEqual([2, ...window]);
+    const link = rows()[0]!.get<HTMLAnchorElement>("a.study-identity").element;
+    link.focus();
+    await afterTask();
+    expect(rowIndices()).toEqual([2, ...inView]);
+
+    // The window loses the focus, as to another application: the event names no new target, and
+    // the row keeps the focus of the page.
+    link.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: null }));
+    await afterTask();
+    expect(document.activeElement).toBe(link);
+    expect(rowIndices()).toEqual([2, ...inView]);
 
     // The focus leaves the table: the row goes.
-    (document.activeElement as HTMLElement).blur();
-    await flushPromises();
-    expect(rowIndices()).toEqual(window);
+    link.blur();
+    await afterTask();
+    expect(rowIndices()).toEqual(inView);
+  });
+
+  it("sizes the window and the spaces by the height of a rendered row, which a larger font raises", async () => {
+    // jsdom has no layout: every row is 30 px high, as with a larger font than the default one.
+    vi.spyOn(HTMLTableRowElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 0, height: 30 } as DOMRect);
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    const shown = Math.ceil(400 / 30) + OVERSCAN;
+    expect(rowIndices()).toEqual(Array.from({ length: shown }, (_, index) => index + 2));
+    expect(page().get<HTMLTableCellElement>("tr.study-space td").element.style.height).toBe(`${(1000 - shown) * 30}px`);
   });
 
   it("shows the profiles of the curators in the rows that were shown before the roster arrived", async () => {

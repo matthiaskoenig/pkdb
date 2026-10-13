@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
 import type { Profile } from "../../src/curation-app/api/types";
 import { REVIEW_LABELS, SYNC_LABELS } from "../../src/curation-app/overview";
-import { bodyParts, OVERSCAN, ROW_HEIGHT, rowItem, sameParts, sizerRows } from "../../src/curation-app/studyTable";
+import {
+  bodyParts,
+  keepSizerRows,
+  OVERSCAN,
+  ROW_HEIGHT,
+  rowItem,
+  sameParts,
+  sizerRows,
+} from "../../src/curation-app/studyTable";
 import { studyRow } from "./curation-fixtures";
 
 const profiles = new Map<string, Profile>([
@@ -96,6 +104,20 @@ describe("sizerRows", () => {
     expect(sizers.some((row) => row.summary.curators?.length === 5)).toBe(true);
     expect(sizers.every((row) => row.id === "" && !row.duplicate)).toBe(true);
     expect(new Set(sizers.map((row) => row.path)).size).toBe(sizers.length);
+  });
+
+  it("keeps the rows of the last sizing that show the same cells, so that they render once", () => {
+    const rows = [draft, review, approved, unchecked, crowded];
+    const before = sizerRows(rows);
+    // A search that keeps a row of every cell, and a poll that brings new objects of the same rows.
+    expect(keepSizerRows(before, sizerRows([crowded, unchecked, approved, review]))).toBe(before);
+    expect(keepSizerRows(before, sizerRows(rows.map((row) => structuredClone(row))))).toBe(before);
+    // A longer message changes the cell of one row; the other rows stay.
+    const message = studyRow({ id: "a/m", path: "a/m", message: "The connection closed" });
+    const after = keepSizerRows(before, sizerRows([...rows, message]));
+    expect(after).not.toBe(before);
+    expect(after.filter((row) => row.message === message.message)).toHaveLength(1);
+    expect(after.filter((row) => before.includes(row)).length).toBe(before.length - 1);
   });
 
   it("takes the longest cells first beyond the limit", () => {
