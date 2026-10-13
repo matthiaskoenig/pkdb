@@ -1,0 +1,107 @@
+"""Decide whether a change touches code, so that a docs-only change skips the tests.
+
+The `changes` job of .github/workflows/ci-cd.yml runs it with the python of the
+runner:
+
+    python3 scripts/ci_changes.py --event "$EVENT" --ref "$GITHUB_REF" \
+        --before "$BEFORE" --output "$GITHUB_OUTPUT"
+
+and the test jobs run when it writes `code=true`. A pull request is compared with
+its base branch, a push with the commit before it. Release tags, manual runs and
+anything it cannot tell count as code, so that a doubt never skips a test.
+"""
+
+import argparse
+import subprocess
+import sys
+from collections.abc import Iterable
+from pathlib import Path
+
+# The client tests read this page (python/tests/studyformat/test_studyformat_export.py).
+READ_BY_TESTS = frozenset({"docs/study-format.md"})
+DOCS_FOLDERS = ("docs/", "release-notes/")
+DOCS_FILES = frozenset({"zensical.toml"})
+
+
+def is_docs(path: str) -> bool:
+    """Whether `path`, relative to the repository, is documentation only."""
+    if path in READ_BY_TESTS:
+        return False
+    if path.startswith(DOCS_FOLDERS) or path in DOCS_FILES:
+        return True
+    # Markdown files at the root, such as README.md
+    return "/" not in path and path.endswith(".md")
+
+
+def code_changed(paths: Iterable[str]) -> bool:
+    """Whether the changed `paths` hold code: anything but documentation, or nothing."""
+    paths = list(paths)
+    return not paths or not all(is_docs(path) for path in paths)
+
+
+def git(repository: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    """Run git in `repository` and keep its output."""
+    return subprocess.run(
+        ["git", "-C", str(repository), *args],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+
+
+def available(repository: Path, commit: str) -> bool:
+    """Whether `commit` is in the clone, fetched from origin when it is not."""
+    if git(repository, "cat-file", "-e", f"{commit}^{{commit}}").returncode == 0:
+        return True
+    fetched = git(repository, "fetch", "--quiet", "--depth=1", "origin", commit)
+    return fetched.returncode == 0
+
+
+def changed_paths(repository: Path, base: str) -> list[str] | None:
+    """The paths that differ between `base` and HEAD, or None if git cannot tell.
+
+    Renames count as a removal and an addition, so that a file moved from code
+    into docs/ still counts as a change of code.
+    """
+    result = git(repository, "diff", "--name-only", "--no-renames", "-z", base, "HEAD")
+    if result.returncode != 0:
+        return None
+    return [path for path in result.stdout.split("\0") if path]
+
+
+def decide(event: str, ref: str, before: str, repository: Path) -> bool:
+    """Whether the change of a run with `event`, `ref` and `before` touches code."""
+    if ref.startswith("refs/tags/"):
+        return True
+    if event == "pull_request":
+        # the merge commit of a pull request has its base branch as first parent
+        base = "HEAD^1"
+    elif event == "push" and before.strip("0") and available(repository, before):
+        base = before
+    else:
+        return True
+    paths = changed_paths(repository, base)
+    return paths is None or code_changed(paths)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Print `code=true` or `code=false` and append it to the file of --output."""
+    parser = argparse.ArgumentParser(
+        description="Decide whether a change touches code."
+    )
+    parser.add_argument("--event", required=True, help="github.event_name")
+    parser.add_argument("--ref", required=True, help="github.ref")
+    parser.add_argument("--before", default="", help="github.event.before of a push")
+    parser.add_argument("--output", type=Path, help="file to append code=... to")
+    args = parser.parse_args(argv)
+    code = decide(args.event, args.ref, args.before, Path.cwd())
+    line = f"code={'true' if code else 'false'}"
+    print(line)
+    if args.output:
+        with args.output.open("a", encoding="utf-8") as handle:
+            handle.write(line + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
