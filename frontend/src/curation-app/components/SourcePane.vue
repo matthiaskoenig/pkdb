@@ -3,15 +3,17 @@ import { computed, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
 import { useMoreBelow } from "../composables/useMoreBelow";
+import { usePlotScales } from "../composables/usePlotScales";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { rawTable } from "../grid";
-import { drawsOnImage, plottedSeries, type SelectedRow } from "../overlay";
+import { drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../overlay";
 import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
 import { SOURCE_ICONS, sourceProblems } from "../sources";
 import { tableFiles, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import MoreBelow from "./MoreBelow.vue";
+import PlotScales from "./PlotScales.vue";
 import ProblemItem from "./ProblemItem.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
@@ -20,7 +22,8 @@ import TableGrid from "./TableGrid.vue";
  * The middle pane of the Data section: one source as the paper shows it. A paper table shows its
  * image above its raw extraction as printed; a figure shows the overlay of its digitized points
  * and mapped rows on its image, or its image above a plot of the mapped rows when it has no
- * digitization. Missing files are named in one line each; the problems of the files of the source
+ * digitization. Above a plot of mapped rows, the curator switches each axis between linear and log.
+ * Missing files are named in one line each; the problems of the files of the source
  * follow in a disclosure. A click on a mapped point emits its row, which the section selects.
  */
 const props = defineProps<{
@@ -63,6 +66,10 @@ function setZoom(value: Zoom): void {
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
+/** The scales of the plots of the source: the curator's choice for the figure, else the digitization's, else linear. */
+const { scales, choose } = usePlotScales(identity, () => props.view);
+/** The points of the plot that its log axes leave out. */
+const offScale = computed(() => (props.view ? pointsOffScale(props.view, scales.value) : 0));
 const kind = computed(() => props.summary.kind);
 /** The raw extraction of a paper table with the lines of its rows. */
 const raw = computed(() =>
@@ -111,7 +118,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
       <!-- The source and its kind keep their room in a narrow pane; the image file name shortens first. -->
       <span class="pane-head-part pane-head-part--fixed">{{ summary.kind }}</span>
       <span v-if="summary.image" class="pane-head-part">{{ summary.image }}</span>
-      <div v-if="showsImage && view?.image_url" class="zoom" role="group" aria-label="Image size">
+      <div v-if="showsImage && view?.image_url" class="zoom switch-group" role="group" aria-label="Image size">
         <button type="button" :aria-pressed="zoom === 'fit'" @click="setZoom('fit')">Fit</button>
         <button type="button" :aria-pressed="zoom === 'full'" @click="setZoom('full')">100 %</button>
       </div>
@@ -143,14 +150,17 @@ const { more, scrollbar } = useMoreBelow(body, content);
             >
               <h4 :id="`${id}-unmatched`" class="pane-heading">Not digitized: {{ view.unmatched.join(", ") }}</h4>
               <p class="pane-note">{{ unmatchedNote }}</p>
-              <SourceOverlay
-                v-if="plotted.length"
-                :view="view"
-                mode="plot"
-                :selected="selected"
-                :problems="sourceIssues"
-                @select-row="emit('select-row', $event)"
-              />
+              <template v-if="plotted.length">
+                <PlotScales :scales="scales" :hidden="offScale" @choose="choose" />
+                <SourceOverlay
+                  :view="view"
+                  mode="plot"
+                  :scales="scales"
+                  :selected="selected"
+                  :problems="sourceIssues"
+                  @select-row="emit('select-row', $event)"
+                />
+              </template>
             </section>
 
             <template v-if="showsImage">
@@ -189,14 +199,17 @@ const { more, scrollbar } = useMoreBelow(body, content);
 
               <section v-else class="pane-block" :aria-labelledby="`${id}-plot`">
                 <h4 :id="`${id}-plot`" class="pane-heading">Plot of the mapped rows</h4>
-                <SourceOverlay
-                  v-if="plotted.length"
-                  :view="view"
-                  mode="plot"
-                  :selected="selected"
-                  :problems="sourceIssues"
-                  @select-row="emit('select-row', $event)"
-                />
+                <template v-if="plotted.length">
+                  <PlotScales :scales="scales" :hidden="offScale" @choose="choose" />
+                  <SourceOverlay
+                    :view="view"
+                    mode="plot"
+                    :scales="scales"
+                    :selected="selected"
+                    :problems="sourceIssues"
+                    @select-row="emit('select-row', $event)"
+                  />
+                </template>
                 <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
               </section>
             </template>
@@ -262,30 +275,9 @@ const { more, scrollbar } = useMoreBelow(body, content);
   min-height: 0;
   height: 100%;
 }
+/* The zoom of the image (`switch-group` of styles.css) goes to the end of the head. */
 .zoom {
-  display: flex;
-  flex: 0 0 auto;
   margin-inline-start: auto;
-}
-/* As high as the smallest target of the app, 24 px, inside the 26 px head with its line below. */
-.zoom button {
-  height: 24px;
-  padding-inline: 8px;
-  font-size: 12px;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  color: rgb(var(--v-theme-on-surface));
-}
-.zoom button:first-child {
-  border-radius: 4px 0 0 4px;
-}
-.zoom button:last-child {
-  margin-inline-start: -1px;
-  border-radius: 0 4px 4px 0;
-}
-.zoom button[aria-pressed="true"] {
-  background: rgb(var(--v-theme-primary));
-  border-color: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
 }
 .pane-frame {
   position: relative;

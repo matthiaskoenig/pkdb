@@ -805,6 +805,7 @@ class Handler(BaseHTTPRequestHandler):
                 "offline",
                 "repository",
                 "theme",
+                "plot_scale",
             }:
                 raise ValueError("Unknown setting")
             return engine.configure(**body)

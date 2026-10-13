@@ -15,6 +15,7 @@ import {
   type Snapshot,
   type ThemeChoice,
 } from "../api/types";
+import type { AxisScales } from "../overlay";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 
 /** The settings that `POST /local/settings` accepts; the API key is write-only. */
@@ -26,6 +27,8 @@ export interface Settings {
   offline?: boolean;
   repository?: string;
   theme?: ThemeChoice;
+  /** The scales of the plot of a figure, which the local server keeps. */
+  plot_scale?: { figure: string } & AxisScales;
 }
 
 /** The workspace, the connection, the study rows and the jobs of `GET /local/state`. */

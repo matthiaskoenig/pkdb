@@ -1656,5 +1656,7 @@
       "y_label": "concentration (mg/l)"
     }
   ],
+  "log_x": false,
+  "log_y": false,
   "image_url": "/local/studies/caffeine/Demo2020/files/Demo2020_Fig1.png"
 }

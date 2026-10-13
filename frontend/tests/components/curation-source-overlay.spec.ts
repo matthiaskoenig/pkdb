@@ -74,6 +74,8 @@ const view: SourceView = {
   ],
   unmatched: ["caf_plasma_D75"],
   layout: "overlay",
+  log_x: false,
+  log_y: false,
   points: [
     {
       series: "caf_plasma_D150",
@@ -400,5 +402,69 @@ describe("SourceOverlay", () => {
     expect(wrapper.find(".overlay-key--problems").exists()).toBe(false);
     expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text())).not.toContain("Problems");
     expect(wrapper.get('[role="img"]').attributes("aria-label")).not.toContain("with problems");
+  });
+
+  it("draws the plot on the scales it gets and names its log axes, and keeps the overlay in pixels", async () => {
+    const plain = { ...view, digitization: null, overlay: [], layout: "side_by_side" as const };
+    const wrapper = mount(SourceOverlay, { props: { view: plain, scales: { x: "linear", y: "log" } } });
+    await flushPromises();
+    const [, , layout] = engine.react.mock.calls[0]!;
+    expect([layout.xaxis.type, layout.yaxis.type]).toEqual(["linear", "log"]);
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toMatch(/, with a log y axis$/);
+    await wrapper.setProps({ scales: { x: "log", y: "log" } });
+    await flushPromises();
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toMatch(/, with log x and y axes$/);
+
+    const overlay = mount(SourceOverlay, { props: { view, scales: { x: "log", y: "log" } } });
+    await flushPromises();
+    const [, , pixels] = engine.react.mock.calls.at(-1)!;
+    expect(pixels.yaxis.type).toBeUndefined();
+    expect(overlay.get('[role="img"]').attributes("aria-label")).not.toContain("log");
+  });
+
+  it("draws linear axes without scales", async () => {
+    mount(SourceOverlay, { props: { view: { ...view, digitization: null, overlay: [], layout: "side_by_side" } } });
+    await flushPromises();
+    const [, , layout] = engine.react.mock.calls[0]!;
+    expect([layout.xaxis.type, layout.yaxis.type]).toEqual(["linear", "linear"]);
+  });
+
+  it("rings, keys and names only the problems of the drawn rows, and lists the problems of every row", async () => {
+    // A log x axis leaves out the point of line 3 at x 0.
+    const plain: SourceView = {
+      ...view,
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: view.points.map((point) => (point.line === 3 ? { ...point, x: 0, x_text: "0" } : point)),
+    };
+    const problem = (row: number, severity: ValidationIssue["severity"]): ValidationIssue => ({
+      code: "digitized_mismatch",
+      severity,
+      message: `Row ${row} is off.`,
+      source: { file: "timecourses_Fig1.tsv", row, header: "mean" },
+    });
+    const problems = [problem(2, "warning"), problem(3, "error")];
+    const wrapper = mount(SourceOverlay, { props: { view: plain, mode: "plot", problems, scales: { x: "log", y: "linear" } } });
+    await flushPromises();
+    const [, traces] = engine.react.mock.calls[0]!;
+    const rings = (traces as OverlayTrace[]).filter((entry) => entry.meta.startsWith("problem"));
+    expect(rings.map((entry) => [entry.meta, entry.x])).toEqual([["problem warning", [0.5]]]);
+    expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with a warning");
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
+      "Plot of 2 mapped rows of Fig1 of the series caf_plasma_D150, caf_plasma_D75, with a log x axis, 1 row with problems",
+    );
+    // The data table lists every mapped row, also the one that the log axis leaves out, with its problems.
+    expect(wrapper.findAll(".overlay-data tbody .overlay-problems").map((cell) => cell.text())).toEqual([
+      "Warning digitized_mismatch: Row 2 is off.",
+      "Error digitized_mismatch: Row 3 is off.",
+    ]);
+
+    // On linear axes, both rows are drawn with their problems.
+    await wrapper.setProps({ scales: { x: "linear", y: "linear" } });
+    await flushPromises();
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toMatch(/caf_plasma_D75, 2 rows with problems$/);
+    expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with an error Row with a warning");
   });
 });

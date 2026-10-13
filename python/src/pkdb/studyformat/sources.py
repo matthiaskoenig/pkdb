@@ -16,6 +16,7 @@ from pkdb.studyformat.digitize import (
     VALUE_DIGITS,
     Axes,
     DigitizationError,
+    LoadedDigitization,
     MappedPoint,
     dataset_series,
     digitization_file,
@@ -132,7 +133,9 @@ class SourceView:
     """Everything the curation app and `pkdb plot` show of one source.
 
     `layout` is `overlay` when the figure has a digitization on an image of known size, which the
-    overlay draws on; otherwise the image and a plot of the points go side by side.
+    overlay draws on; otherwise the image and a plot of the points go side by side. `log_x` and
+    `log_y` say whether the digitization draws that axis on a log scale, the default of the plot
+    of the curation app; False without a digitization.
     """
 
     source: str
@@ -146,6 +149,8 @@ class SourceView:
     layout: Literal["overlay", "side_by_side"]
     points: tuple[SourcePoint, ...]
     series: tuple[SourceSeries, ...]
+    log_x: bool
+    log_y: bool
 
 
 def _sources_of(table: LoadedTable) -> set[str]:
@@ -417,6 +422,25 @@ def _series(
     return tuple(result)
 
 
+def _log_scales(digitization: LoadedDigitization | None) -> tuple[bool, bool]:
+    """Whether the digitization draws x and y on log scales.
+
+    An axis is log when it is log on every axes that a dataset uses, or on every axes of a
+    project without datasets. A log axis of negative values counts as linear, as a plot draws
+    a log axis of values above 0 only.
+    """
+    if digitization is None or not digitization.axes:
+        return False, False
+    used = {dataset.axes for dataset in digitization.datasets}
+    chosen = [
+        entry for name, entry in digitization.axes.items() if name in used
+    ] or list(digitization.axes.values())
+    return (
+        all(entry.log_x and not entry.negative_x for entry in chosen),
+        all(entry.log_y and not entry.negative_y for entry in chosen),
+    )
+
+
 def source_view(study: LoadedStudy, source: str) -> SourceView:
     """The view of one source; raises KeyError for a source the study does not have."""
     if source not in _all_sources(study):
@@ -431,6 +455,7 @@ def source_view(study: LoadedStudy, source: str) -> SourceView:
     figure_points = _figure_points(study, source)
     overlay, unmatched = _overlay(study, source, [p for _, p in figure_points])
     points = _source_points(figure_points)
+    log_x, log_y = _log_scales(digitization)
     return SourceView(
         source=source,
         image=image,
@@ -443,4 +468,6 @@ def source_view(study: LoadedStudy, source: str) -> SourceView:
         layout="overlay" if digitization and image and image_size else "side_by_side",
         points=points,
         series=_series(study, source, overlay, unmatched, points),
+        log_x=log_x,
+        log_y=log_y,
     )

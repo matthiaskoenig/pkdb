@@ -12,6 +12,7 @@ from pkdb.cache import (
 from pkdb.client import Client
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.jobs import now
+from pkdb.curation.plot_scales import figure_scales, keep_plot_scales
 from pkdb.curation.state import THEMES, EngineState
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
@@ -113,6 +114,7 @@ class ConnectionMixin(EngineState):
         offline=None,
         repository=None,
         theme=None,
+        plot_scale=None,
     ):
         with self.lock:
             changed = (
@@ -131,6 +133,9 @@ class ConnectionMixin(EngineState):
                 raise ValueError("PK-DB user must be text")
             if theme is not None and theme not in THEMES:
                 raise ValueError("Theme must be light, dark or system")
+            figure, scales = (
+                figure_scales(plot_scale) if plot_scale is not None else (None, None)
+            )
             resolved_endpoint = (
                 self.endpoint
                 if endpoint is None
@@ -168,6 +173,8 @@ class ConnectionMixin(EngineState):
                 self.github_user = github_user
             if theme is not None:
                 self.theme = theme
+            if figure is not None and scales is not None:
+                keep_plot_scales(self.plot_scales, figure, scales)
             self.github = github
             self.repository = github.repository
             if changed:

@@ -4,18 +4,23 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   dataRows,
+  digitizedScales,
   drawsOnImage,
   FADED,
   legendEntries,
+  logAxes,
+  logTicks,
   overlayTraces,
   plotTraces,
   PROBLEM_COLORS,
   plottedProblems,
   problemHover,
   plottedSeries,
+  pointsOffScale,
   POINT_RING,
   rowAt,
   wrapText,
+  type AxisScales,
   type OverlayTrace,
 } from "../../src/curation-app/overlay";
 
@@ -98,6 +103,8 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
       mapped({ series: "drug_feces", line: 6, x: 1, y: 3.25, error_bar: 2.5 }),
     ],
     series: SERIES,
+    log_x: false,
+    log_y: false,
     ...changes,
   };
 }
@@ -116,6 +123,13 @@ function repositoryFile(relative: string): string {
 const DARK = { surface: "#192b31", text: "#ffffff", muted: "#aaaaaa", grid: "#333333", primary: "#79d5d6" };
 
 describe("overlayTraces", () => {
+  it("keeps the overlay in the pixels of the image, without an axis type", () => {
+    const { layout } = overlayTraces(figure({ log_x: true, log_y: true }));
+    expect(layout.xaxis.type).toBeUndefined();
+    expect(layout.yaxis.type).toBeUndefined();
+    expect(layout.yaxis.range).toEqual([100, 0]);
+  });
+
   it("draws on the image in pixel space with hidden, fixed axes", () => {
     const { layout } = overlayTraces(figure());
     expect(layout.images).toEqual([
@@ -391,6 +405,74 @@ describe("the selected row", () => {
     expect(layout.margin).toEqual({ l: 48, r: 8, t: 8, b: 36, pad: 2 });
     expect(layout.xaxis.tickfont).toEqual({ size: 11 });
   });
+
+  it("draws linear axes by default and sets the log type on the chosen axes", () => {
+    const linear = plotTraces(plain).layout;
+    expect([linear.xaxis.type, linear.yaxis.type]).toEqual(["linear", "linear"]);
+    const log = plotTraces(plain, null, undefined, null, { scales: { x: "linear", y: "log" } }).layout;
+    expect([log.xaxis.type, log.yaxis.type]).toEqual(["linear", "log"]);
+    // A log axis labels full values (0.5), not bare mantissas; a linear axis keeps the default.
+    expect(log.yaxis).toEqual(expect.objectContaining({ tickformat: "~g", exponentformat: "none" }));
+    expect(log.xaxis.tickformat).toBeUndefined();
+    // The titles and the compact axes stay.
+    expect(log.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
+  });
+
+  it("leaves out the points at 0 or below of a log axis, with their error bars, hover texts and ring", () => {
+    const scales: AxisScales = { x: "log", y: "linear" };
+    // Line 4 of drug_feces is at x 0 and selected.
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 4 }, { scales });
+    const feces = trace(traces, "plot drug_feces");
+    expect(feces.x).toEqual([1]);
+    expect(feces.y).toEqual([3.25]);
+    expect(feces.error_y?.array).toEqual([0.75]);
+    expect(feces.customdata).toEqual([[TIMECOURSES, 6, "drug_feces", "1", "3.25", false, ""]]);
+    expect(traces.some((entry) => entry.meta === "selected")).toBe(false);
+    expect(pointsOffScale(plain, scales)).toBe(1);
+    expect(pointsOffScale(plain, { x: "linear", y: "log" })).toBe(0);
+  });
+
+  it("counts a point once when both log axes leave it out", () => {
+    const view = figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: [
+        mapped({ series: "drug_plasma", line: 1, x: 0, y: 0 }),
+        mapped({ series: "drug_plasma", line: 2, x: -1, y: 2 }),
+        mapped({ series: "drug_plasma", line: 3, x: 1, y: -0.5 }),
+        mapped({ series: "drug_plasma", line: 4, x: 2, y: 3 }),
+      ],
+    });
+    expect(pointsOffScale(view, { x: "linear", y: "linear" })).toBe(0);
+    expect(pointsOffScale(view, { x: "log", y: "linear" })).toBe(2);
+    expect(pointsOffScale(view, { x: "linear", y: "log" })).toBe(2);
+    expect(pointsOffScale(view, { x: "log", y: "log" })).toBe(3);
+    expect(trace(plotTraces(view, null, undefined, null, { scales: { x: "log", y: "log" } }).traces, "plot drug_plasma").x).toEqual([2]);
+  });
+
+  it("leaves out every point when all are at 0 or below and keeps the series", () => {
+    const view = figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: [mapped({ series: "drug_plasma", line: 1, x: 0, y: 0 }), mapped({ series: "drug_plasma", line: 2, x: 1, y: 0 })],
+    });
+    const { traces, layout } = plotTraces(view, null, undefined, null, { scales: { x: "linear", y: "log" } });
+    expect(trace(traces, "plot drug_plasma")).toEqual(expect.objectContaining({ x: [], y: [], customdata: [] }));
+    expect(layout.yaxis.title).toEqual({ text: "concentration (mg/l)", font: { size: 11 } });
+    expect(pointsOffScale(view, { x: "linear", y: "log" })).toBe(2);
+  });
+
+  it("takes the default scales from the digitization, else linear", () => {
+    expect(digitizedScales(plain)).toEqual({ x: "linear", y: "linear" });
+    expect(digitizedScales({ ...plain, log_y: true })).toEqual({ x: "linear", y: "log" });
+    expect(digitizedScales({ ...plain, log_x: true, log_y: true })).toEqual({ x: "log", y: "log" });
+    expect(logAxes({ x: "log", y: "log" })).toEqual(["x", "y"]);
+    expect(logAxes({ x: "linear", y: "log" })).toEqual(["y"]);
+  });
 });
 
 describe("problems in the plot", () => {
@@ -407,11 +489,13 @@ describe("problems in the plot", () => {
   }
 
   it("rings the points of rows with problems in the color of their worst severity, below the ring of the selected row", () => {
-    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 6 }, plottedProblems(plain, [
-      problem(4),
-      problem(6),
-      problem(6, "error", { code: "missing_value", message: "mean is missing." }),
-    ]));
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 6 }, {
+      rowProblems: plottedProblems(plain, [
+        problem(4),
+        problem(6),
+        problem(6, "error", { code: "missing_value", message: "mean is missing." }),
+      ]),
+    });
     expect(traces.map((entry) => entry.meta)).toEqual([
       "plot drug_plasma",
       "plot drug_urine",
@@ -441,7 +525,7 @@ describe("problems in the plot", () => {
   });
 
   it("draws the ring of a problem thin and outside the ring of the selected row, so that the two differ and both show", () => {
-    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 4 }, plottedProblems(plain, [problem(4)]));
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 4 }, { rowProblems: plottedProblems(plain, [problem(4)]) });
     const ring = trace(traces, "problem warning").marker!;
     const outline = trace(traces, "selected outline").marker!;
     const selected = trace(traces, "selected").marker!;
@@ -453,7 +537,7 @@ describe("problems in the plot", () => {
 
   it("rings in the colors of the dark theme, which keep 3:1 on the surface of each theme", () => {
     const dark = { dark: true, colors: DARK, font: "sans-serif" };
-    expect(trace(plotTraces(plain, null, dark, null, plottedProblems(plain, [problem(4)])).traces, "problem warning").marker?.color).toBe(
+    expect(trace(plotTraces(plain, null, dark, null, { rowProblems: plottedProblems(plain, [problem(4)]) }).traces, "problem warning").marker?.color).toBe(
       PROBLEM_COLORS.dark.warning,
     );
     for (const severity of ["error", "warning"] as const) {
@@ -463,12 +547,12 @@ describe("problems in the plot", () => {
   });
 
   it("fades the ring of a faded series with it", () => {
-    const { traces } = plotTraces(plain, "drug_plasma", undefined, null, plottedProblems(plain, [problem(4)]));
+    const { traces } = plotTraces(plain, "drug_plasma", undefined, null, { rowProblems: plottedProblems(plain, [problem(4)]) });
     expect(trace(traces, "problem warning").marker?.opacity).toEqual([FADED]);
   });
 
   it("adds the problems of a row to the hover label of its point: severity, code and the message in lines", () => {
-    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    const { traces } = plotTraces(plain, null, undefined, null, { rowProblems: plottedProblems(plain, [problem(4)]) });
     const feces = trace(traces, "plot drug_feces");
     expect(feces.hovertemplate).toBe(
       "%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}%{customdata[6]}<extra></extra>",
@@ -515,7 +599,7 @@ describe("problems in the plot", () => {
   });
 
   it("aligns the lines of the hover label of the data plot to the left", () => {
-    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    const { traces } = plotTraces(plain, null, undefined, null, { rowProblems: plottedProblems(plain, [problem(4)]) });
     expect(trace(traces, "plot drug_feces").hoverlabel?.align).toBe("left");
   });
 
@@ -531,22 +615,101 @@ describe("problems in the plot", () => {
   });
 
   it("rings nothing for problems of rows that the plot does not draw, of other files, or without a line", () => {
-    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [
-      problem(99),
-      { ...problem(4), source: { file: "outputs_Fig1.tsv", row: 4 } },
-      { ...problem(4), source: { file: TIMECOURSES } },
-      { ...problem(4), source: null },
-    ]));
+    const { traces } = plotTraces(plain, null, undefined, null, {
+      rowProblems: plottedProblems(plain, [
+        problem(99),
+        { ...problem(4), source: { file: "outputs_Fig1.tsv", row: 4 } },
+        { ...problem(4), source: { file: TIMECOURSES } },
+        { ...problem(4), source: null },
+      ]),
+    });
     expect(traces.some((entry) => entry.meta.startsWith("problem"))).toBe(false);
   });
 
   it("selects the row of a ringed point on a click, as the point under the ring takes it", () => {
-    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    const { traces } = plotTraces(plain, null, undefined, null, { rowProblems: plottedProblems(plain, [problem(4)]) });
     expect(rowAt(plain, { customdata: trace(traces, "plot drug_feces").customdata![0] })).toEqual({ file: TIMECOURSES, line: 4 });
+  });
+
+  it("keys and rings only the problems of the points that the log axes draw", () => {
+    // Line 4 of drug_feces is at x 0, which a log x axis leaves out; line 6 is at x 1.
+    const scales: AxisScales = { x: "log", y: "linear" };
+    const problems = plottedProblems(plain, [problem(4), problem(6, "error")], scales);
+    expect([...problems.keys()]).toEqual([`${TIMECOURSES}:6`]);
+    expect([...plottedProblems(plain, [problem(4), problem(6, "error")]).keys()]).toEqual([`${TIMECOURSES}:4`, `${TIMECOURSES}:6`]);
+    const { traces } = plotTraces(plain, null, undefined, null, { scales, rowProblems: plottedProblems(plain, [problem(4), problem(6)]) });
+    // Even with the problems of all plotted rows, a ring needs a drawn point.
+    const ring = trace(traces, "problem warning");
+    expect([ring.x, ring.y]).toEqual([[1], [3.25]]);
   });
 
   it("rings nothing on the overlay of the image", () => {
     expect(overlayTraces(figure()).traces.some((entry) => entry.meta.startsWith("problem"))).toBe(false);
+  });
+});
+
+describe("the ticks of a log axis", () => {
+  /** A plot of drug_plasma at x 1, 2, 3 and so on, at the values `ys` with the error bar ends `bars`. */
+  function plotOf(ys: number[], bars: (number | null)[] = []): SourceView {
+    return figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: ys.map((y, index) =>
+        mapped({ series: "drug_plasma", line: index + 1, x: index + 1, y, error_bar: bars[index] ?? null }),
+      ),
+    });
+  }
+  const LOG: AxisScales = { x: "log", y: "log" };
+
+  it.each([
+    [0, { nticks: 4 }],
+    [0.5, { nticks: 4 }],
+    [0.74, { nticks: 4 }],
+    [0.75, { dtick: "D2" }],
+    [1, { dtick: "D2" }],
+    [1.3, { dtick: "D2" }],
+    [2, { dtick: "D2" }],
+    [2.5, { dtick: "D2" }],
+    [2.6, { dtick: 1 }],
+    [3, { dtick: 1 }],
+    [4, { dtick: 1 }],
+    [4.1, { dtick: 2 }],
+    [5, { dtick: 2 }],
+    [9, { dtick: 3 }],
+  ])("ticks a log axis over %s decades with %o", (span, ticks) => {
+    expect(logTicks(span)).toEqual(ticks);
+  });
+
+  it("chooses the ticks of each log axis by the span of its drawn values", () => {
+    // y from 1 to 20 spans 1.3 decades, where Plotly would label every digit; x from 1 to 4, 0.6.
+    const view = plotOf([1, 2, 5, 20]);
+    const { layout } = plotTraces(view, null, undefined, null, { scales: LOG });
+    expect(layout.yaxis).toEqual(expect.objectContaining({ dtick: "D2", tickformat: "~g", exponentformat: "none" }));
+    expect(layout.yaxis.nticks).toBeUndefined();
+    expect(layout.xaxis).toEqual(expect.objectContaining({ nticks: 4, tickformat: "~g", exponentformat: "none" }));
+    expect(layout.xaxis.dtick).toBeUndefined();
+    // A linear axis keeps the ticks of Plotly.
+    const linear = plotTraces(view, null, undefined, null, { scales: { x: "linear", y: "linear" } }).layout;
+    expect([linear.xaxis.dtick, linear.xaxis.nticks, linear.yaxis.dtick, linear.yaxis.nticks]).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("counts the ends of the error bars above 0 and leaves out the points at 0 or below", () => {
+    // 1 to 5 spans 0.7 decades; the point at 0 is not drawn on the log axis.
+    expect(plotTraces(plotOf([1, 5, 0]), null, undefined, null, { scales: LOG }).layout.yaxis.nticks).toBe(4);
+    // The error bar of 5 to 20 also reaches down to -10, which a log axis does not draw: 1 to 20.
+    const { layout } = plotTraces(plotOf([1, 5, 0], [null, 20, 1000]), null, undefined, null, { scales: LOG });
+    expect(layout.yaxis.dtick).toBe("D2");
+    // Without values above 0, a log axis has nothing to span.
+    expect(plotTraces(plotOf([0, -1]), null, undefined, null, { scales: LOG }).layout.yaxis).toEqual(
+      expect.objectContaining({ nticks: 4 }),
+    );
   });
 });
 

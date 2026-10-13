@@ -46,6 +46,8 @@ describe("sourceProblems", () => {
     overlay: [],
     unmatched: [],
     layout: "side_by_side",
+    log_x: false,
+    log_y: false,
     points: [],
     series: [],
   };

@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from digitize_fixtures import GOOD, png, project
 
 from pkdb.studyformat.colors import SERIES_COLORS, SERIES_DARK_COLORS
@@ -55,8 +56,6 @@ def test_figure_without_digitization_lists_unmatched_series(valid_study):
 
 
 def test_unknown_source_raises(valid_study):
-    import pytest
-
     with pytest.raises(KeyError):
         source_view(load_study(valid_study), "Tab9")
 
@@ -243,3 +242,94 @@ def test_mapped_tables_say_whether_other_sources_share_them(valid_study):
     assert [
         table.shared for table in source_view(load_study(valid_study), "Tab2").mapped
     ] == [False]
+
+
+def scaled_project(*, log_x=False, log_y=False, low="1", high="100"):
+    """The project of `project(GOOD)` on axes from `low` to `high`, log where asked."""
+    data = project(GOOD)
+    axes = data["axesColl"][0]
+    axes["isLogX"], axes["isLogY"] = log_x, log_y
+    axes["calibrationPoints"] = [
+        {"px": 0, "py": 100, "dx": low, "dy": low, "dz": None},
+        {"px": 100, "py": 100, "dx": high, "dy": low, "dz": None},
+        {"px": 0, "py": 100, "dx": low, "dy": low, "dz": None},
+        {"px": 0, "py": 0, "dx": low, "dy": high, "dz": None},
+    ]
+    return data
+
+
+def figure_view(make_study, valid_files, data):
+    """The view of Fig1 of a study whose project is `data`."""
+    folder = make_study(
+        {
+            **valid_files,
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(data),
+        }
+    )
+    assert format_folder(folder).ok
+    return source_view(load_study(folder), "Fig1")
+
+
+def test_scales_are_linear_without_a_digitization(valid_study):
+    view = source_view(load_study(valid_study), "Fig1")
+    assert (view.log_x, view.log_y) == (False, False)
+
+
+@pytest.mark.parametrize(
+    ("log_x", "log_y", "low", "high", "expected"),
+    [
+        (False, False, "1", "100", (False, False)),
+        (False, True, "1", "100", (False, True)),
+        (True, True, "1", "100", (True, True)),
+        # A plot draws a log axis of values above 0 only: negative values stay linear.
+        (False, True, "-100", "-1", (False, False)),
+    ],
+)
+def test_scales_follow_the_log_axes_of_the_digitization(
+    make_study, valid_files, log_x, log_y, low, high, expected
+):
+    data = scaled_project(log_x=log_x, log_y=log_y, low=low, high=high)
+    view = figure_view(make_study, valid_files, data)
+    assert (view.log_x, view.log_y) == expected
+
+
+def inset(data, **changes):
+    """Add the axes `Inset`, a copy of the first axes with `changes`, to the project `data`."""
+    data["axesColl"].append({**data["axesColl"][0], "name": "Inset", **changes})
+
+
+def log_y_on_the_axes_of_a_dataset_only(data):
+    inset(data, isLogY=False)
+    data["datasetColl"].append(
+        {"name": "drug_urine", "axesName": "Inset", "data": [{"x": 50, "y": 50}]}
+    )
+
+
+def without_datasets(data):
+    inset(data, isLogX=True)
+    data["datasetColl"] = []
+
+
+def log_on_every_axes(data):
+    inset(data)
+    data["datasetColl"].append(
+        {"name": "drug_urine", "axesName": "Inset", "data": [{"x": 50, "y": 50}]}
+    )
+
+
+@pytest.mark.parametrize(
+    ("log_x", "change", "expected"),
+    [
+        # An axis is log only when it is log on every axes that a dataset uses.
+        (False, log_y_on_the_axes_of_a_dataset_only, (False, False)),
+        # A project without datasets counts all its axes: y is log on both, x on the inset only.
+        (False, without_datasets, (False, True)),
+        (True, log_on_every_axes, (True, True)),
+    ],
+)
+def test_the_scales_of_several_axes(make_study, valid_files, log_x, change, expected):
+    data = scaled_project(log_x=log_x, log_y=True)
+    change(data)
+    view = figure_view(make_study, valid_files, data)
+    assert (view.log_x, view.log_y) == expected

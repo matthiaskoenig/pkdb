@@ -247,6 +247,12 @@ def test_payload_limits_paths_and_errors(local_server):
         request(server, "POST", "/local/settings", {"theme": "dark"}, headers)[0] == 200
     )
     engine.configure.assert_called_with(theme="dark")
+    scale = {"figure": "caffeine/Demo2020/Fig1", "x": "linear", "y": "log"}
+    assert (
+        request(server, "POST", "/local/settings", {"plot_scale": scale}, headers)[0]
+        == 200
+    )
+    engine.configure.assert_called_with(plot_scale=scale)
     engine.enqueue.side_effect = RuntimeError("secret-api-key")
     status, _, body = request(
         server, "POST", "/local/jobs", {"ids": [], "action": "upload"}, headers

@@ -91,6 +91,7 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     offline: true,
     paused: false,
     theme: "system",
+    plot_scales: {},
     vocabulary: { status: "offline" },
     github: { users: [], issues: [], status: "not_loaded", user: "", repository: "matthiaskoenig/pkdb_data" },
     studies: [studyRow()],

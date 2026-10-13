@@ -506,6 +506,18 @@ export interface GitHubAssignments {
 /** The color theme of the app: one that the curator chose, or the theme of the system. */
 export type ThemeChoice = "light" | "dark" | "system";
 
+/** An axis of the plot of mapped rows. */
+export type Axis = "x" | "y";
+
+/** The scale of an axis of the plot of mapped rows, as Plotly names it. */
+export type AxisScale = "linear" | "log";
+
+/** The scales of the axes of the plot of mapped rows. */
+export interface AxisScales {
+  x: AxisScale;
+  y: AxisScale;
+}
+
 export interface Snapshot {
   workspace: string;
   endpoint: string;
@@ -525,6 +537,12 @@ export interface Snapshot {
   paused: boolean;
   /** Kept by the local server: the browser forgets it, as the port and so the origin change with every start. */
   theme: ThemeChoice;
+  /**
+   * The scales that the curator chose for the plots of mapped rows, by figure
+   * `<substance>/<study>/<source>`. Kept by the local server, as the browser forgets them with
+   * every new port; a figure without an entry follows its digitization.
+   */
+  plot_scales: Record<string, AxisScales>;
   vocabulary: VocabularyState;
   github: GitHubAssignments & { user: string; repository: string };
   studies: StudyRow[];
@@ -757,6 +775,10 @@ export interface SourceView {
   layout: "overlay" | "side_by_side";
   points: SourcePoint[];
   series: SourceSeries[];
+  /** Whether the digitization draws the x axis on a log scale; false without a digitization. */
+  log_x: boolean;
+  /** Whether the digitization draws the y axis on a log scale; false without a digitization. */
+  log_y: boolean;
 }
 
 // Folder browser
@@ -852,6 +874,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "offline",
   "paused",
   "theme",
+  "plot_scales",
   "vocabulary",
   "github",
   "studies",
@@ -910,6 +933,8 @@ export const isSourceView = hasKeys<SourceView>(
   "layout",
   "points",
   "series",
+  "log_x",
+  "log_y",
 );
 
 export const isCurators = hasKeys<{ curators: Profile[] }>("curators");

@@ -8,6 +8,8 @@ import {
   dataRows,
   drawsOnImage,
   legendEntries,
+  LINEAR_SCALES,
+  logAxes,
   overlayTraces,
   pageFont,
   plottedProblems,
@@ -17,6 +19,7 @@ import {
   rowAt,
   rowKey,
   worstSeverity,
+  type AxisScales,
   type DataRow,
   type EventPoint,
   type OverlayMode,
@@ -44,6 +47,8 @@ const props = defineProps<{
   selected?: SelectedRow;
   /** The problems of the files of the source: the plot rings the points of their rows. */
   problems?: readonly ValidationIssue[];
+  /** The scales of the axes in `plot` mode, linear without them; the overlay keeps the pixels of the image. */
+  scales?: AxisScales;
 }>();
 const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>] }>();
 
@@ -64,23 +69,45 @@ const markScale = computed(() => {
 const dark = computed(() => theme.current.value.dark);
 /** The font of the page, which the plot uses too. */
 const font = pageFont();
-/** The problems of the plotted rows by `rowKey`; the overlay on the image shows none. */
+const scales = computed(() => props.scales ?? LINEAR_SCALES);
+/** How the name of the plot says its log axes. */
+const logText = computed(() => {
+  const axes = logAxes(scales.value);
+  if (axes.length === 2) return ", with log x and y axes";
+  return axes.length ? `, with a log ${axes[0]} axis` : "";
+});
+/**
+ * The problems of the plotted rows by `rowKey`, which the data table lists for every row; the
+ * overlay on the image shows none.
+ */
 const rowProblems = computed(() =>
   shown.value === "plot" ? plottedProblems(props.view, props.problems ?? []) : new Map<string, ValidationIssue[]>(),
+);
+/**
+ * The problems of the rows whose points the plot draws, which get rings: a log axis leaves out the
+ * points at 0 or below, and with them their rings, their key and their count in the name.
+ */
+const drawnProblems = computed(() =>
+  shown.value === "plot"
+    ? plottedProblems(props.view, props.problems ?? [], scales.value)
+    : new Map<string, ValidationIssue[]>(),
 );
 const plot = computed(() => {
   const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors), font };
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
     ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
-    : plotTraces(props.view, highlight, colors, props.selected ?? null, rowProblems.value);
+    : plotTraces(props.view, highlight, colors, props.selected ?? null, {
+        scales: scales.value,
+        rowProblems: drawnProblems.value,
+      });
 });
 
 const legend = computed(() => legendEntries(props.view, shown.value, dark.value));
 const rows = computed(() => dataRows(props.view, shown.value));
 /** The severities of the rings of the plot, errors first, for the key. */
 const ringed = computed(() => {
-  const found = new Set([...rowProblems.value.values()].map(worstSeverity));
+  const found = new Set([...drawnProblems.value.values()].map(worstSeverity));
   return (["error", "warning"] as const).filter((severity) => found.has(severity));
 });
 const ringColors = computed(() => PROBLEM_COLORS[dark.value ? "dark" : "light"]);
@@ -107,9 +134,9 @@ const name = computed(() => {
   if (shown.value === "plot") {
     const count = rows.value.length;
     // The rings and their key show these rows; screen readers read them here.
-    const ringed = rowProblems.value.size;
+    const ringed = drawnProblems.value.size;
     const problems = ringed ? `, ${plural(ringed, "row")} with problems` : "";
-    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}${problems}`;
+    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}${logText.value}${problems}`;
   }
   const counted = (role: "raw" | "mapped", errorBarEnd: boolean) =>
     props.view.overlay.filter((point) => point.role === role && point.error_bar_end === errorBarEnd).length;

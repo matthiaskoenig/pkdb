@@ -212,6 +212,8 @@ describe("useStudyStore", () => {
       overlay: [],
       unmatched: [],
       layout: "overlay",
+      log_x: false,
+      log_y: false,
       points: [],
       series: [],
       image_url: "/local/studies/caffeine/Example/files/Example_Fig2.png",
