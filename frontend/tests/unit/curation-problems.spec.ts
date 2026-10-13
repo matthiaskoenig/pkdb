@@ -16,6 +16,7 @@ import {
   NO_SUCH_WARNING,
   noIssuesText,
   notesQuery,
+  problemsText,
   reportAfter,
   scopeText,
   severityCounts,
@@ -397,5 +398,25 @@ describe("hintOf", () => {
   it("has no hint without a suggestion", () => {
     expect(hintOf(issue("missing_value", "error"))).toBeNull();
     expect(hintOf(issue("missing_value", "error", null, { suggestions: [] }))).toBeNull();
+  });
+});
+
+describe("problemsText", () => {
+  it("reads the problems of a place as its tooltip shows them: errors first, each with its severity, message and hint", () => {
+    const named = { kind: "did_you_mean", message: "", candidates: ["caffeine", "paraxanthine"] };
+    const issues = [
+      issue("digitized_mismatch", "warning", null, { message: "mean 1.24 lies 61.3 pixels from its point" }),
+      issue("unknown_term", "error", null, { message: "Unknown substance cafeine.", suggestions: [named] }),
+    ];
+    expect(problemsText(issues)).toBe(
+      "Error: Unknown substance cafeine. Did you mean: caffeine, paraxanthine. Warning: mean 1.24 lies 61.3 pixels from its point.",
+    );
+  });
+
+  it("reads at most five problems and how many more there are, as the tooltip lists them", () => {
+    const issues = Array.from({ length: 7 }, (_, index) => issue(`code_${index}`, "warning", null, { message: `Problem ${index}.` }));
+    expect(problemsText(issues)).toBe(
+      "Warning: Problem 0. Warning: Problem 1. Warning: Problem 2. Warning: Problem 3. Warning: Problem 4. And 2 more.",
+    );
   });
 });

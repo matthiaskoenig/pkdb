@@ -126,11 +126,11 @@ describe("TableGrid", () => {
 
     const cell = rows[1]!.findAll("td")[4]!;
     expect(cell.classes()).toContain("grid-cell--error");
-    expect(description(cell.element)).toBe("The mean is not a number.");
+    expect(description(cell.element)).toBe("Error: The mean is not a number.");
     // An issue of the whole row outlines its line.
     const line = rows[2]!.get("th");
     expect(line.classes()).toContain("grid-cell--warning");
-    expect(description(line.element)).toBe("Targeted by an open review item. The row repeats line 1.");
+    expect(description(line.element)).toBe("Targeted by an open review item. Warning: The row repeats line 1.");
     // The descriptions add no text to the cells.
     expect(cell.text()).toBe("3.1");
   });
@@ -153,7 +153,7 @@ describe("TableGrid", () => {
     const wrapper = mount(TableGrid, { props: { table: small, issueCells: issues }, attachTo: document.body });
     const header = wrapper.findAll("thead th").find((cell) => cell.text() === "mean")!;
     expect(header.classes()).toContain("grid-cell--error");
-    expect(description(header.element)).toBe("Unknown column 'meen'.");
+    expect(description(header.element)).toBe("Error: Unknown column 'meen'.");
   });
 
   it("marks a column, and hides empty columns except the ones to show", () => {
@@ -669,8 +669,8 @@ describe("the tooltip of the problems", () => {
     expect(tip.querySelector(".problem-tip-code")?.textContent).toBe("digitized_mismatch");
     expect(tip.querySelector(".problem-tip-message")?.textContent).toBe(`digitized_mismatch at line ${second}`);
     expect(tip.querySelector(".problem-tip-hint")?.textContent).toBe("Check the digitization against the figure.");
-    // The description for screen readers stays.
-    expect(description(cell)).toBe(`digitized_mismatch at line ${second}`);
+    // The description for screen readers stays, and reads what the tooltip shows.
+    expect(description(cell)).toBe(`Warning: digitized_mismatch at line ${second}. Check the digitization against the figure.`);
   });
 
   it("shows the problems of a hovered header cell, and every problem of its line at a hovered line cell, whose button leaves its title to the tooltip", async () => {
@@ -697,14 +697,14 @@ describe("the tooltip of the problems", () => {
     const buttons = mountTips(issues, { selectable: true, highlightLines: new Set([third]) });
     expect(description(lineCell(buttons).element)).toBe("Targeted by an open review item.");
     expect(description(lineCell(buttons).get("button").element)).toBe(
-      `duplicate_row at line ${third} unknown_term at line ${third}`,
+      `Warning: duplicate_row at line ${third}. Warning: unknown_term at line ${third}.`,
     );
-    expect(description(lineCell(mountTips(issues)).element)).toBe(`duplicate_row at line ${third}`);
+    expect(description(lineCell(mountTips(issues)).element)).toBe(`Warning: duplicate_row at line ${third}.`);
     const slotted = mount(TableGrid, {
       props: { table: small, issueCells: issueCells(issues, small.file), selectable: true },
       slots: { line: ({ line }: { line: number }) => h("a", { href: `#${line}` }, String(line)) },
     });
-    expect(description(lineCell(slotted).element)).toBe(`duplicate_row at line ${third}`);
+    expect(description(lineCell(slotted).element)).toBe(`Warning: duplicate_row at line ${third}.`);
   });
 
   it("places the tooltip of a line from the start of its line cell, so that it extends over its row, and that of a cell below its middle", async () => {
@@ -730,7 +730,7 @@ describe("the tooltip of the problems", () => {
     const buttons = wrapper.findAll<HTMLButtonElement>(".grid-line-button").map((entry) => entry.element);
     expect(buttons.map((button) => button.tabIndex)).toEqual([0, -1, -1]);
     // The button reads what its tooltip shows.
-    expect(description(buttons[1]!)).toBe(`digitized_mismatch at line ${second} duplicate_row at line ${second}`);
+    expect(description(buttons[1]!)).toBe(`Warning: digitized_mismatch at line ${second}. Warning: duplicate_row at line ${second}.`);
     buttons[1]!.focus();
     await flushPromises();
     expect([...shownTip()!.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([
@@ -754,7 +754,9 @@ describe("the tooltip of the problems", () => {
     });
     const header = wrapper.get<HTMLElement>("thead th.rows-line");
     expect(header.attributes("tabindex")).toBe("0");
-    expect(description(header.element)).toBe(`unknown_column at line ${HEADER_LINE} missing_header at line ${HEADER_LINE}`);
+    expect(description(header.element)).toBe(
+      `Warning: unknown_column at line ${HEADER_LINE}. Warning: missing_header at line ${HEADER_LINE}.`,
+    );
     header.element.focus();
     await flushPromises();
     expect([...shownTip()!.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([

@@ -13,6 +13,7 @@ import {
   type CellIssues,
   type IssueCells,
 } from "../grid";
+import { problemsText } from "../problems";
 import ProblemTooltip from "./ProblemTooltip.vue";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
@@ -221,6 +222,7 @@ watch(
 interface Note {
   id: string;
   severity: CellIssues["severity"];
+  /** The problems as screen readers read them, as the tooltip shows them. */
   text: string;
   /** The problems of the cell, which its tooltip lists. */
   issues: ValidationIssue[];
@@ -234,20 +236,25 @@ const noteLines = computed(() => [...(numberedHeader.value ? [HEADER_LINE] : [])
  * of the whole row or of a column that does not show. The header of a table is at `HEADER_LINE`.
  */
 const notes = computed(() => {
-  const found = new Map<string, Note>();
   const shown = new Map(headers.value.map(({ index, name }) => [name, index]));
+  // The problems of each place; the line cell takes those of the columns that do not show.
+  const places = new Map<string, { id: string; issues: ValidationIssue[] }>();
   for (const line of noteLines.value)
     for (const [name, cell] of props.issueCells.get(line) ?? []) {
       const index = name === ROW ? -1 : (shown.get(name) ?? -1);
       const key = `${line}:${index}`;
-      const issues = [...(found.get(key)?.issues ?? []), ...cell.issues];
-      found.set(key, {
-        id: `${id}-${line}-${index < 0 ? "line" : index}`,
-        severity: issues.some((issue) => issue.severity === "error") ? "error" : "warning",
-        text: issues.map((issue) => issue.message).join(" "),
-        issues,
-      });
+      const place = places.get(key);
+      if (place) place.issues.push(...cell.issues);
+      else places.set(key, { id: `${id}-${line}-${index < 0 ? "line" : index}`, issues: [...cell.issues] });
     }
+  const found = new Map<string, Note>();
+  for (const [key, { id: noteId, issues }] of places)
+    found.set(key, {
+      id: noteId,
+      severity: issues.some((issue) => issue.severity === "error") ? "error" : "warning",
+      text: problemsText(issues),
+      issues,
+    });
   return found;
 });
 const targetNote = `${id}-target`;
@@ -604,7 +611,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
       <span :id="targetNote">Targeted by an open review item.</span>
       <span v-for="note in notes.values()" :id="note.id" :key="note.id">{{ note.text }}</span>
       <span v-for="[line, issues] in lineProblems" :id="lineNoteId(line)" :key="lineNoteId(line)">{{
-        issues.map((issue) => issue.message).join(" ")
+        problemsText(issues)
       }}</span>
     </div>
     <!-- One tooltip for the problems of every cell, at the cell under the pointer or of the keyboard. -->

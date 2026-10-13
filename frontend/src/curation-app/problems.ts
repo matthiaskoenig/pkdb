@@ -167,6 +167,27 @@ export function hintOf(issue: ValidationIssue): string | null {
   return text || null;
 }
 
+/** `text` ending as a sentence, so that a screen reader pauses after it. */
+function sentence(text: string): string {
+  const trimmed = text.trim();
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+/**
+ * The problems of a place of a table as screen readers read them, as its tooltip lists them:
+ * errors first, at most `TIP_LIMIT`, each with its severity, its message and its hint, such as
+ * `Error: Unknown substance cafeine. Did you mean: caffeine.`, then how many more there are.
+ */
+export function problemsText(issues: readonly ValidationIssue[]): string {
+  const { shown, more } = tipProblems(issues);
+  const parts = shown.map((issue) => {
+    const hint = hintOf(issue);
+    return [`${SEVERITY_LABELS[issue.severity]}: ${sentence(issue.message)}`, ...(hint ? [sentence(hint)] : [])].join(" ");
+  });
+  if (more) parts.push(`And ${more} more.`);
+  return parts.join(" ");
+}
+
 /**
  * The query of the Data section that shows the cell of an issue: its file, and its line and
  * column (the header, or the letter in a raw table) when it has them; null without a file. Only
