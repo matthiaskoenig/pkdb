@@ -9,6 +9,7 @@ import socket
 import subprocess
 import sys
 import threading
+import time
 from http.client import HTTPConnection, IncompleteRead
 from pathlib import Path
 from types import SimpleNamespace
@@ -16,6 +17,7 @@ from unittest.mock import Mock
 
 import pytest
 from curation_http import authenticate, error_body, request
+from open_commands import FAILING_OPENER, command_line, holding_opener, stop_program
 
 from pkdb.curation import launch
 from pkdb.curation import server as transport
@@ -1232,25 +1234,12 @@ def test_a_result_that_is_not_json_is_an_unexpected_500_before_any_200(local_ser
     assert (status, json.loads(data)["code"]) == (500, "unexpected")
 
 
-def _command_line(arguments):
-    # Quoted as the shell of the platform quotes it.
-    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
-    return join(arguments)
-
-
-FAILING_OPENER = [
-    sys.executable,
-    "-c",
-    "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
-]
-
-
 def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
     tmp_path, monkeypatch
 ):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", _command_line(FAILING_OPENER))
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
     with pytest.raises(ActionFailed) as failed:
         open_path(file, subject="the tables of caffeine/Example")
     assert failed.value.message == "Could not open the tables of caffeine/Example."
@@ -1263,7 +1252,7 @@ def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
 def test_a_folder_that_cannot_be_shown_says_so(tmp_path, monkeypatch):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", _command_line(FAILING_OPENER))
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
     with pytest.raises(ActionFailed) as failed:
         open_path(file, reveal=True, subject="outputs.xlsx of caffeine/Example")
     assert failed.value.message == (
@@ -1302,6 +1291,25 @@ def test_a_missing_open_command_is_named(tmp_path, monkeypatch):
     assert "the command 'pkdb-no-such-opener' of PKDB_OPEN_COMMAND was not found" in (
         failed.value.message
     )
+
+
+@pytest.mark.xfail(strict=True, reason="#933: open_path waits until the program quits")
+def test_an_opener_whose_program_keeps_its_streams_returns_at_once(
+    tmp_path, monkeypatch
+):
+    # xdg-open starts LibreOffice and exits; LibreOffice keeps the streams of xdg-open.
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    pid_file = tmp_path / "program.pid"
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(holding_opener(pid_file)))
+    started = time.monotonic()
+    try:
+        open_path(file)
+    finally:
+        elapsed = time.monotonic() - started
+        stop_program(pid_file)
+    # At most the 2 seconds in which a command may fail, not the 30 of the program.
+    assert elapsed < 3
 
 
 def test_an_opener_that_does_not_return_is_named(tmp_path, monkeypatch):

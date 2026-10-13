@@ -3,8 +3,6 @@
 import json
 import os
 import re
-import shlex
-import subprocess
 import sys
 import threading
 from types import SimpleNamespace
@@ -15,6 +13,7 @@ import openpyxl
 import pytest
 from curation_http import authenticate, error_body, request
 from digitize_fixtures import GOOD, png, project
+from open_commands import FAILING_OPENER, command_line, holding_opener, stop_program
 
 from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
@@ -1868,13 +1867,7 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     api, monkeypatch
 ):
     server, engine, folder = api
-    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
-    opener = [
-        sys.executable,
-        "-c",
-        "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
-    ]
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", join(opener))
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
     headers = authenticate(server)
     status, _, data = request(
         server,
@@ -1910,6 +1903,31 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
 
 #: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
 PDF = b"%PDF-1.7\n" + bytes(range(256)) * 400 + b"%%EOF\n"
+
+
+@pytest.mark.xfail(
+    strict=True, reason="#933: Open tables waits until the program quits"
+)
+def test_open_tables_answers_while_the_program_that_it_started_runs(
+    api, monkeypatch, tmp_path
+):
+    server, engine, folder = api
+    pid_file = tmp_path / "program.pid"
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(holding_opener(pid_file)))
+    headers = authenticate(server)
+    try:
+        # request() gives up after 3 seconds; the program runs for 30.
+        status, _, data = request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", "action": "open"},
+            headers,
+        )
+    finally:
+        stop_program(pid_file)
+    assert status == 200
+    assert json.loads(data)["opened"] is True
 
 
 def test_a_pdf_of_the_study_is_served_inline_whole_and_in_ranges(api):
