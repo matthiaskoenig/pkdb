@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VAlert } from "vuetify/components";
-import { ServerStopped, SessionMissing } from "../api/client";
+import { NO_SESSION, ServerStopped, SessionMissing } from "../api/client";
 import { useOverviewStore } from "../stores/overview";
 import { failureOf } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
@@ -12,7 +12,7 @@ const overview = useOverviewStore();
 const message = computed(() => {
   const error = overview.error;
   if (error instanceof ServerStopped) return "The local server stopped. Start pkdb curate again.";
-  if (error instanceof SessionMissing) return "This page has no session. Open the link that pkdb curate printed.";
+  if (error instanceof SessionMissing) return NO_SESSION;
   return null;
 });
 /** Why the state of the local server could not be loaded otherwise, with what the server said. */

@@ -30,7 +30,9 @@
     "pinia": "4.0.3",
     "axios": "1.20.0",
     "@fortawesome/fontawesome-free": "7.3.1",
-    "plotly.js-dist-min": "4.1.1"
+    "plotly.js-dist-min": "4.1.1",
+    "pdfjs-dist": "6.4.299",
+    "@fontsource-variable/inter": "5.3.0"
   },
   "devDependencies": {
     "vite": "8.3.0",

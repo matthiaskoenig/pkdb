@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, type Router } from "vue-router";
 // The views are imported eagerly: a browser keeps a failed dynamic import until the page reloads,
 // so a lazy view requested while the local server is down would break navigation silently.
 import OverviewPage from "./views/OverviewPage.vue";
+import PaperPage from "./views/PaperPage.vue";
 import StudyPage from "./views/StudyPage.vue";
 
 /**
@@ -29,6 +30,8 @@ export function makeRouter(): Router {
         path: "/studies/:substance/:name/:section(sources|tables)",
         redirect: (to) => ({ name: "Study", params: { ...to.params, section: "data" }, query: to.query }),
       },
+      // A PDF of a study in a tab of its own, which New tab of the paper pane opens: no app bar.
+      { path: "/studies/:substance/:name/paper/:file", name: "Paper", component: PaperPage, meta: { bare: true } },
       // Without a section, the study page shows the section that the study needs first.
       { path: "/studies/:substance/:name/:section?", name: "Study", component: StudyPage },
       // An address that the app does not know, such as a launch URL pasted into the open app,

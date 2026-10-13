@@ -66,7 +66,7 @@ const current = computed(() => {
 .overview-dashboard { margin-top: 1.5rem; }
 .coverage-totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .coverage-totals > div { padding: 1.2rem; border-radius: 12px; background: rgba(var(--v-theme-primary), .07); display: flex; flex-direction: column-reverse; gap: .3rem; }
-dd { font-size: 2rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+dd { margin: 0; font-size: 2rem; font-weight: 650; font-variant-numeric: tabular-nums; }
 dt { font-size: .9rem; }
 .coverage-heading { margin: 2rem 0 1rem; }
 .coverage-heading p, .chart-help { color: rgba(var(--v-theme-on-surface), .75); line-height: 1.6; margin-top: .5rem; }

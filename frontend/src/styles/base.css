@@ -1,14 +1,29 @@
 /* Shared by the website and the local curation app. */
+/* Inter is bundled, so that text has the same width on every system. */
+@import "@fontsource-variable/inter";
+
 :root {
-  font-family:
-    Inter,
+  /* Vuetify's typography classes, such as text-caption, read the font from
+     --v-font-body and fall back to Roboto, which is not loaded. */
+  --v-font-body:
+    "Inter Variable",
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+  font-family: var(--v-font-body);
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* Chromium on Linux rounds the glyph positions of the unhinted Inter to whole
+     pixels otherwise, which leaves uneven gaps between letters. */
+  text-rendering: geometricPrecision;
+}
+/* The browser's own style sets text-rendering: auto on form controls. */
+button,
+input,
+select,
+textarea {
+  text-rendering: inherit;
 }
 body {
   margin: 0;

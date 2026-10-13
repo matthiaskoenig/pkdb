@@ -86,6 +86,9 @@ export class ServerStopped extends ApiError {
   }
 }
 
+/** What to do when the page has no session of the running server, which the status banner says too. */
+export const NO_SESSION = "This page has no session. Open the link that pkdb curate printed.";
+
 /** The browser has no session cookie of the running server (401). */
 export class SessionMissing extends Error {
   override readonly name = "SessionMissing";
@@ -193,6 +196,17 @@ export async function getJson<T>(
   if (response.status === 304) return { status: 304, etag: response.headers.get("ETag") ?? etag ?? "" };
   if (!response.ok) return failure(response, request);
   return { status: 200, etag: response.headers.get("ETag"), data: await content(response, accept, request) };
+}
+
+/**
+ * Ask for the first byte of the file at `path`: it resolves when the local server serves the
+ * file, and throws its error as `getJson` does otherwise. A viewer that reads a file without this
+ * client, as PDF.js does, learns from it why the file could not be read.
+ */
+export async function checkFile(path: string): Promise<void> {
+  const response = await send(path, { headers: { Range: "bytes=0-0" } });
+  if (!response.ok) return failure(response, `GET ${path}`);
+  await response.body?.cancel();
 }
 
 async function post<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {

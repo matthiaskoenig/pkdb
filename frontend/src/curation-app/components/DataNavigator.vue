@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import type { StudyDetail, TableEntry } from "../api/types";
-import { fileCounts, sourceCounts, tablesByInfo } from "../data";
+import { fileCounts, PAPER, sourceCounts, tablesByInfo } from "../data";
 import { INFO_HEADINGS, infoStyle } from "../info";
 import { plural } from "../overview";
+import { paperLine } from "../paper";
 import { SOURCE_ICONS } from "../sources";
 import NavigatorCounts from "./NavigatorCounts.vue";
 
@@ -11,13 +12,20 @@ import NavigatorCounts from "./NavigatorCounts.vue";
  * The tables of a study first, under the headings of their class of information (Subjects,
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
  * the color of its class, its problems, its open review items and its rows; then the sources of
- * the study, with a thumbnail of their image.
+ * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
+ * the folder, the one that the paper shows by name with a count of the others, or a disabled entry
+ * that names `<name>.pdf` when the folder has none.
  */
-const props = defineProps<{
-  detail: StudyDetail;
-  source: string | null;
-  file: string | null;
-}>();
+const props = withDefaults(
+  defineProps<{
+    detail: StudyDetail;
+    source: string | null;
+    file: string | null;
+    /** The PDF that the paper shows, chosen in the head of its pane; null for the first. */
+    paper?: string | null;
+  }>(),
+  { paper: null },
+);
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
 
 const tablesId = useId();
@@ -54,6 +62,18 @@ const groups = computed(() =>
 const sources = computed(() =>
   props.detail.sources.map((summary) => ({ summary, counts: sourceCounts(props.detail, summary) })),
 );
+
+/** The entry of the paper, first among the sources: the PDF that it shows and the others, or the PDF that the folder lacks. */
+const paper = computed(() => {
+  const line = paperLine(props.detail, props.paper);
+  const others = props.detail.papers.filter((entry) => entry.file !== line).map((entry) => entry.file);
+  return {
+    line,
+    shown: props.detail.papers.length > 0,
+    others,
+    more: others.length ? `and ${plural(others.length, "more PDF")}` : "",
+  };
+});
 </script>
 
 <template>
@@ -85,6 +105,26 @@ const sources = computed(() =>
     </div>
     <h3 :id="sourcesId" class="nav-heading">Sources</h3>
     <ul :aria-labelledby="sourcesId" class="nav-list">
+      <li>
+        <button
+          type="button"
+          class="nav-paper"
+          :disabled="!paper.shown"
+          :aria-current="source === PAPER ? 'true' : undefined"
+          @click="emit('select-source', PAPER)"
+        >
+          <span class="nav-thumb nav-thumb--icon" aria-hidden="true"><i class="fas fa-file-pdf"></i></span>
+          <span class="nav-text">
+            <span class="nav-name">Paper</span>
+            <span class="nav-kind" :title="paper.line">{{ paper.line }}</span>
+          </span>
+          <!-- The other PDFs as a count of their own, which a long name of the first never cuts. -->
+          <span v-if="paper.others.length" class="nav-more" :title="paper.others.join(', ')">
+            <span class="d-sr-only">{{ paper.more }}</span>
+            <span aria-hidden="true">+{{ paper.others.length }}</span>
+          </span>
+        </button>
+      </li>
       <li v-for="{ summary, counts: count } in sources" :key="summary.source">
         <button
           type="button"
@@ -102,7 +142,9 @@ const sources = computed(() =>
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
-          <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
+          <span class="nav-badges">
+            <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
+          </span>
         </button>
       </li>
     </ul>
@@ -137,6 +179,7 @@ const sources = computed(() =>
   list-style: none;
 }
 .nav-source,
+.nav-paper,
 .nav-file {
   width: 100%;
   border: 1px solid transparent;
@@ -147,10 +190,12 @@ const sources = computed(() =>
   text-align: start;
   cursor: pointer;
 }
-/* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. */
-.nav-source {
+/* 40 px: the 34 px thumbnail, 2 px above and below it, and the border. The badges end where the
+   pills of the rows of the tables end. */
+.nav-source,
+.nav-paper {
   display: grid;
-  grid-template-columns: 48px 1fr auto auto;
+  grid-template-columns: 48px 1fr auto;
   align-items: center;
   gap: 8px;
   min-height: 40px;
@@ -165,15 +210,18 @@ const sources = computed(() =>
   padding: 0 6px 0 4px;
 }
 .nav-source:hover,
+.nav-paper:enabled:hover,
 .nav-file:hover {
   background: rgba(var(--v-theme-on-surface), 0.05);
 }
 .nav-source[aria-current="true"],
+.nav-paper[aria-current="true"],
 .nav-file[aria-current="true"] {
   background: rgba(var(--v-theme-primary), 0.12);
   border-color: rgba(var(--v-theme-primary), 0.35);
 }
 .nav-source:focus-visible,
+.nav-paper:focus-visible,
 .nav-file:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
@@ -223,11 +271,17 @@ const sources = computed(() =>
   flex: 1 1 auto;
   margin-inline-end: 4px;
 }
-/* The rows of a table: a muted number on a tinted pill, apart from the counts with their icons. Up
-   to 999 rows the pill has one width, so that the pills and the badges before them line up: three
-   digits, the padding, and a pixel for digits that a font draws a fraction wider than its 0. A
-   longer count makes it wider. */
-.nav-rows {
+.nav-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* The rows of a table and the other PDFs of the paper: a muted number on a tinted pill, apart from
+   the counts with their icons. Up to 999 rows the pill has one width, so that the pills and the
+   badges before them line up: three digits, the padding, and a pixel for digits that a font draws
+   a fraction wider than its 0. A longer count makes it wider. */
+.nav-rows,
+.nav-more {
   flex: none;
   min-width: calc(3ch + 11px);
   padding: 0 5px;
@@ -238,5 +292,15 @@ const sources = computed(() =>
   text-align: center;
   font-variant-numeric: tabular-nums;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* The paper without a PDF: a disabled entry, whose line names the PDF that the folder lacks. */
+.nav-paper:disabled {
+  cursor: default;
+  color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
+}
+.nav-paper .nav-kind {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

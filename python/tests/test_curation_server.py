@@ -1,5 +1,6 @@
 """Exercise the actual local HTTP boundary without launching desktop apps."""
 
+import io
 import json
 import os
 import re
@@ -8,7 +9,7 @@ import socket
 import subprocess
 import sys
 import threading
-from http.client import HTTPConnection
+from http.client import HTTPConnection, IncompleteRead
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -22,7 +23,7 @@ from pkdb.curation.engine import CurationEngine, WorkspaceError
 from pkdb.curation.errors import ActionFailed, ErrorLog, MissingField
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.launch import open_path, windows_quoted
-from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
+from pkdb.curation.studies import AmbiguousStudy, StudyFile, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError, refusal
@@ -1017,7 +1018,7 @@ def test_a_failed_read_names_what_it_read(local_server):
     )
     engine.study_version.side_effect = None
     engine.study_version.return_value = "v1"
-    engine.study_image.side_effect = FileNotFoundError(2, "No such file", "/x/a.png")
+    engine.study_file.side_effect = FileNotFoundError(2, "No such file", "/x/a.png")
     status, _, data = request(
         server, "GET", "/local/studies/caffeine/Example/files/a.png", headers=headers
     )
@@ -1186,6 +1187,7 @@ def test_a_client_that_disconnects_before_the_reply_leaves_no_failure(
 
     monkeypatch.setattr(transport.Handler, "end_headers", send)
     engine.tables_action.return_value = {"ok": True}
+    stream = serve_file(engine, b"%PDF-1.7\n")
     for method, path, body in [
         (
             "POST",
@@ -1193,12 +1195,14 @@ def test_a_client_that_disconnects_before_the_reply_leaves_no_failure(
             {"study": "caffeine/Example", "action": "open"},
         ),
         ("GET", "/local/state", None),
+        ("GET", FILE, None),
     ]:
         try:
             request(server, method, path, body, headers)
         except OSError, ValueError:
             pass  # http.client sees the closed connection; the server must stay silent
     engine.tables_action.assert_called_once()
+    assert stream.closed_by_server.wait(3)
     engine.record_failure.assert_not_called()
     engine.log.failed.assert_not_called()
     engine.log.unexpected.assert_not_called()
@@ -1315,3 +1319,358 @@ def test_an_opener_that_does_not_return_is_named(tmp_path, monkeypatch):
         "Use a command that starts the program and returns."
     )
     assert launch.OPEN_TIMEOUT == 15
+
+
+FILE = "/local/studies/caffeine/Example/files/Example.pdf"
+
+
+class Recorded(io.BytesIO):
+    """A file of a study whose reads the test sees, and which says when the server closed it.
+
+    With `fail_after`, the reads after that many fail as a disk would.
+    """
+
+    def __init__(self, data: bytes, *, fail_after: int | None = None):
+        super().__init__(data)
+        self.reads: list[int | None] = []
+        self.closed_by_server = threading.Event()
+        self.fail_after = fail_after
+
+    def read(self, size: int | None = -1, /) -> bytes:
+        if self.fail_after is not None and len(self.reads) >= self.fail_after:
+            raise OSError(5, "Input/output error")
+        self.reads.append(size)
+        return super().read(size)
+
+    def close(self) -> None:
+        self.closed_by_server.set()
+        super().close()
+
+
+def finished_requests(monkeypatch):
+    """An event that the server sets once it finished a request, after anything it logs."""
+    finished = threading.Event()
+    finish = transport.Handler.finish
+
+    def finished_request(self):
+        finish(self)
+        finished.set()
+
+    monkeypatch.setattr(transport.Handler, "finish", finished_request)
+    return finished
+
+
+def serve_file(
+    engine, data, name="Example.pdf", media_type="application/pdf", **options
+):
+    """Let the mocked engine open `data` as the file `name` of caffeine/Example."""
+    stream = Recorded(data, **options)
+    engine.study_file.return_value = StudyFile(name, stream, len(data), media_type)
+    return stream
+
+
+@pytest.mark.parametrize(
+    ("header", "expected"),
+    [
+        (None, None),
+        ("bytes=0-9", (0, 10)),
+        ("bytes=90-", (90, 100)),
+        ("bytes=-5", (95, 100)),
+        ("bytes=-500", (0, 100)),
+        ("bytes=95-200", (95, 100)),
+        ("Bytes=99-99", (99, 100)),
+        # Several ranges, another unit and invalid ranges ask for the whole file.
+        ("bytes=0-1,5-6", None),
+        ("items=0-1", None),
+        ("bytes=5-1", None),
+        ("bytes=-", None),
+        ("bytes=abc", None),
+        ("bytes=١-٢", None),
+    ],
+)
+def test_a_range_header_asks_for_one_byte_range_or_the_whole_file(header, expected):
+    assert transport.byte_range(header, 100) == expected
+
+
+@pytest.mark.parametrize(
+    ("header", "size"),
+    [("bytes=100-", 100), ("bytes=-0", 100), ("bytes=150-160", 100), ("bytes=0-", 0)],
+)
+def test_a_range_beyond_the_end_of_the_file_cannot_be_satisfied(header, size):
+    with pytest.raises(transport.RangeNotSatisfiable):
+        transport.byte_range(header, size)
+
+
+@pytest.mark.parametrize(
+    "header",
+    [
+        "bytes=-5-9",
+        "bytes=+5-9",
+        "bytes=0x10-0x20",
+        "bytes=1e3-",
+        "bytes=5-1-",
+        "bytes=0-9,",
+        "bytes=" + "9" * 5000 + "-",
+        "bytes=0-" + "9" * 5000,
+        "bytes=-" + "9" * 5000,
+    ],
+    ids=lambda header: header if len(header) < 20 else f"{header[:12]}...{len(header)}",
+)
+def test_a_malformed_range_never_reaches_outside_the_file(header):
+    assert transport.byte_range(header, 100) is None
+
+
+def test_the_last_bytes_of_an_empty_file_are_the_whole_empty_file():
+    assert transport.byte_range("bytes=-5", 0) is None
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Example.pdf", 'inline; filename="Example.pdf"'),
+        (
+            "Müller 2020.pdf",
+            "inline; filename=\"M_ller 2020.pdf\"; filename*=UTF-8''M%C3%BCller%202020.pdf",
+        ),
+        (
+            'a"b\\c.pdf',
+            "inline; filename=\"a_b_c.pdf\"; filename*=UTF-8''a%22b%5Cc.pdf",
+        ),
+        (
+            "line\nbreak.pdf",
+            "inline; filename=\"line_break.pdf\"; filename*=UTF-8''line%0Abreak.pdf",
+        ),
+    ],
+)
+def test_the_disposition_of_a_pdf_names_it_in_ascii_and_in_utf_8(name, expected):
+    assert transport.content_disposition(name) == expected
+
+
+def test_a_file_of_a_study_is_sent_in_pieces_of_64_kb(local_server):
+    server, engine = local_server
+    data = os.urandom(3 * transport.CHUNK + 5)
+    stream = serve_file(engine, data)
+    status, headers, body = request(server, "GET", FILE, headers=authenticate(server))
+    assert (status, body) == (200, data)
+    assert headers["Content-Length"] == str(len(data))
+    assert headers["Accept-Ranges"] == "bytes"
+    assert headers["Content-Type"] == "application/pdf"
+    assert headers["Content-Disposition"] == 'inline; filename="Example.pdf"'
+    assert "frame-ancestors 'none'" in headers["Content-Security-Policy"]
+    assert stream.closed_by_server.wait(3)
+    assert stream.reads == [transport.CHUNK] * 3 + [5]
+    engine.study_file.assert_called_once_with("caffeine/Example", "Example.pdf")
+
+
+def test_one_byte_range_answers_206_with_its_content_range(local_server):
+    server, engine = local_server
+    data = bytes(range(256)) * 512
+    serve_file(engine, data)
+    headers = {**authenticate(server), "Range": "bytes=1000-70999"}
+    status, answer, body = request(server, "GET", FILE, headers=headers)
+    assert (status, body) == (206, data[1000:71000])
+    assert answer["Content-Range"] == f"bytes 1000-70999/{len(data)}"
+    assert answer["Content-Length"] == "70000"
+
+
+def test_several_ranges_answer_the_whole_file(local_server):
+    server, engine = local_server
+    data = bytes(range(256)) * 4
+    serve_file(engine, data)
+    headers = {**authenticate(server), "Range": "bytes=0-1,5-6"}
+    status, answer, body = request(server, "GET", FILE, headers=headers)
+    assert (status, body) == (200, data)
+    assert "Content-Range" not in answer
+
+
+def test_a_range_beyond_the_end_answers_416_with_the_size(local_server):
+    server, engine = local_server
+    data = b"%PDF-1.7\n" * 10
+    stream = serve_file(engine, data)
+    headers = {**authenticate(server), "Range": "bytes=500-"}
+    status, answer, body = request(server, "GET", FILE, headers=headers)
+    assert status == 416
+    assert answer["Content-Range"] == f"bytes */{len(data)}"
+    assert error_body(body) == {
+        "error": f"bytes=500- lies beyond the {len(data)} bytes of Example.pdf",
+        "code": "range_not_satisfiable",
+        "detail": None,
+        "action": f"Read a file (GET {FILE})",
+    }
+    assert stream.closed_by_server.wait(3)
+
+
+def test_an_image_has_ranges_too_and_no_disposition(local_server):
+    server, engine = local_server
+    headers = authenticate(server)
+    data = b"\x89PNG" + bytes(5000)
+    path = "/local/studies/caffeine/Example/files/Example_Fig1.png"
+    serve_file(engine, data, name="Example_Fig1.png", media_type="image/png")
+    status, answer, body = request(server, "GET", path, headers=headers)
+    assert (status, body, answer["Content-Type"]) == (200, data, "image/png")
+    assert answer["Accept-Ranges"] == "bytes"
+    assert "Content-Disposition" not in answer
+    serve_file(engine, data, name="Example_Fig1.png", media_type="image/png")
+    status, _, body = request(
+        server, "GET", path, headers={**headers, "Range": "bytes=0-3"}
+    )
+    assert (status, body) == (206, b"\x89PNG")
+
+
+def test_a_browser_that_stops_reading_ends_the_answer_without_a_failure(
+    local_server, monkeypatch
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    stream = serve_file(engine, bytes(32 * 1024 * 1024))
+    finished = finished_requests(monkeypatch)
+    with socket.create_connection(
+        ("127.0.0.1", server.server_port), timeout=3
+    ) as client:
+        client.sendall(
+            (
+                f"GET {FILE} HTTP/1.1\r\nHost: 127.0.0.1:{server.server_port}\r\n"
+                f"Cookie: {headers['Cookie']}\r\n\r\n"
+            ).encode()
+        )
+        assert client.recv(12).startswith(b"HTTP/1.")
+    # The server notices on a later piece, stops and closes the file.
+    assert stream.closed_by_server.wait(5)
+    assert finished.wait(5)
+    assert len(stream.reads) < 32 * 1024 * 1024 // transport.CHUNK
+    engine.log.unexpected.assert_not_called()
+    engine.log.failed.assert_not_called()
+    assert request(server, "GET", "/local/state", headers=headers)[0] == 200
+
+
+def test_a_file_that_fails_while_it_is_sent_is_logged_and_its_answer_ends_short(
+    local_server,
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    stream = serve_file(engine, bytes(3 * transport.CHUNK), fail_after=1)
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
+    connection.request("GET", FILE, headers={"Origin": server.origin, **headers})
+    response = connection.getresponse()
+    assert response.status == 200
+    with pytest.raises(IncompleteRead):
+        response.read()
+    connection.close()
+    assert stream.closed_by_server.wait(3)
+    engine.log.unexpected.assert_called_once()
+    body, error = engine.log.unexpected.call_args.args
+    assert (body["code"], body["action"], type(error)) == (
+        "file_error",
+        f"Read a file (GET {FILE})",
+        OSError,
+    )
+    assert engine.log.unexpected.call_args.kwargs == {"label": "Read a file"}
+
+
+@pytest.mark.parametrize("grown", [1000, -1000], ids=["grew", "shrank"])
+def test_a_file_whose_size_changed_since_it_was_opened_sends_its_size_and_ends(
+    local_server, monkeypatch, grown
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    finished = finished_requests(monkeypatch)
+    data = os.urandom(2 * transport.CHUNK)
+    # The size when the server opened the file, which then grew or shrank by `grown` bytes.
+    size = len(data) - grown
+    stream = Recorded(data)
+    engine.study_file.return_value = StudyFile(
+        "Example.pdf", stream, size, "application/pdf"
+    )
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
+    connection.request("GET", FILE, headers={"Origin": server.origin, **headers})
+    response = connection.getresponse()
+    assert (response.status, response.headers["Content-Length"]) == (200, str(size))
+    if grown > 0:
+        # Never more than the size of the headers.
+        assert response.read() == data[:size]
+    else:
+        # The answer ends short at once instead of waiting for bytes that never come.
+        with pytest.raises(IncompleteRead) as short:
+            response.read()
+        assert short.value.partial == data
+    connection.close()
+    assert stream.closed_by_server.wait(3)
+    assert finished.wait(3)
+    engine.log.unexpected.assert_not_called()
+    engine.log.failed.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "broken",
+    [RuntimeError("The log is broken"), OSError(28, "No space left on device")],
+    ids=["error", "os error"],
+)
+def test_a_failure_to_log_a_failed_file_sends_nothing_after_its_bytes(
+    local_server, monkeypatch, broken
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    data = os.urandom(3 * transport.CHUNK)
+    stream = serve_file(engine, data, fail_after=1)
+    # Only the first record fails, so that a second answer after the headers would be logged.
+    engine.log.unexpected.side_effect = [broken, None]
+    finished = finished_requests(monkeypatch)
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
+    connection.request("GET", FILE, headers={"Origin": server.origin, **headers})
+    response = connection.getresponse()
+    assert response.status == 200
+    with pytest.raises(IncompleteRead) as short:
+        response.read()
+    # The bytes of the file and nothing else follow the headers: no second status line.
+    assert short.value.partial == data[: transport.CHUNK]
+    connection.close()
+    assert stream.closed_by_server.wait(3)
+    assert finished.wait(3)
+    engine.log.unexpected.assert_called_once()
+    engine.log.failed.assert_not_called()
+    assert request(server, "GET", "/local/state", headers=headers)[0] == 200
+
+
+def test_a_browser_that_stalls_frees_its_thread_and_the_file_after_a_timeout(
+    local_server, monkeypatch
+):
+    server, engine = local_server
+    headers = authenticate(server)
+    monkeypatch.setattr(transport, "SEND_TIMEOUT", 0.5)
+    stream = serve_file(engine, bytes(32 * 1024 * 1024))
+    finished = finished_requests(monkeypatch)
+    with socket.socket() as client:
+        # A small window, so that the server soon has nothing more to send into.
+        client.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 64 * 1024)
+        client.settimeout(3)
+        client.connect(("127.0.0.1", server.server_port))
+        client.sendall(
+            (
+                f"GET {FILE} HTTP/1.1\r\nHost: 127.0.0.1:{server.server_port}\r\n"
+                f"Cookie: {headers['Cookie']}\r\n\r\n"
+            ).encode()
+        )
+        assert client.recv(12).startswith(b"HTTP/1.")
+        # The browser keeps the connection open and reads no more.
+        assert stream.closed_by_server.wait(5)
+        assert finished.wait(5)
+    assert len(stream.reads) < 32 * 1024 * 1024 // transport.CHUNK
+    engine.log.unexpected.assert_not_called()
+    engine.log.failed.assert_not_called()
+    assert request(server, "GET", "/local/state", headers=headers)[0] == 200
+
+
+def test_the_scripts_of_the_app_are_javascript_whatever_the_system_table_says(
+    local_server, monkeypatch
+):
+    server, _ = local_server
+    worker = transport.ASSETS / "pdfjs" / "pdf.worker.min.mjs"
+    worker.parent.mkdir()
+    worker.write_text("export {};")
+    # The Windows registry can map .js to text/plain; a module worker runs only as JavaScript.
+    monkeypatch.setattr(
+        transport.mimetypes, "guess_type", lambda name: ("text/plain", None)
+    )
+    for path in ("/pdfjs/pdf.worker.min.mjs", "/static/app.js"):
+        status, headers, _ = request(server, "GET", path)
+        assert (status, headers["Content-Type"]) == (200, "text/javascript")

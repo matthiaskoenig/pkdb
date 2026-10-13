@@ -56,6 +56,35 @@ export async function pixelStats(locator: Locator, area?: Area): Promise<PixelSt
   }
 }
 
+/**
+ * The columns of an `area` of `locator` that the browser painted dark, as on a line of text:
+ * true for a column with a pixel darker than #c8c8c8, from the left edge of the area.
+ */
+export async function inkColumns(locator: Locator, area: Area): Promise<boolean[]> {
+  const shot = await areaShot(locator, area);
+  const probe = await locator.page().context().newPage();
+  try {
+    return await probe.evaluate(async (data) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${data}`;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const context = canvas.getContext("2d")!;
+      context.drawImage(image, 0, 0);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      return Array.from({ length: canvas.width }, (_, x) =>
+        Array.from({ length: canvas.height }, (_, y) => (y * canvas.width + x) * 4).some(
+          (at) => pixels[at]! + pixels[at + 1]! + pixels[at + 2]! < 3 * 200,
+        ),
+      );
+    }, shot.toString("base64"));
+  } finally {
+    await probe.close();
+  }
+}
+
 async function areaShot(locator: Locator, area: Area): Promise<Buffer> {
   await locator.scrollIntoViewIfNeeded();
   const box = await locator.boundingBox();

@@ -267,7 +267,8 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
   if (servers.cookies.length) {
     await context.addCookies(servers.cookies);
     await page.goto(`${server.origin}/${hash}`);
-    await expect(header).toBeVisible();
+    // A PDF in a tab of its own has no app bar.
+    await expect(/^#\/studies\/[^/]+\/[^/]+\/paper\//.test(hash) ? page.locator(".paper-viewer") : header).toBeVisible();
     return;
   }
   const session = page.waitForResponse((response) => new URL(response.url()).pathname === "/local/session");
