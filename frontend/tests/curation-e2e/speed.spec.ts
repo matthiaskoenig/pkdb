@@ -1,4 +1,5 @@
 import type { Page } from "@playwright/test";
+import { SEARCH_DELAY_MS } from "../../src/curation-app/overview.ts";
 import { expect, test } from "./fixtures.ts";
 
 /** The studies of the generated workspace (tools/curation_testing/large_workspace.py). */
@@ -7,8 +8,6 @@ const STUDIES = 1000;
 const BUDGET_MS = 100;
 /** The longest task that the polls may cause while jobs run. */
 const LONG_TASK_MS = 200;
-/** How long the search waits after the last keystroke: the debounce that Task 2 of #936 adds. */
-const SEARCH_DELAY_MS = 150;
 /** A surname of the generator: 25 of the 1,000 studies have it, and no title has it. */
 const SURNAME = "dahlqvist";
 const MATCHES = 25;
@@ -54,7 +53,12 @@ async function installLatencyProbe(page: Page): Promise<void> {
       };
       (window as unknown as { __latency: typeof probe }).__latency = probe;
       const afterPaint = (done: () => void) => requestAnimationFrame(() => setTimeout(done, 0));
+      // The final filter ran: the field holds the whole surname (a stale result of an earlier text
+      // or of the last round cannot pass, as each round starts from the unfiltered table) and the
+      // table shows exactly the matches.
       const showsMatches = () => {
+        const field = document.querySelector<HTMLInputElement>('.overview-search input');
+        if (field?.value.toLowerCase() !== surname) return false;
         const rows = [...document.querySelectorAll(".study-table tbody tr:not([aria-hidden])")];
         return (
           rows.length === matches &&
@@ -164,9 +168,12 @@ test("typing in Search studies paints each keystroke and the result within 100 m
   const results: number[] = [];
   for (let round = 0; round < WARM_UP_ROUNDS + ROUNDS; round++) {
     const measured = round >= WARM_UP_ROUNDS;
-    await resetLatency(page, measured);
-    // The next round replaces the text of the last one: its first letter filters again at once.
+    // Each round starts from the unfiltered table, so only the filter of the whole surname can
+    // show its matches; the rows of the last round must not stand in for the result.
     await page.keyboard.press("Control+A");
+    await page.keyboard.press("Backspace");
+    await expect(page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, { exact: true })).toBeVisible();
+    await resetLatency(page, measured);
     await page.keyboard.type(SURNAME, { delay: 60 });
     await expect.poll(async () => (await readLatency(page)).result).not.toBeNull();
     await expect(page.getByText(`${MATCHES} of ${STUDIES.toLocaleString("en-US")} studies`)).toBeVisible();

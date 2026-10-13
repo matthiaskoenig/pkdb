@@ -140,6 +140,8 @@ npx playwright install --with-deps chromium
 npm run build:curation && npm run test:curation-e2e
 ```
 
+To run only the speed tests, use `npx playwright test --config playwright.curation.config.ts --project=speed --no-deps`; without `--no-deps`, Playwright first runs the project that the speed tests wait for, which is all other spec files.
+
 `tools/curation_testing/make_fixture.py` draws the figure, the table images and the WebPlotDigitizer project of that fixture from its tables; run `uv run --project python python tools/curation_testing/make_fixture.py` from the repository root after changing them.
 
 ## Native backend server

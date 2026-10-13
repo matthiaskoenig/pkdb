@@ -16,16 +16,18 @@ import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
 import { storeToRefs } from "pinia";
 import {
-  chipCounts,
+  COLLATOR,
   curatorsOf,
   filterStudies,
   MODE_LABELS,
   plural,
+  SEARCH_DELAY_MS,
   sortStudies,
   STATUS_CHIPS,
   substancesOf,
   uploadBlocker,
 } from "../overview";
+import { useDebounced } from "../composables/useDebounced";
 import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
@@ -69,6 +71,8 @@ watch(
 // Filters
 const filters = useOverviewFilters();
 const { search, substance, curator, chip, sort } = storeToRefs(filters);
+/** The text of the search field; the filter follows it 150 ms after the last keystroke. */
+const { text: searchText, flush: flushSearch } = useDebounced(search, SEARCH_DELAY_MS);
 watch(
   () => snapshot.value?.workspace,
   (path) => {
@@ -90,35 +94,25 @@ const curatorItems = computed(() => {
   const others = curators
     .filter((entry) => entry !== mine)
     .map(({ user, studies: count }) => ({ title: `${name(user)} (${count.toLocaleString("en-US")})`, value: user }))
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .sort((a, b) => COLLATOR.compare(a.title, b.title));
   return [
     { title: "All curators", value: "" },
     ...(me ? [{ title: `Me: ${name(me)} (${(mine?.studies ?? 0).toLocaleString("en-US")})`, value: me }] : []),
     ...others,
   ];
 });
+/** The rows of the filters and the counts of the chips, from one pass over the studies. */
+const filtered = computed(() =>
+  filterStudies(studies.value, {
+    search: search.value,
+    substance: substance.value,
+    curator: curator.value,
+    chip: chip.value,
+  }),
+);
 /** The rows behind each chip, within the search, the substance and the curator. */
-const counts = computed(() =>
-  chipCounts(
-    filterStudies(studies.value, {
-      search: search.value,
-      substance: substance.value,
-      curator: curator.value,
-      chip: "all",
-    }),
-  ),
-);
-const shown = computed(() =>
-  sortStudies(
-    filterStudies(studies.value, {
-      search: search.value,
-      substance: substance.value,
-      curator: curator.value,
-      chip: chip.value,
-    }),
-    sort.value,
-  ),
-);
+const counts = computed(() => filtered.value.counts);
+const shown = computed(() => sortStudies(filtered.value.shown, sort.value));
 const countText = computed(() => {
   const total = plural(studies.value.length, "study", "studies");
   if (shown.value.length === studies.value.length) return total;
@@ -126,6 +120,7 @@ const countText = computed(() => {
 });
 
 function clearFilters(): void {
+  flushSearch("");
   filters.clear();
 }
 
@@ -270,14 +265,14 @@ const format1Notice = computed(() =>
       <template v-if="studies.length">
         <div class="overview-filters">
           <VTextField
-            v-model="search"
+            v-model="searchText"
             label="Search studies"
             placeholder="Identity or title"
             prepend-inner-icon="fas fa-magnifying-glass"
             clearable
             hide-details
             class="overview-search"
-            @click:clear="search = ''"
+            @click:clear="flushSearch('')"
           />
           <VSelect
             v-model="substance"

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { StudyRow } from "../../src/curation-app/api/types";
+import type { ReviewStatus, StudyRow } from "../../src/curation-app/api/types";
 import {
   activityLabel,
-  chipCounts,
+  COLLATOR,
   curatorsOf,
   filterStudies,
   formatTime,
@@ -57,31 +57,31 @@ describe("filterStudies", () => {
   const all = { search: "", substance: "", curator: "", chip: "all" as StatusChip };
 
   it("keeps every row without filters", () => {
-    expect(ids(filterStudies(rows, all))).toEqual(ids(rows));
+    expect(ids(filterStudies(rows, all).shown)).toEqual(ids(rows));
   });
 
   it("matches the identity and the title ignoring case", () => {
-    expect(ids(filterStudies(rows, { ...all, search: "HARDER" }))).toEqual(["caffeine/Harder1988"]);
-    expect(ids(filterStudies(rows, { ...all, search: "caffeine/ex" }))).toEqual(["caffeine/Example"]);
-    expect(ids(filterStudies(rows, { ...all, search: "cyp2d6" }))).toEqual(["codeine/Kirchheiner2007"]);
-    expect(ids(filterStudies(rows, { ...all, search: "  smoking " }))).toEqual(["caffeine/Harder1988"]);
-    expect(filterStudies(rows, { ...all, search: "no such study" })).toEqual([]);
+    expect(ids(filterStudies(rows, { ...all, search: "HARDER" }).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(ids(filterStudies(rows, { ...all, search: "caffeine/ex" }).shown)).toEqual(["caffeine/Example"]);
+    expect(ids(filterStudies(rows, { ...all, search: "cyp2d6" }).shown)).toEqual(["codeine/Kirchheiner2007"]);
+    expect(ids(filterStudies(rows, { ...all, search: "  smoking " }).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(filterStudies(rows, { ...all, search: "no such study" }).shown).toEqual([]);
   });
 
   it("matches a row without a title by its identity", () => {
     const untitled = row("caffeine/Untitled", {}, { title: null });
-    expect(ids(filterStudies([untitled], { ...all, search: "untitled" }))).toEqual(["caffeine/Untitled"]);
-    expect(filterStudies([untitled], { ...all, search: "pharmacokinetics" })).toEqual([]);
+    expect(ids(filterStudies([untitled], { ...all, search: "untitled" }).shown)).toEqual(["caffeine/Untitled"]);
+    expect(filterStudies([untitled], { ...all, search: "pharmacokinetics" }).shown).toEqual([]);
   });
 
   it("keeps the rows of one substance", () => {
-    expect(ids(filterStudies(rows, { ...all, substance: "codeine" }))).toEqual(["codeine/Kirchheiner2007"]);
+    expect(ids(filterStudies(rows, { ...all, substance: "codeine" }).shown)).toEqual(["codeine/Kirchheiner2007"]);
   });
 
   it("keeps the rows of one curator, ignoring the case of the user name", () => {
-    expect(ids(filterStudies(rows, { ...all, curator: "mkoenig" }))).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
-    expect(ids(filterStudies(rows, { ...all, curator: "JANEKG" }))).toEqual(["caffeine/Harder1988"]);
-    expect(filterStudies(rows, { ...all, curator: "nobody" })).toEqual([]);
+    expect(ids(filterStudies(rows, { ...all, curator: "mkoenig" }).shown)).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
+    expect(ids(filterStudies(rows, { ...all, curator: "JANEKG" }).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(filterStudies(rows, { ...all, curator: "nobody" }).shown).toEqual([]);
   });
 
   it.each<[StatusChip, string[]]>([
@@ -91,20 +91,35 @@ describe("filterStudies", () => {
     ["in_review", ["caffeine/Harder1988"]],
     ["approved", ["codeine/Kirchheiner2007"]],
   ])("keeps the rows of the chip %s", (chip, expected) => {
-    expect(ids(filterStudies(rows, { ...all, chip }))).toEqual(expected);
+    expect(ids(filterStudies(rows, { ...all, chip }).shown)).toEqual(expected);
   });
 
   it("combines the search, the substance, the curator and the chip", () => {
-    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "", chip: "draft" }))).toEqual(
+    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "", chip: "draft" }).shown)).toEqual(
       ["caffeine/Example", "caffeine/Broken1999"],
     );
     expect(
-      ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "mkoenig", chip: "draft" })),
+      ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "mkoenig", chip: "draft" }).shown),
     ).toEqual(["caffeine/Example"]);
   });
 
-  it("counts the rows of every chip", () => {
-    expect(chipCounts(rows)).toEqual({ all: 5, attention: 3, draft: 3, in_review: 1, approved: 1 });
+  it("counts the rows of every chip within the search, the substance and the curator, whatever the chip", () => {
+    expect(filterStudies(rows, all).counts).toEqual({ all: 5, attention: 3, draft: 3, in_review: 1, approved: 1 });
+    const caffeine = filterStudies(rows, { ...all, substance: "caffeine", chip: "approved" });
+    expect(caffeine.counts).toEqual({ all: 3, attention: 2, draft: 2, in_review: 1, approved: 0 });
+    expect(caffeine.shown).toEqual([]);
+  });
+
+  it("reads the identity, the title and the curators of a row once for every filter", () => {
+    let reads = 0;
+    const counted = Object.defineProperty({ ...example }, "id", {
+      get: () => {
+        reads += 1;
+        return example.id;
+      },
+    });
+    for (const search of ["caffeine", "example", "x"]) filterStudies([counted], { ...all, search });
+    expect(reads).toBe(1);
   });
 });
 
@@ -148,6 +163,23 @@ describe("needsAttention", () => {
 });
 
 describe("sortStudies", () => {
+  it("computes the sort value of each row once", () => {
+    let reads = 0;
+    const statuses: ReviewStatus[] = ["draft", "in_review", "approved"];
+    const many = Array.from({ length: 50 }, (_, index) => {
+      const value = row(`a/s${index}`, {}, { review_status: statuses[index % 3]! });
+      const { summary } = value;
+      return Object.defineProperty({ ...value }, "summary", {
+        get: () => {
+          reads += 1;
+          return summary;
+        },
+      });
+    });
+    sortStudies(many, { key: "review", descending: false });
+    expect(reads).toBe(50);
+  });
+
   it("sorts by identity in both directions", () => {
     expect(ids(sortStudies(rows, { key: "study", descending: false }))).toEqual([
       "caffeine/Broken1999",
@@ -297,5 +329,12 @@ describe("labels", () => {
 
   it("lists the substances in order", () => {
     expect(substancesOf(rows)).toEqual(["caffeine", "codeine", "midazolam"]);
+  });
+});
+
+describe("COLLATOR", () => {
+  it("orders names without case and numbers by value", () => {
+    expect(substancesOf([row("B/x"), row("a10/y"), row("a9/z")])).toEqual(["a9", "a10", "B"]);
+    expect(["Study10", "study9", "Study1"].sort(COLLATOR.compare)).toEqual(["Study1", "study9", "Study10"]);
   });
 });

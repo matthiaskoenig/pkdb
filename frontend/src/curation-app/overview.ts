@@ -20,6 +20,16 @@ export interface StudyFilter {
 /** A color of the theme for a tinted chip; undefined for a neutral chip. */
 export type Tone = "success" | "info" | "warning" | "error" | undefined;
 
+/** How long the search waits after the last keystroke before it filters the table. */
+export const SEARCH_DELAY_MS = 150;
+
+/**
+ * Compares identities and names: without case, and the numbers in them by value. One for the
+ * app: creating a collator costs more than many comparisons, which `localeCompare` with options
+ * does on every call.
+ */
+export const COLLATOR = new Intl.Collator("en", { numeric: true, sensitivity: "base" });
+
 export const STATUS_CHIPS: readonly { value: StatusChip; label: string }[] = [
   { value: "all", label: "All" },
   { value: "attention", label: "Needs attention" },
@@ -37,34 +47,59 @@ export function needsAttention(row: StudyRow): boolean {
   );
 }
 
-function matchesChip(row: StudyRow, chip: StatusChip): boolean {
-  if (chip === "all") return true;
-  if (chip === "attention") return needsAttention(row);
-  return row.summary.review_status === chip;
+/** What the search compares of a row, in lower case. */
+interface SearchKeys {
+  id: string;
+  title: string;
+  curators: readonly string[];
 }
 
-/** Whether `user` is a curator of the study; user names are compared ignoring case, as the curator roster does. */
-function curatedBy(row: StudyRow, user: string): boolean {
-  const key = user.toLowerCase();
-  return (row.summary.curators ?? []).some((name) => name.toLowerCase() === key);
+/** The search keys of each row object: computed once, and so once per snapshot. */
+const searchKeys = new WeakMap<StudyRow, SearchKeys>();
+
+function keysOf(row: StudyRow): SearchKeys {
+  let keys = searchKeys.get(row);
+  if (!keys) {
+    keys = {
+      id: row.id.toLowerCase(),
+      title: (row.summary.title ?? "").toLowerCase(),
+      // User names are compared ignoring case, as the curator roster does.
+      curators: (row.summary.curators ?? []).map((name) => name.toLowerCase()),
+    };
+    searchKeys.set(row, keys);
+  }
+  return keys;
 }
 
-export function filterStudies(rows: StudyRow[], { search, substance, curator, chip }: StudyFilter): StudyRow[] {
+export interface FilteredStudies {
+  /** The rows of the filter, in the order of the input. */
+  shown: StudyRow[];
+  /** The rows behind each status chip, within the search, the substance and the curator. */
+  counts: Record<StatusChip, number>;
+}
+
+/** The rows of `filter` and the counts of the status chips, in one pass over `rows`. */
+export function filterStudies(
+  rows: readonly StudyRow[],
+  { search, substance, curator, chip }: StudyFilter,
+): FilteredStudies {
   const needle = search.trim().toLowerCase();
-  return rows.filter(
-    (row) =>
-      (!substance || row.substance === substance) &&
-      (!curator || curatedBy(row, curator)) &&
-      matchesChip(row, chip) &&
-      (!needle || row.id.toLowerCase().includes(needle) || (row.summary.title ?? "").toLowerCase().includes(needle)),
-  );
-}
-
-/** The number of rows behind each status chip. */
-export function chipCounts(rows: StudyRow[]): Record<StatusChip, number> {
-  return Object.fromEntries(
-    STATUS_CHIPS.map(({ value }) => [value, rows.filter((row) => matchesChip(row, value)).length]),
-  ) as Record<StatusChip, number>;
+  const user = curator.toLowerCase();
+  const counts: Record<StatusChip, number> = { all: 0, attention: 0, draft: 0, in_review: 0, approved: 0 };
+  const shown: StudyRow[] = [];
+  for (const row of rows) {
+    if (substance && row.substance !== substance) continue;
+    const keys = keysOf(row);
+    if (user && !keys.curators.includes(user)) continue;
+    if (needle && !keys.id.includes(needle) && !keys.title.includes(needle)) continue;
+    counts.all += 1;
+    const attention = needsAttention(row);
+    if (attention) counts.attention += 1;
+    const status = row.summary.review_status;
+    if (status) counts[status] += 1;
+    if (chip === "all" || (chip === "attention" ? attention : status === chip)) shown.push(row);
+  }
+  return { shown, counts };
 }
 
 /**
@@ -84,12 +119,12 @@ export function curatorsOf(rows: StudyRow[]): { user: string; studies: number }[
       else curators.set(key, { user, studies: 1 });
     }
   }
-  return [...curators.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, entry]) => entry);
+  return [...curators.entries()].sort(([a], [b]) => COLLATOR.compare(a, b)).map(([, entry]) => entry);
 }
 
 /** The substances of the rows in alphabetical order. */
 export function substancesOf(rows: StudyRow[]): string[] {
-  return [...new Set(rows.map((row) => row.substance))].sort((a, b) => a.localeCompare(b));
+  return [...new Set(rows.map((row) => row.substance))].sort(COLLATOR.compare);
 }
 
 // Sorting
@@ -121,8 +156,10 @@ function sortValue(row: StudyRow, key: SortKey): string | number | null {
   switch (key) {
     case "study":
       return row.id;
-    case "review":
-      return row.summary.review_status ? REVIEW_ORDER[row.summary.review_status] : null;
+    case "review": {
+      const status = row.summary.review_status;
+      return status ? REVIEW_ORDER[status] : null;
+    }
     case "open_items":
       return row.summary.open_items ?? null;
     case "problems":
@@ -141,24 +178,29 @@ function sortValue(row: StudyRow, key: SortKey): string | number | null {
   }
 }
 
-function compare(a: string | number, b: string | number): number {
+function compareValues(a: string | number, b: string | number): number {
   if (typeof a === "number" && typeof b === "number") return a - b;
-  return String(a).localeCompare(String(b), "en", { numeric: true, sensitivity: "base" });
+  return COLLATOR.compare(String(a), String(b));
 }
 
-/** The rows sorted by `key`; rows without a value come last, and equal rows by identity. */
-export function sortStudies(rows: StudyRow[], { key, descending }: StudySort): StudyRow[] {
-  return [...rows].sort((left, right) => {
-    const a = sortValue(left, key);
-    const b = sortValue(right, key);
+/**
+ * The rows sorted by `key`; rows without a value come last, and equal rows by identity. The
+ * value of each row is computed once, not per comparison.
+ */
+export function sortStudies(rows: readonly StudyRow[], { key, descending }: StudySort): StudyRow[] {
+  const keyed = rows.map((row) => ({ row, value: sortValue(row, key) }));
+  keyed.sort((left, right) => {
+    const a = left.value;
+    const b = right.value;
     if (a === null || b === null) {
       if (a !== b) return a === null ? 1 : -1;
     } else {
-      const order = compare(a, b);
+      const order = compareValues(a, b);
       if (order !== 0) return descending ? -order : order;
     }
-    return compare(left.id, right.id) || compare(left.path, right.path);
+    return COLLATOR.compare(left.row.id, right.row.id) || COLLATOR.compare(left.row.path, right.row.path);
   });
+  return keyed.map(({ row }) => row);
 }
 
 // Labels

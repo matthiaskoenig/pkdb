@@ -7,7 +7,9 @@ import type { Job, Profile, Snapshot, SyncStatus } from "../../src/curation-app/
 import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
+import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -104,6 +106,18 @@ function rowOf(id: string): DOMWrapper<HTMLTableRowElement> {
 /** The checkbox with the accessible name `name`. */
 function checkbox(name: string) {
   return page().get<HTMLInputElement>(`input[type="checkbox"][aria-label="${name}"]`);
+}
+
+/** Type `text` into the search and wait until the table follows it. */
+async function search(text: string): Promise<void> {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  try {
+    await field("Search studies").setValue(text);
+    vi.advanceTimersByTime(SEARCH_DELAY_MS);
+    await flushPromises();
+  } finally {
+    vi.useRealTimers();
+  }
 }
 
 async function check(name: string): Promise<void> {
@@ -400,16 +414,14 @@ describe("OverviewPage", () => {
   it("selects all shown studies", async () => {
     const enqueue = vi.spyOn(useOverviewStore(), "enqueue").mockResolvedValue();
     await mountPage(snapshot({ studies: [example, harder, approved] }));
-    await field("Search studies").setValue("caffeine");
-    await flushPromises();
+    await search("caffeine");
     await check("Select all shown studies");
     expect(page().get(".batch-count").text()).toBe("2 studies selected");
     await click("Validate");
     expect(enqueue).toHaveBeenCalledWith(["caffeine/Example", "caffeine/Harder1988"], "validate");
 
     // A study that a filter hides leaves the selection.
-    await field("Search studies").setValue("harder");
-    await flushPromises();
+    await search("harder");
     expect(page().get(".batch-count").text()).toBe("1 study selected");
   });
 
@@ -637,16 +649,51 @@ describe("OverviewPage", () => {
     expect(button("Validate and upload again").attributes("disabled")).toBeDefined();
   });
 
+  it("filters the table 150 ms after the last keystroke", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await field("Search studies").setValue("smok");
+      vi.advanceTimersByTime(SEARCH_DELAY_MS - 1);
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      await field("Search studies").setValue("smoking");
+      vi.advanceTimersByTime(SEARCH_DELAY_MS - 1);
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      vi.advanceTimersByTime(1);
+      await flushPromises();
+      expect(identities()).toEqual(["caffeine/Harder1988"]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("clears the search at once with its clear icon", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await search("smoking");
+    expect(identities()).toHaveLength(1);
+    await page().get('[aria-label="Clear Search studies"]').trigger("click");
+    await flushPromises();
+    expect(identities()).toHaveLength(3);
+    expect(field("Search studies").element.value).toBe("");
+  });
+
+  it("keeps a search typed just before the overview is left", async () => {
+    const wrapper = await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await field("Search studies").setValue("smoking");
+    wrapper.unmount();
+    expect(useOverviewFilters().search).toBe("smoking");
+  });
+
   it("filters by search, substance and status chip", async () => {
     const wrapper = await mountPage(snapshot({ studies: [example, harder, approved] }));
     expect(page().get(".overview-count").text()).toBe("3 studies");
 
-    await field("Search studies").setValue("smoking");
-    await flushPromises();
+    await search("smoking");
     expect(identities()).toEqual(["caffeine/Harder1988"]);
     expect(page().get(".overview-count").text()).toBe("1 of 3 studies");
-    await field("Search studies").setValue("");
-    await flushPromises();
+    await search("");
 
     await choose(wrapper, "Substance", "codeine");
     expect(identities()).toEqual(["codeine/Kirchheiner2007"]);
@@ -663,8 +710,7 @@ describe("OverviewPage", () => {
     await click(/^Approved/);
     expect(identities()).toEqual(["codeine/Kirchheiner2007"]);
 
-    await field("Search studies").setValue("smoking");
-    await flushPromises();
+    await search("smoking");
     expect(rows()).toHaveLength(0);
     expect(page().text()).toContain("No studies match these filters.");
     await click("Clear filters");
