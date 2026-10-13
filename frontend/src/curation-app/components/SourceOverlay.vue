@@ -106,7 +106,10 @@ const name = computed(() => {
   const emphasis = emphasized.value ? `, with ${emphasized.value} emphasized` : "";
   if (shown.value === "plot") {
     const count = rows.value.length;
-    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}`;
+    // The rings and their key show these rows; screen readers read them here.
+    const ringed = rowProblems.value.size;
+    const problems = ringed ? `, ${plural(ringed, "row")} with problems` : "";
+    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}${problems}`;
   }
   const counted = (role: "raw" | "mapped", errorBarEnd: boolean) =>
     props.view.overlay.filter((point) => point.role === role && point.error_bar_end === errorBarEnd).length;

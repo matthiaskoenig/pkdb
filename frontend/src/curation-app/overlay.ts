@@ -62,6 +62,8 @@ interface HoverLabel {
   bgcolor: string;
   bordercolor: string;
   font: { color: string; family: string; size: number };
+  /** How the lines of a label align; Plotly aligns them to the side of the point by default. */
+  align?: "left";
 }
 
 export interface OverlayTrace {
@@ -386,7 +388,8 @@ export function overlayTraces(
 /**
  * The colors of the ring around a plotted point whose row has a problem, as the grid outlines the
  * cell of a problem: the error color of the theme and the amber of a warning, each with at least
- * 3:1 on the surface of its theme (#ffffff and #192b31).
+ * 3:1 on the surface of its theme (#ffffff and #192b31). Change them together with `--grid-amber`
+ * in TableGrid.vue and the `error` colors of the themes in plugins/vuetify.ts.
  */
 export const PROBLEM_COLORS: Record<"light" | "dark", Record<ValidationIssue["severity"], string>> = {
   light: { error: "#b3261e", warning: "#8f5300" },
@@ -435,20 +438,37 @@ export function wrapText(text: string, width = HOVER_WIDTH): string[] {
 }
 
 /**
- * The problems of a row in the hover label of its point, after a blank line: the severity and
- * the code, then the message of each (no bold: Plotly sets the style attribute for it, which the
- * content security policy of the app blocks), at most `TIP_LIMIT` with the count of the others,
- * escaped; empty without problems.
+ * The most lines of the problems in the hover label of a point. Plotly shows no label that is
+ * higher than the plot: with the lines of the file, the series, x and y and the blank line, the
+ * label has at most 12 lines of 17 pixels, which fit the 220 pixels of the data plot.
+ */
+const HOVER_PROBLEM_LINES = 8;
+
+/**
+ * The problems of a row in the hover label of its point, after a blank line, in at most
+ * `HOVER_PROBLEM_LINES` lines: the severity and the code of each of at most `TIP_LIMIT`, the count
+ * of the others, and the message of as many of the first as fit (no bold: Plotly sets the style
+ * attribute for it, which the content security policy of the app blocks), escaped; empty without
+ * problems.
  */
 export function problemHover(issues: readonly ValidationIssue[]): string {
   if (!issues.length) return "";
   const { shown, more } = tipProblems(issues);
-  const parts = shown.map(
-    (issue) =>
-      `${SEVERITY_LABELS[issue.severity]} · ${escapeMarkup(issue.code)}<br>${wrapText(issue.message).map(escapeMarkup).join("<br>")}`,
-  );
-  if (more) parts.push(`and ${more} more`);
-  return `<br><br>${parts.join("<br>")}`;
+  // A line for each severity and code, and one for the count of the others.
+  let free = HOVER_PROBLEM_LINES - shown.length - (more ? 1 : 0);
+  const lines: string[] = [];
+  for (const issue of shown) {
+    lines.push(`${SEVERITY_LABELS[issue.severity]} · ${escapeMarkup(issue.code)}`);
+    const message = wrapText(issue.message);
+    // A message that does not fit ends the messages, so that they belong to the first problems.
+    if (message.length > free) free = 0;
+    else {
+      lines.push(...message.map(escapeMarkup));
+      free -= message.length;
+    }
+  }
+  if (more) lines.push(`and ${more} more`);
+  return `<br><br>${lines.join("<br>")}`;
 }
 
 /** The problems of a row as lines of the data table of the plot: `Warning digitized_mismatch: <message>`. */
@@ -539,7 +559,8 @@ export function plotTraces(
         problemHover(rowProblems.get(rowKey(point.file, point.line)) ?? []),
       ]),
       hovertemplate: PLOT_HOVER,
-      hoverlabel: hoverLabel(theme, color),
+      // The lines of the problems read as a list.
+      hoverlabel: { ...hoverLabel(theme, color), align: "left" },
     };
   });
   // The axes of the first series, as `pkdb plot` labels them.

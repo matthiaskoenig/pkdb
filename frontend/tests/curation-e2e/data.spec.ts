@@ -1013,8 +1013,8 @@ test.describe("tables", () => {
 });
 
 test.describe("plot of the mapped rows", () => {
-  test("rings the point of a row with a problem, and its hover label lists the problem", async ({ app, page }) => {
-    // Without its digitization, Fig1 shows its image above a plot of its mapped rows.
+  /** Serve Fig1 without its digitization, so that it shows its image above a plot of its mapped rows. */
+  async function withoutDigitization(page: Page): Promise<void> {
     await page.route(
       (url) => url.pathname === "/local/studies/caffeine/Demo2020/sources/Fig1",
       async (route) => {
@@ -1034,6 +1034,24 @@ test.describe("plot of the mapped rows", () => {
         });
       },
     );
+  }
+
+  /** The point of `plot` at `x` and `y` of its axes, in the pixels of the page. */
+  async function pagePoint(plot: Locator, x: number, y: number): Promise<{ x: number; y: number }> {
+    const point = await plot.evaluate(
+      (element, [x, y]) => {
+        type Axis = { l2p: (value: number) => number; _offset: number };
+        const { xaxis, yaxis } = (element as HTMLElement & { _fullLayout: { xaxis: Axis; yaxis: Axis } })._fullLayout;
+        return { x: xaxis._offset + xaxis.l2p(x!), y: yaxis._offset + yaxis.l2p(y!) };
+      },
+      [x, y],
+    );
+    const box = (await plot.boundingBox())!;
+    return { x: box.x + point.x, y: box.y + point.y };
+  }
+
+  test("rings the point of a row with a problem, and its hover label lists the problem", async ({ app, page }) => {
+    await withoutDigitization(page);
     await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
     const plot = page.getByRole("img", { name: /^Plot of \d+ mapped rows of Fig1/ });
     await expect(plot).toBeVisible();
@@ -1050,20 +1068,51 @@ test.describe("plot of the mapped rows", () => {
     expect(ring!.meta).toMatch(/^problem (error|warning)$/);
     await expect(page.getByText(ring!.meta === "problem error" ? "Row with an error" : "Row with a warning", { exact: true })).toBeVisible();
 
-    // The first ringed point, in the pixels of the plot.
-    const point = await plot.evaluate(
-      (element, [x, y]) => {
-        type Axis = { l2p: (value: number) => number; _offset: number };
-        const { xaxis, yaxis } = (element as HTMLElement & { _fullLayout: { xaxis: Axis; yaxis: Axis } })._fullLayout;
-        return { x: xaxis._offset + xaxis.l2p(x!), y: yaxis._offset + yaxis.l2p(y!) };
-      },
-      [ring!.x[0], ring!.y[0]],
-    );
-    const box = (await plot.boundingBox())!;
-    await page.mouse.move(box.x + point.x, box.y + point.y);
+    // The first ringed point.
+    const point = await pagePoint(plot, ring!.x[0]!, ring!.y[0]!);
+    await page.mouse.move(point.x, point.y);
     // The label of the point below the ring names its row and lists the problem of that row.
     const label = page.locator(".hoverlayer .hovertext");
     await expect(label).toContainText("timecourses_Fig1.tsv line");
     await expect(label).toContainText(ring!.meta === "problem error" ? "Error · " : "Warning · ");
+  });
+
+  test("shows the hover label of a point whose row has five problems with long messages", async ({ app, page }) => {
+    await withoutDigitization(page);
+    // Messages of two lines each, as real messages wrap.
+    await addProblems(
+      page,
+      Array.from({ length: 5 }, (_, index) => ({
+        code: `long_problem_${index}`,
+        severity: "error" as const,
+        message: `Problem ${index}: mean lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json.`,
+        source: { file: TABLE, row: 6, header: "mean" },
+      })),
+    );
+    await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
+    // The problems name the plot, and the label of a point its row.
+    const plot = page.getByRole("img", { name: /^Plot of \d+ mapped rows of Fig1.*, \d+ rows? with problems$/ });
+    await expect(plot).toBeVisible({ timeout: 45_000 });
+    // The ringed point of line 6, once Plotly drew it: the values of the row can have changed.
+    const ringed = () =>
+      plot.evaluate((element, file) => {
+        type Trace = { meta: string; x: number[]; y: number[]; customdata?: unknown[][] };
+        const data = (element as HTMLElement & { data?: Trace[] }).data ?? [];
+        if (!data.some((trace) => trace.meta === "problem error")) return null;
+        for (const trace of data.filter((entry) => entry.meta.startsWith("plot "))) {
+          const index = (trace.customdata ?? []).findIndex((row) => row[0] === file && row[1] === 6);
+          if (index >= 0) return { x: trace.x[index]!, y: trace.y[index]! };
+        }
+        return null;
+      }, TABLE);
+    await expect.poll(ringed).not.toBeNull();
+    const at = (await ringed())!;
+    const point = await pagePoint(plot, at.x, at.y);
+    await page.mouse.move(point.x, point.y);
+    const label = page.locator(".hoverlayer .hovertext");
+    await expect(label).toContainText(`${TABLE} line 6`);
+    for (let index = 0; index < 5; index++) await expect(label).toContainText(`long_problem_${index}`);
+    // Plotly shows no label that is higher than the plot.
+    expect((await label.boundingBox())!.height).toBeLessThan((await plot.boundingBox())!.height);
   });
 });

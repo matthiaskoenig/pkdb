@@ -488,6 +488,37 @@ describe("problems in the plot", () => {
     expect(text.endsWith("<br>and 2 more")).toBe(true);
   });
 
+  /** The lines of the problems in a hover label, after the blank line that starts them. */
+  function hoverLines(text: string): string[] {
+    expect(text.startsWith("<br><br>")).toBe(true);
+    return text.slice("<br><br>".length).split("<br>");
+  }
+
+  it("keeps the problems of a row within eight lines of its hover label, so that the whole label fits the plot", () => {
+    // A message of two lines each, as real messages wrap.
+    const long = (index: number) =>
+      `mean ${index} at 4 hr lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json`;
+    const issues = Array.from({ length: 7 }, (_, index) => problem(4, "warning", { code: `code_${index}`, message: long(index) }));
+    expect(wrapText(long(0))).toHaveLength(2);
+    const lines = hoverLines(problemHover(issues));
+    expect(lines.length).toBeLessThanOrEqual(8);
+    // The severity and the code of five problems, the message of the first as it fits, and the count of the others.
+    expect(lines.filter((line) => line.startsWith("Warning · code_"))).toHaveLength(5);
+    expect(lines.slice(0, 3)).toEqual(["Warning · code_0", ...wrapText(long(0))]);
+    expect(lines.at(-1)).toBe("and 2 more");
+
+    // Fewer problems leave room for more messages, in their order.
+    const three = hoverLines(problemHover(issues.slice(0, 3)));
+    expect(three.length).toBeLessThanOrEqual(8);
+    expect(three.filter((line) => line.startsWith("mean "))).toEqual([wrapText(long(0))[0], wrapText(long(1))[0]]);
+    expect(three.at(-1)).toBe("Warning · code_2");
+  });
+
+  it("aligns the lines of the hover label of the data plot to the left", () => {
+    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    expect(trace(traces, "plot drug_feces").hoverlabel?.align).toBe("left");
+  });
+
   it("escapes markup in the problems, which Plotly would read as tags", () => {
     expect(problemHover([problem(4, "error", { code: "a<b>", message: "mean <none> & more" })])).toBe(
       "<br><br>Error · a&lt;b&gt;<br>mean &lt;none&gt; &amp; more",

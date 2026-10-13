@@ -376,7 +376,11 @@ describe("SourceOverlay", () => {
     expect((traces as OverlayTrace[]).map((entry) => entry.meta)).toEqual(["plot caf_plasma_D75", "problem warning"]);
     expect((traces as OverlayTrace[])[0]!.customdata?.[0]?.[6]).toContain("digitized_mismatch");
     expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with a warning");
+    // The key is hidden from screen readers, which read the rows with problems in the name of the plot.
     expect(wrapper.get(".overlay-key--problems").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
+      "Plot of 1 mapped row of Fig1 of the series caf_plasma_D75, 1 row with problems",
+    );
     // The key draws the dashed ring of a warning.
     expect(wrapper.get(".overlay-key--problems circle").attributes("stroke-dasharray")).toBeTruthy();
     expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text()).at(-1)).toBe("Problems");
@@ -395,5 +399,6 @@ describe("SourceOverlay", () => {
     expect((traces as OverlayTrace[]).some((entry) => entry.meta.startsWith("problem"))).toBe(false);
     expect(wrapper.find(".overlay-key--problems").exists()).toBe(false);
     expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text())).not.toContain("Problems");
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).not.toContain("with problems");
   });
 });
