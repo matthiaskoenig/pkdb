@@ -122,10 +122,20 @@ async function render() {
     });
 
     // Data with a problem: the tooltip of the outlined cell of the misplaced row, under the pointer.
-    await rowsOfTable.locator("td.grid-cell--warning").first().hover();
+    // The pointer moves onto the cell once the rows show it whole, as hover() would scroll the
+    // rows just far enough and cut a column at the line column. The rows scroll back afterwards,
+    // so that the next images show their first columns.
+    const outlined = rowsOfTable.locator("td.grid-cell--warning").first();
+    await showWhole(outlined);
+    const cell = await outlined.boundingBox();
+    await page.mouse.move(cell.x + cell.width / 2, cell.y + cell.height / 2);
     const tooltip = page.locator(".problem-tooltip");
     await tooltip.waitFor();
     await capture("data-problem.png", [tooltip.getByText("digitized_mismatch")], { pointer: true, tooltip: true });
+    await page.mouse.move(600, 32);
+    await rowsOfTable.evaluate((region) => {
+      region.scrollLeft = 0;
+    });
 
     // Data with the paper: page 1 of the PDF of the study, with the matches of a find.
     await navigator.getByRole("button", { name: /^Paper\b/ }).click();
@@ -278,6 +288,31 @@ async function alignTabs(tabs) {
     const current = container.scrollLeft;
     const nearest = possible.sort((a, b) => Math.abs(a - current) - Math.abs(b - current))[0];
     if (nearest !== undefined) container.scrollLeft = nearest;
+  });
+}
+
+/**
+ * Scroll the rows around `cell` sideways so that the cell shows whole and a whole column starts
+ * right of the sticky line column, with the cell as near to the middle of the rows as that allows.
+ */
+async function showWhole(cell) {
+  await cell.evaluate((target) => {
+    const region = target.closest(".rows-scroll");
+    const line = region.querySelector("thead th.rows-line")?.getBoundingClientRect().width ?? 0;
+    // Positions in the scrolled content of the region.
+    const origin = region.getBoundingClientRect().left + region.clientLeft - region.scrollLeft;
+    const start = (element) => element.getBoundingClientRect().left - origin;
+    const end = (element) => element.getBoundingClientRect().right - origin;
+    const widest = region.scrollWidth - region.clientWidth;
+    // The scroll positions at which a column starts right of the line column and the cell shows whole.
+    const possible = [...region.querySelectorAll("thead th:not(.rows-line)")]
+      .map((column) => start(column) - line)
+      .filter((left) => left >= -0.5 && left <= widest + 0.5)
+      .filter((left) => start(target) >= left + line - 0.5 && end(target) <= left + region.clientWidth + 0.5);
+    if (!possible.length) throw new Error("The rows cannot show the outlined cell whole with whole columns.");
+    const middle = (start(target) + end(target) - line - region.clientWidth) / 2;
+    const nearest = possible.sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle))[0];
+    region.scrollLeft = Math.max(0, Math.round(nearest));
   });
 }
 
