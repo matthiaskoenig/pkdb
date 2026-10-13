@@ -77,10 +77,17 @@ const logText = computed(() => {
   return axes.length ? `, with a log ${axes[0]} axis` : "";
 });
 /**
- * The problems of the rows whose points the plot draws, by `rowKey`: a log axis leaves out the
- * points at 0 or below, and with them their rings and problems; the overlay on the image shows none.
+ * The problems of the plotted rows by `rowKey`, which the data table lists for every row; the
+ * overlay on the image shows none.
  */
 const rowProblems = computed(() =>
+  shown.value === "plot" ? plottedProblems(props.view, props.problems ?? []) : new Map<string, ValidationIssue[]>(),
+);
+/**
+ * The problems of the rows whose points the plot draws, which get rings: a log axis leaves out the
+ * points at 0 or below, and with them their rings, their key and their count in the name.
+ */
+const drawnProblems = computed(() =>
   shown.value === "plot"
     ? plottedProblems(props.view, props.problems ?? [], scales.value)
     : new Map<string, ValidationIssue[]>(),
@@ -92,7 +99,7 @@ const plot = computed(() => {
     ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
     : plotTraces(props.view, highlight, colors, props.selected ?? null, {
         scales: scales.value,
-        rowProblems: rowProblems.value,
+        rowProblems: drawnProblems.value,
       });
 });
 
@@ -100,7 +107,7 @@ const legend = computed(() => legendEntries(props.view, shown.value, dark.value)
 const rows = computed(() => dataRows(props.view, shown.value));
 /** The severities of the rings of the plot, errors first, for the key. */
 const ringed = computed(() => {
-  const found = new Set([...rowProblems.value.values()].map(worstSeverity));
+  const found = new Set([...drawnProblems.value.values()].map(worstSeverity));
   return (["error", "warning"] as const).filter((severity) => found.has(severity));
 });
 const ringColors = computed(() => PROBLEM_COLORS[dark.value ? "dark" : "light"]);
@@ -127,7 +134,7 @@ const name = computed(() => {
   if (shown.value === "plot") {
     const count = rows.value.length;
     // The rings and their key show these rows; screen readers read them here.
-    const ringed = rowProblems.value.size;
+    const ringed = drawnProblems.value.size;
     const problems = ringed ? `, ${plural(ringed, "row")} with problems` : "";
     return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}${logText.value}${problems}`;
   }

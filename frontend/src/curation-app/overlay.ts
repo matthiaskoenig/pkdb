@@ -491,7 +491,8 @@ export function worstSeverity(issues: readonly ValidationIssue[]): ValidationIss
 
 /**
  * The problems of the rows whose points the data plot draws on `scales`, by `rowKey`, in the order
- * of the report: a log axis leaves out the points at 0 or below, and with them their problems.
+ * of the report: a log axis leaves out the points at 0 or below, and with them their rings. On
+ * linear axes, the problems of every plotted row, which the data table of the plot lists.
  */
 export function plottedProblems(
   view: SourceView,

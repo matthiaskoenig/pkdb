@@ -429,7 +429,7 @@ describe("SourceOverlay", () => {
     expect([layout.xaxis.type, layout.yaxis.type]).toEqual(["linear", "linear"]);
   });
 
-  it("rings, keys, names and lists only the problems of the rows whose points the log axes draw", async () => {
+  it("rings, keys and names only the problems of the drawn rows, and lists the problems of every row", async () => {
     // A log x axis leaves out the point of line 3 at x 0.
     const plain: SourceView = {
       ...view,
@@ -455,9 +455,10 @@ describe("SourceOverlay", () => {
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
       "Plot of 2 mapped rows of Fig1 of the series caf_plasma_D150, caf_plasma_D75, with a log x axis, 1 row with problems",
     );
+    // The data table lists every mapped row, also the one that the log axis leaves out, with its problems.
     expect(wrapper.findAll(".overlay-data tbody .overlay-problems").map((cell) => cell.text())).toEqual([
       "Warning digitized_mismatch: Row 2 is off.",
-      "",
+      "Error digitized_mismatch: Row 3 is off.",
     ]);
 
     // On linear axes, both rows are drawn with their problems.

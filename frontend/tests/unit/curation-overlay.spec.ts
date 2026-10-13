@@ -631,7 +631,7 @@ describe("problems in the plot", () => {
     expect(rowAt(plain, { customdata: trace(traces, "plot drug_feces").customdata![0] })).toEqual({ file: TIMECOURSES, line: 4 });
   });
 
-  it("rings and lists only the problems of the points that the log axes draw", () => {
+  it("keys and rings only the problems of the points that the log axes draw", () => {
     // Line 4 of drug_feces is at x 0, which a log x axis leaves out; line 6 is at x 1.
     const scales: AxisScales = { x: "log", y: "linear" };
     const problems = plottedProblems(plain, [problem(4), problem(6, "error")], scales);
