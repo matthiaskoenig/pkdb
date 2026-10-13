@@ -3,11 +3,16 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
-import type { TableResponse } from "../../src/curation-app/api/types";
+import type { TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
 import { ROW, type CellIssues, type IssueCells } from "../../src/curation-app/grid";
 
 enableAutoUnmount(afterEach);
+
+/** The problems of a cell with these messages, as `issueCells` gives them. */
+function cellIssues(severity: ValidationIssue["severity"], ...messages: string[]): CellIssues {
+  return { severity, issues: messages.map((message) => ({ code: "problem", severity, message })) };
+}
 
 const HEADER = ["study", "source", "label", "time", "mean", "comment"];
 
@@ -105,8 +110,8 @@ describe("TableGrid", () => {
 
   it("colors the rows of open review items amber and outlines the cells with problems", () => {
     const issues: IssueCells = new Map([
-      [2, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["The mean is not a number."] }]])],
-      [3, new Map<string, CellIssues>([[ROW, { severity: "warning", messages: ["The row repeats line 1."] }]])],
+      [2, new Map<string, CellIssues>([["mean", cellIssues("error", "The mean is not a number.")]])],
+      [3, new Map<string, CellIssues>([[ROW, cellIssues("warning", "The row repeats line 1.")]])],
     ]);
     const wrapper = mount(TableGrid, {
       props: { table: small, highlightLines: new Set([1, 3]), issueCells: issues },
@@ -140,7 +145,7 @@ describe("TableGrid", () => {
 
   it("outlines a header cell with a problem of the header, line 0 of a table", () => {
     const issues: IssueCells = new Map([
-      [0, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["Unknown column 'meen'."] }]])],
+      [0, new Map<string, CellIssues>([["mean", cellIssues("error", "Unknown column 'meen'.")]])],
     ]);
     const wrapper = mount(TableGrid, { props: { table: small, issueCells: issues }, attachTo: document.body });
     const header = wrapper.findAll("thead th").find((cell) => cell.text() === "mean")!;
@@ -150,7 +155,7 @@ describe("TableGrid", () => {
 
   it("marks a column, and hides empty columns except the ones to show", () => {
     const issues: IssueCells = new Map([
-      [2, new Map<string, CellIssues>([["comment", { severity: "warning", messages: ["Add a comment."] }]])],
+      [2, new Map<string, CellIssues>([["comment", cellIssues("warning", "Add a comment.")]])],
     ]);
     const wrapper = mount(TableGrid, { props: { table: small, markColumn: "mean", hideEmpty: true } });
     expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual([

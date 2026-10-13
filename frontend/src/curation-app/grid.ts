@@ -73,10 +73,17 @@ export function itemsWithoutRows(
   return { whole, unmatched };
 }
 
-/** The problems of a cell: the severity of the worst and the messages in the order of the report. */
+/**
+ * The line of the header of a table with a header, as the issues and the rows name lines. The
+ * only place where the app knows how the lines of a table are numbered: the rows of a table and
+ * the issues come with their lines from the local server.
+ */
+export const HEADER_LINE = 0;
+
+/** The problems of a cell: the severity of the worst and the issues in the order of the report. */
 export interface CellIssues {
   severity: ValidationIssue["severity"];
-  messages: string[];
+  issues: ValidationIssue[];
 }
 
 /** The problems of the cells of a table by line, then by column name, or `ROW` for the whole row. */
@@ -87,7 +94,8 @@ export const ROW = "";
 
 /**
  * The problems at the lines of `file`, by line and column: the header of a table column, the
- * letter of a raw table column, or `ROW` for a problem of the whole row.
+ * letter of a raw table column, or `ROW` for a problem of the whole row. The problems of the
+ * header of a table are at `HEADER_LINE`.
  */
 export function issueCells(issues: readonly ValidationIssue[], file: string): IssueCells {
   const cells: IssueCells = new Map();
@@ -99,11 +107,16 @@ export function issueCells(issues: readonly ValidationIssue[], file: string): Is
     cells.set(source.row, line);
     const found = line.get(column);
     if (found) {
-      found.messages.push(issue.message);
+      found.issues.push(issue);
       if (issue.severity === "error") found.severity = "error";
-    } else line.set(column, { severity: issue.severity, messages: [issue.message] });
+    } else line.set(column, { severity: issue.severity, issues: [issue] });
   }
   return cells;
+}
+
+/** Every problem of `line`: of its cells, also of columns that do not show, and of the whole row. */
+export function lineIssues(cells: IssueCells, line: number): ValidationIssue[] {
+  return [...(cells.get(line)?.values() ?? [])].flatMap((cell) => cell.issues);
 }
 
 /**

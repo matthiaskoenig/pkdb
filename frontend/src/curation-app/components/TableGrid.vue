@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import type { TableResponse } from "../api/types";
-import { columnName, keptColumns, ROW, visibleColumns, type CellIssues, type IssueCells } from "../grid";
+import type { TableResponse, ValidationIssue } from "../api/types";
+import { columnName, HEADER_LINE, keptColumns, ROW, visibleColumns, type CellIssues, type IssueCells } from "../grid";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
@@ -207,25 +207,30 @@ interface Note {
   id: string;
   severity: CellIssues["severity"];
   text: string;
+  /** The problems of the cell, which its tooltip lists. */
+  issues: ValidationIssue[];
 }
+
+/** The lines whose problems the grid shows: the header line of a table and the lines of the rendered rows. */
+const noteLines = computed(() => [...(numberedHeader.value ? [HEADER_LINE] : []), ...rendered.value.map(({ row }) => row.line)]);
 
 /**
  * The problems of the rendered cells by `<line>:<column index>`, -1 for the line cell: a problem
- * of the whole row or of a column that does not show. Line 0 of a table is its header.
+ * of the whole row or of a column that does not show. The header of a table is at `HEADER_LINE`.
  */
 const notes = computed(() => {
   const found = new Map<string, Note>();
   const shown = new Map(headers.value.map(({ index, name }) => [name, index]));
-  const lines = [...(raw.value ? [] : [0]), ...rendered.value.map(({ row }) => row.line)];
-  for (const line of lines)
+  for (const line of noteLines.value)
     for (const [name, cell] of props.issueCells.get(line) ?? []) {
       const index = name === ROW ? -1 : (shown.get(name) ?? -1);
       const key = `${line}:${index}`;
-      const prior = found.get(key);
+      const issues = [...(found.get(key)?.issues ?? []), ...cell.issues];
       found.set(key, {
         id: `${id}-${line}-${index < 0 ? "line" : index}`,
-        severity: prior?.severity === "error" ? "error" : cell.severity,
-        text: [prior?.text, ...cell.messages].filter(Boolean).join(" "),
+        severity: issues.some((issue) => issue.severity === "error") ? "error" : "warning",
+        text: issues.map((issue) => issue.message).join(" "),
+        issues,
       });
     }
   return found;
@@ -265,7 +270,7 @@ function lineClass(line: number): Record<string, boolean> {
 
 /** The problems of the header of a table, at its line 0; a raw table has no header line. */
 function headerNote(index: number): Note | undefined {
-  return raw.value ? undefined : notes.value.get(`0:${index}`);
+  return raw.value ? undefined : notes.value.get(`${HEADER_LINE}:${index}`);
 }
 
 /** The classes of a header cell; the index -1 is the header of the line column. */

@@ -31,6 +31,21 @@ export const SEVERITY_CHIPS: readonly { value: SeverityFilter; label: string }[]
 
 export const SEVERITY_LABELS: Record<ValidationIssue["severity"], string> = { error: "Error", warning: "Warning" };
 
+/** The icon of each severity, as its chip shows it in the Problems section and in a tooltip. */
+export const SEVERITY_ICONS: Record<ValidationIssue["severity"], string> = {
+  error: "fas fa-circle-xmark",
+  warning: "fas fa-triangle-exclamation",
+};
+
+/** The most problems that a tooltip or a hover label lists; it counts the others. */
+export const TIP_LIMIT = 5;
+
+/** The problems that a tooltip lists, the errors first and otherwise in their order, and how many more there are. */
+export function tipProblems<I extends ValidationIssue>(issues: readonly I[]): { shown: I[]; more: number } {
+  const ordered = [...issues.filter((issue) => issue.severity === "error"), ...issues.filter((issue) => issue.severity !== "error")];
+  return { shown: ordered.slice(0, TIP_LIMIT), more: Math.max(0, ordered.length - TIP_LIMIT) };
+}
+
 /** The issues of a severity, in their order. */
 export function filterIssues<I extends ValidationIssue>(issues: readonly I[], severity: SeverityFilter): I[] {
   return issues.filter((issue) => severity === "all" || issue.severity === severity);
@@ -131,6 +146,25 @@ export function suggestionView(suggestion: Suggestion): SuggestionView {
   if (suggestion.kind === "check_vocabulary" && candidates.length)
     return { lead: "Did you mean:", candidates, note: suggestion.message };
   return { lead: suggestion.message, candidates, note: null };
+}
+
+/** The most candidates of a suggestion that a hint names. */
+const HINT_CANDIDATES = 3;
+
+/**
+ * The hint of a problem in one line, for its tooltip: its first suggestion as the Problems
+ * section shows it, with at most three candidates, such as `Did you mean: caffeine, paraxanthine`;
+ * null without a suggestion.
+ */
+export function hintOf(issue: ValidationIssue): string | null {
+  const first = issue.suggestions?.[0];
+  if (!first) return null;
+  const { lead, candidates, note } = suggestionView(first);
+  const named = candidates.slice(0, HINT_CANDIDATES).join(", ");
+  const others = candidates.length - HINT_CANDIDATES;
+  const text = [lead, others > 0 ? `${named} and ${others} more` : named].filter(Boolean).join(" ");
+  if (note) return text ? `${text}. ${note}` : note;
+  return text || null;
 }
 
 /**

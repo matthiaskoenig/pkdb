@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { SourceLocation, TableResponse, TargetMatch, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   columnName,
+  HEADER_LINE,
   issueCells,
   itemsWithoutRows,
+  lineIssues,
   rawTable,
   ROW,
   targetLines,
@@ -131,13 +133,17 @@ describe("itemsWithoutRows", () => {
 });
 
 describe("issueCells", () => {
-  it("maps the issues of the file to their line and column, errors before warnings", () => {
+  it("maps the issues of the file to their line and column, with the worst severity and the issues in their order", () => {
+    const number = issue("invalid_number", { file: "outputs_Tab2.tsv", row: 3, header: "mean", column: "D" }, "warning");
+    const missing = issue("missing_value", { file: "outputs_Tab2.tsv", row: 3, header: "mean", column: "D" });
+    const term = issue("unknown_term", { file: "outputs_Tab2.tsv", row: 4, header: "label" }, "warning");
+    const duplicate = issue("duplicate_row", { file: "outputs_Tab2.tsv", row: 2 });
     const cells = issueCells(
       [
-        issue("invalid_number", { file: "outputs_Tab2.tsv", row: 3, header: "mean", column: "D" }, "warning"),
-        issue("missing_value", { file: "outputs_Tab2.tsv", row: 3, header: "mean", column: "D" }),
-        issue("unknown_term", { file: "outputs_Tab2.tsv", row: 4, header: "label" }, "warning"),
-        issue("duplicate_row", { file: "outputs_Tab2.tsv", row: 2 }),
+        number,
+        missing,
+        term,
+        duplicate,
         // Other files, the whole file and the workbook are not cells of the table.
         issue("unknown_term", { file: "subjects.tsv", row: 3, header: "mean" }),
         issue("missing_image", { file: "outputs_Tab2.tsv" }),
@@ -147,19 +153,31 @@ describe("issueCells", () => {
       "outputs_Tab2.tsv",
     );
     expect([...cells.keys()]).toEqual([3, 4, 2]);
-    expect(cells.get(3)?.get("mean")).toEqual({
-      severity: "error",
-      messages: ["invalid_number message", "missing_value message"],
-    });
-    expect(cells.get(4)?.get("label")).toEqual({ severity: "warning", messages: ["unknown_term message"] });
+    expect(cells.get(3)?.get("mean")).toEqual({ severity: "error", issues: [number, missing] });
+    expect(cells.get(4)?.get("label")).toEqual({ severity: "warning", issues: [term] });
     // An issue of a whole row has no column.
-    expect(cells.get(2)?.get(ROW)).toEqual({ severity: "error", messages: ["duplicate_row message"] });
+    expect(cells.get(2)?.get(ROW)).toEqual({ severity: "error", issues: [duplicate] });
   });
 
   it("names the cells of a raw table by their column letter", () => {
-    const issues = [issue("invalid_encoding", { file: "Example_Tab2.tsv", row: 2, column: "C" })];
-    const cells = issueCells(issues, "Example_Tab2.tsv");
-    expect(cells.get(2)?.get("C")?.messages).toEqual(["invalid_encoding message"]);
+    const encoding = issue("invalid_encoding", { file: "Example_Tab2.tsv", row: 2, column: "C" });
+    expect(issueCells([encoding], "Example_Tab2.tsv").get(2)?.get("C")?.issues).toEqual([encoding]);
+  });
+
+  it("keeps the issues of the header of a table at its header line", () => {
+    const header = issue("unknown_column", { file: "outputs_Tab2.tsv", row: HEADER_LINE, header: "dose" });
+    expect(issueCells([header], "outputs_Tab2.tsv").get(HEADER_LINE)?.get("dose")?.issues).toEqual([header]);
+  });
+});
+
+describe("lineIssues", () => {
+  it("gathers every issue of a line: of its cells and of the whole row", () => {
+    const mean = issue("missing_value", { file: "outputs_Tab2.tsv", row: 3, header: "mean" });
+    const row = issue("duplicate_row", { file: "outputs_Tab2.tsv", row: 3 }, "warning");
+    const other = issue("unknown_term", { file: "outputs_Tab2.tsv", row: 4, header: "label" });
+    const cells = issueCells([mean, row, other], "outputs_Tab2.tsv");
+    expect(lineIssues(cells, 3)).toEqual([mean, row]);
+    expect(lineIssues(cells, 5)).toEqual([]);
   });
 });
 

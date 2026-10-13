@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
 import type { Problem } from "../api/types";
-import { acknowledgement, location, locationKey, SEVERITY_LABELS, suggestionView, tableQuery } from "../problems";
+import { acknowledgement, location, locationKey, SEVERITY_ICONS, SEVERITY_LABELS, suggestionView, tableQuery } from "../problems";
 import { sectionRoute } from "../study";
 
 /**
@@ -54,7 +54,7 @@ const describedBy = computed(() =>
         size="small"
         variant="tonal"
         :color="issue.severity"
-        :prepend-icon="issue.severity === 'error' ? 'fas fa-circle-xmark' : 'fas fa-triangle-exclamation'"
+        :prepend-icon="SEVERITY_ICONS[issue.severity]"
         class="status-chip problem-severity"
       >
         {{ SEVERITY_LABELS[issue.severity] }}
