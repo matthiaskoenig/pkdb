@@ -3,8 +3,8 @@
 from sqlalchemy import text
 
 # PostgreSQL advisory locks belong to the whole database. Combining the key with
-# the schema keeps the locks of different schemas apart, such as those of the
-# isolated schemas of parallel tests; within one schema they behave as before.
+# the schema keeps the locks of different schemas apart; within one schema they
+# behave as before.
 SCHEMA_KEY = "hashtextextended(current_schema() || ':' || CAST(:key AS text), 0)"
 
 

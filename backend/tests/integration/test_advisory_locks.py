@@ -9,7 +9,7 @@ from pkdb_server.db.locks import advisory_xact_lock
 
 
 def test_advisory_locks_of_two_schemas_do_not_block_each_other(session_factory):
-    """Parallel tests share one database with a schema each.
+    """Two schemas of one database keep their advisory locks apart.
 
     While a vocabulary bootstrap in another schema holds the exclusive vocabulary
     lock, a publication here takes its shared lock; in the same schema the

@@ -10,6 +10,12 @@ from pkdb_server.app import SCHEMA_REVISION
 from pkdb_server.db.models import Base
 
 
+@pytest.fixture
+def session_factory(fresh_session_factory):
+    """The tests of the migrations migrate an empty database, not a copy of the template."""
+    return fresh_session_factory
+
+
 def alembic_config(session_factory):
     config = Config(str(Path(__file__).parents[2] / "alembic.ini"))
     config.set_main_option(

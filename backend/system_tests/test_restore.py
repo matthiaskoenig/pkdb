@@ -32,7 +32,6 @@ def test_database_and_attachment_restore_preserves_science_and_permissions(
     original = read_study(published.sid, actor, session_factory)
     url = session_factory.kw["bind"].url
     with session_factory() as session:
-        schema = session.scalar(text("SELECT current_schema()"))
         file_id = session.scalar(select(StoredFile.id))
     environment = {**os.environ, "PGUSER": url.username, "PGPASSWORD": url.password}
     execute = ["docker", "exec", "--env", "PGUSER", "--env", "PGPASSWORD", container]
@@ -46,8 +45,9 @@ def test_database_and_attachment_restore_preserves_science_and_permissions(
                 "--format=custom",
                 "--no-owner",
                 "--no-privileges",
+                # the database of the test holds only its data, so all of it is
+                # dumped, as the backup of a deployment is
                 "--dbname=" + url.database,
-                "--schema=" + schema,
             ],
             env=environment,
             stdout=handle,
