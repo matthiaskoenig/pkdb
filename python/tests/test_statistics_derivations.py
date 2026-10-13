@@ -612,10 +612,16 @@ def test_near_gsd_1_the_digits_that_differ_show():
         Statistics(sd=1e300, se=1e-300),
         # An error bar at the mean implies sd 0: there is no ratio.
         Statistics(mean=1.5, sd=0.5, error_bar=1.5, error_type="se"),
+        # The counts 10000 to 10019 all fit: the cap must not make one unique.
+        Statistics(sd=100.148, se=1.001),
+        Statistics(mean=10, error_bar=11, error_type="se", sd=199.993),
+        # A negative spread has no count.
+        Statistics(sd=-0.08, se=0.1),
+        Statistics(sd=4.99995, se=-0.1),
     ],
 )
 def test_no_agreeing_count_outside_2_to_10000_or_without_a_ratio(statistics):
-    result = inconsistent_statistics(statistics, 4)
+    result = inconsistent_statistics(statistics, 9)
     assert result is not None
     assert result.agreeing_count is None
     assert "they agree" not in result.message

@@ -11,6 +11,7 @@ family. A digitized error bar (error_bar with error_type) completes the missing
 field of its type.
 """
 
+import itertools
 import math
 from dataclasses import dataclass
 from decimal import Decimal
@@ -321,13 +322,16 @@ def _agreeing_count(left: _Implied, right: _Implied, count: int | None) -> int |
     distance of an error bar from the mean as its se. A count agrees when the
     two values differ by at most the sum of their rounding uncertainties, as
     values derived from each other with that count do. That bounds sqrt(n) to
-    an interval; the whole counts in it, in AGREEING_COUNTS and other than
+    an interval; the whole counts in it, other than
     `count`, are the candidates. A count is named only when exactly one
-    remains: with several, any of them could be the one the curator used.
+    remains and lies in AGREEING_COUNTS: with several, any of them could be
+    the one the curator used. Negative spreads have no count.
     """
     if count is None or left.needs_count == right.needs_count:
         return None
     scaled, fixed = (left, right) if left.needs_count else (right, left)
+    if scaled.value < 0 or fixed.value < 0:
+        return None
     # The value and rounding uncertainty of the scaled side per sqrt(count).
     root = math.sqrt(count)
     value, uncertainty = scaled.value / root, scaled.uncertainty / root
@@ -338,14 +342,19 @@ def _agreeing_count(left: _Implied, right: _Implied, count: int | None) -> int |
         high = (fixed.value + fixed_uncertainty) / (value - uncertainty)
     else:
         high = math.inf
-    if not math.isfinite(low) or low * low > AGREEING_COUNTS.stop:
+    if not math.isfinite(low * low):
         return None
     first = max(math.ceil(low * low), AGREEING_COUNTS.start)
-    last = AGREEING_COUNTS.stop - 1
-    if high * high < last:
-        last = math.floor(high * high)
-    fitting = [n for n in islice(range(first, last + 1), 3) if n != count]
-    return fitting[0] if len(fitting) == 1 else None
+    # Unbounded above, so that a range running past AGREEING_COUNTS is not unique.
+    numbers = (
+        range(first, math.floor(high * high) + 1)
+        if math.isfinite(high * high)
+        else itertools.count(first)
+    )
+    fitting = [n for n in islice(numbers, 3) if n != count]
+    if len(fitting) == 1 and fitting[0] in AGREEING_COUNTS:
+        return fitting[0]
+    return None
 
 
 @dataclass(frozen=True)
