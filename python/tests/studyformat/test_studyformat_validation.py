@@ -525,7 +525,7 @@ def test_error_bar_contradictions_are_acknowledged_at_the_error_bar(
     [issue] = validate_folder(folder, sf_vocabulary).issues
     assert issue.message == (
         "se 0.1 with count 2 of all implies sd 0.1414, but error_bar 4.5 (sd) "
-        "implies sd 2; they agree with count 400"
+        "implies sd 2"
     )
     assert issue.source is not None and issue.source.header == "error_bar"
     target = {"file": OUTPUTS, "column": column}

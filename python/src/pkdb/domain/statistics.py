@@ -12,9 +12,9 @@ field of its type.
 """
 
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from decimal import Decimal
-from itertools import combinations
+from itertools import combinations, islice
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -201,6 +201,13 @@ def _text(value: float) -> str:
     return f"{float(f'{value:.4g}'):.15g}"
 
 
+def _gsd_text(value: float) -> str:
+    """A gsd with 4 significant digits; near 1 those of gsd - 1, which differ."""
+    if 1 <= value < 1.1:
+        return f"{1 + float(f'{value - 1:.4g}'):.15g}"
+    return _text(value)
+
+
 @dataclass(frozen=True)
 class _Implied:
     """The spread one reported field implies, with its rounding uncertainty."""
@@ -302,40 +309,43 @@ def _disagree(left: _Implied, right: _Implied) -> bool:
     )
 
 
-def _within_rounding(left: _Implied, right: _Implied) -> bool:
-    """Whether two implied spreads agree within the rounding of their digits."""
-    return abs(left.value - right.value) <= left.uncertainty + right.uncertainty
+# The slack that floating-point error of derived values (error_bar - mean) gets.
+_FLOAT_SLACK = 1e-12
 
 
 def _agreeing_count(left: _Implied, right: _Implied, count: int | None) -> int | None:
-    """The whole count other than `count` with which a pair of spreads agrees, or None.
+    """The only whole count with which a pair of spreads agrees, or None.
 
     Only a pair of one value that needs the count (se, an error bar of type se)
-    and one that does not has such a count: n = (sd / se)^2, with the distance
-    of an error bar from the mean as its se. The whole number nearest to n
-    counts when it lies in AGREEING_COUNTS, differs from `count` and makes the
-    two values agree within the rounding of their reported digits, as values
-    derived from each other with that count do. The 2 percent of
-    RELATIVE_TOLERANCE would admit a whole count for every n above 12.5.
+    and one that does not has such a count: sd = se * sqrt(n), with the
+    distance of an error bar from the mean as its se. A count agrees when the
+    two values differ by at most the sum of their rounding uncertainties, as
+    values derived from each other with that count do. That bounds sqrt(n) to
+    an interval; the whole counts in it, in AGREEING_COUNTS and other than
+    `count`, are the candidates. A count is named only when exactly one
+    remains: with several, any of them could be the one the curator used.
     """
     if count is None or left.needs_count == right.needs_count:
         return None
     scaled, fixed = (left, right) if left.needs_count else (right, left)
-    if scaled.value == 0:
+    # The value and rounding uncertainty of the scaled side per sqrt(count).
+    root = math.sqrt(count)
+    value, uncertainty = scaled.value / root, scaled.uncertainty / root
+    slack = _FLOAT_SLACK * max(abs(fixed.value), abs(scaled.value))
+    fixed_uncertainty = fixed.uncertainty + slack
+    low = max(fixed.value - fixed_uncertainty, 0.0) / (value + uncertainty)
+    if value > uncertainty:
+        high = (fixed.value + fixed_uncertainty) / (value - uncertainty)
+    else:
+        high = math.inf
+    if not math.isfinite(low) or low * low > AGREEING_COUNTS.stop:
         return None
-    ratio = fixed.value / scaled.value
-    # A product, not a power: a huge ratio gives inf instead of an OverflowError.
-    exact = count * ratio * ratio
-    if not math.isfinite(exact):
-        return None
-    whole = round(exact)
-    if whole == count or whole not in AGREEING_COUNTS:
-        return None
-    factor = math.sqrt(whole / count)
-    candidate = replace(
-        scaled, value=scaled.value * factor, uncertainty=scaled.uncertainty * factor
-    )
-    return whole if _within_rounding(fixed, candidate) else None
+    first = max(math.ceil(low * low), AGREEING_COUNTS.start)
+    last = AGREEING_COUNTS.stop - 1
+    if high * high < last:
+        last = math.floor(high * high)
+    fitting = [n for n in islice(range(first, last + 1), 3) if n != count]
+    return fitting[0] if len(fitting) == 1 else None
 
 
 @dataclass(frozen=True)
@@ -419,9 +429,10 @@ def inconsistent_statistics(
         geometric = implied[field].family == "geometric"
         spread = "gsd" if geometric else "sd"
         if field == spread:
-            return f"{spread} is {_text(implied[field].reported)}"
+            reported = implied[field].reported
+            return f"{spread} is {(_gsd_text if geometric else _text)(reported)}"
         value = implied[field].value
-        shown = _text(math.exp(value) if geometric else value)
+        shown = _gsd_text(math.exp(value)) if geometric else _text(value)
         counted = with_count if implied[field].needs_count else ""
         return f"{implied[field].label}{counted} implies {spread} {shown}"
 
