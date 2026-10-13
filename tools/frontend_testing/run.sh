@@ -6,6 +6,7 @@ compose=(docker compose -p pkdb-frontend-test -f "$PWD/compose.frontend-test.yam
 # CI names the backend image that the job built itself in PKDB_TEST_IMAGE;
 # without it the backend is built from this checkout.
 if [[ -n "${PKDB_TEST_IMAGE:-}" ]]; then
+  echo "frontend harness: using the backend image $PKDB_TEST_IMAGE (PKDB_TEST_IMAGE)" >&2
   # With --no-build, compose would try to pull a missing image from a registry.
   if ! docker image inspect "$PKDB_TEST_IMAGE" > /dev/null 2>&1; then
     echo "The backend image $PKDB_TEST_IMAGE of PKDB_TEST_IMAGE does not exist." \
@@ -14,6 +15,7 @@ if [[ -n "${PKDB_TEST_IMAGE:-}" ]]; then
   fi
   build=--no-build
 else
+  echo "frontend harness: building the backend from this checkout" >&2
   build=--build
 fi
 cleanup() { "${compose[@]}" down --volumes --remove-orphans; }

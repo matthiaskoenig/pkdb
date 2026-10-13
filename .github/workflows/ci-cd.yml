@@ -15,14 +15,16 @@ concurrency:
   cancel-in-progress: true
 env:
   # The jobs server, compose and frontend-e2e each build the backend image from the
-  # layer cache that server writes, with this Python, and start it under this tag;
-  # the id of the run in the tag makes sure that they never start an older image.
+  # layer cache that server writes, with this Python. server and frontend-e2e start it
+  # under this tag (compose under pkdb-local:latest, the name in compose.yaml); the id
+  # of the run in the tag makes sure that they never start an older image.
   PKDB_IMAGE_PYTHON: "3.14"
   PKDB_BACKEND_IMAGE: pkdb-ci-backend:run-${{ github.run_id }}
 jobs:
   changes:
-    # A change of documentation only skips the test jobs, see scripts/ci_changes.py;
-    # release tags, manual runs and anything the script cannot tell count as code.
+    # A pull request of documentation only skips the test jobs, see scripts/ci_changes.py;
+    # every push, release tag and manual run, and anything the script cannot tell,
+    # count as code.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -37,8 +39,7 @@ jobs:
         id: classify
         env:
           EVENT: ${{ github.event_name }}
-          BEFORE: ${{ github.event.before }}
-        run: python3 scripts/ci_changes.py --event "$EVENT" --ref "$GITHUB_REF" --before "$BEFORE" --output "$GITHUB_OUTPUT"
+        run: python3 scripts/ci_changes.py --event "$EVENT" --ref "$GITHUB_REF" --output "$GITHUB_OUTPUT"
 
   python:
     needs: changes
@@ -86,6 +87,8 @@ jobs:
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
           # the interpreter is cached with the packages instead of downloaded by every run
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
       - run: uv sync --locked --python ${{ matrix.python }}
       - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
       - run: uv run --python ${{ matrix.python }} --locked alembic check
@@ -154,13 +157,15 @@ jobs:
           # the layers are cached between runs; a release run builds without the
           # cache, which zizmor cannot tell from the expression
           cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend' || '' }}  # zizmor: ignore[cache-poisoning]
-          cache-to: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend,mode=max' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-to: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend,mode=max,ignore-error=true' || '' }}  # zizmor: ignore[cache-poisoning]
       - uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: ${{ env.PKDB_IMAGE_PYTHON }}
           # a release run restores no cache, which zizmor cannot tell from the
           # expression; the released distributions are built without one
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
       - run: uv sync --locked --python "$PKDB_IMAGE_PYTHON"
       - run: uv build --python "$PKDB_IMAGE_PYTHON"
@@ -307,6 +312,8 @@ jobs:
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
           # the interpreter is cached with the packages instead of downloaded by every run
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
       - run: uv sync --python ${{ matrix.python }} --locked --all-extras
       # The workbook round trip tests re-save workbooks with LibreOffice. Its packages
       # are cached per image of the runner, so a run installs them without downloading.
@@ -420,6 +427,8 @@ jobs:
           python-version: ${{ matrix.python }}
           # a release run restores no cache, which zizmor cannot tell from the expression
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
       - run: uv sync --python ${{ matrix.python }} --locked --all-extras
       - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -m slow --durations=5
@@ -444,6 +453,8 @@ jobs:
           python-version: "3.14"
           # a release run restores no cache, which zizmor cannot tell from the expression
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
       - run: uv sync --project ../python --locked --python 3.14
       - uses: actions/setup-node@v7

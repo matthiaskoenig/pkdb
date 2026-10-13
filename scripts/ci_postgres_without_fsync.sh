@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Run the PostgreSQL service of a CI job without durable writes, as compose.test.yaml
-# does: fsync, synchronous_commit and full_page_writes are off. A service of GitHub
+# does: fsync, synchronous_commit and full_page_writes are off, and checkpoints are not logged
+# (every DROP DATABASE forces one). A service of GitHub
 # Actions takes no command line, so ALTER SYSTEM sets them and a reload applies them.
 # Only for a disposable test database, whose data a crash of the server may lose.
 #
@@ -21,6 +22,7 @@ sql() {
 sql -c "ALTER SYSTEM SET fsync = off" \
   -c "ALTER SYSTEM SET synchronous_commit = off" \
   -c "ALTER SYSTEM SET full_page_writes = off" \
+  -c "ALTER SYSTEM SET log_checkpoints = off" \
   -c "SELECT pg_reload_conf()" > /dev/null
 # the server applies the reload shortly after
 query="SELECT current_setting('fsync'), current_setting('synchronous_commit'), current_setting('full_page_writes')"

@@ -30,7 +30,9 @@ from pkdb_server.db.models.vocabulary import VocabularyNode
 from pkdb_server.db.session import make_session_factory
 
 # A run drops the test databases that a killed run left after this many seconds.
-STALE_SECONDS = 6 * 60 * 60
+# Liveness of the owner decides; the window only protects the gap between CREATE
+# DATABASE and the COMMENT that records the owner.
+STALE_SECONDS = 10 * 60
 # The test property with the seconds that copying the template took for a test.
 CLONE_PROPERTY = "database_clone_seconds"
 # The copy times of this run, collected from the reports of every worker.
@@ -99,7 +101,8 @@ class DatabaseServer:
         """Drop the test databases older than STALE_SECONDS and return their names.
 
         A database whose creating run is still alive is never dropped, so a run that
-        lasts longer than STALE_SECONDS keeps its databases. The run is alive while it
+        lasts longer than STALE_SECONDS keeps its databases; a killed run leaves them
+        for STALE_SECONDS at most. The run is alive while it
         keeps a connection named after it open, as DatabaseServer does until close().
         A database without a recorded run counts as left by a killed run.
         """

@@ -1,14 +1,21 @@
-"""Decide whether a change touches code, so that a docs-only change skips the tests.
+"""Decide whether a change touches code, so that a docs-only pull request skips the tests.
 
 The `changes` job of .github/workflows/ci-cd.yml runs it with the python of the
 runner:
 
     python3 scripts/ci_changes.py --event "$EVENT" --ref "$GITHUB_REF" \
-        --before "$BEFORE" --output "$GITHUB_OUTPUT"
+        --output "$GITHUB_OUTPUT"
 
-and the test jobs run when it writes `code=true`. A pull request is compared with
-its base branch, a push with the commit before it. Release tags, manual runs and
-anything it cannot tell count as code, so that a doubt never skips a test.
+and the test jobs run when it writes `code=true`. Only a pull request can skip
+them: it is compared with its base branch. Every push (a merge into develop or
+main included), release tag and manual run counts as code, and so does anything
+it cannot tell, so that a doubt never skips a test. A push must not skip: the
+run of an earlier push may have been cancelled by this one or may have failed,
+and the docs-only diff against it would then hide code that was never tested.
+
+The runner's python may be older than the project's: keep this file compatible
+with Python 3.12. ruff enforces it with the per-file target version in .ruff.toml,
+for example `except A, B:` is Python 3.14 only.
 """
 
 import argparse
@@ -49,14 +56,6 @@ def git(repository: Path, *args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def available(repository: Path, commit: str) -> bool:
-    """Whether `commit` is in the clone, fetched from origin when it is not."""
-    if git(repository, "cat-file", "-e", f"{commit}^{{commit}}").returncode == 0:
-        return True
-    fetched = git(repository, "fetch", "--quiet", "--depth=1", "origin", commit)
-    return fetched.returncode == 0
-
-
 def changed_paths(repository: Path, base: str) -> list[str] | None:
     """The paths that differ between `base` and HEAD, or None if git cannot tell.
 
@@ -69,18 +68,15 @@ def changed_paths(repository: Path, base: str) -> list[str] | None:
     return [path for path in result.stdout.split("\0") if path]
 
 
-def decide(event: str, ref: str, before: str, repository: Path) -> bool:
-    """Whether the change of a run with `event`, `ref` and `before` touches code."""
-    if ref.startswith("refs/tags/"):
+def decide(event: str, ref: str, repository: Path) -> bool:
+    """Whether the change of a run with `event` and `ref` touches code.
+
+    Only a pull request can be docs only, see the docstring of the module.
+    """
+    if event != "pull_request" or ref.startswith("refs/tags/"):
         return True
-    if event == "pull_request":
-        # the merge commit of a pull request has its base branch as first parent
-        base = "HEAD^1"
-    elif event == "push" and before.strip("0") and available(repository, before):
-        base = before
-    else:
-        return True
-    paths = changed_paths(repository, base)
+    # the merge commit of a pull request has its base branch as first parent
+    paths = changed_paths(repository, "HEAD^1")
     return paths is None or code_changed(paths)
 
 
@@ -91,10 +87,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--event", required=True, help="github.event_name")
     parser.add_argument("--ref", required=True, help="github.ref")
-    parser.add_argument("--before", default="", help="github.event.before of a push")
     parser.add_argument("--output", type=Path, help="file to append code=... to")
     args = parser.parse_args(argv)
-    code = decide(args.event, args.ref, args.before, Path.cwd())
+    code = decide(args.event, args.ref, Path.cwd())
     line = f"code={'true' if code else 'false'}"
     print(line)
     if args.output:

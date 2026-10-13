@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 30
   backend:
-    # CI starts the backend image that it built once for the run (PKDB_TEST_IMAGE);
+    # CI starts the backend image that the job built from the layer cache of the job server (PKDB_TEST_IMAGE);
     # without it the image is built from this checkout under its usual name.
     image: ${PKDB_TEST_IMAGE:-pkdb-frontend-test-backend}
     # run.sh passes --no-build when PKDB_TEST_IMAGE is set, so compose then ignores

@@ -1,4 +1,4 @@
-"""A change of documentation only skips the test jobs of continuous integration."""
+"""A pull request of documentation only skips the test jobs of continuous integration."""
 
 import importlib.util
 from pathlib import Path
@@ -78,12 +78,12 @@ def edit_code(root: Path) -> None:
 
 def test_a_pull_request_of_docs_only_skips_the_tests(repository):
     merge_pull_request(repository, edit_docs)
-    assert changes.decide("pull_request", "refs/pull/1/merge", "", repository) is False
+    assert changes.decide("pull_request", "refs/pull/1/merge", repository) is False
 
 
 def test_a_pull_request_of_code_runs_the_tests(repository):
     merge_pull_request(repository, edit_code)
-    assert changes.decide("pull_request", "refs/pull/1/merge", "", repository) is True
+    assert changes.decide("pull_request", "refs/pull/1/merge", repository) is True
 
 
 def test_a_file_moved_from_code_into_docs_is_a_change_of_code(repository):
@@ -91,36 +91,33 @@ def test_a_file_moved_from_code_into_docs_is_a_change_of_code(repository):
         repository,
         lambda root: (root / "python" / "cli.py").rename(root / "docs" / "cli.py"),
     )
-    assert changes.decide("pull_request", "refs/pull/1/merge", "", repository) is True
-
-
-def test_a_push_is_compared_with_the_commit_before_it(repository):
-    before = git(repository, "rev-parse", "HEAD").strip()
-    edit_docs(repository)
-    git(repository, "commit", "-q", "-am", "docs")
-    assert changes.decide("push", "refs/heads/develop", before, repository) is False
-    edit_code(repository)
-    git(repository, "commit", "-q", "-am", "code")
-    assert changes.decide("push", "refs/heads/develop", before, repository) is True
+    assert changes.decide("pull_request", "refs/pull/1/merge", repository) is True
 
 
 @pytest.mark.parametrize(
-    ("event", "ref", "before"),
+    ("event", "ref"),
     [
-        ("push", "refs/tags/v0.13.0", ""),
-        ("workflow_dispatch", "refs/heads/develop", ""),
-        # the first push of a branch has no commit before it
-        ("push", "refs/heads/develop", "0" * 40),
-        # a commit that the clone lacks and cannot fetch
-        ("push", "refs/heads/develop", "1" * 40),
+        # a push of docs only could hide the code of an earlier push that was
+        # cancelled or failed
+        ("push", "refs/heads/develop"),
+        ("push", "refs/heads/main"),
+        ("push", "refs/tags/v0.13.0"),
+        ("pull_request", "refs/tags/v0.13.0"),
+        ("workflow_dispatch", "refs/heads/develop"),
+        ("schedule", "refs/heads/develop"),
     ],
 )
-def test_releases_manual_runs_and_unknown_history_run_the_tests(
-    repository, event, ref, before
+def test_pushes_releases_and_manual_runs_run_the_tests_even_for_docs(
+    repository, event, ref
 ):
     edit_docs(repository)
     git(repository, "commit", "-q", "-am", "docs")
-    assert changes.decide(event, ref, before, repository) is True
+    assert changes.decide(event, ref, repository) is True
+
+
+def test_a_pull_request_that_git_cannot_compare_runs_the_tests(repository):
+    # no merge commit, so HEAD has no first parent
+    assert changes.decide("pull_request", "refs/pull/1/merge", repository) is True
 
 
 def test_the_decision_is_printed_and_appended_to_the_output_file(
