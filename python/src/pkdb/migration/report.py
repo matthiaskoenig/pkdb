@@ -41,6 +41,8 @@ DECISION_HEADINGS = {
     "reference_replaced": "Replaced reference snapshots",
     "reference_resolved": "Resolved missing references",
     "creator_fallback": "Studies without a creator",
+    "table_count_above_group": "Counts of format 1 tables above the group count (not written)",
+    "table_count_invalid": "Counts of format 1 tables that are no whole number (not written)",
 }
 # Rows without any value that the converter dropped: thousands, so migration.md
 # lists them per sheet, and only for studies that replace their format 1 folder.

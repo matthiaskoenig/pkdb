@@ -4,6 +4,7 @@ from datetime import date
 import openpyxl
 import pytest
 from migration_fixtures import (
+    IMAGES,
     SHEETS,
     STUDY,
     tiny_png,
@@ -218,6 +219,43 @@ def test_unreferenced_sheets_are_listed(tmp_path):
         ("unreferenced_sheet", "Fig9"),
         ("unreferenced_sheet", "Tab8"),
     ]
+
+
+def counted(tmp_path, sheets, *, workbook=True):
+    """The twin with a group `all` of 12 and the `count` columns of `sheets`."""
+    group = {**STUDY["groupset"]["groups"][0], "count": 12}
+    study = {**STUDY, "groupset": {"groups": [group]}}
+    return v1_study(tmp_path / "v1", study, sheets, IMAGES, workbook=workbook)
+
+
+def test_counts_above_the_group_count_are_listed(tmp_path):
+    sheets = {
+        "Tab2": [["mean", "sd", "count"], [2.5, 0.5, 13]],
+        "Fig1": [["time", "mean", "count"], [0, 0, 14], [1, 2, 14], [2, 1, 12]],
+    }
+    conversion = convert(counted(tmp_path, sheets), tmp_path)
+    assert [(d.kind, d.detail) for d in conversion.decisions] == [
+        (
+            "table_count_above_group",
+            "outputs_Tab2.tsv: 1 row of all (count 12) with count 13",
+        ),
+        (
+            "table_count_above_group",
+            "timecourses_Fig1.tsv: 2 rows of all (count 12) with count 14",
+        ),
+    ]
+
+
+@pytest.mark.parametrize("workbook", [True, False])
+def test_counts_that_are_no_whole_number_are_listed(tmp_path, workbook):
+    sheets = {**SHEETS, "Tab2": [["mean", "sd", "count"], [2.5, 0.5, "10-12"]]}
+    conversion = convert(counted(tmp_path, sheets, workbook=workbook), tmp_path)
+    row = 3 if workbook else 2
+    assert [(d.kind, d.detail) for d in conversion.decisions] == [
+        ("table_count_invalid", f"Tab2 row {row}: count '10-12' is no whole number")
+    ]
+    output = rows(conversion.folder / "outputs_Tab2.tsv")
+    assert [row["count"] for row in output] == [""]
 
 
 def test_v1_files_are_tables_workbooks_and_json_files_but_reference_json():

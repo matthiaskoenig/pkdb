@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 from collections.abc import Mapping
 from decimal import Decimal
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from pkdb.domain.datasets import STATISTICS_FIELDS
 from pkdb.domain.vocabulary import Vocabulary
@@ -26,6 +27,9 @@ from pkdb.studyformat.relations import SERIES_COLUMNS
 from pkdb.studyformat.tables import TABLES, TEXT_SOURCE, table_file
 from pkdb.studyformat.terms import VALUE_TYPES
 from pkdb.studyformat.text import format_number, render_tsv
+
+if TYPE_CHECKING:
+    from pkdb.migration.counts import TableCounts
 
 Tables = dict[str, list[dict[str, str]]]
 ErrorBars = Mapping[str, tuple[float, str]]
@@ -118,7 +122,7 @@ def timed_measurements(vocabulary: Vocabulary) -> frozenset[str]:
     )
 
 
-def _scatter_outputs(study: CanonicalStudy) -> set[str]:
+def scatter_outputs(study: CanonicalStudy) -> set[str]:
     """The output labels that are scatter dimensions."""
     return {
         dimension.output
@@ -158,7 +162,7 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     too, since a scatter row pairs two outputs.
     """
     rules = vocabulary.measurement_map()
-    scatters = _scatter_outputs(study)
+    scatters = scatter_outputs(study)
     records: list[Observation] = [
         record
         for subject in [*study.groups, *study.individuals]
@@ -596,7 +600,7 @@ def series_arrays(
     outputs. Scatter points are neither. Rows without any value (`dropped`)
     are not written, so they are no part of a series.
     """
-    points = _scatter_outputs(study)
+    points = scatter_outputs(study)
     series: dict[tuple[str, str], list[tuple[Measurement, dict[str, str]]]]
     series = defaultdict(list)
     for record in study.measurements:
@@ -668,11 +672,14 @@ def study_tables(
     *,
     images: frozenset[str],
     vocabulary: Vocabulary,
+    counts: TableCounts | None = None,
 ) -> tuple[Tables, list[Decision]]:
     """The format 2 tables of a parsed format 1 study and the decisions to check.
 
     `images` are the sources that have an image in the v1 folder (`image_sources`).
     The `vocabulary` names the measurements that need a value or a time.
+    `counts` are those of the `count` columns of the format 1 tables
+    (`table_counts`).
     """
     decisions: list[Decision] = []
     dropped = valueless(study, vocabulary)
@@ -695,6 +702,8 @@ def study_tables(
     }
     array_files: Counter[str] = Counter()
     labels: Counter[str] = Counter()
+    # Rows by table file, group and count of the format 1 table above the group count.
+    above: Counter[tuple[str, str, int]] = Counter()
     names = _Labels(study)
     for record in study.measurements:
         if record.key in used:
@@ -716,6 +725,11 @@ def study_tables(
                 decisions.append(_dropped(file, record, subject, record.label))
                 continue
             row = _geometric(record, row, decisions)
+            if counts is not None and record.key in counts.written:
+                row["count"] = number(counts.written[record.key])
+            elif counts is not None and record.key in counts.above:
+                assert record.group is not None
+                above[file, record.group, counts.above[record.key]] += 1
             if timecourse:
                 assert record.label is not None
                 row = {**row, "label": names(record.label, file)}
@@ -739,6 +753,15 @@ def study_tables(
             detail=f"{_plural(count, 'output label')} dropped in {file}",
         )
         for file, count in labels.items()
+    ]
+    groups = {group.name: group.count for group in study.groups}
+    decisions += [
+        Decision(
+            kind="table_count_above_group",
+            detail=f"{file}: {_plural(rows, 'row')} of {group} "
+            f"(count {number(groups[group])}) with count {count}",
+        )
+        for (file, group, count), rows in above.items()
     ]
     decisions += names.decisions()
     return {file: rows for file, rows in tables.items() if rows}, decisions

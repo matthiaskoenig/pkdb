@@ -10,6 +10,7 @@ from pydantic import ValidationError
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration.counts import table_counts
 from pkdb.migration.formulas import error_bars
 from pkdb.migration.metadata import review, study_metadata
 from pkdb.migration.model import Decision, NotConverted
@@ -168,9 +169,16 @@ def convert_study(
         raise NotConverted("unreadable", _issues(error.report.issues)) from error
     workbook = v1 / f"{name}.xlsx"
     bars = error_bars(workbook, study) if workbook.exists() else {}
+    counts = table_counts(bundle, study)
     tables, decisions = study_tables(
-        study, name, bars, images=image_sources(v1, name), vocabulary=vocabulary
+        study,
+        name,
+        bars,
+        images=image_sources(v1, name),
+        vocabulary=vocabulary,
+        counts=counts,
     )
+    decisions += counts.invalid
     if "subjects.tsv" not in tables:
         raise NotConverted("no_subjects", "The study has no groups or individuals")
     release = registry.release(
