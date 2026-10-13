@@ -90,7 +90,10 @@ def test_inconsistent_sd_and_se_are_reported_as_a_warning(valid_study, vocabular
     assert issue.severity == "warning"
     assert issue.category == "scientific"
     assert issue.stage == "validate"
-    assert issue.message == "sd is 1.2, but se 1.1 with count 4 of all implies sd 2.2"
+    assert (
+        issue.message
+        == "sd is 1.2, but se 1.1 with count 4 of the group all implies sd 2.2"
+    )
     assert issue.context == {
         "reported": {"sd": 1.2, "se": 1.1},
         "implied_sd": {"sd": 1.2, "se": 2.2},

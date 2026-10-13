@@ -484,7 +484,7 @@ def test_a_claim_that_needs_the_count_names_the_count_and_its_subjects():
     result = inconsistent_statistics(BURCKHARDT_0_H, 9, "enalapril")
     assert result is not None
     assert result.message == (
-        "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of enalapril "
+        "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of the group enalapril "
         "implies sd 0.4934; they agree with count 5"
     )
     assert result.context == {
@@ -612,6 +612,11 @@ def test_near_gsd_1_the_digits_that_differ_show():
         Statistics(sd=1e300, se=1e-300),
         # An error bar at the mean implies sd 0: there is no ratio.
         Statistics(mean=1.5, sd=0.5, error_bar=1.5, error_type="se"),
+        # the counts 1 and 2 fit: the floor must not make one unique
+        Statistics(sd=0.35, se=0.3),
+        Statistics(sd=0.5, se=0.4),
+        Statistics(sd=0.6, se=0.5),
+        Statistics(sd=3.5, se=3),
         # The counts 10000 to 10019 all fit: the cap must not make one unique.
         Statistics(sd=100.148, se=1.001),
         Statistics(mean=10, error_bar=11, error_type="se", sd=199.993),

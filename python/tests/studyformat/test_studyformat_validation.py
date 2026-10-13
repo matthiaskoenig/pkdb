@@ -487,8 +487,8 @@ def test_postprocessing_issues_are_located_in_the_table(
         "scientific",
     )
     assert issue.message == (
-        "sd is 0.5, but se 1 with count 2 of all implies sd 1.414; "
-        "se 1 with count 2 of all implies sd 1.414, but cv 20% implies sd 0.5"
+        "sd is 0.5, but se 1 with count 2 of the group all implies sd 1.414; "
+        "se 1 with count 2 of the group all implies sd 1.414, but cv 20% implies sd 0.5"
     )
     assert issue.source is not None
     # The warning points to the statistic that disagrees with the most others.
@@ -524,7 +524,7 @@ def test_error_bar_contradictions_are_acknowledged_at_the_error_bar(
     folder = inconsistent_study(valid_study, tsv, **cells)
     [issue] = validate_folder(folder, sf_vocabulary).issues
     assert issue.message == (
-        "se 0.1 with count 2 of all implies sd 0.1414, but error_bar 4.5 (sd) "
+        "se 0.1 with count 2 of the group all implies sd 0.1414, but error_bar 4.5 (sd) "
         "implies sd 2"
     )
     assert issue.source is not None and issue.source.header == "error_bar"
@@ -551,7 +551,7 @@ DERIVED_WITH_COUNT_5 = {
     [
         pytest.param(
             {},
-            "sd is 0.3677, but error_bar 0.5452 (se) with count 2 of all "
+            "sd is 0.3677, but error_bar 0.5452 (se) with count 2 of the group all "
             "implies sd 0.2326; they agree with count 5",
             2,
             "all",

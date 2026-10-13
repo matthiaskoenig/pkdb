@@ -15,7 +15,6 @@ import itertools
 import math
 from dataclasses import dataclass
 from decimal import Decimal
-from itertools import combinations, islice
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -344,14 +343,14 @@ def _agreeing_count(left: _Implied, right: _Implied, count: int | None) -> int |
         high = math.inf
     if not math.isfinite(low * low):
         return None
-    first = max(math.ceil(low * low), AGREEING_COUNTS.start)
+    first = max(math.ceil(low * low), 1)
     # Unbounded above, so that a range running past AGREEING_COUNTS is not unique.
     numbers = (
         range(first, math.floor(high * high) + 1)
         if math.isfinite(high * high)
         else itertools.count(first)
     )
-    fitting = [n for n in islice(numbers, 3) if n != count]
+    fitting = [n for n in itertools.islice(numbers, 3) if n != count]
     if len(fitting) == 1 and fitting[0] in AGREEING_COUNTS:
         return fitting[0]
     return None
@@ -410,7 +409,7 @@ def inconsistent_statistics(
 
     The count of the record comes before `count`. `count_source` names where
     the used count comes from, as the message shows it: the subjects, for
-    example "enalapril", or ROW_COUNT for a count of the record itself.
+    example "enalapril" (named in the message as the group), or ROW_COUNT for a count of the record itself.
     """
     used = _effective_count(statistics, count)
     source = count_source if used is not None else None
@@ -418,7 +417,7 @@ def inconsistent_statistics(
     fields = sorted(implied, key=_ORDER.index)
     pairs = [
         (left, right)
-        for left, right in combinations(fields, 2)
+        for left, right in itertools.combinations(fields, 2)
         if implied[left].family == implied[right].family
         and _disagree(implied[left], implied[right])
     ]
@@ -428,7 +427,11 @@ def inconsistent_statistics(
     most = max(disagreements.values())
     tied = [field for field in fields if disagreements[field] == most]
     outlier = "error_bar" if "error_bar" in tied else tied[0]
-    with_count = f" with count {used}" + (f" of {source}" if source else "")
+    with_count = f" with count {used}"
+    if source:
+        with_count += (
+            f" of {source}" if source == ROW_COUNT else f" of the group {source}"
+        )
     agreeing = [
         _agreeing_count(implied[left], implied[right], used) for left, right in pairs
     ]
