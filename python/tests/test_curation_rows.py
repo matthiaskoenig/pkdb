@@ -577,11 +577,28 @@ def test_requests_and_the_state_read_no_table(two_substances, monkeypatch, tmp_p
     engine, folder = two_substances
     no_reads(monkeypatch)
     name_in_interventions(folder, "drug", "codeine")
-    # The scan of an app write and a workspace switch, and the state, read no table.
+    # The scan of an app write and a workspace switch, and the state, read no table:
+    # they serve what was read before until the watcher reads the changed tables.
     engine.scan()
     engine.select_workspace(str(tmp_path))
     assert substances(engine) == {
-        "caffeine/Example": ["caffeine"],
+        "caffeine/Example": ["caffeine", "drug"],
+        "drug/Other": ["drug"],
+    }
+
+
+def test_selecting_the_workspace_again_reads_only_the_tables_that_changed(
+    two_substances, make_study, valid_files, monkeypatch, tmp_path
+):
+    engine, folder = two_substances
+    make_study(valid_files, name="Third", substance="codeine")
+    read = counted_reads(monkeypatch)
+    engine.select_workspace(str(tmp_path))
+    engine._read_substances()
+    assert read == ["Third"]
+    assert substances(engine) == {
+        "caffeine/Example": ["caffeine", "drug"],
+        "codeine/Third": ["codeine", "drug"],
         "drug/Other": ["drug"],
     }
 
@@ -629,15 +646,30 @@ def test_a_substance_folder_added_later_counts_without_reading_the_tables_again(
         engine.close()
 
 
-def test_the_watcher_reads_the_tables_before_its_first_wait(
-    tmp_path, tmp_path_factory, make_study, valid_files
+def test_the_first_watcher_tick_reads_every_table_after_scheduling(
+    tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
 ):
     make_study(valid_files)
     make_study(valid_files, name="Other", substance="drug")
     engine = start_engine(tmp_path, tmp_path_factory.mktemp("state"))
     try:
+        events = counted_reads(monkeypatch)
+        schedule_changes = engine.schedule_changes
+
+        def scheduled():
+            events.append("scheduled")
+            schedule_changes()
+
+        monkeypatch.setattr(engine, "schedule_changes", scheduled)
+        # Nothing happens before the first wait, so a start without saved substances
+        # schedules the validation of the studies before it reads their tables.
         engine.stop = Waits(0)
         engine._watch()
+        assert events == []
+        engine.stop = Waits(1)
+        engine._watch()
+        assert events[0] == "scheduled"
+        assert sorted(events[1:]) == ["Example", "Other"]
         assert substances(engine) == {
             "caffeine/Example": ["caffeine", "drug"],
             "drug/Other": ["drug"],
@@ -686,7 +718,11 @@ def test_a_read_during_a_workspace_switch_stores_nothing(
     engine._read_substances()
     assert old["_named_substances"] == ("drug",)
     assert old["_tables"] != old["_table_signature"]
-    assert all(row["_tables"] is None for row in engine.studies.values())
+    # The rows of the switch have what was saved, not what the read found.
+    new = engine.studies["caffeine/Example"]
+    assert new is not old
+    assert new["_named_substances"] == ("drug",)
+    assert new["_tables"] != new["_table_signature"]
     assert saved_substances(engine).read_bytes() == saved
 
 
@@ -797,6 +833,15 @@ def test_a_read_stops_when_the_engine_stops(two_substances, monkeypatch):
     engine.stop.set()
     engine._read_substances()
     assert read == []
+
+
+def test_saved_substances_keep_folder_names_that_are_no_text(tmp_path):
+    # A path on Linux with a byte that is no UTF-8, as Python decodes it.
+    folder = os.fsdecode(b"/data/studies/caf\xe9/Example")
+    read = {folder: ((("interventions.tsv", 1, 2),), ("caffeine", "drug"))}
+    path = tmp_path / "substances.json"
+    workspace_module.save_substances(path, read)
+    assert workspace_module.load_substances(path) == read
 
 
 def test_the_table_signature_has_the_tables_whose_substances_count():

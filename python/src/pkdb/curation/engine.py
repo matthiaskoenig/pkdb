@@ -182,9 +182,6 @@ class CurationEngine(
             # A removed or unmounted workspace must not prevent startup.
             remembered = None
         self.select_workspace(path or remembered or default_workspace)
-        # The substances that the tables name, as the watcher read them before; it reads
-        # the tables that changed since, so that the start waits for no table.
-        self._load_substances()
         if start:
             for target in (self._watch, self._worker, self._connect):
                 thread = threading.Thread(target=target, daemon=True)

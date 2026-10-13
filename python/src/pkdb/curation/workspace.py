@@ -135,10 +135,9 @@ def save_substances(path, read):
         folder: {"tables": tables, "substances": names}
         for folder, (tables, names) in read.items()
     }
+    # ASCII: a folder name with a byte that is no UTF-8 is escaped, not refused.
     text = json.dumps(
-        {"version": __version__, "studies": studies},
-        ensure_ascii=False,
-        separators=(",", ":"),
+        {"version": __version__, "studies": studies}, separators=(",", ":")
     )
     atomic_text(path, text + "\n")
 
@@ -162,6 +161,9 @@ class WorkspaceMixin(EngineState):
                 self.studies = {}
             self._formats = {}
             self._scan(initial=True)
+            # What the watcher read of this workspace before, so that neither the start
+            # nor a switch waits for a table; the watcher reads the tables that changed.
+            self._load_substances()
         with self.lock:
             self.recent_workspaces = [
                 str(root),
@@ -424,8 +426,8 @@ class WorkspaceMixin(EngineState):
     def _load_substances(self):
         """Serve the substances that the watcher read before, without reading a table.
 
-        Called at the start of the engine. A study whose tables changed since keeps them
-        until the watcher reads its tables again.
+        Called after the scan of a workspace switch, as at the start of the engine. A study
+        whose tables changed since keeps them until the watcher reads its tables again.
         """
         saved = load_substances(self.state_dir / SUBSTANCES_FILE)
         with self.lock:
@@ -610,21 +612,17 @@ class WorkspaceMixin(EngineState):
         return result
 
     def _watch(self):
-        # The first pass reads the tables that changed since the substances were saved,
-        # right away: the start of the engine scanned the workspace and read no table.
-        self._watch_tick(first=True)
         while not self.stop.wait(1):
             self._watch_tick()
 
-    def _watch_tick(self, first: bool = False) -> None:
-        """Run one pass of the watcher; a failure is recorded and never raised. The
-        `first` pass only reads the substances."""
+    def _watch_tick(self) -> None:
+        """Run one pass of the watcher; a failure is recorded and never raised."""
         try:
-            if not first:
-                self.scan()
-                self.schedule_changes()
-                self._check_workbooks()
-            # Last, so that reading the tables of many studies delays no job.
+            self.scan()
+            self.schedule_changes()
+            self._check_workbooks()
+            # Last, so that reading the tables of many studies, as after a start without
+            # saved substances, delays no job.
             self._read_substances()
         except Exception as error:
             # The watcher retries every second and must outlive any failure.
