@@ -691,7 +691,7 @@ for (const theme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme: theme });
     await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
     const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
-    await expect(rows.getByRole("rowheader", { name: "19", exact: true })).toBeVisible();
+    await expect(rows.getByRole("rowheader", { name: "18", exact: true })).toBeVisible();
     /** The color beside the line column in the rows, which the shadow darkens once the rows scrolled sideways. */
     const besideLine: [number, number, number][] = [];
     for (const scrollLeft of [0, 200]) {
@@ -876,21 +876,21 @@ test("the tooltip of an outlined cell stays while the pointer moves down onto it
   app,
   page,
 }) => {
-  // The row below the outlined 1.24 of line 6 has a problem in its mean too, as in a table with a
+  // The row below the outlined 1.24 of line 5 has a problem in its mean too, as in a table with a
   // problem in every row.
   await addProblems(page, [
-    { code: "below", severity: "error", message: "A problem of the row below.", source: { file: TABLE, row: 7, header: "mean" } },
+    { code: "below", severity: "error", message: "A problem of the row below.", source: { file: TABLE, row: 6, header: "mean" } },
   ]);
   await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
   const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
-  const upper = gridCell(page, 6, "1.24");
+  const upper = gridCell(page, 5, "1.24");
   const row = (line: number) => rows.getByRole("row").filter({ has: page.getByRole("rowheader", { name: String(line), exact: true }) });
   await expect(upper).toHaveClass(/grid-cell--warning/);
-  await expect(row(7).locator("td.grid-cell--error")).toHaveCount(1);
+  await expect(row(6).locator("td.grid-cell--error")).toHaveCount(1);
   await upper.scrollIntoViewIfNeeded();
   const tooltip = page.locator(".problem-tooltip");
 
-  for (const cell of [upper, row(6).locator("th")]) {
+  for (const cell of [upper, row(5).locator("th")]) {
     await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
     await expect(tooltip).toBeHidden();
     const at = (await cell.boundingBox())!;
