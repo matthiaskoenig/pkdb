@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 # Fixed, distinct project and database; never operate on the default stack.
 compose=(docker compose -p pkdb-frontend-test -f "$PWD/compose.frontend-test.yaml")
-# CI names the backend image that it built once for the run in PKDB_TEST_IMAGE;
+# CI names the backend image that the job built itself in PKDB_TEST_IMAGE;
 # without it the backend is built from this checkout.
 if [[ -n "${PKDB_TEST_IMAGE:-}" ]]; then
   # With --no-build, compose would try to pull a missing image from a registry.
