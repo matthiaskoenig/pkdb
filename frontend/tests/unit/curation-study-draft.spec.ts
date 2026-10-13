@@ -3,7 +3,7 @@ import { effectScope, nextTick, shallowRef, type EffectScope } from "vue";
 import { ApiError } from "../../src/curation-app/api/client";
 import type { MetadataWrite, StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
 import { useStudyDraft, type StudyDraft } from "../../src/curation-app/composables/useStudyDraft";
-import { toForm } from "../../src/curation-app/metadata";
+import { changedFields, toForm } from "../../src/curation-app/metadata";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import { fullStudyMetadata, NOTE_KINDS, studyDetail } from "./curation-fixtures";
 
@@ -91,6 +91,15 @@ describe("useStudyDraft", () => {
     expect(draft.dirty.value).toBe(true);
     expect(draft.barShown.value).toBe(true);
     expect(draft.canSave.value).toBe(true);
+  });
+
+  it("lists the changed fields, as changedFields names them", async () => {
+    const draft = await draftOf();
+    expect(draft.changed.value).toEqual([]);
+    draft.form.value!.creator = "janekg";
+    draft.form.value!.notes.outputs.descriptions.push("More.");
+    expect(draft.changed.value).toEqual(changedFields(draft.base.value!, draft.form.value!));
+    expect(draft.changed.value).toEqual(expect.arrayContaining(["creator", "notes.outputs.descriptions"]));
   });
 
   it("saves over the revision it was read from and keeps the edits made while the save ran", async () => {

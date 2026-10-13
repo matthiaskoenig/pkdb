@@ -64,6 +64,8 @@ export interface StudyDraft {
   /** Whether the app can write study.json: it has a revision to save over. */
   writable: ComputedRef<boolean>;
   dirty: ComputedRef<boolean>;
+  /** The fields with unsaved changes, the keys of `changedFields(base, form)`. */
+  changed: ComputedRef<string[]>;
   /** The sections with unsaved fields, whose tabs the study page marks. */
   unsaved: ComputedRef<Section[]>;
   saving: Readonly<Ref<boolean>>;
@@ -415,6 +417,7 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     base,
     writable,
     dirty,
+    changed,
     unsaved,
     saving,
     canSave,

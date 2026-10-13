@@ -336,6 +336,8 @@ const newFields = computed(() => {
         </VCardItem>
         <VCardText class="metadata-card-body">
           <div class="field-row field-row--radios">
+            <!-- Not DiskField: it needs an options prop, and forwarding the VRadio slot brings back
+                 the forced update. -->
             <VRadioGroup
               v-model="form.licence"
               label="Licence"

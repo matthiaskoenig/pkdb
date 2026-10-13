@@ -11,6 +11,7 @@ import {
   issueMessage,
   issuesByTarget,
   issueTarget,
+  MARK_TEXT,
   markMessages,
   mergeOnReload,
   messagesAt,
@@ -393,7 +394,7 @@ describe("messages", () => {
 
   it("keeps one array per marked field", () => {
     const messages = markMessages(new Map([["licence", "disk" as const]]), new Map());
-    expect(messages.get("licence")).toHaveLength(1);
-    expect(messages.get("licence")).toBe(messages.get("licence"));
+    expect(messages.get("licence")).toEqual([MARK_TEXT.disk]);
+    expect(messages.get("access")).toBeUndefined();
   });
 });

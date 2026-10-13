@@ -1,24 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useChangedFields } from "../../src/curation-app/composables/useChangedFields";
-import {
-  clone,
-  sameField,
-  toForm,
-  type MetadataForm,
-} from "../../src/curation-app/metadata";
+import { clone, sameField, toForm, type MetadataForm } from "../../src/curation-app/metadata";
 import { fullStudyMetadata, NOTE_KINDS } from "./curation-fixtures";
 
 vi.mock("../../src/curation-app/metadata", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../../src/curation-app/metadata")>();
+  const actual = await importOriginal<typeof import("../../src/curation-app/metadata")>();
   return { ...actual, sameField: vi.fn(actual.sameField) };
 });
 
 function setup() {
-  const base = ref<MetadataForm | null>(
-    toForm(fullStudyMetadata(), NOTE_KINDS),
-  );
+  const base = ref<MetadataForm | null>(toForm(fullStudyMetadata(), NOTE_KINDS));
   const form = ref<MetadataForm | null>(clone(base.value!));
   return { base, form, changed: useChangedFields(base, form) };
 }
@@ -44,10 +36,7 @@ describe("useChangedFields", () => {
     expect(changed.value).toEqual(["reference.pmid"]);
     form.value!.reference.pmid = "98";
     expect(changed.value).toEqual(["reference.pmid"]);
-    expect(vi.mocked(sameField).mock.calls.map(([, , key]) => key)).toEqual([
-      "reference.pmid",
-      "reference.pmid",
-    ]);
+    expect(vi.mocked(sameField).mock.calls.map(([, , key]) => key)).toEqual(["reference.pmid", "reference.pmid"]);
   });
 
   it("follows a new base, as after a save, and lists nothing without a form", () => {
