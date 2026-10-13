@@ -2594,3 +2594,17 @@ def test_a_failure_of_open_tables_after_it_answered_goes_to_the_log(api, monkeyp
         f"CalledProcessError: {program} exited with status 3\nlost the display"
     ) in text
     assert "Could not open the tables of caffeine/Example." in text
+
+
+def test_the_state_names_the_substance_folders_of_each_study(
+    api, make_study, valid_files
+):
+    server, engine, folder = api
+    make_study(valid_files, name="Other", substance="drug")
+    engine.scan()
+    status, _, data = request(
+        server, "GET", "/local/state", headers=authenticate(server)
+    )
+    assert status == 200
+    rows = {row["id"]: row["substances"] for row in json.loads(data)["studies"]}
+    assert rows == {"caffeine/Example": ["caffeine", "drug"], "drug/Other": ["drug"]}

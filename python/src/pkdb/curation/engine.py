@@ -35,6 +35,7 @@ from pkdb.curation.workspace import (
 )
 from pkdb.identity import IdentityError
 from pkdb.issues.github import token_from
+from pkdb.studyformat.substances import folder_index, folder_substances
 from pkdb.update import newer
 
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
@@ -178,6 +179,9 @@ class CurationEngine(
             # A removed or unmounted workspace must not prevent startup.
             remembered = None
         self.select_workspace(path or remembered or default_workspace)
+        # Before the server starts, so that the first state finds each study under every
+        # substance folder that its tables name; the watcher reads tables that change.
+        self._read_substances()
         if start:
             for target in (self._watch, self._worker, self._connect):
                 thread = threading.Thread(target=target, daemon=True)
@@ -233,6 +237,8 @@ class CurationEngine(
         except IdentityError as error:
             author = {"user": None, "reason": str(error)}
         with self.lock.reading():
+            # The substance folders of the workspace, by which a study is also found.
+            folders = folder_index(row["substance"] for row in self.studies.values())
             return json.loads(
                 json.dumps(
                     {
@@ -262,6 +268,11 @@ class CurationEngine(
                         "studies": [
                             {
                                 **state_row(row),
+                                # The folder substance, then the other substance folders
+                                # that the tables name, as the watcher last read them.
+                                "substances": folder_substances(
+                                    row["substance"], row["_named_substances"], folders
+                                ),
                                 "issue": self._issue_for(
                                     (row.get("summary") or {}).get("issue")
                                 ),

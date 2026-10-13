@@ -390,3 +390,123 @@ def test_old_state_with_mappings_loads(tmp_path, tmp_path_factory):
         engine.snapshot()
     finally:
         engine.close()
+
+
+@pytest.fixture
+def two_substances(tmp_path, tmp_path_factory, make_study, valid_files):
+    """An engine on caffeine/Example, whose tables name drug, and on drug/Other."""
+    folder = make_study(valid_files)
+    make_study(valid_files, name="Other", substance="drug")
+    engine = module.CurationEngine(
+        tmp_path,
+        state_dir=tmp_path_factory.mktemp("state"),
+        offline=True,
+        start=False,
+    )
+    yield engine, folder
+    engine.close()
+
+
+def substances(engine):
+    return {row["id"]: row["substances"] for row in engine.snapshot()["studies"]}
+
+
+def counted_reads(monkeypatch):
+    """The study folders whose tables `study_substances` reads from now on."""
+    read = []
+    real = workspace_module.study_substances
+
+    def counted(folder):
+        read.append(folder.name)
+        return real(folder)
+
+    monkeypatch.setattr(workspace_module, "study_substances", counted)
+    return read
+
+
+def no_reads(monkeypatch):
+    def refused(folder):
+        raise AssertionError(f"read the tables of {folder}")
+
+    monkeypatch.setattr(workspace_module, "study_substances", refused)
+
+
+def test_the_first_state_has_the_substance_folders_that_the_tables_name(
+    two_substances,
+):
+    engine, folder = two_substances
+    # No validation ran: the start of the engine read the tables.
+    assert not engine.jobs
+    assert substances(engine) == {
+        "caffeine/Example": ["caffeine", "drug"],
+        "drug/Other": ["drug"],
+    }
+
+
+def test_requests_and_the_state_read_no_table(two_substances, monkeypatch, tmp_path):
+    engine, folder = two_substances
+    no_reads(monkeypatch)
+    interventions = folder / "interventions.tsv"
+    text = interventions.read_text(encoding="utf-8")
+    interventions.write_text(
+        text.replace("\tdrug\t", "\tcodeine\t"), encoding="utf-8", newline=""
+    )
+    # The scan of an app write and a workspace switch, and the state, read no table.
+    engine.scan()
+    engine.select_workspace(str(tmp_path))
+    assert substances(engine) == {
+        "caffeine/Example": ["caffeine"],
+        "drug/Other": ["drug"],
+    }
+
+
+def test_the_watcher_reads_only_the_tables_that_changed(
+    two_substances, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    read = counted_reads(monkeypatch)
+    # A save of the metadata changes study.json alone and reads no table.
+    metadata = json.loads((folder / "study.json").read_text(encoding="utf-8"))
+    (folder / "study.json").write_text(
+        dump_json({**metadata, "issue": 7}), encoding="utf-8"
+    )
+    engine.scan()
+    engine._read_substances()
+    assert read == []
+    # The interventions name codeine now, the folder of a new study.
+    interventions = folder / "interventions.tsv"
+    text = interventions.read_text(encoding="utf-8")
+    assert "\tdrug\t" in text
+    interventions.write_text(
+        text.replace("\tdrug\t", "\tcodeine\t"), encoding="utf-8", newline=""
+    )
+    make_study(valid_files, name="Third", substance="codeine")
+    engine.scan()
+    engine._read_substances()
+    assert sorted(read) == ["Example", "Third"]
+    # The data still name drug.
+    assert substances(engine)["caffeine/Example"] == ["caffeine", "codeine", "drug"]
+    engine.scan()
+    engine._read_substances()
+    assert sorted(read) == ["Example", "Third"]
+
+
+def test_a_substance_folder_added_later_counts_without_reading_the_tables_again(
+    tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    make_study(valid_files)
+    engine = module.CurationEngine(
+        tmp_path,
+        state_dir=tmp_path_factory.mktemp("state"),
+        offline=True,
+        start=False,
+    )
+    try:
+        # drug has no folder yet, like a metabolite.
+        assert substances(engine) == {"caffeine/Example": ["caffeine"]}
+        no_reads(monkeypatch)
+        make_study(valid_files, name="Other", substance="drug")
+        engine.scan()
+        assert substances(engine)["caffeine/Example"] == ["caffeine", "drug"]
+    finally:
+        engine.close()

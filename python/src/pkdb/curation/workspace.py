@@ -26,8 +26,9 @@ from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.revision import folder_lock
+from pkdb.studyformat.substances import SUBSTANCE_COLUMNS, study_substances
 from pkdb.studyformat.sync import workbook_check
-from pkdb.studyformat.tables import STUDY_JSON
+from pkdb.studyformat.tables import STUDY_JSON, parse_table_file
 from pkdb.studyformat.workbook.base import workbook_path
 
 RECENT_LIMIT = 10
@@ -68,6 +69,21 @@ def _hashes(folder: Path) -> dict[str, str] | None:
         return source_hashes(folder)
     except OSError, StudyValidationError:
         return None
+
+
+def table_signature(files):
+    """Name, size and modification time of each table of a study whose substances count.
+
+    `files` are the entries of `SourceTree.files`; a change of one of these tables
+    changes the signature without reading or hashing a file.
+    """
+    return tuple(
+        entry
+        for entry in files
+        if "/" not in entry[0]
+        and (table := parse_table_file(entry[0])) is not None
+        and table[0].kind in SUBSTANCE_COLUMNS
+    )
 
 
 class WorkspaceMixin(EngineState):
@@ -190,6 +206,11 @@ class WorkspaceMixin(EngineState):
             "_folder": folder,
             "_fingerprint": None,
             "_signature": None,
+            # The tables whose substances count as the last scan saw them, the signature
+            # at which their substances were read, and the substances they name.
+            "_table_signature": None,
+            "_tables": None,
+            "_named_substances": (),
             "_changed_at": time.monotonic(),
             "_pending": False,
             "_blocked": False,
@@ -280,6 +301,7 @@ class WorkspaceMixin(EngineState):
                         files=[{"id": name, "path": name} for name in hashes],
                         summary=summary,
                         reference=reference_summary(folder),
+                        _table_signature=table_signature(signature[0]),
                     )
                     # Set again below or by the next scheduling while it still applies.
                     row.pop("message", None)
@@ -341,6 +363,31 @@ class WorkspaceMixin(EngineState):
                 if row["duplicate"] != duplicate:
                     self.lock.changed()
                     row["duplicate"] = duplicate
+
+    def _read_substances(self):
+        """Read the substances of the studies whose tables changed since they were read.
+
+        Only the start of the engine and the watcher thread call this, never a request:
+        the scan of a request notes the table signature only. Tables are read outside
+        the engine lock; a row whose tables change meanwhile is read on the next call.
+        """
+        with self.lock.reading():
+            root = self.root
+            due = [
+                (row, row["_folder"], row["_table_signature"])
+                for row in self.studies.values()
+                if row["_table_signature"] != row["_tables"]
+            ]
+        for row, folder, tables in due:
+            named = study_substances(folder)
+            with self.lock.reading():
+                if self.root is not root:
+                    return
+                if row["_table_signature"] == tables:
+                    # Only the names are served: the revision grows when they change.
+                    if row["_named_substances"] != named:
+                        self.lock.changed()
+                    row["_tables"], row["_named_substances"] = tables, named
 
     def _is_v2(self, folder, tree):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
@@ -461,6 +508,7 @@ class WorkspaceMixin(EngineState):
         """Run one pass of the watcher; a failure is recorded and never raised."""
         try:
             self.scan()
+            self._read_substances()
             self.schedule_changes()
             self._check_workbooks()
         except Exception as error:
