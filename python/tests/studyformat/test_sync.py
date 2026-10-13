@@ -30,6 +30,7 @@ from pkdb.studyformat.workbook.base import (
     write_state,
 )
 from pkdb.studyformat.workbook.read import read_workbook
+from pkdb.studyformat.workbook.view import show_place
 from pkdb.studyformat.workbook.write import build_workbook
 
 STUDY = "Example"
@@ -194,6 +195,19 @@ def test_a_workbook_in_step_writes_nothing(study, workbook, sf_vocabulary):
 
     assert result == SyncResult(study, workbook)
     assert snapshot(study) == before
+
+
+def test_a_view_change_is_no_edit(study, workbook, sf_vocabulary):
+    """Opening the workbook at a sheet changes no cell, so the sync writes nothing (#939)."""
+    assert show_place(workbook, "timecourses_Fig1", "O6")
+    before = snapshot(study)
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert result == SyncResult(study, workbook)
+    assert snapshot(study) == before
+    check = workbook_check(study, sf_vocabulary)
+    assert check is not None and check["action"] == "unchanged"
 
 
 def test_a_workbook_change_is_written_in_canonical_form(study, workbook, sf_vocabulary):
