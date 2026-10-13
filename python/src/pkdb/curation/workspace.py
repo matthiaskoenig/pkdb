@@ -402,19 +402,23 @@ class WorkspaceMixin(EngineState):
 
     def _watch(self):
         while not self.stop.wait(1):
+            self._watch_tick()
+
+    def _watch_tick(self) -> None:
+        """Run one pass of the watcher; a failure is recorded and never raised."""
+        try:
+            self.scan()
+            self.schedule_changes()
+            self._check_workbooks()
+        except Exception as error:
+            # The watcher retries every second and must outlive any failure.
             try:
-                self.scan()
-                self.schedule_changes()
-                self._check_workbooks()
-            except Exception as error:
-                # The watcher retries every second and must outlive any failure.
-                try:
-                    self._watch_failed(error)
-                except Exception as recording:
-                    # Recording the failure failed too: the loop still continues.
-                    self._watch_unrecorded(recording)
-            else:
-                self._watch_recovered()
+                self._watch_failed(error)
+            except Exception as recording:
+                # Recording the failure failed too: the loop still continues.
+                self._watch_unrecorded(recording)
+        else:
+            self._watch_recovered()
 
     def _watch_failed(self, error: Exception) -> None:
         """Keep the failure for the File watching menu, and log it.

@@ -765,6 +765,19 @@ def test_the_state_answers_304_until_the_engine_state_changes(api):
     assert json.loads(changed[2])["theme"] == "dark"
 
 
+def test_the_state_answers_304_across_watcher_ticks(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    for _ in range(2):
+        engine._watch_tick()
+    first = request(server, "GET", STATE, headers=headers)
+    assert first[0] == 200
+    conditional = {**headers, "If-None-Match": first[1]["ETag"]}
+    for _ in range(2):
+        engine._watch_tick()
+        assert request(server, "GET", STATE, headers=conditional)[0] == 304
+
+
 def test_the_state_is_built_once_per_revision_and_never_for_a_poll(api, monkeypatch):
     server, engine, _ = api
     headers = authenticate(server)

@@ -1758,6 +1758,8 @@ def test_an_idle_engine_keeps_its_revision(workspace):
         engine._check_workbooks()
         engine._watch_recovered()
         assert engine._next_job() is None
+    for _ in range(3):
+        engine._watch_tick()
     engine.snapshot()
     engine.state_version()
     engine.study_version(identity)
