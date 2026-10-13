@@ -188,7 +188,7 @@ describe("conflictView", () => {
 
   it("says that the workbook removed the rows that the table changed", () => {
     const view = conflictView(ROWS_REMOVED_CONFLICT, SUBJECTS_COLUMNS);
-    expect(view.table.rows.map((row) => view.labels.get(row.line))).toEqual(["Last sync", "Tables line 2"]);
+    expect(view.table.rows.map((row) => view.labels.get(row.line))).toEqual(["Last sync", "Tables line 1"]);
     expect(view.changed).toEqual(["count"]);
     expect(view.note).toBe("The workbook removed these rows, and the tables changed them.");
     const tables = conflictView(

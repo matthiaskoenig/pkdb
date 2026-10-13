@@ -427,7 +427,7 @@ export const ROWS_REMOVED_CONFLICT: ConflictData = {
   kind: "subjects",
   sheet: "subjects",
   workbook_rows: [],
-  table_lines: [{ line: 2, text: "Example\tS1\tall\t2\tTabA\t" }],
+  table_lines: [{ line: 1, text: "Example\tS1\tall\t2\tTabA\t" }],
   base_lines: ["Example\tS1\tall\t1\tTabA\t"],
   kept: null,
   removed: null,
@@ -437,7 +437,7 @@ export const ROWS_REMOVED_ISSUE = syncConflict(
   "subjects",
   2,
   "The workbook and the tables changed the same rows of subjects differently since the last sync: rows removed " +
-    "after row 2 of the sheet, line 2 of subjects.tsv",
+    "after row 2 of the sheet, line 1 of subjects.tsv",
 );
 
 /** The table file was deleted while its sheet changed: the sides list the whole table from its header. */

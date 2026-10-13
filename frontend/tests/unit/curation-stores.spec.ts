@@ -84,7 +84,7 @@ describe("useStudyStore", () => {
   it("percent-encodes each segment of the identity", async () => {
     const requests = server((_method, url) =>
       url.includes("/tables/")
-        ? json({ file: "outputs Tab3.tsv", kind: "table", header: ["label"], rows: [{ line: 2, cells: ["a"] }] })
+        ? json({ file: "outputs Tab3.tsv", kind: "table", header: ["label"], rows: [{ line: 1, cells: ["a"] }] })
         : json(detail("r1", "caffeine/Smith 2020%")),
     );
     const store = useStudyStore();
@@ -161,7 +161,7 @@ describe("useStudyStore", () => {
   });
 
   it("drops a late table answer of a study that was closed", async () => {
-    const table = { file: "outputs_Tab3.tsv", kind: "table", header: ["label"], rows: [{ line: 2, cells: ["a"] }] };
+    const table = { file: "outputs_Tab3.tsv", kind: "table", header: ["label"], rows: [{ line: 1, cells: ["a"] }] };
     let answerLate: (response: Response) => void = () => {};
     let tableLoads = 0;
     const requests = server((_method, url) => {

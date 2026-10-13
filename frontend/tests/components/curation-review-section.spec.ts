@@ -108,9 +108,9 @@ const resolvedAcknowledgement = reviewItem({
 /** What the local server matches for the targets of the items, in the rows of `timecourses`. */
 const TARGETS: Record<string, TargetMatch> = {
   [QUESTION]: { lines: null, series: null, total: 2 },
-  [AGENT]: { lines: [2, 3], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
+  [AGENT]: { lines: [1, 2], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
   [ACKNOWLEDGEMENT]: { lines: null, series: null, total: 3 },
-  [RESOLVED_ACKNOWLEDGEMENT]: { lines: [3], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
+  [RESOLVED_ACKNOWLEDGEMENT]: { lines: [2], series: { source: "Fig1", series: "caf_plasma_D150" }, total: 3 },
 };
 
 /** The lines of the rows of `timecourses` that the row filters of a draft target match, by its filters. */
@@ -134,9 +134,9 @@ const timecourses: TableResponse = {
   kind: "table",
   header: ["study", "source", "label", "time", "mean", "sd", "error_type", "comment"],
   rows: [
-    { line: 2, cells: ["Example", "Fig1", "caf_plasma_D150", "0", "0.166", "0.316", "sd", ""] },
-    { line: 3, cells: ["Example", "Fig1", "caf_plasma_D150", "0.5", "2.419", "3.051", "sd", ""] },
-    { line: 4, cells: ["Example", "Fig1", "caf_plasma_D300", "0", "0.2", "0.4", "sd", ""] },
+    { line: 1, cells: ["Example", "Fig1", "caf_plasma_D150", "0", "0.166", "0.316", "sd", ""] },
+    { line: 2, cells: ["Example", "Fig1", "caf_plasma_D150", "0.5", "2.419", "3.051", "sd", ""] },
+    { line: 3, cells: ["Example", "Fig1", "caf_plasma_D300", "0", "0.2", "0.4", "sd", ""] },
   ],
 };
 const outputs: TableResponse = {
@@ -144,8 +144,8 @@ const outputs: TableResponse = {
   kind: "table",
   header: ["study", "source", "label", "measurement", "mean", "unit"],
   rows: [
-    { line: 2, cells: ["Example", "Tab2", "caf_cl", "clearance", "1.2", "ml/min/kg"] },
-    { line: 3, cells: ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "h"] },
+    { line: 1, cells: ["Example", "Tab2", "caf_cl", "clearance", "1.2", "ml/min/kg"] },
+    { line: 2, cells: ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "h"] },
   ],
 };
 const figure: SourceView = {
@@ -791,7 +791,7 @@ describe("new item count", () => {
     const preview: Handler = (body) => {
       const target = body?.target as { rows?: Record<string, string> } | undefined;
       if (target?.rows?.label === "caf_plasma_D150") return new Promise<Response>((resolve) => (answerFirst = resolve));
-      return json({ lines: [3], series: null, total: 3 });
+      return json({ lines: [2], series: null, total: 3 });
     };
     const wrapper = await mountSection(withReview(), { "POST /local/studies/review/preview": preview });
     await click("New item");
@@ -803,7 +803,7 @@ describe("new item count", () => {
     await flushPromises();
     await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D75");
     await flushPromises();
-    answerFirst(json({ lines: [2, 3], series: null, total: 3 }));
+    answerFirst(json({ lines: [1, 2], series: null, total: 3 }));
     await flushPromises();
     expect(dialog().get(".new-item-matches").text()).toBe("Matches 1 of 3 rows.");
   });
@@ -1026,7 +1026,7 @@ describe("target", () => {
   it("lists the rows of the target table and marks its column", async () => {
     await mountSection();
     expect(target().text()).toContain("outputs_Tab2.tsv · column mean");
-    expect(targetLines()).toEqual(["2", "3"]);
+    expect(targetLines()).toEqual(["1", "2"]);
     expect(target().text()).toContain("The table has 2 rows.");
     expect(target().get("thead .grid-cell--marked").text()).toBe("mean, the column of the item");
     expect(target().findAll("tbody .grid-cell--marked").map((cell) => cell.text())).toEqual(["1.2", "4.8"]);
@@ -1038,16 +1038,16 @@ describe("target", () => {
     const link = target()
       .findAll("a")
       .find((candidate) => candidate.text() === "Show in table");
-    expect(link?.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=2&column=mean");
-    const line = target().get('a[aria-label="Show line 3 of outputs_Tab2.tsv in the Data section"]');
-    expect(line.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=3&column=mean");
+    expect(link?.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=1&column=mean");
+    const line = target().get('a[aria-label="Show line 2 of outputs_Tab2.tsv in the Data section"]');
+    expect(line.attributes("href")).toBe("#/studies/caffeine/Example/data?file=outputs_Tab2.tsv&line=2&column=mean");
   });
 
   it("lists the matching rows and shows the overlay of a digitized series with the series emphasized", async () => {
     await mountSection();
     await select("The error bars");
     expect(fetched(`${EXAMPLE}/tables/timecourses_Fig1.tsv`)).toBe(1);
-    expect(targetLines()).toEqual(["2", "3"]);
+    expect(targetLines()).toEqual(["1", "2"]);
     expect(target().text()).toContain("Matches 2 of 3 rows.");
     // The empty comment column is hidden.
     expect(target().findAll("thead th").map((cell) => cell.text())).not.toContain("comment");
@@ -1065,9 +1065,9 @@ describe("target", () => {
     const edited: TableResponse = {
       ...timecourses,
       rows: [
-        { ...third!, line: 2 },
-        { ...first!, line: 3 },
-        { ...second!, line: 4 },
+        { ...third!, line: 1 },
+        { ...first!, line: 2 },
+        { ...second!, line: 3 },
       ],
     };
     await mountSection(withReview(), {
@@ -1075,24 +1075,24 @@ describe("target", () => {
         hold ? new Promise<Response>((resolve) => (answerRows = resolve)) : json(timecourses),
     });
     await select("The error bars");
-    expect(targetLines()).toEqual(["2", "3"]);
+    expect(targetLines()).toEqual(["1", "2"]);
 
     // The page with the new lines of the series arrives before the edited rows.
     hold = true;
     served = {
       ...served,
       files_version: "files-2",
-      targets: { ...served.targets, [AGENT]: { ...TARGETS[AGENT]!, lines: [3, 4] } },
+      targets: { ...served.targets, [AGENT]: { ...TARGETS[AGENT]!, lines: [2, 3] } },
     };
     await useStudyStore().refresh();
     await flushPromises();
     expect(answerRows).not.toBeNull();
-    expect(targetLines()).toEqual(["2", "3"]);
+    expect(targetLines()).toEqual(["1", "2"]);
     expect(target().text()).toContain("Matches 2 of 3 rows.");
 
     answerRows!(json(edited));
     await flushPromises();
-    expect(targetLines()).toEqual(["3", "4"]);
+    expect(targetLines()).toEqual(["2", "3"]);
     expect(target().findAll("tbody td").some((cell) => cell.text() === "caf_plasma_D300")).toBe(false);
   });
 
@@ -1114,7 +1114,7 @@ describe("target", () => {
     served = {
       ...changed("", (entry) => entry, [fresh]),
       files_version: "files-2",
-      targets: { ...served.targets, [NEW]: { lines: [4], series: null, total: 3 } },
+      targets: { ...served.targets, [NEW]: { lines: [3], series: null, total: 3 } },
     };
     await useStudyStore().refresh();
     await router.push(`${SECTION}?item=${NEW}`);
@@ -1125,7 +1125,7 @@ describe("target", () => {
 
     answerRows!(json(timecourses));
     await flushPromises();
-    expect(targetLines()).toEqual(["4"]);
+    expect(targetLines()).toEqual(["3"]);
   });
 
   it("opens the Data section at the row of a clicked mapped point", async () => {

@@ -16,20 +16,20 @@ const small: TableResponse = {
   kind: "table",
   header: HEADER,
   rows: [
-    { line: 2, cells: ["Example", "Fig1", "caf_plasma_D150", "0.5", "2.419", ""] },
-    { line: 3, cells: ["Example", "Fig1", "caf_plasma_D150", "1", "3.1", ""] },
-    { line: 4, cells: ["Example", "Fig1", "caf_plasma_D75", "0.5", "1.2", ""] },
+    { line: 1, cells: ["Example", "Fig1", "caf_plasma_D150", "0.5", "2.419", ""] },
+    { line: 2, cells: ["Example", "Fig1", "caf_plasma_D150", "1", "3.1", ""] },
+    { line: 3, cells: ["Example", "Fig1", "caf_plasma_D75", "0.5", "1.2", ""] },
   ],
 };
 
-/** A timecourse table with `count` rows on the lines 2 to `count + 1`. */
+/** A timecourse table with `count` rows on the lines 1 to `count`. */
 function large(count = 5000): TableResponse {
   return {
     file: "timecourses_Fig1.tsv",
     kind: "table",
     header: HEADER,
     rows: Array.from({ length: count }, (_, index) => ({
-      line: index + 2,
+      line: index + 1,
       cells: ["Example", "Fig1", `series_${Math.floor(index / 50)}`, String(index % 50), String(index / 10), ""],
     })),
   };
@@ -89,7 +89,7 @@ describe("TableGrid", () => {
   it("shows the header and the rows with their lines in the file", () => {
     const wrapper = mount(TableGrid, { props: { table: small } });
     expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual(["Line 0", ...HEADER]);
-    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(lines(wrapper)).toEqual(["1", "2", "3"]);
     expect(wrapper.findAll("tbody tr")[1]?.findAll("td").map((cell) => cell.text())).toEqual([
       "Example",
       "Fig1",
@@ -105,11 +105,11 @@ describe("TableGrid", () => {
 
   it("colors the rows of open review items amber and outlines the cells with problems", () => {
     const issues: IssueCells = new Map([
-      [3, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["The mean is not a number."] }]])],
-      [4, new Map<string, CellIssues>([[ROW, { severity: "warning", messages: ["The row repeats line 2."] }]])],
+      [2, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["The mean is not a number."] }]])],
+      [3, new Map<string, CellIssues>([[ROW, { severity: "warning", messages: ["The row repeats line 1."] }]])],
     ]);
     const wrapper = mount(TableGrid, {
-      props: { table: small, highlightLines: new Set([2, 4]), issueCells: issues },
+      props: { table: small, highlightLines: new Set([1, 3]), issueCells: issues },
       attachTo: document.body,
     });
     const rows = wrapper.findAll("tbody tr");
@@ -122,7 +122,7 @@ describe("TableGrid", () => {
     // An issue of the whole row outlines its line.
     const line = rows[2]!.get("th");
     expect(line.classes()).toContain("grid-cell--warning");
-    expect(description(line.element)).toBe("Targeted by an open review item. The row repeats line 2.");
+    expect(description(line.element)).toBe("Targeted by an open review item. The row repeats line 1.");
     // The descriptions add no text to the cells.
     expect(cell.text()).toBe("3.1");
   });
@@ -208,9 +208,9 @@ describe("TableGrid", () => {
       slots: { line: ({ line }: { line: number }) => h("a", { href: `#line-${line}` }, String(line)) },
     });
     expect(wrapper.findAll("tbody th a").map((link) => link.attributes("href"))).toEqual([
+      "#line-1",
       "#line-2",
       "#line-3",
-      "#line-4",
     ]);
   });
 
@@ -231,27 +231,27 @@ describe("TableGrid", () => {
 
 describe("TableGrid with many rows", () => {
   it("renders only the rows near the view of a large table and follows the scrolling", async () => {
-    const wrapper = mount(TableGrid, { props: { table: large(), highlightLines: new Set([2101, 2102]) } });
+    const wrapper = mount(TableGrid, { props: { table: large(), highlightLines: new Set([2100, 2101]) } });
     const rendered = wrapper.findAll("tbody tr:not([aria-hidden])");
     expect(rendered.length).toBeGreaterThan(10);
     expect(rendered.length).toBeLessThan(100);
-    expect(lines(wrapper)[0]).toBe("2");
+    expect(lines(wrapper)[0]).toBe("1");
     expect(wrapper.get("table").attributes("aria-rowcount")).toBe("5001");
     expect(rendered[0]?.attributes("aria-rowindex")).toBe("2");
 
-    // Down to the row of line 2,102 (the 2,101st row).
+    // Down to the row of line 2,101 (the 2,101st row).
     const element = region(wrapper);
     element.scrollTop = 2100 * 22;
     element.dispatchEvent(new Event("scroll"));
     await flushPromises();
     const shown = lines(wrapper).map(Number);
     expect(shown.length).toBeLessThan(100);
-    expect(shown).toContain(2102);
+    expect(shown).toContain(2101);
     expect(shown).toEqual(Array.from({ length: shown.length }, (_, index) => shown[0]! + index));
-    const row = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "2102")!;
+    const row = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "2101")!;
     expect(row.attributes("aria-rowindex")).toBe("2102");
     expect(row.classes()).toContain("grid-row--target");
-    const other = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "2103")!;
+    const other = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "2102")!;
     expect(other.classes()).not.toContain("grid-row--target");
     // Spacers keep the height of the rows that are not rendered.
     const spacers = wrapper.findAll("tbody tr[aria-hidden]");
@@ -284,12 +284,12 @@ describe("TableGrid with many rows", () => {
 
   it("scrolls to the focused line, marks its cell and moves the focus there", async () => {
     const wrapper = mount(TableGrid, {
-      props: { table: large(), focus: { line: 4001, column: "mean" } },
+      props: { table: large(), focus: { line: 4000, column: "mean" } },
       attachTo: document.body,
     });
     await flushPromises();
     expect(region(wrapper).scrollTop).toBeGreaterThan(3900 * 22);
-    const row = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "4001")!;
+    const row = wrapper.findAll("tbody tr:not([aria-hidden])").find((entry) => entry.get("th").text() === "4000")!;
     const cell = row.findAll("td")[4]!;
     expect(cell.text()).toBe("399.9");
     expect(cell.classes()).toContain("grid-cell--focus");
@@ -299,7 +299,7 @@ describe("TableGrid with many rows", () => {
   });
 
   it("marks the line of a focused line without a column", async () => {
-    const wrapper = mount(TableGrid, { props: { table: small, focus: { line: 3 } }, attachTo: document.body });
+    const wrapper = mount(TableGrid, { props: { table: small, focus: { line: 2 } }, attachTo: document.body });
     await flushPromises();
     const line = wrapper.findAll("tbody tr")[1]!.get("th");
     expect(line.classes()).toContain("grid-cell--focus");
@@ -328,17 +328,17 @@ describe("TableGrid with many rows", () => {
   });
 
   it("keeps the focus where it is when the same focus comes again, as after a reload", async () => {
-    const wrapper = mount(TableGrid, { props: { table: small, focus: { line: 3 } }, attachTo: document.body });
+    const wrapper = mount(TableGrid, { props: { table: small, focus: { line: 2 } }, attachTo: document.body });
     await flushPromises();
     region(wrapper).focus();
-    await wrapper.setProps({ focus: { line: 3 }, table: { ...small, rows: [...small.rows] } });
+    await wrapper.setProps({ focus: { line: 2 }, table: { ...small, rows: [...small.rows] } });
     await flushPromises();
     expect(document.activeElement).toBe(region(wrapper));
   });
 
   it("moves the focus to the region before the focused cell scrolls away", async () => {
     const wrapper = mount(TableGrid, {
-      props: { table: large(), focus: { line: 4001, column: "mean" } },
+      props: { table: large(), focus: { line: 4000, column: "mean" } },
       attachTo: document.body,
     });
     await flushPromises();
@@ -346,7 +346,7 @@ describe("TableGrid with many rows", () => {
     element.scrollTop = 0;
     element.dispatchEvent(new Event("scroll"));
     await flushPromises();
-    expect(lines(wrapper)).not.toContain("4001");
+    expect(lines(wrapper)).not.toContain("4000");
     expect(document.activeElement).toBe(element);
   });
 });
@@ -383,20 +383,20 @@ describe("revealing the focus", () => {
     element.scrollTop = 220;
     element.dispatchEvent(new Event("scroll"));
     await flushPromises();
-    // Line 14 is the 13th row, 66 pixels below the top of the region.
-    await wrapper.setProps({ focus: { line: 14 } });
+    // Line 13 is the 13th row, 66 pixels below the top of the region.
+    await wrapper.setProps({ focus: { line: 13 } });
     await flushPromises();
     expect(element.scrollTop).toBe(220);
     expect(scrolled).toEqual([]);
-    expect(document.activeElement?.textContent?.trim()).toBe("14");
+    expect(document.activeElement?.textContent?.trim()).toBe("13");
   });
 
   it("scrolls a focus that is out of view to the middle of the rows", async () => {
     layOut();
     const wrapper = mount(TableGrid, { props: { table: large(60) }, attachTo: document.body });
     const element = region(wrapper);
-    // Line 50 is the 49th row, 1,078 pixels below the top of the region.
-    await wrapper.setProps({ focus: { line: 50, column: "mean" } });
+    // Line 49 is the 49th row, 1,078 pixels below the top of the region.
+    await wrapper.setProps({ focus: { line: 49, column: "mean" } });
     await flushPromises();
     expect(element.scrollTop).toBe(1078 - 22 - (300 - 22 - 22) / 2);
     expect(scrolled).toEqual([element]);
@@ -437,8 +437,8 @@ describe("revealing the focus", () => {
     layOut();
     const wrapper = mount(TableGrid, { props: { table: large(60) }, attachTo: document.body });
     const element = region(wrapper);
-    // Line 14 is the 13th row: 286 to 308 pixels, of which 8 are below the region.
-    await wrapper.setProps({ focus: { line: 14 } });
+    // Line 13 is the 13th row: 286 to 308 pixels, of which 8 are below the region.
+    await wrapper.setProps({ focus: { line: 13 } });
     await flushPromises();
     expect(element.scrollTop).toBe(8);
   });
@@ -448,11 +448,11 @@ describe("revealing the focus", () => {
     const wide: TableResponse = { ...small, header: [...HEADER, ...HEADER.map((name) => `${name}_2`)] };
     const wrapper = mount(TableGrid, { props: { table: wide }, attachTo: document.body });
     const element = region(wrapper);
-    await wrapper.setProps({ focus: { line: 3, column: "mean" } });
+    await wrapper.setProps({ focus: { line: 2, column: "mean" } });
     await flushPromises();
     expect(element.scrollLeft).toBe(0);
     // The 12th column starts at 944 pixels.
-    await wrapper.setProps({ focus: { line: 3, column: "comment_2" } });
+    await wrapper.setProps({ focus: { line: 2, column: "comment_2" } });
     await flushPromises();
     expect(element.scrollLeft).toBe(944 - 64 - (600 - 64 - 80) / 2);
     expect(element.scrollTop).toBe(0);
@@ -467,16 +467,16 @@ describe("selection and the line filter", () => {
   it("emits the line of a clicked row and of its line button", async () => {
     const wrapper = mountGrid({ selectable: true });
     await wrapper.findAll("tbody tr[data-index]")[1]!.find("td").trigger("click");
-    await wrapper.get('th[scope="row"] button[title="Select line 4"]').trigger("click");
-    expect(wrapper.emitted("select-line")).toEqual([[3], [4]]);
+    await wrapper.get('th[scope="row"] button[title="Select line 3"]').trigger("click");
+    expect(wrapper.emitted("select-line")).toEqual([[2], [3]]);
   });
 
   it("names the line button by its line number, so the row header reads as the line", () => {
     const wrapper = mountGrid({ selectable: true });
     const header = wrapper.findAll("tbody tr[data-index]")[2]!.get("th[scope=row]");
-    expect(header.text()).toBe("4");
+    expect(header.text()).toBe("3");
     expect(header.get("button").attributes("aria-label")).toBeUndefined();
-    expect(header.get("button").attributes("title")).toBe("Select line 4");
+    expect(header.get("button").attributes("title")).toBe("Select line 3");
   });
 
   it("marks a selectable grid, whose rows show the pointer and a tint under it", () => {
@@ -492,14 +492,14 @@ describe("selection and the line filter", () => {
   });
 
   it("shows only the visible lines and counts them for screen readers", () => {
-    const wrapper = mountGrid({ visibleLines: new Set([2, 4]) });
-    expect(wrapper.findAll("tbody tr[data-index]").map((row) => row.get("th").text())).toEqual(["2", "4"]);
+    const wrapper = mountGrid({ visibleLines: new Set([1, 3]) });
+    expect(wrapper.findAll("tbody tr[data-index]").map((row) => row.get("th").text())).toEqual(["1", "3"]);
     expect(wrapper.get("table").attributes("aria-rowcount")).toBe("3");
   });
 
   it("frames the only cell of the selected row on all four sides", () => {
     const names: TableResponse = { ...small, header: ["label"], rows: small.rows.map(({ line, cells }) => ({ line, cells: [cells[2]!] })) };
-    const wrapper = mount(TableGrid, { props: { table: names, lineHeader: null, focus: { line: 3 } } });
+    const wrapper = mount(TableGrid, { props: { table: names, lineHeader: null, focus: { line: 2 } } });
     const cell = wrapper.get("tr.grid-row--focus > td").element;
     // The first cell draws the start of the frame and the last its end: the only cell both.
     expect(declared(cell, "--grid-frame-start")).toEqual(["1px"]);
@@ -507,25 +507,25 @@ describe("selection and the line filter", () => {
   });
 
   it("tints the row of the focus", () => {
-    const wrapper = mountGrid({ focus: { line: 3 } });
+    const wrapper = mountGrid({ focus: { line: 2 } });
     expect(wrapper.findAll("tbody tr[data-index]")[1]!.classes()).toContain("grid-row--focus");
   });
 
   it("scrolls a filtered large table to the focus line and numbers the shown rows", async () => {
-    // Every second row shows: the lines 2, 4, 6 and so on.
-    const visibleLines = new Set(Array.from({ length: 2500 }, (_, index) => index * 2 + 2));
+    // Every second row shows: the lines 1, 3, 5 and so on.
+    const visibleLines = new Set(Array.from({ length: 2500 }, (_, index) => index * 2 + 1));
     const wrapper = mount(TableGrid, {
-      props: { table: large(), visibleLines, focus: { line: 4002 } },
+      props: { table: large(), visibleLines, focus: { line: 4001 } },
       attachTo: document.body,
     });
     await flushPromises();
     expect(wrapper.get("table").attributes("aria-rowcount")).toBe("2501");
-    // Line 4002 is the 2,001st shown row.
-    const row = wrapper.findAll("tbody tr[data-index]").find((entry) => entry.get("th").text() === "4002")!;
+    // Line 4001 is the 2,001st shown row.
+    const row = wrapper.findAll("tbody tr[data-index]").find((entry) => entry.get("th").text() === "4001")!;
     expect(row.attributes("aria-rowindex")).toBe("2002");
     expect(row.classes()).toContain("grid-row--focus");
     expect(region(wrapper).scrollTop).toBeGreaterThan(1900 * 22);
-    expect(lines(wrapper).every((line) => Number(line) % 2 === 0)).toBe(true);
+    expect(lines(wrapper).every((line) => Number(line) % 2 === 1)).toBe(true);
   });
 });
 
@@ -547,25 +547,25 @@ describe("the keyboard in a selectable grid", () => {
   it("is one Tab stop: the button of the focus line, else of the first row", async () => {
     const wrapper = mountGrid({ selectable: true });
     expect(stops(wrapper)).toEqual(["0", "-1", "-1"]);
-    await wrapper.setProps({ focus: { line: 3 } });
+    await wrapper.setProps({ focus: { line: 2 } });
     expect(stops(wrapper)).toEqual(["-1", "0", "-1"]);
   });
 
   it("moves the focus to the row above or below with the arrow keys, and to the first or last with Home and End", async () => {
     const wrapper = mount(TableGrid, { props: { table: small, selectable: true }, attachTo: document.body });
     const button = (line: number) => lineButton(wrapper, line).element;
-    button(2).focus();
-    await press(button(2), "ArrowDown");
-    expect(document.activeElement).toBe(button(3));
+    button(1).focus();
+    await press(button(1), "ArrowDown");
+    expect(document.activeElement).toBe(button(2));
     expect(stops(wrapper)).toEqual(["-1", "0", "-1"]);
-    await press(button(3), "End");
-    expect(document.activeElement).toBe(button(4));
-    await press(button(4), "ArrowDown");
-    expect(document.activeElement).toBe(button(4));
-    await press(button(4), "Home");
-    expect(document.activeElement).toBe(button(2));
-    await press(button(2), "ArrowUp");
-    expect(document.activeElement).toBe(button(2));
+    await press(button(2), "End");
+    expect(document.activeElement).toBe(button(3));
+    await press(button(3), "ArrowDown");
+    expect(document.activeElement).toBe(button(3));
+    await press(button(3), "Home");
+    expect(document.activeElement).toBe(button(1));
+    await press(button(1), "ArrowUp");
+    expect(document.activeElement).toBe(button(1));
     expect(stops(wrapper)).toEqual(["0", "-1", "-1"]);
     // Moving selects nothing; Enter and Space press the button.
     expect(wrapper.emitted("select-line")).toBeUndefined();
@@ -573,23 +573,23 @@ describe("the keyboard in a selectable grid", () => {
 
   it("moves on from the line cell that the focus of the route focused", async () => {
     const wrapper = mount(TableGrid, {
-      props: { table: small, selectable: true, focus: { line: 3 } },
+      props: { table: small, selectable: true, focus: { line: 2 } },
       attachTo: document.body,
     });
     await flushPromises();
     const cell = wrapper.findAll("tbody tr")[1]!.get("th").element;
     expect(document.activeElement).toBe(cell);
     await press(cell, "ArrowDown");
-    expect(document.activeElement).toBe(lineButton(wrapper, 4).element);
+    expect(document.activeElement).toBe(lineButton(wrapper, 3).element);
   });
 
   it("renders the row that it moves to in a large table", async () => {
     const wrapper = mount(TableGrid, { props: { table: large(), selectable: true }, attachTo: document.body });
-    lineButton(wrapper, 2).element.focus();
-    await press(lineButton(wrapper, 2).element, "End");
-    expect(document.activeElement?.textContent?.trim()).toBe("5001");
+    lineButton(wrapper, 1).element.focus();
+    await press(lineButton(wrapper, 1).element, "End");
+    expect(document.activeElement?.textContent?.trim()).toBe("5000");
     expect(stops(wrapper).filter((stop) => stop === "0")).toHaveLength(1);
     await press(document.activeElement!, "ArrowUp");
-    expect(document.activeElement?.textContent?.trim()).toBe("5000");
+    expect(document.activeElement?.textContent?.trim()).toBe("4999");
   });
 });

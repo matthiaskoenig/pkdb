@@ -17,9 +17,9 @@ const outputs: TableResponse = {
   kind: "table",
   header: ["study", "source", "label", "mean", "sd", "comment"],
   rows: [
-    { line: 2, cells: ["Example", "Tab2", "caf_cl", "1.2", "", ""] },
-    { line: 3, cells: ["Example", "Tab2", "caf_thalf", "4.8", "0.3", ""] },
-    { line: 4, cells: ["Example", "Tab2", "caf_vd", "0.7", "", ""] },
+    { line: 1, cells: ["Example", "Tab2", "caf_cl", "1.2", "", ""] },
+    { line: 2, cells: ["Example", "Tab2", "caf_thalf", "4.8", "0.3", ""] },
+    { line: 3, cells: ["Example", "Tab2", "caf_vd", "0.7", "", ""] },
   ],
 };
 

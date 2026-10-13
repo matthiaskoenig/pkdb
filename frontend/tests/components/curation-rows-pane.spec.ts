@@ -12,9 +12,9 @@ const subjects: TableResponse = {
   kind: "table",
   header: ["study", "source", "name", "count"],
   rows: [
-    { line: 2, cells: ["Example", "Fig1", "all", "8"] },
-    { line: 3, cells: ["Example", "Tab2", "men", "4"] },
-    { line: 4, cells: ["Example", "Tab2", "women", "4"] },
+    { line: 1, cells: ["Example", "Fig1", "all", "8"] },
+    { line: 2, cells: ["Example", "Tab2", "men", "4"] },
+    { line: 3, cells: ["Example", "Tab2", "women", "4"] },
   ],
 };
 
@@ -52,7 +52,7 @@ const select = (wrapper: ReturnType<typeof mountPane>) => wrapper.get<HTMLSelect
 describe("rows pane", () => {
   it("shows every row of a shared table until the curator chooses a source", () => {
     const wrapper = mountPane();
-    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(lines(wrapper)).toEqual(["1", "2", "3"]);
     expect(wrapper.get(".pane-head").text()).toContain("3 rows");
     expect(select(wrapper).element.value).toBe("all");
   });
@@ -70,21 +70,21 @@ describe("rows pane", () => {
 
   it("shows the rows of the chosen source, and tells the section the choice", async () => {
     const wrapper = mountPane({ filter: { kind: "source", source: "Tab2" } });
-    expect(lines(wrapper)).toEqual(["3", "4"]);
+    expect(lines(wrapper)).toEqual(["2", "3"]);
     expect(wrapper.get(".pane-head .d-sr-only").text()).toBe("2 of 3 rows.");
     await select(wrapper).setValue("source:Fig1");
     expect(wrapper.emitted("update:filter")).toEqual([[{ kind: "source", source: "Fig1" }]]);
   });
 
   it("shows the line of the route although the filter would hide it", () => {
-    const wrapper = mountPane({ filter: { kind: "source", source: "Tab2" }, focus: { line: 2 } });
-    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
-    expect(wrapper.get(".pane-head").text()).toContain("Line 2");
+    const wrapper = mountPane({ filter: { kind: "source", source: "Tab2" }, focus: { line: 1 } });
+    expect(lines(wrapper)).toEqual(["1", "2", "3"]);
+    expect(wrapper.get(".pane-head").text()).toContain("Line 1");
   });
 
   it("shows all rows for a source that the rows no longer name", () => {
     const wrapper = mountPane({ filter: { kind: "source", source: "Fig9" } });
-    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(lines(wrapper)).toEqual(["1", "2", "3"]);
     expect(select(wrapper).element.value).toBe("all");
   });
 
@@ -100,13 +100,13 @@ describe("rows pane", () => {
     const table: TableResponse = { ...subjects, file: "outputs_Tab2.tsv" };
     const wrapper = mountPane({ detail: outputs, rowsDetail: outputs, file: "outputs_Tab2.tsv", table });
     expect(wrapper.find("select").exists()).toBe(false);
-    expect(lines(wrapper)).toEqual(["2", "3", "4"]);
+    expect(lines(wrapper)).toEqual(["1", "2", "3"]);
   });
 
   it("emits the line of a clicked row", async () => {
     const wrapper = mountPane();
     await wrapper.findAll("tbody tr:not([aria-hidden])")[0]!.trigger("click");
-    expect(wrapper.emitted("select-line")).toEqual([[2]]);
+    expect(wrapper.emitted("select-line")).toEqual([[1]]);
   });
 
   it("shows the kind of the table in the color of its class, which tints its grid", () => {
