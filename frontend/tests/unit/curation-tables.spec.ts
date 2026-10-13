@@ -166,7 +166,7 @@ describe("conflictView", () => {
     expect(view.table.rows.map((row) => view.labels.get(row.line))).toEqual([
       "Last sync",
       "Workbook row 2",
-      "Tables line 2",
+      "Tables line 1",
     ]);
     expect(view.changed).toEqual(["mean"]);
     expect(view.columns.map((index) => columnName(view.table, index))).toEqual([
@@ -188,7 +188,7 @@ describe("conflictView", () => {
 
   it("says that the workbook removed the rows that the table changed", () => {
     const view = conflictView(ROWS_REMOVED_CONFLICT, SUBJECTS_COLUMNS);
-    expect(view.table.rows.map((row) => view.labels.get(row.line))).toEqual(["Last sync", "Tables line 3"]);
+    expect(view.table.rows.map((row) => view.labels.get(row.line))).toEqual(["Last sync", "Tables line 2"]);
     expect(view.changed).toEqual(["count"]);
     expect(view.note).toBe("The workbook removed these rows, and the tables changed them.");
     const tables = conflictView(
@@ -215,7 +215,7 @@ describe("conflictView", () => {
       {
         ...FILE_DELETED_CONFLICT,
         workbook_rows: [],
-        table_lines: FILE_DELETED_CONFLICT.workbook_rows.map(({ row, text }) => ({ line: row, text })),
+        table_lines: FILE_DELETED_CONFLICT.workbook_rows.map(({ row, text }) => ({ line: row - 1, text })),
         removed: "workbook",
       },
       SCATTERS_COLUMNS,
@@ -223,8 +223,8 @@ describe("conflictView", () => {
     expect(emptied.table.rows.map((row) => emptied.labels.get(row.line))).toEqual([
       "Last sync",
       "Last sync",
+      "Tables line 1",
       "Tables line 2",
-      "Tables line 3",
     ]);
     expect(emptied.note).toBe("The sheet has no rows in the workbook, but the table changed since the last sync.");
   });

@@ -770,7 +770,7 @@ test.describe("tables", () => {
 
     // In a window of 1440 x 900 px the notes give up their room first: the conflicts show whole.
     const lastVersion = panel.getByRole("row").last();
-    await expect(lastVersion).toContainText("Tables line 8");
+    await expect(lastVersion).toContainText("Tables line 7");
     expect(bottom(await box(lastVersion))).toBeLessThanOrEqual(bottom(await box(panel)));
     await expect(panel.locator(".pane-more")).toHaveCount(0);
     await expect(notes.locator(".pane-more")).toBeVisible();

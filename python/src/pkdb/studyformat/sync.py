@@ -59,6 +59,7 @@ from pkdb.studyformat.tables import (
     image_file,
     parse_table_file,
     table_file,
+    table_line,
 )
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.workbook.base import (
@@ -96,11 +97,12 @@ KEEP_HINT = (
 class SyncConflict:
     """Rows of a table that the workbook and the tables changed differently since the last sync.
 
-    `workbook_rows` holds the 1-based sheet rows and `table_lines` the 1-based
-    TSV line numbers, each with its canonical text, and `base_lines` the lines
-    both sides changed. When one side removed the whole table, its rows are
-    empty and the other side lists all of its lines. `kept` is the side that
-    resolved the conflict, or None while it is unresolved. `removed` is the
+    `workbook_rows` holds the 1-based sheet rows and `table_lines` the lines of
+    the TSV file, each with its canonical text: the header of a table is row 1
+    and line 0, and a raw table starts at row 1 and line 1. `base_lines` holds
+    the lines both sides changed. When one side removed the whole table, its
+    rows are empty and the other side lists all of its lines. `kept` is the side
+    that resolved the conflict, or None while it is unresolved. `removed` is the
     side that removed the whole table, which the other side then lists from its
     header, or None for rows that both sides changed.
     """
@@ -282,7 +284,7 @@ def _region_conflict(
         for index, line in enumerate(conflict.ours)
     )
     table_lines = tuple(
-        (conflict.theirs_start + index + 1, line)
+        (table_line(file, conflict.theirs_start + index + 1), line)
         for index, line in enumerate(conflict.theirs)
     )
     found = SyncConflict(
@@ -304,7 +306,8 @@ def _region_conflict(
     elif raw and not conflict.theirs_start:
         in_tables = "lines removed before line 1"
     else:
-        in_tables = f"lines removed after line {conflict.theirs_start or 1}"
+        before = table_line(file, conflict.theirs_start or 1)
+        in_tables = f"lines removed after line {before}"
     return found, make_issue(
         "sync_conflict",
         f"The workbook and the tables changed the same rows of {sheet} "
@@ -340,7 +343,7 @@ def _removal_conflict(
         file,
         sheet,
         workbook_rows,
-        tuple(enumerate(_lines(tables), start=1)),
+        tuple(enumerate(_lines(tables), start=table_line(file, 1))),
         tuple(_lines(base)),
         kept=keep,
         removed="workbook" if workbook is None else "tables",

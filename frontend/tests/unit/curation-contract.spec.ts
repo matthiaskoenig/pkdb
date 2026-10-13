@@ -126,7 +126,7 @@ describe("tables contract", () => {
   it("compares the rows that both sides changed", () => {
     const view = conflictView(conflict("subjects"), SUBJECTS_COLUMNS);
     expect(view.changed).toEqual(["count"]);
-    expect([...view.labels.values()]).toEqual(["Last sync", "Workbook row 2", "Tables line 2"]);
+    expect([...view.labels.values()]).toEqual(["Last sync", "Workbook row 2", "Tables line 1"]);
     expect(view.note).toBeNull();
   });
 

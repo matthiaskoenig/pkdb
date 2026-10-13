@@ -571,7 +571,9 @@ export interface ConflictData {
   file: string;
   kind: TableFileKind;
   sheet: string;
+  /** The rows of the sheet, from 1; the header of a data sheet is row 1. */
   workbook_rows: { row: number; text: string }[];
+  /** The lines of the file: the header of a table is line 0, a raw table starts at line 1. */
   table_lines: { line: number; text: string }[];
   base_lines: string[];
   kept: "workbook" | "tables" | null;

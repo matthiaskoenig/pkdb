@@ -209,13 +209,11 @@ def _cells(file: str, text: str) -> str:
     return ", ".join(cells) or "(empty row)"
 
 
-def _print_rows(file: str, label: str, rows, removed: str) -> None:
-    from pkdb.studyformat.tables import parse_table_file
-
-    # The header is the first row and line on both sides of a table; only data
-    # rows conflict. A raw table has no header.
-    if parse_table_file(file) is not None:
-        rows = [(number, text) for number, text in rows if number != 1]
+def _print_rows(file: str, label: str, rows, removed: str, header: int) -> None:
+    # Only data rows conflict, so the header is left out: row 1 of a data sheet
+    # and line 0 of its file. A raw table has no header, and `header` is no row
+    # of it.
+    rows = [(number, text) for number, text in rows if number != header]
     if not rows:
         say(f"    {removed}")
         return
@@ -227,6 +225,8 @@ def _print_rows(file: str, label: str, rows, removed: str) -> None:
 
 def _print_result(label: str, result, issues) -> None:
     """Print a sync for people: the changes, the workbook action, conflicts and issues."""
+    from pkdb.studyformat.tables import workbook_row
+
     planned = int(result.checked)
     if not result.ok:
         unresolved = any(conflict.kept is None for conflict in result.conflicts)
@@ -266,12 +266,14 @@ def _print_result(label: str, result, issues) -> None:
             "workbook row",
             conflict.workbook_rows,
             "workbook: rows removed",
+            header=workbook_row(conflict.file, 0),
         )
         _print_rows(
             conflict.file,
             f"{conflict.file} line",
             conflict.table_lines,
             f"{conflict.file}: lines removed",
+            header=0,
         )
     print_issues(issues)
 

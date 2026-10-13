@@ -460,7 +460,7 @@ def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
     [conflict] = detail["conflicts"]
     assert conflict["file"] == "timecourses_Fig1.tsv"
     assert conflict["workbook_rows"][0]["row"] == 3
-    assert conflict["table_lines"][0]["line"] == 3
+    assert conflict["table_lines"][0]["line"] == 2
 
 
 def test_acknowledged_warnings_are_listed_until_dismissed(api):

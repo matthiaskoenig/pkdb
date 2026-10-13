@@ -1155,7 +1155,7 @@ describe("conflicts", () => {
     expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
       ["Last sync", "5.9"],
       ["Workbook row 2", "6.1"],
-      ["Tables line 2", "6.3"],
+      ["Tables line 1", "6.3"],
     ]);
   });
 
@@ -1188,7 +1188,7 @@ describe("conflicts", () => {
     expect(page().get(".conflict-note").text()).toBe("The workbook removed these rows, and the tables changed them.");
     expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
       ["Last sync", "1"],
-      ["Tables line 3", "2"],
+      ["Tables line 2", "2"],
     ]);
   });
 

@@ -59,8 +59,10 @@ def table_lines(folder, file):
     return lines((folder / file).read_text(encoding="utf-8"))
 
 
-def cell(folder, file, line, column):
-    return table_lines(folder, file)[line - 1].split("\t")[names(file).index(column)]
+def cell(folder, file, physical, column):
+    return table_lines(folder, file)[physical - 1].split("\t")[
+        names(file).index(column)
+    ]
 
 
 def replaced(line, file, **cells):
@@ -70,10 +72,10 @@ def replaced(line, file, **cells):
     return "\t".join(values)
 
 
-def edit_table(folder, file, line, **cells):
-    """Change cells of a TSV line by column name, as in a text editor."""
+def edit_table(folder, file, physical, **cells):
+    """Change cells of the 1-based physical line of a TSV file by column name, as in a text editor."""
     rows = table_lines(folder, file)
-    rows[line - 1] = replaced(rows[line - 1], file, **cells)
+    rows[physical - 1] = replaced(rows[physical - 1], file, **cells)
     (folder / file).write_text("\n".join(rows) + "\n", encoding="utf-8", newline="")
 
 
@@ -286,7 +288,7 @@ def test_changes_to_the_same_cell_conflict(study, workbook, conflicting, sf_voca
             TIMECOURSES,
             "timecourses_Fig1",
             workbook_rows=((2, replaced(conflicting[1], TIMECOURSES, mean="0.25")),),
-            table_lines=((2, replaced(conflicting[1], TIMECOURSES, mean="0.75")),),
+            table_lines=((1, replaced(conflicting[1], TIMECOURSES, mean="0.75")),),
             base_lines=(conflicting[1],),
         ),
     )
@@ -295,7 +297,7 @@ def test_changes_to_the_same_cell_conflict(study, workbook, conflicting, sf_voca
     assert issue.severity == "error"
     assert issue.source is not None
     assert (issue.source.sheet, issue.source.row) == ("timecourses_Fig1", 2)
-    assert "line 2 of timecourses_Fig1.tsv" in issue.message
+    assert "line 1 of timecourses_Fig1.tsv" in issue.message
     assert result.changes == ()
     assert result.workbook_action == "unchanged"
     assert snapshot(study) == before
@@ -344,7 +346,7 @@ def test_a_conflict_names_the_sheet_row_of_a_moved_row(study, workbook, sf_vocab
 
     [conflict] = result.conflicts
     assert conflict.workbook_rows == ((4, replaced(base[1], TIMECOURSES, mean="0.25")),)
-    assert conflict.table_lines == ((2, replaced(base[1], TIMECOURSES, mean="0.75")),)
+    assert conflict.table_lines == ((1, replaced(base[1], TIMECOURSES, mean="0.75")),)
     [issue] = result.issues
     assert issue.source is not None
     assert issue.source.row == 4
@@ -364,7 +366,7 @@ def test_a_conflict_with_a_removed_row_is_located_at_the_row_before(
             TIMECOURSES,
             "timecourses_Fig1",
             workbook_rows=(),
-            table_lines=((3, replaced(base[2], TIMECOURSES, mean="2.5")),),
+            table_lines=((2, replaced(base[2], TIMECOURSES, mean="2.5")),),
             base_lines=(base[2],),
         ),
     )
@@ -571,7 +573,7 @@ def test_a_removed_sheet_whose_table_changed_conflicts(study, workbook, sf_vocab
             OUTPUTS,
             "outputs_Tab2",
             workbook_rows=(),
-            table_lines=tuple(enumerate(changed, start=1)),
+            table_lines=tuple(enumerate(changed, start=0)),
             base_lines=tuple(base),
             removed="workbook",
         ),
@@ -873,7 +875,7 @@ def test_without_a_base_differences_conflict_unless_kept(
             TIMECOURSES,
             "timecourses_Fig1",
             workbook_rows=tuple(enumerate(sheet, start=1)),
-            table_lines=tuple(enumerate(tables, start=1)),
+            table_lines=tuple(enumerate(tables, start=0)),
             base_lines=(),
             kept=keep,
         ),
@@ -1199,6 +1201,29 @@ def test_a_scratch_sheet_survives_a_regeneration(study, workbook, sf_vocabulary)
     sheet = openpyxl.load_workbook(workbook)["_notes"]
     assert sheet["A1"].value == "keep me"
     assert sheet["B1"].value == "=SUM(1,2)"
+
+
+def test_rows_removed_from_the_tables_name_the_line_before_them(
+    study, workbook, sf_vocabulary
+):
+    def change(book):
+        book["timecourses_Fig1"][f"{letter(TIMECOURSES, 'mean')}3"] = 2.5
+
+    edit(workbook, change)
+    rows = table_lines(study, TIMECOURSES)
+    del rows[2]  # line 2, which row 3 of the sheet shows
+    (study / TIMECOURSES).write_text(
+        "\n".join(rows) + "\n", encoding="utf-8", newline=""
+    )
+
+    result = sync_study(study, sf_vocabulary)
+
+    [conflict] = result.conflicts
+    assert conflict.table_lines == ()
+    assert [row for row, _ in conflict.workbook_rows] == [3]
+    [issue] = result.issues
+    assert "row 3 of the sheet" in issue.message
+    assert "lines removed after line 1 of timecourses_Fig1.tsv" in issue.message
 
 
 def test_rows_follow_the_subject_order_of_the_merged_subjects(

@@ -143,21 +143,21 @@ function values(rows: readonly TableRow[], index: number): string {
  * with a row per version.
  *
  * The server says which side removed the whole table that the other changed (`removed`); the
- * other side then lists the table from its header, which is line 1 and row 1: the header is no row
+ * other side then lists the table from its header, which is line 0 of the file and row 1 of the sheet: the header is no row
  * here, and it names the columns when the table is gone. Elsewhere a side without lines removed the
  * rows that the other changed. A raw table or a table whose header is unknown names its columns by
  * letter.
  */
 export function conflictView(conflict: ConflictData, header: readonly string[] | null): ConflictView {
   const split = (text: string) => text.split("\t");
-  // A side that removed the whole table leaves the other side listing it from its header, line
-  // 1 and row 1; a raw table has no header.
+  // A side that removed the whole table leaves the other side listing it from its header, line 0
+  // and row 1; a raw table has no header.
   const removal = conflict.removed !== null && conflict.kind !== "raw";
   const first = removal ? (conflict.table_lines[0] ?? conflict.workbook_rows[0]) : undefined;
   const columns = header ?? (first ? split(first.text) : null);
   const base = (removal ? conflict.base_lines.slice(1) : conflict.base_lines).map(split);
   const workbook = conflict.workbook_rows.filter(({ row }) => !(removal && row === 1));
-  const tables = conflict.table_lines.filter(({ line }) => !(removal && line === 1));
+  const tables = conflict.table_lines.filter(({ line }) => !(removal && line === 0));
 
   const labels = new Map<number, string>();
   const rows: TableRow[] = [];

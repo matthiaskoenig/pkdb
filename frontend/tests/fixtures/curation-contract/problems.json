@@ -79,7 +79,7 @@
     {
       "code": "sync_conflict",
       "severity": "error",
-      "message": "The workbook and the tables changed the same rows of subjects differently since the last sync: rows 1-2 of the sheet, lines 1-2 of subjects.tsv",
+      "message": "The workbook and the tables changed the same rows of subjects differently since the last sync: rows 1-2 of the sheet, lines 0-1 of subjects.tsv",
       "source": {
         "file": "Demo2020.xlsx",
         "sheet": "subjects",
