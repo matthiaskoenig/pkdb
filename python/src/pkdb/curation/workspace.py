@@ -11,6 +11,7 @@ import os
 import sys
 import time
 from collections import Counter
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
@@ -18,12 +19,13 @@ from uuid import uuid4
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
-from pkdb.curation.state import EngineState, state_row
+from pkdb.curation.state import EngineState, JobRunning, state_row
 from pkdb.curation.studies import study_summary
 from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat import is_v2_folder
+from pkdb.studyformat.revision import folder_lock
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.workbook.base import workbook_path
@@ -52,6 +54,20 @@ def folder_kind(path):
     except OSError:
         pass
     return "folder"
+
+
+def _study_id(folder: Path) -> str:
+    """The study that a folder holds, as rows, jobs and the queue name it."""
+    return f"{folder.parent.name}/{folder.name}"
+
+
+def _hashes(folder: Path) -> dict[str, str] | None:
+    """The hashes of the source files of a folder as a scan reads them; None when they
+    cannot be read."""
+    try:
+        return source_hashes(folder)
+    except OSError, StudyValidationError:
+        return None
 
 
 class WorkspaceMixin(EngineState):
@@ -144,7 +160,7 @@ class WorkspaceMixin(EngineState):
         }
 
     def _row(self, folder, root):
-        identifier = f"{folder.parent.name}/{folder.name}"
+        identifier = _study_id(folder)
         path = folder.relative_to(root).as_posix()
         uploads = [
             job["upload"]
@@ -399,6 +415,43 @@ class WorkspaceMixin(EngineState):
         else:
             status = "in_sync"
         return {"status": status, "changes": changes, "conflicts": conflicts}
+
+    def _unwatched_write[T](self, folder: Path, file: str, write: Callable[[], T]) -> T:
+        """`write()` of `file` under the folder lock, taken as seen by the watcher.
+
+        For a write that changes no content that a job reads, such as the view of the
+        workbook; `file` is its path in the folder. When only `file` changed, the row of
+        the folder takes the fingerprint after the write if it had the one before it, so
+        the next scan finds nothing to validate or upload. A row with changes that no scan
+        has seen yet keeps them, and so does a row whose other files changed meanwhile, as
+        an editor or a checkout saves them. JobRunning, without a write, while a job of
+        the study runs. Scans hold the scan lock and never a folder lock, so it is taken
+        first: no scan sees the write before the row has it.
+        """
+        with self.scan_lock:
+            with folder_lock(folder):
+                # Read without the engine lock, which is never awaited under a folder lock.
+                # A job that starts after this read syncs after the write, as its sync
+                # takes the folder lock, and so it starts from the written source.
+                if self.active == _study_id(folder):
+                    raise JobRunning(self.active)
+                before = _hashes(folder)
+                result = write()
+                after = _hashes(folder)
+            if before is None or after is None or after == before:
+                return result
+            changed = {
+                name
+                for name in before.keys() | after.keys()
+                if before.get(name) != after.get(name)
+            }
+            if changed <= {file}:
+                old, new = fingerprint(before), fingerprint(after)
+                with self.lock:
+                    for row in self.studies.values():
+                        if row["_folder"] == folder and row["_fingerprint"] == old:
+                            row["_fingerprint"] = new
+        return result
 
     def _watch(self):
         while not self.stop.wait(1):

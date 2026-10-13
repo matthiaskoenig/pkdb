@@ -17,10 +17,11 @@ import type {
   TableEntry,
   TableKindEntry,
   TablePreview,
+  TablesResult,
   TargetMatch,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
-import { isSourceView, isTablePreview, isTargetMatch } from "../../src/curation-app/api/types";
+import { isSourceView, isTablePreview, isTablesResult, isTargetMatch } from "../../src/curation-app/api/types";
 import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
@@ -35,6 +36,7 @@ import {
   locationKey,
   NO_EXACT_TARGET,
   NO_SUCH_WARNING,
+  openPlace,
   scopeText,
   suggestionView,
 } from "../../src/curation-app/problems";
@@ -43,6 +45,8 @@ import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } fro
 import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
 import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app/data";
+import openTablesFixture from "../fixtures/curation-contract/open-tables.json";
+import problemsFixture from "../fixtures/curation-contract/problems.json";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
@@ -370,5 +374,21 @@ describe("rows contract", () => {
     const { shown, counts } = filterStudies(rows, { search: "demo", substance: "", curator: "", chip: "all" });
     expect(shown.map((row) => row.id)).toEqual(["caffeine/Demo2020"]);
     expect(counts.all).toBe(1);
+  });
+});
+
+describe("open tables contract", () => {
+  it("accepts the answers of Open tables at a cell, and the notice of an open workbook", () => {
+    const opened = contract<TablesResult>(openTablesFixture.opened);
+    const open = contract<TablesResult>(openTablesFixture.already_open);
+    expect(isTablesResult(opened)).toBe(true);
+    expect(isTablesResult(open)).toBe(true);
+    expect(opened.notice).toBeNull();
+    expect(open.notice).toBe("The workbook is already open. Go to sheet timecourses_Fig1, cell O6.");
+  });
+
+  it("opens a problem of the validation at the place that the local server takes", () => {
+    const mismatch = contract<Problem[]>(problemsFixture.validated).find((issue) => issue.code === "digitized_mismatch");
+    expect(openPlace(mismatch!)).toEqual({ file: openTablesFixture.request.file, cell: openTablesFixture.request.cell });
   });
 });

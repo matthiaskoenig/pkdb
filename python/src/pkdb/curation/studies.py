@@ -21,10 +21,11 @@ from urllib.parse import quote
 
 from pydantic import ValidationError
 
-from pkdb.curation.actions import action_of
+from pkdb.curation.actions import Action, action_of
+from pkdb.curation.errors import describe, new_request_id
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
-from pkdb.curation.state import EngineState
+from pkdb.curation.state import EngineState, JobRunning
 from pkdb.curation.tree import SourceTree
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
@@ -38,7 +39,7 @@ from pkdb.studyformat.layout import Layout, scan_folder, workbook_tables
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
-from pkdb.studyformat.raw import raw_lines
+from pkdb.studyformat.raw import parse_raw_file, raw_lines
 from pkdb.studyformat.review_edit import (
     ANY,
     AmbiguousWarning,
@@ -73,11 +74,20 @@ from pkdb.studyformat.tables import (
     REVIEW_JSON,
     STUDY_JSON,
     TABLES,
+    parse_table_file,
 )
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
-from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.base import open_lock, workbook_path
+from pkdb.studyformat.workbook.view import (
+    HiddenSheet,
+    NoSheet,
+    ViewError,
+    WorkbookOpen,
+    parse_cell,
+    show_place,
+)
 
 IMAGE_TYPES = {
     ".png": "image/png",
@@ -360,6 +370,32 @@ def _located(line: int | None, column: str | None, key: str | None) -> str:
     parts += [f"column {column}"] if column is not None else []
     parts += [f"key {key}"] if key is not None else []
     return " ".join(parts) or "the file"
+
+
+def _place(folder: Path, payload: dict) -> tuple[str, str | None] | None:
+    """The sheet and the cell that Open tables opens the workbook at, from `file` and `cell`.
+
+    None without `file`: the workbook opens where it was left. `file` names a table file or
+    a raw table of the study, which need not exist yet; `cell` is a workbook address such as
+    Y97. Refused before the sync, so that a refused place writes nothing.
+    """
+    file = _optional_text(payload, "file")
+    cell = _optional_text(payload, "cell")
+    if file is None:
+        if cell is not None:
+            raise ValueError("A cell needs the file of its table")
+        return None
+    if parse_table_file(file) is None and parse_raw_file(file, folder.name) is None:
+        raise ValueError(f"{file} is no table file of {folder.name}")
+    if cell is not None:
+        parse_cell(cell)
+    # The sheet of a table is its file name without .tsv, as build_workbook names it.
+    return file.removesuffix(".tsv"), cell
+
+
+def _go_to(sheet: str, cell: str | None) -> str:
+    """Where the curator goes in a workbook that the app could not switch."""
+    return f"Go to sheet {sheet}, cell {cell}." if cell else f"Go to sheet {sheet}."
 
 
 def _sync_result(result: SyncResult) -> dict:
@@ -953,6 +989,69 @@ class StudiesMixin(EngineState):
             # A sync can have written some files before it failed.
             self._rescan()
 
+    def _open_at(
+        self,
+        folder: Path,
+        workbook: Path,
+        sheet: str,
+        cell: str | None,
+        *,
+        opening: Action,
+    ) -> str | None:
+        """Make the workbook open at `sheet` with `cell` selected; a notice when it cannot.
+
+        A workbook that a spreadsheet program has open cannot be switched from outside: it
+        opens as it is, and the notice names the sheet and the cell to go to. So does a
+        workbook of a study with a running job, which a rewrite would stop. The rewrite
+        changes no cell, so the watcher takes it as seen and starts no job for it. The log
+        names a failure by `opening`, the request that opens the workbook.
+        """
+        if open_lock(workbook) is not None:
+            return f"The workbook is already open. {_go_to(sheet, cell)}"
+        try:
+            self._unwatched_write(
+                folder, workbook.name, lambda: show_place(workbook, sheet, cell)
+            )
+        except WorkbookOpen:
+            return f"The workbook is already open. {_go_to(sheet, cell)}"
+        except JobRunning:
+            return f"The study is being validated or uploaded. {_go_to(sheet, cell)}"
+        except HiddenSheet:
+            then = f", then go to cell {cell}." if cell else "."
+            return f"Sheet {sheet} is hidden in the workbook. Show it{then}"
+        except NoSheet:
+            return f"The workbook has no sheet {sheet}."
+        except ViewError as error:
+            self._log_open_failure(error, opening)
+            return (
+                f"Could not select sheet {sheet}: the view of the workbook could not be "
+                f"changed. {_go_to(sheet, cell)}"
+            )
+        except OSError as error:
+            # Its text names the absolute path of the file.
+            reason = error.strerror or type(error).__name__
+            return f"Could not select sheet {sheet}: {reason}. {_go_to(sheet, cell)}"
+        except Exception as error:
+            # A problem of the view never blocks the open: the workbook opens as it is.
+            self._log_open_failure(error, opening)
+            return f"Could not select sheet {sheet}. {_go_to(sheet, cell)}"
+        return None
+
+    def _log_open_failure(self, error: BaseException, opening: Action) -> None:
+        """Keep the technical detail of a failed view change in the error log."""
+        body = describe(
+            error,
+            action=opening.text(),
+            request_id=new_request_id(),
+            code="view_error",
+            unexpected=not isinstance(error, ViewError),
+            secrets=self.secrets(),
+        )
+        if isinstance(error, ViewError):
+            self.log.failed(body, error, label=opening.label)
+        else:
+            self.log.unexpected(body, error, label=opening.label)
+
     def table_preview(self, identity: str, payload: dict) -> dict:
         """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""
         preview = preview_table(
@@ -980,7 +1079,7 @@ class StudiesMixin(EngineState):
         return dataclasses.asdict(match_target(study, target))
 
     def tables_action(self, identity: str, payload: dict) -> dict:
-        """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
+        """Open the workbook, at the sheet of a table and a cell when given, sync it, resolve its conflicts with `keep`, or add a sheet."""
         # The workbook and the tables record no author, but writes need a user (spec 7.4).
         self.author()
         folder = self.study_folder(identity)
@@ -1024,6 +1123,7 @@ class StudiesMixin(EngineState):
             }
         if action not in {"open", "sync", "resolve"}:
             raise ValueError(f"Unknown tables action {action!r}")
+        place = _place(folder, payload) if action == "open" else None
         keep = payload.get("keep") if action == "resolve" else None
         if action == "resolve" and keep not in {"workbook", "tables"}:
             raise ValueError("Keep the workbook or the tables")
@@ -1034,12 +1134,17 @@ class StudiesMixin(EngineState):
         if action == "open":
             # A sync that failed is reported; the curator fixes it in the workbook.
             result["opened"] = sync.workbook.is_file()
+            result["notice"] = None
             if result["opened"]:
                 opening = action_of(
                     "POST",
                     "/local/studies/tables",
                     {"study": identity, "action": "open"},
                 )
+                if place is not None:
+                    result["notice"] = self._open_at(
+                        folder, sync.workbook, *place, opening=opening
+                    )
                 open_path(
                     sync.workbook,
                     subject=f"the tables of {identity}",

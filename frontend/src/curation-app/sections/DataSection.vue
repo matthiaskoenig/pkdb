@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
-import { VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
+import { VAlert, VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
 import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
@@ -43,11 +43,12 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
 
 /**
  * A source of the study beside the rows of a table, read only. The toolbar holds the switch of
- * the empty columns, Sync, Add table and what the sync status means; the head of a shared table
- * holds its Source filter. Below the toolbar are the navigator of the tables and sources, the
- * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
- * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
- * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * the empty columns, Open sheet, Sync, Add table and what the sync status means; the head of a
+ * shared table holds its Source filter. Below the toolbar are the navigator of the tables and
+ * sources, the source pane and the rows pane, which a separator resizes. Tables are edited in the
+ * workbook, which Open tables of the study header opens where it was left, and Open sheet at the
+ * sheet of the shown table: Sync syncs it, and Add table adds a sheet. While the workbook and the
+ * tables conflict, the conflict panel shows at the top of the rows pane.
  * Below it, the notes of the kind of the table in study.json open and close above the rows; they
  * edit the draft of the study store, whose banner under the section tabs shows its unsaved changes.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
@@ -323,22 +324,34 @@ const syncText = computed(() =>
 /** Whether the workbook and the tables conflict; the panel offers to keep a side even without the rows. */
 const conflicted = computed(() => detail.value?.sync.status === "conflict");
 
-type Action = "open" | "sync" | Side;
+type Action = "open" | "sheet" | "sync" | Side;
 
 const { busy, working, failure, userText, run } = useAction<Action>(announce);
 const addTable = ref(false);
+/** What to do in the workbook after an open found it open already; it stays until it is closed or the next action. */
+const openNotice = ref<string | null>(null);
+// The notice names a sheet of the table that was shown, so it ends with the table and with the study.
+watch([file, identity], () => (openNotice.value = null));
 
-/** Open workbook of the conflict panel, which explains the conflicts. */
-function openWorkbook(): Promise<void> {
-  return run("open", async () => {
-    const result = await study.tablesAction("open");
+/**
+ * Open the workbook at the sheet of the shown table: Open sheet of the toolbar (`sheet`), and Open
+ * workbook of the conflict panel (`open`), which explains the conflicts.
+ */
+function openWorkbook(action: "open" | "sheet" = "open"): Promise<void> {
+  return run(action, async () => {
+    openNotice.value = null;
+    const shown = file.value;
+    const result = await study.tablesAction("open", shown ? { file: shown } : {});
     failure.value = tablesOutcome(withoutConflicts(result));
-    return result.opened ? "The workbook opened." : "";
+    openNotice.value = result.notice ?? null;
+    // The notice says what to do when the workbook was open already, so the status stays silent then.
+    return result.opened && !result.notice ? "The workbook opened." : "";
   });
 }
 
 function syncTables(): Promise<void> {
   return run("sync", async () => {
+    openNotice.value = null;
     const outcome = syncOutcome(await study.tablesAction("sync"), null);
     failure.value = outcome.failure;
     return outcome.notice;
@@ -347,6 +360,7 @@ function syncTables(): Promise<void> {
 
 function keep(side: Side): Promise<void> {
   return run(side, async () => {
+    openNotice.value = null;
     const outcome = syncOutcome(await study.tablesAction("resolve", { keep: side }), side);
     failure.value = outcome.failure;
     return outcome.notice;
@@ -397,7 +411,11 @@ const rowsPane = computed(() =>
 /** The props of the conflict panel; the progress of Sync shows on its own button. */
 const conflictPanel = computed(() => {
   const running = busy.value;
-  return { conflicts: detail.value?.conflicts ?? [], busy: running === "sync" ? null : running, disabled: working.value };
+  return {
+    conflicts: detail.value?.conflicts ?? [],
+    busy: running === "sync" || running === "sheet" ? null : running,
+    disabled: working.value,
+  };
 });
 </script>
 
@@ -449,6 +467,19 @@ const conflictPanel = computed(() => {
           class="data-switch"
         />
         <VBtn
+          v-if="file"
+          variant="tonal"
+          color="primary"
+          size="small"
+          prepend-icon="fas fa-table"
+          :disabled="working"
+          :loading="busy === 'sheet'"
+          class="data-open-sheet"
+          @click="openWorkbook('sheet')"
+        >
+          Open sheet
+        </VBtn>
+        <VBtn
           variant="tonal"
           color="primary"
           size="small"
@@ -476,10 +507,22 @@ const conflictPanel = computed(() => {
 
       <ActionFailureAlert v-if="failure" :failure="failure" :study="identity" @close="failure = null" />
       <UserHint v-else-if="userText" :text="userText" />
+      <VAlert
+        v-if="openNotice"
+        type="info"
+        variant="tonal"
+        density="compact"
+        closable
+        role="status"
+        class="status-alert data-open-notice"
+        @click:close="openNotice = null"
+      >
+        {{ openNotice }}
+      </VAlert>
       <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
       <span role="status" aria-live="polite" class="data-notice">{{ notice }}</span>
       <!-- Without a table, also beyond the upload limits, the conflicts have no rows pane to show in. -->
-      <ConflictPanel v-if="conflicted && !rowsPane" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+      <ConflictPanel v-if="conflicted && !rowsPane" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
 
       <p v-if="limited" class="data-empty">
         This study is beyond the upload limits, so the app cannot show its sources and tables. See
@@ -523,7 +566,7 @@ const conflictPanel = computed(() => {
               @retry="reloadRows"
               @update:filter="setFilter"
             >
-              <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+              <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
               <TableNotes
                 v-if="notesKind"
                 :key="notesKind"
@@ -556,7 +599,7 @@ const conflictPanel = computed(() => {
             @retry="reloadRows"
             @update:filter="setFilter"
           >
-            <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+            <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
             <TableNotes
               v-if="notesKind"
               :key="notesKind"

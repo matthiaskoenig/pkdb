@@ -5,7 +5,7 @@ methods are declared for type checking only and are provided by `CurationEngine`
 """
 
 import threading
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple
@@ -110,6 +110,11 @@ class StateVersion(NamedTuple):
     recent: list[dict]
 
 
+class JobRunning(Exception):
+    """A job of the study runs: it compares the source with the one it started on, so a
+    write that the watcher takes as seen would still stop it."""
+
+
 class EngineState:
     lock: StateLock
     # Tells the versions of the state of this engine from those of an engine before it.
@@ -181,6 +186,9 @@ class EngineState:
         def _sync_state(self, folder: Path) -> dict: ...
         def _wait(self, row: dict, error: Exception) -> None: ...
         def _sync_later(self, row: dict) -> None: ...
+        def _unwatched_write[T](
+            self, folder: Path, file: str, write: Callable[[], T]
+        ) -> T: ...
         def _record_write(
             self,
             identity: str,

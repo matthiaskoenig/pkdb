@@ -1,5 +1,6 @@
 """The read and write routes of a study page on a real loopback server over a real engine."""
 
+import errno
 import json
 import os
 import re
@@ -36,6 +37,7 @@ from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.ulid import new_ulid
 from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.view import ViewError
 
 DETAIL = "/local/studies/caffeine/Example"
 METADATA = {"format": 2, "creator": "curator", "licence": "open", "access": "private"}
@@ -1532,6 +1534,249 @@ def test_tables_open_uses_the_opener(api, monkeypatch):
     result = json.loads(data)
     assert result["ok"] and result["workbook_action"] == "created"
     assert result["changes"] == [] and result["conflicts"] == []
+
+
+def _open(server, headers, **place):
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "open", **place},
+        headers,
+    )
+    return status, json.loads(data)
+
+
+@pytest.fixture
+def opened(api, monkeypatch):
+    """The api with a recording opener, and the workbook that a first Open tables created."""
+    server, engine, folder = api
+    paths = []
+    monkeypatch.setattr(
+        "pkdb.curation.studies.open_path", lambda path, **kw: paths.append(path)
+    )
+    headers = authenticate(server)
+    status, result = _open(server, headers)
+    assert status == 200 and result["opened"] and result["notice"] is None
+    return server, engine, folder, headers, paths
+
+
+def test_open_tables_at_a_cell_opens_the_workbook_at_its_sheet(opened):
+    server, engine, folder, headers, paths = opened
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"] and result["notice"] is None
+    assert paths == [workbook_path(folder)] * 2
+    sheet = openpyxl.load_workbook(workbook_path(folder)).active
+    assert sheet.title == "timecourses_Fig1"
+    assert sheet.sheet_view.selection[0].activeCell == "O6"
+
+
+def test_open_tables_at_a_raw_table_opens_its_sheet(opened):
+    server, engine, folder, headers, paths = opened
+
+    status, result = _open(server, headers, file="Example_Tab2.tsv")
+
+    assert status == 200 and result["notice"] is None
+    assert openpyxl.load_workbook(workbook_path(folder)).active.title == "Example_Tab2"
+
+
+def test_open_tables_without_a_place_keeps_the_last_sheet(opened):
+    server, engine, folder, headers, paths = opened
+    assert _open(server, headers, file="outputs_Tab2.tsv")[0] == 200
+    before = workbook_path(folder).read_bytes()
+
+    status, result = _open(server, headers)
+
+    assert status == 200 and result["notice"] is None
+    assert workbook_path(folder).read_bytes() == before
+
+
+def test_open_tables_at_a_cell_of_an_open_workbook_names_the_place(opened):
+    server, engine, folder, headers, paths = opened
+    workbook = workbook_path(folder)
+    (folder / f".~lock.{workbook.name}#").write_text("curator", encoding="utf-8")
+    before = workbook.read_bytes()
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "The workbook is already open. Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert workbook.read_bytes() == before
+    # It opens as it is: the program brings its window to the front.
+    assert paths == [workbook] * 2
+    status, result = _open(server, headers, file="outputs_Tab2.tsv")
+    assert result["notice"] == "The workbook is already open. Go to sheet outputs_Tab2."
+
+
+def test_open_tables_at_a_table_without_a_sheet_says_so(opened):
+    server, engine, folder, headers, paths = opened
+    before = workbook_path(folder).read_bytes()
+
+    status, result = _open(server, headers, file="outputs_Tab9.tsv", cell="A2")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == "The workbook has no sheet outputs_Tab9."
+    assert workbook_path(folder).read_bytes() == before
+
+
+def test_open_tables_at_a_hidden_sheet_says_to_show_it(opened):
+    server, engine, folder, headers, paths = opened
+    book = openpyxl.load_workbook(workbook_path(folder))
+    book["timecourses_Fig1"].sheet_state = "hidden"
+    book.save(workbook_path(folder))
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Sheet timecourses_Fig1 is hidden in the workbook. Show it, then go to cell O6."
+    )
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv")
+    assert (
+        result["notice"] == "Sheet timecourses_Fig1 is hidden in the workbook. Show it."
+    )
+
+
+@pytest.mark.parametrize(
+    ("error", "reason"),
+    [
+        (
+            lambda path: OSError(errno.ENOSPC, os.strerror(errno.ENOSPC), str(path)),
+            os.strerror(errno.ENOSPC),
+        ),
+        (lambda path: OSError(f"Could not write {path}"), "OSError"),
+    ],
+)
+def test_open_tables_names_a_failed_write_without_its_path(
+    opened, monkeypatch, error, reason
+):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, data):
+        raise error(path)
+
+    monkeypatch.setattr("pkdb.studyformat.workbook.view.atomic_bytes", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        f"Could not select sheet timecourses_Fig1: {reason}. "
+        "Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert str(folder) not in result["notice"]
+
+
+def test_open_tables_names_a_view_problem_plainly_and_logs_its_detail(
+    opened, monkeypatch
+):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, sheet, cell=None):
+        raise ViewError(f"the sheet {sheet} has no view in {path}")
+
+    monkeypatch.setattr("pkdb.curation.studies.show_place", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Could not select sheet timecourses_Fig1: the view of the workbook could not "
+        "be changed. Go to sheet timecourses_Fig1, cell O6."
+    )
+    engine.log.handler.flush()
+    # The log names the request as it names a later failure of the open command.
+    assert (
+        "in Open tables (POST /local/studies/tables): "
+        "ViewError: the sheet timecourses_Fig1 has no view"
+    ) in engine.log.path.read_text(encoding="utf-8")
+
+
+def test_open_tables_opens_the_workbook_whatever_fails_in_the_view(opened, monkeypatch):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, sheet, cell=None):
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr("pkdb.curation.studies.show_place", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Could not select sheet timecourses_Fig1. Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert paths == [workbook_path(folder)] * 2
+    engine.log.handler.flush()
+    text = engine.log.path.read_text(encoding="utf-8")
+    assert "in Open tables (POST /local/studies/tables): " in text
+    assert "RuntimeError" in text
+
+
+def test_open_tables_at_a_cell_while_a_job_of_the_study_runs(opened):
+    server, engine, folder, headers, paths = opened
+    before = workbook_path(folder).read_bytes()
+    engine.active = "caffeine/Example"
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "The study is being validated or uploaded. Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert workbook_path(folder).read_bytes() == before
+    assert paths == [workbook_path(folder)] * 2
+
+
+@pytest.mark.parametrize(
+    ("place", "detail"),
+    [
+        ({"file": "study.json"}, "study.json is no table file of Example"),
+        (
+            {"file": "../Other/outputs_Tab2.tsv"},
+            "../Other/outputs_Tab2.tsv is no table file of Example",
+        ),
+        (
+            {"file": "outputs_Tab2.tsv", "cell": "y97"},
+            "'y97' is no workbook cell such as Y97",
+        ),
+        ({"file": "outputs_Tab2.tsv", "cell": 97}, "Expected text in cell"),
+        ({"cell": "Y97"}, "A cell needs the file of its table"),
+    ],
+)
+def test_open_tables_refuses_a_place_that_is_no_table_or_cell(opened, place, detail):
+    server, engine, folder, headers, paths = opened
+    before = workbook_path(folder).read_bytes()
+
+    status, result = _open(server, headers, **place)
+
+    assert status == 400 and result["code"] == "invalid_request"
+    assert result["detail"] == f"ValueError: {detail}"
+    assert workbook_path(folder).read_bytes() == before and len(paths) == 1
+
+
+def test_opening_at_a_place_starts_no_job(opened):
+    server, engine, folder, headers, paths = opened
+    engine.scan()
+    row = engine.studies["caffeine/Example"]
+    # The workbook that the first Open tables created is a change; it counts as seen now.
+    row["_pending"], row["stale"] = False, False
+    seen = row["_fingerprint"]
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+    engine.scan()
+
+    assert status == 200 and result["notice"] is None
+    assert openpyxl.load_workbook(workbook_path(folder)).active.title == (
+        "timecourses_Fig1"
+    )
+    # The workbook changed, but no cell: the watcher queues no validation or upload.
+    assert row["_fingerprint"] != seen
+    assert row["_pending"] is False and row["stale"] is False
 
 
 def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):

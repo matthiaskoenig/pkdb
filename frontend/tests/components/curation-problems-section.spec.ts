@@ -536,6 +536,63 @@ describe("actions", () => {
     expect(notice()).toBe("The workbook opened.");
   });
 
+  it("opens the workbook at the cell of a problem of a table with Open in tables", async () => {
+    await mountSection();
+    // Only the problems of the tables of the study open there.
+    expect(controls(problem("invalid_study_json"), "Open in tables")).toHaveLength(0);
+    expect(controls(problem("digitized_mismatch"), "Open in tables")).toHaveLength(0);
+    await control(problem("outside_range"), "Open in tables").trigger("click");
+    await flushPromises();
+    expect(posted(TABLES)).toEqual([
+      { study: "caffeine/Example", action: "open", file: "timecourses_Fig1.tsv", cell: "O6" },
+    ]);
+    expect(notice()).toBe("The workbook opened.");
+    expect(section().find(".problems-open-notice").exists()).toBe(false);
+  });
+
+  it("names the sheet and the cell to go to when the workbook is open already, until it is closed", async () => {
+    const text = "The workbook is already open. Go to sheet timecourses_Fig1, cell O6.";
+    await mountSection(withProblems(), { [`POST ${TABLES}`]: tablesResult({ notice: text }) });
+    await control(problem("outside_range"), "Open in tables").trigger("click");
+    await flushPromises();
+    const open = section().get(".problems-open-notice");
+    expect(open.text()).toContain(text);
+    expect(open.attributes("role")).toBe("status");
+    expect(notice()).toBe("");
+    await open.get('button[aria-label="Close"]').trigger("click");
+    await flushPromises();
+    expect(section().find(".problems-open-notice").exists()).toBe(false);
+  });
+
+  it("closes the notice of an open workbook when another study is shown", async () => {
+    const other = "/local/studies/caffeine/Other";
+    await mountSection(withProblems(), {
+      [`POST ${TABLES}`]: tablesResult({ notice: "The workbook is already open. Go to sheet timecourses_Fig1, cell O6." }),
+      [`GET ${other}`]: withProblems({ id: "caffeine/Other" }),
+    });
+    await control(problem("outside_range"), "Open in tables").trigger("click");
+    await flushPromises();
+    expect(section().find(".problems-open-notice").exists()).toBe(true);
+    await router.push("/studies/caffeine/Other/problems");
+    await flushPromises();
+    expect(section().find(".problems-open-notice").exists()).toBe(false);
+  });
+
+  it("opens nothing else while Open in tables of a problem runs", async () => {
+    let finish: (response: Response) => void = () => undefined;
+    await mountSection(withProblems(), {
+      [`POST ${TABLES}`]: (() => new Promise<Response>((resolve) => (finish = resolve))) satisfies Handler,
+    });
+    await control(problem("outside_range"), "Open in tables").trigger("click");
+    await flushPromises();
+    expect(control(problem("outside_range"), "Open in tables").classes()).toContain("v-btn--loading");
+    expect(control(problem("unused_intervention"), "Open in tables").attributes("disabled")).toBeDefined();
+    expect(control(section(), "Open tables").attributes("disabled")).toBeDefined();
+    finish(json(tablesResult()));
+    await flushPromises();
+    expect(control(problem("unused_intervention"), "Open in tables").attributes("disabled")).toBeUndefined();
+  });
+
   it("explains a workbook that could not be opened until the alert is closed", async () => {
     await mountSection(withProblems(), {
       [`POST ${TABLES}`]: tablesResult({ ok: false, opened: false, issues: [unitDimension] }),

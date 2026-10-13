@@ -1099,6 +1099,65 @@ describe("sync status", () => {
     expect(page().find(".action-failure").exists()).toBe(false);
   });
 
+  it("opens the workbook at the sheet of the shown table with Open sheet", async () => {
+    await mountSection(
+      detail(),
+      { [`POST ${TABLES}`]: { ...synced, opened: true } },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    await press("Open sheet");
+    expect(posted()).toEqual([{ action: "open", file: "outputs_Tab2.tsv", study: "caffeine/Example" }]);
+    expect(page().get(".data-notice").text()).toBe("The workbook opened.");
+    expect(page().find(".data-open-notice").exists()).toBe(false);
+  });
+
+  it("names the sheet to go to when the workbook is open already, until the notice is closed", async () => {
+    const text = "The workbook is already open. Go to sheet outputs_Tab2.";
+    await mountSection(
+      detail(),
+      { [`POST ${TABLES}`]: { ...synced, opened: true, notice: text } },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    await press("Open sheet");
+    const open = page().get(".data-open-notice");
+    expect(open.text()).toContain(text);
+    expect(page().get(".data-notice").text()).toBe("");
+    await open.get('button[aria-label="Close"]').trigger("click");
+    await flushPromises();
+    expect(page().find(".data-open-notice").exists()).toBe(false);
+  });
+
+  it("closes the notice of an open workbook when another table is shown", async () => {
+    await mountSection(
+      detail(),
+      { [`POST ${TABLES}`]: { ...synced, opened: true, notice: "The workbook is already open. Go to sheet outputs_Tab2." } },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    await press("Open sheet");
+    expect(page().find(".data-open-notice").exists()).toBe(true);
+    await router.push(`${SECTION}?file=subjects.tsv`);
+    await flushPromises();
+    expect(page().find(".data-open-notice").exists()).toBe(false);
+  });
+
+  it("closes the notice of an open workbook when another study is shown", async () => {
+    const other = "/local/studies/caffeine/Other";
+    await mountSection(
+      detail(),
+      {
+        [`POST ${TABLES}`]: { ...synced, opened: true, notice: "The workbook is already open. Go to sheet outputs_Tab2." },
+        [`GET ${other}`]: detail({ id: "caffeine/Other" }),
+        [`GET ${other}/tables/outputs_Tab2.tsv`]: outputs,
+      },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    await press("Open sheet");
+    expect(page().find(".data-open-notice").exists()).toBe(true);
+    await router.push("/studies/caffeine/Other/data?file=outputs_Tab2.tsv");
+    await flushPromises();
+    expect(page().find(".data-open-notice").exists()).toBe(false);
+  });
+
   it("leaves Open tables to the study header, and shows the progress on the running button only", async () => {
     let finish: (response: Response) => void = () => undefined;
     await mountSection(reviewed(sync("changed", 1)), {
@@ -1110,7 +1169,7 @@ describe("sync status", () => {
         .findAll("button")
         .map((control) => control.text().trim());
     expect(names()).not.toContain("Open tables");
-    expect(names()).toEqual(expect.arrayContaining(["Sync", "Add table"]));
+    expect(names()).toEqual(expect.arrayContaining(["Open sheet", "Sync", "Add table"]));
     void press("Sync");
     await flushPromises();
     const loading = page()
@@ -1266,13 +1325,17 @@ describe("conflicts", () => {
     expect(page().get(".data-notice").text()).toBe("Kept the table rows. The workbook and the tables are in sync.");
   });
 
-  it("opens the workbook to edit the conflicting rows", async () => {
-    await mountSection(reviewed({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
-      ...CONFLICT_TABLES,
-      [`POST ${TABLES}`]: conflictAnswer([[REGION_CONFLICT, REGION_ISSUE]], { opened: true }),
-    });
+  it("opens the workbook at the shown table to edit the conflicting rows", async () => {
+    await mountSection(
+      reviewed({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }),
+      {
+        ...CONFLICT_TABLES,
+        [`POST ${TABLES}`]: conflictAnswer([[REGION_CONFLICT, REGION_ISSUE]], { opened: true }),
+      },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
     await press("Open workbook");
-    expect(posted()).toEqual([{ action: "open", study: "caffeine/Example" }]);
+    expect(posted()).toEqual([{ action: "open", file: "outputs_Tab2.tsv", study: "caffeine/Example" }]);
     // The panel shows the conflict already.
     expect(page().find(".action-failure").exists()).toBe(false);
     expect(page().get(".data-notice").text()).toBe("The workbook opened.");

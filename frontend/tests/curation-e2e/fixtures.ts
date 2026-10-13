@@ -47,9 +47,9 @@ function python(): string {
   return interpreter;
 }
 
-/** Run a script of tools/curation_testing with the interpreter of the python/ project. */
-export async function runTool(script: string, ...args: string[]): Promise<void> {
-  await execute(python(), [join(testing, script), ...args]);
+/** Run a script of tools/curation_testing with the interpreter of the python/ project; its output. */
+export async function runTool(script: string, ...args: string[]): Promise<string> {
+  return (await execute(python(), [join(testing, script), ...args])).stdout;
 }
 
 /** A running `pkdb curate` on a fresh copy of the fixture workspace. */

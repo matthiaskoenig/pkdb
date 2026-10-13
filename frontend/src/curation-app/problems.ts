@@ -206,6 +206,16 @@ export function tableQuery(issue: ValidationIssue): Record<string, string> | nul
 }
 
 /**
+ * Where Open in tables opens the workbook for an issue: the sheet of its file, with its workbook
+ * cell selected when it has one; null without a file. Only the tables of a study open there.
+ */
+export function openPlace(issue: ValidationIssue): { file: string; cell?: string } | null {
+  const source = issue.source;
+  if (!source) return null;
+  return source.cell ? { file: source.file, cell: source.cell } : { file: source.file };
+}
+
+/**
  * The query of the Data section that shows the notes of an issue of study.json in the notes of a
  * table kind, such as `notes.subjects.comments.0.user`: the first table of the kind, and `notes`,
  * which opens its notes. Null for another issue, and for the notes of a kind that the study has
