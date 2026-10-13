@@ -5,9 +5,9 @@
 The target must not exist or be empty. Each study is a copy of caffeine/Draft2021 of the
 fixture under another name, `<substance>/<Surname><Year>`, with a title of its own, one to
 four curators, the review statuses in turn, an issue in every fifth and a release in every
-ninth study, and the typo of the template fixed in every fourth study, so that the overview shows the variety of a real workspace. The same arguments
-always create the same workspace. The studies are synthetic: they describe no real
-publication.
+ninth study, and the typo of the template fixed in every fourth study, so that the overview
+shows the variety of a real workspace. The same arguments always create the same workspace.
+The studies are synthetic: they describe no real publication.
 """
 
 import argparse
