@@ -58,7 +58,10 @@ export interface CurationServer {
   launchUrl: string;
   /** `http://127.0.0.1:<port>` */
   origin: string;
-  /** The workspace folder: caffeine/Demo2020 (with its workbook), caffeine/Draft2021, caffeine/Legacy1990. */
+  /**
+   * The workspace folder: caffeine/Demo2020 (with its workbook), caffeine/Draft2021,
+   * caffeine/Legacy1990; or, with the option `studies`, that many generated studies.
+   */
   workspace: string;
   /** The file to which the recording opener appends every path that the server opens. */
   openLog: string;
@@ -102,13 +105,18 @@ class RunningServer {
     this.launchUrl = this.readLaunchUrl();
   }
 
-  /** Copy the fixture into a new folder below `root` and start `pkdb curate` on it with `openCommand`. */
-  static async start(root: string, openCommand: string | null): Promise<RunningServer> {
+  /**
+   * Copy the fixture into a new folder below `root`, or generate `studies` studies there when it
+   * is above 0 (tools/curation_testing/large_workspace.py), and start `pkdb curate` on it with
+   * `openCommand`.
+   */
+  static async start(root: string, openCommand: string | null, studies: number): Promise<RunningServer> {
     const folder = mkdtempSync(join(root, "server-"));
     const workspace = join(folder, "workspace");
     const openLog = join(folder, "open.log");
     try {
-      await runTool("workspace.py", workspace);
+      if (studies > 0) await runTool("large_workspace.py", workspace, "--studies", String(studies));
+      else await runTool("workspace.py", workspace);
     } catch (error) {
       rmSync(folder, { recursive: true, force: true });
       throw error;
@@ -196,8 +204,14 @@ class RunningServer {
 class ServerPool {
   private current: { file: string; server: RunningServer; cookies: Cookie[] } | null = null;
 
-  /** `openCommand` is the PKDB_OPEN_COMMAND of every server; null records the opened paths. */
-  constructor(private readonly openCommand: string | null) {}
+  /**
+   * `openCommand` is the PKDB_OPEN_COMMAND of every server; null records the opened paths.
+   * `studies` above 0 starts every server on that many generated studies.
+   */
+  constructor(
+    private readonly openCommand: string | null,
+    private readonly studies: number,
+  ) {}
 
   async forFile(file: string): Promise<CurationServer> {
     if (this.current?.file !== file) {
@@ -205,7 +219,7 @@ class ServerPool {
       const root = process.env[ROOT_VARIABLE];
       if (!root) throw new Error(`${ROOT_VARIABLE} is not set: run the suite with playwright.curation.config.ts`);
       // Kept before its launch URL comes, so that closing the pool stops it in any case.
-      this.current = { file, server: await RunningServer.start(root, this.openCommand), cookies: [] };
+      this.current = { file, server: await RunningServer.start(root, this.openCommand, this.studies), cookies: [] };
     }
     return this.current.server.info();
   }
@@ -310,15 +324,19 @@ export async function setAutomaticActions(page: Page, paused: boolean): Promise<
 
 export const test = base.extend<
   { curation: CurationServer; app: CurationApp },
-  { servers: ServerPool; openCommand: string | null }
+  { servers: ServerPool; openCommand: string | null; studies: number }
 >({
   // The PKDB_OPEN_COMMAND of the servers of a spec file, as `test.use({ openCommand: "false" })`
   // sets it; null records the opened paths in `openLog`. Playwright starts another worker for
   // another command, so spec files never share a server with another opener.
   openCommand: [null, { scope: "worker", option: true }],
+  // The number of generated studies of the servers of a spec file, as `test.use({ studies: 1000 })`
+  // sets it; 0 copies the fixture workspace. Playwright starts another worker for another number,
+  // so spec files never share a server with another workspace.
+  studies: [0, { scope: "worker", option: true }],
   servers: [
-    async ({ openCommand }, use) => {
-      const pool = new ServerPool(openCommand);
+    async ({ openCommand, studies }, use) => {
+      const pool = new ServerPool(openCommand, studies);
       await use(pool);
       await pool.close();
     },
