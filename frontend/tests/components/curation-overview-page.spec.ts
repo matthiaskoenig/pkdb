@@ -676,18 +676,47 @@ describe("OverviewPage", () => {
   });
 
   it("builds the item of each row once per snapshot, not per filter or sort change", async () => {
-    // Rows without an identity stand for no study (the sizer rows of the table).
-    const studyItems = () => vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
     await mountPage(snapshot({ studies: [example, harder, approved] }));
     vi.mocked(rowItem).mockClear();
     await search("smoking");
     await search("");
     await click("Open items");
-    expect(studyItems()).toHaveLength(0);
+    expect(vi.mocked(rowItem).mock.calls).toHaveLength(0);
     serve({ "/local/state": snapshot({ studies: [example, harder, approved] }), "/local/curators": { curators: profiles } });
     await useOverviewStore().refresh();
     await flushPromises();
-    expect(studyItems()).toHaveLength(3);
+    expect(vi.mocked(rowItem).mock.calls).toHaveLength(3);
+  });
+
+  it("shows the profiles of the curators in the rows that were shown before the roster arrived", async () => {
+    let release: () => void = () => {};
+    const roster = new Promise<void>((resolve) => (release = resolve));
+    const state = snapshot({ studies: [harder] });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const path = new URL(input instanceof Request ? input.url : String(input), "http://127.0.0.1").pathname;
+      if (path === "/local/curators") await roster;
+      return new Response(JSON.stringify(path === "/local/state" ? state : { curators: profiles }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    });
+    await useOverviewStore().refresh();
+    router = makeRouter();
+    await router.push("/");
+    await router.isReady();
+    mount(OverviewPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
+    await flushPromises();
+    const before = rowOf("caffeine/Harder1988").get(".cell-curators");
+    expect(before.get('[role="img"][aria-label="mkoenig"]').text()).toBe("M");
+    expect(before.find("img").exists()).toBe(false);
+    vi.mocked(rowItem).mockClear();
+
+    release();
+    await flushPromises();
+    const after = rowOf("caffeine/Harder1988").get(".cell-curators");
+    expect(after.get('img[alt="Matthias König"]').attributes("src")).toBe("/avatars/matthias_koenig.webp");
+    expect(after.get('[role="img"][aria-label="Jan Grzegorzewski"]').text()).toBe("JG");
+    expect(vi.mocked(rowItem).mock.calls).toHaveLength(1);
   });
 
   it("applies the search at once when the keyboard empties the field", async () => {

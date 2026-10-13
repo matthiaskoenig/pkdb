@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
 import { formatTime, MODE_LABELS, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
@@ -14,45 +13,44 @@ const props = defineProps<{
 const emit = defineEmits<{ toggle: []; retry: [] }>();
 
 const router = useRouter();
-const row = computed(() => props.item.row);
 
 /**
  * A click on a row opens its study, unless it hits a control of the row or the cell of its
  * checkbox, or ends a drag that selected text.
  */
 function open(event: MouseEvent): void {
-  if (row.value.duplicate) return;
+  if (props.item.row.duplicate) return;
   if (event.target instanceof Element && event.target.closest("a, button, input, label, .cell-select")) return;
   if (window.getSelection()?.toString()) return;
-  void router.push(studyRoute(row.value));
+  void router.push(studyRoute(props.item.row));
 }
 </script>
 
 <template>
   <tr
-    :data-study="row.duplicate ? undefined : row.id"
+    :data-study="item.row.duplicate ? undefined : item.row.id"
     class="study-row"
-    :class="{ 'study-row--link': !row.duplicate, 'study-row--selected': selected }"
+    :class="{ 'study-row--link': !item.row.duplicate, 'study-row--selected': selected }"
     @click="open"
   >
     <td class="cell-select">
       <VCheckboxBtn
         :model-value="selected"
-        :disabled="row.duplicate"
+        :disabled="item.row.duplicate"
         density="compact"
-        :aria-label="`Select ${row.id}`"
+        :aria-label="`Select ${item.row.id}`"
         @update:model-value="emit('toggle')"
       />
     </td>
     <td class="cell-study">
       <div class="study-row-line">
         <!-- A long identity stays on its line; the title after it is cut with an ellipsis. -->
-        <span v-if="row.duplicate" class="study-identity">{{ row.substance }}/{{ row.name }}</span>
-        <RouterLink v-else :to="studyRoute(row)" class="study-identity"
-          >{{ row.substance }}/<wbr />{{ row.name }}</RouterLink
+        <span v-if="item.row.duplicate" class="study-identity">{{ item.row.substance }}/{{ item.row.name }}</span>
+        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity"
+          >{{ item.row.substance }}/<wbr />{{ item.row.name }}</RouterLink
         >
         <VChip
-          v-if="row.duplicate"
+          v-if="item.row.duplicate"
           size="x-small"
           color="error"
           variant="tonal"
@@ -61,12 +59,12 @@ function open(event: MouseEvent): void {
         >
           Duplicate identity
         </VChip>
-        <span v-if="row.duplicate" class="study-path" :title="row.path">{{ row.path }}</span>
+        <span v-if="item.row.duplicate" class="study-path" :title="item.row.path">{{ item.row.path }}</span>
         <span
-          v-if="row.summary.title"
+          v-if="item.row.summary.title"
           class="study-row-title"
-          :title="row.summary.title"
-          >{{ row.summary.title }}</span
+          :title="item.row.summary.title"
+          >{{ item.row.summary.title }}</span
         >
         <span v-else class="study-row-title study-row-title--missing">No reference title yet</span>
       </div>
@@ -74,22 +72,22 @@ function open(event: MouseEvent): void {
     <td class="cell-review">
       <div class="cell-chips">
         <VChip
-          v-if="row.summary.review_status"
+          v-if="item.row.summary.review_status"
           size="small"
           variant="tonal"
-          :color="REVIEW_TONES[row.summary.review_status]"
+          :color="REVIEW_TONES[item.row.summary.review_status]"
           class="status-chip"
         >
-          {{ REVIEW_LABELS[row.summary.review_status] }}
+          {{ REVIEW_LABELS[item.row.summary.review_status] }}
         </VChip>
         <span v-else class="cell-empty">-</span>
-        <VChip v-if="row.summary.ai" size="small" variant="outlined" class="ai-marker" :title="aiTitle(row)">
+        <VChip v-if="item.row.summary.ai" size="small" variant="outlined" class="ai-marker" :title="aiTitle(item.row)">
           AI
         </VChip>
       </div>
     </td>
-    <td class="cell-open">{{ row.summary.open_items ?? 0 }}</td>
-    <td v-if="row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
+    <td class="cell-open">{{ item.row.summary.open_items ?? 0 }}</td>
+    <td v-if="item.row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
     <td v-else class="cell-problems">
       <div class="cell-chips">
         <VChip
@@ -103,15 +101,15 @@ function open(event: MouseEvent): void {
           {{ problem.label }}
         </VChip>
         <span v-if="item.activity" class="cell-note" :title="item.activity">{{ item.activity }}</span>
-        <span v-if="row.message" class="cell-message" :title="row.message">{{ row.message }}</span>
+        <span v-if="item.row.message" class="cell-message" :title="item.row.message">{{ item.row.message }}</span>
         <VBtn
-          v-if="row.status === 'unknown'"
+          v-if="item.row.status === 'unknown'"
           size="x-small"
           variant="tonal"
           color="primary"
           prepend-icon="fas fa-triangle-exclamation"
           class="retry-button"
-          :aria-label="`Review uncertain upload of ${row.id}`"
+          :aria-label="`Review uncertain upload of ${item.row.id}`"
           @click="emit('retry')"
         >
           Review
@@ -119,13 +117,13 @@ function open(event: MouseEvent): void {
       </div>
     </td>
     <td class="cell-sync">
-      <VChip size="small" variant="tonal" :color="SYNC_TONES[row.sync.status]" class="status-chip">
-        {{ SYNC_LABELS[row.sync.status] }}
+      <VChip size="small" variant="tonal" :color="SYNC_TONES[item.row.sync.status]" class="status-chip">
+        {{ SYNC_LABELS[item.row.sync.status] }}
       </VChip>
     </td>
     <td class="cell-release">
-      <span v-if="row.summary.release" :title="`Released on ${row.summary.release.date}`">
-        {{ row.summary.release.pkdb_id }}
+      <span v-if="item.row.summary.release" :title="`Released on ${item.row.summary.release.date}`">
+        {{ item.row.summary.release.pkdb_id }}
       </span>
       <span v-else class="cell-empty">-</span>
     </td>
@@ -161,18 +159,18 @@ function open(event: MouseEvent): void {
       </div>
       <span v-else class="cell-empty">-</span>
     </td>
-    <td class="cell-mode">{{ MODE_LABELS[row.mode] }}</td>
+    <td class="cell-mode">{{ MODE_LABELS[item.row.mode] }}</td>
     <td class="cell-upload">
       <a
-        v-if="item.upload && row.last_upload"
+        v-if="item.upload && item.row.last_upload"
         :href="item.upload"
         target="_blank"
         rel="noopener noreferrer"
-        :title="`Open ${row.id} in PK-DB`"
+        :title="`Open ${item.row.id} in PK-DB`"
       >
-        {{ formatTime(row.last_upload.at) }}
+        {{ formatTime(item.row.last_upload.at) }}
       </a>
-      <span v-else-if="row.last_upload">{{ formatTime(row.last_upload.at) }}</span>
+      <span v-else-if="item.row.last_upload">{{ formatTime(item.row.last_upload.at) }}</span>
       <span v-else class="cell-empty">-</span>
     </td>
   </tr>
