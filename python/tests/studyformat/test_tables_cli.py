@@ -412,6 +412,8 @@ def test_open_reports_a_failed_sync_and_still_opens(
 def test_open_reports_an_application_that_cannot_open(
     study, vocabulary, capsys, monkeypatch
 ):
+    # A failure counts as early however slow the runner: wait returns when it exits.
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 30)
     opener = [
         sys.executable,
         "-c",

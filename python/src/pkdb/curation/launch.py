@@ -105,12 +105,18 @@ def _start(
         try:
             status = process.wait(timeout=EARLY_FAILURE_SECONDS)
         except subprocess.TimeoutExpired:
-            threading.Thread(
-                target=_reap,
-                args=(process, arguments, errors, failed, late_failure),
-                name=f"pkdb-open-command-{process.pid}",
-                daemon=True,
-            ).start()
+            try:
+                threading.Thread(
+                    target=_reap,
+                    args=(process, arguments, errors, failed, late_failure),
+                    name=f"pkdb-open-command-{process.pid}",
+                    daemon=True,
+                ).start()
+            except BaseException:
+                # Nothing will wait for the command: stop it, so that no zombie remains.
+                process.kill()
+                process.wait()
+                raise
             return
         if status != 0:
             raise subprocess.CalledProcessError(
@@ -167,10 +173,10 @@ def open_path(
             arguments = [executable, str(path)]
         _start(arguments, failed, late_failure)
     except subprocess.CalledProcessError as error:
-        raise _open_failed(failed, error) from error
+        raise _open_failed(failed, error)
     except FileNotFoundError as error:
         if not command and sys.platform == "win32":
-            raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
+            raise _open_failed(failed, error)
         missing = (
             f"the command {command!r} of PKDB_OPEN_COMMAND" if command else executable
         )
@@ -181,7 +187,7 @@ def open_path(
             cause=error,
         ) from error
     except OSError as error:
-        raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
+        raise _open_failed(failed, error)
 
 
 def unbuilt_app_message(assets: Path) -> str:

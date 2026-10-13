@@ -2159,7 +2159,7 @@ def test_a_failure_of_open_tables_after_it_answered_goes_to_the_log(api, monkeyp
     server, engine, folder = api
     monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 0.2)
     monkeypatch.setenv(
-        "PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "lost the display"))
+        "PKDB_OPEN_COMMAND", command_line(late_opener(3, 3, "lost the display"))
     )
     headers = authenticate(server)
     status, _, data = request(

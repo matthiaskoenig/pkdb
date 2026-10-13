@@ -362,7 +362,8 @@ def test_a_thread_that_cannot_start_closes_the_stderr_file_of_the_command(
     file.write_text("x")
     monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
     monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
-    process = Mock(wait=Mock(side_effect=subprocess.TimeoutExpired("xdg-open", 2)))
+    timeout = subprocess.TimeoutExpired("xdg-open", 2)
+    process = Mock(wait=Mock(side_effect=[timeout, -9]))
     runner = Mock(return_value=process)
     monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
     monkeypatch.setattr(
@@ -371,6 +372,9 @@ def test_a_thread_that_cannot_start_closes_the_stderr_file_of_the_command(
     with pytest.raises(RuntimeError):
         open_path(file)
     assert runner.call_args.kwargs["stderr"].closed
+    # Nothing waits for the command any more: it is stopped and reaped.
+    process.kill.assert_called_once_with()
+    assert process.wait.call_count == 2
 
 
 def test_curate_names_the_source_checkout_without_built_assets(
@@ -1424,12 +1428,12 @@ def test_an_opener_that_keeps_running_counts_as_started_and_is_waited_for(
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(2, 0)))
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(3, 0)))
     processes = started_processes(monkeypatch)
     late = []
     started = time.monotonic()
     open_path(file, late_failure=late.append)
-    assert time.monotonic() - started < 1.5
+    assert time.monotonic() - started < 2.5
     [process] = processes
     assert process.returncode is None
     wait_for_open_commands()
@@ -1445,7 +1449,7 @@ def test_an_opener_that_fails_after_it_started_reports_the_failure_later(
     file.write_text("x")
     monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
     monkeypatch.setenv(
-        "PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "lost the display"))
+        "PKDB_OPEN_COMMAND", command_line(late_opener(3, 3, "lost the display"))
     )
     late = []
     open_path(file, subject="the tables of caffeine/Example", late_failure=late.append)
@@ -1465,7 +1469,7 @@ def test_a_later_failure_without_a_listener_is_dropped_quietly(tmp_path, monkeyp
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "gone")))
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(3, 3, "gone")))
     processes = started_processes(monkeypatch)
     errors = []
     monkeypatch.setattr(threading, "excepthook", errors.append)
