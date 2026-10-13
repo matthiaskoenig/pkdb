@@ -411,6 +411,9 @@ describe("the selected row", () => {
     const log = plotTraces(plain, null, undefined, null, { scales: { x: "linear", y: "log" } }).layout;
     expect([log.xaxis.type, log.yaxis.type]).toEqual(["linear", "log"]);
     // The titles and the compact axes stay.
+    // A log axis labels full values (0.5), not bare mantissas; a linear axis keeps the default.
+    expect(log.yaxis).toEqual(expect.objectContaining({ tickformat: "~g", exponentformat: "none" }));
+    expect(log.xaxis.tickformat).toBeUndefined();
     expect(log.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
   });
 

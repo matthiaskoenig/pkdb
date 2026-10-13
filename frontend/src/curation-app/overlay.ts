@@ -100,6 +100,9 @@ export interface OverlayAxis {
   fixedrange: true;
   title?: { text: string; font?: { size: number } };
   tickfont?: { size: number };
+  /** Full values on a log axis (0.2, 0.5, 1), not bare mantissas. */
+  tickformat?: string;
+  exponentformat?: "none";
   automargin?: true;
   gridcolor?: string;
   linecolor?: string;
@@ -633,6 +636,7 @@ export function plotTraces(
     type,
     title: { text, font: { size: 11 } },
     tickfont: { size: 11 },
+    ...(type === "log" ? { tickformat: "~g", exponentformat: "none" as const } : {}),
     visible: true,
     fixedrange: true,
     automargin: true,

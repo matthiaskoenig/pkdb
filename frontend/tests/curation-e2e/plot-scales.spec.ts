@@ -39,16 +39,25 @@ test("a log y axis of the plot of mapped rows is kept for the figure and reads w
     await expect(pane.locator(".plot-scales-note")).toHaveText("");
 
     // The local server keeps the choice of the figure with its settings, for the next start too.
-    const state = (await page.evaluate(async () => (await fetch("/local/state")).json())) as {
-      plot_scales: Record<string, unknown>;
-    };
-    expect(state.plot_scales["caffeine/Demo2020/Fig1"]).toEqual({ x: "linear", y: "log" });
+    // The choice is applied at once and saved after it: wait for the save before the reload.
+    const savedScales = () =>
+      page.evaluate(async () => {
+        const state = (await (await fetch("/local/state")).json()) as { plot_scales: Record<string, unknown> };
+        return state.plot_scales["caffeine/Demo2020/Fig1"];
+      });
+    await expect.poll(savedScales).toEqual({ x: "linear", y: "log" });
     await page.reload();
     await expect(pane.getByRole("group", { name: "Scale of the y axis" }).getByRole("button", { name: "log" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
     await expect.poll(() => axisTypes(page)).toEqual(["linear", "log"]);
+
+    // The log axis labels full values, so a 5 is not taken for 0.5: each label is a different number.
+    const ticks = await plot.locator(".ytick text").allTextContents();
+    expect(ticks).toEqual(expect.arrayContaining(["0.5", "1"]));
+    expect(new Set(ticks).size).toBe(ticks.length);
+    expect(ticks.every((tick) => Number.isFinite(Number(tick)))).toBe(true);
 
     for (const theme of ["light", "dark"] as const) {
       await page.emulateMedia({ colorScheme: theme });
