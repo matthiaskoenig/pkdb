@@ -80,6 +80,8 @@ test("nothing in the study header overlaps another part from 900 to 1100 px, als
         return { name: leaf.className, left, right, top, bottom };
       });
     });
+    // The selector must find the parts of the line, or the loop below checks nothing.
+    expect(boxes.length, `parts of the study header at ${width} px`).toBeGreaterThan(5);
     for (const [index, a] of boxes.entries())
       for (const b of boxes.slice(index + 1)) {
         const overlap = a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5;

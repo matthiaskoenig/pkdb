@@ -1,6 +1,6 @@
 /**
  * What the curation app adds to the light and the dark theme of the website: the colors of the
- * classes of information (`info.ts`), and its amber.
+ * classes of information (`info.ts`), and its amber `caution` color.
  */
 import type { ThemeExtension } from "../plugins/vuetify";
 import { INFO_THEMES } from "./info";

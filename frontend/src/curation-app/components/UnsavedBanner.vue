@@ -12,7 +12,7 @@ import UserHint from "./UserHint.vue";
 
 /**
  * The banner of the draft of study.json under the section tabs, in every section of the study
- * page. While the draft has unsaved changes it is amber and names the changed fields, with Undo,
+ * page. While the draft has unsaved changes it uses the caution color (amber) and names the changed fields, with Undo,
  * Discard and Save; afterwards it shows the outcome of the last save, reload, discard or
  * reference change. It sticks below the app bar while the page scrolls, with square top corners,
  * and publishes where it sticks and its height as `--unsaved-banner-top` and

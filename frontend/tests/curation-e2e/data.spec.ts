@@ -441,7 +441,7 @@ test("in a stacked window the source pane fits a short image, up to 70 % of the 
   // Nothing scrolls and nothing is left empty below the content of the pane.
   expect(sizes.scroll - sizes.client).toBeLessThanOrEqual(1);
   const free = await body.evaluate((element) => {
-    const last = element.lastElementChild!.getBoundingClientRect().bottom;
+    const last = element.querySelector(".pane-content")!.getBoundingClientRect().bottom;
     return element.getBoundingClientRect().bottom - last;
   });
   expect(free, "empty space below the content of the pane").toBeLessThanOrEqual(24);

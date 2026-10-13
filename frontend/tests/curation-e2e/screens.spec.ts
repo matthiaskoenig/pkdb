@@ -41,6 +41,16 @@ const SCREENS: Screen[] = [
     },
   },
   {
+    name: "unsaved metadata",
+    hash: `${STUDY}/metadata`,
+    ready: async (page) => {
+      const banner = page.locator(".unsaved-banner");
+      // The draft stays while the window narrows, so the edit happens once.
+      if (!(await banner.isVisible())) await page.getByRole("textbox", { name: "Source key" }).fill("pkdb.manual.edited");
+      await expect(banner).toContainText("Unsaved changes to study.json: Source key");
+    },
+  },
+  {
     name: "review",
     hash: `${STUDY}/review`,
     ready: async (page) => {
@@ -99,6 +109,21 @@ const SCREENS: Screen[] = [
       // The panel keeps its state when the window narrows, so it opens once.
       if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
       await expect(pane.getByRole("textbox", { name: "Description 1" })).toBeVisible();
+      await paperDrawn(page);
+    },
+  },
+  {
+    name: "unsaved notes of a table",
+    hash: `${STUDY}/data?file=subjects.tsv`,
+    ready: async (page) => {
+      const banner = page.locator(".unsaved-banner");
+      if (!(await banner.isVisible())) {
+        const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+        const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+        if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
+        await pane.getByRole("textbox", { name: "Description 1" }).fill("Healthy adult volunteers, edited.");
+      }
+      await expect(banner).toContainText("Unsaved changes to study.json: Notes of the subjects");
       await paperDrawn(page);
     },
   },
