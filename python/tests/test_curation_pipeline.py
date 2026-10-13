@@ -901,6 +901,31 @@ def test_a_view_write_is_no_change_for_the_watcher(seen):
     assert study["_pending"] is False and study["stale"] is False
 
 
+def watcher_pass(engine):
+    """One pass of the watcher without its failure handling."""
+    engine.scan()
+    engine.schedule_changes()
+    engine._check_workbooks()
+
+
+def test_a_view_write_changes_no_served_state_and_leaves_the_engine_idle(seen):
+    engine, folder, study = seen
+    for _ in range(2):
+        watcher_pass(engine)
+    served = state.state_row(study)
+
+    view_write(engine, folder)
+    # The next scan reads the workbook again, as it reads any file that was written.
+    watcher_pass(engine)
+
+    assert state.state_row(study) == served
+    assert study["_pending"] is False and engine._next_job() is None
+    revision = engine.lock.revision
+    for _ in range(2):
+        watcher_pass(engine)
+    assert engine.lock.revision == revision
+
+
 def test_an_edit_before_a_view_write_stays_a_change(seen):
     engine, folder, study = seen
     set_mean(folder, "timecourses_Fig1.tsv", "6")
