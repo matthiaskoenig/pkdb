@@ -140,7 +140,7 @@ npx playwright install --with-deps chromium
 npm run build:curation && npm run test:curation-e2e
 ```
 
-To run only the speed tests, use `npx playwright test --config playwright.curation.config.ts --project=speed --no-deps`; without `--no-deps`, Playwright first runs the project that the speed tests wait for, which is all other spec files.
+To run only the speed tests, use `npx playwright test --config playwright.curation.config.ts --project=speed --no-deps`; without `--no-deps`, Playwright first runs the project that the speed tests wait for, which is all other spec files. Continuous integration runs the speed tests in the job `curation-speed`, with one worker, and `curation-e2e` runs `npm run test:curation-e2e -- --project=chromium`, which leaves them out.
 
 `tools/curation_testing/make_fixture.py` draws the figure, the table images and the WebPlotDigitizer project of that fixture from its tables; run `uv run --project python python tools/curation_testing/make_fixture.py` from the repository root after changing them.
 
