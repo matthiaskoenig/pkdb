@@ -132,6 +132,9 @@ class EngineState:
     repository: str
     # The color theme of the app; the server keeps it, as the browser origin changes with the port.
     theme: str
+    # The scales of the plots of mapped rows that the curator chose, by figure
+    # `<substance>/<study>/<source>`; the server keeps them, as the origin changes with the port.
+    plot_scales: dict[str, dict[str, str]]
     github: GitHubAssignments
     account: Any
     can_upload: bool

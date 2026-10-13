@@ -25,6 +25,7 @@ from pkdb.curation.jobs import (
     maybe_sent,
     now,
 )
+from pkdb.curation.plot_scales import saved_plot_scales
 from pkdb.curation.state import THEMES, StateLock, StateVersion, state_row
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
@@ -94,6 +95,7 @@ class CurationEngine(
         self.github_user = github_user or saved.get("github_user", "")
         theme = saved.get("theme")
         self.theme = theme if isinstance(theme, str) and theme in THEMES else "system"
+        self.plot_scales = saved_plot_scales(saved.get("plot_scales"))
         self.repository = (
             repository or saved.get("repository") or "matthiaskoenig/pkdb_data"
         )
@@ -197,6 +199,7 @@ class CurationEngine(
             "github_user": self.github_user,
             "repository": self.repository,
             "theme": self.theme,
+            "plot_scales": self.plot_scales,
             "github": self.github.data,
             "modes": self.modes,
             "recent_workspaces": self.recent_workspaces,
@@ -259,6 +262,10 @@ class CurationEngine(
                         "offline": self.offline,
                         "paused": self.paused,
                         "theme": self.theme,
+                        "plot_scales": {
+                            figure: dict(scales)
+                            for figure, scales in self.plot_scales.items()
+                        },
                         "vocabulary": self.vocabulary,
                         "github": {
                             **self.github.data,

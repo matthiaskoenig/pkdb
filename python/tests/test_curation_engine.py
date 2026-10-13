@@ -12,7 +12,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from pkdb.curation import connection, jobs
+from pkdb.curation import connection, jobs, plot_scales
 from pkdb.curation import engine as module
 from pkdb.curation import workspace as workspace_module
 from pkdb.curation.state import StateLock, state_row
@@ -1230,6 +1230,90 @@ def test_an_unknown_saved_theme_follows_the_system(workspace):
         replacement.close()
 
 
+FIG1 = "caffeine/Example/Fig1"
+
+
+def test_the_plot_scales_are_saved_per_figure_and_restored_after_a_restart(
+    workspace, monkeypatch
+):
+    engine, folder = workspace
+    connect = Mock()
+    monkeypatch.setattr(engine, "connect", connect)
+    # The browser origin changes with every random port, so the server keeps the choice.
+    assert engine.snapshot()["plot_scales"] == {}
+    scale = {"figure": FIG1, "x": "linear", "y": "log"}
+    assert engine.configure(plot_scale=scale)["plot_scales"] == {
+        FIG1: {"x": "linear", "y": "log"}
+    }
+    connect.assert_not_called()
+    saved = json.loads((engine.state_dir / "state.json").read_text())
+    assert saved["plot_scales"] == {FIG1: {"x": "linear", "y": "log"}}
+    engine.configure(plot_scale={**scale, "x": "log"})
+    replacement = module.CurationEngine(
+        folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        assert replacement.snapshot()["plot_scales"] == {FIG1: {"x": "log", "y": "log"}}
+    finally:
+        replacement.close()
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        FIG1,
+        {"figure": FIG1, "x": "log"},
+        {"figure": FIG1, "x": "log", "y": "linear", "z": "log"},
+        {"figure": "caffeine/Example", "x": "log", "y": "linear"},
+        {"figure": "caffeine//Fig1", "x": "log", "y": "linear"},
+        {"figure": " caffeine/Example/Fig1", "x": "log", "y": "linear"},
+        {"figure": "caffeine/Example/Fig 1", "x": "log", "y": "linear"},
+        {"figure": FIG1, "x": "logarithmic", "y": "linear"},
+        {"figure": 1, "x": "log", "y": "linear"},
+    ],
+)
+def test_a_plot_scale_names_a_figure_and_the_scales_of_x_and_y(workspace, value):
+    engine, _ = workspace
+    with pytest.raises(ValueError):
+        engine.configure(plot_scale=value)
+    assert engine.snapshot()["plot_scales"] == {}
+
+
+def test_damaged_saved_plot_scales_are_left_out(workspace):
+    engine, folder = workspace
+    path = engine.state_dir / "state.json"
+    kept = {"x": "log", "y": "linear"}
+    damaged = {
+        FIG1: kept,
+        "caffeine/Example/Fig2": {"x": "log"},
+        "caffeine/Example/Fig3": "log",
+        "caffeine/Example": kept,
+        "caffeine/Example/Fig4": {"x": "log", "y": "sqrt"},
+    }
+    for value, expected in ((damaged, {FIG1: kept}), (["log"], {})):
+        path.write_text(
+            json.dumps({**json.loads(path.read_text()), "plot_scales": value})
+        )
+        replacement = module.CurationEngine(
+            folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
+        )
+        try:
+            assert replacement.snapshot()["plot_scales"] == expected
+        finally:
+            replacement.close()
+
+
+def test_the_oldest_plot_scales_go_beyond_the_limit(workspace, monkeypatch):
+    engine, _ = workspace
+    monkeypatch.setattr(plot_scales, "MAX_FIGURES", 2)
+    for source in ("Fig1", "Fig2", "Fig1", "Fig3"):
+        engine.configure(
+            plot_scale={"figure": f"caffeine/Example/{source}", "x": "log", "y": "log"}
+        )
+    # Fig1, chosen again, is newer than Fig2.
+    assert list(engine.snapshot()["plot_scales"]) == [FIG1, "caffeine/Example/Fig3"]
+
+
 def test_reference_preview_save_and_stale_review(workspace):
     import httpx2
 
@@ -1985,6 +2069,7 @@ FIELD_CHANGES = {
     "offline": _configured(offline=False),
     "paused": lambda engine, *_: partial(engine.set_paused, True),
     "theme": _configured(theme="dark"),
+    "plot_scales": _configured(plot_scale={"figure": FIG1, "x": "linear", "y": "log"}),
     "vocabulary": _checked_vocabulary,
     "github": _refreshed_assignments,
     "studies": lambda engine, *_: partial(engine.set_mode, [row(engine)["id"]], "off"),
