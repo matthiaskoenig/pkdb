@@ -1,4 +1,4 @@
-import type { Page, TestInfo } from "@playwright/test";
+import type { Locator, Page, TestInfo } from "@playwright/test";
 import { expect, expectAccessible, test } from "./fixtures.ts";
 
 // The screens and dialogs change nothing on the server, so their tests run in parallel.
@@ -21,6 +21,17 @@ interface Screen {
   hash: string;
   /** Wait until the screen shows its content, also after the window changed its width. */
   ready(page: Page): Promise<void>;
+}
+
+/**
+ * Open the notes of the subjects above subjects.tsv, if they are closed (the panel keeps its state
+ * when the window narrows), and return the field of the first description.
+ */
+async function openSubjectNotes(page: Page): Promise<Locator> {
+  const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+  const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+  if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
+  return pane.getByRole("textbox", { name: "Description 1" });
 }
 
 const SCREENS: Screen[] = [
@@ -104,11 +115,8 @@ const SCREENS: Screen[] = [
     name: "notes of a table",
     hash: `${STUDY}/data?file=subjects.tsv`,
     ready: async (page) => {
-      const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
-      const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
-      // The panel keeps its state when the window narrows, so it opens once.
-      if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
-      await expect(pane.getByRole("textbox", { name: "Description 1" })).toBeVisible();
+      const description = await openSubjectNotes(page);
+      await expect(description).toBeVisible();
       await paperDrawn(page);
     },
   },
@@ -118,10 +126,7 @@ const SCREENS: Screen[] = [
     ready: async (page) => {
       const banner = page.locator(".unsaved-banner");
       if (!(await banner.isVisible())) {
-        const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
-        const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
-        if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.click();
-        await pane.getByRole("textbox", { name: "Description 1" }).fill("Healthy adult volunteers, edited.");
+        await (await openSubjectNotes(page)).fill("Healthy adult volunteers, edited.");
       }
       await expect(banner).toContainText("Unsaved changes to study.json: Notes of the subjects");
       await paperDrawn(page);

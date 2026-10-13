@@ -29,7 +29,7 @@ const WIDTH = 1440;
 const HEIGHT = 900;
 /** The height that shows the review item with all its target rows below the study header. */
 const REVIEW_HEIGHT = 1010;
-/** The height that shows the whole form of Metadata with the save bar below it. */
+/** The height that shows the whole form of Metadata below the banner of its unsaved change. */
 const METADATA_HEIGHT = 1090;
 /** The folder of the copy of the fixture workspace, whose name the header of every image shows. */
 const WORKSPACE = "demo_studies";
@@ -128,16 +128,16 @@ async function render() {
     await paper.getByRole("searchbox", { name: "Find in the paper" }).fill("the");
     await capture("data-paper.png", [paper.locator(".paper-count").filter({ hasText: "1 of 3" })]);
 
-    // Metadata: the forms of study.json with an unsaved change, which is discarded afterwards. The
-    // whole page fits into the window, so that the save bar ends the form rather than cover its end.
+    // Metadata: the forms of study.json with an unsaved change, named by the banner under the tabs, which is
+    // discarded afterwards. The whole page fits into the window, so that no field scrolls under the banner.
     await page.setViewportSize({ width: WIDTH, height: METADATA_HEIGHT });
     await sections.getByRole("link", { name: /^Metadata\b/ }).click();
     await page.getByRole("slider", { name: "Rating of curator" }).press("ArrowRight");
-    await capture("metadata.png", [page.getByText("Unsaved changes in study.json"), page.getByText("Notes of a table are in")], {
+    await capture("metadata.png", [page.getByText("Unsaved changes to study.json: Curators"), page.getByText("Notes of a table are in")], {
       fit: true,
     });
     await page.setViewportSize({ width: WIDTH, height: HEIGHT });
-    // The bar of the draft shows in Data too: its notice of the discard must be gone first.
+    // The banner of the draft shows in Data too: its notice of the discard must be gone first.
     await discardDraft(page);
 
     // Data: the notes of the subjects opened above their rows, with an unsaved edit, discarded afterwards.
@@ -151,7 +151,7 @@ async function render() {
     await description.fill(`${await description.inputValue()} Smokers were excluded.`);
     await capture("data-notes.png", [
       subjects.getByRole("region", { name: "Rows of subjects.tsv", exact: true }),
-      page.getByText("Unsaved changes in study.json"),
+      page.getByText("Unsaved changes to study.json: Notes of the subjects"),
     ]);
     await discardDraft(page);
 
@@ -293,8 +293,8 @@ async function hoverMappedRow(page, source, line) {
 }
 
 /**
- * Discard the unsaved edits of study.json and wait until the bar has gone: Undo shows for a few
- * seconds after a discard, in every section that shows the bar.
+ * Discard the unsaved edits of study.json and wait until the banner has gone: Undo shows for a few
+ * seconds after a discard, in every section, which shows the banner.
  */
 async function discardDraft(page) {
   await page.getByRole("button", { name: "Discard", exact: true }).click();

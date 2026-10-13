@@ -248,7 +248,13 @@ onBeforeUnmount(() => {
   margin-inline-start: auto;
 }
 .unsaved-banner-key {
-  padding: 0 5px;
+  align-self: center;
+  /* Its text sits on the baseline of the label of Save: the smaller font and the thicker bottom
+     border lift it by a pixel. */
+  position: relative;
+  top: 1px;
+  padding: 1px 5px 0;
+  line-height: 16px;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-bottom-width: 2px;
   border-radius: 4px;
