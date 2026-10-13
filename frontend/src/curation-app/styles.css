@@ -455,6 +455,19 @@ a.brand {
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
+/* The tooltip of the problems of a cell of a table grid: a card on the surface with the shadow of
+   a menu, so that its severity chips read as in the Problems section. Vuetify's tooltip is dark
+   and compact. */
+.v-tooltip > .v-overlay__content.problem-tooltip {
+  padding: 8px 12px;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 6px;
+  background: rgb(var(--v-theme-surface));
+  color: rgb(var(--v-theme-on-surface));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-size: 0.9286rem;
+  line-height: 1.4;
+}
 /* A fact has an icon in a 1rem column and its text 8 px after it. */
 .problem-fact {
   display: flex;

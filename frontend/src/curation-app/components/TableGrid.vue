@@ -1,7 +1,19 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { VTooltip } from "vuetify/components";
 import type { TableResponse, ValidationIssue } from "../api/types";
-import { columnName, HEADER_LINE, keptColumns, ROW, visibleColumns, type CellIssues, type IssueCells } from "../grid";
+import { useCellTip } from "../composables/useCellTip";
+import {
+  columnName,
+  HEADER_LINE,
+  keptColumns,
+  lineIssues,
+  ROW,
+  visibleColumns,
+  type CellIssues,
+  type IssueCells,
+} from "../grid";
+import ProblemTip from "./ProblemTip.vue";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
@@ -16,9 +28,12 @@ const STEP = 10;
 
 /**
  * The rows of a table with the lines of its TSV file, or of a raw table with the column letters of
- * its sheet, read only. Rows that open review items target are amber, cells with problems are
- * outlined and describe the problems to screen readers, a column can be marked, and empty
- * columns can be hidden. The header and the line column stay in view while the rows scroll.
+ * its sheet, read only. Rows that open review items target are amber. Cells with problems are
+ * outlined, describe the problems to screen readers, and show them in one tooltip of the grid
+ * 300 ms after the pointer rests on them; a line cell shows every problem of its line, also when
+ * its line button has a keyboard focus, and the Line header, a Tab stop while the header has
+ * problems, every problem of the header. A column can be marked, and empty columns can be
+ * hidden. The header and the line column stay in view while the rows scroll.
  *
  * Above 500 rows, only the rows near the view render, between spacers of the height of the
  * others; `aria-rowcount` and `aria-rowindex` give screen readers the place of each row. The
@@ -284,6 +299,91 @@ function headerClass(index: number, name: string | null): Record<string, boolean
   };
 }
 
+// The tooltip of the problems: one for the grid, at the cell under the pointer or of the keyboard.
+// No outlined cell is a Tab stop: the keyboard reaches the problems through the line buttons,
+// which show every problem of their line, and the Line header, which shows those of the header.
+
+const tip = useCellTip();
+const tipCell = tip.cell;
+
+/** Every problem of each line whose problems the grid shows, also of columns that do not show. */
+const lineProblems = computed(() => {
+  const found = new Map<number, ValidationIssue[]>();
+  for (const line of noteLines.value) {
+    const issues = lineIssues(props.issueCells, line);
+    if (issues.length) found.set(line, issues);
+  }
+  return found;
+});
+
+/** The `data-tip` of the line cell of `line`: its tooltip lists every problem of the line. */
+function lineKey(line: number): string {
+  return `${line}:line`;
+}
+
+/** The problems that a tooltip can list, by the `data-tip` of their cell. */
+const tips = computed(() => {
+  const found = new Map<string, ValidationIssue[]>();
+  for (const [key, note] of notes.value) found.set(key, note.issues);
+  for (const [line, issues] of lineProblems.value) found.set(lineKey(line), issues);
+  return found;
+});
+/**
+ * The problems that the tooltip lists: those of the cell whose tooltip shows. A hiding tooltip
+ * keeps them while it fades out.
+ */
+const tipIssues = computed<ValidationIssue[]>((shown = []) =>
+  tip.key.value === null ? shown : (tips.value.get(tip.key.value) ?? shown),
+);
+
+/** The `data-tip` of the cell at `line` and the column `index` when it has problems. */
+function tipOf(line: number, index: number): string | undefined {
+  const key = `${line}:${index}`;
+  return notes.value.has(key) ? key : undefined;
+}
+
+/** The `data-tip` of the line cell of `line` when the line has problems. */
+function lineTip(line: number): string | undefined {
+  return lineProblems.value.has(line) ? lineKey(line) : undefined;
+}
+
+/** The `data-tip` of a header cell; a raw table has no header line. */
+function headerTip(index: number): string | undefined {
+  return raw.value ? undefined : tipOf(HEADER_LINE, index);
+}
+
+/**
+ * The `data-tip` of the Line header while the header has problems: the header has no other
+ * focusable element, so the Line header is then its one Tab stop.
+ */
+const headerLineTip = computed(() => (raw.value ? undefined : lineTip(HEADER_LINE)));
+
+/** The id of the hidden text with every problem of `line`, which describes its line button or the Line header. */
+function lineNoteId(line: number): string {
+  return `${id}-${line}-all`;
+}
+
+function onScroll(): void {
+  update();
+  tip.scrolled(region.value);
+}
+
+/** Vuetify closes the tooltip, such as on a click outside it. */
+function onTipToggle(open: boolean): void {
+  if (!open) tip.hide();
+}
+
+// A tooltip whose cell left the rendered rows, or has no problems any more, hides.
+watch(
+  [rendered, tips],
+  () => {
+    const cell = tipCell.value;
+    const key = tip.key.value;
+    if (cell && (!cell.isConnected || key === null || !tips.value.has(key))) tip.hide();
+  },
+  { flush: "post" },
+);
+
 function described(...ids: (string | undefined | false)[]): string | undefined {
   return ids.filter(Boolean).join(" ") || undefined;
 }
@@ -420,7 +520,11 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
       tabindex="0"
       role="region"
       :aria-label="label ?? `Rows of ${table.file}`"
-      @scroll.passive="update"
+      @scroll.passive="onScroll"
+      @mouseover="tip.over"
+      @mouseout="tip.out"
+      @focusin="tip.focusIn"
+      @focusout="tip.focusOut"
     >
       <table class="rows-table rows-table--packed" :aria-rowcount="shownRows.length + 1">
         <thead>
@@ -430,7 +534,9 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               scope="col"
               class="rows-line"
               :class="headerClass(-1, null)"
-              :aria-describedby="described(headerNote(-1)?.id)"
+              :data-tip="headerLineTip"
+              :tabindex="headerLineTip ? 0 : undefined"
+              :aria-describedby="headerLineTip ? lineNoteId(HEADER_LINE) : undefined"
             >
               <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> 0</template>
               <template v-else>{{ lineHeader }}</template>
@@ -440,6 +546,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :key="column.index"
               scope="col"
               :class="headerClass(column.index, column.name)"
+              :data-tip="headerTip(column.index)"
               :aria-describedby="described(headerNote(column.index)?.id)"
             >
               {{ column.name
@@ -465,6 +572,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               class="rows-line"
               :class="lineClass(row.line)"
               :tabindex="isFocus(row.line, null) ? -1 : undefined"
+              :data-tip="lineTip(row.line)"
               :aria-describedby="
                 described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
               "
@@ -476,7 +584,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
                   type="button"
                   class="grid-line-button"
                   :tabindex="row.line === tabLine ? 0 : -1"
-                  :title="`Select line ${row.line}`"
+                  :title="lineTip(row.line) ? undefined : `Select line ${row.line}`"
+                  :aria-describedby="lineTip(row.line) ? lineNoteId(row.line) : undefined"
                   @focus="keyLine = row.line"
                   @click.stop="emit('select-line', row.line)"
                 >
@@ -490,6 +599,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :key="column.index"
               :class="cellClass(row.line, column.index, column.name)"
               :tabindex="isFocus(row.line, column.name) ? -1 : undefined"
+              :data-tip="tipOf(row.line, column.index)"
               :aria-describedby="described(notes.get(`${row.line}:${column.index}`)?.id)"
             >
               {{ row.cells[column.index] ?? "" }}
@@ -505,7 +615,28 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
     <div hidden>
       <span :id="targetNote">Targeted by an open review item.</span>
       <span v-for="note in notes.values()" :id="note.id" :key="note.id">{{ note.text }}</span>
+      <span v-for="[line, issues] in lineProblems" :id="lineNoteId(line)" :key="lineNoteId(line)">{{
+        issues.map((issue) => issue.message).join(" ")
+      }}</span>
     </div>
+    <!-- One tooltip for the problems of every cell, at the cell under the pointer or of the keyboard. -->
+    <VTooltip
+      v-if="tips.size"
+      :model-value="tipCell !== null"
+      :target="tipCell ?? undefined"
+      :open-on-hover="false"
+      :open-on-focus="false"
+      :eager="false"
+      interactive
+      location="bottom"
+      :offset="4"
+      max-width="380"
+      content-class="problem-tooltip"
+      :content-props="{ onMouseenter: tip.enterTip, onMouseleave: tip.leaveTip }"
+      @update:model-value="onTipToggle"
+    >
+      <ProblemTip :issues="tipIssues" />
+    </VTooltip>
   </div>
 </template>
 

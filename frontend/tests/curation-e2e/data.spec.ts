@@ -686,6 +686,76 @@ test("the line buttons of the rows are one Tab stop, which the arrow keys move, 
   expect(await page.evaluate(() => document.activeElement?.closest(".rows-scroll") === null)).toBe(true);
 });
 
+test("an outlined cell lists its problems in a tooltip on hover, the button of its line on keyboard focus, and Escape hides it", async ({
+  app,
+  page,
+}) => {
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const cell = rows.getByRole("cell", { name: "1.24", exact: true });
+  await expect(cell).toHaveClass(/grid-cell--warning/);
+  await expect(cell).not.toHaveAttribute("tabindex", "0");
+  const tooltip = page.locator(".problem-tooltip");
+  await cell.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".v-chip")).toHaveText("Warning");
+  await expect(tooltip.locator(".problem-tip-code")).toHaveText("digitized_mismatch");
+  await expect(tooltip.locator(".problem-tip-message")).toContainText("mean 1.24 at 4 hr lies");
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+
+  // The keyboard: Tab reaches the line buttons, the arrow keys the line of the outlined cell, whose
+  // button shows the problems of the line at once. Lines are counted from the first button, so
+  // that the test does not depend on how the lines are numbered.
+  await page.mouse.move(600, 32);
+  const buttons = rows.locator(".grid-line-button");
+  const lineButton = rows
+    .getByRole("row")
+    .filter({ has: page.getByRole("cell", { name: "1.24", exact: true }) })
+    .locator(".grid-line-button");
+  const steps = Number(await lineButton.textContent()) - Number(await buttons.first().textContent());
+  await rows.focus();
+  await page.keyboard.press("Tab");
+  await expect(buttons.first()).toBeFocused();
+  for (let step = 0; step < steps; step++) await page.keyboard.press("ArrowDown");
+  await expect(lineButton).toBeFocused();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".problem-tip-code")).toHaveText("digitized_mismatch");
+  // The row above has no problems.
+  await page.keyboard.press("ArrowUp");
+  await expect(tooltip).toBeHidden();
+  await page.keyboard.press("ArrowDown");
+  await expect(tooltip).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+  await expect(lineButton).toBeFocused();
+});
+
+for (const theme of ["light", "dark"] as const) {
+  test(`the tooltip of an outlined cell in the ${theme} theme is accessible and leaves its cell in view`, async ({
+    app,
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: theme });
+    await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+    const cell = page.getByRole("region", { name: `Rows of ${TABLE}` }).getByRole("cell", { name: "1.24", exact: true });
+    // The problems load after the rows.
+    await expect(cell).toHaveClass(/grid-cell--warning/);
+    await cell.hover();
+    const tooltip = page.locator(".problem-tooltip");
+    await expect(tooltip).toContainText("digitized_mismatch");
+    // Once it grew in, so that the contrast and the box are those of the tooltip as it stays.
+    await expect(tooltip).toHaveCSS("opacity", "1");
+    await expectAccessible(page);
+    const at = (await cell.boundingBox())!;
+    const tip = (await tooltip.boundingBox())!;
+    // Below the cell, or above it at the bottom of the window, and inside the window.
+    expect(tip.y >= at.y + at.height || tip.y + tip.height <= at.y).toBe(true);
+    expect(tip.x).toBeGreaterThanOrEqual(0);
+    expect(tip.x + tip.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  });
+}
+
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
   await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "5", exact: true }).click();
