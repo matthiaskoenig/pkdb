@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watchPostEffect } from "vue";
+import { computed, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
 import type { Profile, StudyRow } from "../api/types";
+import { useWindowPosition } from "../composables/useWindowPosition";
 import type { SortKey, StudySort } from "../overview";
-import { rowItem, type RowItem } from "../studyTable";
+import { bodyParts, ROW_HEIGHT, rowItem, sameParts, sizerRows, type BodyPart, type RowItem } from "../studyTable";
 import StudyTableRow from "./StudyTableRow.vue";
 
 const props = defineProps<{
@@ -88,49 +89,101 @@ function itemOf(row: StudyRow): RowItem {
   if (!item) items.set(row, (item = rowItem(row, profiles, repository)));
   return item;
 }
+
+const body = useTemplateRef<HTMLElement>("body");
+const { position, schedule } = useWindowPosition(body);
+// The filters above the table wrap differently with other counts and move the table.
+watch(() => props.rows, schedule, { flush: "post" });
+
+/** The folder of the study whose row has the keyboard focus: it stays rendered wherever it is. */
+const focusedPath = ref<string | null>(null);
+const pinned = computed(() => {
+  const path = focusedPath.value;
+  if (path === null) return null;
+  const index = props.rows.findIndex((row) => row.path === path);
+  return index < 0 ? null : index;
+});
+
+/** The rendered rows and the spaces between them; the same list while scrolling keeps them. */
+const parts = computed<BodyPart[]>((previous) => {
+  const next = bodyParts({
+    count: props.rows.length,
+    top: position.value.top,
+    height: position.value.height,
+    pinned: pinned.value,
+  });
+  return previous && sameParts(previous, next) ? previous : next;
+});
+
+/** Hidden rows that give the columns the widths of all shown rows. */
+const sizers = computed(() => sizerRows(props.rows));
+
+function focusIn(event: FocusEvent): void {
+  const row = event.target instanceof Element ? event.target.closest("tr[aria-rowindex]") : null;
+  const index = row ? Number(row.getAttribute("aria-rowindex")) - 2 : -1;
+  focusedPath.value = props.rows[index]?.path ?? null;
+}
+
+function focusOut(event: FocusEvent): void {
+  if (!(event.relatedTarget instanceof Node && body.value?.contains(event.relatedTarget))) focusedPath.value = null;
+}
 </script>
 
 <template>
   <VTable class="study-table" density="compact">
-    <caption class="d-sr-only">
-      Studies of the workspace
-    </caption>
-    <thead>
-      <tr>
-        <th ref="select-all" scope="col" class="cell-select">
-          <VCheckboxBtn
-            :model-value="allSelected"
-            :indeterminate="someSelected"
-            :disabled="selectable.length === 0"
-            density="compact"
-            aria-label="Select all shown studies"
-            @update:model-value="toggleAll"
-          />
-        </th>
-        <th
-          v-for="column in columns"
-          :key="column.cell"
-          scope="col"
-          :class="column.cell"
-          :aria-sort="ariaSort(column.key)"
-        >
-          <button v-if="column.key" type="button" class="sort-button" @click="sortBy(column.key)">
-            {{ column.label }}<VIcon :icon="sortIcon(column.key)" size="12" class="sort-icon" />
-          </button>
-          <template v-else>{{ column.label }}</template>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <StudyTableRow
-        v-for="row in rows"
-        :key="row.path"
-        :item="itemOf(row)"
-        :selected="isSelected(row)"
-        @toggle="toggle(row)"
-        @retry="emit('retry', row)"
-      />
-    </tbody>
+    <!-- The wrapper slot renders the table itself, so that it gets aria-rowcount: VTable passes
+         only aria-label attributes to its table. -->
+    <template #wrapper>
+      <div class="v-table__wrapper">
+        <table :aria-rowcount="rows.length + 1">
+          <caption class="d-sr-only">
+            Studies of the workspace
+          </caption>
+          <thead>
+            <tr aria-rowindex="1">
+              <th ref="select-all" scope="col" class="cell-select">
+                <VCheckboxBtn
+                  :model-value="allSelected"
+                  :indeterminate="someSelected"
+                  :disabled="selectable.length === 0"
+                  density="compact"
+                  aria-label="Select all shown studies"
+                  @update:model-value="toggleAll"
+                />
+              </th>
+              <th
+                v-for="column in columns"
+                :key="column.cell"
+                scope="col"
+                :class="column.cell"
+                :aria-sort="ariaSort(column.key)"
+              >
+                <button v-if="column.key" type="button" class="sort-button" @click="sortBy(column.key)">
+                  {{ column.label }}<VIcon :icon="sortIcon(column.key)" size="12" class="sort-icon" />
+                </button>
+                <template v-else>{{ column.label }}</template>
+              </th>
+            </tr>
+          </thead>
+          <tbody ref="body" @focusin="focusIn" @focusout="focusOut">
+            <StudyTableRow v-for="row in sizers" :key="row.path" :item="itemOf(row)" :selected="false" :row-index="null" />
+            <template v-for="part in parts" :key="part.kind === 'row' ? rows[part.index]!.path : part.key">
+              <tr v-if="part.kind === 'space'" class="study-space" aria-hidden="true">
+                <td :colspan="columns.length + 1" :style="{ height: `${part.rows * ROW_HEIGHT}px` }" />
+              </tr>
+              <StudyTableRow
+                v-else
+                :item="itemOf(rows[part.index]!)"
+                :selected="isSelected(rows[part.index]!)"
+                :row-index="part.index + 2"
+                @toggle="toggle(rows[part.index]!)"
+                @retry="emit('retry', rows[part.index]!)"
+              />
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
   </VTable>
 </template>
 
@@ -212,5 +265,17 @@ th[aria-sort] .sort-icon {
 .study-table .cell-select .v-selection-control__input {
   width: 24px;
   height: 24px;
+}
+/* The sizer rows (StudyTableRow.vue without a row index) take no height but keep the widths of
+   their cells, and the space of the rows that are not rendered draws nothing. A space takes its
+   height at once: Vuetify animates the height of cells, which would move the rendered rows away
+   from their places, and so out of the window while it scrolls. */
+.study-table tr.study-sizer {
+  visibility: collapse;
+}
+.study-table tr.study-space > td {
+  padding: 0;
+  border: 0;
+  transition: none;
 }
 </style>

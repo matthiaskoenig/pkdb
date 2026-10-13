@@ -1,6 +1,7 @@
 import type { Page } from "@playwright/test";
 import { SEARCH_DELAY_MS } from "../../src/curation-app/overview.ts";
-import { expect, test } from "./fixtures.ts";
+import { OVERSCAN, ROW_HEIGHT } from "../../src/curation-app/studyTable.ts";
+import { expect, expectAccessible, test } from "./fixtures.ts";
 
 /** The studies of the generated workspace (tools/curation_testing/large_workspace.py). */
 const STUDIES = 1000;
@@ -143,7 +144,6 @@ test.beforeEach(async ({ app, page }) => {
 });
 
 test("while jobs run, a poll never blocks the page for more than 200 ms", async ({ page }, testInfo) => {
-  test.fail(true, "#936: every poll handles 5 to 6 MB of state and renders every study again");
   // The initial validations of the 1,000 studies are the jobs. The load of the page is over after
   // a few seconds; the polls are what is measured.
   await page.waitForTimeout(QUIET_MS);
@@ -156,7 +156,6 @@ test("while jobs run, a poll never blocks the page for more than 200 ms", async 
 });
 
 test("typing in Search studies paints each keystroke and the result within 100 ms", async ({ page }, testInfo) => {
-  test.fail(true, "#936: the overview filters and renders every study on each keystroke");
   // The validations of the 1,000 studies run for minutes, and every poll of the state would load
   // the page again. This test measures the keystrokes, so the polls answer "nothing changed".
   await page.route("**/local/state", (route) => route.fulfill({ status: 304 }));
@@ -196,4 +195,108 @@ test("typing in Search studies paints each keystroke and the result within 100 m
   // The 90th percentile, so that the slow first keystroke of a search does not hide behind the fast ones.
   expect(summary.p90Input, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
   expect(summary.medianResult, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
+});
+
+function studyTable(page: Page) {
+  return page.getByRole("table", { name: "Studies of the workspace" });
+}
+
+/** The study rows that the table rendered. */
+function rendered(page: Page) {
+  return page.locator("tr.study-row");
+}
+
+/** The most rows that a window of 900 px renders: the rows in view, the overscan, the pinned row. */
+const MOST_ROWS = Math.ceil(900 / ROW_HEIGHT) + 2 * OVERSCAN + 1;
+
+test("renders only the rows in view and reaches the last study by scrolling", async ({ page }) => {
+  await expect(studyTable(page)).toHaveAttribute("aria-rowcount", String(STUDIES + 1));
+  expect(await rendered(page).count()).toBeLessThanOrEqual(MOST_ROWS);
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await expect(page.locator(`tr.study-row[aria-rowindex="${STUDIES + 1}"]`)).toBeInViewport();
+  expect(await rendered(page).count()).toBeLessThanOrEqual(MOST_ROWS);
+  await expectAccessible(page);
+});
+
+test("the rendered rows follow the mouse wheel at their places, without a blank band", async ({ page }) => {
+  // After each painted frame: a rendered row that is not at its place in the table, or a part of
+  // the window (its top, middle or bottom) that shows the space of the rows that are not rendered.
+  await page.evaluate((rowHeight) => {
+    const faults: string[] = [];
+    (window as unknown as { __faults: string[] }).__faults = faults;
+    const afterPaint = (done: () => void) => requestAnimationFrame(() => setTimeout(done, 0));
+    const check = () => {
+      const at = Math.round(window.scrollY);
+      const body = document.querySelector(".study-table tbody")!.getBoundingClientRect().top;
+      const rows = [...document.querySelectorAll("tr.study-row")];
+      for (const row of [rows[0]!, rows.at(-1)!]) {
+        const place = (Number(row.getAttribute("aria-rowindex")) - 2) * rowHeight;
+        const offset = row.getBoundingClientRect().top - body;
+        if (Math.abs(offset - place) > 0.5) faults.push(`${at}: row at ${Math.round(offset)} px, not ${place} px`);
+      }
+      for (const y of [0.3, 0.6, 0.99].map((part) => Math.round(window.innerHeight * part))) {
+        if (document.elementFromPoint(720, y)?.closest("tr.study-space")) faults.push(`${at}: space at ${y} px`);
+      }
+      afterPaint(check);
+    };
+    afterPaint(check);
+  }, ROW_HEIGHT);
+  await page.mouse.move(720, 500);
+  // A quick hand on the wheel: a notch of 100 px every 50 ms.
+  for (let notch = 0; notch < 40; notch++) {
+    await page.mouse.wheel(0, 100);
+    await page.waitForTimeout(50);
+  }
+  // The page scrolled by every notch at once: the browser did not pull it back as rows came and went.
+  await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 1000 }).toBe(4000);
+  expect(await page.evaluate(() => (window as unknown as { __faults: string[] }).__faults)).toEqual([]);
+});
+
+test("Select all selects every shown study, also the rows that are not rendered", async ({ page }) => {
+  await page.getByRole("checkbox", { name: "Select all shown studies" }).check();
+  await expect(page.getByText("1,000 studies selected")).toBeVisible();
+  // A study that a filter hides leaves the selection.
+  await page.getByRole("textbox", { name: "Search studies" }).fill(SURNAME);
+  await expect(page.getByText("25 studies selected")).toBeVisible();
+});
+
+test("Tab moves through the rows below the window and keeps the focused row in view", async ({ page }) => {
+  await page.locator('tr.study-row[aria-rowindex="2"] .cell-select input').focus();
+  // Each row has two or three stops: its checkbox, its link and sometimes an issue.
+  for (let press = 0; press < 150; press++) await page.keyboard.press("Tab");
+  const focused = page.locator("tr.study-row:focus-within");
+  await expect(focused).toBeInViewport();
+  expect(Number(await focused.getAttribute("aria-rowindex"))).toBeGreaterThan(Math.ceil(900 / ROW_HEIGHT) + OVERSCAN);
+});
+
+test("keeps the keyboard focus in its row while Page Down scrolls it out of view", async ({ page }) => {
+  const first = page.locator('tr.study-row[aria-rowindex="2"] .cell-select input');
+  await first.focus();
+  for (let press = 0; press < 5; press++) await page.keyboard.press("PageDown");
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(2000);
+  await expect(first).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.locator('tr.study-row[aria-rowindex="2"] a.study-identity')).toBeFocused();
+});
+
+test("the columns keep their widths while the table scrolls", async ({ page }) => {
+  // A new state may change the widths of the columns, as the cells change; this test is about
+  // scrolling, so the polls answer "nothing changed".
+  await page.route("**/local/state", (route) => route.fulfill({ status: 304 }));
+  const widths = () =>
+    studyTable(page)
+      .locator("thead th")
+      .evaluateAll((cells) => cells.map((cell) => cell.getBoundingClientRect().width));
+  const top = await widths();
+  // The first rendered row once the window followed: the middle, and the last rows of the table.
+  for (const [fraction, row] of [
+    [0.5, 400],
+    [1, STUDIES - MOST_ROWS],
+  ] as const) {
+    await page.evaluate((part) => window.scrollTo(0, document.documentElement.scrollHeight * part), fraction);
+    await expect
+      .poll(() => page.evaluate(() => Number(document.querySelector("tr.study-row")?.getAttribute("aria-rowindex"))))
+      .toBeGreaterThan(row);
+    expect(await widths()).toEqual(top);
+  }
 });

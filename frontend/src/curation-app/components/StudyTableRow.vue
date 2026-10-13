@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
 import { formatTime, MODE_LABELS, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
@@ -9,8 +10,16 @@ const props = defineProps<{
   item: RowItem;
   /** Whether the checkbox of the row is checked. */
   selected: boolean;
+  /**
+   * The position of the row for assistive technology, 2 for the first study after the header;
+   * null for a hidden row that only sizes the columns (StudyTable.vue).
+   */
+  rowIndex: number | null;
 }>();
 const emit = defineEmits<{ toggle: []; retry: [] }>();
+
+/** A sizer row: hidden, inert, without a checkbox, an identity or a place in the table. */
+const sizer = computed(() => props.rowIndex === null);
 
 const router = useRouter();
 
@@ -28,13 +37,18 @@ function open(event: MouseEvent): void {
 
 <template>
   <tr
-    :data-study="item.row.duplicate ? undefined : item.row.id"
-    class="study-row"
-    :class="{ 'study-row--link': !item.row.duplicate, 'study-row--selected': selected }"
-    @click="open"
+    :data-study="sizer || item.row.duplicate ? undefined : item.row.id"
+    :aria-rowindex="rowIndex ?? undefined"
+    :aria-hidden="sizer ? 'true' : undefined"
+    :inert="sizer || undefined"
+    :class="
+      sizer ? 'study-sizer' : ['study-row', { 'study-row--link': !item.row.duplicate, 'study-row--selected': selected }]
+    "
+    @click="sizer || open($event)"
   >
     <td class="cell-select">
       <VCheckboxBtn
+        v-if="!sizer"
         :model-value="selected"
         :disabled="item.row.duplicate"
         density="compact"
@@ -43,7 +57,7 @@ function open(event: MouseEvent): void {
       />
     </td>
     <td class="cell-study">
-      <div class="study-row-line">
+      <div v-if="!sizer" class="study-row-line">
         <!-- A long identity stays on its line; the title after it is cut with an ellipsis. -->
         <span v-if="item.row.duplicate" class="study-identity">{{ item.row.substance }}/{{ item.row.name }}</span>
         <RouterLink v-else :to="studyRoute(item.row)" class="study-identity"

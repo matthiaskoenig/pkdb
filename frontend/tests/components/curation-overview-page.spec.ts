@@ -10,7 +10,7 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
-import { rowItem } from "../../src/curation-app/studyTable";
+import { OVERSCAN, ROW_HEIGHT, rowItem } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -163,6 +163,48 @@ function unknownJob(changes: Partial<Job> = {}): Job {
     sid: "caffeine/Example",
     ...changes,
   };
+}
+
+/** The calls of `rowItem` for studies; the rows that size the columns (StudyTable.vue) have no identity. */
+function studyItemCalls() {
+  return vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
+}
+
+/** `count` studies of three substances with titles of their own. */
+function manyStudies(count = 1000) {
+  return Array.from({ length: count }, (_, index) => {
+    const substance = ["caffeine", "codeine", "midazolam"][index % 3]!;
+    const name = `Study${index}`;
+    return studyRow({
+      id: `${substance}/${name}`,
+      name,
+      substance,
+      path: `studies/${substance}/${name}`,
+      summary: { ...example.summary, title: `Title ${index}` },
+    });
+  });
+}
+
+/** The rows that a window of `height` px renders at the top of the table, beyond the overscan. */
+function windowRows(height: number): number {
+  return Math.ceil(height / ROW_HEIGHT) + OVERSCAN;
+}
+
+/** The positions of the rendered study rows (`aria-rowindex`, 2 for the first study). */
+function rowIndices(): number[] {
+  return rows().map((row) => Number(row.attributes("aria-rowindex")));
+}
+
+/**
+ * Moves the body of the study table to `top` px from the top of the window, as scrolling the page
+ * would, and waits for the frame that measures it; jsdom has no layout.
+ */
+async function scrollBody(top: number): Promise<void> {
+  const body = page().get(".study-table tbody").element;
+  vi.spyOn(body, "getBoundingClientRect").mockReturnValue({ top } as DOMRect);
+  document.dispatchEvent(new Event("scroll"));
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  await flushPromises();
 }
 
 beforeEach(() => {
@@ -681,11 +723,76 @@ describe("OverviewPage", () => {
     await search("smoking");
     await search("");
     await click("Open items");
-    expect(vi.mocked(rowItem).mock.calls).toHaveLength(0);
+    expect(studyItemCalls()).toHaveLength(0);
     serve({ "/local/state": snapshot({ studies: [example, harder, approved] }), "/local/curators": { curators: profiles } });
     await useOverviewStore().refresh();
     await flushPromises();
-    expect(vi.mocked(rowItem).mock.calls).toHaveLength(3);
+    expect(studyItemCalls()).toHaveLength(3);
+  });
+
+  it("renders the rows of 1,000 studies that the window shows and selects all of them", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    expect(page().get(".study-table table").attributes("aria-rowcount")).toBe("1001");
+    expect(rows()).toHaveLength(windowRows(400));
+    expect(rows()[0]!.attributes("aria-rowindex")).toBe("2");
+    expect(page().findAll("tr.study-space")).toHaveLength(1);
+    expect(page().findAll("tr.study-sizer").length).toBeGreaterThan(0);
+    await check("Select all shown studies");
+    expect(page().get(".batch-count").text()).toBe("1,000 studies selected");
+  });
+
+  it("renders only the rows in the window while the search filters 1,000 studies", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    for (const [text, shown] of [
+      ["study1", 111],
+      ["title 9", 111],
+      ["codeine", 333],
+      ["study999", 1],
+      ["", 1000],
+    ] as const) {
+      await search(text);
+      expect(page().get(".study-table table").attributes("aria-rowcount"), text).toBe(String(shown + 1));
+      expect(rowIndices(), text).toEqual(Array.from({ length: Math.min(shown, windowRows(400)) }, (_, index) => index + 2));
+    }
+  });
+
+  it("builds the items of the rendered rows only when a poll brings 1,000 new rows", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    vi.mocked(rowItem).mockClear();
+    // While jobs run, every poll brings new rows; here one study validates.
+    const studies = manyStudies().map((row, index) => (index === 0 ? { ...row, status: "validating" as const } : row));
+    serve({ "/local/state": snapshot({ studies }), "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(rows()[0]!.get(".cell-problems").text()).toBe("Validating");
+    expect(studyItemCalls()).toHaveLength(windowRows(400));
+  });
+
+  it("follows the scrolled page and keeps the row with the keyboard focus until the focus leaves the table", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    const input = rows()[0]!.get("input").element;
+    input.focus();
+    // The body scrolled 2,400 px above the window: rows 100 to 116 are in view.
+    await scrollBody(-2400);
+    const window = Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2);
+    expect(rowIndices()).toEqual([2, ...window]);
+    // A space between the focused row and the window, and one below the window.
+    expect(page().findAll("tr.study-space")).toHaveLength(2);
+    expect(document.activeElement).toBe(input);
+
+    // The focus moves within the row: it stays.
+    rows()[0]!.get<HTMLAnchorElement>("a.study-identity").element.focus();
+    await flushPromises();
+    expect(rowIndices()).toEqual([2, ...window]);
+
+    // The focus leaves the table: the row goes.
+    (document.activeElement as HTMLElement).blur();
+    await flushPromises();
+    expect(rowIndices()).toEqual(window);
   });
 
   it("shows the profiles of the curators in the rows that were shown before the roster arrived", async () => {
@@ -716,7 +823,7 @@ describe("OverviewPage", () => {
     const after = rowOf("caffeine/Harder1988").get(".cell-curators");
     expect(after.get('img[alt="Matthias König"]').attributes("src")).toBe("/avatars/matthias_koenig.webp");
     expect(after.get('[role="img"][aria-label="Jan Grzegorzewski"]').text()).toBe("JG");
-    expect(vi.mocked(rowItem).mock.calls).toHaveLength(1);
+    expect(studyItemCalls()).toHaveLength(1);
   });
 
   it("applies the search at once when the keyboard empties the field", async () => {
