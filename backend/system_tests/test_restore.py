@@ -3,7 +3,6 @@
 import os
 import shutil
 import subprocess
-from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
@@ -21,7 +20,7 @@ from pkdb_server.services.ingestion import IngestionService
 
 
 def test_database_and_attachment_restore_preserves_science_and_permissions(
-    ingestion_context, session_factory, valid_bundle, tmp_path
+    ingestion_context, session_factory, database_server, valid_bundle, tmp_path
 ):
     container = os.environ["PKDB_TEST_POSTGRES_CONTAINER"]
     ingestion, actor = ingestion_context
@@ -32,7 +31,6 @@ def test_database_and_attachment_restore_preserves_science_and_permissions(
     original = read_study(published.sid, actor, session_factory)
     url = session_factory.kw["bind"].url
     with session_factory() as session:
-        schema = session.scalar(text("SELECT current_schema()"))
         file_id = session.scalar(select(StoredFile.id))
     environment = {**os.environ, "PGUSER": url.username, "PGPASSWORD": url.password}
     execute = ["docker", "exec", "--env", "PGUSER", "--env", "PGPASSWORD", container]
@@ -46,8 +44,9 @@ def test_database_and_attachment_restore_preserves_science_and_permissions(
                 "--format=custom",
                 "--no-owner",
                 "--no-privileges",
+                # the database of the test holds only its data, so all of it is
+                # dumped, as the backup of a deployment is
                 "--dbname=" + url.database,
-                "--schema=" + schema,
             ],
             env=environment,
             stdout=handle,
@@ -56,7 +55,7 @@ def test_database_and_attachment_restore_preserves_science_and_permissions(
         )
     restored_files = tmp_path / "restored-files"
     shutil.copytree(ingestion.file_store.root, restored_files)
-    database = "restore_" + uuid4().hex
+    database = database_server.name()
     admin = create_engine(url.set(query={}), isolation_level="AUTOCOMMIT")
     restored = None
     created = False

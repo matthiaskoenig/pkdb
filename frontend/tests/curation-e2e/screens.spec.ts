@@ -1,6 +1,9 @@
 import type { Page, TestInfo } from "@playwright/test";
 import { expect, expectAccessible, test } from "./fixtures.ts";
 
+// The screens and dialogs change nothing on the server, so their tests run in parallel.
+test.describe.configure({ mode: "parallel" });
+
 const STUDY = "#/studies/caffeine/Demo2020";
 const NARROW = { width: 390, height: 844 };
 

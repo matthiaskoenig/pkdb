@@ -1,4 +1,4 @@
-"""Opt-in local curation uploads against an isolated schema; sources stay unchanged."""
+"""Opt-in local curation uploads against an isolated database; sources stay unchanged."""
 
 import json
 import os

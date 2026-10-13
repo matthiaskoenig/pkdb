@@ -607,6 +607,7 @@ def test_the_row_limit_counts_the_rows_of_every_sheet(workbook):
     assert error.value.report.issues[0].code == "row_limit"
 
 
+@pytest.mark.slow
 def test_reading_a_large_sheet_is_fast(sf_vocabulary, tmp_path, linear_cpu_time):
     workbooks = {}
 

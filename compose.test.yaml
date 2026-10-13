@@ -2,6 +2,9 @@ name: pkdb-tests
 services:
   db:
     image: postgres:18.6
+    # A disposable test database: without durable writes the tests wait less for the
+    # disk. Never use these settings for data that has to survive a crash.
+    command: [postgres, -c, fsync=off, -c, synchronous_commit=off, -c, full_page_writes=off, -c, log_checkpoints=off]
     environment:
       POSTGRES_DB: pkdb_test
       POSTGRES_USER: pkdb_test

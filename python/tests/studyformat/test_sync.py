@@ -1320,6 +1320,7 @@ def test_keep_must_name_a_side(study, sf_vocabulary):
         sync_study(study, sf_vocabulary, keep="both")  # ty: ignore[invalid-argument-type]
 
 
+@pytest.mark.slow
 def test_the_cpu_time_check_tells_linear_from_quadratic_work(linear_cpu_time):
     # The smaller steps take about 0.1 CPU seconds, well above timer noise.
     def linear(count):
@@ -1334,6 +1335,7 @@ def test_the_cpu_time_check_tells_linear_from_quadratic_work(linear_cpu_time):
         linear_cpu_time(quadratic, 1_500)
 
 
+@pytest.mark.slow
 def test_a_large_study_syncs_quickly(
     make_study, valid_files, tsv, sf_vocabulary, linear_cpu_time
 ):
