@@ -331,11 +331,18 @@ test("a study identity that its cell cuts ends with an ellipsis and stays whole 
   await page.setViewportSize({ width: 1000, height: 900 });
   await page.evaluate(() => document.documentElement.style.setProperty("font-size", "21px"));
   await expect.poll(async () => (await identities(page)).filter((identity) => identity.cut).length).toBeGreaterThan(0);
-  for (const identity of (await identities(page)).filter((candidate) => candidate.cut)) {
+  const cut = (await identities(page)).filter((candidate) => candidate.cut);
+  for (const identity of cut) {
     expect(identity.overflow).toBe("hidden ellipsis nowrap");
-    expect(identity.title).toBe(identity.text);
+    // The tooltip of the app names it whole; a native one would show beside it.
+    expect(identity.title).toBeNull();
     await expect(page.getByRole("link", { name: identity.text, exact: true })).toBeVisible();
   }
+  // Every generated study has the tables of caffeine/Draft2021, which name caffeine. An identity of
+  // the generator has letters, a slash and digits only.
+  const [first] = cut;
+  await page.getByRole("link", { name: first!.text, exact: true }).hover();
+  await expect(page.getByRole("tooltip")).toHaveText(new RegExp(`^\\s*${first!.text}\\s*\\+ caffeine\\s*$`));
 });
 
 test("Select all selects every shown study, also the rows that are not rendered", async ({ page }) => {
