@@ -6,13 +6,16 @@ first entry line 1, so line n is row n + 1 of its sheet. A raw table
 issue keeps the address of its cell in the workbook.
 """
 
+from copy import deepcopy
+
 import pytest
 
+from pkdb.schemas.source import SourceLocation
 from pkdb.studyformat import read_study
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.load import load_study, load_table
 from pkdb.studyformat.raw import load_raw
-from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.tables import TABLES, has_header, table_line, workbook_row
 
 OUTPUTS = TABLES["outputs"]
 # Strict: a test that passes before its task removes the mark fails.
@@ -74,3 +77,34 @@ def test_a_record_points_to_its_line_and_its_workbook_cell(valid_study):
     source = records["outputs_Tab2.tsv:1"].source
     assert source is not None and source.row == 1
     assert source.for_header("mean").cell == "N2"
+
+
+@pytest.mark.parametrize(
+    ("file", "header", "row", "line"),
+    [
+        # Line 1 of the file is row `row` of its sheet; physical line 1 is line `line`.
+        ("outputs_Tab2.tsv", True, 2, 0),
+        ("subjects.tsv", True, 2, 0),
+        ("Example_Tab2.tsv", False, 1, 1),
+        ("Example.xlsx", False, 1, 1),
+        ("study.json", False, 1, 1),
+    ],
+)
+def test_lines_rows_and_physical_lines(file, header, row, line):
+    assert has_header(file) is header
+    assert workbook_row(file, 1) == row
+    assert table_line(file, 1) == line
+
+
+def test_a_row_offset_moves_the_cell_of_a_header_and_keeps_line_0():
+    location = SourceLocation(file="outputs_Tab2.tsv", sheet="outputs_Tab2", row=0)
+    location._columns = {"mean": "N"}
+    location._row_offset = 1
+    header = location.for_header("mean")
+    assert (header.row, header.cell) == (0, "N1")
+    assert deepcopy(location).for_header("mean").cell == "N1"
+    assert location.model_copy(update={"row": 4}).for_header("mean").cell == "N5"
+    # Without an offset the row is the row of the sheet, as study format 1 reads it.
+    sheet = SourceLocation(file="Example.xlsx", sheet="Tab1", row=7)
+    sheet._columns = {"mean": "C"}
+    assert sheet.for_header("mean").cell == "C7"

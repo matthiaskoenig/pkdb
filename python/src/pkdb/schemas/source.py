@@ -33,6 +33,10 @@ class SourceLocation(BaseModel):
     # cells. for_field resolves them on demand, so a large table does not create
     # a location for every cell up front.
     _headers: dict[str, str] = PrivateAttr(default={})
+    # The row of `cell` is row + _row_offset: 1 for a line of a study format 2
+    # table, whose header is line 0 and row 1 of its sheet; 0 for a row of a
+    # sheet, as study format 1 reads them.
+    _row_offset: int = PrivateAttr(default=0)
 
     def __deepcopy__(self, memo=None):
         # Public coordinates contain only immutable scalars and a tuple of
@@ -63,12 +67,13 @@ class SourceLocation(BaseModel):
 
     def for_header(self, header: str) -> SourceLocation:
         column = self._columns.get(header)
+        row = None if self.row is None else self.row + self._row_offset
         # These values come from this validated location and the reader's column
         # map. Avoid serializing and revalidating every field for every cell.
         location = self.model_copy(
             update={
                 "column": column,
-                "cell": f"{column}{self.row}" if column and self.row else None,
+                "cell": f"{column}{row}" if column and row is not None else None,
                 "header": header,
             }
         )

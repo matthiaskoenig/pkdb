@@ -234,6 +234,35 @@ def parse_table_file(name: str) -> tuple[TableSpec, str | None] | None:
     return None
 
 
+def has_header(file: str) -> bool:
+    """Whether a file is a table with a header line, `<kind>[_<source>].tsv`.
+
+    Its header is line 0 and its first entry line 1, and line n is row n + 1 of
+    its sheet. A raw table `<study>_<source>.tsv` has no header: its first line
+    is line 1 and row 1.
+    """
+    return parse_table_file(file) is not None
+
+
+def workbook_row(file: str, line: int) -> int:
+    """The row of the sheet in the workbook that shows a line of a file.
+
+    Line n of a table with a header is row n + 1. The lines of a raw table are
+    their rows, and so are the rows of the workbook itself, whose issues name
+    the rows of its sheets.
+    """
+    return line + 1 if has_header(file) else line
+
+
+def table_line(file: str, physical: int) -> int:
+    """The line of a file that is its 1-based physical line `physical`.
+
+    A table with a header counts from its header, line 0; other files count
+    from 1.
+    """
+    return physical - 1 if has_header(file) else physical
+
+
 def image_file(study: str, source: str) -> str:
     """File name `<study>_<source>.png` of the image of a paper table or figure."""
     return f"{study}_{source}.png"
