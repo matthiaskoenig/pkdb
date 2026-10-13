@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, type ComponentOptions, type ComponentPublicInstance } from "vue";
 import { RouterView, type Router } from "vue-router";
 import { VAutocomplete, VCombobox, VSelect, VTextarea } from "vuetify/components";
 import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
@@ -63,7 +63,11 @@ function changedOnDisk(disk: StudyMetadata): Handler {
  * The metadata section of `detail` inside the app's router view, with `routes` besides the
  * defaults. A save writes like the local server, unless `routes` answers it otherwise.
  */
-async function mountSection(detail: StudyDetail = studyDetail(), routes: Record<string, unknown> = {}) {
+async function mountSection(
+  detail: StudyDetail = studyDetail(),
+  routes: Record<string, unknown> = {},
+  mixins: ComponentOptions[] = [],
+) {
   served = detail;
   requests = serveApi({
     "GET /local/state": snapshot(),
@@ -78,7 +82,7 @@ async function mountSection(detail: StudyDetail = studyDetail(), routes: Record<
   await router.isReady();
   wrapper = mount(defineComponent({ render: () => h(RouterView) }), {
     attachTo: document.body,
-    global: { plugins: [pinia, router] },
+    global: { plugins: [pinia, router], mixins },
   });
   await flushPromises();
   return wrapper;
@@ -455,6 +459,27 @@ describe("notes of kinds without a table", () => {
       "Notes of the characteristica 1 description",
       "Notes of the scatters 1 description",
     ]);
+  });
+});
+
+describe("typing", () => {
+  it("renders no other field again while the curator types into one", async () => {
+    const updated: string[] = [];
+    const counting: ComponentOptions = {
+      updated(this: ComponentPublicInstance) {
+        const name = this.$options.name;
+        if (name === "VTextField" || name === "VTextarea" || name === "VSelect" || name === "VAutocomplete")
+          updated.push(String((this.$props as { label?: unknown }).label ?? name));
+      },
+    };
+    await mountSection(studyDetail(), {}, [counting]);
+    // The first keystroke shows that study.json has changes; the next one changes only the field.
+    await field("PMID").setValue("9");
+    await flushPromises();
+    updated.length = 0;
+    await field("PMID").setValue("98");
+    await flushPromises();
+    expect(updated.filter((label) => label !== "PMID")).toEqual([]);
   });
 });
 

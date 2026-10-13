@@ -36,6 +36,7 @@ import {
 import { kindsWithTable, notesKindOf, notesKindsOf } from "../notes";
 import { failureOf, issuesFailure, NOTICE_MS, userHint, type ActionFailure, type Section } from "../study";
 import { noteKinds } from "../tableKinds";
+import { useChangedFields } from "./useChangedFields";
 import { createNotice } from "./useNotice";
 
 /** What the draft reads and writes. */
@@ -161,7 +162,9 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
   let undoTimer: ReturnType<typeof setTimeout> | undefined;
 
   const writable = computed(() => revision.value !== null);
-  const unsaved = computed(() => unsavedSections(base.value, form.value, tabled.value));
+  /** The fields with unsaved changes, compared field by field. */
+  const changed = useChangedFields(base, form);
+  const unsaved = computed(() => unsavedSections(base.value, form.value, changed.value, tabled.value));
   const dirty = computed(() => unsaved.value.length > 0);
   const undoable = computed(() => undo.value !== null);
   const barShown = computed(
