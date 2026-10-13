@@ -745,6 +745,64 @@ def test_state_etag(api):
     assert changed[0] == 200 and changed[1]["ETag"] != response_headers["ETag"]
 
 
+STATE = "/local/state"
+
+
+def test_the_state_answers_304_until_the_engine_state_changes(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    status, response_headers, _ = request(server, "GET", STATE, headers=headers)
+    assert status == 200
+    etag = response_headers["ETag"]
+    again = request(server, "GET", STATE, headers={**headers, "If-None-Match": etag})
+    assert again[0] == 304 and again[2] == b""
+    with engine.lock:
+        engine.theme = "dark"
+    changed = request(server, "GET", STATE, headers={**headers, "If-None-Match": etag})
+    assert changed[0] == 200 and changed[1]["ETag"] != etag
+    assert json.loads(changed[2])["theme"] == "dark"
+
+
+def test_the_state_is_built_once_per_revision_and_never_for_a_poll(api, monkeypatch):
+    server, engine, _ = api
+    headers = authenticate(server)
+    built = []
+    snapshot = engine.snapshot
+
+    def counted():
+        built.append(1)
+        return snapshot()
+
+    monkeypatch.setattr(engine, "snapshot", counted)
+    first = request(server, "GET", STATE, headers=headers)
+    second = request(server, "GET", STATE, headers=headers)
+    poll = request(
+        server, "GET", STATE, headers={**headers, "If-None-Match": first[1]["ETag"]}
+    )
+    assert (first[0], second[0], poll[0]) == (200, 200, 304)
+    assert second[2] == first[2] and len(built) == 1
+    with engine.lock:
+        engine.paused = True
+    request(server, "GET", STATE, headers=headers)
+    assert len(built) == 2
+
+
+def test_the_state_etag_changes_when_a_recent_workspace_disappears(api, tmp_path):
+    server, engine, _ = api
+    headers = authenticate(server)
+    gone = tmp_path / "gone"
+    gone.mkdir()
+    with engine.lock:
+        engine.recent_workspaces.append(str(gone))
+    etag = request(server, "GET", STATE, headers=headers)[1]["ETag"]
+    gone.rmdir()
+    status, _, data = request(
+        server, "GET", STATE, headers={**headers, "If-None-Match": etag}
+    )
+    assert status == 200
+    assert {"path": str(gone), "exists": False} in json.loads(data)["recent_workspaces"]
+
+
 def _detail(server, headers):
     return json.loads(request(server, "GET", DETAIL, headers=headers)[2])
 

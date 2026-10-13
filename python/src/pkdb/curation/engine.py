@@ -5,6 +5,7 @@ import os
 import re
 import threading
 from pathlib import Path
+from secrets import token_hex
 
 from pkdb import __version__
 from pkdb.cache import (
@@ -24,7 +25,7 @@ from pkdb.curation.jobs import (
     maybe_sent,
     now,
 )
-from pkdb.curation.state import THEMES, state_row
+from pkdb.curation.state import THEMES, StateLock, state_row
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -58,7 +59,9 @@ class CurationEngine(
         user=None,
         start=True,
     ):
-        self.lock = threading.RLock()
+        self.lock = StateLock()
+        # Tells the versions of the state of this engine from those of an engine before it.
+        self.epoch = token_hex(4)
         self.scan_lock = threading.Lock()
         self._connection_generation = 0
         self.stop = threading.Event()
@@ -221,7 +224,7 @@ class CurationEngine(
         self.protected.extend(value for value in values if value)
 
     def snapshot(self):
-        with self.lock:
+        with self.lock.reading():
             recent = list(self.recent_workspaces)
         try:
             author = {"user": self.author().user, "reason": None}
@@ -229,7 +232,7 @@ class CurationEngine(
             author = {"user": None, "reason": str(error)}
         # Existence checks may touch slow mounts, so they run outside the lock.
         recent = [{"path": path, "exists": Path(path).is_dir()} for path in recent]
-        with self.lock:
+        with self.lock.reading():
             return json.loads(
                 json.dumps(
                     {
@@ -276,6 +279,16 @@ class CurationEngine(
                     }
                 )
             )
+
+    def state_version(self) -> str:
+        """A version of `snapshot`, cheap enough for every poll: the epoch of the engine, the
+        revision of its state, and which recent workspaces exist, which no section of the lock
+        sees change. Read before building the state, so the state is at least as new."""
+        with self.lock.reading():
+            revision, recent = self.lock.revision, list(self.recent_workspaces)
+        # Existence checks may touch slow mounts, so they run outside the lock.
+        exists = "".join("1" if Path(path).is_dir() else "0" for path in recent)
+        return f"{self.epoch}-{revision}-{exists}"
 
     def close(self):
         self.stop.set()

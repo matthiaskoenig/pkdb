@@ -5,6 +5,8 @@ methods are declared for type checking only and are provided by `CurationEngine`
 """
 
 import threading
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -31,8 +33,69 @@ def state_row(row: dict) -> dict:
     }
 
 
+class StateLock:
+    """The reentrant lock of the state of an engine, which counts the changes of the state.
+
+    `with lock:` is a section that may change the state: when the outermost section of the
+    thread that holds the lock ends after one, `revision` grows by one, also after an error.
+    `with lock.reading():` only reads and keeps the revision, unless it calls `changed()` or
+    enters `with lock:` inside. The local server answers a poll of the state from the revision
+    without building the state.
+
+    So a change that no section counts stays hidden behind `304` until an unrelated change.
+    Every change of what `CurationEngine.snapshot` returns happens in a section that counts
+    it, or is followed by one on every path, also when it fails. This holds for every thread
+    (the watcher, a job, a server check, a reaper thread) and every value: one written
+    outside the lock and stored later, or one that a later step derives, such as a workbook
+    signature that the sync state records after a write. A reading section calls `changed()`
+    only when a value really changes, so that an idle engine keeps its revision. What
+    `snapshot` reads from outside the engine is a function of fields that only such sections
+    change (`author`, `connection`, `update_required`), fixed for the engine
+    (`client_version`, `log_file`), or part of `state_version` (whether each recent workspace
+    exists).
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+        # Only the thread that holds the lock touches these two.
+        self._depth = 0
+        self._changed = False
+        self.revision = 0
+
+    def __enter__(self) -> StateLock:
+        self._lock.acquire()
+        self._depth += 1
+        self._changed = True
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self._release()
+
+    @contextmanager
+    def reading(self) -> Iterator[StateLock]:
+        self._lock.acquire()
+        self._depth += 1
+        try:
+            yield self
+        finally:
+            self._release()
+
+    def changed(self) -> None:
+        """Count a change of the state in a reading section; called with the lock held."""
+        self._changed = True
+
+    def _release(self) -> None:
+        self._depth -= 1
+        if self._depth == 0 and self._changed:
+            self._changed = False
+            self.revision += 1
+        self._lock.release()
+
+
 class EngineState:
-    lock: threading.RLock
+    lock: StateLock
+    # Tells the versions of the state of this engine from those of an engine before it.
+    epoch: str
     scan_lock: threading.Lock
     stop: threading.Event
     wakeup: threading.Event
@@ -81,6 +144,7 @@ class EngineState:
         def secrets(self) -> list[str]: ...
         def _save(self) -> None: ...
         def snapshot(self) -> dict: ...
+        def state_version(self) -> str: ...
         def scan(self, initial: bool = False) -> Any: ...
         def connect(self) -> Any: ...
         def _context(self) -> str: ...

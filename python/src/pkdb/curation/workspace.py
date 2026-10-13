@@ -18,7 +18,7 @@ from uuid import uuid4
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
-from pkdb.curation.state import EngineState
+from pkdb.curation.state import EngineState, state_row
 from pkdb.curation.studies import study_summary
 from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
@@ -193,7 +193,7 @@ class WorkspaceMixin(EngineState):
     def _scan(self, initial):
         # A scan of a workspace that was replaced meanwhile stops before it changes a row:
         # its keys and paths are relative to the old root.
-        with self.lock:
+        with self.lock.reading():
             root = self.root
         if self._tree is None or self._tree.root is not root:
             self._tree = SourceTree(root)
@@ -202,7 +202,7 @@ class WorkspaceMixin(EngineState):
         # interrupted pkdb new, is no study.
         found = tree.study_folders()
         folders = set(found)
-        with self.lock:
+        with self.lock.reading():
             if self.root is not root:
                 return
             folders.update(row["_folder"] for row in self.studies.values())
@@ -219,10 +219,11 @@ class WorkspaceMixin(EngineState):
                 ):
                     continue
                 if not self._is_v2(folder, tree):
-                    with self.lock:
+                    with self.lock.reading():
                         if self.root is not root:
                             return
-                        self.studies.pop(key, None)
+                        if self.studies.pop(key, None) is not None:
+                            self.lock.changed()
                     if study is None:
                         study_file = (folder / "study.json").is_file()
                     else:
@@ -230,11 +231,12 @@ class WorkspaceMixin(EngineState):
                     if study_file:
                         format1 += 1
                     continue
-                with self.lock:
+                with self.lock.reading():
                     if self.root is not root:
                         return
                     row = self.studies.get(key)
                     if row is None:
+                        self.lock.changed()
                         row = self.studies[key] = self._row(folder, root)
                 # Opening or closing the workbook changes its sync status, not the source.
                 signature = (tree.files(folder), tree.workbook_open(folder))
@@ -295,15 +297,23 @@ class WorkspaceMixin(EngineState):
                         row["id"], "validate"
                     )
             except (OSError, StudyValidationError) as error:
-                with self.lock:
+                with self.lock.reading():
                     if self.root is not root:
                         return
-                    row = self.studies.setdefault(key, self._row(folder, root))
+                    row = self.studies.get(key)
+                    before = None if row is None else state_row(row)
+                    if row is None:
+                        row = self.studies[key] = self._row(folder, root)
                     self._wait(row, error)
-        with self.lock:
+                    # A folder that stays unreadable is waited for again by every scan.
+                    if state_row(row) != before:
+                        self.lock.changed()
+        with self.lock.reading():
             if self.root is not root:
                 return
-            self.format1_folders = format1
+            if self.format1_folders != format1:
+                self.lock.changed()
+                self.format1_folders = format1
             self._formats = {
                 folder: self._formats[folder]
                 for folder in folders
@@ -311,7 +321,10 @@ class WorkspaceMixin(EngineState):
             }
             counts = Counter(r["id"] for r in self.studies.values())
             for row in self.studies.values():
-                row["duplicate"] = counts[row["id"]] > 1
+                duplicate = counts[row["id"]] > 1
+                if row["duplicate"] != duplicate:
+                    self.lock.changed()
+                    row["duplicate"] = duplicate
 
     def _is_v2(self, folder, tree):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
@@ -429,16 +442,18 @@ class WorkspaceMixin(EngineState):
     def _watch_unrecorded(self, recording: Exception) -> None:
         """Keep a minimal failure when the failure of the watcher could not be described."""
         detail = f"{type(recording).__name__} while recording a watcher failure"
-        self.watcher_error = {
-            "time": datetime.now().astimezone().isoformat(timespec="seconds"),
-            "detail": detail,
-            "recovered": False,
-        }
+        with self.lock:
+            self.watcher_error = {
+                "time": datetime.now().astimezone().isoformat(timespec="seconds"),
+                "detail": detail,
+                "recovered": False,
+            }
 
     def _watch_recovered(self) -> None:
         """A check of the workspace succeeded: the last failure of the watcher has passed."""
-        with self.lock:
+        with self.lock.reading():
             if self.watcher_error is not None and not self.watcher_error["recovered"]:
+                self.lock.changed()
                 self.watcher_error = {**self.watcher_error, "recovered": True}
 
     def _check_workbooks(self, limit=CHECK_LIMIT):
@@ -449,7 +464,7 @@ class WorkspaceMixin(EngineState):
         engine lock and the folder lock, and a row that a job or a scan checked meanwhile
         keeps the state that they recorded.
         """
-        with self.lock:
+        with self.lock.reading():
             root = self.root
             rows = [
                 (key, row)
@@ -501,7 +516,7 @@ class WorkspaceMixin(EngineState):
         return action
 
     def schedule_changes(self):
-        with self.lock:
+        with self.lock.reading():
             if self.paused:
                 return
             for row in self.studies.values():
@@ -509,17 +524,19 @@ class WorkspaceMixin(EngineState):
                     continue
                 action = self._automatic_action(row)
                 if action == "suspended":
-                    row["message"] = (
-                        "Upload on save suspended: connect an authorized account"
-                    )
+                    message = "Upload on save suspended: connect an authorized account"
+                    if row.get("message") != message:
+                        self.lock.changed()
+                        row["message"] = message
                 if action in {None, "suspended"} or self.active == row["id"]:
                     continue
+                self.lock.changed()
                 row["_pending"] = False
                 row["_initial"] = False
                 self._enqueue_one(row, action, automatic=True)
 
     def resolve_file(self, study_id, file=None):
-        with self.lock:
+        with self.lock.reading():
             row = self._selected([study_id])[0]
             folder = row["_folder"]
             if not is_v2_folder(folder):

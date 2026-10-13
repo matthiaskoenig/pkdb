@@ -272,6 +272,8 @@ class CurationServer(ThreadingHTTPServer):
         self.bootstrap_token = secrets.token_urlsafe(32)
         self.session_token = secrets.token_urlsafe(32)
         self.csrf_token = secrets.token_urlsafe(32)
+        # The JSON of the last state that GET /local/state built, with its version.
+        self.state_cache: tuple[str, bytes] | None = None
         # The tokens never reach an error body, a report or the log.
         engine.protect(self.bootstrap_token, self.session_token, self.csrf_token)
         super().__init__(("127.0.0.1", port), Handler)
@@ -368,6 +370,22 @@ class Handler(BaseHTTPRequestHandler):
         """Reply with a JSON value whose ETag is the hash of its JSON."""
         data = _dump(value)
         self._versioned(hashlib.sha256(data).hexdigest(), lambda: data)
+
+    def _state(self):
+        """Reply with the state of the engine, built and serialized once per version; a poll
+        with the current version gets 304 without either."""
+        server, engine = self.server, self.server.engine
+        # Read before the build, so that the state is at least as new as its version.
+        version = engine.state_version()
+
+        def build():
+            cached = server.state_cache
+            if cached is None or cached[0] != version:
+                state = {**engine.snapshot(), "csrf_token": server.csrf_token}
+                cached = server.state_cache = (version, _dump(state))
+            return cached[1]
+
+        self._versioned(version, build)
 
     def _reject(self, status, message, *, code, headers=None):
         """Refuse a request before it runs, with the error body of the local API."""
@@ -597,12 +615,7 @@ class Handler(BaseHTTPRequestHandler):
             action = action_of("GET", path)
             try:
                 if path == "/local/state":
-                    self._json(
-                        {
-                            **self.server.engine.snapshot(),
-                            "csrf_token": self.server.csrf_token,
-                        }
-                    )
+                    self._state()
                 elif path.startswith("/local/reports/"):
                     name = unquote(path.removeprefix("/local/reports/"))
                     try:

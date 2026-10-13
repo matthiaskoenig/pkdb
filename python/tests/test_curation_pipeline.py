@@ -58,7 +58,7 @@ def row_list(engine):
 
 def owned(lock):
     """Whether the current thread holds the engine lock."""
-    return lock._is_owned()
+    return lock._lock._is_owned()
 
 
 def set_mean(folder, table, value):

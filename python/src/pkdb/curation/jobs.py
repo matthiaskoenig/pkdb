@@ -374,19 +374,27 @@ class JobsMixin(EngineState):
             self.wakeup.wait(1)
             self.wakeup.clear()
             while not self.stop.is_set():
-                with self.lock:
-                    if not self.queue or self.paused:
-                        break
-                    identifier = next(iter(self.queue))
-                    job = self.queue.pop(identifier)
-                    self.active = identifier
-                    job["status"] = "running"
+                job = self._next_job()
+                if job is None:
+                    break
                 try:
                     self.run_job(job)
                 finally:
                     with self.lock:
                         self.active = None
                         self._save()
+
+    def _next_job(self):
+        """The next queued job, now running, or None while the queue is empty or paused."""
+        with self.lock.reading():
+            if not self.queue or self.paused:
+                return None
+            self.lock.changed()
+            identifier = next(iter(self.queue))
+            job = self.queue.pop(identifier)
+            self.active = identifier
+            job["status"] = "running"
+            return job
 
     def _sync_later(self, row):
         """Queue a validation whose sync regenerates the closed workbook; it needs no upload.
@@ -405,7 +413,7 @@ class JobsMixin(EngineState):
         A broken lock file is an error that names it, never a fallback: the hook and CI would reject
         what the bundled vocabulary accepts. Only a broken endpoint cache falls back to the bundled one.
         """
-        with self.lock:
+        with self.lock.reading():
             endpoint = self.endpoint
         where = folder if folder is not None else self.root
         if lock := lock_file(where):
@@ -850,7 +858,7 @@ class JobsMixin(EngineState):
         return failure
 
     def resume(self, ids=None):
-        with self.lock:
+        with self.lock.reading():
             rows = self._selected(ids) if ids else list(self.studies.values())
         for row in rows:
             if not row["_blocked"]:
@@ -885,13 +893,15 @@ class JobsMixin(EngineState):
                     f"The server has another version of {name} than the upload sent, "
                     f"so its outcome is unknown. Please {review}."
                 )
-            job.update(
-                status="succeeded",
-                persistence="reconciled",
-                message="Server publication matches the attempted snapshot",
-            )
-            row["_blocked"] = False
-            row["status"] = "changed"
+            # A later study that cannot be reconciled raises: the lock counts this one now.
+            with self.lock:
+                job.update(
+                    status="succeeded",
+                    persistence="reconciled",
+                    message="Server publication matches the attempted snapshot",
+                )
+                row["_blocked"] = False
+                row["status"] = "changed"
         return self.set_paused(False)
 
     def cancel_jobs(self, ids):
