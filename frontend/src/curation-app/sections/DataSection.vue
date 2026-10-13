@@ -12,7 +12,6 @@ import PaperPane from "../components/PaperPane.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
-import StudySaveBar from "../components/StudySaveBar.vue";
 import TableNotes from "../components/TableNotes.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
@@ -50,7 +49,7 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
  * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
  * Below it, the notes of the kind of the table in study.json open and close above the rows; they
- * edit the draft of the study store, whose save bar ends the section while it has unsaved changes.
+ * edit the draft of the study store, whose banner under the section tabs shows its unsaved changes.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
  * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
@@ -571,8 +570,6 @@ const conflictPanel = computed(() => {
           </p>
         </div>
       </div>
-      <!-- The draft of study.json, which the notes above a table and the Metadata section edit. -->
-      <StudySaveBar section="data" :kind="notesKind" :sticky="stacked || limited" />
 
       <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
     </template>
@@ -594,6 +591,11 @@ const conflictPanel = computed(() => {
 :global(.v-application__wrap:has(.data-section--fill)) {
   height: 100dvh;
 }
+/* In a window too short for the section, the page scrolls beyond the app, and keeps the color of
+   the app there. */
+:global(html:has(.data-section--fill)) {
+  background: rgb(var(--v-theme-background));
+}
 :global(.v-main:has(.data-section--fill)) {
   display: flex;
   flex: 1 1 0;
@@ -608,10 +610,12 @@ const conflictPanel = computed(() => {
   flex: 1 1 0;
   min-height: 0;
 }
-/* A short window scrolls the page rather than squeezing the panes. */
+/* A short window scrolls the page rather than squeezing the panes. The section and the banner of
+   unsaved changes above it take at least 480 px together, so that the banner, which sticks while
+   the page scrolls, covers no more of the panes than needed. */
 .data-section--fill {
   flex: 1 1 0;
-  min-height: 480px;
+  min-height: calc(480px - var(--unsaved-banner-height, 0px));
 }
 /* A wrapped line leaves room for the labels of the selects, which stand above their fields. */
 .data-toolbar {

@@ -1,14 +1,19 @@
 /**
  * The keyboard shortcut of Save on the study page: Ctrl+S, or Cmd+S on macOS. While the page is
  * open, it saves the draft of study.json from any section and any field instead of opening the
- * save dialog of the browser. It does nothing more without unsaved changes, during a save, and
- * while a dialog is open, which answers with its own buttons.
+ * save dialog of the browser. It does nothing more without unsaved changes, during a save, for
+ * the repeats of a held key, and while a dialog is open, which answers with its own buttons.
  */
 import { onBeforeUnmount, onMounted } from "vue";
 
-/** Whether `event` is Ctrl+S or Cmd+S without Alt and Shift; both work on every system, as Ctrl+F does in the paper. */
+/**
+ * Whether `event` is Ctrl+S or Cmd+S without Alt and Shift; both work on every system, as Ctrl+F
+ * does in the paper. S is the letter that the key types, or the S key of the keyboard where the
+ * layout types no Latin letter, such as ы on a Russian layout, as browsers do for their shortcuts.
+ */
 export function isSaveShortcut(event: KeyboardEvent): boolean {
-  return (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "s";
+  if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey) return false;
+  return /^[a-z]$/i.test(event.key) ? event.key.toLowerCase() === "s" : event.code === "KeyS";
 }
 
 /** Whether the browser runs on macOS or iOS, where Cmd takes the place of Ctrl. */
@@ -26,6 +31,8 @@ export function useSaveShortcut(save: () => void): void {
   function onKeydown(event: KeyboardEvent): void {
     if (event.isComposing || !isSaveShortcut(event)) return;
     event.preventDefault();
+    // A held key saves once; its repeats only keep the save dialog of the browser closed.
+    if (event.repeat) return;
     // A dialog over the page, such as Leave without saving?, answers with its own buttons.
     if (document.querySelector(".v-dialog.v-overlay--active")) return;
     save();

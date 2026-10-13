@@ -17,8 +17,10 @@ import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
+import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
+import { selectedFile, selectionOf, tableNotesKind } from "../data";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
@@ -40,7 +42,8 @@ import {
 
 /**
  * The component of each section. A section gets the open study from the study store; the
- * Metadata and Data sections edit its draft of study.json, whose unsaved fields the tabs mark.
+ * Metadata and Data sections edit its draft of study.json, whose unsaved fields the tabs mark and
+ * the banner under them names.
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
@@ -87,6 +90,13 @@ const loadError = computed(() => {
   return failureOf(error, "The study could not be loaded.");
 });
 const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
+
+/** In Data, the kind of the notes above the selected table, whose fields a refused save marks there; null elsewhere. */
+const notesKind = computed(() => {
+  const value = detail.value;
+  if (section.value !== "data" || !value) return null;
+  return tableNotesKind(value, selectedFile(value, selectionOf(route.query)));
+});
 
 /** The facts of the study at the end of the line of tabs. */
 const facts = computed(() => {
@@ -201,6 +211,8 @@ watch(
           :unsaved="study.draft.unsaved"
           :facts="facts"
         />
+        <!-- The draft of study.json, which Metadata and the notes in Data edit, in every section. -->
+        <UnsavedBanner :section="section" :kind="notesKind" />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
           <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
           <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>

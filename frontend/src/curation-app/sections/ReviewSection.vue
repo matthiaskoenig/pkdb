@@ -389,10 +389,11 @@ function added(item: ReviewItem | null): void {
   .review-body {
     grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
   }
+  /* Below the app bar, and below the banner of unsaved changes of study.json while it shows. */
   .review-selected {
     position: sticky;
-    top: 80px;
-    max-height: calc(100vh - 96px);
+    top: calc(80px + var(--unsaved-banner-height, 0px));
+    max-height: calc(100vh - 96px - var(--unsaved-banner-height, 0px));
     overflow-y: auto;
   }
   /* The cards keep their height in the limited column, which scrolls instead. */

@@ -14,10 +14,11 @@ import NotesFields from "./NotesFields.vue";
 /**
  * The notes of a table kind in study.json, in a panel that opens and closes. Its header names
  * the kind and what the notes hold, such as "Notes of the subjects 2 descriptions · 1 comment";
- * its body edits their descriptions and comments in the draft of study.json, which the save bar
- * saves. Notes belong to a kind, so every table of a kind shows the same notes. The panel starts
- * closed, opens by itself for an issue in its notes, and the draft keeps it open or closed while
- * the study is open. While study.json is not valid it says so and lists the issues of its notes.
+ * its body edits their descriptions and comments in the draft of study.json, which the banner of
+ * unsaved changes saves. Notes belong to a kind, so every table of a kind shows the same notes.
+ * The panel starts closed, opens by itself for an issue in its notes, and the draft keeps it open
+ * or closed while the study is open. While study.json is not valid it says so and lists the
+ * issues of its notes.
  *
  * Above the rows of a table it shares the rows pane with them, and its body scrolls on its own.
  * In a card of the Metadata section, which shows the notes of a kind without a table, it has a

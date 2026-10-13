@@ -20,7 +20,6 @@ import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
-import StudySaveBar from "../components/StudySaveBar.vue";
 import TableNotes from "../components/TableNotes.vue";
 import { sectionHeading } from "../composables/useReturnFocus";
 import {
@@ -41,9 +40,9 @@ import { noteKinds } from "../tableKinds";
 
 /**
  * The form of study.json. It edits the draft of the study store, which the Data section edits
- * too; the save bar of both saves the draft over the revision that it was read from. A file
- * changed on disk meanwhile is a conflict, and Reload puts the edits on top of the new version.
- * The study page asks before the study is left with unsaved edits.
+ * too; the banner of the study page saves the draft over the revision that it was read from. A
+ * file changed on disk meanwhile is a conflict, and Reload puts the edits on top of the new
+ * version. The study page asks before the study is left with unsaved edits.
  */
 const study = useStudyStore();
 const overview = useOverviewStore();
@@ -574,8 +573,6 @@ const newFields = computed(() => {
       </VCard>
     </VForm>
 
-    <StudySaveBar section="metadata" />
-
     <ReferenceDialog
       v-model="referenceOpen"
       :unsaved-identifiers="identifiersChanged"
@@ -591,6 +588,10 @@ const newFields = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 100rem;
+}
+/* The banner of unsaved changes of the study page ends where the cards below it end. */
+:global(.study-page:has(.metadata) .unsaved-banner) {
   max-width: 100rem;
 }
 .metadata-alert-text,

@@ -1587,8 +1587,8 @@ describe("notes of the tables", () => {
     return () => json({ error: "Invalid study.json", issues }, { status: 422 });
   }
 
-  /** The alert of the failed save in the bar of the Data section. */
-  const failure = () => page().get(".data-section .savebar-failure");
+  /** The alert of the failed save in the banner, as the Data section shows it. */
+  const failure = () => page().get(".unsaved-banner-failure");
 
   it("shows the notes of the kind of a table between its head and its rows, and none for a raw table", async () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
@@ -1617,16 +1617,16 @@ describe("notes of the tables", () => {
     expect(toggle().attributes("aria-expanded")).toBe("false");
   });
 
-  it("edits the notes in the draft of study.json, marks the Data tab and saves from the bar at the bottom", async () => {
+  it("edits the notes in the draft of study.json, marks the Data tab and saves from the banner under the tabs", async () => {
     await mountSection(withNotes(), { [`POST ${METADATA}`]: write }, `${SECTION}?file=subjects.tsv`);
-    expect(page().find(".study-savebar").exists()).toBe(false);
+    expect(page().find(".unsaved-banner").exists()).toBe(false);
     await toggle().trigger("click");
     await textArea("Description 1", rowsPane().element).setValue("Healthy adult volunteers.");
 
-    const bar = page().get(".data-section .study-savebar");
-    expect(bar.text()).toContain("Unsaved changes in study.json");
-    // The panes fill the window: the bar ends the section instead of sticking to the window.
-    expect(bar.classes()).toContain("study-savebar--static");
+    const banner = page().get(".unsaved-banner");
+    expect(banner.text()).toContain("Unsaved changes to study.json: Notes of the subjects");
+    // Under the section tabs, above the panes of the section.
+    expect(page().find(".unsaved-banner + .study-section .data-section").exists()).toBe(true);
     expect(tabLabel("Data")).toBe("Data, unsaved changes");
     expect(tabLabel("Metadata")).toBe("Metadata");
 
@@ -1639,7 +1639,7 @@ describe("notes of the tables", () => {
         metadata: { ...studyMetadata(), notes: { subjects: { descriptions: ["Healthy adult volunteers."], comments: [] } } },
       },
     ]);
-    expect(page().get(".study-savebar").text()).toContain("study.json saved.");
+    expect(page().get(".unsaved-banner").text()).toContain("study.json saved.");
     expect(tabLabel("Data")).toBe("Data");
   });
 
@@ -1654,7 +1654,7 @@ describe("notes of the tables", () => {
       },
       `${SECTION}?file=subjects.tsv`,
     );
-    // Edits of Metadata, saved from the bar of Data.
+    // Edits of Metadata, saved from the banner in Data.
     const form = useStudyStore().draft.form!;
     form.reference.pmid = "abc";
     form.curators = [{ user: "the curator", rating: 4 }];
@@ -1715,7 +1715,7 @@ describe("notes of the tables", () => {
     await toggle().trigger("click");
     await textArea("Description 1", rowsPane().element).setValue("Edited.");
     await click("Save");
-    expect(page().get(".data-section .savebar-conflict").text()).toBe(
+    expect(page().get(".unsaved-banner-conflict").text()).toBe(
       "study.json changed on disk after you started editing it. Reload it to keep your edits on top of the new version. Reload",
     );
     await click("Reload");
@@ -1723,7 +1723,7 @@ describe("notes of the tables", () => {
     expect(textArea("Description 1", rowsPane().element).element.value).toBe("Edited.");
   });
 
-  it("keeps the edits of the notes and the bar while another section opens", async () => {
+  it("keeps the edits of the notes and the banner while another section opens", async () => {
     await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
     await toggle().trigger("click");
     await textArea("Description 1", rowsPane().element).setValue("Edited.");
@@ -1731,7 +1731,7 @@ describe("notes of the tables", () => {
     await router.push("/studies/caffeine/Example/metadata");
     await flushPromises();
     expect(buttons("Stay")).toHaveLength(0);
-    expect(page().get(".study-savebar").text()).toContain("Unsaved changes in study.json");
+    expect(page().get(".unsaved-banner").text()).toContain("Unsaved changes to study.json");
 
     await router.push(`${SECTION}?file=subjects.tsv`);
     await flushPromises();
@@ -1739,23 +1739,15 @@ describe("notes of the tables", () => {
     expect(textArea("Description 1", rowsPane().element).element.value).toBe("Edited.");
   });
 
-  it("shows the bar of an edit in Metadata, which marks the Metadata tab", async () => {
+  it("shows the banner of an edit in Metadata, which marks the Metadata tab", async () => {
     await mountSection(withNotes(), {}, "/studies/caffeine/Example/metadata");
     await field("Source key").setValue("pkdb.edited");
     await router.push(`${SECTION}?file=subjects.tsv`);
     await flushPromises();
 
-    expect(page().get(".data-section .study-savebar").text()).toContain("Unsaved changes in study.json");
+    expect(page().get(".unsaved-banner").text()).toContain("Unsaved changes to study.json");
     expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
     expect(tabLabel("Data")).toBe("Data");
-  });
-
-  it("sticks the bar to the window when the panes stack", async () => {
-    setViewport(900);
-    await mountSection(withNotes(), {}, `${SECTION}?file=subjects.tsv`);
-    await toggle().trigger("click");
-    await textArea("Description 1", rowsPane().element).setValue("Edited.");
-    expect(page().get(".study-savebar").classes()).not.toContain("study-savebar--static");
   });
 
   it("opens the notes that a link names, focuses them, and keeps only the selection in the address", async () => {

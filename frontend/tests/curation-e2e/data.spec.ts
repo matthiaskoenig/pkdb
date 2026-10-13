@@ -745,9 +745,9 @@ test.describe("tables", () => {
     const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
     const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
     await toggle.click();
-    // An unsaved edit adds the save bar below the panes.
+    // An unsaved edit adds the banner above the panes.
     await notes.getByRole("textbox", { name: "Description 1" }).fill("Edited.");
-    await expect(page.locator(".study-savebar")).toContainText("Unsaved changes in study.json");
+    await expect(page.locator(".unsaved-banner")).toContainText("Unsaved changes to study.json: Notes of the subjects");
     const box = async (part: Locator) => (await part.boundingBox())!;
     const bottom = (rect: { y: number; height: number }) => rect.y + rect.height;
 

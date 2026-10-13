@@ -106,8 +106,8 @@ function card(title: string): DOMWrapper<Element> {
   return found;
 }
 
-function saveBar() {
-  return page().find(".study-savebar");
+function unsavedBanner() {
+  return page().find(".unsaved-banner");
 }
 
 function ratingOf(name: string) {
@@ -262,7 +262,7 @@ describe("people card", () => {
     const collaborators = labeled(wrapper, VCombobox, "Collaborators");
     expect(collaborators.props("modelValue")).toEqual(["Jane Doe"]);
     await collaborators.setValue(["Jane Doe", "janekg"]);
-    expect(saveBar().exists()).toBe(true);
+    expect(unsavedBanner().exists()).toBe(true);
   });
 });
 
@@ -340,7 +340,7 @@ describe("access and provenance card", () => {
     expect(access.get(".data-import-facts").text()).toContain("pkdb-importer 1.2");
     for (const label of ["Source key", "Method", "Version", "Run ID"]) expect(() => field(label)).toThrow();
     expect(buttons("Add asset")).toHaveLength(0);
-    expect(saveBar().exists()).toBe(false);
+    expect(unsavedBanner().exists()).toBe(false);
   });
 });
 
@@ -389,7 +389,7 @@ describe("descriptions, comments and notes", () => {
       comments: [{ user: "mkoenig", text: "Checked against the PDF." }],
       curators: fullStudyMetadata().curators,
     });
-    expect(page().find(".savebar-failure").exists()).toBe(false);
+    expect(page().find(".unsaved-banner-failure").exists()).toBe(false);
   });
 
   it("says that the notes of a table are in Data, above the table", async () => {
@@ -544,13 +544,14 @@ describe("typing", () => {
 });
 
 describe("saving", () => {
-  it("shows a sticky bar with Discard and Save for unsaved changes and marks the tab", async () => {
+  it("shows an amber banner with Discard and Save for unsaved changes and marks the tab", async () => {
     await mountSection();
-    expect(saveBar().exists()).toBe(false);
+    expect(unsavedBanner().exists()).toBe(false);
 
     await field("DOI").setValue("10.1000/xyz");
+    expect(unsavedBanner().text()).toContain("Unsaved changes to study.json: DOI");
+    expect(unsavedBanner().classes()).toContain("unsaved-banner--dirty");
 
-    expect(saveBar().text()).toContain("Unsaved changes in study.json");
     expect(button("Discard").element.disabled).toBe(false);
     expect(button("Save").element.disabled).toBe(false);
     const metadataLink = page().get('nav[aria-label="Study sections"] a');
@@ -559,7 +560,8 @@ describe("saving", () => {
 
     await click("Discard");
     expect(field("DOI").element.value).toBe("");
-    expect(saveBar().text()).toContain("Changes discarded.");
+    expect(unsavedBanner().classes()).not.toContain("unsaved-banner--dirty");
+    expect(unsavedBanner().text()).toContain("Changes discarded.");
     expect(page().get('nav[aria-label="Study sections"] a .section-tab-label').text()).toBe("Metadata");
   });
 
@@ -569,11 +571,11 @@ describe("saving", () => {
       await mountSection();
       await field("DOI").setValue("10.1000/xyz");
       await click("Discard");
-      expect(page().get(".savebar-notice").text()).toBe("Changes discarded.");
+      expect(page().get(".unsaved-banner-notice").text()).toBe("Changes discarded.");
 
       await click("Undo");
       expect(field("DOI").element.value).toBe("10.1000/xyz");
-      expect(saveBar().text()).toContain("Unsaved changes in study.json");
+      expect(unsavedBanner().text()).toContain("Unsaved changes to study.json");
       expect(buttons("Undo")).toHaveLength(0);
 
       // The next edit ends the undo.
@@ -587,13 +589,13 @@ describe("saving", () => {
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
       expect(buttons("Undo")).toHaveLength(0);
-      expect(saveBar().exists()).toBe(false);
+      expect(unsavedBanner().exists()).toBe(false);
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it("posts the full study.json with its revision and hides the bar after the save", async () => {
+  it("posts the full study.json with its revision and hides the banner after the save", async () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     try {
       await mountSection();
@@ -607,14 +609,14 @@ describe("saving", () => {
           metadata: { ...studyMetadata(), reference: { pmid: "3678553", doi: "10.1000/xyz" } },
         },
       ]);
-      // The bar says that the save worked, for a few seconds.
-      expect(saveBar().text()).toContain("study.json saved.");
-      expect(saveBar().text()).not.toContain("Unsaved changes");
+      // The banner says that the save worked, for a few seconds.
+      expect(unsavedBanner().text()).toContain("study.json saved.");
+      expect(unsavedBanner().text()).not.toContain("Unsaved changes");
       expect(button("Save").element.disabled).toBe(true);
-      expect(page().get(".savebar-notice").text()).toBe("study.json saved.");
+      expect(page().get(".unsaved-banner-notice").text()).toBe("study.json saved.");
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
-      expect(saveBar().exists()).toBe(false);
+      expect(unsavedBanner().exists()).toBe(false);
 
       // The next save goes over the new revision.
       await field("DOI").setValue("10.1000/abc");
@@ -631,7 +633,7 @@ describe("saving", () => {
     });
     await field("PMID").setValue("999");
     await click("Save");
-    expect(page().get(".savebar-reference-error").text()).toBe(
+    expect(page().get(".unsaved-banner-reference-error").text()).toBe(
       "study.json saved; reference.json could not be refreshed: PubMed is offline",
     );
   });
@@ -657,10 +659,10 @@ describe("saving", () => {
     expect(field("DOI").element.value).toBe("doi");
     expect(messagesOf(field("DOI"))).toBe("String should match pattern '^10\\.\\d{4,9}/\\S+$'");
     expect(page().get(".curator-row .curator-messages").text()).toBe("Input should be less than or equal to 5");
-    const failure = page().get(".savebar-failure").text();
+    const failure = page().get(".unsaved-banner-failure").text();
     expect(failure).toContain("study.json was not saved. Fix the marked fields.");
     expect(failure).toContain("format: Input should be 2");
-    expect(saveBar().exists()).toBe(true);
+    expect(unsavedBanner().exists()).toBe(true);
   });
 
   it("shows the messages of the library at their fields without the field", async () => {
@@ -674,7 +676,7 @@ describe("saving", () => {
 
     expect(messagesOf(field("PMID"))).toBe("Give a pmid or a doi, or remove reference for a manual reference");
     expect(messagesOf(page().get(".creator-field").element)).toBe("A user name has no spaces.");
-    expect(page().get(".savebar-failure").text()).toContain("study.json was not saved. Fix the marked fields.");
+    expect(page().get(".unsaved-banner-failure").text()).toContain("study.json was not saved. Fix the marked fields.");
   });
 
   it("reloads a study.json changed on disk, keeps the edits on top and saves over the new revision", async () => {
@@ -700,7 +702,7 @@ describe("saving", () => {
     await flushPromises();
     await click("Save");
 
-    expect(page().get(".savebar-conflict").text()).toContain(
+    expect(page().get(".unsaved-banner-conflict").text()).toContain(
       "study.json changed on disk after you started editing it",
     );
     expect(button("Save").element.disabled).toBe(true);
@@ -714,7 +716,7 @@ describe("saving", () => {
     expect(page().get(".curators-block").text()).toContain("Changed on disk");
     expect(messagesOf(textArea("Description 1", notes))).toBe("");
     expect(page().get(".descriptions-block").text()).toContain("Changed on disk");
-    expect(page().find(".savebar-conflict").exists()).toBe(false);
+    expect(page().find(".unsaved-banner-conflict").exists()).toBe(false);
     expect(button("Save").element.disabled).toBe(false);
 
     await click("Save");
@@ -732,7 +734,7 @@ describe("saving", () => {
     await click("Save");
     await click("Reload");
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("mkoenig");
-    expect(page().get(".savebar-reloaded").text()).toContain("Changed on both sides, your version is kept: Creator");
+    expect(page().get(".unsaved-banner-reloaded").text()).toContain("Changed on both sides, your version is kept: Creator");
     expect(messagesOf(page().get(".creator-field input"))).toBe(
       "Changed on disk too. Your edit is kept. On disk: janekg",
     );
@@ -742,8 +744,8 @@ describe("saving", () => {
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("janekg");
     expect(messagesOf(page().get(".creator-field input"))).toBe("Changed on disk");
     expect(buttons(/^Use the disk version/)).toHaveLength(0);
-    expect(page().get(".savebar-reloaded").text()).not.toContain("Changed on both sides");
-    expect(saveBar().text()).toContain("No unsaved changes");
+    expect(page().get(".unsaved-banner-reloaded").text()).not.toContain("Changed on both sides");
+    expect(unsavedBanner().text()).toContain("No unsaved changes");
   });
 
   it("offers the disk version of a list that changed on both sides", async () => {
@@ -779,7 +781,7 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    expect(page().get(".savebar-conflict").text()).toContain(
+    expect(page().get(".unsaved-banner-conflict").text()).toContain(
       "It is not valid JSON now, so it cannot be merged. Fix it in your editor, then save again.",
     );
     expect(buttons("Reload")).toHaveLength(0);
@@ -788,7 +790,7 @@ describe("saving", () => {
 
     // Saved again after the fix: the readable file can be merged, and Save waits for Reload.
     await click("Save");
-    expect(page().get(".savebar-conflict").text()).toContain("Reload it to keep your edits on top of the new version.");
+    expect(page().get(".unsaved-banner-conflict").text()).toContain("Reload it to keep your edits on top of the new version.");
     expect(button("Save").element.disabled).toBe(true);
     await click("Reload");
     expect(radio("Closed").checked).toBe(true);
@@ -797,8 +799,8 @@ describe("saving", () => {
     await click("Save");
     expect(posted(METADATA).map((body) => body?.revision)).toEqual(["study-1", "study-1", "study-3"]);
     expect(posted(METADATA)[2]?.metadata).toMatchObject({ licence: "closed", reference: { doi: "10.1000/xyz" } });
-    expect(saveBar().text()).toContain("study.json saved.");
-    expect(page().find(".savebar-conflict").exists()).toBe(false);
+    expect(unsavedBanner().text()).toContain("study.json saved.");
+    expect(page().find(".unsaved-banner-conflict").exists()).toBe(false);
   });
 
   it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
@@ -840,7 +842,7 @@ describe("saving", () => {
     await field("DOI").setValue("");
     await flushPromises();
     expect(textArea("Description 1", card("Descriptions and comments").element).element.value).toBe("New.");
-    expect(saveBar().exists()).toBe(false);
+    expect(unsavedBanner().exists()).toBe(false);
   });
 
   it("shows what failed in a save, with Details and a link to its entry in the Activity", async () => {
@@ -861,7 +863,7 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    const alert = page().get(".savebar-failure");
+    const alert = page().get(".unsaved-banner-failure");
     expect(alert.get(".action-failure-detail").text()).toBe("RuntimeError: boom");
     expect(alert.get("summary").text()).toBe("Details");
     expect(alert.get(".action-failure-activity").attributes("href")).toBe("#/studies/caffeine/Example/activity?entry=act-7");
@@ -874,7 +876,7 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    expect(page().get(".savebar-failure").text()).toContain("Set your PK-DB user in Connection settings");
+    expect(page().get(".unsaved-banner-failure").text()).toContain("Set your PK-DB user in Connection settings");
     expect(useDialogStore().settings).toBe(false);
     await click("Open settings");
     expect(useDialogStore().settings).toBe(true);
@@ -887,7 +889,7 @@ describe("saving", () => {
     await flushPromises();
     expect(tabLabel("Data")).toBe("Data, unsaved changes");
     expect(tabLabel("Metadata")).toBe("Metadata");
-    expect(saveBar().text()).toContain("Unsaved changes in study.json");
+    expect(unsavedBanner().text()).toContain("Unsaved changes to study.json");
 
     await field("DOI").setValue("10.1000/xyz");
     expect(tabLabel("Metadata")).toBe("Metadata, unsaved changes");
@@ -911,13 +913,13 @@ describe("saving", () => {
     });
     await field("DOI").setValue("10.1000/xyz");
     await click("Save");
-    const failure = page().get(".savebar-failure");
+    const failure = page().get(".unsaved-banner-failure");
     expect(failure.get(".action-failure-text").text()).toBe("Could not save study.json of caffeine/Example.");
     expect(failure.text()).toContain("OSError: disk full");
 
     // Its alert closes it, in the draft of the store.
     await failure.get(".v-alert__close button").trigger("click");
-    expect(page().find(".savebar-failure").exists()).toBe(false);
+    expect(page().find(".unsaved-banner-failure").exists()).toBe(false);
     expect(useStudyStore().draft.failure).toBeNull();
   });
 });
@@ -935,7 +937,7 @@ describe("leaving the study with unsaved changes", () => {
     await router.push(SECTION);
     await flushPromises();
     expect(field("DOI").element.value).toBe("10.1000/xyz");
-    expect(saveBar().text()).toContain("Unsaved changes in study.json");
+    expect(unsavedBanner().text()).toContain("Unsaved changes to study.json");
   });
 
   it("asks before the overview opens, and stays or discards and leaves", async () => {
@@ -993,7 +995,7 @@ describe("leaving the study with unsaved changes", () => {
     expect(router.currentRoute.value.params.name).toBe("Other");
     expect(field("DOI").element.value).toBe("10.1000/other");
     expect(radio("Closed").checked).toBe(true);
-    expect(saveBar().exists()).toBe(false);
+    expect(unsavedBanner().exists()).toBe(false);
     expect(tabLabel("Metadata")).toBe("Metadata");
     expect(useStudyStore().draft.dirty).toBe(false);
   });
@@ -1042,7 +1044,7 @@ describe("invalid study.json", () => {
 
     await click("Start a new study.json from these fields");
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("curator");
-    expect(saveBar().exists()).toBe(true);
+    expect(unsavedBanner().exists()).toBe(true);
     await click("Save");
     expect(posted(METADATA)[0]).toMatchObject({ revision: "broken-1", metadata: { creator: "curator" } });
   });

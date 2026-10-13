@@ -3,7 +3,7 @@
  * that it was read from and its revision, the changed fields and the sections that show them,
  * Save over the revision, Discard with Undo, the conflict with a newer file on disk and Reload,
  * and which notes panels are open. The Metadata section edits the form, the Data section the
- * notes of the tables in it, and both show its save bar (StudySaveBar).
+ * notes of the tables in it, and the study page shows its banner (UnsavedBanner).
  *
  * The form follows study.json on disk while it has no unsaved edits. `reset` forgets the draft
  * when the study closes; the answer of a save that started before changes nothing.
@@ -46,9 +46,6 @@ export interface DraftSource {
   /** Writes study.json over `revision`; a stale revision rejects with a revision conflict. */
   save: (revision: string, metadata: StudyMetadata) => Promise<MetadataWrite>;
 }
-
-/** The sections that edit the draft and show its save bar. */
-export type DraftSection = Extract<Section, "metadata" | "data">;
 
 /** study.json changed on disk: its revision, and its content as a form, null when it is no JSON object. */
 export interface DraftConflict {
@@ -101,7 +98,7 @@ export interface StudyDraft {
   undoable: ComputedRef<boolean>;
   /** The table kinds whose notes panels are open, kept while the study is open. */
   notesOpen: Readonly<Ref<ReadonlySet<TableKind>>>;
-  /** Show `text` in the bar for a few seconds; an empty text clears it. */
+  /** Show `text` in the banner for a few seconds; an empty text clears it. */
   announce(text: string): void;
   save(): Promise<void>;
   /** Put the edits on top of study.json on disk and mark what changed there. */
@@ -262,7 +259,7 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
 
   /**
    * A refused save: the issues by field, which the sections mark, and the issues of no field,
-   * which the bar lists. The notes with an issue open.
+   * which the banner lists. The notes with an issue open.
    */
   function refused(issues: ValidationIssue[], sent: MetadataForm): void {
     const grouped = issuesByTarget(sent, issues);
