@@ -13,7 +13,14 @@ import openpyxl
 import pytest
 from curation_http import authenticate, error_body, request
 from digitize_fixtures import GOOD, png, project
-from open_commands import FAILING_OPENER, command_line, holding_opener, stop_program
+from open_commands import (
+    FAILING_OPENER,
+    command_line,
+    holding_opener,
+    late_opener,
+    stop_program,
+    wait_for_open_commands,
+)
 
 from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
@@ -1867,6 +1874,7 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     api, monkeypatch
 ):
     server, engine, folder = api
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 30)
     monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
     headers = authenticate(server)
     status, _, data = request(
@@ -2145,3 +2153,29 @@ def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
         )
         assert status == 200
         assert response_headers["Content-Type"] == "application/pdf"
+
+
+def test_a_failure_of_open_tables_after_it_answered_goes_to_the_log(api, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 0.2)
+    monkeypatch.setenv(
+        "PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "lost the display"))
+    )
+    headers = authenticate(server)
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "open"},
+        headers,
+    )
+    # The command still ran after 0.2 seconds: it counted as started.
+    assert (status, json.loads(data)["opened"]) == (200, True)
+    wait_for_open_commands()
+    text = engine.log.path.read_text(encoding="utf-8")
+    program = sys.executable.replace("\\", "/").rsplit("/", 1)[-1]
+    assert (
+        "in Open tables (POST /local/studies/tables): "
+        f"CalledProcessError: {program} exited with status 3\nlost the display"
+    ) in text
+    assert "Could not open the tables of caffeine/Example." in text

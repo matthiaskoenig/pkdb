@@ -369,3 +369,42 @@ def test_quiet_repeats_write_nothing_until_the_minute_is_over(tmp_path, capsys):
         "Error 00000000 in File watching: OSError",
         "Error 00000060 in File watching: OSError",
     ]
+
+
+def test_a_failure_after_the_request_goes_to_the_file_and_the_terminal(
+    tmp_path, capsys
+):
+    # An open command that counted as started fails later: no request answers it.
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [SECRET])
+    cause = subprocess.CalledProcessError(
+        3, ["xdg-open", "/x/Demo2020.xlsx"], stderr=f"no display for {SECRET}".encode()
+    )
+    failure = ActionFailed(
+        "Could not open the tables of caffeine/Demo2020.",
+        code="open_failed",
+        cause=cause,
+    )
+    log.failed_later(failure, action=OPEN, label="Open tables")
+    log.close()
+    text = log.path.read_text(encoding="utf-8")
+    logged = re.search(
+        rf"WARNING Error ([0-9a-f]{{8}}) in {re.escape(OPEN)}: CalledProcessError: "
+        r"xdg-open exited with status 3\nno display for \[redacted\]",
+        text,
+    )
+    assert logged is not None, text
+    assert "Could not open the tables of caffeine/Demo2020." in text
+    assert SECRET not in text
+    assert capsys.readouterr().err == (
+        f"Error {logged[1]} in Open tables: CalledProcessError (see {log.path})\n"
+    )
+
+
+def test_a_failure_after_the_log_closed_goes_nowhere(tmp_path, capsys):
+    # pkdb curate stopped while the program of an open command still ran.
+    log = ErrorLog(tmp_path / "logs" / "curation.log", lambda: [])
+    log.close()
+    failure = ActionFailed("Could not open outputs.xlsx.", code="open_failed")
+    log.failed_later(failure, action=OPEN, label="Open tables")
+    assert not log.path.exists()
+    assert capsys.readouterr().err == ""

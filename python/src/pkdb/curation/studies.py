@@ -21,6 +21,7 @@ from urllib.parse import quote
 
 from pydantic import ValidationError
 
+from pkdb.curation.actions import action_of
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
 from pkdb.curation.state import EngineState
@@ -1034,7 +1035,19 @@ class StudiesMixin(EngineState):
             # A sync that failed is reported; the curator fixes it in the workbook.
             result["opened"] = sync.workbook.is_file()
             if result["opened"]:
-                open_path(sync.workbook, subject=f"the tables of {identity}")
+                opening = action_of(
+                    "POST",
+                    "/local/studies/tables",
+                    {"study": identity, "action": "open"},
+                )
+                open_path(
+                    sync.workbook,
+                    subject=f"the tables of {identity}",
+                    # The command may fail after this request answered: the log keeps it.
+                    late_failure=lambda failure: self.log.failed_later(
+                        failure, action=opening.text(), label=opening.label
+                    ),
+                )
         done = {
             "open": "Opened the workbook",
             "sync": "Synced the workbook and the tables",

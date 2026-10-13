@@ -298,6 +298,22 @@ class ErrorLog:
         """
         self._log(logging.WARNING, body, error, label or body["action"], quiet_repeats)
 
+    def failed_later(self, error: BaseException, *, action: str, label: str) -> None:
+        """Log a failure that no request answers any more, and name it in the terminal.
+
+        An open command that counted as started can fail after its request answered; the
+        log and the terminal are the only places that learn of it, with a request id of
+        its own. `action` is the action of the request, such as `Open tables (POST
+        /local/studies/tables)`, and `label` its label, such as `Open tables`.
+        """
+        body = describe(
+            error,
+            action=action,
+            request_id=new_request_id(),
+            secrets=self._secrets(),
+        )
+        self.failed(body, error, label=label)
+
     def unexpected(
         self,
         body: dict,

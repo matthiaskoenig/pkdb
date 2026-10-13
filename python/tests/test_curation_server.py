@@ -13,7 +13,7 @@ import time
 from http.client import HTTPConnection, IncompleteRead
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import Mock
+from unittest.mock import ANY, Mock
 
 import pytest
 from curation_http import authenticate, error_body, request
@@ -317,8 +317,60 @@ def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     runner.return_value.wait.assert_called_once_with(
         timeout=launch.EARLY_FAILURE_SECONDS
     )
+    # The command exited in time: nothing reads the file of stderr any more.
+    assert options["stderr"].closed
     open_path(file, reveal=True)
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
+
+
+def test_a_program_that_cannot_be_started_says_the_open_failed(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
+    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
+    cause = PermissionError(13, "Permission denied", "xdg-open")
+    monkeypatch.setattr(
+        "pkdb.curation.launch.subprocess.Popen", Mock(side_effect=cause)
+    )
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file)
+    assert (failed.value.message, failed.value.code) == (
+        "Could not open outputs.xlsx.",
+        "open_failed",
+    )
+    assert failed.value.cause is cause
+
+
+def test_an_interrupted_wait_closes_the_stderr_file_of_the_command(
+    tmp_path, monkeypatch
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
+    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
+    runner = Mock(return_value=Mock(wait=Mock(side_effect=KeyboardInterrupt)))
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
+    with pytest.raises(KeyboardInterrupt):
+        open_path(file)
+    assert runner.call_args.kwargs["stderr"].closed
+
+
+def test_a_thread_that_cannot_start_closes_the_stderr_file_of_the_command(
+    tmp_path, monkeypatch
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
+    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
+    process = Mock(wait=Mock(side_effect=subprocess.TimeoutExpired("xdg-open", 2)))
+    runner = Mock(return_value=process)
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
+    monkeypatch.setattr(
+        launch.threading.Thread, "start", Mock(side_effect=RuntimeError("no threads"))
+    )
+    with pytest.raises(RuntimeError):
+        open_path(file)
+    assert runner.call_args.kwargs["stderr"].closed
 
 
 def test_curate_names_the_source_checkout_without_built_assets(
@@ -426,7 +478,19 @@ def test_open_action_resolves_registered_file(local_server, monkeypatch, tmp_pat
         == 200
     )
     engine.resolve_file.assert_called_once_with("study", "outputs.xlsx")
-    opener.assert_called_once_with(target, reveal=True, subject="outputs.xlsx of study")
+    opener.assert_called_once_with(
+        target, reveal=True, subject="outputs.xlsx of study", late_failure=ANY
+    )
+    # A failure after the answer goes to the log, named as the request.
+    failure = ActionFailed(
+        "Could not show outputs.xlsx of study in its folder.", code="open_failed"
+    )
+    opener.call_args.kwargs["late_failure"](failure)
+    engine.log.failed_later.assert_called_once_with(
+        failure,
+        action="Show in folder (POST /local/files/open)",
+        label="Show in folder",
+    )
 
 
 def test_invalid_bootstrap_does_not_consume_valid_token(local_server):
@@ -1262,6 +1326,8 @@ def test_a_result_that_is_not_json_is_an_unexpected_500_before_any_200(local_ser
 def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
     tmp_path, monkeypatch
 ):
+    # A failure counts as early however slow the runner: wait returns when it exits.
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 30)
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
@@ -1275,6 +1341,8 @@ def test_a_failing_open_command_names_its_program_exit_status_and_stderr(
 
 
 def test_a_folder_that_cannot_be_shown_says_so(tmp_path, monkeypatch):
+    # A failure counts as early however slow the runner: wait returns when it exits.
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 30)
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
@@ -1409,6 +1477,8 @@ def test_a_later_failure_without_a_listener_is_dropped_quietly(tmp_path, monkeyp
 
 
 def test_a_failed_opener_keeps_the_end_of_a_long_stderr(tmp_path, monkeypatch):
+    # A failure counts as early however slow the runner: wait returns when it exits.
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 30)
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
     noisy = python_program(

@@ -45,6 +45,13 @@ def _stderr_of(errors: IO[bytes]) -> bytes:
     return errors.read()
 
 
+def _open_failed(failed: str, error: BaseException) -> ActionFailed:
+    """The ActionFailed of an open command that failed, early or late."""
+    failure = ActionFailed(f"{failed}.", code="open_failed", cause=error)
+    failure.__cause__ = error
+    return failure
+
+
 def _reap(
     process: subprocess.Popen[bytes],
     arguments: list[str] | str,
@@ -64,9 +71,7 @@ def _reap(
         error = subprocess.CalledProcessError(
             status, arguments, stderr=_stderr_of(errors)
         )
-    failure = ActionFailed(f"{failed}.", code="open_failed", cause=error)
-    failure.__cause__ = error
-    late_failure(failure)
+    late_failure(_open_failed(failed, error))
 
 
 def _start(
@@ -97,20 +102,25 @@ def _start(
         errors.close()
         raise
     try:
-        status = process.wait(timeout=EARLY_FAILURE_SECONDS)
-    except subprocess.TimeoutExpired:
-        threading.Thread(
-            target=_reap,
-            args=(process, arguments, errors, failed, late_failure),
-            name=f"pkdb-open-command-{process.pid}",
-            daemon=True,
-        ).start()
-        return
-    with errors:
+        try:
+            status = process.wait(timeout=EARLY_FAILURE_SECONDS)
+        except subprocess.TimeoutExpired:
+            threading.Thread(
+                target=_reap,
+                args=(process, arguments, errors, failed, late_failure),
+                name=f"pkdb-open-command-{process.pid}",
+                daemon=True,
+            ).start()
+            return
         if status != 0:
             raise subprocess.CalledProcessError(
                 status, arguments, stderr=_stderr_of(errors)
             )
+    except BaseException:
+        # The thread did not take over the file, or the command failed in time.
+        errors.close()
+        raise
+    errors.close()
 
 
 def open_path(
@@ -157,7 +167,7 @@ def open_path(
             arguments = [executable, str(path)]
         _start(arguments, failed, late_failure)
     except subprocess.CalledProcessError as error:
-        raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
+        raise _open_failed(failed, error) from error
     except FileNotFoundError as error:
         if not command and sys.platform == "win32":
             raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error

@@ -814,10 +814,15 @@ class Handler(BaseHTTPRequestHandler):
 
             study, file = required(body, "study_id"), body.get("file")
             target = engine.resolve_file(study, file)
+            opening = action_of("POST", path, body)
             open_path(
                 target,
                 reveal=bool(body.get("reveal", False)),
                 subject=f"{file} of {study}" if file else f"the folder of {study}",
+                # The command may fail after this request answered: the log keeps it.
+                late_failure=lambda failure: engine.log.failed_later(
+                    failure, action=opening.text(), label=opening.label
+                ),
             )
             return {"ok": True}
         if path == "/local/assignments/refresh":
