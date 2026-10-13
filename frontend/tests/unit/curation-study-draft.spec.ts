@@ -78,7 +78,7 @@ describe("useStudyDraft", () => {
     draft.form.value!.creator = "curator";
     await nextTick();
     expect(draft.form.value?.creator).toBe("mkoenig");
-    expect(draft.barShown.value).toBe(false);
+    expect(draft.dirty.value).toBe(false);
   });
 
   it("names the changed fields by the section that shows them", async () => {
@@ -89,7 +89,6 @@ describe("useStudyDraft", () => {
     draft.form.value!.notes.scatters.comments.push({ user: "curator", text: "Figure 3." });
     expect(draft.unsaved.value).toEqual(["metadata", "data"]);
     expect(draft.dirty.value).toBe(true);
-    expect(draft.barShown.value).toBe(true);
     expect(draft.canSave.value).toBe(true);
   });
 
@@ -134,6 +133,46 @@ describe("useStudyDraft", () => {
     draft.form.value!.reference.pmid = "999";
     await draft.save();
     expect(draft.referenceError.value).toBe("study.json saved; reference.json could not be refreshed: PubMed is offline");
+  });
+
+  it("lists the changed fields in the order of the form", async () => {
+    const draft = await draftOf();
+    expect(draft.changed.value).toEqual([]);
+    draft.form.value!.notes.outputs.descriptions.push("Read from Table 2.");
+    draft.form.value!.provenance.source_key = "pkdb.edited";
+    await nextTick();
+    expect(draft.changed.value).toEqual(["provenance.source_key", "notes.outputs.descriptions"]);
+    expect(draft.unsaved.value).toEqual(["metadata", "data"]);
+  });
+
+  it("lists for a new study.json the fields that it sets", async () => {
+    const draft = await draftOf(withMetadata(null));
+    expect(draft.changed.value).toEqual([]);
+    draft.startNew(toForm({ creator: "curator" }, NOTE_KINDS));
+    await nextTick();
+    expect(draft.changed.value).toEqual(["creator"]);
+    expect(draft.unsaved.value).toEqual(["metadata"]);
+  });
+
+  it("lists every issue of a refused save with its field in a section that shows no field", async () => {
+    const draft = await draftOf();
+    answer = () =>
+      Promise.reject(
+        new ApiError(422, {
+          error: "Invalid study.json",
+          issues: [
+            issue("reference.pmid", "A PubMed ID has only digits."),
+            issue("notes.outputs.descriptions.0", "Enter some text or remove this entry."),
+          ],
+        }),
+      );
+    draft.form.value!.reference.pmid = "abc";
+    draft.form.value!.notes.outputs.descriptions[0] = " ";
+    await draft.save();
+    expect(draft.failureIn("review")).toMatchObject({
+      text: "study.json was not saved.",
+      issues: ["PMID: A PubMed ID has only digits.", "Descriptions of outputs: Enter some text or remove this entry."],
+    });
   });
 
   it("marks the fields of a refused save, lists in each section the issues of the fields it does not show, and opens their notes", async () => {
@@ -305,7 +344,7 @@ describe("useStudyDraft", () => {
     expect(draft.undoable.value).toBe(true);
     vi.advanceTimersByTime(NOTICE_MS);
     expect(draft.undoable.value).toBe(false);
-    expect(draft.barShown.value).toBe(false);
+    expect(draft.notice.value).toBe("");
   });
 
   it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
@@ -409,6 +448,5 @@ describe("useStudyDraft", () => {
     expect(draft.dirty.value).toBe(false);
     expect(draft.notesOpen.value.size).toBe(0);
     expect(draft.notice.value).toBe("");
-    expect(draft.barShown.value).toBe(false);
   });
 });

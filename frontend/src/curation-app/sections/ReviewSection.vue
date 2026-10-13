@@ -389,10 +389,11 @@ function added(item: ReviewItem | null): void {
   .review-body {
     grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
   }
+  /* Below the app bar, and below the banner of unsaved changes of study.json while it sticks. */
   .review-selected {
     position: sticky;
-    top: 80px;
-    max-height: calc(100vh - 96px);
+    top: calc(80px + var(--unsaved-banner-height, 0px));
+    max-height: calc(100vh - 96px - var(--unsaved-banner-height, 0px));
     overflow-y: auto;
   }
   /* The cards keep their height in the limited column, which scrolls instead. */
@@ -419,6 +420,11 @@ function added(item: ReviewItem | null): void {
   min-width: 0;
   /* Below the app bar when it scrolls into view. */
   scroll-margin-top: 80px;
+}
+/* The page keeps the room of the app bar and of the banner of unsaved changes while the banner
+   sticks (UnsavedBanner): the item scrolls to just below the banner. */
+:global(html:has(.unsaved-banner--sticky) .review-selected) {
+  scroll-margin-top: 0;
 }
 .review-notice {
   font-size: 0.875rem;

@@ -91,21 +91,21 @@ test("edits a description of the subjects in Data and saves it from Metadata", a
     await pane.getByRole("button", { name: /^Notes of the subjects/ }).click();
     await pane.getByRole("textbox", { name: "Description 1" }).fill(EDITED);
 
-    const bar = page.locator(".study-savebar");
-    await expect(bar).toContainText("Unsaved changes in study.json");
+    const banner = page.locator(".unsaved-banner");
+    await expect(banner).toContainText("Unsaved changes to study.json: Notes of the subjects");
     await expect(sectionTab(page, "Data, unsaved changes")).toBeVisible();
     await expect(sectionTab(page, "Metadata")).toBeVisible();
-    // The panes keep filling the window with the bar below them: the page does not scroll.
+    // The panes keep filling the window below the banner: the page does not scroll.
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollHeight - document.documentElement.clientHeight))
       .toBe(0);
 
-    // Metadata shows the same draft and the same bar, without asking to leave.
+    // Metadata shows the same draft and the same banner, without asking to leave.
     await sectionTab(page, "Metadata").click();
     await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/metadata$/);
-    await expect(bar).toContainText("Unsaved changes in study.json");
+    await expect(banner).toContainText("Unsaved changes to study.json: Notes of the subjects");
     await page.getByRole("button", { name: "Save", exact: true }).click();
-    await expect(bar).toContainText("study.json saved.");
+    await expect(banner).toContainText("study.json saved.");
     await expect(sectionTab(page, "Data")).toBeVisible();
 
     // Only the first description of the subjects changed on disk.
@@ -117,7 +117,7 @@ test("edits a description of the subjects in Data and saves it from Metadata", a
   }
 });
 
-test("open notes leave rows of the table in view in a short window, with the save bar below the panes", async ({
+test("open notes leave rows of the table in view in a short window, with the banner above the panes", async ({
   app,
   page,
 }) => {
@@ -136,8 +136,8 @@ test("open notes leave rows of the table in view in a short window, with the sav
     const pane = rowsPane(page, "timecourses_Fig1.tsv");
     await pane.getByRole("button", { name: /^Notes of the timecourses/ }).click();
     await pane.getByRole("textbox", { name: "Description 1" }).fill(EDITED);
-    const bar = page.locator(".study-savebar");
-    await expect(bar).toContainText("Unsaved changes in study.json");
+    const banner = page.locator(".unsaved-banner");
+    await expect(banner).toContainText("Unsaved changes to study.json: Notes of the timecourses");
 
     const panel = pane.getByRole("region", { name: /^Notes of the timecourses/ });
     const rows = pane.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
@@ -146,8 +146,8 @@ test("open notes leave rows of the table in view in a short window, with the sav
     expect(bottom(notes!)).toBeLessThanOrEqual(grid!.y);
     expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
     expect(grid!.height).toBeGreaterThanOrEqual(5 * header!.height);
-    // The bar ends the section below the panes rather than cover them.
-    expect((await box(bar)).y).toBeGreaterThanOrEqual(bottom(section!));
+    // The banner stands above the panes rather than cover them.
+    expect(bottom(await box(banner))).toBeLessThanOrEqual(section!.y);
 
     // The cut notes fade out at the bottom of their body until it scrolls to its end.
     const fade = panel.locator(".pane-more");
@@ -265,7 +265,7 @@ test("open notes grow with their content without a loop of resize observers", as
       await expect.poll(async () => (await panel.boundingBox())!.height).toBeGreaterThan(before);
       await toggle.click();
       await page.getByRole("button", { name: "Discard" }).click();
-      await expect(page.locator(".study-savebar")).toContainText("Changes discarded.");
+      await expect(page.locator(".unsaved-banner")).toContainText("Changes discarded.");
     }
     expect(await page.evaluate(() => window.__windowErrors)).toEqual([]);
   } finally {

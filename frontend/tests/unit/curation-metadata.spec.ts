@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { ValidationIssue } from "../../src/curation-app/api/types";
+import type { TableKind, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   changedFields,
+  changedLabels,
   clone,
   copyField,
   fieldLabel,
@@ -18,13 +19,15 @@ import {
   NO_MESSAGES,
   type MetadataForm,
   readStudyJson,
+  shortList,
   startForm,
   targetLabel,
   toForm,
   unsavedSections,
   withKind,
 } from "../../src/curation-app/metadata";
-import { NOTE_KINDS, fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
+import { kindLabel } from "../../src/curation-app/tableKinds";
+import { NOTE_KINDS, TABLE_KIND_ENTRIES, fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
 
 /** The form of a study.json value with the notes of every table kind of the study page. */
 function formOf(value: unknown): MetadataForm {
@@ -396,5 +399,28 @@ describe("messages", () => {
     const messages = markMessages(new Map([["licence", "disk" as const]]), new Map());
     expect(messages.get("licence")).toEqual([MARK_TEXT.disk]);
     expect(messages.get("access")).toBeUndefined();
+  });
+});
+
+describe("the names of the changed fields", () => {
+  const label = (kind: TableKind) => kindLabel({ table_kinds: TABLE_KIND_ENTRIES }, kind);
+
+  it("names a field of the study by its label, and the notes of a kind once", () => {
+    expect(
+      changedLabels(["provenance.source_key", "notes.outputs.descriptions", "notes.outputs.comments"], label),
+    ).toEqual(["Source key", "Notes of the outputs"]);
+    expect(changedLabels(["reference.pmid", "notes.subjects.comments", "comments"], label)).toEqual([
+      "PMID",
+      "Notes of the subjects",
+      "Comments",
+    ]);
+  });
+
+  it("lists three names and counts the others", () => {
+    expect(shortList([])).toBe("");
+    expect(shortList(["PMID"])).toBe("PMID");
+    expect(shortList(["PMID", "DOI", "Creator"])).toBe("PMID, DOI, Creator");
+    expect(shortList(["PMID", "DOI", "Creator", "Curators"])).toBe("PMID, DOI, Creator and 1 more");
+    expect(shortList(["PMID", "DOI", "Creator", "Curators", "Licence"])).toBe("PMID, DOI, Creator and 2 more");
   });
 });

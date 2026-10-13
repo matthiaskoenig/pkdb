@@ -431,6 +431,23 @@ test("the alerts of a source and a table that cannot be loaded keep the height o
   }
 });
 
+test("in a stacked window the source pane fits a short image, up to 70 % of the window", async ({ app, page }) => {
+  await page.setViewportSize({ width: 700, height: 900 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  const pane = page.locator(".data-stack > .source-pane");
+  await expect(pane.locator(".source-image")).toBeVisible();
+  const body = pane.locator(".pane-body");
+  const sizes = await body.evaluate((element) => ({ client: element.clientHeight, scroll: element.scrollHeight }));
+  // Nothing scrolls and nothing is left empty below the content of the pane.
+  expect(sizes.scroll - sizes.client).toBeLessThanOrEqual(1);
+  const free = await body.evaluate((element) => {
+    const last = element.querySelector(".pane-content")!.getBoundingClientRect().bottom;
+    return element.getBoundingClientRect().bottom - last;
+  });
+  expect(free, "empty space below the content of the pane").toBeLessThanOrEqual(24);
+  expect((await pane.boundingBox())!.height).toBeLessThan(0.7 * 900);
+});
+
 test("on a phone the review status and More actions share a line above the buttons of the study", async ({
   app,
   page,
@@ -745,9 +762,9 @@ test.describe("tables", () => {
     const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
     const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
     await toggle.click();
-    // An unsaved edit adds the save bar below the panes.
+    // An unsaved edit turns the banner above the panes amber.
     await notes.getByRole("textbox", { name: "Description 1" }).fill("Edited.");
-    await expect(page.locator(".study-savebar")).toContainText("Unsaved changes in study.json");
+    await expect(page.locator(".unsaved-banner")).toContainText("Unsaved changes to study.json: Notes of the subjects");
     const box = async (part: Locator) => (await part.boundingBox())!;
     const bottom = (rect: { y: number; height: number }) => rect.y + rect.height;
 

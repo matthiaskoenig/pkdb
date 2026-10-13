@@ -52,12 +52,8 @@ const problems = computed(() =>
 .nav-count--error {
   color: rgb(var(--v-theme-error));
 }
-/* The amber of the warnings of the table grid: the warning color of the theme is too light for
-   3:1 on the navigator in the light theme. */
+/* The amber of the app (themes.ts), as the warnings of the table grid. */
 .nav-count--warning {
-  color: #8f5300;
-}
-.v-theme--dark .nav-count--warning {
-  color: #ffb547;
+  color: rgb(var(--v-theme-caution));
 }
 </style>

@@ -20,7 +20,7 @@ test("saves the metadata form to study.json and keeps the edits through a confli
 
   await page.getByRole("radio", { name: "Open" }).check();
   await description.fill(EDITED);
-  await expect(page.getByText("Unsaved changes in study.json")).toBeVisible();
+  await expect(page.locator(".unsaved-banner")).toContainText("Unsaved changes to study.json: Licence, Descriptions");
   await save.click();
   await expect(page.getByText("study.json saved.").first()).toBeVisible();
   await expect.poll(onDisk).toMatchObject({ licence: "open", descriptions: [EDITED] });
@@ -47,7 +47,7 @@ test("saves the metadata form to study.json and keeps the edits through a confli
   await save.click();
   await expect(page.getByText("study.json saved.").first()).toBeVisible();
   await expect.poll(onDisk).toMatchObject({ licence: "closed", descriptions: [EDITED, ON_DISK] });
-  await expect(page.getByText("Unsaved changes in study.json")).toBeHidden();
+  await expect(page.locator(".unsaved-banner")).not.toContainText("Unsaved changes");
 });
 
 test("the avatar of a person stays clear of the label on the outline of its field", async ({ app, page }) => {

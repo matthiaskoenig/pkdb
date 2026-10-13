@@ -12,12 +12,15 @@ import type {
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import { POLL_INTERVAL_MS } from "../../src/curation-app/composables/usePolling";
+import { toForm } from "../../src/curation-app/metadata";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
+import { noteKinds } from "../../src/curation-app/tableKinds";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow, tableEntry } from "../unit/curation-fixtures";
@@ -267,25 +270,33 @@ describe("routes", () => {
 
 describe("StudyPage", () => {
   it("stays on the overview when the study page is left", async () => {
-    requests = serveApi({ "GET /local/state": snapshot({ studies: [harderRow] }), [`GET ${HARDER}`]: harder });
-    router = makeRouter();
-    await router.push("/studies/caffeine/Harder1988/review");
-    mount(Routed, {
-      attachTo: document.body,
-      global: { plugins: [pinia, router] },
-    });
-    await flushPromises();
-    expect(page().find(".study-header").exists()).toBe(true);
-    const studyRequests = () => requests.filter(({ path }) => path.startsWith("/local/studies/"));
-    // The detail, and the table that the selected review item targets.
-    const opened = studyRequests().length;
-    expect(studyRequests().filter(({ path }) => path === HARDER)).toHaveLength(1);
+    // The clock stands still until the study is left, so that no poll of the open study counts as one after it.
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      requests = serveApi({ "GET /local/state": snapshot({ studies: [harderRow] }), [`GET ${HARDER}`]: harder });
+      router = makeRouter();
+      await router.push("/studies/caffeine/Harder1988/review");
+      mount(Routed, {
+        attachTo: document.body,
+        global: { plugins: [pinia, router] },
+      });
+      await flushPromises();
+      expect(page().find(".study-header").exists()).toBe(true);
+      const studyRequests = () => requests.filter(({ path }) => path.startsWith("/local/studies/"));
+      // The detail, and the table that the selected review item targets.
+      const opened = studyRequests().length;
+      expect(studyRequests().filter(({ path }) => path === HARDER)).toHaveLength(1);
 
-    await router.push("/");
-    await flushPromises();
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    expect(router.currentRoute.value.name).toBe("Overview");
-    expect(studyRequests().slice(opened)).toEqual([]);
+      const left = router.push("/");
+      // An open study would be polled several times meanwhile.
+      await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS * 3);
+      await left;
+      await flushPromises();
+      expect(router.currentRoute.value.name).toBe("Overview");
+      expect(studyRequests().slice(opened)).toEqual([]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("redirects a study without a section to its default section", async () => {
@@ -450,7 +461,9 @@ describe("StudyPage", () => {
     expect(header.get(".study-title").text()).toBe("No reference title yet");
     expect(header.find(".fact-pmid").exists()).toBe(false);
     expect(header.get(".fact-sync").text()).toBe("Not checked yet");
-    expect(header.get(".fact-problems").text()).toBe("Not validated yet");
+    // Beside the title, which gives way to it, so that the line never wraps for it.
+    expect(header.find(".fact-problems").exists()).toBe(false);
+    expect(header.get(".study-title-box .fact-activity").text()).toBe("Not validated yet");
   });
 
   it("sets the review status over the revision of review.json", async () => {
@@ -1137,5 +1150,360 @@ describe("StudyPage", () => {
     expect(alert.get(".action-failure-activity").attributes("href")).toBe(
       "#/studies/caffeine/Harder1988/activity?entry=0123456789abcdef0123456789abcdef",
     );
+  });
+});
+
+describe("the save shortcut", () => {
+  const METADATA = "/local/studies/metadata";
+  const written = () => json({ revision: "study-2", reference: null, reference_error: null });
+
+  /** Sends the keydown of S with `init` to the focused part of the page; whether the page prevented the default. */
+  function press(init: KeyboardEventInit): boolean {
+    const event = new KeyboardEvent("keydown", { key: "s", bubbles: true, cancelable: true, ...init });
+    (document.activeElement ?? document.body).dispatchEvent(event);
+    return event.defaultPrevented;
+  }
+
+  it("saves the draft with Ctrl+S or Cmd+S from any section, and keeps the save dialog of the browser closed", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+
+    useStudyStore().draft.form!.creator = "mkoenig";
+    await flushPromises();
+    expect(press({ metaKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(2);
+  });
+
+  it("writes nothing without unsaved changes, with Shift or Alt, or while a dialog is open", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    // Without changes the browser's save dialog stays closed too.
+    expect(press({ ctrlKey: true })).toBe(true);
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(press({ ctrlKey: true, shiftKey: true })).toBe(false);
+    expect(press({ ctrlKey: true, altKey: true })).toBe(false);
+    expect(press({})).toBe(false);
+
+    // The dialog of leaving answers with its own buttons.
+    void router.push("/");
+    await vi.waitFor(() => expect(buttons("Stay")).toHaveLength(1));
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toEqual([]);
+  });
+
+  it("writes once when Ctrl+S repeats while the save runs", async () => {
+    let answer: (response: Response) => void = () => {};
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
+    });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    press({ ctrlKey: true });
+    press({ ctrlKey: true, repeat: true });
+    await flushPromises();
+    press({ ctrlKey: true });
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+    answer(written());
+    await flushPromises();
+    expect(useStudyStore().draft.dirty).toBe(false);
+  });
+
+  it("adds a collaborator that is typed but not yet added before it saves, and keeps the focus in the field", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    const collaborators = field("Collaborators");
+    collaborators.element.focus();
+    await collaborators.setValue("Jane Doe");
+    // The typed name is the only change: the combobox adds it to the list on Enter or blur.
+    expect(useStudyStore().draft.dirty).toBe(false);
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(posted(METADATA)[0]?.metadata).toMatchObject({ collaborators: ["Jane Doe"] });
+    expect(document.activeElement).toBe(collaborators.element);
+    expect(collaborators.element.value).toBe("");
+  });
+
+  it("leaves Ctrl+S to the browser once the study page closed", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    await router.push("/");
+    await flushPromises();
+    expect(router.currentRoute.value.name).toBe("Overview");
+    expect(press({ ctrlKey: true })).toBe(false);
+  });
+});
+
+describe("the unsaved banner", () => {
+  const METADATA = "/local/studies/metadata";
+  const written = () => json({ revision: "study-2", reference: null, reference_error: null });
+  /** The banner stands after the tabs and the live region of its notices, before the section. */
+  const placed = () => page().find(".section-tabs-line + .unsaved-banner-notice + .unsaved-banner + .study-section");
+  const banner = () => page().get(".unsaved-banner");
+  const text = () => page().get(".unsaved-banner-text").text();
+
+  // Its place in Data is a test of curation-data-section.spec.ts, which serves the tables.
+  it("keeps its row in Metadata, and shows in Review once study.json has unsaved changes", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    expect(placed().exists()).toBe(true);
+    expect(banner().classes()).not.toContain("unsaved-banner--dirty");
+    expect(text()).toBe("No unsaved changes to study.json");
+    expect(button("Discard").element.disabled).toBe(true);
+    expect(button("Save").element.disabled).toBe(true);
+    await router.push("/studies/caffeine/Example/review");
+    await flushPromises();
+    expect(page().find(".unsaved-banner").exists()).toBe(false);
+
+    useStudyStore().draft.form!.provenance.source_key = "pkdb.edited";
+    await flushPromises();
+    for (const section of ["review", "metadata"]) {
+      await router.push(`/studies/caffeine/Example/${section}`);
+      await flushPromises();
+      expect(placed().exists(), section).toBe(true);
+      expect(text()).toBe("Unsaved changes to study.json: Source key");
+      expect(banner().classes()).toContain("unsaved-banner--dirty");
+    }
+  });
+
+  it("is a region named by its text, which keeps the focus after Save, Discard and Undo", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    const region = banner().element;
+    expect(region.getAttribute("role")).toBe("region");
+    expect(region.getAttribute("tabindex")).toBe("-1");
+    expect(document.getElementById(region.getAttribute("aria-labelledby")!)?.textContent).toBe(
+      "No unsaved changes to study.json",
+    );
+
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    button("Save").element.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(region);
+
+    draft.form!.creator = "mkoenig";
+    await flushPromises();
+    button("Discard").element.focus();
+    await click("Discard");
+    expect(text()).toBe("Changes discarded.");
+    expect(document.activeElement).toBe(region);
+    button("Undo").element.focus();
+    await click("Undo");
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(document.activeElement).toBe(region);
+  });
+
+  it("hides its buttons where they have nothing to act on, and sticks only while it has something to say", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    /** The buttons and the shortcut that show, by their text. */
+    const shown = () =>
+      page()
+        .findAll(".unsaved-banner-actions > *")
+        .filter((part) => !part.classes().includes("unsaved-banner-off"))
+        .map((part) => part.text());
+    expect(shown()).toEqual([]);
+    expect(banner().classes()).toEqual(expect.arrayContaining(["unsaved-banner--idle"]));
+    expect(banner().classes()).not.toContain("unsaved-banner--sticky");
+    // Hidden, they keep their room: they are still there, disabled.
+    expect(button("Save").element.disabled).toBe(true);
+
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(shown()).toEqual(["Discard", "Save", "Ctrl+S"]);
+    expect(banner().classes()).toContain("unsaved-banner--sticky");
+    expect(banner().classes()).not.toContain("unsaved-banner--idle");
+
+    await click("Discard");
+    expect(shown()).toEqual(["Undo"]);
+    expect(banner().classes()).toContain("unsaved-banner--sticky");
+    expect(banner().classes()).not.toContain("unsaved-banner--idle");
+  });
+
+  it("takes the focus from Save once the save has ended, when the banner says how", async () => {
+    let answer: (response: Response) => void = () => {};
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
+    });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    const save = button("Save").element;
+    save.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(document.activeElement).not.toBe(banner().element);
+    answer(written());
+    await flushPromises();
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(banner().element);
+  });
+
+  it("stays in Review after a save there, with its notice and then neutral, until the curator leaves the section", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    onTestFinished(() => void vi.useRealTimers());
+    button("Save").element.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(banner().classes()).not.toContain("unsaved-banner--dirty");
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(banner().element);
+    expect(page().get(".unsaved-banner-notice").text()).toBe("study.json saved.");
+
+    // No timer takes it away: nothing below it moves.
+    vi.advanceTimersByTime(NOTICE_MS);
+    await flushPromises();
+    expect(placed().exists()).toBe(true);
+    expect(text()).toBe("No unsaved changes to study.json");
+    expect(button("Save").element.disabled).toBe(true);
+    // The router waits for timers of its own.
+    vi.useRealTimers();
+
+    // A section opened without changes and notices shows none.
+    for (const section of ["problems", "review"]) {
+      await router.push(`/studies/caffeine/Example/${section}`);
+      await flushPromises();
+      expect(page().find(".unsaved-banner").exists(), section).toBe(false);
+    }
+  });
+
+  it("offers Undo of a discard in Problems", async () => {
+    await mountPage("/studies/caffeine/Example/problems");
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Discard");
+    expect(text()).toBe("Changes discarded.");
+    expect(draft.form!.creator).not.toBe("janekg");
+    await click("Undo");
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(draft.form!.creator).toBe("janekg");
+  });
+
+  it("shows a notice that is still pending in a section opened after it, and the refresh error of reference.json where the save was", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: () =>
+        json({ revision: "study-2", reference: null, reference_error: "PubMed did not answer." }),
+    });
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Save");
+    await router.push("/studies/caffeine/Example/activity");
+    await flushPromises();
+    expect(placed().exists()).toBe(true);
+    expect(text()).toBe("study.json saved.");
+    expect(page().get(".unsaved-banner-reference-error").text()).toBe(
+      "study.json saved; reference.json could not be refreshed: PubMed did not answer.",
+    );
+
+    // Saved from Review, the error shows there too.
+    await router.push("/studies/caffeine/Example/review");
+    draft.referenceError = "";
+    draft.form!.creator = "mkoenig";
+    await flushPromises();
+    await click("Save");
+    expect(page().get(".unsaved-banner-reference-error").text()).toContain("PubMed did not answer.");
+  });
+
+  it("starts hidden in the sections of another study", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Save");
+    expect(text()).toBe("study.json saved.");
+    await router.push("/studies/caffeine/Harder1988/review");
+    await flushPromises();
+    expect(useStudyStore().detail?.id).toBe("caffeine/Harder1988");
+    expect(page().find(".unsaved-banner").exists()).toBe(false);
+  });
+
+  it("names the changed fields by their labels, three of them and how many more", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    const form = useStudyStore().draft.form!;
+    form.provenance.source_key = "pkdb.edited";
+    form.notes.outputs.descriptions.push("Read from Table 2.");
+    await flushPromises();
+    expect(page().get(".unsaved-banner-text").text()).toBe(
+      "Unsaved changes to study.json: Source key, Notes of the outputs",
+    );
+    form.reference.doi = "10.1000/xyz";
+    form.licence = "closed";
+    form.notes.outputs.comments.push({ user: "curator", text: "Check the unit." });
+    form.notes.subjects.descriptions.push("Healthy adults.");
+    await flushPromises();
+    expect(page().get(".unsaved-banner-text").text()).toBe(
+      "Unsaved changes to study.json: DOI, Licence, Source key and 2 more",
+    );
+  });
+
+  it("names fewer fields, with how many more, where three would not fit into the lines of its text", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    const form = useStudyStore().draft.form!;
+    form.provenance.source_key = "pkdb.edited";
+    await flushPromises();
+    // A layout for jsdom, which has none: the text has one line of 18 pixels and 60 characters.
+    page().get<HTMLElement>(".unsaved-banner-measure").element.style.lineHeight = "18px";
+    const layout = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      const lines = this.classList.contains("unsaved-banner-measure") ? Math.ceil((this.textContent ?? "").length / 60) : 0;
+      return new DOMRect(0, 0, 600, lines * 18);
+    });
+    onTestFinished(() => layout.mockRestore());
+    form.reference.doi = "10.1000/xyz";
+    await flushPromises();
+    // 46 characters: one line.
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Source key");
+    form.licence = "closed";
+    form.notes.outputs.comments.push({ user: "curator", text: "Check the unit." });
+    form.notes.subjects.descriptions.push("Healthy adults.");
+    await flushPromises();
+    // Three names and how many more take 66 characters, two lines; two take 54.
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Licence and 3 more");
+    // On a phone the text has two lines.
+    page().get<HTMLElement>(".unsaved-banner-measure").element.style.setProperty("--unsaved-banner-lines", "2");
+    form.creator = "janekg";
+    await flushPromises();
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Creator, Licence and 3 more");
+    // The measure is empty again: the name of the banner, its text, has the names once.
+    expect(page().get(".unsaved-banner-measure").text()).toBe("");
+  });
+
+  it("says that a new study.json whose fields are all still empty is not written yet", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    const draft = useStudyStore().draft;
+    draft.startNew(toForm({}, noteKinds(useStudyStore().detail!)));
+    await flushPromises();
+    expect(draft.changed).toEqual([]);
+    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: new file, not written yet");
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: Creator");
+  });
+
+  it("names a field typed into a new study.json", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    useStudyStore().draft.startNew(toForm({}, noteKinds(useStudyStore().detail!)));
+    await flushPromises();
+    await field("Source key").setValue("pkdb.new");
+    await flushPromises();
+    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: Source key");
+  });
+
+  it("shows the shortcut beside Save and names it for assistive technology", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(page().get(".unsaved-banner-key").text()).toBe("Ctrl+S");
+    expect(button("Save").attributes("aria-keyshortcuts")).toBe("Control+S");
   });
 });

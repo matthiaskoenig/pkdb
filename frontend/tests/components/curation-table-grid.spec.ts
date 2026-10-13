@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
 import type { TableResponse } from "../../src/curation-app/api/types";
@@ -380,6 +380,36 @@ describe("revealing the focus", () => {
     expect(element.scrollTop).toBe(1078 - 22 - (300 - 22 - 22) / 2);
     expect(scrolled).toEqual([element]);
     expect(document.activeElement?.textContent?.trim()).toBe("4.8");
+  });
+
+  it("brings the region into view for a focus under the app bar or the stuck banner of unsaved changes", async () => {
+    layOut();
+    const style = document.documentElement.style;
+    onTestFinished(() => {
+      for (const name of ["--v-layout-top", "--unsaved-banner-top", "--unsaved-banner-height"]) style.removeProperty(name);
+    });
+    const wrapper = mount(TableGrid, { props: { table: large(60), selectable: true }, attachTo: document.body });
+    const element = region(wrapper);
+    // Line 3 is the 2nd row, 44 to 66 pixels from the top of the window: in the region, but under
+    // an app bar of 64 pixels.
+    style.setProperty("--v-layout-top", "64px");
+    await wrapper.setProps({ focus: { line: 3 } });
+    await flushPromises();
+    expect(element.scrollTop).toBe(0);
+    expect(scrolled).toEqual([element]);
+
+    // Line 5 is the 4th row, 88 to 110 pixels: below the app bar, under the banner that sticks below it.
+    style.setProperty("--unsaved-banner-top", "64px");
+    style.setProperty("--unsaved-banner-height", "50px");
+    await wrapper.setProps({ focus: { line: 5 } });
+    await flushPromises();
+    expect(scrolled).toEqual([element, element]);
+
+    // Line 7 is the 6th row, 132 to 154 pixels: below the banner, in view.
+    await wrapper.setProps({ focus: { line: 7 } });
+    await flushPromises();
+    expect(scrolled).toEqual([element, element]);
+    expect(document.activeElement?.textContent?.trim()).toBe("7");
   });
 
   it("scrolls a focus that is partly in view by the least amount", async () => {

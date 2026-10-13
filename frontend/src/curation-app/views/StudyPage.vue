@@ -17,7 +17,10 @@ import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
+import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
+import { useSaveShortcut } from "../composables/useSaveShortcut";
+import { selectedNotesKind, selectionOf } from "../data";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
@@ -39,7 +42,8 @@ import {
 
 /**
  * The component of each section. A section gets the open study from the study store; the
- * Metadata and Data sections edit its draft of study.json, whose unsaved fields the tabs mark.
+ * Metadata and Data sections edit its draft of study.json, whose unsaved fields the tabs mark and
+ * the banner under them names.
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
@@ -86,6 +90,11 @@ const loadError = computed(() => {
   return failureOf(error, "The study could not be loaded.");
 });
 const counts = computed(() => (detail.value ? sectionCounts(detail.value) : {}));
+
+/** In Data, the kind of the notes above the selected table, whose fields a refused save marks there; null elsewhere. */
+const notesKind = computed(() =>
+  section.value === "data" && detail.value ? selectedNotesKind(detail.value, selectionOf(route.query)) : null,
+);
 
 /** The facts of the study at the end of the line of tabs. */
 const facts = computed(() => {
@@ -144,6 +153,10 @@ onBeforeUnmount(() => {
   study.close();
 });
 
+// Ctrl+S (Cmd+S on macOS) saves the draft of study.json from any section; the draft saves only
+// what it can: nothing without changes, during a save, or before the Reload of a conflict.
+useSaveShortcut(() => void study.draft.save());
+
 // Without a valid section, the page shows the section that the study needs first.
 watch(
   [detail, section],
@@ -159,7 +172,7 @@ watch(
 </script>
 
 <template>
-  <VContainer fluid class="study-page">
+  <VContainer fluid class="study-page" :class="section && `study-page--${section}`">
     <section v-if="failure" class="study-failure">
       <template v-if="failure.kind === 'missing'">
         <h1>This study is not in the workspace</h1>
@@ -194,6 +207,9 @@ watch(
           :unsaved="study.draft.unsaved"
           :facts="facts"
         />
+        <!-- The draft of study.json, which Metadata and the notes in Data edit: its row stays in
+             these two sections, and the others show it once the draft has something to say. -->
+        <UnsavedBanner :section="section" :kind="notesKind" />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
           <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
           <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>
@@ -230,12 +246,21 @@ watch(
   gap: 0;
   padding: 2px 12px 8px;
 }
+/* A stacking context of its own: nothing that a section raises, such as the sticky header of a
+   table, rises above the banner of unsaved changes, which the section scrolls under. */
 .study-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
   padding-top: 8px;
+  isolation: isolate;
+}
+/* The cards of Metadata take at most 100rem, and the banner of unsaved changes above them ends
+   where they end; the other sections and their banner take the whole width. */
+.study-page--metadata > .study-section,
+.study-page--metadata > :deep(.unsaved-banner) {
+  max-width: 100rem;
 }
 .study-failure {
   display: flex;
