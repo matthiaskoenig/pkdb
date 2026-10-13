@@ -37,6 +37,7 @@ from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.ulid import new_ulid
 from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.view import ViewError
 
 DETAIL = "/local/studies/caffeine/Example"
 METADATA = {"format": 2, "creator": "curator", "licence": "open", "access": "private"}
@@ -1670,6 +1671,48 @@ def test_open_tables_names_a_failed_write_without_its_path(
     assert str(folder) not in result["notice"]
 
 
+def test_open_tables_names_a_view_problem_plainly_and_logs_its_detail(
+    opened, monkeypatch
+):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, sheet, cell=None):
+        raise ViewError(f"the sheet {sheet} has no view in {path}")
+
+    monkeypatch.setattr("pkdb.curation.studies.show_place", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Could not select sheet timecourses_Fig1: the view of the workbook could not "
+        "be changed. Go to sheet timecourses_Fig1, cell O6."
+    )
+    engine.log.handler.flush()
+    assert "the sheet timecourses_Fig1 has no view" in engine.log.path.read_text(
+        encoding="utf-8"
+    )
+
+
+def test_open_tables_opens_the_workbook_whatever_fails_in_the_view(opened, monkeypatch):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, sheet, cell=None):
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr("pkdb.curation.studies.show_place", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Could not select sheet timecourses_Fig1. Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert paths == [workbook_path(folder)] * 2
+    engine.log.handler.flush()
+    assert "RuntimeError" in engine.log.path.read_text(encoding="utf-8")
+
+
 def test_open_tables_at_a_cell_while_a_job_of_the_study_runs(opened):
     server, engine, folder, headers, paths = opened
     before = workbook_path(folder).read_bytes()
@@ -1679,7 +1722,7 @@ def test_open_tables_at_a_cell_while_a_job_of_the_study_runs(opened):
 
     assert status == 200 and result["opened"]
     assert result["notice"] == (
-        "A job of the study is running. Go to sheet timecourses_Fig1, cell O6."
+        "The study is being validated or uploaded. Go to sheet timecourses_Fig1, cell O6."
     )
     assert workbook_path(folder).read_bytes() == before
     assert paths == [workbook_path(folder)] * 2

@@ -7,8 +7,8 @@ import { sectionRoute } from "../study";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and
- * suggestions, with Show in table, Open in tables, Show notes and Acknowledge. A component of its own, so that a long list
- * renders only the issues whose props changed.
+ * suggestions, with Show in table, Open in tables, Show notes and Acknowledge. A component of
+ * its own, so that a long list renders only the issues whose props changed.
  */
 const props = withDefaults(
   defineProps<{

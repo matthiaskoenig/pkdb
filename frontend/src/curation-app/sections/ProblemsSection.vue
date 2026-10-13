@@ -219,6 +219,7 @@ const { busy, working, failure, userText, run } = useAction<string>(announce, ()
 
 /** What to do in the workbook after an open found it open already; it stays until it is closed or the next open. */
 const openNotice = ref<string | null>(null);
+watch(identity, () => (openNotice.value = null));
 
 function openTables(): Promise<void> {
   return run("tables", async () => {
@@ -243,7 +244,8 @@ function openAt(issue: ValidationIssue): Promise<void> {
     const result = await study.tablesAction("open", place);
     failure.value = tablesOutcome(result);
     openNotice.value = result.notice ?? null;
-    return result.opened ? "The workbook opened." : "";
+    // The notice says what to do when the workbook could not be switched, so the status stays silent then.
+    return result.opened && !result.notice ? "The workbook opened." : "";
   });
 }
 

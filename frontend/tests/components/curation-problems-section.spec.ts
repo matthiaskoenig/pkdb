@@ -558,7 +558,22 @@ describe("actions", () => {
     const open = section().get(".problems-open-notice");
     expect(open.text()).toContain(text);
     expect(open.attributes("role")).toBe("status");
+    expect(notice()).toBe("");
     await open.get('button[aria-label="Close"]').trigger("click");
+    await flushPromises();
+    expect(section().find(".problems-open-notice").exists()).toBe(false);
+  });
+
+  it("closes the notice of an open workbook when another study is shown", async () => {
+    const other = "/local/studies/caffeine/Other";
+    await mountSection(withProblems(), {
+      [`POST ${TABLES}`]: tablesResult({ notice: "The workbook is already open. Go to sheet timecourses_Fig1, cell O6." }),
+      [`GET ${other}`]: withProblems({ id: "caffeine/Other" }),
+    });
+    await control(problem("outside_range"), "Open in tables").trigger("click");
+    await flushPromises();
+    expect(section().find(".problems-open-notice").exists()).toBe(true);
+    await router.push("/studies/caffeine/Other/problems");
     await flushPromises();
     expect(section().find(".problems-open-notice").exists()).toBe(false);
   });

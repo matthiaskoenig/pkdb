@@ -947,7 +947,9 @@ test.describe("tables", () => {
     await page.getByRole("button", { name: "Open sheet" }).click();
     await expect(page.getByRole("status").filter({ hasText: "The workbook opened." })).toBeVisible();
     const workbook = join(app.server.workspace, "caffeine/Demo2020/Demo2020.xlsx");
-    expect(readFileSync(app.server.openLog, "utf8").split("\n")).toContain(workbook);
+    await expect
+      .poll(() => (existsSync(app.server.openLog) ? readFileSync(app.server.openLog, "utf8").split("\n") : []))
+      .toContain(workbook);
     expect((await runTool("workbook_view.py", workbook)).split("!")[0]).toBe(SHEET);
   });
 

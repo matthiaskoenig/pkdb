@@ -222,7 +222,11 @@ def _attributes(
 
 
 def _address(column: int, row: int) -> str:
-    return f"{get_column_letter(column)}{row}"
+    """The cell address of a column and a row; ViewError for a column outside the sheet."""
+    try:
+        return f"{get_column_letter(column)}{row}"
+    except ValueError:
+        raise ViewError(f"the column {column} of the workbook is no column") from None
 
 
 def _select(data: bytes, view: _Tag, cell: str) -> list[_Edit]:

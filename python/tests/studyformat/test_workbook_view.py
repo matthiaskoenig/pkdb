@@ -382,6 +382,16 @@ def changed(name, old, new):
 SHEET2 = "xl/worksheets/sheet2.xml"
 
 
+@pytest.mark.parametrize("split", ["20000", "1e300"])
+def test_a_frozen_pane_outside_the_sheet_is_a_view_error(split):
+    parts = changed(
+        SHEET2, b'<x:pane ySplit="1"', f'<x:pane xSplit="{split}" ySplit="1"'.encode()
+    )
+
+    with pytest.raises(ViewError, match="is no column"):
+        with_view(package(parts), "outputs_Fig6", "Y97")
+
+
 @pytest.mark.parametrize(
     ("parts", "message"),
     [

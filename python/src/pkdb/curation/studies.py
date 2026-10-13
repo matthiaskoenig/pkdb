@@ -22,6 +22,7 @@ from urllib.parse import quote
 from pydantic import ValidationError
 
 from pkdb.curation.actions import action_of
+from pkdb.curation.errors import describe, new_request_id
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
 from pkdb.curation.state import EngineState, JobRunning
@@ -1007,19 +1008,42 @@ class StudiesMixin(EngineState):
         except WorkbookOpen:
             return f"The workbook is already open. {_go_to(sheet, cell)}"
         except JobRunning:
-            return f"A job of the study is running. {_go_to(sheet, cell)}"
+            return f"The study is being validated or uploaded. {_go_to(sheet, cell)}"
         except HiddenSheet:
             then = f", then go to cell {cell}." if cell else "."
             return f"Sheet {sheet} is hidden in the workbook. Show it{then}"
         except NoSheet:
             return f"The workbook has no sheet {sheet}."
         except ViewError as error:
-            return f"Could not select sheet {sheet}: {error}. {_go_to(sheet, cell)}"
+            self._log_open_failure(error)
+            return (
+                f"Could not select sheet {sheet}: the view of the workbook could not be "
+                f"changed. {_go_to(sheet, cell)}"
+            )
         except OSError as error:
             # Its text names the absolute path of the file.
             reason = error.strerror or type(error).__name__
             return f"Could not select sheet {sheet}: {reason}. {_go_to(sheet, cell)}"
+        except Exception as error:
+            # A problem of the view never blocks the open: the workbook opens as it is.
+            self._log_open_failure(error)
+            return f"Could not select sheet {sheet}. {_go_to(sheet, cell)}"
         return None
+
+    def _log_open_failure(self, error: BaseException) -> None:
+        """Keep the technical detail of a failed view change in the error log."""
+        body = describe(
+            error,
+            action="open_tables",
+            request_id=new_request_id(),
+            code="view_error",
+            unexpected=not isinstance(error, ViewError),
+            secrets=self.secrets(),
+        )
+        if isinstance(error, ViewError):
+            self.log.failed(body, error, label="Open workbook")
+        else:
+            self.log.unexpected(body, error, label="Open workbook")
 
     def table_preview(self, identity: str, payload: dict) -> dict:
         """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""

@@ -992,7 +992,7 @@ def test_opening_the_tables_at_a_place_while_a_job_runs_keeps_the_job(
     [answer] = answers
     assert answer["opened"]
     assert answer["notice"] == (
-        "A job of the study is running. Go to sheet timecourses_Fig1, cell O6."
+        "The study is being validated or uploaded. Go to sheet timecourses_Fig1, cell O6."
     )
     # The workbook opens as it is.
     assert openpyxl.load_workbook(workbook_path(folder)).active.title == "subjects"
