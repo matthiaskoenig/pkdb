@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
+import { fontLicenses } from "./scripts/font-licenses.ts";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "PKDB_DEV_");
   const { version } = JSON.parse(
@@ -28,6 +29,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      fontLicenses(),
       {
         name: "pkdb-public-asset-reload",
         apply: "serve",

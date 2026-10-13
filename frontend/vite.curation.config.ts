@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, URL } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig, type Plugin, type ProxyOptions } from "vite";
+import { fontLicenses } from "./scripts/font-licenses.ts";
 
 // A string, not a URL object: under Vitest the URL class is the one of jsdom, which fileURLToPath refuses.
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -102,7 +103,7 @@ function pdfjsAssets(): Plugin {
 const PDFJS_NOTICE = pdfjsNotice();
 
 export default defineConfig({
-  plugins: [vue(), servedAsIndex(), pdfjsAssets()],
+  plugins: [vue(), servedAsIndex(), pdfjsAssets(), fontLicenses()],
   resolve: { alias: { "@": join(HERE, "src") } },
   base: "./",
   // frontend/public holds the website's files.
