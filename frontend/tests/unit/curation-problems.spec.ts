@@ -9,17 +9,21 @@ import {
   filterIssues,
   groupByFile,
   groupCounts,
+  hintOf,
   location,
   locationKey,
   lastWrite,
   NO_SUCH_WARNING,
   noIssuesText,
   notesQuery,
+  problemsText,
   reportAfter,
   scopeText,
   severityCounts,
   suggestionView,
+  TIP_LIMIT,
   tableQuery,
+  tipProblems,
   validatesAfterWrite,
 } from "../../src/curation-app/problems";
 import { TABLE_KIND_ENTRIES, tableEntry } from "./curation-fixtures";
@@ -355,5 +359,64 @@ describe("notesQuery", () => {
     expect(notesQuery(study, inStudyJson("notes.scatters.descriptions.0"))).toBeNull();
     expect(notesQuery(study, issue("invalid_value", "error", { file: "subjects.tsv" }, { field: "notes.subjects" }))).toBeNull();
     expect(notesQuery(study, issue("row_limit", "error", null, { field: "notes.subjects" }))).toBeNull();
+  });
+});
+
+describe("tipProblems", () => {
+  it("lists the errors first and otherwise keeps the order of the report", () => {
+    const issues = [issue("a", "warning"), issue("b", "error"), issue("c", "warning")];
+    expect(tipProblems(issues)).toEqual({ shown: [issues[1], issues[0], issues[2]], more: 0 });
+  });
+
+  it("lists at most five problems and counts the others", () => {
+    const issues = Array.from({ length: 7 }, (_, index) => issue(`code_${index}`, "warning"));
+    expect(TIP_LIMIT).toBe(5);
+    expect(tipProblems(issues)).toEqual({ shown: issues.slice(0, 5), more: 2 });
+  });
+});
+
+describe("hintOf", () => {
+  it("reads the first suggestion of a problem as one line", () => {
+    const check = { kind: "inspect_source", message: "Check the reported error statistics against the publication." };
+    const problem = issue("inconsistent_statistics", "warning", null, {
+      suggestions: [check, { kind: "inspect_source", message: "Not shown." }],
+    });
+    expect(hintOf(problem)).toBe("Check the reported error statistics against the publication.");
+  });
+
+  it("names the candidates after Did you mean, at most three, and the note of a spelling suggestion", () => {
+    const named = { kind: "did_you_mean", message: "", candidates: ["caffeine", "paraxanthine"] };
+    expect(hintOf(issue("unknown_term", "error", null, { suggestions: [named] }))).toBe("Did you mean: caffeine, paraxanthine");
+    const many = { kind: "did_you_mean", message: "", candidates: ["a", "b", "c", "d", "e"] };
+    expect(hintOf(issue("unknown_term", "error", null, { suggestions: [many] }))).toBe("Did you mean: a, b, c and 2 more");
+    const spelling = { kind: "check_vocabulary", message: "Spelling suggestions only.", candidates: ["caffeine"] };
+    expect(hintOf(issue("unknown_term", "error", null, { suggestions: [spelling] }))).toBe(
+      "Did you mean: caffeine. Spelling suggestions only.",
+    );
+  });
+
+  it("has no hint without a suggestion", () => {
+    expect(hintOf(issue("missing_value", "error"))).toBeNull();
+    expect(hintOf(issue("missing_value", "error", null, { suggestions: [] }))).toBeNull();
+  });
+});
+
+describe("problemsText", () => {
+  it("reads the problems of a place as its tooltip shows them: errors first, each with its severity, message and hint", () => {
+    const named = { kind: "did_you_mean", message: "", candidates: ["caffeine", "paraxanthine"] };
+    const issues = [
+      issue("digitized_mismatch", "warning", null, { message: "mean 1.24 lies 61.3 pixels from its point" }),
+      issue("unknown_term", "error", null, { message: "Unknown substance cafeine.", suggestions: [named] }),
+    ];
+    expect(problemsText(issues)).toBe(
+      "Error: Unknown substance cafeine. Did you mean: caffeine, paraxanthine. Warning: mean 1.24 lies 61.3 pixels from its point.",
+    );
+  });
+
+  it("reads at most five problems and how many more there are, as the tooltip lists them", () => {
+    const issues = Array.from({ length: 7 }, (_, index) => issue(`code_${index}`, "warning", null, { message: `Problem ${index}.` }));
+    expect(problemsText(issues)).toBe(
+      "Warning: Problem 0. Warning: Problem 1. Warning: Problem 2. Warning: Problem 3. Warning: Problem 4. And 2 more.",
+    );
   });
 });

@@ -455,6 +455,19 @@ a.brand {
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
+/* The tooltip of the problems of a cell of a table grid: a card on the surface with the shadow of
+   a menu, so that its severity chips read as in the Problems section. Vuetify's tooltip is dark
+   and compact. */
+.v-tooltip > .v-overlay__content.problem-tooltip {
+  padding: 8px 12px;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 6px;
+  background: rgb(var(--v-theme-surface));
+  color: rgb(var(--v-theme-on-surface));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-size: 0.9286rem;
+  line-height: 1.4;
+}
 /* A fact has an icon in a 1rem column and its text 8 px after it. */
 .problem-fact {
   display: flex;
@@ -532,11 +545,13 @@ a.brand {
 /* Rows of a table in a region of their own, such as the rows of a review target or of a source.
    At most about eighteen rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
    the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
-   them at the start and the end. */
+   them at the start and the end. The shadows end at the last row: a region that is higher than
+   its rows, such as the rows of the Data section, sets their height as `--rows-content-height`. */
 .rows-scroll {
   --cover: rgb(var(--v-theme-surface));
   --cover-clear: rgba(var(--v-theme-surface), 0);
   --shade: rgba(var(--v-theme-on-surface), 0.2);
+  --shade-height: min(100%, var(--rows-content-height, 100%));
   max-height: var(--rows-max-height, 420px);
   overflow: auto;
   /* A region scrolled into view stays clear of the app bar, or of more with --rows-scroll-margin. */
@@ -546,8 +561,8 @@ a.brand {
   background:
     linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
     linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
-    linear-gradient(to right, var(--shade), var(--cover-clear)) left center / 14px 100% no-repeat scroll,
-    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) left top / 14px var(--shade-height) no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right top / 14px var(--shade-height) no-repeat scroll,
     var(--cover);
 }
 /* While the banner of unsaved changes sticks, the page keeps the room of the app bar and of the
@@ -605,8 +620,9 @@ html:has(.unsaved-banner--sticky) .rows-scroll {
     linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
       local,
     linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
-    linear-gradient(to right, var(--shade), var(--cover-clear)) var(--line-width) center / 14px 100% no-repeat scroll,
-    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) var(--line-width) top / 14px var(--shade-height)
+      no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right top / 14px var(--shade-height) no-repeat scroll,
     var(--cover);
 }
 .rows-scroll--sticky-line .rows-table .rows-line {

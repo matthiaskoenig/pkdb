@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
 import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./fixtures.ts";
+import { pixelStats } from "./pixels.ts";
 
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
@@ -33,6 +34,15 @@ async function editWorkbook(workspace: string, line: number, column: string, val
   const cell = `${columnLetters(readTable(workspace)[0]!.indexOf(column))}${line + 1}`;
   const workbook = join(workspace, "caffeine/Demo2020/Demo2020.xlsx");
   await runTool("edit_workbook.py", workbook, SHEET, cell, value);
+}
+
+/** Expect `box` to lie inside the window of `page`. */
+function expectInWindow(page: Page, box: { x: number; y: number; width: number; height: number }): void {
+  const { width, height } = page.viewportSize()!;
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(width);
+  expect(box.y + box.height).toBeLessThanOrEqual(height);
 }
 
 /** The sync status of the study header, which starts with `text`; a chip, which has no role. */
@@ -72,6 +82,37 @@ function sourceView(page: Page, source: string): Promise<SourceView> {
   return page.evaluate(
     async (url) => (await (await fetch(url)).json()) as SourceView,
     `/local/studies/caffeine/Demo2020/sources/${source}`,
+  );
+}
+
+/** A problem that `addProblems` adds to those of the validation of Demo2020. */
+interface AddedProblem {
+  code: string;
+  severity: "error" | "warning";
+  message: string;
+  source: { file: string; row: number; header?: string };
+}
+
+/**
+ * Serve the study detail of Demo2020 with `problems` added to those of its validation, as if the
+ * validation had found them: the grid outlines their cells and the plot rings their rows.
+ */
+async function addProblems(page: Page, problems: AddedProblem[]): Promise<void> {
+  await page.route(
+    (url) => url.pathname === "/local/studies/caffeine/Demo2020",
+    async (route) => {
+      // Without the ETag of the last detail, so that the server sends the detail rather than 304.
+      const headers = { ...route.request().headers() };
+      delete headers["if-none-match"];
+      // A request that the page cancels, as it leaves, has no response.
+      const response = await route.fetch({ headers }).catch(() => null);
+      if (!response) return;
+      const detail = (await response.json().catch(() => null)) as { problems?: unknown } | null;
+      // Such as an error, which the app shows as it is.
+      if (!detail || !Array.isArray(detail.problems)) return route.fulfill({ response });
+      const added = problems.map((problem) => ({ ...problem, acknowledgeable: false }));
+      await route.fulfill({ response, json: { ...detail, problems: [...detail.problems, ...added] } });
+    },
   );
 }
 
@@ -642,6 +683,48 @@ test("the source pane shows that more of it follows below, and scrolls to its en
   }
 });
 
+for (const theme of ["light", "dark"] as const) {
+  test(`the shadows of the sides of the rows end at the last row in the ${theme} theme, also when the rows scroll sideways`, async ({
+    app,
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: theme });
+    await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+    const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+    await expect(rows.getByRole("rowheader", { name: "18", exact: true })).toBeVisible();
+    /** The color beside the line column in the rows, which the shadow darkens once the rows scrolled sideways. */
+    const besideLine: [number, number, number][] = [];
+    for (const scrollLeft of [0, 200]) {
+      await rows.evaluate((element, left) => {
+        element.scrollLeft = left;
+      }, scrollLeft);
+      const layout = await rows.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        const line = element.querySelector("thead th.rows-line")!.getBoundingClientRect();
+        const table = element.querySelector("table")!.getBoundingClientRect();
+        const head = element.querySelector("thead")!.getBoundingClientRect();
+        return {
+          line: line.right - box.left,
+          head: head.bottom - box.top,
+          below: table.bottom - box.top,
+          width: element.clientWidth,
+          height: element.clientHeight,
+        };
+      });
+      // A short table leaves room below its last row, which is blank at the sides, in the color of the room between them.
+      expect(layout.height - layout.below).toBeGreaterThan(60);
+      const strip = (x: number) => ({ x, y: layout.below + 12, width: 12, height: 40 });
+      const room = await pixelStats(rows, strip(layout.width / 2));
+      expect((await pixelStats(rows, strip(layout.line))).dominant).toEqual(room.dominant);
+      expect((await pixelStats(rows, strip(layout.width - 12))).dominant).toEqual(room.dominant);
+      // The padding of the cells beside the line column, which holds no text.
+      const rowsArea = { x: layout.line, y: layout.head + 2, width: 6, height: layout.below - layout.head - 4 };
+      besideLine.push((await pixelStats(rows, rowsArea)).dominant);
+    }
+    expect(besideLine[1]).not.toEqual(besideLine[0]);
+  });
+}
+
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=5");
   const cell = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "5", exact: true });
@@ -684,6 +767,151 @@ test("the line buttons of the rows are one Tab stop, which the arrow keys move, 
   await rows.getByRole("button", { name: "3", exact: true }).focus();
   await page.keyboard.press("Tab");
   expect(await page.evaluate(() => document.activeElement?.closest(".rows-scroll") === null)).toBe(true);
+});
+
+test("an outlined cell lists its problems in a tooltip on hover, the button of its line on keyboard focus, and Escape hides it", async ({
+  app,
+  page,
+}) => {
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const cell = rows.getByRole("cell", { name: "1.24", exact: true });
+  await expect(cell).toHaveClass(/grid-cell--warning/);
+  await expect(cell).not.toHaveAttribute("tabindex", "0");
+  const tooltip = page.locator(".problem-tooltip");
+  await cell.hover();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".v-chip")).toHaveText("Warning");
+  await expect(tooltip.locator(".problem-tip-code")).toHaveText("digitized_mismatch");
+  await expect(tooltip.locator(".problem-tip-message")).toContainText("mean 1.24 at 4 hr lies");
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+
+  // The keyboard: Tab reaches the line buttons, the arrow keys the line of the outlined cell, whose
+  // button shows the problems of the line at once. Lines are counted from the first button, so
+  // that the test does not depend on how the lines are numbered.
+  await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
+  const buttons = rows.locator(".grid-line-button");
+  const lineButton = rows
+    .getByRole("row")
+    .filter({ has: page.getByRole("cell", { name: "1.24", exact: true }) })
+    .locator(".grid-line-button");
+  const steps = Number(await lineButton.textContent()) - Number(await buttons.first().textContent());
+  await rows.focus();
+  await page.keyboard.press("Tab");
+  await expect(buttons.first()).toBeFocused();
+  for (let step = 0; step < steps; step++) await page.keyboard.press("ArrowDown");
+  await expect(lineButton).toBeFocused();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".problem-tip-code")).toHaveText("digitized_mismatch");
+  // The row above has no problems.
+  await page.keyboard.press("ArrowUp");
+  await expect(tooltip).toBeHidden();
+  await page.keyboard.press("ArrowDown");
+  await expect(tooltip).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(tooltip).toBeHidden();
+  await expect(lineButton).toBeFocused();
+});
+
+for (const theme of ["light", "dark"] as const) {
+  test(`the tooltip of an outlined cell in the ${theme} theme is accessible and leaves its cell in view`, async ({
+    app,
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: theme });
+    await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+    const cell = page.getByRole("region", { name: `Rows of ${TABLE}` }).getByRole("cell", { name: "1.24", exact: true });
+    // The problems load after the rows.
+    await expect(cell).toHaveClass(/grid-cell--warning/);
+    await cell.hover();
+    const tooltip = page.locator(".problem-tooltip");
+    await expect(tooltip).toContainText("digitized_mismatch");
+    // Once it grew in, so that the contrast and the box are those of the tooltip as it stays.
+    await expect(tooltip).toHaveCSS("opacity", "1");
+    await expectAccessible(page);
+    const at = (await cell.boundingBox())!;
+    const tip = (await tooltip.boundingBox())!;
+    // Below the cell, and inside the window.
+    expect(tip.y).toBeGreaterThanOrEqual(at.y + at.height);
+    expectInWindow(page, tip);
+  });
+}
+
+test("the tooltip of the problems follows the pointer to the line cell, which it starts at, and shows above a cell near the bottom of the window", async ({
+  app,
+  page,
+}) => {
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const cell = rows.getByRole("cell", { name: "1.24", exact: true });
+  await expect(cell).toHaveClass(/grid-cell--warning/);
+  const tooltip = page.locator(".problem-tooltip");
+  await cell.hover();
+  await expect(tooltip).toHaveCSS("opacity", "1");
+  // From the cell to the line cell of its row, which lists every problem of the line.
+  const line = rows.getByRole("row").filter({ has: page.getByRole("cell", { name: "1.24", exact: true }) }).locator("th");
+  await line.hover();
+  const at = (await line.boundingBox())!;
+  await expect.poll(async () => Math.abs((await tooltip.boundingBox())!.x - at.x)).toBeLessThanOrEqual(1);
+  const tip = (await tooltip.boundingBox())!;
+  expect(tip.y).toBeGreaterThanOrEqual(at.y + at.height);
+  expectInWindow(page, tip);
+
+  // A window that ends below the cell leaves no room under it: the tooltip shows above the cell.
+  await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
+  await expect(tooltip).toBeHidden();
+  const below = (await cell.boundingBox())!;
+  await page.setViewportSize({ width: 1440, height: Math.ceil(below.y + below.height + 40) });
+  await cell.hover();
+  await expect(tooltip).toHaveCSS("opacity", "1");
+  const above = (await cell.boundingBox())!;
+  expect(above.y + above.height).toBeGreaterThan(page.viewportSize()!.height - 60);
+  const flipped = (await tooltip.boundingBox())!;
+  expect(flipped.y + flipped.height).toBeLessThanOrEqual(above.y);
+  expectInWindow(page, flipped);
+});
+
+test("the tooltip of an outlined cell stays while the pointer moves down onto it over an outlined row below", async ({
+  app,
+  page,
+}) => {
+  // The row below the outlined 1.24 of line 5 has a problem in its mean too, as in a table with a
+  // problem in every row.
+  await addProblems(page, [
+    { code: "below", severity: "error", message: "A problem of the row below.", source: { file: TABLE, row: 6, header: "mean" } },
+  ]);
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const upper = gridCell(page, 5, "1.24");
+  const row = (line: number) => rows.getByRole("row").filter({ has: page.getByRole("rowheader", { name: String(line), exact: true }) });
+  await expect(upper).toHaveClass(/grid-cell--warning/);
+  await expect(row(6).locator("td.grid-cell--error")).toHaveCount(1);
+  await upper.scrollIntoViewIfNeeded();
+  const tooltip = page.locator(".problem-tooltip");
+
+  for (const cell of [upper, row(5).locator("th")]) {
+    await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
+    await expect(tooltip).toBeHidden();
+    const at = (await cell.boundingBox())!;
+    const x = at.x + at.width / 2;
+    await page.mouse.move(x, at.y + at.height / 2);
+    await expect(tooltip).toHaveCSS("opacity", "1");
+    const shown = (await tooltip.boundingBox())!;
+    const text = await tooltip.innerText();
+    expect(text).toContain("digitized_mismatch");
+    // The tooltip touches its cell, so that no other cell lies between them.
+    expect(Math.abs(shown.y - (at.y + at.height))).toBeLessThanOrEqual(1);
+    // Down in steps of 1.5 pixels, as a slow hand moves, to 12 pixels into the tooltip.
+    const end = shown.y + 12;
+    await page.mouse.move(x, end, { steps: Math.ceil((end - (at.y + at.height / 2)) / 1.5) });
+    // Longer than a tooltip waits before it moves to another cell or hides (`TIP_LINGER`).
+    await page.waitForTimeout(400);
+    await expect(tooltip).toBeVisible();
+    expect(await tooltip.innerText()).toBe(text);
+    const kept = (await tooltip.boundingBox())!;
+    expect([kept.x, kept.y]).toEqual([shown.x, shown.y]);
+  }
 });
 
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
@@ -824,5 +1052,110 @@ test.describe("tables", () => {
 
     await expect(dialog).toBeHidden();
     await expect(page.getByRole("status").filter({ hasText: "Added the sheet Demo2020_Tab3 to the workbook." })).toBeVisible();
+  });
+});
+
+test.describe("plot of the mapped rows", () => {
+  /** Serve Fig1 without its digitization, so that it shows its image above a plot of its mapped rows. */
+  async function withoutDigitization(page: Page): Promise<void> {
+    await page.route(
+      (url) => url.pathname === "/local/studies/caffeine/Demo2020/sources/Fig1",
+      async (route) => {
+        const response = await route.fetch();
+        // A request that the page cancels, as it leaves, has no body to change.
+        const view = (await response.json().catch(() => null)) as (SourceView & { series: { name: string }[] }) | null;
+        if (!view) return;
+        await route.fulfill({
+          response,
+          json: {
+            ...view,
+            digitization: null,
+            overlay: [],
+            unmatched: view.series.map((series) => series.name),
+            layout: "side_by_side",
+          },
+        });
+      },
+    );
+  }
+
+  /** The point of `plot` at `x` and `y` of its axes, in the pixels of the page. */
+  async function pagePoint(plot: Locator, x: number, y: number): Promise<{ x: number; y: number }> {
+    const point = await plot.evaluate(
+      (element, [x, y]) => {
+        type Axis = { l2p: (value: number) => number; _offset: number };
+        const { xaxis, yaxis } = (element as HTMLElement & { _fullLayout: { xaxis: Axis; yaxis: Axis } })._fullLayout;
+        return { x: xaxis._offset + xaxis.l2p(x!), y: yaxis._offset + yaxis.l2p(y!) };
+      },
+      [x, y],
+    );
+    const box = (await plot.boundingBox())!;
+    return { x: box.x + point.x, y: box.y + point.y };
+  }
+
+  test("rings the point of a row with a problem, and its hover label lists the problem", async ({ app, page }) => {
+    await withoutDigitization(page);
+    await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
+    const plot = page.getByRole("img", { name: /^Plot of \d+ mapped rows of Fig1/ });
+    await expect(plot).toBeVisible();
+    // Plotly keeps its traces on the element. Other tests of this file change the rows of the table,
+    // so the ringed rows are read from the plot rather than assumed.
+    const rings = () =>
+      plot.evaluate((element) => {
+        const data = (element as HTMLElement & { data?: { meta: string; x: number[]; y: number[] }[] }).data ?? [];
+        return data.filter((trace) => trace.meta.startsWith("problem")).map(({ meta, x, y }) => ({ meta, x, y }));
+      });
+    // The first validation of the study can take a few seconds on a busy machine.
+    await expect.poll(async () => (await rings()).length, { timeout: 45_000 }).toBeGreaterThan(0);
+    const [ring] = await rings();
+    expect(ring!.meta).toMatch(/^problem (error|warning)$/);
+    await expect(page.getByText(ring!.meta === "problem error" ? "Row with an error" : "Row with a warning", { exact: true })).toBeVisible();
+
+    // The first ringed point.
+    const point = await pagePoint(plot, ring!.x[0]!, ring!.y[0]!);
+    await page.mouse.move(point.x, point.y);
+    // The label of the point below the ring names its row and lists the problem of that row.
+    const label = page.locator(".hoverlayer .hovertext");
+    await expect(label).toContainText("timecourses_Fig1.tsv line");
+    await expect(label).toContainText(ring!.meta === "problem error" ? "Error · " : "Warning · ");
+  });
+
+  test("shows the hover label of a point whose row has five problems with long messages", async ({ app, page }) => {
+    await withoutDigitization(page);
+    // Messages of two lines each, as real messages wrap.
+    await addProblems(
+      page,
+      Array.from({ length: 5 }, (_, index) => ({
+        code: `long_problem_${index}`,
+        severity: "error" as const,
+        message: `Problem ${index}: mean lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json.`,
+        source: { file: TABLE, row: 6, header: "mean" },
+      })),
+    );
+    await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
+    // The problems name the plot, and the label of a point its row.
+    const plot = page.getByRole("img", { name: /^Plot of \d+ mapped rows of Fig1.*, \d+ rows? with problems$/ });
+    await expect(plot).toBeVisible({ timeout: 45_000 });
+    // The ringed point of line 6, once Plotly drew it: the values of the row can have changed.
+    const ringed = () =>
+      plot.evaluate((element, file) => {
+        type Trace = { meta: string; x: number[]; y: number[]; customdata?: unknown[][] };
+        const data = (element as HTMLElement & { data?: Trace[] }).data ?? [];
+        if (!data.some((trace) => trace.meta === "problem error")) return null;
+        for (const trace of data.filter((entry) => entry.meta.startsWith("plot "))) {
+          const index = (trace.customdata ?? []).findIndex((row) => row[0] === file && row[1] === 6);
+          if (index >= 0) return { x: trace.x[index]!, y: trace.y[index]! };
+        }
+        return null;
+      }, TABLE);
+    await expect.poll(ringed).not.toBeNull();
+    const at = (await ringed())!;
+    const point = await pagePoint(plot, at.x, at.y);
+    await page.mouse.move(point.x, point.y);
+    const label = page.locator(".hoverlayer .hovertext");
+    await expect(label).toContainText(`${TABLE} line 6`);
+    for (let index = 0; index < 5; index++) await expect(label).toContainText(`long_problem_${index}`);
+    // Plotly shows no label that is higher than the plot.
+    expect((await label.boundingBox())!.height).toBeLessThan((await plot.boundingBox())!.height);
   });
 });

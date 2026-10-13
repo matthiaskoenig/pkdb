@@ -8,7 +8,9 @@
  * in table units, the values as printed, and the series in one order with their colors and axis
  * labels. This module only lays them out for Plotly.
  */
-import type { OverlayPoint, SourceSeries, SourceView } from "./api/types";
+import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "./api/types";
+import { SEVERITY_LABELS, tipProblems } from "./problems";
+import { CAUTION_COLORS } from "./themes";
 import { plotColors, type PlotColors } from "../features/plots/theme";
 
 /**
@@ -52,12 +54,17 @@ export function pageFont(): string {
  * What the hover label and a click read of a point: file, TSV line (null for a digitized point),
  * series, x, y, and whether it is a digitized end of an error bar.
  */
-export type Customdata = [file: string, line: number | null, series: string, x: string, y: string, errorBarEnd: boolean];
+type PointData = [file: string, line: number | null, series: string, x: string, y: string, errorBarEnd: boolean];
+
+/** `PointData`, and for a point of the data plot the problems of its row as hover text (`problemHover`). */
+export type Customdata = [...PointData, problems?: string];
 
 interface HoverLabel {
   bgcolor: string;
   bordercolor: string;
   font: { color: string; family: string; size: number };
+  /** How the lines of a label align; Plotly aligns them to the side of the point by default. */
+  align?: "left";
 }
 
 export interface OverlayTrace {
@@ -75,7 +82,7 @@ export interface OverlayTrace {
   y: (number | null)[];
   opacity: number;
   showlegend: false;
-  marker?: { symbol: string; size: number; color: string; line?: { width: number; color: string } };
+  marker?: { symbol: string; size: number; color: string; opacity?: number[]; line?: { width: number; color: string; dash?: string } };
   line?: { color: string; width: number };
   error_y?: { type: "data"; array: (number | null)[]; visible: true; color: string; thickness: number; width: number };
   customdata?: Customdata[];
@@ -177,7 +184,7 @@ function customdata(point: {
   x_text: string;
   y_text: string;
   error_bar_end?: boolean;
-}): Customdata {
+}): PointData {
   return [
     escapeMarkup(point.file),
     point.line,
@@ -188,9 +195,12 @@ function customdata(point: {
   ];
 }
 
-const VALUES = "<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>";
+const XY = "<br>x %{customdata[3]} · y %{customdata[4]}";
+const VALUES = `${XY}<extra></extra>`;
 /** The hover text of a mapped row: `<file> line <line>`, the series, x and y. */
 const MAPPED_HOVER = `%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}${VALUES}`;
+/** The hover text of a point of the data plot: as of a mapped row, then the problems of its row. */
+const PLOT_HOVER = `%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}${XY}%{customdata[6]}<extra></extra>`;
 /** The hover text of a digitized point, which has no line. */
 const RAW_HOVER = `%{customdata[0]}<br>%{customdata[2]}${VALUES}`;
 /** The hover text of a digitized end of an error bar. */
@@ -377,15 +387,152 @@ export function overlayTraces(
 }
 
 /**
+ * The colors of the ring around a plotted point whose row has a problem, as the grid outlines the
+ * cell of a problem: the error color of the theme and the amber `caution` of the app
+ * (`CAUTION_COLORS` in themes.ts), each with at least 3:1 on the surface of its theme (#ffffff and
+ * #192b31). Plotly draws the rings outside of Vuetify, so the error colors repeat the `error`
+ * colors of the themes in plugins/vuetify.ts; change them together.
+ */
+export const PROBLEM_COLORS: Record<"light" | "dark", Record<ValidationIssue["severity"], string>> = {
+  light: { error: "#b3261e", warning: CAUTION_COLORS.light.caution },
+  dark: { error: "#f28b82", warning: CAUTION_COLORS.dark.caution },
+};
+
+/** The key of a row of a table: `<file>:<line>`. */
+export function rowKey(file: string, line: number | null): string {
+  return `${file}:${line}`;
+}
+
+/** The worst severity of `issues`; null without issues. */
+export function worstSeverity(issues: readonly ValidationIssue[]): ValidationIssue["severity"] | null {
+  if (!issues.length) return null;
+  return issues.some((issue) => issue.severity === "error") ? "error" : "warning";
+}
+
+/** The problems of the rows that the data plot draws, by `rowKey`, in the order of the report. */
+export function plottedProblems(view: SourceView, problems: readonly ValidationIssue[]): Map<string, ValidationIssue[]> {
+  const plotted = new Set(plottedPoints(view).map((point) => rowKey(point.file, point.line)));
+  const rows = new Map<string, ValidationIssue[]>();
+  for (const issue of problems) {
+    const source = issue.source;
+    if (!source || source.row == null) continue;
+    const key = rowKey(source.file, source.row);
+    if (plotted.has(key)) rows.set(key, [...(rows.get(key) ?? []), issue]);
+  }
+  return rows;
+}
+
+/** The longest line of a message in a hover label, which Plotly does not wrap. */
+const HOVER_WIDTH = 60;
+
+/** `text` in lines of at most `width` characters, broken at spaces; a longer word has a line of its own. */
+export function wrapText(text: string, width = HOVER_WIDTH): string[] {
+  const lines: string[] = [];
+  let line = "";
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    if (line && line.length + 1 + word.length > width) {
+      lines.push(line);
+      line = word;
+    } else line = line ? `${line} ${word}` : word;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/**
+ * The most lines of the problems in the hover label of a point. Plotly shows no label that is
+ * higher than the plot: with the lines of the file, the series, x and y and the blank line, the
+ * label has at most 12 lines of 17 pixels, which fit the 220 pixels of the data plot.
+ */
+const HOVER_PROBLEM_LINES = 8;
+
+/**
+ * The problems of a row in the hover label of its point, after a blank line, in at most
+ * `HOVER_PROBLEM_LINES` lines: the severity and the code of each of at most `TIP_LIMIT`, the count
+ * of the others, and the message of as many of the first as fit (no bold: Plotly sets the style
+ * attribute for it, which the content security policy of the app blocks), escaped; empty without
+ * problems.
+ */
+export function problemHover(issues: readonly ValidationIssue[]): string {
+  if (!issues.length) return "";
+  const { shown, more } = tipProblems(issues);
+  // A line for each severity and code, and one for the count of the others.
+  let free = HOVER_PROBLEM_LINES - shown.length - (more ? 1 : 0);
+  const lines: string[] = [];
+  for (const issue of shown) {
+    lines.push(`${SEVERITY_LABELS[issue.severity]} · ${escapeMarkup(issue.code)}`);
+    const message = wrapText(issue.message);
+    // A message that does not fit ends the messages, so that they belong to the first problems.
+    if (message.length > free) free = 0;
+    else {
+      lines.push(...message.map(escapeMarkup));
+      free -= message.length;
+    }
+  }
+  if (more) lines.push(`and ${more} more`);
+  return `<br><br>${lines.join("<br>")}`;
+}
+
+/** The problems of a row as lines of the data table of the plot: `Warning digitized_mismatch: <message>`. */
+export function problemLines(issues: readonly ValidationIssue[]): string[] {
+  return issues.map((issue) => `${SEVERITY_LABELS[issue.severity]} ${issue.code}: ${issue.message}`);
+}
+
+/**
+ * The rings around the plotted points of rows with problems, a trace per severity in the colors
+ * of `PROBLEM_COLORS`, errors above warnings: the worst problem of a row colors its ring, and the
+ * ring of a faded series fades with it. They take no hover, so that the point below a ring shows
+ * its label and takes the click.
+ */
+function problemTraces(
+  points: readonly SourcePoint[],
+  problems: ReadonlyMap<string, ValidationIssue[]>,
+  opacity: (series: string) => number,
+  dark: boolean,
+): OverlayTrace[] {
+  const colors = PROBLEM_COLORS[dark ? "dark" : "light"];
+  return (["warning", "error"] as const).flatMap((severity): OverlayTrace[] => {
+    const ringed = points.filter((point) => worstSeverity(problems.get(rowKey(point.file, point.line)) ?? []) === severity);
+    if (!ringed.length) return [];
+    const color = colors[severity];
+    return [
+      {
+        type: "scatter",
+        meta: `problem ${severity}`,
+        name: severity,
+        mode: "markers",
+        x: ringed.map((point) => point.x),
+        y: ringed.map((point) => point.y),
+        opacity: 1,
+        showlegend: false,
+        // A thin halo outside the ring of the selected row (`selectedTrace`, which ends 10.75 px from
+        // the center): the two differ in size and weight, and both show on a selected point.
+        // A warning ring is dashed and an error ring solid, so that they differ by more than color.
+        marker: {
+          symbol: "circle-open",
+          size: 28,
+          color,
+          opacity: ringed.map((point) => opacity(point.series)),
+          line: { width: 2, color, ...(severity === "warning" ? { dash: "dash" } : {}) },
+        },
+        hoverinfo: "skip",
+      },
+    ];
+  });
+}
+
+/**
  * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
  * as lines with error bars to the error bar end, scatters as points. With `highlight`, the other
- * series fade.
+ * series fade. Points of rows with problems get a ring in the color of their worst problem, and
+ * their hover text lists the problems.
  */
 export function plotTraces(
   view: SourceView,
   highlight: string | null = null,
   theme: PlotTheme = LIGHT,
   selected: SelectedRow = null,
+  rowProblems: ReadonlyMap<string, ValidationIssue[]> = new Map(),
 ): OverlayPlot {
   const styles = seriesStyles(view);
   const points = plottedPoints(view);
@@ -409,9 +556,13 @@ export function plotTraces(
       ...(errors.some((error) => error !== null)
         ? { error_y: { type: "data", array: errors, visible: true, color, thickness: 1.5, width: 4 } as const }
         : {}),
-      customdata: rows.map(customdata),
-      hovertemplate: MAPPED_HOVER,
-      hoverlabel: hoverLabel(theme, color),
+      customdata: rows.map((point): Customdata => [
+        ...customdata(point),
+        problemHover(rowProblems.get(rowKey(point.file, point.line)) ?? []),
+      ]),
+      hovertemplate: PLOT_HOVER,
+      // The lines of the problems read as a list.
+      hoverlabel: { ...hoverLabel(theme, color), align: "left" },
     };
   });
   // The axes of the first series, as `pkdb plot` labels them.
@@ -430,6 +581,7 @@ export function plotTraces(
   return {
     traces: [
       ...emphasizedLast(traces),
+      ...problemTraces(points, rowProblems, opacity, theme.dark),
       ...selectedTrace(
         points.filter((point) => selected !== null && point.file === selected.file && point.line === selected.line),
       ),

@@ -1,16 +1,21 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OverlayPoint, SourcePoint, SourceSeries, SourceView } from "../../src/curation-app/api/types";
+import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   dataRows,
   drawsOnImage,
+  FADED,
   legendEntries,
   overlayTraces,
   plotTraces,
+  PROBLEM_COLORS,
+  plottedProblems,
+  problemHover,
   plottedSeries,
   POINT_RING,
   rowAt,
+  wrapText,
   type OverlayTrace,
 } from "../../src/curation-app/overlay";
 
@@ -264,8 +269,8 @@ describe("plotTraces", () => {
     expect(feces.error_y).toEqual(expect.objectContaining({ type: "data", array: [0.5, 0.75], visible: true }));
     expect(trace(traces, "plot drug_urine").error_y).toBeUndefined();
     expect(feces.customdata).toEqual([
-      [TIMECOURSES, 4, "drug_feces", "0", "1", false],
-      [TIMECOURSES, 6, "drug_feces", "1", "3.25", false],
+      [TIMECOURSES, 4, "drug_feces", "0", "1", false, ""],
+      [TIMECOURSES, 6, "drug_feces", "1", "3.25", false, ""],
     ]);
     expect(trace(traces, "plot drug_plasma").customdata?.[0]?.[4]).toBe("5.00");
     expect(feces.marker?.color).toBe("#3c4d5e");
@@ -385,6 +390,163 @@ describe("the selected row", () => {
     expect(layout.height).toBe(220);
     expect(layout.margin).toEqual({ l: 48, r: 8, t: 8, b: 36, pad: 2 });
     expect(layout.xaxis.tickfont).toEqual({ size: 11 });
+  });
+});
+
+describe("problems in the plot", () => {
+  const plain = figure({
+    digitization: null,
+    overlay: [],
+    layout: "side_by_side",
+    unmatched: ["drug_plasma", "drug_urine", "drug_feces"],
+  });
+  const MESSAGE = "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of enalapril implies sd 0.4934.";
+
+  function problem(line: number, severity: ValidationIssue["severity"] = "warning", changes: Partial<ValidationIssue> = {}): ValidationIssue {
+    return { code: "inconsistent_statistics", severity, message: MESSAGE, source: { file: TIMECOURSES, row: line, header: "sd" }, ...changes };
+  }
+
+  it("rings the points of rows with problems in the color of their worst severity, below the ring of the selected row", () => {
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 6 }, plottedProblems(plain, [
+      problem(4),
+      problem(6),
+      problem(6, "error", { code: "missing_value", message: "mean is missing." }),
+    ]));
+    expect(traces.map((entry) => entry.meta)).toEqual([
+      "plot drug_plasma",
+      "plot drug_urine",
+      "plot drug_feces",
+      "problem warning",
+      "problem error",
+      "selected outline",
+      "selected",
+    ]);
+    const warning = trace(traces, "problem warning");
+    expect([warning.x, warning.y]).toEqual([[0], [1]]);
+    expect(warning.marker).toEqual({
+      symbol: "circle-open",
+      size: 28,
+      color: PROBLEM_COLORS.light.warning,
+      opacity: [1],
+      line: { width: 2, color: PROBLEM_COLORS.light.warning, dash: "dash" },
+    });
+    // The ring takes no hover, so that the point below it shows its label and takes the click.
+    expect(warning.hoverinfo).toBe("skip");
+    expect(warning.showlegend).toBe(false);
+    const error = trace(traces, "problem error");
+    expect([error.x, error.y]).toEqual([[1], [3.25]]);
+    expect(error.marker?.color).toBe(PROBLEM_COLORS.light.error);
+    // The warning ring is dashed and the error ring solid: they differ by more than color.
+    expect(error.marker?.line).toEqual({ width: 2, color: PROBLEM_COLORS.light.error });
+  });
+
+  it("draws the ring of a problem thin and outside the ring of the selected row, so that the two differ and both show", () => {
+    const { traces } = plotTraces(plain, null, undefined, { file: TIMECOURSES, line: 4 }, plottedProblems(plain, [problem(4)]));
+    const ring = trace(traces, "problem warning").marker!;
+    const outline = trace(traces, "selected outline").marker!;
+    const selected = trace(traces, "selected").marker!;
+    // A ring of size s and width w covers the radii s/2 - w/2 to s/2 + w/2.
+    expect(ring.size / 2 - ring.line!.width / 2).toBeGreaterThan(outline.size / 2 + outline.line!.width / 2);
+    expect(ring.line!.width).toBeLessThan(selected.line!.width);
+    expect([ring.symbol, selected.symbol]).toEqual(["circle-open", "circle-open"]);
+  });
+
+  it("rings in the colors of the dark theme, which keep 3:1 on the surface of each theme", () => {
+    const dark = { dark: true, colors: DARK, font: "sans-serif" };
+    expect(trace(plotTraces(plain, null, dark, null, plottedProblems(plain, [problem(4)])).traces, "problem warning").marker?.color).toBe(
+      PROBLEM_COLORS.dark.warning,
+    );
+    for (const severity of ["error", "warning"] as const) {
+      expect(contrast(PROBLEM_COLORS.light[severity], "#ffffff")).toBeGreaterThanOrEqual(3);
+      expect(contrast(PROBLEM_COLORS.dark[severity], "#192b31")).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("fades the ring of a faded series with it", () => {
+    const { traces } = plotTraces(plain, "drug_plasma", undefined, null, plottedProblems(plain, [problem(4)]));
+    expect(trace(traces, "problem warning").marker?.opacity).toEqual([FADED]);
+  });
+
+  it("adds the problems of a row to the hover label of its point: severity, code and the message in lines", () => {
+    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    const feces = trace(traces, "plot drug_feces");
+    expect(feces.hovertemplate).toBe(
+      "%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}%{customdata[6]}<extra></extra>",
+    );
+    expect(feces.customdata?.[0]?.[6]).toBe(
+      "<br><br>Warning · inconsistent_statistics<br>sd is 0.3677, but error_bar 0.5452 (se) with count 9 of<br>enalapril implies sd 0.4934.",
+    );
+    expect(feces.customdata?.[1]?.[6]).toBe("");
+  });
+
+  it("lists at most five problems of a row in its hover label and counts the others", () => {
+    const issues = Array.from({ length: 7 }, (_, index) => problem(4, "warning", { code: `code_${index}`, message: "Short." }));
+    const text = problemHover(issues);
+    expect(text.match(/Warning · code_/g)).toHaveLength(5);
+    // Plotly sets a style attribute for a tag such as bold, which the content security policy blocks.
+    expect(text.replaceAll("<br>", "")).not.toContain("<");
+    expect(text.endsWith("<br>and 2 more")).toBe(true);
+  });
+
+  /** The lines of the problems in a hover label, after the blank line that starts them. */
+  function hoverLines(text: string): string[] {
+    expect(text.startsWith("<br><br>")).toBe(true);
+    return text.slice("<br><br>".length).split("<br>");
+  }
+
+  it("keeps the problems of a row within eight lines of its hover label, so that the whole label fits the plot", () => {
+    // A message of two lines each, as real messages wrap.
+    const long = (index: number) =>
+      `mean ${index} at 4 hr lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json`;
+    const issues = Array.from({ length: 7 }, (_, index) => problem(4, "warning", { code: `code_${index}`, message: long(index) }));
+    expect(wrapText(long(0))).toHaveLength(2);
+    const lines = hoverLines(problemHover(issues));
+    expect(lines.length).toBeLessThanOrEqual(8);
+    // The severity and the code of five problems, the message of the first as it fits, and the count of the others.
+    expect(lines.filter((line) => line.startsWith("Warning · code_"))).toHaveLength(5);
+    expect(lines.slice(0, 3)).toEqual(["Warning · code_0", ...wrapText(long(0))]);
+    expect(lines.at(-1)).toBe("and 2 more");
+
+    // Fewer problems leave room for more messages, in their order.
+    const three = hoverLines(problemHover(issues.slice(0, 3)));
+    expect(three.length).toBeLessThanOrEqual(8);
+    expect(three.filter((line) => line.startsWith("mean "))).toEqual([wrapText(long(0))[0], wrapText(long(1))[0]]);
+    expect(three.at(-1)).toBe("Warning · code_2");
+  });
+
+  it("aligns the lines of the hover label of the data plot to the left", () => {
+    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    expect(trace(traces, "plot drug_feces").hoverlabel?.align).toBe("left");
+  });
+
+  it("escapes markup in the problems, which Plotly would read as tags", () => {
+    expect(problemHover([problem(4, "error", { code: "a<b>", message: "mean <none> & more" })])).toBe(
+      "<br><br>Error · a&lt;b&gt;<br>mean &lt;none&gt; &amp; more",
+    );
+  });
+
+  it("wraps a message at spaces into lines of at most 60 characters", () => {
+    expect(wrapText(MESSAGE)).toEqual(["sd is 0.3677, but error_bar 0.5452 (se) with count 9 of", "enalapril implies sd 0.4934."]);
+    expect(wrapText("a ".repeat(3) + "x".repeat(70))).toEqual(["a a a", "x".repeat(70)]);
+  });
+
+  it("rings nothing for problems of rows that the plot does not draw, of other files, or without a line", () => {
+    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [
+      problem(99),
+      { ...problem(4), source: { file: "outputs_Fig1.tsv", row: 4 } },
+      { ...problem(4), source: { file: TIMECOURSES } },
+      { ...problem(4), source: null },
+    ]));
+    expect(traces.some((entry) => entry.meta.startsWith("problem"))).toBe(false);
+  });
+
+  it("selects the row of a ringed point on a click, as the point under the ring takes it", () => {
+    const { traces } = plotTraces(plain, null, undefined, null, plottedProblems(plain, [problem(4)]));
+    expect(rowAt(plain, { customdata: trace(traces, "plot drug_feces").customdata![0] })).toEqual({ file: TIMECOURSES, line: 4 });
+  });
+
+  it("rings nothing on the overlay of the image", () => {
+    expect(overlayTraces(figure()).traces.some((entry) => entry.meta.startsWith("problem"))).toBe(false);
   });
 });
 

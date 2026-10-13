@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import type { TableResponse } from "../api/types";
-import { columnName, keptColumns, ROW, visibleColumns, type CellIssues, type IssueCells } from "../grid";
+import type { TableResponse, ValidationIssue } from "../api/types";
+import { useCellTip } from "../composables/useCellTip";
+import {
+  columnName,
+  HEADER_LINE,
+  keptColumns,
+  lineIssues,
+  lineTipKey,
+  ROW,
+  visibleColumns,
+  type CellIssues,
+  type IssueCells,
+} from "../grid";
+import { problemsText } from "../problems";
+import ProblemTooltip from "./ProblemTooltip.vue";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
@@ -16,9 +29,12 @@ const STEP = 10;
 
 /**
  * The rows of a table with the lines of its TSV file, or of a raw table with the column letters of
- * its sheet, read only. Rows that open review items target are amber, cells with problems are
- * outlined and describe the problems to screen readers, a column can be marked, and empty
- * columns can be hidden. The header and the line column stay in view while the rows scroll.
+ * its sheet, read only. Rows that open review items target are amber. Cells with problems are
+ * outlined, describe the problems to screen readers, and show them in one tooltip of the grid
+ * 300 ms after the pointer rests on them; a line cell shows every problem of its line, also when
+ * its line button has a keyboard focus, and the Line header, a Tab stop while the header has
+ * problems, every problem of the header. A column can be marked, and empty columns can be
+ * hidden. The header and the line column stay in view while the rows scroll.
  *
  * Above 500 rows, only the rows near the view render, between spacers of the height of the
  * others; `aria-rowcount` and `aria-rowindex` give screen readers the place of each row. The
@@ -75,7 +91,7 @@ const props = withDefaults(
   },
 );
 const emit = defineEmits<{ "select-line": [line: number] }>();
-defineSlots<{
+const slots = defineSlots<{
   /** The content of the line cell of a row; its line by default. */
   line?: (props: { line: number }) => unknown;
 }>();
@@ -90,7 +106,7 @@ const shownRows = computed(() =>
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
-/** Whether the line cell of the header row shows 0, the line of the header of a table. */
+/** Whether the line cell of the header row shows `HEADER_LINE`, the line of the header of a table. */
 const numberedHeader = computed(() => props.headerLine && !raw.value);
 
 const marked = computed(
@@ -123,6 +139,11 @@ const scrolled = ref(false);
  */
 const more = ref(false);
 const scrollbars = ref({ x: 0, y: 0 });
+/** The height of the rows with their header, at which the shadows of the sides end in a higher region. */
+const contentHeight = ref<number | null>(null);
+const regionStyle = computed(() =>
+  contentHeight.value === null ? {} : { "--rows-content-height": `${contentHeight.value}px` },
+);
 const fade = computed(() => ({
   "--grid-scrollbar-x": `${scrollbars.value.x}px`,
   "--grid-scrollbar-y": `${scrollbars.value.y}px`,
@@ -181,8 +202,10 @@ function measure(): void {
   if (!element) return;
   const row = element.querySelector("tbody tr[data-index]")?.getBoundingClientRect().height ?? 0;
   const header = element.querySelector("thead tr")?.getBoundingClientRect().height ?? 0;
+  const content = element.querySelector("table")?.getBoundingClientRect().height ?? 0;
   if (row > 0) rowHeight.value = row;
   if (header > 0) headerHeight.value = header;
+  contentHeight.value = content > 0 ? content : null;
   if (element.clientHeight > 0) viewRows.value = Math.ceil(element.clientHeight / rowHeight.value);
   update();
 }
@@ -192,6 +215,9 @@ onMounted(() => {
   measure();
   observer = new ResizeObserver(measure);
   if (region.value) observer.observe(region.value);
+  // The rows grow and shrink with the table, its columns and its filters.
+  const table = region.value?.querySelector("table");
+  if (table) observer.observe(table);
 });
 onBeforeUnmount(() => observer?.disconnect());
 // New rows of the same table keep the scroll position, which the browser shortens to the rows.
@@ -206,28 +232,39 @@ watch(
 interface Note {
   id: string;
   severity: CellIssues["severity"];
+  /** The problems as screen readers read them, as the tooltip shows them. */
   text: string;
+  /** The problems of the cell, which its tooltip lists. */
+  issues: ValidationIssue[];
 }
+
+/** The lines whose problems the grid shows: the header line of a table and the lines of the rendered rows. */
+const noteLines = computed(() => [...(numberedHeader.value ? [HEADER_LINE] : []), ...rendered.value.map(({ row }) => row.line)]);
 
 /**
  * The problems of the rendered cells by `<line>:<column index>`, -1 for the line cell: a problem
- * of the whole row or of a column that does not show. Line 0 of a table is its header.
+ * of the whole row or of a column that does not show. The header of a table is at `HEADER_LINE`.
  */
 const notes = computed(() => {
-  const found = new Map<string, Note>();
   const shown = new Map(headers.value.map(({ index, name }) => [name, index]));
-  const lines = [...(raw.value ? [] : [0]), ...rendered.value.map(({ row }) => row.line)];
-  for (const line of lines)
+  // The problems of each place; the line cell takes those of the columns that do not show.
+  const places = new Map<string, { id: string; issues: ValidationIssue[] }>();
+  for (const line of noteLines.value)
     for (const [name, cell] of props.issueCells.get(line) ?? []) {
       const index = name === ROW ? -1 : (shown.get(name) ?? -1);
       const key = `${line}:${index}`;
-      const prior = found.get(key);
-      found.set(key, {
-        id: `${id}-${line}-${index < 0 ? "line" : index}`,
-        severity: prior?.severity === "error" ? "error" : cell.severity,
-        text: [prior?.text, ...cell.messages].filter(Boolean).join(" "),
-      });
+      const place = places.get(key);
+      if (place) place.issues.push(...cell.issues);
+      else places.set(key, { id: `${id}-${line}-${index < 0 ? "line" : index}`, issues: [...cell.issues] });
     }
+  const found = new Map<string, Note>();
+  for (const [key, { id: noteId, issues }] of places)
+    found.set(key, {
+      id: noteId,
+      severity: issues.some((issue) => issue.severity === "error") ? "error" : "warning",
+      text: problemsText(issues),
+      issues,
+    });
   return found;
 });
 const targetNote = `${id}-target`;
@@ -263,9 +300,9 @@ function lineClass(line: number): Record<string, boolean> {
   };
 }
 
-/** The problems of the header of a table, at its line 0; a raw table has no header line. */
+/** The problems of the header of a table, at its line 0; a raw table and a grid of other rows have no header line. */
 function headerNote(index: number): Note | undefined {
-  return raw.value ? undefined : notes.value.get(`0:${index}`);
+  return numberedHeader.value ? notes.value.get(`${HEADER_LINE}:${index}`) : undefined;
 }
 
 /** The classes of a header cell; the index -1 is the header of the line column. */
@@ -278,6 +315,81 @@ function headerClass(index: number, name: string | null): Record<string, boolean
     "grid-letter": raw.value && index >= 0,
   };
 }
+
+// The tooltip of the problems: one for the grid, at the cell under the pointer or of the keyboard.
+// No outlined cell is a Tab stop: the keyboard reaches the problems through the line buttons,
+// which show every problem of their line, and the Line header, which shows those of the header.
+
+const tip = useCellTip();
+
+/** Every problem of each line whose problems the grid shows, also of columns that do not show. */
+const lineProblems = computed(() => {
+  const found = new Map<number, ValidationIssue[]>();
+  for (const line of noteLines.value) {
+    const issues = lineIssues(props.issueCells, line);
+    if (issues.length) found.set(line, issues);
+  }
+  return found;
+});
+
+/** The problems that a tooltip can list, by the `data-tip` of their cell. */
+const tips = computed(() => {
+  const found = new Map<string, ValidationIssue[]>();
+  for (const [key, note] of notes.value) found.set(key, note.issues);
+  for (const [line, issues] of lineProblems.value) found.set(lineTipKey(line), issues);
+  return found;
+});
+
+/** The `data-tip` of the cell at `line` and the column `index` when it has problems. */
+function tipOf(line: number, index: number): string | undefined {
+  const key = `${line}:${index}`;
+  return notes.value.has(key) ? key : undefined;
+}
+
+/** The `data-tip` of the line cell of `line` when the line has problems. */
+function lineTip(line: number): string | undefined {
+  return lineProblems.value.has(line) ? lineTipKey(line) : undefined;
+}
+
+/** The `data-tip` of a header cell; a raw table and a grid of other rows have no header line. */
+function headerTip(index: number): string | undefined {
+  return numberedHeader.value ? tipOf(HEADER_LINE, index) : undefined;
+}
+
+/**
+ * The `data-tip` of the Line header while the header has problems: the header has no other
+ * focusable element, so the Line header is then its one Tab stop.
+ */
+const headerLineTip = computed(() => (numberedHeader.value ? lineTip(HEADER_LINE) : undefined));
+
+/** The id of the hidden text with every problem of `line`, which describes its line button or the Line header. */
+function lineNoteId(line: number): string {
+  return `${id}-${line}-all`;
+}
+
+/**
+ * The id of the problems of the whole row of `line`, which describe its line cell. A line button
+ * describes every problem of its line instead, of which they are a part.
+ */
+function rowNoteId(line: number): string | undefined {
+  return props.selectable && !slots.line ? undefined : notes.value.get(`${line}:-1`)?.id;
+}
+
+function onScroll(): void {
+  update();
+  tip.scrolled(region.value);
+}
+
+// A tooltip whose cell left the rendered rows, or has no problems any more, hides.
+watch(
+  [rendered, tips],
+  () => {
+    const cell = tip.cell.value;
+    const key = tip.key.value;
+    if (cell && (!cell.isConnected || key === null || !tips.value.has(key))) tip.hide();
+  },
+  { flush: "post" },
+);
 
 function described(...ids: (string | undefined | false)[]): string | undefined {
   return ids.filter(Boolean).join(" ") || undefined;
@@ -412,10 +524,15 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
       ref="region"
       class="rows-scroll"
       :class="{ 'rows-scroll--sticky-line': lines, 'rows-scroll--stuck': scrolled }"
+      :style="regionStyle"
       tabindex="0"
       role="region"
       :aria-label="label ?? `Rows of ${table.file}`"
-      @scroll.passive="update"
+      @scroll.passive="onScroll"
+      @mouseover="tip.over"
+      @mouseout="tip.out"
+      @focusin="tip.focusIn"
+      @focusout="tip.focusOut"
     >
       <table class="rows-table rows-table--packed" :aria-rowcount="shownRows.length + 1">
         <thead>
@@ -425,9 +542,11 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               scope="col"
               class="rows-line"
               :class="headerClass(-1, null)"
-              :aria-describedby="described(headerNote(-1)?.id)"
+              :data-tip="headerLineTip"
+              :tabindex="headerLineTip ? 0 : undefined"
+              :aria-describedby="headerLineTip ? lineNoteId(HEADER_LINE) : undefined"
             >
-              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> 0</template>
+              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> {{ HEADER_LINE }}</template>
               <template v-else>{{ lineHeader }}</template>
             </th>
             <th
@@ -435,6 +554,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :key="column.index"
               scope="col"
               :class="headerClass(column.index, column.name)"
+              :data-tip="headerTip(column.index)"
               :aria-describedby="described(headerNote(column.index)?.id)"
             >
               {{ column.name
@@ -460,9 +580,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               class="rows-line"
               :class="lineClass(row.line)"
               :tabindex="isFocus(row.line, null) ? -1 : undefined"
-              :aria-describedby="
-                described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
-              "
+              :data-tip="lineTip(row.line)"
+              :aria-describedby="described(highlightLines.has(row.line) && targetNote, rowNoteId(row.line))"
               @keydown="selectable && moveFocus($event, index)"
             >
               <slot name="line" :line="row.line">
@@ -471,7 +590,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
                   type="button"
                   class="grid-line-button"
                   :tabindex="row.line === tabLine ? 0 : -1"
-                  :title="`Select line ${row.line}`"
+                  :title="lineTip(row.line) ? undefined : `Select line ${row.line}`"
+                  :aria-describedby="lineTip(row.line) ? lineNoteId(row.line) : undefined"
                   @focus="keyLine = row.line"
                   @click.stop="emit('select-line', row.line)"
                 >
@@ -485,6 +605,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :key="column.index"
               :class="cellClass(row.line, column.index, column.name)"
               :tabindex="isFocus(row.line, column.name) ? -1 : undefined"
+              :data-tip="tipOf(row.line, column.index)"
               :aria-describedby="described(notes.get(`${row.line}:${column.index}`)?.id)"
             >
               {{ row.cells[column.index] ?? "" }}
@@ -500,7 +621,12 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
     <div hidden>
       <span :id="targetNote">Targeted by an open review item.</span>
       <span v-for="note in notes.values()" :id="note.id" :key="note.id">{{ note.text }}</span>
+      <span v-for="[line, issues] in lineProblems" :id="lineNoteId(line)" :key="lineNoteId(line)">{{
+        problemsText(issues)
+      }}</span>
     </div>
+    <!-- One tooltip for the problems of every cell, at the cell under the pointer or of the keyboard. -->
+    <ProblemTooltip v-if="tips.size" :tip="tip" :tips="tips" />
   </div>
 </template>
 

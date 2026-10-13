@@ -56,7 +56,7 @@ function redact(text) {
   return token ? text.replaceAll(token, "<launch token>") : text;
 }
 
-/** Capture the seven images; the paths of the files. */
+/** Capture the eight images; the paths of the files. */
 async function render() {
   const written = [];
   const browser = await chromium.launch();
@@ -121,6 +121,22 @@ async function render() {
       pointer: true,
     });
 
+    // Data with a problem: the tooltip of the outlined cell of the misplaced row, under the pointer.
+    // The pointer moves onto the cell once the rows show it whole, as hover() would scroll the
+    // rows just far enough and cut a column at the line column. The rows scroll back afterwards,
+    // so that the next images show their first columns.
+    const outlined = rowsOfTable.locator("td.grid-cell--warning").first();
+    await showWhole(outlined);
+    const cell = await outlined.boundingBox();
+    await page.mouse.move(cell.x + cell.width / 2, cell.y + cell.height / 2);
+    const tooltip = page.locator(".problem-tooltip");
+    await tooltip.waitFor();
+    await capture("data-problem.png", [tooltip.getByText("digitized_mismatch")], { pointer: true, tooltip: true });
+    await page.mouse.move(600, 32);
+    await rowsOfTable.evaluate((region) => {
+      region.scrollLeft = 0;
+    });
+
     // Data with the paper: page 1 of the PDF of the study, with the matches of a find.
     await navigator.getByRole("button", { name: /^Paper\b/ }).click();
     const paper = page.getByRole("region", { name: `Paper ${STUDY.split("/")[1]}.pdf` });
@@ -180,9 +196,10 @@ async function render() {
  * `ready` is visible, the images are loaded, no menu or dialog is open, nothing animates, and
  * the tab bars stand still. The pointer moves to the empty middle of the app bar, so that nothing
  * shows a hover, unless `pointer` keeps it where it is. `whole` must fit into the window, and with
- * `fit` the whole page, so that nothing scrolls under a sticky bar.
+ * `fit` the whole page, so that nothing scrolls under a sticky bar. With `tooltip`, the tooltip
+ * under the pointer stays open; any other overlay must be closed.
  */
-async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false } = {}) {
+async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false, tooltip = false } = {}) {
   await page.evaluate(() => window.scrollTo(0, 0));
   if (!pointer) await page.mouse.move(600, 32);
   // A control that a click or a key focused shows no focus ring in the picture.
@@ -190,7 +207,11 @@ async function screenshot(page, name, ready, { pointer = false, whole = null, fi
   for (const locator of ready) await locator.waitFor();
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => [...document.images].every((image) => image.complete));
-  await page.waitForFunction(() => !document.querySelector(".v-overlay--active"));
+  await page.waitForFunction(
+    (tooltip) =>
+      [...document.querySelectorAll(".v-overlay--active")].every((overlay) => tooltip && overlay.classList.contains("v-tooltip")),
+    tooltip,
+  );
   await settled(page);
   for (const tabs of await page.getByRole("tablist").all()) await alignTabs(tabs);
   await settled(page);
@@ -267,6 +288,31 @@ async function alignTabs(tabs) {
     const current = container.scrollLeft;
     const nearest = possible.sort((a, b) => Math.abs(a - current) - Math.abs(b - current))[0];
     if (nearest !== undefined) container.scrollLeft = nearest;
+  });
+}
+
+/**
+ * Scroll the rows around `cell` sideways so that the cell shows whole and a whole column starts
+ * right of the sticky line column, with the cell as near to the middle of the rows as that allows.
+ */
+async function showWhole(cell) {
+  await cell.evaluate((target) => {
+    const region = target.closest(".rows-scroll");
+    const line = region.querySelector("thead th.rows-line")?.getBoundingClientRect().width ?? 0;
+    // Positions in the scrolled content of the region.
+    const origin = region.getBoundingClientRect().left + region.clientLeft - region.scrollLeft;
+    const start = (element) => element.getBoundingClientRect().left - origin;
+    const end = (element) => element.getBoundingClientRect().right - origin;
+    const widest = region.scrollWidth - region.clientWidth;
+    // The scroll positions at which a column starts right of the line column and the cell shows whole.
+    const possible = [...region.querySelectorAll("thead th:not(.rows-line)")]
+      .map((column) => start(column) - line)
+      .filter((left) => left >= -0.5 && left <= widest + 0.5)
+      .filter((left) => start(target) >= left + line - 0.5 && end(target) <= left + region.clientWidth + 0.5);
+    if (!possible.length) throw new Error("The rows cannot show the outlined cell whole with whole columns.");
+    const middle = (start(target) + end(target) - line - region.clientWidth) / 2;
+    const nearest = possible.sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle))[0];
+    region.scrollLeft = Math.max(0, Math.round(nearest));
   });
 }
 

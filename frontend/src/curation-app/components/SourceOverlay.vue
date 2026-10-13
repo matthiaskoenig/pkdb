@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useTheme } from "vuetify";
 import { VAlert, VBtn, VProgressLinear } from "vuetify/components";
-import type { SourceView } from "../api/types";
+import type { SourceView, ValidationIssue } from "../api/types";
 import { plural } from "../overview";
 import {
   dataRows,
@@ -10,8 +10,14 @@ import {
   legendEntries,
   overlayTraces,
   pageFont,
+  plottedProblems,
   plotTraces,
+  PROBLEM_COLORS,
+  problemLines,
   rowAt,
+  rowKey,
+  worstSeverity,
+  type DataRow,
   type EventPoint,
   type OverlayMode,
   type SelectedRow,
@@ -36,6 +42,8 @@ const props = defineProps<{
   mode?: OverlayMode;
   /** The row that the curator selected, whose point gets a ring. */
   selected?: SelectedRow;
+  /** The problems of the files of the source: the plot rings the points of their rows. */
+  problems?: readonly ValidationIssue[];
 }>();
 const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>] }>();
 
@@ -56,16 +64,32 @@ const markScale = computed(() => {
 const dark = computed(() => theme.current.value.dark);
 /** The font of the page, which the plot uses too. */
 const font = pageFont();
+/** The problems of the plotted rows by `rowKey`; the overlay on the image shows none. */
+const rowProblems = computed(() =>
+  shown.value === "plot" ? plottedProblems(props.view, props.problems ?? []) : new Map<string, ValidationIssue[]>(),
+);
 const plot = computed(() => {
   const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors), font };
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
     ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
-    : plotTraces(props.view, highlight, colors, props.selected ?? null);
+    : plotTraces(props.view, highlight, colors, props.selected ?? null, rowProblems.value);
 });
 
 const legend = computed(() => legendEntries(props.view, shown.value, dark.value));
 const rows = computed(() => dataRows(props.view, shown.value));
+/** The severities of the rings of the plot, errors first, for the key. */
+const ringed = computed(() => {
+  const found = new Set([...rowProblems.value.values()].map(worstSeverity));
+  return (["error", "warning"] as const).filter((severity) => found.has(severity));
+});
+const ringColors = computed(() => PROBLEM_COLORS[dark.value ? "dark" : "light"]);
+const RING_LABELS = { error: "Row with an error", warning: "Row with a warning" } as const;
+
+/** The problems of the row of a point of the data table, a line each. */
+function problemsOf(row: DataRow): string[] {
+  return problemLines(rowProblems.value.get(rowKey(row.file, row.line)) ?? []);
+}
 /** Whether a point of the plot selects a row: the plot has a mapped row. */
 const selectable = computed(() => rows.value.some((row) => row.line !== null));
 const emphasized = computed(() =>
@@ -82,7 +106,10 @@ const name = computed(() => {
   const emphasis = emphasized.value ? `, with ${emphasized.value} emphasized` : "";
   if (shown.value === "plot") {
     const count = rows.value.length;
-    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}`;
+    // The rings and their key show these rows; screen readers read them here.
+    const ringed = rowProblems.value.size;
+    const problems = ringed ? `, ${plural(ringed, "row")} with problems` : "";
+    return `Plot of ${plural(count, "mapped row")} of ${props.view.source}${of}${emphasis}${problems}`;
   }
   const counted = (role: "raw" | "mapped", errorBarEnd: boolean) =>
     props.view.overlay.filter((point) => point.role === role && point.error_bar_end === errorBarEnd).length;
@@ -305,6 +332,15 @@ onBeforeUnmount(() => {
         </span>
       </p>
 
+      <p v-if="ringed.length" class="overlay-key overlay-key--problems" aria-hidden="true">
+        <span v-for="severity in ringed" :key="severity" class="overlay-key-item">
+          <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--ring" :style="{ stroke: ringColors[severity] }">
+            <circle cx="6" cy="6" r="4.5" :stroke-dasharray="severity === 'warning' ? '2.5 1.8' : undefined" />
+          </svg>
+          {{ RING_LABELS[severity] }}
+        </span>
+      </p>
+
       <p v-if="selectable" class="overlay-key">
         Click a point to select its row.
       </p>
@@ -329,6 +365,7 @@ onBeforeUnmount(() => {
               <th scope="col">y</th>
               <th scope="col">File</th>
               <th scope="col" class="rows-line">Line</th>
+              <th v-if="rowProblems.size" scope="col">Problems</th>
             </tr>
           </thead>
           <tbody>
@@ -339,6 +376,9 @@ onBeforeUnmount(() => {
               <td class="overlay-value">{{ row.y }}</td>
               <td>{{ row.file }}</td>
               <td class="rows-line">{{ row.line ?? "-" }}</td>
+              <td v-if="rowProblems.size" class="overlay-problems">
+                <div v-for="(text, place) in problemsOf(row)" :key="place">{{ text }}</div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -450,6 +490,15 @@ onBeforeUnmount(() => {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.75;
+}
+.overlay-glyph--ring {
+  fill: none;
+  stroke-width: 1.75;
+}
+/* The problems of a row wrap, so that the data table stays as wide as the figure. */
+.overlay-problems {
+  min-width: 16em;
+  white-space: normal;
 }
 /* The data of an overlay is as wide as the figure above it. */
 .overlay-data {

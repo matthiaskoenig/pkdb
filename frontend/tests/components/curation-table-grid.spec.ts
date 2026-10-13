@@ -3,11 +3,19 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
-import type { TableResponse } from "../../src/curation-app/api/types";
+import type { TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
-import { ROW, type CellIssues, type IssueCells } from "../../src/curation-app/grid";
+import { VTooltip } from "vuetify/components";
+import { TIP_DELAY, TIP_LINGER } from "../../src/curation-app/composables/useCellTip";
+import { HEADER_LINE, issueCells, ROW, type CellIssues, type IssueCells } from "../../src/curation-app/grid";
+import { setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
+
+/** The problems of a cell with these messages, as `issueCells` gives them. */
+function cellIssues(severity: ValidationIssue["severity"], ...messages: string[]): CellIssues {
+  return { severity, issues: messages.map((message) => ({ code: "problem", severity, message })) };
+}
 
 const HEADER = ["study", "source", "label", "time", "mean", "comment"];
 
@@ -105,8 +113,8 @@ describe("TableGrid", () => {
 
   it("colors the rows of open review items amber and outlines the cells with problems", () => {
     const issues: IssueCells = new Map([
-      [2, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["The mean is not a number."] }]])],
-      [3, new Map<string, CellIssues>([[ROW, { severity: "warning", messages: ["The row repeats line 1."] }]])],
+      [2, new Map<string, CellIssues>([["mean", cellIssues("error", "The mean is not a number.")]])],
+      [3, new Map<string, CellIssues>([[ROW, cellIssues("warning", "The row repeats line 1.")]])],
     ]);
     const wrapper = mount(TableGrid, {
       props: { table: small, highlightLines: new Set([1, 3]), issueCells: issues },
@@ -118,11 +126,11 @@ describe("TableGrid", () => {
 
     const cell = rows[1]!.findAll("td")[4]!;
     expect(cell.classes()).toContain("grid-cell--error");
-    expect(description(cell.element)).toBe("The mean is not a number.");
+    expect(description(cell.element)).toBe("Error: The mean is not a number.");
     // An issue of the whole row outlines its line.
     const line = rows[2]!.get("th");
     expect(line.classes()).toContain("grid-cell--warning");
-    expect(description(line.element)).toBe("Targeted by an open review item. The row repeats line 1.");
+    expect(description(line.element)).toBe("Targeted by an open review item. Warning: The row repeats line 1.");
     // The descriptions add no text to the cells.
     expect(cell.text()).toBe("3.1");
   });
@@ -140,17 +148,17 @@ describe("TableGrid", () => {
 
   it("outlines a header cell with a problem of the header, line 0 of a table", () => {
     const issues: IssueCells = new Map([
-      [0, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["Unknown column 'meen'."] }]])],
+      [0, new Map<string, CellIssues>([["mean", cellIssues("error", "Unknown column 'meen'.")]])],
     ]);
     const wrapper = mount(TableGrid, { props: { table: small, issueCells: issues }, attachTo: document.body });
     const header = wrapper.findAll("thead th").find((cell) => cell.text() === "mean")!;
     expect(header.classes()).toContain("grid-cell--error");
-    expect(description(header.element)).toBe("Unknown column 'meen'.");
+    expect(description(header.element)).toBe("Error: Unknown column 'meen'.");
   });
 
   it("marks a column, and hides empty columns except the ones to show", () => {
     const issues: IssueCells = new Map([
-      [2, new Map<string, CellIssues>([["comment", { severity: "warning", messages: ["Add a comment."] }]])],
+      [2, new Map<string, CellIssues>([["comment", cellIssues("warning", "Add a comment.")]])],
     ]);
     const wrapper = mount(TableGrid, { props: { table: small, markColumn: "mean", hideEmpty: true } });
     expect(wrapper.findAll("thead th").map((cell) => cell.text())).toEqual([
@@ -591,5 +599,312 @@ describe("the keyboard in a selectable grid", () => {
     expect(stops(wrapper).filter((stop) => stop === "0")).toHaveLength(1);
     await press(document.activeElement!, "ArrowUp");
     expect(document.activeElement?.textContent?.trim()).toBe("4999");
+  });
+});
+
+/** The `matches` of jsdom, which guesses `:focus-visible` from the events before a focus. */
+const MATCHES = Element.prototype.matches;
+
+/** Whether a focus shows its ring, as after a key (`true`) or after a click (`false`). */
+function focusRing(shown: boolean): void {
+  vi.spyOn(Element.prototype, "matches").mockImplementation(function (this: Element, selector: string): boolean {
+    return selector === ":focus-visible" ? shown && this === document.activeElement : MATCHES.call(this, selector);
+  });
+}
+
+describe("the tooltip of the problems", () => {
+  const [, second, third] = small.rows.map((row) => row.line) as [number, number, number];
+  const MEAN = HEADER.indexOf("mean");
+
+  /** A warning of `small` at `line` and the column `header`, or of the whole row for null. */
+  function problem(code: string, line: number, header: string | null, changes: Partial<ValidationIssue> = {}): ValidationIssue {
+    const source = header === null ? { file: small.file, row: line } : { file: small.file, row: line, header };
+    return { code, severity: "warning", message: `${code} at line ${line}`, source, ...changes };
+  }
+
+  function mountTips(issues: ValidationIssue[], props: Record<string, unknown> = {}) {
+    return mount(TableGrid, {
+      props: { table: small, issueCells: issueCells(issues, small.file), ...props },
+      attachTo: document.body,
+    });
+  }
+
+  /** The cell of `small` at `line` and the column index `column`. */
+  function cellAt(wrapper: VueWrapper, line: number, column: number): HTMLElement {
+    const row = wrapper.findAll("tbody tr[data-index]").find((entry) => entry.get("th").text() === String(line))!;
+    return row.findAll("td")[column]!.element;
+  }
+
+  /** The tooltip while it shows; null while it is hidden. */
+  function shownTip(): HTMLElement | null {
+    return document.querySelector<HTMLElement>(".v-overlay--active .problem-tooltip");
+  }
+
+  async function hover(element: Element): Promise<void> {
+    element.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: document.body }));
+    vi.advanceTimersByTime(TIP_DELAY);
+    await flushPromises();
+  }
+
+  beforeEach(() => {
+    // Vuetify places the tooltip in the visual viewport.
+    setViewport();
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("shows the problems of an outlined cell 300 ms after the pointer rests on it, and keeps its description", async () => {
+    const hint = { kind: "inspect_source", message: "Check the digitization against the figure." };
+    const wrapper = mountTips([problem("digitized_mismatch", second, "mean", { suggestions: [hint] })]);
+    const cell = cellAt(wrapper, second, MEAN);
+    expect(cell.dataset.tip).toBe(`${second}:${MEAN}`);
+    cell.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: document.body }));
+    vi.advanceTimersByTime(TIP_DELAY - 1);
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+    vi.advanceTimersByTime(1);
+    await flushPromises();
+    const tip = shownTip()!;
+    expect(tip.querySelector(".v-chip")?.textContent?.trim()).toBe("Warning");
+    expect(tip.querySelector(".problem-tip-code")?.textContent).toBe("digitized_mismatch");
+    expect(tip.querySelector(".problem-tip-message")?.textContent).toBe(`digitized_mismatch at line ${second}`);
+    expect(tip.querySelector(".problem-tip-hint")?.textContent).toBe("Check the digitization against the figure.");
+    // The description for screen readers stays, and reads what the tooltip shows.
+    expect(description(cell)).toBe(`Warning: digitized_mismatch at line ${second}. Check the digitization against the figure.`);
+  });
+
+  it("shows the problems of a hovered header cell, and every problem of its line at a hovered line cell, whose button leaves its title to the tooltip", async () => {
+    const wrapper = mountTips(
+      [problem("unknown_column", HEADER_LINE, "comment"), problem("duplicate_row", third, null), problem("unknown_term", third, "label")],
+      { selectable: true },
+    );
+    await hover(wrapper.findAll("thead th").at(-1)!.element);
+    expect(shownTip()?.textContent).toContain("unknown_column");
+    const line = wrapper.findAll("tbody tr[data-index]")[2]!.get("th");
+    expect(line.attributes("data-tip")).toBe(`${third}:line`);
+    await hover(line.get("button").element);
+    expect([...shownTip()!.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([
+      "duplicate_row",
+      "unknown_term",
+    ]);
+    expect(line.get("button").attributes("title")).toBeUndefined();
+    expect(wrapper.findAll("tbody tr[data-index]")[1]!.get("th button").attributes("title")).toBe(`Select line ${second}`);
+  });
+
+  it("describes the problems of a line once: by its line button, which carries all of them, else by its line cell", () => {
+    const issues = [problem("duplicate_row", third, null), problem("unknown_term", third, "label")];
+    const lineCell = (wrapper: VueWrapper) => wrapper.findAll("tbody tr[data-index]")[2]!.get("th");
+    const buttons = mountTips(issues, { selectable: true, highlightLines: new Set([third]) });
+    expect(description(lineCell(buttons).element)).toBe("Targeted by an open review item.");
+    expect(description(lineCell(buttons).get("button").element)).toBe(
+      `Warning: duplicate_row at line ${third}. Warning: unknown_term at line ${third}.`,
+    );
+    expect(description(lineCell(mountTips(issues)).element)).toBe(`Warning: duplicate_row at line ${third}.`);
+    const slotted = mount(TableGrid, {
+      props: { table: small, issueCells: issueCells(issues, small.file), selectable: true },
+      slots: { line: ({ line }: { line: number }) => h("a", { href: `#${line}` }, String(line)) },
+    });
+    expect(description(lineCell(slotted).element)).toBe(`Warning: duplicate_row at line ${third}.`);
+  });
+
+  it("places the tooltip of a line from the start of its line cell, so that it extends over its row, and that of a cell below its middle", async () => {
+    const wrapper = mountTips([problem("unknown_term", third, "label")], { selectable: true });
+    const line = wrapper.findAll("tbody tr[data-index]")[2]!.get("th").element;
+    await hover(line);
+    expect(shownTip()).not.toBeNull();
+    expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom start");
+    cellAt(wrapper, third, HEADER.indexOf("label")).dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: line }));
+    vi.advanceTimersByTime(TIP_LINGER);
+    await flushPromises();
+    expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom");
+  });
+
+  it("adds no Tab stop for outlined cells, and shows every problem of a line when the keyboard moves to its line button", async () => {
+    focusRing(true);
+    const wrapper = mountTips(
+      [problem("digitized_mismatch", second, "mean"), problem("duplicate_row", second, null), problem("unknown_term", third, "label")],
+      { selectable: true },
+    );
+    expect(wrapper.findAll("tbody td[tabindex]")).toHaveLength(0);
+    expect(wrapper.findAll("thead th[tabindex]")).toHaveLength(0);
+    const buttons = wrapper.findAll<HTMLButtonElement>(".grid-line-button").map((entry) => entry.element);
+    expect(buttons.map((button) => button.tabIndex)).toEqual([0, -1, -1]);
+    // The button reads what its tooltip shows.
+    expect(description(buttons[1]!)).toBe(`Warning: digitized_mismatch at line ${second}. Warning: duplicate_row at line ${second}.`);
+    buttons[1]!.focus();
+    await flushPromises();
+    expect([...shownTip()!.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([
+      "digitized_mismatch",
+      "duplicate_row",
+    ]);
+    buttons[1]!.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.activeElement).toBe(buttons[2]);
+    expect(shownTip()?.textContent).toContain("unknown_term");
+    buttons[2]!.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.activeElement).toBe(buttons[0]);
+    expect(shownTip()).toBeNull();
+  });
+
+  it("makes the Line header a Tab stop only while the header has problems, and lists every problem of the header there", async () => {
+    focusRing(true);
+    const wrapper = mountTips([problem("unknown_column", HEADER_LINE, "comment"), problem("missing_header", HEADER_LINE, null)], {
+      selectable: true,
+    });
+    const header = wrapper.get<HTMLElement>("thead th.rows-line");
+    expect(header.attributes("tabindex")).toBe("0");
+    expect(description(header.element)).toBe(
+      `Warning: unknown_column at line ${HEADER_LINE}. Warning: missing_header at line ${HEADER_LINE}.`,
+    );
+    header.element.focus();
+    await flushPromises();
+    expect([...shownTip()!.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([
+      "unknown_column",
+      "missing_header",
+    ]);
+    const clean = mountTips([problem("digitized_mismatch", second, "mean")], { selectable: true });
+    expect(clean.get("thead th.rows-line").attributes("tabindex")).toBeUndefined();
+  });
+
+  it("shows the tooltip at the cell that the route focuses only when the focus shows its ring", async () => {
+    focusRing(false);
+    mountTips([problem("digitized_mismatch", second, "mean")], { focus: { line: second, column: "mean" } });
+    await flushPromises();
+    expect(document.activeElement?.textContent?.trim()).toBe(small.rows[1]!.cells[MEAN]);
+    expect(shownTip()).toBeNull();
+  });
+
+  it("shows the tooltip at the cell that the route focuses after a key", async () => {
+    focusRing(true);
+    mountTips([problem("digitized_mismatch", second, "mean")], { focus: { line: second, column: "mean" } });
+    await flushPromises();
+    expect(shownTip()?.textContent).toContain("digitized_mismatch");
+  });
+
+  it("lists at most five problems of a cell, errors first, and counts the others", async () => {
+    const issues = [
+      ...Array.from({ length: 6 }, (_, index) => problem(`warning_${index}`, second, "mean")),
+      problem("missing_value", second, "mean", { severity: "error" }),
+    ];
+    const wrapper = mountTips(issues);
+    await hover(cellAt(wrapper, second, MEAN));
+    const tip = shownTip()!;
+    expect([...tip.querySelectorAll(".problem-tip-code")].map((code) => code.textContent)).toEqual([
+      "missing_value",
+      "warning_0",
+      "warning_1",
+      "warning_2",
+      "warning_3",
+    ]);
+    expect(tip.querySelector(".problem-tip-more")?.textContent).toBe("and 2 more");
+  });
+
+  it("has one tooltip for all cells, which moves from cell to cell, and none without problems", async () => {
+    const table = large(2000);
+    const issues = table.rows.map(
+      (row): ValidationIssue => ({
+        code: "digitized_mismatch",
+        severity: "warning",
+        message: `Mismatch of line ${row.line}.`,
+        source: { file: table.file, row: row.line, header: "mean" },
+      }),
+    );
+    const wrapper = mount(TableGrid, { props: { table, issueCells: issueCells(issues, table.file) }, attachTo: document.body });
+    expect(wrapper.findAllComponents(VTooltip)).toHaveLength(1);
+    const cells = wrapper.findAll("tbody td.grid-cell--warning");
+    expect(cells.length).toBeGreaterThan(10);
+    expect(cells.length).toBeLessThan(100);
+    await hover(cells[0]!.element);
+    expect(shownTip()?.textContent).toContain(`Mismatch of line ${table.rows[0]!.line}.`);
+    cells[1]!.element.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: cells[0]!.element }));
+    vi.advanceTimersByTime(TIP_LINGER);
+    await flushPromises();
+    expect(shownTip()?.textContent).toContain(`Mismatch of line ${table.rows[1]!.line}.`);
+    expect(document.querySelectorAll(".problem-tooltip")).toHaveLength(1);
+    expect(mount(TableGrid, { props: { table: small } }).findAllComponents(VTooltip)).toHaveLength(0);
+  });
+
+  it("hides the tooltip on Escape until the pointer left its cell, when the rows scroll, and when its cell loses its problems", async () => {
+    const wrapper = mountTips([problem("digitized_mismatch", second, "mean")]);
+    const cell = cellAt(wrapper, second, MEAN);
+    await hover(cell);
+    expect(shownTip()).not.toBeNull();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+    await hover(cell);
+    expect(shownTip()).toBeNull();
+    cell.dispatchEvent(new MouseEvent("mouseout", { bubbles: true, relatedTarget: document.body }));
+
+    await hover(cell);
+    expect(shownTip()).not.toBeNull();
+    region(wrapper).dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+
+    await hover(cell);
+    expect(shownTip()).not.toBeNull();
+    await wrapper.setProps({ issueCells: new Map() });
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+  });
+
+  it("renders the rows once, not again when the tooltip shows, moves or hides", async () => {
+    let renders = 0;
+    const issues = [problem("digitized_mismatch", second, "mean"), problem("unknown_term", third, "label")];
+    const wrapper = mount(TableGrid, {
+      props: { table: small, issueCells: issueCells(issues, small.file) },
+      // Each render of the grid renders the line cell of each row.
+      slots: {
+        line: ({ line }: { line: number }) => {
+          renders++;
+          return String(line);
+        },
+      },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    renders = 0;
+    const [mean, label] = [cellAt(wrapper, second, MEAN), cellAt(wrapper, third, HEADER.indexOf("label"))];
+    await hover(mean);
+    expect(shownTip()?.textContent).toContain("digitized_mismatch");
+    label.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: mean }));
+    vi.advanceTimersByTime(TIP_LINGER);
+    await flushPromises();
+    expect(shownTip()?.textContent).toContain("unknown_term");
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+    expect(renders).toBe(0);
+  });
+
+  it("keeps the problems in a hiding tooltip, which fades out", async () => {
+    const wrapper = mountTips([problem("digitized_mismatch", second, "mean")]);
+    await hover(cellAt(wrapper, second, MEAN));
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+    expect(document.querySelector(".problem-tooltip .problem-tip-code")?.textContent).toBe("digitized_mismatch");
+  });
+
+  it("hides a tooltip of the focus whose cell scrolls out of the rendered rows", async () => {
+    focusRing(true);
+    const table = large();
+    const issues: ValidationIssue[] = [
+      { code: "digitized_mismatch", severity: "warning", message: "Far down.", source: { file: table.file, row: 4001, header: "mean" } },
+    ];
+    const wrapper = mount(TableGrid, {
+      props: { table, issueCells: issueCells(issues, table.file), focus: { line: 4001, column: "mean" } },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    expect(shownTip()?.textContent).toContain("Far down.");
+    const element = region(wrapper);
+    element.scrollTop = 0;
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    expect(lines(wrapper)).not.toContain("4001");
+    expect(shownTip()).toBeNull();
   });
 });

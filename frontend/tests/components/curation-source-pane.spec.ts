@@ -154,6 +154,41 @@ describe("problems of the source", () => {
     expect(details().open).toBe(true);
     study.close();
   });
+
+  it("gives the plot of a figure the problems of the files of its source", async () => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const mismatch: Problem = {
+      code: "digitized_mismatch",
+      severity: "warning",
+      message: "mean 1.2 lies 12 pixels from its point.",
+      source: { file: "timecourses_Fig1.tsv", row: 3, header: "mean" },
+      acknowledgeable: true,
+    };
+    serveApi({ "GET /local/state": snapshot(), [`GET ${EXAMPLE}`]: studyDetail({ problems: [mismatch] }) });
+    const study = useStudyStore();
+    await study.open("caffeine", "Example");
+    const figure: SourceView = {
+      ...view,
+      source: "Fig1",
+      image: "Example_Fig1.png",
+      image_url: `${EXAMPLE}/files/Example_Fig1.png`,
+      raw_grid: null,
+      mapped: [
+        { file: "timecourses_Fig1.tsv", kind: "timecourses", header: ["label", "time", "mean"], rows: [[3, ["D75", "0.5", "1.2"]]], shared: false },
+      ],
+      points: [
+        { series: "D75", kind: "timecourses", file: "timecourses_Fig1.tsv", line: 3, x: 0.5, y: 1.2, error_bar: null, x_text: "0.5", y_text: "1.2" },
+      ],
+      series: [{ name: "D75", color: "#d65a24", dark_color: "#d95926", x_label: "time (h)", y_label: "c (mg/l)" }],
+    };
+    const wrapper = mount(SourcePane, {
+      props: { summary: sourceSummary({ source: "Fig1", kind: "figure", image: "Example_Fig1.png" }), view: figure, loading: false, error: null, selected: null },
+      global: { plugins: [pinia], stubs: { SourceOverlay: true } },
+    });
+    expect(wrapper.findComponent({ name: "SourceOverlay" }).props("problems")).toEqual([mismatch]);
+    study.close();
+  });
 });
 
 describe("scrolling", () => {

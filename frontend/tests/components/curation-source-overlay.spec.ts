@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach } from "vitest";
-import type { SourceView } from "../../src/curation-app/api/types";
+import type { SourceView, ValidationIssue } from "../../src/curation-app/api/types";
 import type SourceOverlayComponent from "../../src/curation-app/components/SourceOverlay.vue";
 import type { OverlayTrace } from "../../src/curation-app/overlay";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
@@ -359,5 +359,46 @@ describe("SourceOverlay", () => {
     await flushPromises();
     wrapper.unmount();
     expect(engine.purge).toHaveBeenCalledTimes(1);
+  });
+
+  it("rings the points of rows with problems in plot mode, keys the rings and lists the problems in the data table", async () => {
+    const problems: ValidationIssue[] = [
+      {
+        code: "digitized_mismatch",
+        severity: "warning",
+        message: "mean 1.2 lies 12 pixels from its point.",
+        source: { file: "timecourses_Fig1.tsv", row: 3, header: "mean" },
+      },
+    ];
+    const wrapper = mount(SourceOverlay, { props: { view, mode: "plot", problems } });
+    await flushPromises();
+    const [, traces] = engine.react.mock.calls[0]!;
+    expect((traces as OverlayTrace[]).map((entry) => entry.meta)).toEqual(["plot caf_plasma_D75", "problem warning"]);
+    expect((traces as OverlayTrace[])[0]!.customdata?.[0]?.[6]).toContain("digitized_mismatch");
+    expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with a warning");
+    // The key is hidden from screen readers, which read the rows with problems in the name of the plot.
+    expect(wrapper.get(".overlay-key--problems").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
+      "Plot of 1 mapped row of Fig1 of the series caf_plasma_D75, 1 row with problems",
+    );
+    // The key draws the dashed ring of a warning.
+    expect(wrapper.get(".overlay-key--problems circle").attributes("stroke-dasharray")).toBeTruthy();
+    expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text()).at(-1)).toBe("Problems");
+    expect(wrapper.get(".overlay-data tbody .overlay-problems").text()).toBe(
+      "Warning digitized_mismatch: mean 1.2 lies 12 pixels from its point.",
+    );
+  });
+
+  it("draws no rings, key or Problems column on the overlay of the image", async () => {
+    const problems: ValidationIssue[] = [
+      { code: "digitized_mismatch", severity: "warning", message: "Off.", source: { file: "timecourses_Fig1.tsv", row: 2 } },
+    ];
+    const wrapper = mount(SourceOverlay, { props: { view, problems } });
+    await flushPromises();
+    const [, traces] = engine.react.mock.calls[0]!;
+    expect((traces as OverlayTrace[]).some((entry) => entry.meta.startsWith("problem"))).toBe(false);
+    expect(wrapper.find(".overlay-key--problems").exists()).toBe(false);
+    expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text())).not.toContain("Problems");
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).not.toContain("with problems");
   });
 });
