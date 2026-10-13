@@ -12,7 +12,7 @@ field of its type.
 """
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from decimal import Decimal
 from itertools import combinations
 from typing import TYPE_CHECKING
@@ -24,6 +24,10 @@ if TYPE_CHECKING:
 
 # Reported statistics of one family agree when they differ by at most this share.
 RELATIVE_TOLERANCE = 0.02
+# How a message names the count that a record gives itself.
+ROW_COUNT = "this row"
+# The whole counts that a message offers as the count with which two values agree.
+AGREEING_COUNTS = range(2, 10_001)
 
 
 def _is(value):
@@ -192,8 +196,9 @@ def _half_percent(fraction: float) -> float:
     return _half_unit(fraction * 100) / 100
 
 
-def _text(value: float, digits: int = 15) -> str:
-    return f"{float(f'{value:.{digits}g}'):.15g}"
+def _text(value: float) -> str:
+    """A number of a message, with 4 significant digits."""
+    return f"{float(f'{value:.4g}'):.15g}"
 
 
 @dataclass(frozen=True)
@@ -205,6 +210,8 @@ class _Implied:
     uncertainty: float
     reported: float
     label: str
+    # Whether the value needs the count: se and an error bar of type se.
+    needs_count: bool = False
 
 
 def _sigma_log_uncertainty(gcv: float) -> float:
@@ -224,20 +231,25 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
     sd, se, cv, mean = statistics.sd, statistics.se, statistics.cv, statistics.mean
     gsd, gcv, gmean = statistics.gsd, statistics.gcv, statistics.gmean
 
-    def add(field, family, value, uncertainty, reported, label=None):
+    def add(field, family, value, uncertainty, reported, label=None, needs_count=False):
         if math.isfinite(value) and math.isfinite(uncertainty):
             shown = (
                 _text(reported * 100) + "%" if field in _PERCENT else _text(reported)
             )
             implied[field] = _Implied(
-                family, value, uncertainty, reported, label or f"{field} {shown}"
+                family,
+                value,
+                uncertainty,
+                reported,
+                label or f"{field} {shown}",
+                needs_count,
             )
 
     if sd is not None:
         add("sd", "arithmetic", sd, _half_unit(sd), sd)
     if se is not None and count is not None:
         root = math.sqrt(count)
-        add("se", "arithmetic", se * root, _half_unit(se) * root, se)
+        add("se", "arithmetic", se * root, _half_unit(se) * root, se, needs_count=True)
     if cv is not None and mean:
         add(
             "cv",
@@ -268,7 +280,15 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
     elif mean is not None and (error_type == "sd" or count is not None):
         root = math.sqrt(count) if error_type == "se" and count is not None else 1.0
         uncertainty = (_half_unit(error_bar) + _half_unit(mean)) * root
-        add("error_bar", "arithmetic", derived * root, uncertainty, error_bar, label)
+        add(
+            "error_bar",
+            "arithmetic",
+            derived * root,
+            uncertainty,
+            error_bar,
+            label,
+            needs_count=error_type == "se",
+        )
     return implied
 
 
@@ -280,6 +300,42 @@ def _disagree(left: _Implied, right: _Implied) -> bool:
     return difference > max(
         RELATIVE_TOLERANCE * larger, left.uncertainty + right.uncertainty
     )
+
+
+def _within_rounding(left: _Implied, right: _Implied) -> bool:
+    """Whether two implied spreads agree within the rounding of their digits."""
+    return abs(left.value - right.value) <= left.uncertainty + right.uncertainty
+
+
+def _agreeing_count(left: _Implied, right: _Implied, count: int | None) -> int | None:
+    """The whole count other than `count` with which a pair of spreads agrees, or None.
+
+    Only a pair of one value that needs the count (se, an error bar of type se)
+    and one that does not has such a count: n = (sd / se)^2, with the distance
+    of an error bar from the mean as its se. The whole number nearest to n
+    counts when it lies in AGREEING_COUNTS, differs from `count` and makes the
+    two values agree within the rounding of their reported digits, as values
+    derived from each other with that count do. The 2 percent of
+    RELATIVE_TOLERANCE would admit a whole count for every n above 12.5.
+    """
+    if count is None or left.needs_count == right.needs_count:
+        return None
+    scaled, fixed = (left, right) if left.needs_count else (right, left)
+    if scaled.value == 0:
+        return None
+    ratio = fixed.value / scaled.value
+    # A product, not a power: a huge ratio gives inf instead of an OverflowError.
+    exact = count * ratio * ratio
+    if not math.isfinite(exact):
+        return None
+    whole = round(exact)
+    if whole == count or whole not in AGREEING_COUNTS:
+        return None
+    factor = math.sqrt(whole / count)
+    candidate = replace(
+        scaled, value=scaled.value * factor, uncertainty=scaled.uncertainty * factor
+    )
+    return whole if _within_rounding(fixed, candidate) else None
 
 
 @dataclass(frozen=True)
@@ -299,6 +355,12 @@ class Inconsistency:
     # The field that disagrees with the most others, where the warning is placed.
     field: str
     message: str
+    # The count that se and an error bar of type se were checked with (None
+    # without one), and where it comes from: the subjects or ROW_COUNT.
+    count: int | None
+    count_source: str | None
+    # The whole count with which the first disagreeing pair that has one agrees.
+    agreeing_count: int | None
 
     @property
     def context(self) -> dict:
@@ -307,11 +369,14 @@ class Inconsistency:
             "implied_sd": self.implied_sd,
             "implied_sigma_log": self.implied_sigma_log,
             "disagreeing": [list(pair) for pair in self.disagreeing],
+            "count": self.count,
+            "count_source": self.count_source,
+            "agreeing_count": self.agreeing_count,
         }
 
 
 def inconsistent_statistics(
-    statistics: Statistics, count: int | None = None
+    statistics: Statistics, count: int | None = None, count_source: str | None = None
 ) -> Inconsistency | None:
     """Reported statistics of a record that contradict each other, or None.
 
@@ -323,8 +388,14 @@ def inconsistent_statistics(
     their rounding uncertainties: half a unit of the last decimal place of each
     reported value, propagated through the conversion. The families are never
     compared with each other.
+
+    The count of the record comes before `count`. `count_source` names where
+    the used count comes from, as the message shows it: the subjects, for
+    example "enalapril", or ROW_COUNT for a count of the record itself.
     """
-    implied = _implied_spreads(statistics, _effective_count(statistics, count))
+    used = _effective_count(statistics, count)
+    source = count_source if used is not None else None
+    implied = _implied_spreads(statistics, used)
     fields = sorted(implied, key=_ORDER.index)
     pairs = [
         (left, right)
@@ -338,6 +409,10 @@ def inconsistent_statistics(
     most = max(disagreements.values())
     tied = [field for field in fields if disagreements[field] == most]
     outlier = "error_bar" if "error_bar" in tied else tied[0]
+    with_count = f" with count {used}" + (f" of {source}" if source else "")
+    agreeing = [
+        _agreeing_count(implied[left], implied[right], used) for left, right in pairs
+    ]
 
     def claim(field: str) -> str:
         # Geometric spreads read as the geometric SD they imply.
@@ -346,8 +421,13 @@ def inconsistent_statistics(
         if field == spread:
             return f"{spread} is {_text(implied[field].reported)}"
         value = implied[field].value
-        shown = _text(math.exp(value) if geometric else value, 4)
-        return f"{implied[field].label} implies {spread} {shown}"
+        shown = _text(math.exp(value) if geometric else value)
+        counted = with_count if implied[field].needs_count else ""
+        return f"{implied[field].label}{counted} implies {spread} {shown}"
+
+    def sentence(left: str, right: str, whole: int | None) -> str:
+        text = f"{claim(left)}, but {claim(right)}"
+        return text if whole is None else f"{text}; they agree with count {whole}"
 
     def values(family: str) -> dict[str, float]:
         return {
@@ -363,6 +443,10 @@ def inconsistent_statistics(
         disagreeing=pairs,
         field=outlier,
         message="; ".join(
-            f"{claim(left)}, but {claim(right)}" for left, right in pairs
+            sentence(left, right, whole)
+            for (left, right), whole in zip(pairs, agreeing, strict=True)
         ),
+        count=used,
+        count_source=source,
+        agreeing_count=next((whole for whole in agreeing if whole is not None), None),
     )
