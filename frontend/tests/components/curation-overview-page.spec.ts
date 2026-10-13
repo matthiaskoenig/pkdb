@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
-import { VSelect } from "vuetify/components";
+import { VSelect, VTooltip } from "vuetify/components";
 import { ApiError } from "../../src/curation-app/api/client";
 import type { Job, Profile, Snapshot, SyncStatus } from "../../src/curation-app/api/types";
 import type { Router } from "vue-router";
@@ -10,7 +10,8 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
-import { OVERSCAN, ROW_HEIGHT, rowItem } from "../../src/curation-app/studyTable";
+import StudyTable from "../../src/curation-app/components/StudyTable.vue";
+import { OVERSCAN, ROW_HEIGHT, rowItem, studyRoute } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -18,7 +19,8 @@ import { button, click, field, focusDialog, page, serve, setViewport } from "./c
 
 vi.mock("../../src/curation-app/studyTable", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../src/curation-app/studyTable")>();
-  return { ...actual, rowItem: vi.fn(actual.rowItem) };
+  // Every render of a study row with a link calls studyRoute once.
+  return { ...actual, rowItem: vi.fn(actual.rowItem), studyRoute: vi.fn(actual.studyRoute) };
 });
 
 const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
@@ -165,13 +167,23 @@ function unknownJob(changes: Partial<Job> = {}): Job {
   };
 }
 
-/** The tooltip that is open; tooltips are not eager, and one that closed stays in the page. */
+/** The tooltip of the study table while it shows; it is not eager, and once it hid it stays in the page. */
 function openTooltip() {
-  return page().find(".v-tooltip.v-overlay--active");
+  return page().find(".v-overlay--active .study-tooltip");
 }
 
-/** The wait for a tooltip of an identity, which opens 300 ms after the pointer enters it, also under load. */
+/** The wait for the tooltip of an identity, which shows 300 ms after the pointer rests on it, also under load. */
 const TOOLTIP_WAIT = { timeout: 3000 };
+
+/** The pointer moves onto `element` from `from`. */
+function pointTo(element: { element: Element }, from: Element = document.body): void {
+  element.element.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: from }));
+}
+
+/** The pointer leaves `element` for `to`. */
+function pointAway(element: { element: Element }, to: Element = document.body): void {
+  element.element.dispatchEvent(new MouseEvent("mouseout", { bubbles: true, relatedTarget: to }));
+}
 
 /** The calls of `rowItem` for studies; the rows that size the columns (StudyTable.vue) have no identity. */
 function studyItemCalls() {
@@ -380,13 +392,13 @@ describe("OverviewPage", () => {
     expect(link.text()).toBe("caffeine/Harder1988");
     // One tooltip: the identity has no native one besides it.
     expect(link.attributes("title")).toBeUndefined();
-    await link.trigger("mouseenter");
+    pointTo(link);
     await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"), TOOLTIP_WAIT);
-    await link.trigger("mouseleave");
+    pointAway(link);
     await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
     const duplicate = rowOf("caffeine/Example").get("span.study-identity");
     expect(duplicate.attributes("title")).toBeUndefined();
-    await duplicate.trigger("mouseenter");
+    pointTo(duplicate);
     await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"), TOOLTIP_WAIT);
   });
 
@@ -786,6 +798,55 @@ describe("OverviewPage", () => {
     }
   });
 
+  it("has one tooltip for the identities of 1,000 studies, and showing, moving or hiding it renders no study row", async () => {
+    setViewport(1280, 400);
+    const wrapper = await mountPage(snapshot({ studies: manyStudies() }));
+    expect(wrapper.findComponent(StudyTable).findAllComponents(VTooltip)).toHaveLength(1);
+    // The rows rendered, each with its link.
+    expect(vi.mocked(studyRoute).mock.calls.length).toBeGreaterThanOrEqual(windowRows(400));
+    vi.mocked(studyRoute).mockClear();
+    const [first, second] = rows().map((row) => row.get(".study-identity"));
+    pointTo(first!);
+    await vi.waitFor(() => expect(openTooltip().text()).toBe(first!.text()), TOOLTIP_WAIT);
+    // The pointer moves to the identity below: the tooltip moves with it.
+    pointAway(first!, second!.element);
+    pointTo(second!, first!.element);
+    expect(second!.text()).not.toBe(first!.text());
+    await vi.waitFor(() => expect(openTooltip().text()).toBe(second!.text()), TOOLTIP_WAIT);
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
+    expect(studyRoute).not.toHaveBeenCalled();
+  });
+
+  it("shows the tooltip of an identity that the keyboard focuses, not of one that a click focuses, and hides it on scroll only for the pointer", async () => {
+    const matches = Element.prototype.matches;
+    let ring = true;
+    vi.spyOn(Element.prototype, "matches").mockImplementation(function (this: Element, selector: string): boolean {
+      return selector === ":focus-visible" ? ring && this === document.activeElement : matches.call(this, selector);
+    });
+    await mountPage(snapshot({ studies: [example, harder] }));
+    const link = rowOf("caffeine/Harder1988").get<HTMLAnchorElement>("a.study-identity");
+    link.element.focus();
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"), TOOLTIP_WAIT);
+    // The tooltip of the focus follows its identity when the page scrolls.
+    document.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    expect(openTooltip().exists()).toBe(true);
+    link.element.blur();
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
+
+    ring = false;
+    rowOf("caffeine/Example").get<HTMLAnchorElement>("a.study-identity").element.focus();
+    await afterTask();
+    expect(openTooltip().exists()).toBe(false);
+
+    // A tooltip of the pointer hides when the page scrolls.
+    pointTo(link);
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"), TOOLTIP_WAIT);
+    document.dispatchEvent(new Event("scroll"));
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
+  });
+
   it("builds the items of the rendered rows only when a poll brings 1,000 new rows", async () => {
     setViewport(1280, 400);
     await mountPage(snapshot({ studies: manyStudies() }));
@@ -988,15 +1049,15 @@ describe("OverviewPage", () => {
     expect(identities()).toEqual(["caffeine/Example", "codeine/Pair2002"]);
 
     // The tooltip of the identity names the other substance folders below it.
-    await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseenter");
-    await vi.waitFor(() => expect(openTooltip().find(".study-substances-more").text()).toBe("+ caffeine"), TOOLTIP_WAIT);
+    pointTo(rowOf("codeine/Pair2002").get(".study-identity"));
+    await vi.waitFor(() => expect(openTooltip().find(".study-tooltip-more").text()).toBe("+ caffeine"), TOOLTIP_WAIT);
     expect(openTooltip().text()).toMatch(/^codeine\/Pair2002\s*\+ caffeine$/);
-    await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseleave");
+    pointAway(rowOf("codeine/Pair2002").get(".study-identity"));
     await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
     // A study that names none has the identity alone.
-    await rowOf("caffeine/Example").get(".study-identity").trigger("mouseenter");
+    pointTo(rowOf("caffeine/Example").get(".study-identity"));
     await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"), TOOLTIP_WAIT);
-    expect(openTooltip().find(".study-substances-more").exists()).toBe(false);
+    expect(openTooltip().find(".study-tooltip-more").exists()).toBe(false);
   });
 
   it("filters by curator, with the user of the app first", async () => {

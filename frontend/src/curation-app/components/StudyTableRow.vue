@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { RouterLink, useRouter } from "vue-router";
-import { VAvatar, VBtn, VCheckboxBtn, VChip, VTooltip } from "vuetify/components";
+import { useRouter } from "vue-router";
+import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
 import { formatTime, MODE_LABELS, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
 import { aiTitle, studyRoute, type RowItem } from "../studyTable";
 
@@ -61,21 +61,13 @@ function open(event: MouseEvent): void {
     <td class="cell-study">
       <div v-if="!sizer" class="study-row-line">
         <!-- The study keeps one line: the title after the identity is cut with an ellipsis first, the
-             identity only when it alone is wider than its cell, as with a large font; its tooltip
-             and the name of its link keep it whole. The tooltip also names the other substance
-             folders that the tables of the study name; it is not eager. -->
-        <component
-          :is="item.row.duplicate ? 'span' : RouterLink"
-          v-bind="item.row.duplicate ? {} : { to: studyRoute(item.row) }"
-          class="study-identity"
-          >{{ identity
-          }}<VTooltip activator="parent" location="top" :eager="false" open-delay="300"
-            ><div>{{ identity }}</div>
-            <div v-if="item.alsoNamed.length" class="study-substances-more">
-              + {{ item.alsoNamed.join(", ") }}
-            </div></VTooltip
-          ></component
-        >
+             identity only when it alone is wider than its cell, as with a large font; the name of
+             its link and the one tooltip of the table (StudyTable.vue), which also names the other
+             substance folders that the tables of the study name, keep it whole. -->
+        <span v-if="item.row.duplicate" class="study-identity" :data-tip="item.row.path">{{ identity }}</span>
+        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity" :data-tip="item.row.path">{{
+          identity
+        }}</RouterLink>
         <VChip
           v-if="item.row.duplicate"
           size="x-small"
@@ -244,10 +236,6 @@ a.study-identity {
 }
 a.study-identity:hover {
   text-decoration: underline;
-}
-/* The other substance folders, muted below the identity in its tooltip. */
-.study-substances-more {
-  opacity: 0.8;
 }
 .study-path,
 .study-row-title {
