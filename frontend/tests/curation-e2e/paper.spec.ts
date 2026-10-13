@@ -100,26 +100,31 @@ test("a PDF opens in a tab of its own without the app bar", async ({ app, page }
   await expect(page).toHaveTitle("Demo2020.pdf · caffeine/Demo2020 · PK-DB");
 });
 
+/** How many animation frames `sampleTops` records. */
+const FRAMES = 12;
+
 /**
- * Record the top of `selector` in each animation frame of the next 400 ms, from the frame that
- * shows it; `window.__tops` holds them.
+ * Record the top of `selector` in each of the next FRAMES animation frames that show it;
+ * `window.__tops` holds them. A count of frames, not a time, as a busy runner draws few frames.
  */
 async function sampleTops(page: Page, selector: string): Promise<void> {
-  await page.evaluate((target) => {
-    window.__tops = [];
-    const start = performance.now();
-    const sample = (): void => {
-      const element = document.querySelector(target);
-      if (element) window.__tops.push(Math.round(element.getBoundingClientRect().top));
-      if (performance.now() - start < 400) requestAnimationFrame(sample);
-    };
-    requestAnimationFrame(sample);
-  }, selector);
+  await page.evaluate(
+    ({ target, frames }) => {
+      window.__tops = [];
+      const sample = (): void => {
+        const element = document.querySelector(target);
+        if (element) window.__tops.push(Math.round(element.getBoundingClientRect().top));
+        if (window.__tops.length < frames) requestAnimationFrame(sample);
+      };
+      requestAnimationFrame(sample);
+    },
+    { target: selector, frames: FRAMES },
+  );
 }
 
-/** The tops that `sampleTops` recorded, once its 400 ms are over. */
+/** The tops that `sampleTops` recorded, once it has all of them. */
 async function sampledTops(page: Page): Promise<number[]> {
-  await page.waitForTimeout(500);
+  await expect.poll(() => page.evaluate(() => window.__tops.length), { timeout: 10_000 }).toBe(FRAMES);
   return page.evaluate(() => window.__tops);
 }
 
@@ -133,14 +138,12 @@ test("the pages of the app stand still when the app bar comes and goes between t
   await sampleTops(page, ".study-header");
   await page.getByRole("link", { name: "caffeine/Demo2020" }).click();
   const study = await sampledTops(page);
-  expect(study.length).toBeGreaterThan(5);
   expect(new Set(study)).toEqual(new Set([study.at(-1)]));
   expect(study.at(-1)).toBeGreaterThanOrEqual(36);
   // Back in the history to the tab: its head is at the top from the first frame on.
   await sampleTops(page, ".paper-page-head");
   await page.goBack();
   const tab = await sampledTops(page);
-  expect(tab.length).toBeGreaterThan(5);
   expect(new Set(tab)).toEqual(new Set([0]));
 });
 

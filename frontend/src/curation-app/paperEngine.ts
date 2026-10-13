@@ -51,15 +51,45 @@ function quietAbort(event: Event & { reason?: unknown }): void {
   if (isAbort(event.reason)) event.preventDefault();
 }
 
+/**
+ * The errors that the viewer of PDF.js 6.4.299 logs for a page that it still loads when its PDF
+ * closes, by their label and the message of their reason: the page fails with "Transport
+ * destroyed", and the viewer then draws the page view without its page.
+ */
+const CLOSING_ERRORS = new Map([
+  ["Unable to get page for page view", "Transport destroyed"],
+  ["renderView:", "pdfPage is not loaded"],
+]);
+
+/** `console.error` of the page, while `quietConsole` stands in for it. */
+let logError: typeof console.error = console.error;
+
+/** `console.error`, which leaves out the errors of a page that was loading as its PDF closed. */
+function quietConsole(...data: unknown[]): void {
+  const [label, reason] = data;
+  if (typeof label === "string" && reason instanceof Error && CLOSING_ERRORS.get(label) === reason.message) return;
+  logError(...data);
+}
+
 /** How many PDFs are being destroyed. */
 let destroying = 0;
 
-/** `destroyed`, during which and one task after which a cancelled request is not reported. */
+/**
+ * `destroyed`, during which and one task after which a cancelled request is not reported and the
+ * errors of a page that was loading are not logged.
+ */
 function quietWhile(destroyed: Promise<void>): Promise<void> {
-  if (destroying++ === 0) window.addEventListener("unhandledrejection", quietAbort);
+  if (destroying++ === 0) {
+    window.addEventListener("unhandledrejection", quietAbort);
+    logError = console.error;
+    console.error = quietConsole;
+  }
   return destroyed.finally(() =>
     setTimeout(() => {
-      if (--destroying === 0) window.removeEventListener("unhandledrejection", quietAbort);
+      if (--destroying === 0) {
+        window.removeEventListener("unhandledrejection", quietAbort);
+        console.error = logError;
+      }
     }, 0),
   );
 }
