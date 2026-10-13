@@ -106,7 +106,7 @@ const shownRows = computed(() =>
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
-/** Whether the line cell of the header row shows 0, the line of the header of a table. */
+/** Whether the line cell of the header row shows `HEADER_LINE`, the line of the header of a table. */
 const numberedHeader = computed(() => props.headerLine && !raw.value);
 
 const marked = computed(
@@ -300,9 +300,9 @@ function lineClass(line: number): Record<string, boolean> {
   };
 }
 
-/** The problems of the header of a table, at its line 0; a raw table has no header line. */
+/** The problems of the header of a table, at its line 0; a raw table and a grid of other rows have no header line. */
 function headerNote(index: number): Note | undefined {
-  return raw.value ? undefined : notes.value.get(`${HEADER_LINE}:${index}`);
+  return numberedHeader.value ? notes.value.get(`${HEADER_LINE}:${index}`) : undefined;
 }
 
 /** The classes of a header cell; the index -1 is the header of the line column. */
@@ -351,16 +351,16 @@ function lineTip(line: number): string | undefined {
   return lineProblems.value.has(line) ? lineTipKey(line) : undefined;
 }
 
-/** The `data-tip` of a header cell; a raw table has no header line. */
+/** The `data-tip` of a header cell; a raw table and a grid of other rows have no header line. */
 function headerTip(index: number): string | undefined {
-  return raw.value ? undefined : tipOf(HEADER_LINE, index);
+  return numberedHeader.value ? tipOf(HEADER_LINE, index) : undefined;
 }
 
 /**
  * The `data-tip` of the Line header while the header has problems: the header has no other
  * focusable element, so the Line header is then its one Tab stop.
  */
-const headerLineTip = computed(() => (raw.value ? undefined : lineTip(HEADER_LINE)));
+const headerLineTip = computed(() => (numberedHeader.value ? lineTip(HEADER_LINE) : undefined));
 
 /** The id of the hidden text with every problem of `line`, which describes its line button or the Line header. */
 function lineNoteId(line: number): string {
@@ -546,7 +546,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :tabindex="headerLineTip ? 0 : undefined"
               :aria-describedby="headerLineTip ? lineNoteId(HEADER_LINE) : undefined"
             >
-              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> 0</template>
+              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> {{ HEADER_LINE }}</template>
               <template v-else>{{ lineHeader }}</template>
             </th>
             <th
