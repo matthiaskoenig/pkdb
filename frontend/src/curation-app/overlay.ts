@@ -10,6 +10,7 @@
  */
 import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "./api/types";
 import { SEVERITY_LABELS, tipProblems } from "./problems";
+import { CAUTION_COLORS } from "./themes";
 import { plotColors, type PlotColors } from "../features/plots/theme";
 
 /**
@@ -387,13 +388,14 @@ export function overlayTraces(
 
 /**
  * The colors of the ring around a plotted point whose row has a problem, as the grid outlines the
- * cell of a problem: the error color of the theme and the amber of a warning, each with at least
- * 3:1 on the surface of its theme (#ffffff and #192b31). Change them together with `--grid-amber`
- * in TableGrid.vue and the `error` colors of the themes in plugins/vuetify.ts.
+ * cell of a problem: the error color of the theme and the amber `caution` of the app
+ * (`CAUTION_COLORS` in themes.ts), each with at least 3:1 on the surface of its theme (#ffffff and
+ * #192b31). Plotly draws the rings outside of Vuetify, so the error colors repeat the `error`
+ * colors of the themes in plugins/vuetify.ts; change them together.
  */
 export const PROBLEM_COLORS: Record<"light" | "dark", Record<ValidationIssue["severity"], string>> = {
-  light: { error: "#b3261e", warning: "#8f5300" },
-  dark: { error: "#f28b82", warning: "#ffb547" },
+  light: { error: "#b3261e", warning: CAUTION_COLORS.light.caution },
+  dark: { error: "#f28b82", warning: CAUTION_COLORS.dark.caution },
 };
 
 /** The key of a row of a table: `<file>:<line>`. */
