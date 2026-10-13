@@ -1,0 +1,25 @@
+{
+  "request": {
+    "action": "open",
+    "file": "timecourses_Fig1.tsv",
+    "cell": "O6"
+  },
+  "opened": {
+    "ok": true,
+    "workbook_action": "created",
+    "changes": [],
+    "conflicts": [],
+    "issues": [],
+    "opened": true,
+    "notice": null
+  },
+  "already_open": {
+    "ok": true,
+    "workbook_action": "unchanged",
+    "changes": [],
+    "conflicts": [],
+    "issues": [],
+    "opened": true,
+    "notice": "The workbook is already open. Go to sheet timecourses_Fig1, cell O6."
+  }
+}

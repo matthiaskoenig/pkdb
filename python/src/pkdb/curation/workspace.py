@@ -11,6 +11,7 @@ import os
 import sys
 import time
 from collections import Counter
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
@@ -24,6 +25,7 @@ from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat import is_v2_folder
+from pkdb.studyformat.revision import folder_lock
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.workbook.base import workbook_path
@@ -52,6 +54,15 @@ def folder_kind(path):
     except OSError:
         pass
     return "folder"
+
+
+def _digest(folder: Path) -> str | None:
+    """The fingerprint of the source files of a folder as a scan computes it; None when
+    they cannot be read."""
+    try:
+        return fingerprint(source_hashes(folder))
+    except OSError, StudyValidationError:
+        return None
 
 
 class WorkspaceMixin(EngineState):
@@ -399,6 +410,27 @@ class WorkspaceMixin(EngineState):
         else:
             status = "in_sync"
         return {"status": status, "changes": changes, "conflicts": conflicts}
+
+    def _unwatched_write[T](self, folder: Path, write: Callable[[], T]) -> T:
+        """`write()` under the folder lock, with what it changes taken as seen by the watcher.
+
+        For a write that changes no content that a job reads, such as the view of the
+        workbook: the row of the folder takes the fingerprint after the write when it had
+        the one before it, so the next scan finds nothing to validate or upload. A row with
+        changes that no scan has seen yet keeps them. Scans hold the scan lock and never a
+        folder lock, so it is taken first: no scan sees the write before the row has it.
+        """
+        with self.scan_lock:
+            with folder_lock(folder):
+                before = _digest(folder)
+                result = write()
+                after = _digest(folder)
+            if before is not None and after is not None and after != before:
+                with self.lock:
+                    for row in self.studies.values():
+                        if row["_folder"] == folder and row["_fingerprint"] == before:
+                            row["_fingerprint"] = after
+        return result
 
     def _watch(self):
         while not self.stop.wait(1):

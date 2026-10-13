@@ -109,6 +109,24 @@ def test_tables_contract(workspace, engine_on):
     )
 
 
+def test_open_tables_contract(workspace, engine_on, monkeypatch):
+    """Open tables at a cell of Demo2020: opened there, then named while the workbook is open."""
+    engine = engine_on(workspace)
+    monkeypatch.setattr(studies, "open_path", lambda path, **kwargs: None)
+    place = {"action": "open", "file": "timecourses_Fig1.tsv", "cell": "O6"}
+    opened = engine.tables_action(DEMO, place)
+    (workspace / DEMO / ".~lock.Demo2020.xlsx#").write_text("curator", encoding="utf-8")
+    already_open = engine.tables_action(DEMO, place)
+    assert opened["opened"] and opened["notice"] is None
+    assert already_open["notice"] == (
+        "The workbook is already open. Go to sheet timecourses_Fig1, cell O6."
+    )
+    check_contract(
+        "open-tables",
+        {"request": place, "opened": opened, "already_open": already_open},
+    )
+
+
 TABLE_PREVIEWS = [
     {"kind": "outputs", "source": "Tab3"},
     {"kind": "timecourses", "source": "Text"},

@@ -38,7 +38,7 @@ from pkdb.studyformat.layout import Layout, scan_folder, workbook_tables
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
-from pkdb.studyformat.raw import raw_lines
+from pkdb.studyformat.raw import parse_raw_file, raw_lines
 from pkdb.studyformat.review_edit import (
     ANY,
     AmbiguousWarning,
@@ -73,11 +73,19 @@ from pkdb.studyformat.tables import (
     REVIEW_JSON,
     STUDY_JSON,
     TABLES,
+    parse_table_file,
 )
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
-from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.base import open_lock, workbook_path
+from pkdb.studyformat.workbook.view import (
+    NoSheet,
+    ViewError,
+    WorkbookOpen,
+    parse_cell,
+    show_place,
+)
 
 IMAGE_TYPES = {
     ".png": "image/png",
@@ -360,6 +368,32 @@ def _located(line: int | None, column: str | None, key: str | None) -> str:
     parts += [f"column {column}"] if column is not None else []
     parts += [f"key {key}"] if key is not None else []
     return " ".join(parts) or "the file"
+
+
+def _place(folder: Path, payload: dict) -> tuple[str, str | None] | None:
+    """The sheet and the cell that Open tables opens the workbook at, from `file` and `cell`.
+
+    None without `file`: the workbook opens where it was left. `file` names a table file or
+    a raw table of the study, which need not exist yet; `cell` is a workbook address such as
+    Y97. Refused before the sync, so that a refused place writes nothing.
+    """
+    file = _optional_text(payload, "file")
+    cell = _optional_text(payload, "cell")
+    if file is None:
+        if cell is not None:
+            raise ValueError("A cell needs the file of its table")
+        return None
+    if parse_table_file(file) is None and parse_raw_file(file, folder.name) is None:
+        raise ValueError(f"{file} is no table file of {folder.name}")
+    if cell is not None:
+        parse_cell(cell)
+    # The sheet of a table is its file name without .tsv, as build_workbook names it.
+    return file.removesuffix(".tsv"), cell
+
+
+def _go_to(sheet: str, cell: str | None) -> str:
+    """Where the curator goes in a workbook that the app could not switch."""
+    return f"Go to sheet {sheet}, cell {cell}." if cell else f"Go to sheet {sheet}."
 
 
 def _sync_result(result: SyncResult) -> dict:
@@ -953,6 +987,27 @@ class StudiesMixin(EngineState):
             # A sync can have written some files before it failed.
             self._rescan()
 
+    def _open_at(
+        self, folder: Path, workbook: Path, sheet: str, cell: str | None
+    ) -> str | None:
+        """Make the workbook open at `sheet` with `cell` selected; a notice when it cannot.
+
+        A workbook that a spreadsheet program has open cannot be switched from outside: it
+        opens as it is, and the notice names the sheet and the cell to go to. The rewrite
+        changes no cell, so the watcher takes it as seen and starts no job for it.
+        """
+        if open_lock(workbook) is not None:
+            return f"The workbook is already open. {_go_to(sheet, cell)}"
+        try:
+            self._unwatched_write(folder, lambda: show_place(workbook, sheet, cell))
+        except WorkbookOpen:
+            return f"The workbook is already open. {_go_to(sheet, cell)}"
+        except NoSheet:
+            return f"The workbook has no sheet {sheet}."
+        except (ViewError, OSError) as error:
+            return f"Could not select sheet {sheet}: {error}. {_go_to(sheet, cell)}"
+        return None
+
     def table_preview(self, identity: str, payload: dict) -> dict:
         """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""
         preview = preview_table(
@@ -980,7 +1035,7 @@ class StudiesMixin(EngineState):
         return dataclasses.asdict(match_target(study, target))
 
     def tables_action(self, identity: str, payload: dict) -> dict:
-        """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
+        """Open the workbook, at the sheet of a table and a cell when given, sync it, resolve its conflicts with `keep`, or add a sheet."""
         # The workbook and the tables record no author, but writes need a user (spec 7.4).
         self.author()
         folder = self.study_folder(identity)
@@ -1024,6 +1079,7 @@ class StudiesMixin(EngineState):
             }
         if action not in {"open", "sync", "resolve"}:
             raise ValueError(f"Unknown tables action {action!r}")
+        place = _place(folder, payload) if action == "open" else None
         keep = payload.get("keep") if action == "resolve" else None
         if action == "resolve" and keep not in {"workbook", "tables"}:
             raise ValueError("Keep the workbook or the tables")
@@ -1034,7 +1090,10 @@ class StudiesMixin(EngineState):
         if action == "open":
             # A sync that failed is reported; the curator fixes it in the workbook.
             result["opened"] = sync.workbook.is_file()
+            result["notice"] = None
             if result["opened"]:
+                if place is not None:
+                    result["notice"] = self._open_at(folder, sync.workbook, *place)
                 opening = action_of(
                     "POST",
                     "/local/studies/tables",
