@@ -419,8 +419,8 @@ function added(table: string): void {
   flex-direction: column;
   gap: 4px;
 }
-/* One line from 1280 px; below that the parts wrap onto more lines where they do not fit, the
-   title shrinking to 12rem before it wraps. */
+/* One line where the parts fit, else they wrap onto more lines. The title gives way first, down
+   to 8rem, before it wraps; the chips never shrink, so they keep their whole text. */
 .study-header-line {
   display: flex;
   flex-wrap: wrap;
@@ -428,10 +428,8 @@ function added(table: string): void {
   gap: 8px 10px;
   min-height: 38px;
 }
-@media (min-width: 1280px) {
-  .study-header-line {
-    flex-wrap: nowrap;
-  }
+.study-header-line > .v-chip {
+  flex: none;
 }
 .study-identity {
   flex: 0 0 auto;
@@ -446,7 +444,7 @@ function added(table: string): void {
   border-color: rgba(var(--v-theme-on-surface), 0.3);
 }
 .study-title {
-  flex: 1 1 12rem;
+  flex: 1 1 8rem;
   min-width: 0;
   margin: 0;
   overflow: hidden;

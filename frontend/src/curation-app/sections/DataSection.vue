@@ -697,8 +697,10 @@ const conflictPanel = computed(() => {
   flex-direction: column;
   min-width: 0;
 }
-/* Each stacked pane scrolls on its own. The rows pane has a fixed height, which its grid fills. */
+/* Each stacked pane scrolls on its own. The source pane fits its content up to 70vh, so that a short
+   image leaves no empty space; the paper and the rows pane have a fixed height. */
 .data-stack > .source-pane {
+  height: auto;
   max-height: 70vh;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }

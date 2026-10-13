@@ -54,6 +54,6 @@ const problems = computed(() =>
 }
 /* The amber of the app (themes.ts), as the warnings of the table grid. */
 .nav-count--warning {
-  color: rgb(var(--v-theme-amber));
+  color: rgb(var(--v-theme-caution));
 }
 </style>

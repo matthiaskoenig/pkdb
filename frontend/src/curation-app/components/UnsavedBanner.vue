@@ -187,7 +187,7 @@ onBeforeUnmount(() => {
 <style scoped>
 /* Under the section tabs. It sticks below the app bar while the page scrolls, opaque, since the
    form scrolls under it, and scrolls on its own when its alerts are taller than half the window.
-   Amber while study.json has unsaved changes (the theme colors amber and amber-tint), the surface
+   Amber while study.json has unsaved changes (the theme colors caution and caution-tint), the surface
    otherwise. */
 .unsaved-banner {
   position: sticky;
@@ -206,8 +206,8 @@ onBeforeUnmount(() => {
   background: rgb(var(--v-theme-surface));
 }
 .unsaved-banner--dirty {
-  border-color: rgb(var(--v-theme-amber));
-  background: rgb(var(--v-theme-amber-tint));
+  border-color: rgb(var(--v-theme-caution));
+  background: rgb(var(--v-theme-caution-tint));
 }
 /* Stuck below the app bar, it hangs from it: square top corners, where nothing shows through. */
 .unsaved-banner--stuck {
@@ -235,7 +235,7 @@ onBeforeUnmount(() => {
   overflow-wrap: anywhere;
 }
 .unsaved-banner--dirty .unsaved-banner-text {
-  color: rgb(var(--v-theme-amber));
+  color: rgb(var(--v-theme-caution));
 }
 .unsaved-banner-dot {
   font-size: 0.5rem;

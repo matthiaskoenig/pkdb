@@ -488,7 +488,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .table-grid {
   /* The amber of the app (themes.ts) for the bar of a targeted row and the outline of a warning:
      3:1 on the surface and on the rows of open review items in both themes. */
-  --grid-amber: rgb(var(--v-theme-amber));
+  --grid-amber: rgb(var(--v-theme-caution));
   min-width: 0;
 }
 /* More columns follow: the rows fade out at the end of the region, above the cells and inside its

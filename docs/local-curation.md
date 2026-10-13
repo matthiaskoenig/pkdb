@@ -93,7 +93,7 @@ Study format 1 folders are not listed. The line below the table counts them, and
 
 ## The study page
 
-The header of a study is one line: its identity, its release, its issue and its provenance, the title of the publication, the PMID, the sync status, the problems, the review status select labelled **Review**, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**.
+The header of a study is one line where its parts fit: its identity, its release, its issue and its provenance, the title of the publication, the PMID, the sync status, the problems, the review status select labelled **Review**, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**. Where they do not fit, the title gets shorter first, and then the parts wrap onto more lines; a chip always shows its whole text.
 
 Tabs under the header switch between the sections Metadata, Review, Problems, Data and Activity. The tabs of Review and Problems count the open review items and the problems. At the end of the tab line are two facts: **On save**, the action of a save, and **Last upload**, with a link to the study on PK-DB. A narrow window turns the tabs into a select, with the two facts below it. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
 

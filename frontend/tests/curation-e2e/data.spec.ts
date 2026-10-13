@@ -431,6 +431,23 @@ test("the alerts of a source and a table that cannot be loaded keep the height o
   }
 });
 
+test("in a stacked window the source pane fits a short image, up to 70 % of the window", async ({ app, page }) => {
+  await page.setViewportSize({ width: 700, height: 900 });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Tab2");
+  const pane = page.locator(".data-stack > .source-pane");
+  await expect(pane.locator(".source-image")).toBeVisible();
+  const body = pane.locator(".pane-body");
+  const sizes = await body.evaluate((element) => ({ client: element.clientHeight, scroll: element.scrollHeight }));
+  // Nothing scrolls and nothing is left empty below the content of the pane.
+  expect(sizes.scroll - sizes.client).toBeLessThanOrEqual(1);
+  const free = await body.evaluate((element) => {
+    const last = element.lastElementChild!.getBoundingClientRect().bottom;
+    return element.getBoundingClientRect().bottom - last;
+  });
+  expect(free, "empty space below the content of the pane").toBeLessThanOrEqual(24);
+  expect((await pane.boundingBox())!.height).toBeLessThan(0.7 * 900);
+});
+
 test("on a phone the review status and More actions share a line above the buttons of the study", async ({
   app,
   page,
