@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
 import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./fixtures.ts";
+import { pixelStats } from "./pixels.ts";
 
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
@@ -681,6 +682,48 @@ test("the source pane shows that more of it follows below, and scrolls to its en
     renameSync(`${project}.away`, project);
   }
 });
+
+for (const theme of ["light", "dark"] as const) {
+  test(`the shadows of the sides of the rows end at the last row in the ${theme} theme, also when the rows scroll sideways`, async ({
+    app,
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: theme });
+    await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+    const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+    await expect(rows.getByRole("rowheader", { name: "19", exact: true })).toBeVisible();
+    /** The color beside the line column in the rows, which the shadow darkens once the rows scrolled sideways. */
+    const besideLine: [number, number, number][] = [];
+    for (const scrollLeft of [0, 200]) {
+      await rows.evaluate((element, left) => {
+        element.scrollLeft = left;
+      }, scrollLeft);
+      const layout = await rows.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        const line = element.querySelector("thead th.rows-line")!.getBoundingClientRect();
+        const table = element.querySelector("table")!.getBoundingClientRect();
+        const head = element.querySelector("thead")!.getBoundingClientRect();
+        return {
+          line: line.right - box.left,
+          head: head.bottom - box.top,
+          below: table.bottom - box.top,
+          width: element.clientWidth,
+          height: element.clientHeight,
+        };
+      });
+      // A short table leaves room below its last row, which is blank at the sides, in the color of the room between them.
+      expect(layout.height - layout.below).toBeGreaterThan(60);
+      const strip = (x: number) => ({ x, y: layout.below + 12, width: 12, height: 40 });
+      const room = await pixelStats(rows, strip(layout.width / 2));
+      expect((await pixelStats(rows, strip(layout.line))).dominant).toEqual(room.dominant);
+      expect((await pixelStats(rows, strip(layout.width - 12))).dominant).toEqual(room.dominant);
+      // The padding of the cells beside the line column, which holds no text.
+      const rowsArea = { x: layout.line, y: layout.head + 2, width: 6, height: layout.below - layout.head - 4 };
+      besideLine.push((await pixelStats(rows, rowsArea)).dominant);
+    }
+    expect(besideLine[1]).not.toEqual(besideLine[0]);
+  });
+}
 
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=5");

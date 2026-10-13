@@ -139,6 +139,11 @@ const scrolled = ref(false);
  */
 const more = ref(false);
 const scrollbars = ref({ x: 0, y: 0 });
+/** The height of the rows with their header, at which the shadows of the sides end in a higher region. */
+const contentHeight = ref<number | null>(null);
+const regionStyle = computed(() =>
+  contentHeight.value === null ? {} : { "--rows-content-height": `${contentHeight.value}px` },
+);
 const fade = computed(() => ({
   "--grid-scrollbar-x": `${scrollbars.value.x}px`,
   "--grid-scrollbar-y": `${scrollbars.value.y}px`,
@@ -197,8 +202,10 @@ function measure(): void {
   if (!element) return;
   const row = element.querySelector("tbody tr[data-index]")?.getBoundingClientRect().height ?? 0;
   const header = element.querySelector("thead tr")?.getBoundingClientRect().height ?? 0;
+  const content = element.querySelector("table")?.getBoundingClientRect().height ?? 0;
   if (row > 0) rowHeight.value = row;
   if (header > 0) headerHeight.value = header;
+  contentHeight.value = content > 0 ? content : null;
   if (element.clientHeight > 0) viewRows.value = Math.ceil(element.clientHeight / rowHeight.value);
   update();
 }
@@ -208,6 +215,9 @@ onMounted(() => {
   measure();
   observer = new ResizeObserver(measure);
   if (region.value) observer.observe(region.value);
+  // The rows grow and shrink with the table, its columns and its filters.
+  const table = region.value?.querySelector("table");
+  if (table) observer.observe(table);
 });
 onBeforeUnmount(() => observer?.disconnect());
 // New rows of the same table keep the scroll position, which the browser shortens to the rows.
@@ -514,6 +524,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
       ref="region"
       class="rows-scroll"
       :class="{ 'rows-scroll--sticky-line': lines, 'rows-scroll--stuck': scrolled }"
+      :style="regionStyle"
       tabindex="0"
       role="region"
       :aria-label="label ?? `Rows of ${table.file}`"
