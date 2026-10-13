@@ -522,6 +522,35 @@ def test_a_workspace_switch_keeps_the_saved_substances_of_the_old_workspace(
         again.close()
 
 
+def test_a_save_drops_the_saved_substances_of_folders_that_are_gone(
+    two_substances, tmp_path_factory
+):
+    engine, folder = two_substances
+    other = tmp_path_factory.mktemp("other")
+    study = other / "codeine" / "Third"
+    shutil.copytree(folder, study)
+    engine.select_workspace(str(other))
+    engine._read_substances()
+    path = saved_substances(engine)
+    assert set(json.loads(path.read_text(encoding="utf-8"))["studies"]) >= {
+        str(folder),
+        str(study),
+    }
+    # The first workspace still exists on disk, so its entry stays.
+    name_in_interventions(study, "drug", "midazolam")
+    engine.scan()
+    engine._read_substances()
+    assert str(folder) in json.loads(path.read_text(encoding="utf-8"))["studies"]
+    # Once it is gone from disk, the next save drops its entry.
+    shutil.rmtree(folder)
+    name_in_interventions(study, "midazolam", "codeine")
+    engine.scan()
+    engine._read_substances()
+    saved = json.loads(path.read_text(encoding="utf-8"))["studies"]
+    assert str(folder) not in saved
+    assert str(study) in saved
+
+
 def test_tables_that_changed_while_stopped_are_read_again(
     two_substances, tmp_path, make_study, valid_files, monkeypatch
 ):
