@@ -84,6 +84,37 @@ function sourceView(page: Page, source: string): Promise<SourceView> {
   );
 }
 
+/** A problem that `addProblems` adds to those of the validation of Demo2020. */
+interface AddedProblem {
+  code: string;
+  severity: "error" | "warning";
+  message: string;
+  source: { file: string; row: number; header?: string };
+}
+
+/**
+ * Serve the study detail of Demo2020 with `problems` added to those of its validation, as if the
+ * validation had found them: the grid outlines their cells and the plot rings their rows.
+ */
+async function addProblems(page: Page, problems: AddedProblem[]): Promise<void> {
+  await page.route(
+    (url) => url.pathname === "/local/studies/caffeine/Demo2020",
+    async (route) => {
+      // Without the ETag of the last detail, so that the server sends the detail rather than 304.
+      const headers = { ...route.request().headers() };
+      delete headers["if-none-match"];
+      // A request that the page cancels, as it leaves, has no response.
+      const response = await route.fetch({ headers }).catch(() => null);
+      if (!response) return;
+      const detail = (await response.json().catch(() => null)) as { problems?: unknown } | null;
+      // Such as an error, which the app shows as it is.
+      if (!detail || !Array.isArray(detail.problems)) return route.fulfill({ response });
+      const added = problems.map((problem) => ({ ...problem, acknowledgeable: false }));
+      await route.fulfill({ response, json: { ...detail, problems: [...detail.problems, ...added] } });
+    },
+  );
+}
+
 /** The button of a source or a table file in the navigator of the Data section. */
 function navigatorButton(page: Page, name: RegExp) {
   return page.getByRole("navigation", { name: "Tables and sources" }).getByRole("button", { name });
@@ -775,7 +806,7 @@ test("the tooltip of the problems follows the pointer to the line cell, which it
   const tooltip = page.locator(".problem-tooltip");
   await cell.hover();
   await expect(tooltip).toHaveCSS("opacity", "1");
-  // From the cell to the line cell of its row, which lists every problem of the line, at once.
+  // From the cell to the line cell of its row, which lists every problem of the line.
   const line = rows.getByRole("row").filter({ has: page.getByRole("cell", { name: "1.24", exact: true }) }).locator("th");
   await line.hover();
   const at = (await line.boundingBox())!;
@@ -796,6 +827,48 @@ test("the tooltip of the problems follows the pointer to the line cell, which it
   const flipped = (await tooltip.boundingBox())!;
   expect(flipped.y + flipped.height).toBeLessThanOrEqual(above.y);
   expectInWindow(page, flipped);
+});
+
+test("the tooltip of an outlined cell stays while the pointer moves down onto it over an outlined row below", async ({
+  app,
+  page,
+}) => {
+  // The row below the outlined 1.24 of line 6 has a problem in its mean too, as in a table with a
+  // problem in every row.
+  await addProblems(page, [
+    { code: "below", severity: "error", message: "A problem of the row below.", source: { file: TABLE, row: 7, header: "mean" } },
+  ]);
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const upper = gridCell(page, 6, "1.24");
+  const row = (line: number) => rows.getByRole("row").filter({ has: page.getByRole("rowheader", { name: String(line), exact: true }) });
+  await expect(upper).toHaveClass(/grid-cell--warning/);
+  await expect(row(7).locator("td.grid-cell--error")).toHaveCount(1);
+  await upper.scrollIntoViewIfNeeded();
+  const tooltip = page.locator(".problem-tooltip");
+
+  for (const cell of [upper, row(6).locator("th")]) {
+    await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
+    await expect(tooltip).toBeHidden();
+    const at = (await cell.boundingBox())!;
+    const x = at.x + at.width / 2;
+    await page.mouse.move(x, at.y + at.height / 2);
+    await expect(tooltip).toHaveCSS("opacity", "1");
+    const shown = (await tooltip.boundingBox())!;
+    const text = await tooltip.innerText();
+    expect(text).toContain("digitized_mismatch");
+    // The tooltip touches its cell, so that no other cell lies between them.
+    expect(Math.abs(shown.y - (at.y + at.height))).toBeLessThanOrEqual(1);
+    // Down in steps of 1.5 pixels, as a slow hand moves, to 12 pixels into the tooltip.
+    const end = shown.y + 12;
+    await page.mouse.move(x, end, { steps: Math.ceil((end - (at.y + at.height / 2)) / 1.5) });
+    // Longer than a tooltip waits before it moves to another cell or hides (`TIP_LINGER`).
+    await page.waitForTimeout(400);
+    await expect(tooltip).toBeVisible();
+    expect(await tooltip.innerText()).toBe(text);
+    const kept = (await tooltip.boundingBox())!;
+    expect([kept.x, kept.y]).toEqual([shown.x, shown.y]);
+  }
 });
 
 test("a clicked row of a figure rings its point", async ({ app, page }) => {

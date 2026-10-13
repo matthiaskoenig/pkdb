@@ -6,7 +6,7 @@ import { h } from "vue";
 import type { TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
 import { VTooltip } from "vuetify/components";
-import { TIP_DELAY } from "../../src/curation-app/composables/useCellTip";
+import { TIP_DELAY, TIP_LINGER } from "../../src/curation-app/composables/useCellTip";
 import { HEADER_LINE, issueCells, ROW, type CellIssues, type IssueCells } from "../../src/curation-app/grid";
 import { setViewport } from "./curation-dom";
 
@@ -714,6 +714,7 @@ describe("the tooltip of the problems", () => {
     expect(shownTip()).not.toBeNull();
     expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom start");
     cellAt(wrapper, third, HEADER.indexOf("label")).dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: line }));
+    vi.advanceTimersByTime(TIP_LINGER);
     await flushPromises();
     expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom");
   });
@@ -815,6 +816,7 @@ describe("the tooltip of the problems", () => {
     await hover(cells[0]!.element);
     expect(shownTip()?.textContent).toContain(`Mismatch of line ${table.rows[0]!.line}.`);
     cells[1]!.element.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: cells[0]!.element }));
+    vi.advanceTimersByTime(TIP_LINGER);
     await flushPromises();
     expect(shownTip()?.textContent).toContain(`Mismatch of line ${table.rows[1]!.line}.`);
     expect(document.querySelectorAll(".problem-tooltip")).toHaveLength(1);
@@ -866,6 +868,7 @@ describe("the tooltip of the problems", () => {
     await hover(mean);
     expect(shownTip()?.textContent).toContain("digitized_mismatch");
     label.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: mean }));
+    vi.advanceTimersByTime(TIP_LINGER);
     await flushPromises();
     expect(shownTip()?.textContent).toContain("unknown_term");
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));

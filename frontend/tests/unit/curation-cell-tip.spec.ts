@@ -75,14 +75,75 @@ describe("useCellTip", () => {
     expect(tip.cell.value).toBeNull();
   });
 
-  it("moves an open tip to the next cell with a tip at once", () => {
+  it("moves an open tip to the next cell with a tip once the pointer rested there for 150 ms", () => {
     const { first, second } = cells();
     enter(first);
     vi.advanceTimersByTime(TIP_DELAY);
     leave(first, second);
     enter(second, first);
+    vi.advanceTimersByTime(TIP_LINGER - 1);
+    expect(tip.cell.value).toBe(first);
+    vi.advanceTimersByTime(1);
     expect(tip.cell.value).toBe(second);
     expect(tip.key.value).toBe("3:1");
+  });
+
+  it("keeps the tip at its cell while the pointer crosses another cell with a tip on its way onto the tooltip", () => {
+    const { first, second } = cells();
+    const tooltip = document.createElement("div");
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    // The gap below the cell lies in the next row, whose cell has a tip too.
+    leave(first, second);
+    enter(second, first);
+    vi.advanceTimersByTime(TIP_LINGER - 1);
+    leave(second, tooltip);
+    tip.enterTip();
+    vi.advanceTimersByTime(1000);
+    expect(tip.cell.value).toBe(first);
+    expect(tip.key.value).toBe("2:1");
+  });
+
+  it("keeps the tip at its cell when the pointer comes back from another cell with a tip before the tip moved", () => {
+    const { first, second } = cells();
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    leave(first, second);
+    enter(second, first);
+    vi.advanceTimersByTime(TIP_LINGER - 1);
+    leave(second, first);
+    enter(first, second);
+    vi.advanceTimersByTime(1000);
+    expect(tip.cell.value).toBe(first);
+  });
+
+  it("hides the tip 150 ms after the pointer crossed another cell with a tip to a cell without one", () => {
+    const { first, second, plain } = cells();
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    leave(first, second);
+    enter(second, first);
+    vi.advanceTimersByTime(TIP_LINGER - 1);
+    leave(second, plain);
+    enter(plain, second);
+    vi.advanceTimersByTime(TIP_LINGER - 1);
+    expect(tip.cell.value).toBe(first);
+    vi.advanceTimersByTime(1);
+    expect(tip.cell.value).toBeNull();
+  });
+
+  it("moves a tip of the focus at once when the keyboard moves on, also while the pointer leaves a tip", () => {
+    focusRing(true);
+    const { first, second } = cells();
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    leave(first, second);
+    enter(second, first);
+    second.focus();
+    expect(tip.cell.value).toBe(second);
+    expect(tip.key.value).toBe("3:1");
+    vi.advanceTimersByTime(1000);
+    expect(tip.cell.value).toBe(second);
   });
 
   it("keeps the tip while the pointer moves within its cell and onto the tooltip, and hides it 150 ms after the pointer left both", () => {
@@ -126,6 +187,19 @@ describe("useCellTip", () => {
     expect(tip.key.value).toBe("2:1");
   });
 
+  it("keeps a tip of the focus while the focus moves within its cell", () => {
+    focusRing(true);
+    const { lineButton } = cells();
+    const line = lineButton.closest("th")!;
+    line.tabIndex = -1;
+    lineButton.focus();
+    expect(tip.cell.value).toBe(line);
+    line.focus();
+    expect(document.activeElement).toBe(line);
+    expect(tip.cell.value).toBe(line);
+    expect(tip.key.value).toBe("2:line");
+  });
+
   it("shows no tip for a focus without a focus ring, as of a click or of a script after a click", () => {
     focusRing(false);
     const { first } = cells();
@@ -165,6 +239,20 @@ describe("useCellTip", () => {
     enter(first, plain);
     vi.advanceTimersByTime(TIP_DELAY);
     expect(tip.cell.value).toBe(first);
+  });
+
+  it("shows no tip at a cell that the tip was to move to when Escape hid it, until the pointer left the cell", () => {
+    const { first, second, inner } = cells();
+    enter(second);
+    vi.advanceTimersByTime(TIP_DELAY);
+    leave(second, first);
+    enter(first, second);
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(tip.cell.value).toBeNull();
+    leave(first, inner);
+    enter(inner, first);
+    vi.advanceTimersByTime(1000);
+    expect(tip.cell.value).toBeNull();
   });
 
   it("shows the tip of a cell again after Escape hid it while the pointer rested on the tooltip", () => {
@@ -217,6 +305,22 @@ describe("useCellTip", () => {
     first.focus();
     tip.scrolled(grid!);
     expect(tip.cell.value).toBe(first);
+  });
+
+  it("stops listening to Escape once the tip hides", () => {
+    const add = vi.spyOn(document, "addEventListener");
+    const remove = vi.spyOn(document, "removeEventListener");
+    const { first, plain } = cells();
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    const listener = add.mock.calls.find(([type]) => type === "keydown")?.[1];
+    expect(listener).toBeInstanceOf(Function);
+    expect(remove).not.toHaveBeenCalledWith("keydown", listener, true);
+    leave(first, plain);
+    enter(plain, first);
+    vi.advanceTimersByTime(TIP_LINGER);
+    expect(tip.cell.value).toBeNull();
+    expect(remove).toHaveBeenCalledWith("keydown", listener, true);
   });
 
   it("hides the tip and stops listening to Escape when its scope ends", () => {

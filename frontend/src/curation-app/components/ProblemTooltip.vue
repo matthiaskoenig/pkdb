@@ -9,7 +9,8 @@ import ProblemTip from "./ProblemTip.vue";
 /**
  * The one tooltip of the problems of a table grid, at the cell of `tip`. It renders apart from
  * the grid, so that showing, moving and hiding it renders no row. The tooltip of a line starts at
- * its line cell, so that it extends over its row; the tooltip of a cell is below its middle.
+ * its line cell, so that it extends over its row; the tooltip of a cell is below its middle. It
+ * touches its cell, so that the pointer moves onto it without crossing the cells below.
  */
 const props = defineProps<{
   tip: CellTip;
@@ -49,7 +50,7 @@ function onToggle(open: boolean): void {
     :eager="false"
     interactive
     :location="location"
-    :offset="4"
+    :offset="0"
     max-width="380"
     content-class="problem-tooltip"
     :content-props="contentProps"
