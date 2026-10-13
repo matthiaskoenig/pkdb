@@ -1915,6 +1915,7 @@ def test_open_tables_answers_while_the_program_that_it_started_runs(
     server, engine, folder = api
     pid_file = tmp_path / "program.pid"
     monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(holding_opener(pid_file)))
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 0.5)
     headers = authenticate(server)
     try:
         # request() gives up after 3 seconds; the program runs for 30.

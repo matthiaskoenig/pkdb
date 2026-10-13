@@ -649,6 +649,8 @@ def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):
     # Quoted as the shell of the platform quotes it.
     join = subprocess.list2cmdline if os.name == "nt" else shlex.join
     monkeypatch.setenv("PKDB_OPEN_COMMAND", join(command))
+    # open_path waits for the command up to this long, so the record exists when it returns.
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 30)
     open_path(file)
     assert record.read_text(encoding="utf-8") == str(file.resolve())
 
@@ -1398,14 +1400,15 @@ def test_an_opener_whose_program_keeps_its_streams_returns_at_once(
     file.write_text("x")
     pid_file = tmp_path / "program.pid"
     monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(holding_opener(pid_file)))
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.5)
     started = time.monotonic()
     try:
         open_path(file)
     finally:
         elapsed = time.monotonic() - started
         stop_program(pid_file)
-    # At most the 2 seconds in which a command may fail, not the 30 of the program.
-    assert elapsed < launch.EARLY_FAILURE_SECONDS + 1
+    # Far below the 30 seconds of the program, with room for a loaded machine.
+    assert elapsed < 15
 
 
 def started_processes(monkeypatch) -> list[subprocess.Popen]:
