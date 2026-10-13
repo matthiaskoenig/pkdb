@@ -13,8 +13,35 @@ concurrency:
   # a newer run supersedes the running one of the same branch or pull request;
   # a release is never superseded, every tag is a group of its own
   cancel-in-progress: true
+env:
+  # The backend image of this run: the job image builds it, and the jobs server and
+  # frontend-e2e start it from the artifact backend-image; the id of the run in the
+  # name makes sure that they never start an image of another run.
+  PKDB_BACKEND_IMAGE: pkdb-ci-backend:run-${{ github.run_id }}
 jobs:
+  changes:
+    # A change of documentation only skips the test jobs, see scripts/ci_changes.py;
+    # release tags, manual runs and anything the script cannot tell count as code.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.classify.outputs.code }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          # the merge commit of a pull request and its first parent, the base branch
+          fetch-depth: 2
+      - name: Decide whether code changed
+        id: classify
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        run: python3 scripts/ci_changes.py --event "$EVENT" --ref "$GITHUB_REF" --before "$BEFORE" --output "$GITHUB_OUTPUT"
+
   python:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -31,7 +58,9 @@ jobs:
           POSTGRES_USER: pkdb_test
           POSTGRES_PASSWORD: local-test-only
         ports: ['5432:5432']
+        # the disposable test database keeps its data in memory, as compose.test.yaml does
         options: >-
+          --tmpfs /var/lib/postgresql
           --health-cmd "pg_isready -U pkdb_test -d pkdb_test"
           --health-interval 5s --health-timeout 5s --health-retries 12
     env:
@@ -44,6 +73,25 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+      - name: Run the test database without durable writes
+        # as compose.test.yaml does; a service takes no command line, and a reload
+        # applies these settings
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -q \
+            -c "ALTER SYSTEM SET fsync = off" \
+            -c "ALTER SYSTEM SET synchronous_commit = off" \
+            -c "ALTER SYSTEM SET full_page_writes = off" \
+            -c "SELECT pg_reload_conf()"
+          for _ in 1 2 3 4 5; do
+            if [ "$(docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -Atc 'SHOW fsync')" = off ]; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "fsync is still on" >&2
+          exit 1
       - uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: ${{ matrix.python }}
@@ -63,12 +111,119 @@ jobs:
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_vocabulary.py --check
       - name: Verify bundled curator profiles match the curator roster
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_curators.py --check
-      # every test owns a database schema, so the tests run in parallel; a test file
-      # stays on one worker, which builds its module fixtures only once
-      - run: uv run --python ${{ matrix.python }} --locked pytest -q -n auto --dist loadfile --durations=15
-      - run: uv run --python ${{ matrix.python }} --locked ruff check .
-      - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
-      - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
+      # every test owns a copy of a template database that each worker migrates once,
+      # see tests/db_fixtures.py, so the tests run in parallel; an idle worker
+      # takes tests from a busy one
+      - run: uv run --python ${{ matrix.python }} --locked pytest -q -n auto --dist worksteal --durations=15
+      - name: Verify rebuild accounting tooling
+        run: |
+          cd ..
+          PYTHONPATH=. backend/.venv/bin/python -m pytest tools/backend_migration -q
+
+  image:
+    # The backend image of the run, built once and handed to the jobs server, compose
+    # and frontend-e2e as the artifact backend-image; they start as soon as it exists.
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.14"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+      - name: Build the backend image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
+        with:
+          context: .
+          file: backend/Dockerfile
+          build-args: PYTHON_VERSION=${{ matrix.python }}
+          # pkdb-local:latest is the name in compose.yaml, so that compose starts this image
+          tags: |
+            pkdb-local:latest
+            ${{ env.PKDB_BACKEND_IMAGE }}
+          load: true
+          provenance: false
+          # the layers are cached between runs; a release run builds without the
+          # cache, which zizmor cannot tell from the expression
+          cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend-image' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-to: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend-image,mode=max' || '' }}  # zizmor: ignore[cache-poisoning]
+      - name: Save the backend image
+        run: docker save pkdb-local:latest "$PKDB_BACKEND_IMAGE" | zstd -T0 -3 -q -o "$RUNNER_TEMP/backend-image.tar.zst"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: backend-image
+          path: ${{ runner.temp }}/backend-image.tar.zst
+          # zstd compressed it already
+          compression-level: 0
+          retention-days: 1
+
+  server:
+    # The server wheel, and the system tests of the backend image of the run: the
+    # installed container runtime and the restore of PostgreSQL and the attachments.
+    needs: image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # the Python of the image, see the job image
+        python: ["3.14"]
+    services:
+      postgres:
+        image: postgres:18.6
+        env:
+          POSTGRES_DB: pkdb_test
+          POSTGRES_USER: pkdb_test
+          POSTGRES_PASSWORD: local-test-only
+        ports: ['5432:5432']
+        options: >-
+          --tmpfs /var/lib/postgresql
+          --health-cmd "pg_isready -U pkdb_test -d pkdb_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      PKDB_TEST_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
+      PKDB_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
+    defaults:
+      run:
+        working-directory: backend
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Run the test database without durable writes
+        env:
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -q \
+            -c "ALTER SYSTEM SET fsync = off" \
+            -c "ALTER SYSTEM SET synchronous_commit = off" \
+            -c "ALTER SYSTEM SET full_page_writes = off" \
+            -c "SELECT pg_reload_conf()"
+          for _ in 1 2 3 4 5; do
+            if [ "$(docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -Atc 'SHOW fsync')" = off ]; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "fsync is still on" >&2
+          exit 1
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+          # a release run restores no cache, which zizmor cannot tell from the
+          # expression; the released distributions are built without one
+          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+      - run: uv sync --locked --python ${{ matrix.python }}
       - run: uv build --python ${{ matrix.python }}
       - name: Install wheel in clean environment
         env:
@@ -85,149 +240,51 @@ jobs:
         with:
           name: server-distributions
           path: backend/dist/pkdb_server-*
-      - name: Build pinned runtime image
-        run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb:py${{ matrix.python }} -f Dockerfile ..
+      - uses: actions/download-artifact@v8
+        with:
+          name: backend-image
+          path: ${{ runner.temp }}/backend-image
+      - name: Load the backend image of the run
+        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
       - name: Verify installed container runtime
         env:
-          PKDB_TEST_IMAGE: pkdb:py${{ matrix.python }}
+          PKDB_TEST_IMAGE: ${{ env.PKDB_BACKEND_IMAGE }}
           PKDB_TEST_IMAGE_PYTHON: ${{ matrix.python }}
         run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_runtime.py -q
-      - name: Verify rebuild accounting tooling
-        run: |
-          cd ..
-          PYTHONPATH=. backend/.venv/bin/python -m pytest tools/backend_migration -q
       - name: Verify PostgreSQL and attachment restore
         env:
           PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q
 
-  client:
-    name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
-    runs-on: ${{ matrix.os }}
+  compose:
+    needs: image
+    runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        # macOS and Windows are tested for release tag pushes and manual runs,
-        # so a branch can be tested on every platform before it is tagged.
-        os: ${{ fromJSON((github.event_name == 'workflow_dispatch' || github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) && '["ubuntu-latest", "macos-latest", "windows-latest"]' || '["ubuntu-latest"]') }}
-        # continuous integration tests the newest python, python 3.15 is tested
-        # locally before a pull request is opened, see docs/development.md
-        python: ["3.14"]
+    env:
+      COMPOSE_PROJECT_NAME: pkdb-ci
     defaults:
       run:
-        working-directory: python
         shell: bash
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: actions/download-artifact@v8
         with:
-          python-version: ${{ matrix.python }}
-          # a release run restores no cache, which zizmor cannot tell from the
-          # expression; the released distributions are built without one
-          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
-          # the interpreter is cached with the packages instead of downloaded by every run
-          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
-      - run: uv sync --python ${{ matrix.python }} --locked --all-extras
-      # The workbook round trip tests re-save workbooks with LibreOffice.
-      - name: Install LibreOffice Calc
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-calc
-      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -n auto --durations=15
-        env:
-          # On Linux a missing LibreOffice fails the round trip tests; macOS and Windows skip them.
-          PKDB_REQUIRE_LIBREOFFICE: ${{ runner.os == 'Linux' && '1' || '' }}
-      - run: uv run --python ${{ matrix.python }} --locked ruff check .
-      - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
-      - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
-      # The wheel ships the curation app, which is built from frontend/.
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24.21.0
-          # the curation app built here ships in the released wheel, so a
-          # release run restores no cache, which zizmor cannot tell from the expression
-          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm install --global npm@12.1.0
-      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
-      - run: npm ci
-        working-directory: frontend
-      - run: npm run build:curation
-        working-directory: frontend
-      # The curation app end to end in Chromium against the real `pkdb curate`, which the specs
-      # start with the Python of the uv environment on copies of tools/curation_testing/fixture.
-      - name: Cache Chromium for the curation app tests
-        id: chromium-cache
-        # a release run restores no cache and downloads Chromium, which zizmor
-        # cannot tell from the condition
-        if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
-      - name: Install Chromium for the curation app tests
-        if: runner.os == 'Linux' && steps.chromium-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-        working-directory: frontend
-      - name: Install the system dependencies of the cached Chromium
-        if: runner.os == 'Linux' && steps.chromium-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
-        working-directory: frontend
-      - name: Test the curation app end to end
-        if: runner.os == 'Linux'
-        run: npm run test:curation-e2e
-        working-directory: frontend
-      - uses: actions/upload-artifact@v7
-        if: failure() && runner.os == 'Linux'
-        with:
-          name: curation-browser-failures
-          path: |
-            frontend/playwright-report/curation
-            frontend/test-results/curation
-          retention-days: 7
-      - run: uv build --python ${{ matrix.python }}
-      - name: Verify isolated public wheel, sdist and CLI
-        run: |
-          uv venv --python ${{ matrix.python }} wheel-env
-          if [ "$RUNNER_OS" = Windows ]; then
-            PYTHON_BIN=wheel-env/Scripts/python.exe
-            PKDB_BIN=wheel-env/Scripts/pkdb.exe
-          else
-            PYTHON_BIN=wheel-env/bin/python
-            PKDB_BIN=wheel-env/bin/pkdb
-          fi
-          uv pip install --python "$PYTHON_BIN" dist/*.whl
-          "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
-          "$PYTHON_BIN" -c "import importlib.resources as r; assert (r.files('pkdb.curation') / 'static' / 'index.html').is_file()"
-          # The sdist ships the app too: a stray PKDB_BUILD_WITHOUT_CURATION_APP would leave it out.
-          "$PYTHON_BIN" -c "import glob, tarfile; names = tarfile.open(*glob.glob('dist/pkdb-*.tar.gz')).getnames(); assert any(name.endswith('/src/pkdb/curation/static/index.html') for name in names), 'The sdist lacks the curation app'"
-          "$PKDB_BIN" --help
-      - uses: actions/upload-artifact@v7
-        if: runner.os == 'Linux'
-        with:
-          name: python-distributions
-          path: python/dist/*
-
-  compose:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      COMPOSE_PROJECT_NAME: pkdb-ci
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
+          name: backend-image
+          path: ${{ runner.temp }}/backend-image
+      - name: Load the backend image of the run
+        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
       - name: Start the documented local stack
-        run: docker compose up --build --wait --wait-timeout 180
+        # compose.yaml names the image of the run, pkdb-local:latest, so compose builds nothing
+        run: docker compose up --no-build --wait --wait-timeout 180
       - name: Verify automatic schema and vocabulary bootstrap
         run: |
           curl --fail http://127.0.0.1:18083/health/ready
           curl --fail 'http://127.0.0.1:18083/api/v1/info_nodes/?page_size=1'
           printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb-server create-admin mkoenig --email ci@example.org --password-stdin
           docker compose restart backend
-          docker compose up -d --wait --wait-timeout 180
+          docker compose up -d --no-build --wait --wait-timeout 180
           python - <<'PYTHON'
           import http.cookiejar
           import json
@@ -277,27 +334,329 @@ jobs:
         if: always()
         run: docker compose down -v
 
-  frontend:
-    uses: ./.github/workflows/frontend.yml
+  client:
+    name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        # macOS and Windows are tested for release tag pushes and manual runs,
+        # so a branch can be tested on every platform before it is tagged.
+        os: ${{ fromJSON((github.event_name == 'workflow_dispatch' || github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) && '["ubuntu-latest", "macos-latest", "windows-latest"]' || '["ubuntu-latest"]') }}
+        # continuous integration tests the newest python, python 3.15 is tested
+        # locally before a pull request is opened, see docs/development.md
+        python: ["3.14"]
+    defaults:
+      run:
+        working-directory: python
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+          # a release run restores no cache, which zizmor cannot tell from the
+          # expression; the released distributions are built without one
+          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # the interpreter is cached with the packages instead of downloaded by every run
+          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+      - run: uv sync --python ${{ matrix.python }} --locked --all-extras
+      # The workbook round trip tests re-save workbooks with LibreOffice. Its packages
+      # are cached per image of the runner, so a run installs them without downloading.
+      - name: Name the image of the runner
+        id: runner-image
+        if: runner.os == 'Linux'
+        run: echo "name=$ImageOS-$ImageVersion" >> "$GITHUB_OUTPUT"
+      - name: Cache the LibreOffice Calc packages
+        # a release run restores no cache and downloads the packages, which zizmor
+        # cannot tell from the condition
+        if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/libreoffice-packages
+          key: libreoffice-calc-${{ steps.runner-image.outputs.name }}
+      - name: Install LibreOffice Calc
+        if: runner.os == 'Linux'
+        run: |
+          packages="$HOME/libreoffice-packages"
+          # nothing reads manual pages here, so their index is not rebuilt
+          sudo rm -f /var/lib/man-db/auto-update
+          if compgen -G "$packages/*.deb" > /dev/null \
+            && sudo apt-get install -y --no-install-recommends "$packages"/*.deb; then
+            exit 0
+          fi
+          sudo apt-get update
+          sudo apt-get clean
+          sudo apt-get install -y --no-install-recommends --download-only libreoffice-calc
+          mkdir -p "$packages"
+          cp /var/cache/apt/archives/*.deb "$packages"/
+          sudo apt-get install -y --no-install-recommends libreoffice-calc
+      # The speed tests (-m slow) run in client-slow, see addopts in pyproject.toml.
+      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -n auto --durations=15
+        env:
+          # On Linux a missing LibreOffice fails the round trip tests; macOS and Windows skip them.
+          PKDB_REQUIRE_LIBREOFFICE: ${{ runner.os == 'Linux' && '1' || '' }}
+      # The wheel ships the curation app, which is built from frontend/.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          # the curation app built here ships in the released wheel, so a
+          # release run restores no cache, which zizmor cannot tell from the expression
+          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build:curation
+        working-directory: frontend
+      - run: uv build --python ${{ matrix.python }}
+      - name: Verify isolated public wheel, sdist and CLI
+        run: |
+          uv venv --python ${{ matrix.python }} wheel-env
+          if [ "$RUNNER_OS" = Windows ]; then
+            PYTHON_BIN=wheel-env/Scripts/python.exe
+            PKDB_BIN=wheel-env/Scripts/pkdb.exe
+          else
+            PYTHON_BIN=wheel-env/bin/python
+            PKDB_BIN=wheel-env/bin/pkdb
+          fi
+          uv pip install --python "$PYTHON_BIN" dist/*.whl
+          "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
+          "$PYTHON_BIN" -c "import importlib.resources as r; assert (r.files('pkdb.curation') / 'static' / 'index.html').is_file()"
+          # The sdist ships the app too: a stray PKDB_BUILD_WITHOUT_CURATION_APP would leave it out.
+          "$PYTHON_BIN" -c "import glob, tarfile; names = tarfile.open(*glob.glob('dist/pkdb-*.tar.gz')).getnames(); assert any(name.endswith('/src/pkdb/curation/static/index.html') for name in names), 'The sdist lacks the curation app'"
+          "$PKDB_BIN" --help
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Linux'
+        with:
+          name: python-distributions
+          path: python/dist/*
+
+  client-slow:
+    # The speed tests measure CPU time; they run in one process, without
+    # workers that share the cores, and on every platform that client tests.
+    name: Client speed tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON((github.event_name == 'workflow_dispatch' || github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) && '["ubuntu-latest", "macos-latest", "windows-latest"]' || '["ubuntu-latest"]') }}
+        python: ["3.14"]
+    defaults:
+      run:
+        working-directory: python
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+      - run: uv sync --python ${{ matrix.python }} --locked --all-extras
+      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -m slow --durations=5
+
+  curation-e2e:
+    # The curation app in Chromium against the real `pkdb curate`, which the specs
+    # start with the Python of the uv environment on copies of tools/curation_testing/fixture.
+    name: Curation app browser tests
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.14"
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+      - run: uv sync --project ../python --locked --python 3.14
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+      - run: npm run build:curation
+      - name: Read the Playwright version
+        id: playwright
+        run: echo "version=$(node -p 'require("./package-lock.json").packages["node_modules/playwright"].version')" >> "$GITHUB_OUTPUT"
+      - name: Cache Chromium
+        id: browser-cache
+        # a release run restores no cache and downloads Chromium, which zizmor
+        # cannot tell from the condition
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+      - name: Install Chromium
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install the system dependencies of the cached Chromium
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npm run test:curation-e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: curation-browser-failures
+          path: |
+            frontend/playwright-report/curation
+            frontend/test-results/curation
+          retention-days: 7
+
+  frontend-unit:
+    name: Frontend checks
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+      - run: npm run test:source
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit -- --run
+      - run: npm run build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: frontend-static
+          path: frontend/dist
+          retention-days: 14
+
+  frontend-e2e:
+    # Every browser in a job of its own, against a disposable stack of the backend
+    # image of the run, see tools/frontend_testing/run.sh.
+    name: Frontend browser tests (${{ matrix.browser }})
+    needs: image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    defaults:
+      run:
+        working-directory: frontend
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+      - run: npm run build
+      - name: Read the Playwright version
+        id: playwright
+        run: echo "version=$(node -p 'require("./package-lock.json").packages["node_modules/playwright"].version')" >> "$GITHUB_OUTPUT"
+      - name: Cache the browser
+        id: browser-cache
+        # a release run restores no cache and downloads the browser, which zizmor
+        # cannot tell from the condition
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ matrix.browser }}
+      - name: Install the browser
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: npx playwright install --with-deps "$BROWSER"
+      - name: Install the system dependencies of the cached browser
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: npx playwright install-deps "$BROWSER"
+      - uses: actions/download-artifact@v8
+        with:
+          name: backend-image
+          path: ${{ runner.temp }}/backend-image
+      - name: Load the backend image of the run
+        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
+      - name: Test the frontend in the browser
+        env:
+          BROWSER: ${{ matrix.browser }}
+          # the harness starts this image instead of building one, and stops when
+          # it is missing
+          PKDB_TEST_IMAGE: ${{ env.PKDB_BACKEND_IMAGE }}
+        run: npm run test:e2e -- --project="$BROWSER"
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: frontend-browser-failures-${{ matrix.browser }}
+          path: |
+            frontend/playwright-report
+            frontend/test-results
+          retention-days: 7
 
   tests:
+    # the one required check of this workflow, see .github/rulesets/develop.json
     name: tests
-    needs: [python, client, compose, frontend]
+    needs: [changes, python, image, server, compose, client, client-slow, curation-e2e, frontend-unit, frontend-e2e]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require backend, frontend, and local Docker setup
+      - name: Require every test job, or none for a change of documentation only
         env:
-          PYTHON_RESULT: ${{ needs.python.result }}
-          CLIENT_RESULT: ${{ needs.client.result }}
-          COMPOSE_RESULT: ${{ needs.compose.result }}
-          FRONTEND_RESULT: ${{ needs.frontend.result }}
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          CODE: ${{ needs.changes.outputs.code }}
+          NEEDS: ${{ toJSON(needs) }}
         run: |
-          test "$PYTHON_RESULT" = success
-          test "$CLIENT_RESULT" = success
-          test "$COMPOSE_RESULT" = success
-          test "$FRONTEND_RESULT" = success
+          test "$CHANGES_RESULT" = success
+          case "$CODE" in
+            true) expected=success ;;
+            false) expected=skipped ;;
+            *) echo "the job changes told neither code=true nor code=false" >&2; exit 1 ;;
+          esac
+          echo "$NEEDS" | jq -r 'del(.changes) | to_entries[] | "\(.key): \(.value.result)"'
+          echo "$NEEDS" | jq -e --arg expected "$expected" \
+            'del(.changes) | [.[].result] | all(. == $expected)' > /dev/null
 
   publish-pypi:
     name: Publish public Python package

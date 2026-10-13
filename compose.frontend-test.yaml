@@ -17,6 +17,8 @@ services:
     # CI starts the backend image that it built once for the run (PKDB_TEST_IMAGE);
     # without it the image is built from this checkout under its usual name.
     image: ${PKDB_TEST_IMAGE:-pkdb-frontend-test-backend}
+    # run.sh passes --no-build when PKDB_TEST_IMAGE is set, so compose then ignores
+    # this section and never builds over that image
     build:
       context: .
       dockerfile: backend/Dockerfile

@@ -40,3 +40,15 @@ jobs:
           # render diagnostics as GitHub Actions workflow annotations
           TY_OUTPUT_FORMAT: github
         run: uv run --locked --python 3.14 ty check
+      # the client runs on Linux, Windows and macOS, so its types are checked for each
+      - name: Install the client
+        working-directory: python
+        run: uv sync --locked --python 3.14 --all-extras
+      - name: Type check the client
+        working-directory: python
+        env:
+          TY_OUTPUT_FORMAT: github
+        run: |
+          for platform in linux win32 darwin; do
+            uv run --locked --python 3.14 ty check --python-version 3.14 --python-platform "$platform"
+          done
