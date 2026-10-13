@@ -15,6 +15,7 @@ from typing import Any, NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.migration.counts import table_counts
 from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Change, Difference, StudyResult
 from pkdb.migration.rows import (
@@ -273,12 +274,14 @@ class _Normalizer:
         changes: Changes,
         arrays: Collection[str],
         timed: Collection[str],
+        counts: Mapping[str, int],
     ):
         self.name = study.metadata.name
         self.as_individuals = as_individuals
         self.changes = changes
         self.arrays = arrays
         self.timed = timed
+        self.counts = counts
         self.labels = _scatter_labels(study)
         self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
@@ -385,6 +388,14 @@ class _Normalizer:
                 key = key._replace(label=name)
         return key
 
+    def count(self, key: Key, statistics: Statistics, record: str) -> Statistics:
+        """The count of the format 1 table of an output, which format 1 never read."""
+        count = self.counts.get(record)
+        if count is None:
+            return statistics
+        self.changes.add("table_count", described(key))
+        return statistics.model_copy(update={"count": count})
+
     def __call__(
         self, key: Key, statistics: Statistics, record: str
     ) -> tuple[Key, Statistics]:
@@ -395,6 +406,7 @@ class _Normalizer:
         key = self.time(self.subject(key))
         if key.table == "measurements":
             key = self.output(key, record)
+            statistics = self.count(key, statistics, record)
         return key, statistics
 
     def finish(self) -> None:
@@ -438,12 +450,14 @@ class _Conversion(NamedTuple):
 
     `arrays` are the array outputs that became timecourse points, `dropped`
     the parsed format 1 records that it dropped as rows without any value, by
-    key, and `timed` the measurements whose characteristica got time NR.
+    key, `timed` the measurements whose characteristica got time NR, and
+    `counts` the counts of the format 1 tables that it wrote, by key.
     """
 
     arrays: Collection[str] = frozenset()
     dropped: Mapping[str, Observation] = {}
     timed: Collection[str] = frozenset()
+    counts: Mapping[str, int] = {}
 
 
 DROPPED_WITH_DATA = "dropped record with data"
@@ -482,7 +496,12 @@ def _records(
         None
         if changes is None
         else _Normalizer(
-            study, as_individuals, changes, conversion.arrays, conversion.timed
+            study,
+            as_individuals,
+            changes,
+            conversion.arrays,
+            conversion.timed,
+            conversion.counts,
         )
     )
     scatter_comments = {} if changes is None else _scatter_comments(study)
@@ -805,19 +824,21 @@ def compare(
     *,
     dropped: Mapping[str, Observation] = {},
     timed: Collection[str] = frozenset(),
+    counts: Mapping[str, int] = {},
 ) -> tuple[list[Change], list[Difference]]:
     """The intended changes from A to B and every other difference between them.
 
     `arrays` are the keys of A's array outputs that become timecourse points
     (`rows.series_arrays`); other array outputs become outputs. `dropped` are
     the parsed records of A that the converter dropped as rows without any
-    value (`rows.valueless`), by key, and `timed` the measurements whose
-    characteristica get time NR.
+    value (`rows.valueless`), by key, `timed` the measurements whose
+    characteristica get time NR, and `counts` the counts of A's format 1
+    tables that the converter writes (`counts.table_counts`), by key.
     """
     changes = Changes()
     as_individuals = _individuals(a, changes)
     a_records, a_keys, refused = _records(
-        a, as_individuals, changes, _Conversion(arrays, dropped, timed)
+        a, as_individuals, changes, _Conversion(arrays, dropped, timed, counts)
     )
     b_records, b_keys, _ = _records(b, set(), None)
     differences = refused + _match(a_records, b_records, changes)
@@ -858,7 +879,8 @@ def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
     The converter decides this on the parsed, not the prepared, format 1
     study, whose calculation types and counts `prepare` has not filled yet.
     """
-    parsed = parse_bundle(load_folder(v1))
+    bundle = load_folder(v1)
+    parsed = parse_bundle(bundle)
     keys = valueless(parsed, vocabulary)
     records: list[Observation] = [*parsed.measurements]
     for subject in [*parsed.groups, *parsed.individuals]:
@@ -868,7 +890,8 @@ def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
     if any(r.output_type == "array" and r.label for r in parsed.measurements):
         images = image_sources(v1, v1.name)
         arrays = series_arrays(parsed, v1.name, images, keys)
-    return _Conversion(arrays, dropped, timed_measurements(vocabulary))
+    counts = table_counts(bundle, parsed).written
+    return _Conversion(arrays, dropped, timed_measurements(vocabulary), counts)
 
 
 def _errors(bundle: PreparedBundle) -> list[str]:
@@ -981,6 +1004,7 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         conversion.arrays,
         dropped=conversion.dropped,
         timed=conversion.timed,
+        counts=conversion.counts,
     )
     if differences:
         return StudyResult(

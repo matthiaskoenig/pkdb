@@ -98,6 +98,80 @@ def test_a_group_with_count_one_is_an_intended_change(tmp_path, sf_vocabulary):
     ]
 
 
+def counted(tmp_path, sheets, *outputs, workbook=True):
+    """A format 1 study whose group `all` counts 12, with the `count` columns of `sheets`."""
+    group = {**STUDY["groupset"]["groups"][0], "count": 12}
+    study = with_outputs(
+        *(outputs or (OUTPUT, TIMECOURSE)), groupset={"groups": [group]}
+    )
+    return v1_study(tmp_path / "v1", study, sheets, IMAGES, workbook=workbook)
+
+
+def column(table, name):
+    header, *lines = [line.split("\t") for line in table.read_text().splitlines()]
+    return [line[header.index(name)] for line in lines]
+
+
+COUNTED = {
+    "Tab2": [["mean", "sd", "count"], [2.5, 0.5, 10]],
+    "Fig1": [["time", "mean", "count"], [0, 0, 12], [1, 2, 11], [2, 1, "NA"]],
+}
+
+
+@pytest.mark.parametrize("workbook", [True, False])
+def test_counts_that_only_the_format_1_table_holds_are_an_intended_change(
+    tmp_path, sf_vocabulary, workbook
+):
+    # No format 1 template maps `count`: format 1 counted every output with its
+    # group, and the formulas of the workbook use the count of the row.
+    v1 = counted(tmp_path, COUNTED, workbook=workbook)
+    v2 = converted(tmp_path, v1)
+    assert column(v2 / "outputs_Tab2.tsv", "count") == ["10"]
+    assert column(v2 / "timecourses_Fig1.tsv", "count") == ["", "11", ""]
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("table_count", 2)]
+
+
+def test_a_count_other_than_that_of_the_table_is_a_mismatch(tmp_path, sf_vocabulary):
+    v1 = counted(tmp_path, COUNTED)
+    v2 = converted(tmp_path, v1)
+    rewrite(v2 / "outputs_Tab2.tsv", "count", "9")
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "mismatch"
+    [difference] = result.differences
+    assert difference.path.endswith(".count")
+    assert (difference.a, difference.b) == ("10", "9")
+
+
+def test_a_count_above_the_group_count_stays_the_group_count(tmp_path, sf_vocabulary):
+    sheets = {**SHEETS, "Tab2": [["mean", "sd", "count"], [2.5, 0.5, 13]]}
+    v1 = counted(tmp_path, sheets)
+    v2 = converted(tmp_path, v1)
+    assert column(v2 / "outputs_Tab2.tsv", "count") == [""]
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
+
+
+def test_the_count_of_an_individual_stays_one(tmp_path, sf_vocabulary):
+    # Curators copied the count of the group into the rows of its individuals.
+    individual = {k: v for k, v in OUTPUT.items() if k not in ("group", "sd")}
+    output = {**individual, "individual": "S1"}
+    sheets = {**SHEETS, "Tab2": [["mean", "count"], [2.5, 12]]}
+    v1 = counted(tmp_path, sheets, output, TIMECOURSE)
+    v2 = converted(tmp_path, v1)
+    assert column(v2 / "outputs_Tab2.tsv", "count") == [""]
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
+
+
+def test_a_count_that_the_template_maps_wins_over_the_table(tmp_path, sf_vocabulary):
+    output = {**OUTPUT, "count": "col==n"}
+    sheets = {**SHEETS, "Tab2": [["mean", "sd", "n", "count"], [2.5, 0.5, 8, 10]]}
+    v1 = counted(tmp_path, sheets, output, TIMECOURSE)
+    v2 = converted(tmp_path, v1)
+    assert column(v2 / "outputs_Tab2.tsv", "count") == ["8"]
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
+
+
 def test_a_changed_value_is_a_mismatch(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)
