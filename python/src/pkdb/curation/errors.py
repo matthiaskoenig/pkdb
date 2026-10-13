@@ -16,7 +16,7 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from secrets import token_hex
-from subprocess import CalledProcessError, TimeoutExpired
+from subprocess import CalledProcessError
 from typing import Any
 
 #: What replaces a secret in an error body, a report and the log.
@@ -103,8 +103,7 @@ def _tail(stream: bytes | str | None) -> str:
 def detail_of(error: BaseException) -> str:
     """The type and the text of `error`.
 
-    For a command that failed: its program, its exit status and the end of its stderr; for a
-    command that did not return: its program and the timeout.
+    For a command that failed: its program, its exit status and the end of its stderr.
     """
     name = type(error).__name__
     if isinstance(error, CalledProcessError):
@@ -112,9 +111,6 @@ def detail_of(error: BaseException) -> str:
         if stderr := _tail(error.stderr):
             text += f"\n{stderr}"
         return f"{name}: {text}"
-    if isinstance(error, TimeoutExpired):
-        program = _program(error.cmd)
-        return f"{name}: {program} did not return within {error.timeout:g} seconds"
     text = str(error)
     return f"{name}: {text}" if text else name
 
@@ -301,6 +297,22 @@ class ErrorLog:
         with `quiet_repeats`, for a failure whose request id nobody sees, it gets none.
         """
         self._log(logging.WARNING, body, error, label or body["action"], quiet_repeats)
+
+    def failed_later(self, error: BaseException, *, action: str, label: str) -> None:
+        """Log a failure that no request answers any more, and name it in the terminal.
+
+        An open command that counted as started can fail after its request answered; the
+        log and the terminal are the only places that learn of it, with a request id of
+        its own. `action` is the action of the request, such as `Open tables (POST
+        /local/studies/tables)`, and `label` its label, such as `Open tables`.
+        """
+        body = describe(
+            error,
+            action=action,
+            request_id=new_request_id(),
+            secrets=self._secrets(),
+        )
+        self.failed(body, error, label=label)
 
     def unexpected(
         self,

@@ -3,9 +3,9 @@
 import json
 import os
 import shutil
-import subprocess
 import threading
 from pathlib import Path
+from unittest.mock import Mock
 
 import openpyxl
 import pytest
@@ -466,18 +466,15 @@ ACTIVITY_ID = "0" * 32
 def test_errors_contract(workspace, engine_on, monkeypatch):
     """The error body of an Open tables whose open command fails, and its activity entry.
 
-    The command is `false`, on every platform the same answer: a fake runner raises what
-    `false` makes subprocess raise. The request id, the time and the ids are fixed.
+    The command is `false`, on every platform the same answer: a stand-in for Popen exits
+    at once with the status of `false`, 1, and writes no stderr. The request id, the time
+    and the ids are fixed.
     """
     engine = engine_on(workspace)
     monkeypatch.setenv("PKDB_OPEN_COMMAND", "false")
-
-    def fail(arguments, **kwargs):
-        raise subprocess.CalledProcessError(
-            1, ["false", "Demo2020.xlsx"], output=b"", stderr=b""
-        )
-
-    monkeypatch.setattr(launch.subprocess, "run", fail)
+    monkeypatch.setattr(
+        launch.subprocess, "Popen", Mock(return_value=Mock(wait=Mock(return_value=1)))
+    )
     server = create_server(engine)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()

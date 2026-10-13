@@ -3,8 +3,6 @@
 import json
 import os
 import re
-import shlex
-import subprocess
 import sys
 import threading
 from types import SimpleNamespace
@@ -15,6 +13,14 @@ import openpyxl
 import pytest
 from curation_http import authenticate, error_body, request
 from digitize_fixtures import GOOD, png, project
+from open_commands import (
+    FAILING_OPENER,
+    command_line,
+    holding_opener,
+    late_opener,
+    stop_program,
+    wait_for_open_commands,
+)
 
 from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
@@ -1868,13 +1874,8 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     api, monkeypatch
 ):
     server, engine, folder = api
-    join = subprocess.list2cmdline if os.name == "nt" else shlex.join
-    opener = [
-        sys.executable,
-        "-c",
-        "import sys; sys.stderr.write('no method available for opening'); sys.exit(4)",
-    ]
-    monkeypatch.setenv("PKDB_OPEN_COMMAND", join(opener))
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 30)
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(FAILING_OPENER))
     headers = authenticate(server)
     status, _, data = request(
         server,
@@ -1906,6 +1907,30 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     )
     assert entry["error"]["detail"] == body["detail"]
     assert "exited with status 4" in engine.log.path.read_text(encoding="utf-8")
+
+
+def test_open_tables_answers_while_the_program_that_it_started_runs(
+    api, monkeypatch, tmp_path
+):
+    server, engine, folder = api
+    pid_file = tmp_path / "program.pid"
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(holding_opener(pid_file)))
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 0.5)
+    headers = authenticate(server)
+    try:
+        # request() gives up after 3 seconds; the program runs for 30.
+        status, _, data = request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", "action": "open"},
+            headers,
+        )
+    finally:
+        wait_for_open_commands()
+        stop_program(pid_file)
+    assert status == 200
+    assert json.loads(data)["opened"] is True
 
 
 #: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
@@ -2130,3 +2155,29 @@ def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
         )
         assert status == 200
         assert response_headers["Content-Type"] == "application/pdf"
+
+
+def test_a_failure_of_open_tables_after_it_answered_goes_to_the_log(api, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr("pkdb.curation.launch.EARLY_FAILURE_SECONDS", 0.2)
+    monkeypatch.setenv(
+        "PKDB_OPEN_COMMAND", command_line(late_opener(3, 3, "lost the display"))
+    )
+    headers = authenticate(server)
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/studies/tables",
+        {"study": "caffeine/Example", "action": "open"},
+        headers,
+    )
+    # The command still ran after 0.2 seconds: it counted as started.
+    assert (status, json.loads(data)["opened"]) == (200, True)
+    wait_for_open_commands()
+    text = engine.log.path.read_text(encoding="utf-8")
+    program = sys.executable.replace("\\", "/").rsplit("/", 1)[-1]
+    assert (
+        "in Open tables (POST /local/studies/tables): "
+        f"CalledProcessError: {program} exited with status 3\nlost the display"
+    ) in text
+    assert "Could not open the tables of caffeine/Example." in text

@@ -1,4 +1,4 @@
-import { readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
@@ -693,7 +693,9 @@ test.describe("tables", () => {
     await page.getByRole("button", { name: "Open tables" }).click();
     await expect(page.getByRole("status").filter({ hasText: "The workbook opened." })).toBeVisible();
     const workbook = join(app.server.workspace, "caffeine/Demo2020/Demo2020.xlsx");
-    expect(readFileSync(app.server.openLog, "utf8").split("\n")).toContain(workbook);
+    await expect
+      .poll(() => (existsSync(app.server.openLog) ? readFileSync(app.server.openLog, "utf8").split("\n") : []))
+      .toContain(workbook);
   });
 
   test("a saved workbook updates the tables within the next polls", async ({ app, page }) => {
