@@ -1,15 +1,20 @@
 """The view of a workbook: the sheet and the cell that it opens at (#939)."""
 
 import io
+import os
+import sys
 import zipfile
+from types import SimpleNamespace
 
 import openpyxl
 import pytest
 
 from pkdb.studyformat.sync import sync_study
+from pkdb.studyformat.workbook import view
 from pkdb.studyformat.workbook.base import workbook_path
 from pkdb.studyformat.workbook.view import (
     NoSheet,
+    ViewError,
     WorkbookOpen,
     parse_cell,
     show_place,
@@ -210,6 +215,62 @@ def test_an_open_workbook_is_left_as_it_is(workbook):
     assert workbook.read_bytes() == before
 
 
+def test_a_workbook_saved_meanwhile_is_left_as_it_is(workbook, monkeypatch):
+    """A save while the app read the workbook wins: the app replaces nothing."""
+    compute = view.with_view
+
+    def saved_meanwhile(data, sheet, cell=None):
+        viewed = compute(data, sheet, cell)
+        book = openpyxl.load_workbook(workbook)
+        book["subjects"]["A2"] = "saved meanwhile"
+        book.save(workbook)
+        status = workbook.stat()
+        # A save within the same tick of the clock can keep the time.
+        os.utime(workbook, ns=(status.st_atime_ns, status.st_mtime_ns + 10**9))
+        return viewed
+
+    monkeypatch.setattr(view, "with_view", saved_meanwhile)
+
+    with pytest.raises(ViewError, match=r"^Example.xlsx was saved meanwhile$"):
+        show_place(workbook, "timecourses_Fig1", "O6")
+    book = openpyxl.load_workbook(workbook)
+    assert book["subjects"]["A2"].value == "saved meanwhile"
+    assert book.active.title == "subjects"
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32" or os.geteuid() == 0,
+    reason="POSIX permissions, which root ignores",
+)
+def test_a_workbook_in_a_folder_without_write_permission_is_not_open(workbook):
+    """Only Windows refuses a replace for an open workbook; elsewhere it is no open one."""
+    before = workbook.read_bytes()
+    workbook.parent.chmod(0o555)
+    try:
+        with pytest.raises(
+            ViewError, match=r"^Example.xlsx cannot be replaced: permission denied$"
+        ):
+            show_place(workbook, "timecourses_Fig1", "O6")
+    finally:
+        workbook.parent.chmod(0o755)
+    assert workbook.read_bytes() == before
+
+
+def test_a_workbook_that_windows_refuses_to_replace_is_open(workbook, monkeypatch):
+    """Windows keeps a workbook locked while a program has it open."""
+
+    def locked(path, data):
+        raise PermissionError(13, "Permission denied")
+
+    monkeypatch.setattr(view, "atomic_bytes", locked)
+    monkeypatch.setattr(view, "os", SimpleNamespace(name="nt"))
+    before = workbook.read_bytes()
+
+    with pytest.raises(WorkbookOpen):
+        show_place(workbook, "timecourses_Fig1", "O6")
+    assert workbook.read_bytes() == before
+
+
 @pytest.mark.parametrize(
     "cell", ["y97", "A0", "XFE1", "A1048577", "Y", "97", "A1:B2", " A1", "A01"]
 )
@@ -263,6 +324,119 @@ def test_a_sheet_view_without_content_gets_a_selection():
         b'<selection activeCell="C40" sqref="C40"/></sheetView>',
     )
     assert openpyxl.load_workbook(io.BytesIO(data)).active.title == "raw"
+
+
+@pytest.mark.parametrize(
+    ("cell", "pane"), [("Z40", "X37"), ("B1", "C2"), ("D30", "C27"), ("K2", "I2")]
+)
+def test_frozen_rows_and_columns_stay_and_the_pane_scrolls_to_the_cell(cell, pane):
+    book = openpyxl.Workbook()
+    book.active.title = "first"
+    frozen = book.create_sheet("frozen")
+    # Two columns and a row stay, as in the sheet of a table with a frozen label.
+    frozen.freeze_panes = "C2"
+    data = io.BytesIO()
+    book.save(data)
+
+    viewed = with_view(data.getvalue(), "frozen", cell)
+
+    assert viewed is not None
+    sheet = openpyxl.load_workbook(io.BytesIO(viewed)).active
+    assert sheet.title == "frozen"
+    assert selected(sheet) == cell
+    split = sheet.sheet_view.pane
+    assert (split.xSplit, split.ySplit, split.state, split.activePane) == (
+        2,
+        1,
+        "frozen",
+        "bottomRight",
+    )
+    assert split.topLeftCell == pane
+    # The top left pane holds only frozen cells and never scrolls.
+    assert sheet.sheet_view.topLeftCell == "A1"
+
+
+def changed(name, old, new):
+    """The parts of OTHER_WRITER with `old` replaced by `new` in the part `name`."""
+    assert old in OTHER_WRITER[name]
+    return {**OTHER_WRITER, name: OTHER_WRITER[name].replace(old, new)}
+
+
+SHEET2 = "xl/worksheets/sheet2.xml"
+
+
+@pytest.mark.parametrize(
+    ("parts", "message"),
+    [
+        (None, "the workbook is no xlsx file: "),
+        (
+            {
+                name: part
+                for name, part in OTHER_WRITER.items()
+                if name != "xl/workbook.xml"
+            },
+            "the workbook cannot be read: ",
+        ),
+        (
+            changed("xl/workbook.xml", b"</x:sheets>", b"</x:sheet>"),
+            "a part of the workbook is no XML: mismatched tag",
+        ),
+        (
+            changed("xl/_rels/workbook.xml.rels", b"</Relationships>", b""),
+            "the relationships of the workbook are no XML: ",
+        ),
+        (
+            changed(SHEET2, b"</x:pane>", b"</x:sheetView>"),
+            "a part of the workbook is no XML: mismatched tag",
+        ),
+        (
+            changed(
+                "xl/workbook.xml",
+                b'<x:bookViews><x:workbookView xWindow="0" yWindow="0" firstSheet="2" '
+                b'activeTab="0" xr:uid="{A}"/></x:bookViews>',
+                b"",
+            ),
+            "the workbook has no view",
+        ),
+        (
+            changed("xl/_rels/workbook.xml.rels", b'Id="rId2"', b'Id="rId9"'),
+            "the sheet outputs_Fig6 has no part",
+        ),
+        (
+            changed(
+                SHEET2,
+                b'<x:sheetViews><x:sheetView workbookViewId="0"><x:pane ySplit="1" '
+                b'topLeftCell="A2" activePane="bottomLeft" state="frozen"></x:pane>'
+                b"</x:sheetView></x:sheetViews>",
+                b"",
+            ),
+            "the sheet has no view",
+        ),
+        (
+            changed("xl/workbook.xml", b'firstSheet="2"', b'firstSheet="second"'),
+            "the firstSheet 'second' of the workbook is no number",
+        ),
+        (
+            changed(SHEET2, b'ySplit="1"', b'ySplit="one"'),
+            "the ySplit 'one' of the workbook is no number",
+        ),
+        (
+            changed(SHEET2, b'ySplit="1"', b'ySplit="NaN"'),
+            "the ySplit 'NaN' of the workbook is no number",
+        ),
+        (
+            changed(SHEET2, b'<x:pane ySplit="1"', b'<x:pane xSplit="INF" ySplit="1"'),
+            "the xSplit 'INF' of the workbook is no number",
+        ),
+    ],
+)
+def test_a_workbook_whose_view_cannot_be_set_is_refused(parts, message):
+    """ViewError, never the ValueError of a cell that is no workbook address."""
+    data = b"PK no zip" if parts is None else package(parts)
+
+    with pytest.raises(ViewError) as error:
+        with_view(data, "outputs_Fig6", "Y97")
+    assert str(error.value).startswith(message)
 
 
 def test_libreoffice_opens_the_workbook_at_the_place(workbook, libreoffice_resave):

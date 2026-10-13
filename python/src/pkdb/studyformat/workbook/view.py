@@ -12,6 +12,7 @@ namespace declarations that only `mc:Ignorable` names, and Excel takes such a pa
 damaged.
 """
 
+import os
 import posixpath
 import re
 import zlib
@@ -151,6 +152,18 @@ def _elements(data: bytes, names: frozenset[str], last: str) -> list[_Tag]:
     return found
 
 
+def _number(tag: _Tag, name: str) -> int:
+    """The whole number in the attribute `name` of `tag`, 0 without it.
+
+    ViewError for a value that is no finite number: a ValueError means a bad cell address.
+    """
+    value = tag.attributes.get(name, "0")
+    try:
+        return int(float(value))
+    except ValueError, OverflowError:
+        raise ViewError(f"the {name} {value!r} of the workbook is no number") from None
+
+
 def _with_attributes(tag: bytes, values: Mapping[str, str | None]) -> bytes:
     """The start tag `tag` with the attributes of `values` set, or removed for None.
 
@@ -225,8 +238,7 @@ def _select(data: bytes, view: _Tag, cell: str) -> list[_Edit]:
     if pane is None:
         values["topLeftCell"] = _address(left, top)
     elif pane.attributes.get("state") in {"frozen", "frozenSplit"}:
-        columns = int(float(pane.attributes.get("xSplit", "0")))
-        rows = int(float(pane.attributes.get("ySplit", "0")))
+        columns, rows = _number(pane, "xSplit"), _number(pane, "ySplit")
         # The top left pane scrolls only along the frozen edge that it does not have.
         values["topLeftCell"] = _address(
             left if columns == 0 else 1, top if rows == 0 else 1
@@ -402,7 +414,7 @@ def with_view(data: bytes, sheet: str, cell: str | None = None) -> bytes | None:
                 raise NoSheet(sheet)
             values: dict[str, str | None] = {"activeTab": str(index)}
             # The tab bar starts at the active sheet at the latest.
-            if int(view.attributes.get("firstSheet", "0")) > index:
+            if _number(view, "firstSheet") > index:
                 values["firstSheet"] = str(index)
             parts: dict[str, bytes] = {}
             if edits := _attributes(workbook, view, values):
@@ -440,8 +452,8 @@ def show_place(path: Path, sheet: str, cell: str | None = None) -> bool:
     """Make the workbook at `path` open at `sheet`, with `cell` selected; whether it changed.
 
     The workbook is replaced atomically through a temporary file in its folder. A workbook
-    that a spreadsheet program has open raises WorkbookOpen, and one saved while it was read
-    raises ViewError; both are left as they are.
+    that a spreadsheet program has open raises WorkbookOpen; one saved while it was read, or
+    in a folder that refuses the replace, raises ViewError. Each is left as it is.
     """
     before = path.stat()
     data = path.read_bytes()
@@ -456,6 +468,9 @@ def show_place(path: Path, sheet: str, cell: str | None = None) -> bool:
     try:
         atomic_bytes(path, viewed)
     except PermissionError:
-        # Windows keeps a workbook locked while a program has it open.
-        raise WorkbookOpen(path.name) from None
+        if os.name == "nt":
+            # Windows keeps a workbook locked while a program has it open.
+            raise WorkbookOpen(path.name) from None
+        # Elsewhere programs lock no file: the folder refuses the write.
+        raise ViewError(f"{path.name} cannot be replaced: permission denied") from None
     return True
