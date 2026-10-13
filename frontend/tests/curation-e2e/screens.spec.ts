@@ -59,6 +59,14 @@ const SCREENS: Screen[] = [
     },
   },
   {
+    name: "data of a shared table",
+    hash: `${STUDY}/data?file=subjects.tsv`,
+    ready: async (page) => {
+      await expect(page.getByRole("combobox", { name: "Source of the rows" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Rows of subjects.tsv" })).toBeVisible();
+    },
+  },
+  {
     name: "activity",
     hash: `${STUDY}/activity`,
     ready: async (page) => {

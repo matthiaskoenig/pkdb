@@ -79,10 +79,32 @@ export type TableKind = "subjects" | "interventions" | "characteristica" | "outp
 /** The kind of a table file: a table kind, or `raw` for the raw table of a paper table. */
 export type TableFileKind = TableKind | "raw";
 
-/** A table file of the study with its kind; the study detail lists them in the order of the workbook sheets. */
+/** The class of information of a table, by which the Data section groups and colors it. */
+export type InfoClass = "subjects" | "interventions" | "data" | "raw";
+
+/**
+ * A table file of the study; the study detail lists them in the order of the workbook sheets.
+ * `source` is the source it belongs to, such as Tab2 of `outputs_Tab2.tsv` or of the raw table
+ * `<name>_Tab2.tsv`, and null for a table shared by several sources, which names the source of
+ * each row. `rows` is the number of its data rows; null when it cannot be read.
+ */
 export interface TableEntry {
   file: string;
   kind: TableFileKind;
+  info: InfoClass;
+  source: string | null;
+  rows: number | null;
+}
+
+/** A kind of table as the local server describes it, in the order of the workbook sheets with the raw table last. */
+export interface TableKindEntry {
+  kind: TableFileKind;
+  label: string;
+  info: InfoClass;
+  /** Whether a table of the kind belongs to one source; the others name the source of each row. */
+  per_source: boolean;
+  /** Whether Add table adds a table of the kind. */
+  addable: boolean;
 }
 
 export interface StudyReference {
@@ -605,6 +627,8 @@ export interface StudyDetail {
   files: string[];
   /** The table files and raw tables in the order of the workbook sheets; empty beyond the upload limits. */
   tables: TableEntry[];
+  /** The kinds of tables, also beyond the upload limits. */
+  table_kinds: TableKindEntry[];
   /**
    * What the target of each review item with a file selects, by item id, as the library matches
    * it; empty beyond the upload limits.
@@ -835,6 +859,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "sources",
   "files",
   "tables",
+  "table_kinds",
   "targets",
 );
 

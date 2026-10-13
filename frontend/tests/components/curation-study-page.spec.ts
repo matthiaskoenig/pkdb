@@ -20,7 +20,7 @@ import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
-import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
+import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow, tableEntry } from "../unit/curation-fixtures";
 import {
   button,
   buttons,
@@ -111,11 +111,11 @@ const harder: StudyDetail = studyDetail({
     "timecourses_Fig1.tsv",
   ],
   tables: [
-    { file: "subjects.tsv", kind: "subjects" },
-    { file: "interventions.tsv", kind: "interventions" },
-    { file: "characteristica.tsv", kind: "characteristica" },
-    { file: "outputs_Tab2.tsv", kind: "outputs" },
-    { file: "timecourses_Fig1.tsv", kind: "timecourses" },
+    tableEntry("subjects.tsv", "subjects"),
+    tableEntry("interventions.tsv", "interventions"),
+    tableEntry("characteristica.tsv", "characteristica"),
+    tableEntry("outputs_Tab2.tsv", "outputs"),
+    tableEntry("timecourses_Fig1.tsv", "timecourses"),
   ],
 });
 

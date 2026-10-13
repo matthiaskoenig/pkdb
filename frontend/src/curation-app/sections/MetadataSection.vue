@@ -55,7 +55,7 @@ import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { failureOf, issuesFailure, knownProfiles, NOTICE_MS, releaseLabel, userHint, type ActionFailure } from "../study";
-import { TABLE_KIND_LABELS, TABLE_KINDS } from "../tableKinds";
+import { kindLabel, noteKinds } from "../tableKinds";
 
 /**
  * The form of study.json. Saves are explicit and go over the revision that the form was read
@@ -77,6 +77,12 @@ const ids = {
 };
 
 const detail = computed(() => study.detail);
+/** The table kinds with notes in study.json and their labels, as the study page describes them. */
+const notesKinds = computed(() => {
+  const value = detail.value;
+  return value ? noteKinds(value).map((kind) => ({ kind, label: kindLabel(value, kind) })) : [];
+});
+const formKinds = computed(() => notesKinds.value.map((entry) => entry.kind));
 /** study.json as the app last read it. */
 const studyJson = computed(() => detail.value?.metadata ?? null);
 
@@ -152,7 +158,7 @@ function clearFeedback(): void {
 function adopt(state: DocumentState<StudyMetadata>): void {
   adopted = state.revision;
   revision.value = state.revision;
-  base.value = state.value ? toForm(state.value) : null;
+  base.value = state.value ? toForm(state.value, formKinds.value) : null;
   form.value = base.value ? clone(base.value) : null;
   clearFeedback();
 }
@@ -310,7 +316,7 @@ function refused(issues: ValidationIssue[], sent: MetadataForm): void {
     grouped.general,
   );
   // The notes of a table kind with an issue open, so that the issue shows.
-  const kinds = TABLE_KINDS.filter((kind) => [...grouped.fields.keys()].some((key) => key.startsWith(`notes.${kind}.`)));
+  const kinds = formKinds.value.filter((kind) => [...grouped.fields.keys()].some((key) => key.startsWith(`notes.${kind}.`)));
   openPanels.value = [...new Set([...openPanels.value, ...kinds])];
 }
 
@@ -328,7 +334,7 @@ async function save(): Promise<void> {
   announce("");
   try {
     const result = await study.saveMetadata(at, metadata);
-    const written = toForm(metadata);
+    const written = toForm(metadata, formKinds.value);
     // Edits made while the save ran stay unsaved; otherwise the form shows what was written.
     if (form.value && changedFields(sent, form.value).length === 0) form.value = clone(written);
     base.value = written;
@@ -342,7 +348,7 @@ async function save(): Promise<void> {
     announce("study.json saved.");
   } catch (caught) {
     if (isRevisionConflict(caught))
-      conflict.value = { revision: caught.body.revision, theirs: readStudyJson(caught.body.content) };
+      conflict.value = { revision: caught.body.revision, theirs: readStudyJson(caught.body.content, formKinds.value) };
     else if (isValidationError(caught)) refused(caught.body.issues, sent);
     else if (isNoUser(caught)) noUser.value = userHint(caught);
     else failure.value = failureOf(caught, "study.json was not saved.");
@@ -355,7 +361,7 @@ async function save(): Promise<void> {
 function reload(): void {
   const changed = conflict.value;
   if (!changed?.theirs || !form.value) return;
-  const start = base.value ?? toForm({});
+  const start = base.value ?? toForm({}, formKinds.value);
   const { merged, conflicts } = mergeOnReload(start, form.value, changed.theirs);
   marks.value = new Map(
     changedFields(start, changed.theirs).map((key): [string, FieldMark] => [
@@ -371,7 +377,7 @@ function reload(): void {
   conflict.value = null;
   failure.value = null;
   errors.value = new Map();
-  const kinds = TABLE_KINDS.filter((kind) => marks.value.has(`notes.${kind}.descriptions`) || marks.value.has(`notes.${kind}.comments`));
+  const kinds = formKinds.value.filter((kind) => marks.value.has(`notes.${kind}.descriptions`) || marks.value.has(`notes.${kind}.comments`));
   openPanels.value = [...new Set([...openPanels.value, ...kinds])];
 }
 
@@ -836,10 +842,10 @@ onBeforeUnmount(() => {
         </VCardItem>
         <VCardText class="metadata-card-body">
           <VExpansionPanels v-model="openPanels" multiple variant="accordion" class="notes-panels">
-            <VExpansionPanel v-for="kind in TABLE_KINDS" :key="kind" :value="kind" elevation="0">
+            <VExpansionPanel v-for="{ kind, label } in notesKinds" :key="kind" :value="kind" elevation="0">
               <!-- The space keeps the kind and the summary apart for screen readers. -->
               <VExpansionPanelTitle class="notes-title">
-                <span class="notes-kind">{{ TABLE_KIND_LABELS[kind] }}</span> <span class="notes-summary">{{ notesSummary(kind) }}</span>
+                <span class="notes-kind">{{ label }}</span> <span class="notes-summary">{{ notesSummary(kind) }}</span>
               </VExpansionPanelTitle>
               <VExpansionPanelText>
                 <NotesFields

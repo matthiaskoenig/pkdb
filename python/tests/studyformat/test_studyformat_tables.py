@@ -3,7 +3,10 @@ import re
 from pkdb.cache import bundled_vocabulary
 from pkdb.studyformat.columns import ColumnType
 from pkdb.studyformat.tables import (
+    INFO_CLASSES,
+    KIND_LABELS,
     KIND_ORDER,
+    RAW_KIND,
     TABLES,
     image_file,
     parse_table_file,
@@ -210,3 +213,26 @@ def test_file_names():
     assert parse_table_file("outputs_Tab2.csv") is None
     assert parse_table_file("groups.tsv") is None
     assert image_file("Guo2016", "Fig2") == "Guo2016_Fig2.png"
+
+
+def test_every_table_kind_and_the_raw_table_have_a_class_of_information_and_a_label():
+    kinds = [*KIND_ORDER, RAW_KIND]
+    assert [INFO_CLASSES[kind] for kind in kinds] == [
+        "subjects",
+        "subjects",
+        "interventions",
+        "data",
+        "data",
+        "data",
+        "raw",
+    ]
+    assert [KIND_LABELS[kind] for kind in kinds] == [
+        "Subjects",
+        "Characteristica",
+        "Interventions",
+        "Outputs",
+        "Timecourses",
+        "Scatters",
+        "Raw table",
+    ]
+    assert set(INFO_CLASSES) == set(KIND_LABELS) == set(kinds)

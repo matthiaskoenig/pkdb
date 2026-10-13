@@ -19,7 +19,7 @@ import {
   type TableKind,
   type ValidationIssue,
 } from "./api/types";
-import { TABLE_KINDS } from "./tableKinds";
+import { noteKinds } from "./tableKinds";
 
 export type ProvenanceKind = Provenance["kind"];
 
@@ -72,8 +72,8 @@ export interface MetadataForm {
   notes: Record<TableKind, NotesForm>;
 }
 
-/** The fields of the form, in the order of the section. */
-export const FIELD_KEYS: readonly string[] = [
+/** The fields of the form outside the notes of the tables, in the order of the section. */
+const STUDY_FIELD_KEYS: readonly string[] = [
   "reference.pmid",
   "reference.doi",
   "creator",
@@ -92,8 +92,20 @@ export const FIELD_KEYS: readonly string[] = [
   "release",
   "descriptions",
   "comments",
-  ...TABLE_KINDS.flatMap((kind) => [`notes.${kind}.descriptions`, `notes.${kind}.comments`]),
 ];
+
+/** The kinds of the notes of a form, in the order of the study page that it was made for. */
+function formKinds(form: MetadataForm): TableKind[] {
+  return Object.keys(form.notes) as TableKind[];
+}
+
+/** The fields of the form, in the order of the section: those of the study, then the notes of each table kind. */
+export function fieldKeys(form: MetadataForm): string[] {
+  return [
+    ...STUDY_FIELD_KEYS,
+    ...formKinds(form).flatMap((kind) => [`notes.${kind}.descriptions`, `notes.${kind}.comments`]),
+  ];
+}
 
 const LABELS: Record<string, string> = {
   "reference.pmid": "PMID",
@@ -177,8 +189,8 @@ function provenanceForm(value: unknown): ProvenanceForm {
   };
 }
 
-/** The form of a `study.json` value; it reads any JSON value, with defaults for what it lacks. */
-export function toForm(value: unknown): MetadataForm {
+/** The form of a `study.json` value with the notes of `kinds`; it reads any JSON value, with defaults for what it lacks. */
+export function toForm(value: unknown, kinds: readonly TableKind[]): MetadataForm {
   const data = record(value);
   const reference = record(data.reference);
   const release = record(data.release);
@@ -199,7 +211,7 @@ export function toForm(value: unknown): MetadataForm {
     descriptions: list(data.descriptions).map(text),
     comments: comments(data.comments),
     notes: Object.fromEntries(
-      TABLE_KINDS.map((kind) => {
+      kinds.map((kind) => {
         const entry = record(notes[kind]);
         return [kind, { descriptions: list(entry.descriptions).map(text), comments: comments(entry.comments) }];
       }),
@@ -208,7 +220,7 @@ export function toForm(value: unknown): MetadataForm {
 }
 
 /** The form of the content of a 409 answer: the text of `study.json` on disk; null when it is no JSON object. */
-export function readStudyJson(content: string | null): MetadataForm | null {
+export function readStudyJson(content: string | null, kinds: readonly TableKind[]): MetadataForm | null {
   if (content === null) return null;
   let value: unknown;
   try {
@@ -216,7 +228,7 @@ export function readStudyJson(content: string | null): MetadataForm | null {
   } catch {
     return null;
   }
-  return isRecord(value) ? toForm(value) : null;
+  return isRecord(value) ? toForm(value, kinds) : null;
 }
 
 /**
@@ -227,7 +239,7 @@ export function readStudyJson(content: string | null): MetadataForm | null {
 export function startForm(detail: StudyDetail, author: string): MetadataForm {
   const summary = detail.summary;
   const reference = detail.reference && !("error" in detail.reference) ? detail.reference : null;
-  const form = toForm({});
+  const form = toForm({}, noteKinds(detail));
   form.reference = { pmid: reference?.pmid ?? "", doi: reference?.doi ?? "" };
   form.creator = summary.creator ?? author;
   form.curators = (summary.curators ?? []).map((user) => ({ user, rating: 0 }));
@@ -270,7 +282,7 @@ export function fromForm(form: MetadataForm): StudyMetadata {
   if (form.reference.pmid !== "") reference.pmid = form.reference.pmid;
   if (form.reference.doi !== "") reference.doi = form.reference.doi;
   const notes: StudyMetadata["notes"] = {};
-  for (const kind of TABLE_KINDS) {
+  for (const kind of formKinds(form)) {
     const descriptions = form.notes[kind].descriptions.filter(keptText);
     const comments = form.notes[kind].comments.filter(keptComment).map((entry) => ({ ...entry }));
     if (descriptions.length || comments.length) notes[kind] = { descriptions, comments };
@@ -338,9 +350,10 @@ export function copyField(target: MetadataForm, source: MetadataForm, key: strin
   if (isRecord(node) && last !== undefined) node[last] = clone(valueAt(source, key));
 }
 
-/** The fields whose values differ between `base` and `current`, in the order of `FIELD_KEYS`. */
+/** The fields whose values differ between `base` and `current`, in the order of `fieldKeys`. */
 export function changedFields(base: MetadataForm, current: MetadataForm): string[] {
-  return FIELD_KEYS.filter((key) => !same(valueAt(base, key), valueAt(current, key)));
+  const keys = [...new Set([...fieldKeys(base), ...fieldKeys(current)])];
+  return keys.filter((key) => !same(valueAt(base, key), valueAt(current, key)));
 }
 
 /**
@@ -451,7 +464,7 @@ export function issueTarget(form: MetadataForm, field: string | null | undefined
     }
     case "notes": {
       const [kind, name, index] = rest;
-      const notes = TABLE_KINDS.find((candidate) => candidate === kind);
+      const notes = formKinds(form).find((candidate) => candidate === kind);
       if (notes === undefined) return null;
       if (name === "descriptions")
         return row(`notes.${notes}.descriptions`, form.notes[notes].descriptions, keptText, index);

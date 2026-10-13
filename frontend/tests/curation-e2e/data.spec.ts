@@ -1,8 +1,8 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import { columnLetters } from "../../src/curation-app/columns.ts";
-import { expect, runTool, setAutomaticActions, test } from "./fixtures.ts";
+import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./fixtures.ts";
 
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
@@ -77,7 +77,7 @@ function sourceView(page: Page, source: string): Promise<SourceView> {
 
 /** The button of a source or a table file in the navigator of the Data section. */
 function navigatorButton(page: Page, name: RegExp) {
-  return page.getByRole("navigation", { name: "Sources and tables" }).getByRole("button", { name });
+  return page.getByRole("navigation", { name: "Tables and sources" }).getByRole("button", { name });
 }
 
 /** Where the panes of the Data section end, how high they are, and how far the page scrolls. */
@@ -111,6 +111,69 @@ test.describe("sources", () => {
     expect(await height(/^Fig1/)).toBe(40);
     expect(await height(/^Tab2/)).toBe(40);
     expect(await height(/^subjects\.tsv/)).toBe(24);
+  });
+
+  test("the navigator lists the tables by class of information, then the sources", async ({ page }) => {
+    const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+    await expect(navigator.getByRole("heading")).toHaveText(["Tables", "Subjects", "Interventions", "Data", "Raw extractions", "Sources"]);
+    const names = (group: string) => navigator.getByRole("list", { name: group, exact: true }).locator(".nav-file-name");
+    await expect(names("Subjects")).toHaveText(["subjects.tsv", "characteristica.tsv"]);
+    await expect(names("Interventions")).toHaveText(["interventions.tsv"]);
+    await expect(names("Data")).toHaveText(["outputs_Tab2.tsv", "timecourses_Fig1.tsv"]);
+    await expect(names("Raw extractions")).toHaveText(["Demo2020_Tab2.tsv"]);
+    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Fig1", "Tab2", "Text"]);
+    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-rows")).toHaveAttribute("title", "18 rows");
+    await expect(navigatorButton(page, /^subjects\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(29, 95, 184)");
+    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(106, 63, 181)");
+  });
+
+  test("below 1100 px the Table select lists the tables under the headings of their class, in a menu that the keyboard reaches", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
+    await page.locator(".data-select--table .v-field").click();
+    const menu = page.getByRole("listbox");
+    await expect(menu.locator(".v-list-subheader")).toHaveText(["Subjects", "Interventions", "Data", "Raw extractions"]);
+    await expect(menu.getByRole("option")).toHaveText([
+      "subjects.tsv",
+      "characteristica.tsv",
+      "interventions.tsv",
+      "outputs_Tab2.tsv",
+      "timecourses_Fig1.tsv",
+      "Demo2020_Tab2.tsv",
+    ]);
+    await expect(menu.getByRole("option", { name: "subjects.tsv" }).locator(".data-option-dot")).toHaveCSS(
+      "background-color",
+      "rgb(29, 95, 184)",
+    );
+    // The menu scrolls when the tables do not fit, so the keyboard must reach it.
+    await expectAccessible(page);
+    await menu.getByRole("option", { name: "timecourses_Fig1.tsv" }).click();
+    await expect(page).toHaveURL(/file=timecourses_Fig1\.tsv/);
+  });
+
+  test("the focus ring of an option of the Table menu lies inside the menu, in both themes", async ({ page }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
+    for (const scheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.locator(".data-select--table .v-field").click();
+      const menu = page.getByRole("listbox");
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("ArrowDown");
+      const option = menu.locator(".v-list-item:focus-visible");
+      await expect(option).toHaveCount(1);
+      const ring = await option.evaluate((element) => {
+        const style = getComputedStyle(element);
+        const reach = parseFloat(style.outlineOffset) + parseFloat(style.outlineWidth);
+        const box = element.getBoundingClientRect();
+        return { left: box.left - reach, right: box.right + reach };
+      });
+      const list = (await menu.boundingBox())!;
+      expect(ring.left).toBeGreaterThanOrEqual(list.x);
+      expect(ring.right).toBeLessThanOrEqual(list.x + list.width);
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+    }
   });
 
   test("the Fig1 overlay shows the row of a mapped point and focuses it in the rows of the Data section", async ({ page }) => {
@@ -154,6 +217,123 @@ test.describe("sources", () => {
     const rows = page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" });
     await expect(rows.getByRole("button", { name: "2", exact: true })).toBeVisible();
   });
+});
+
+test("the navigator shows the whole name of a table beside a warning, an open review item and its rows, all lined up", async ({
+  app,
+  page,
+}) => {
+  // An open review item about the table, beside the warning of its misplaced point.
+  const file = join(app.server.workspace, "caffeine/Demo2020/review.json");
+  const original = readFileSync(file, "utf8");
+  const review = JSON.parse(original) as { items: object[] };
+  review.items.push({
+    id: "01M2Z8Q4KX0T9V3B6N1C5D7E2F",
+    kind: "question",
+    state: "open",
+    target: { file: TABLE },
+    text: "Are the times after the first or the second dose?",
+    author: "demo-reviewer",
+    created: "2026-09-20T09:00:00+02:00",
+  });
+  writeFileSync(file, `${JSON.stringify(review, null, 2)}\n`);
+  try {
+    await app.open("#/studies/caffeine/Demo2020/data");
+    const entry = navigatorButton(page, /^timecourses_Fig1\.tsv/);
+    await expect(entry.locator(".nav-count--warning")).toHaveAttribute("title", "1 warning");
+    await expect(entry.locator(".nav-count:not(.nav-count--warning)")).toHaveAttribute("title", "1 open review item");
+    await expect(entry.locator(".nav-rows")).toHaveAttribute("title", "18 rows");
+    const name = entry.locator(".nav-name");
+    await expect(name).toHaveText("timecourses_Fig1");
+    expect(await name.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    // The drawn name keeps 8 px from the warning after it, twice the space between the badges.
+    const apart = await entry.evaluate((element) => {
+      const text = document.createRange();
+      text.selectNodeContents(element.querySelector(".nav-name")!);
+      return element.querySelector(".nav-count")!.getBoundingClientRect().left - text.getBoundingClientRect().right;
+    });
+    expect(apart).toBeGreaterThanOrEqual(8);
+    // A pill of one or two digits has the width of two, so that the pills and the badges before them line up.
+    const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+    const lefts = (selector: string) =>
+      navigator.locator(selector).evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().left));
+    expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
+    expect(new Set(await lefts(".nav-file .nav-count:not(.nav-count--error, .nav-count--warning)")).size).toBe(1);
+    // A count of three digits (364 of the 1572 studies of pkdb_data have such a table) keeps the pill as wide.
+    const widths = () =>
+      navigator.locator(".nav-file .nav-rows").evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().width));
+    const narrow = await widths();
+    await navigator.locator(".nav-file .nav-rows").first().evaluate((element) => {
+      element.textContent = "364";
+    });
+    const wide = await widths();
+    expect(wide[0]).toBe(narrow[0]);
+    expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
+  } finally {
+    writeFileSync(file, original);
+  }
+});
+
+test("the navigator takes the width of its longest name up to 320 px, beyond which the name ends with an ellipsis", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data");
+  const navigator = page.getByRole("navigation", { name: "Tables and sources" });
+  const width = async () => (await navigator.boundingBox())!.width;
+  const entry = navigatorButton(page, /^timecourses_Fig1\.tsv/);
+  const name = entry.locator(".nav-name");
+  // At least 232 px, whatever font the machine draws the names in: with DejaVu Sans, the sans-serif
+  // of the Linux runners of continuous integration, it is wider than with Noto Sans.
+  await expect(entry.locator(".nav-count--warning")).toHaveAttribute("title", "1 warning");
+  const short = await width();
+  expect(short).toBeGreaterThanOrEqual(232);
+  expect(short).toBeLessThan(320);
+  await name.evaluate((element) => {
+    element.textContent = "timecourses_Fig1_caffeine_paraxanthine_theophylline";
+  });
+  await expect.poll(width).toBe(320);
+  expect(await name.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+  await expect(name).toHaveCSS("text-overflow", "ellipsis");
+  await expect(name).toHaveAttribute("title", "timecourses_Fig1.tsv");
+  // The warning and the rows keep their place at the end of the entry, inside the navigator.
+  const rows = (await entry.locator(".nav-rows").boundingBox())!;
+  const button = (await entry.boundingBox())!;
+  expect(rows.x + rows.width).toBeLessThanOrEqual(button.x + button.width);
+  await expect(entry.locator(".nav-count--warning")).toBeInViewport({ ratio: 1 });
+});
+
+test("subjects.tsv shows all of its rows when it is chosen, whichever source is selected", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/data");
+  await navigatorButton(page, /^subjects\.tsv/).click();
+  // subjects.tsv of Demo2020 has one row, the group all, whose source is Text.
+  const rows = page.getByRole("region", { name: "Rows of subjects.tsv" });
+  await expect(rows.getByRole("rowheader", { name: "2", exact: true })).toBeVisible();
+  await expect(rows.getByRole("cell", { name: "all", exact: true })).toBeVisible();
+  await expect(page.getByText(/^No rows of /)).toHaveCount(0);
+});
+
+test("the Source filter of a shared table keeps its choice per table while the study is open", async ({ app, page }) => {
+  await app.open("#/studies/caffeine/Demo2020/data?file=characteristica.tsv");
+  const filter = page.getByRole("combobox", { name: "Source of the rows" });
+  await expect(filter).toHaveValue("all");
+  await expect(filter.locator("option")).toHaveText(["All (6)", "Text (6)", "No source (0)"]);
+  await filter.selectOption({ label: "No source (0)" });
+  await expect(page.getByText("Every row of characteristica.tsv names a source.")).toBeVisible();
+  // Another shared table has a filter of its own, and a table of one source none.
+  await navigatorButton(page, /^subjects\.tsv/).click();
+  await expect(filter).toHaveValue("all");
+  await navigatorButton(page, /^outputs_Tab2\.tsv/).click();
+  await expect(filter).toHaveCount(0);
+  // The choice survives other sections of the study.
+  await page.getByRole("link", { name: /^Metadata\b/ }).click();
+  await page.getByRole("link", { name: /^Data\b/ }).click();
+  await navigatorButton(page, /^characteristica\.tsv/).click();
+  await expect(filter).toHaveValue("none");
+  await page.getByRole("button", { name: "Show all rows" }).click();
+  await expect(filter).toHaveValue("all");
+  // The header row and the six rows.
+  await expect(page.getByRole("region", { name: "Rows of characteristica.tsv" }).getByRole("row")).toHaveCount(7);
 });
 
 test("the app bar, the study header and the section tabs take at most 110 px of a 1600 × 1000 window", async ({
@@ -344,6 +524,39 @@ test("the pane heads keep the source and the count of rows whole while a pane is
   await expect.poll(() => count.evaluate(whole)).toBe(true);
 });
 
+test("the head of the rows pane shows its kind, count, Source select and notes without cutting a word, also at its narrowest", async ({
+  app,
+  page,
+}) => {
+  await app.open("#/studies/caffeine/Demo2020/data?file=interventions.tsv");
+  const pane = page.getByRole("region", { name: "Table interventions.tsv" });
+  await expect(pane.getByRole("combobox", { name: "Source of the rows" })).toBeVisible();
+  await expect(pane.getByText("1 problem is outlined.", { exact: true })).toBeVisible();
+  // What the head and its notes cut or clip, apart from the file name, which may end in an ellipsis in a narrow pane.
+  const cut = () =>
+    pane.evaluate((section) => {
+      const box = section.getBoundingClientRect();
+      const parts = ".pane-head-name, .pane-head-kind, .pane-head-part, .pane-head-filter, .pane-head-line, .rows-pane-notes > *";
+      return [...section.querySelectorAll<HTMLElement>(parts)]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          const clipped = rect.left < box.left || rect.right > box.right;
+          const name = element.classList.contains("pane-head-name");
+          return clipped || (!name && element.scrollWidth > element.clientWidth);
+        })
+        .map((element) => element.textContent?.trim());
+    });
+  expect(await cut()).toEqual([]);
+  await expect(pane.locator(".pane-head-kind")).toHaveText("Interventions");
+  // Where it has room, the head is one line of 26 px, as the head of the source pane beside it.
+  expect((await pane.locator(".pane-head").boundingBox())!.height).toBe(26);
+  const separator = page.getByRole("separator", { name: "Resize the source and the rows" });
+  await separator.focus();
+  await page.keyboard.press("End");
+  await expect.poll(() => pane.evaluate((section) => section.getBoundingClientRect().width)).toBeLessThan(300);
+  expect(await cut()).toEqual([]);
+});
+
 test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px head of the source pane", async ({
   app,
   page,
@@ -359,6 +572,56 @@ test("the Fit and 100 % buttons of the image are 24 px high inside the 26 px hea
   const fit = (await zoom.getByRole("button", { name: "Fit", exact: true }).boundingBox())!;
   expect(fit.y).toBeGreaterThanOrEqual(head.y);
   expect(fit.y + fit.height).toBeLessThanOrEqual(head.y + head.height);
+});
+
+test("the focus ring of the Source select lies inside the head of the rows pane, in both themes", async ({ app, page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const scheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await app.open("#/studies/caffeine/Demo2020/data?file=subjects.tsv");
+    const select = page.getByRole("combobox", { name: "Source of the rows" });
+    await select.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(select).toBeFocused();
+    const ring = await select.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const reach = parseFloat(style.outlineOffset) + parseFloat(style.outlineWidth);
+      const box = element.getBoundingClientRect();
+      return { top: box.top - reach, bottom: box.bottom + reach, left: box.left - reach, right: box.right + reach };
+    });
+    const head = (await page.locator(".rows-pane > .pane-head").boundingBox())!;
+    expect(ring.top).toBeGreaterThanOrEqual(head.y);
+    expect(ring.bottom).toBeLessThanOrEqual(head.y + head.height);
+    expect(ring.left).toBeGreaterThanOrEqual(head.x);
+    expect(ring.right).toBeLessThanOrEqual(head.x + head.width);
+  }
+});
+
+test("the source pane shows that more of it follows below, and scrolls to its end", async ({ app, page }) => {
+  // Without its WebPlotDigitizer project Fig1 shows the note "No digitization" at the end of the
+  // pane; in a short window (the section keeps its least height of 480 px) the pane is taller than its view.
+  const project = join(app.server.workspace, "caffeine/Demo2020/Demo2020_Fig1.wpd.json");
+  renameSync(project, `${project}.away`);
+  try {
+    await page.setViewportSize({ width: 1440, height: 640 });
+    await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
+    const pane = page.getByRole("region", { name: "Source Fig1" });
+    const body = pane.locator(".pane-body");
+    await expect(pane.getByText("No digitization:")).toBeAttached();
+    await expect(pane.locator(".pane-more")).toBeVisible();
+    // The problems of the study may still arrive after the first scroll and lengthen the pane: scroll again.
+    await expect(async () => {
+      await body.evaluate((element) => element.scrollTo({ top: element.scrollHeight }));
+      await expect(pane.locator(".pane-more")).toBeHidden({ timeout: 500 });
+      const last = (await pane.locator(".pane-content > *").last().boundingBox())!;
+      const view = (await body.boundingBox())!;
+      expect(last.y + last.height).toBeLessThanOrEqual(view.y + view.height);
+    }).toPass();
+    await expect(pane.getByText("No digitization:")).toBeInViewport({ ratio: 1 });
+  } finally {
+    renameSync(`${project}.away`, project);
+  }
 });
 
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {

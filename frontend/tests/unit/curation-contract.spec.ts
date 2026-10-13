@@ -13,6 +13,7 @@ import type {
   SourceView,
   Suggestion,
   TableEntry,
+  TableKindEntry,
   TablePreview,
   TargetMatch,
   ValidationIssue,
@@ -36,9 +37,9 @@ import {
 } from "../../src/curation-app/problems";
 import { matchText, targetText } from "../../src/curation-app/review";
 import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
-import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
+import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
-import { defaultSource, fileForSource } from "../../src/curation-app/data";
+import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app/data";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
@@ -84,8 +85,38 @@ describe("tables contract", () => {
     expect(isRawTable({ tables }, "outputs_Tab2.tsv")).toBe(false);
   });
 
-  it("lists every table kind of the library", () => {
-    expect([...TABLE_KINDS]).toEqual(tablesFixture.table_kinds);
+  it("names the class of information, the source and the data rows of each table", () => {
+    expect(tables.map(({ file, kind, info, source, rows }) => [file, kind, info, source, rows])).toEqual([
+      ["subjects.tsv", "subjects", "subjects", null, 1],
+      ["characteristica.tsv", "characteristica", "subjects", null, 6],
+      ["interventions.tsv", "interventions", "interventions", null, 3],
+      ["outputs_Tab2.tsv", "outputs", "data", "Tab2", 8],
+      ["timecourses_Fig1.tsv", "timecourses", "data", "Fig1", 18],
+      ["Demo2020_Tab2.tsv", "raw", "raw", "Tab2", 6],
+    ]);
+  });
+
+  it("describes every kind of table, and Add table adds the kinds that the library adds", () => {
+    const kinds = contract<TableKindEntry[]>(tablesFixture.table_kinds);
+    expect(kinds.map((entry) => [entry.kind, entry.label, entry.info, entry.per_source, entry.addable])).toEqual([
+      ["subjects", "Subjects", "subjects", false, false],
+      ["characteristica", "Characteristica", "subjects", false, false],
+      ["interventions", "Interventions", "interventions", false, false],
+      ["outputs", "Outputs", "data", true, true],
+      ["timecourses", "Timecourses", "data", true, true],
+      ["scatters", "Scatters", "data", true, true],
+      ["raw", "Raw table", "raw", true, true],
+    ]);
+    expect(kinds.filter((entry) => entry.addable).map((entry) => entry.kind)).toEqual(tablePreviewFixture.kinds);
+    const detail = { table_kinds: kinds };
+    expect(noteKinds(detail)).toEqual(["subjects", "characteristica", "interventions", "outputs", "timecourses", "scatters"]);
+    expect(addableKinds(detail)).toEqual([
+      { value: "outputs", label: "Outputs" },
+      { value: "timecourses", label: "Timecourses" },
+      { value: "scatters", label: "Scatters" },
+      { value: "raw", label: "Raw table" },
+    ]);
+    expect(kindLabel(detail, "characteristica")).toBe("Characteristica");
   });
 
   it("compares the rows that both sides changed", () => {
@@ -112,7 +143,8 @@ describe("tables contract", () => {
 
 describe("table preview contract", () => {
   it("offers every kind of a new table that the library adds", () => {
-    expect(NEW_TABLE_KINDS.map((kind) => kind.value)).toEqual(tablePreviewFixture.kinds);
+    const detail = { table_kinds: contract<TableKindEntry[]>(tablesFixture.table_kinds) };
+    expect(addableKinds(detail).map((kind) => kind.value)).toEqual(tablePreviewFixture.kinds);
   });
 
   it("accepts every preview answer", () => {
@@ -184,7 +216,9 @@ describe("sources contract", () => {
 
   it("opens each source on its own table, a text on its first shared one", () => {
     const study = { sources, tables, problems: [], review: studyDetail().review };
-    expect(defaultSource(study)?.source).toBe("Fig1");
+    expect(defaultFile(study)).toBe("subjects.tsv");
+    expect(sourceOfFile(study, "subjects.tsv")?.source).toBe("Fig1");
+    expect(sourceOfFile(study, "Demo2020_Tab2.tsv")?.source).toBe("Tab2");
     expect(sources.map((summary) => fileForSource(study, summary, null))).toEqual([
       "timecourses_Fig1.tsv",
       "outputs_Tab2.tsv",

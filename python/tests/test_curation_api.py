@@ -29,6 +29,58 @@ from pkdb.studyformat.workbook.base import workbook_path
 
 DETAIL = "/local/studies/caffeine/Example"
 METADATA = {"format": 2, "creator": "curator", "licence": "open", "access": "private"}
+# The kinds of tables that the study page describes to the app, in the order of the sheets.
+TABLE_KINDS_OF_THE_APP = [
+    {
+        "kind": "subjects",
+        "label": "Subjects",
+        "info": "subjects",
+        "per_source": False,
+        "addable": False,
+    },
+    {
+        "kind": "characteristica",
+        "label": "Characteristica",
+        "info": "subjects",
+        "per_source": False,
+        "addable": False,
+    },
+    {
+        "kind": "interventions",
+        "label": "Interventions",
+        "info": "interventions",
+        "per_source": False,
+        "addable": False,
+    },
+    {
+        "kind": "outputs",
+        "label": "Outputs",
+        "info": "data",
+        "per_source": True,
+        "addable": True,
+    },
+    {
+        "kind": "timecourses",
+        "label": "Timecourses",
+        "info": "data",
+        "per_source": True,
+        "addable": True,
+    },
+    {
+        "kind": "scatters",
+        "label": "Scatters",
+        "info": "data",
+        "per_source": True,
+        "addable": True,
+    },
+    {
+        "kind": "raw",
+        "label": "Raw table",
+        "info": "raw",
+        "per_source": True,
+        "addable": True,
+    },
+]
 
 
 @pytest.fixture
@@ -74,14 +126,58 @@ def test_study_detail(api):
     assert "missing_raw" in tab2
     assert "Example_Fig1.wpd.json" in detail["files"]
     assert detail["tables"] == [
-        {"file": "subjects.tsv", "kind": "subjects"},
-        {"file": "characteristica.tsv", "kind": "characteristica"},
-        {"file": "interventions.tsv", "kind": "interventions"},
-        {"file": "outputs_Tab2.tsv", "kind": "outputs"},
-        {"file": "timecourses_Fig1.tsv", "kind": "timecourses"},
-        {"file": "scatters_Fig2.tsv", "kind": "scatters"},
-        {"file": "Example_Tab2.tsv", "kind": "raw"},
+        {
+            "file": "subjects.tsv",
+            "kind": "subjects",
+            "info": "subjects",
+            "source": None,
+            "rows": 3,
+        },
+        {
+            "file": "characteristica.tsv",
+            "kind": "characteristica",
+            "info": "subjects",
+            "source": None,
+            "rows": 5,
+        },
+        {
+            "file": "interventions.tsv",
+            "kind": "interventions",
+            "info": "interventions",
+            "source": None,
+            "rows": 1,
+        },
+        {
+            "file": "outputs_Tab2.tsv",
+            "kind": "outputs",
+            "info": "data",
+            "source": "Tab2",
+            "rows": 1,
+        },
+        {
+            "file": "timecourses_Fig1.tsv",
+            "kind": "timecourses",
+            "info": "data",
+            "source": "Fig1",
+            "rows": 3,
+        },
+        {
+            "file": "scatters_Fig2.tsv",
+            "kind": "scatters",
+            "info": "data",
+            "source": "Fig2",
+            "rows": 2,
+        },
+        # A raw table belongs to its paper table; its rows are its non-empty lines.
+        {
+            "file": "Example_Tab2.tsv",
+            "kind": "raw",
+            "info": "raw",
+            "source": "Tab2",
+            "rows": 1,
+        },
     ]
+    assert detail["table_kinds"] == TABLE_KINDS_OF_THE_APP
     etag = response_headers["ETag"]
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
     assert again[0] == 304 and again[2] == b"" and again[1]["ETag"] == etag
@@ -136,6 +232,24 @@ def test_study_detail_gives_no_image_url_for_an_image_that_the_file_route_refuse
         request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
     )
     assert view["image_url"] is None
+
+
+def test_study_detail_lists_a_table_that_cannot_be_read_without_a_row_count(api):
+    server, engine, folder = api
+    # A git conflict marker makes the table unreadable; it stays a table of the study.
+    (folder / "timecourses_Fig1.tsv").write_text("<<<<<<< HEAD\n", encoding="utf-8")
+    tables = {
+        entry["file"]: entry
+        for entry in engine.study_detail("caffeine/Example")["tables"]
+    }
+    assert tables["timecourses_Fig1.tsv"] == {
+        "file": "timecourses_Fig1.tsv",
+        "kind": "timecourses",
+        "info": "data",
+        "source": "Fig1",
+        "rows": None,
+    }
+    assert tables["outputs_Tab2.tsv"]["rows"] == 1
 
 
 def test_detail_etag_changes_with_a_job(api):
@@ -220,6 +334,8 @@ def test_upload_limits_bound_the_read_routes(api, monkeypatch, limit, value, cod
     assert detail["review"]["value"]["status"] == "draft"
     assert detail["problems"][0]["code"] == code
     assert detail["sources"] == [] and detail["files"] == [] and detail["tables"] == []
+    # Add table and the notes of study.json still need the kinds of tables.
+    assert detail["table_kinds"] == TABLE_KINDS_OF_THE_APP
     assert detail["targets"] == {}
     for path in (f"{DETAIL}/tables/timecourses_Fig1.tsv", f"{DETAIL}/sources/Fig1"):
         status, _, data = request(server, "GET", path, headers=headers)

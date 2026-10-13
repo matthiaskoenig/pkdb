@@ -5,18 +5,24 @@ import {
   copyField,
   fieldLabel,
   fieldText,
-  FIELD_KEYS,
+  fieldKeys,
   fromForm,
   issueMessage,
   issuesByTarget,
   issueTarget,
   mergeOnReload,
+  type MetadataForm,
   readStudyJson,
   startForm,
   toForm,
   withKind,
 } from "../../src/curation-app/metadata";
-import { fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
+import { NOTE_KINDS, fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
+
+/** The form of a study.json value with the notes of every table kind of the study page. */
+function formOf(value: unknown): MetadataForm {
+  return toForm(value, NOTE_KINDS);
+}
 
 /** An issue of study.json as the library gives it: the message names the field, the detail does not. */
 function issue(field: string | null, detail = "Input is invalid"): ValidationIssue {
@@ -27,7 +33,7 @@ function issue(field: string | null, detail = "Input is invalid"): ValidationIss
 describe("toForm and fromForm", () => {
   it("round-trips a full study.json", () => {
     const value = fullStudyMetadata();
-    expect(fromForm(toForm(value))).toEqual(value);
+    expect(fromForm(formOf(value))).toEqual(value);
   });
 
   it("round-trips study.json of a data import, which the form keeps as read", () => {
@@ -45,16 +51,16 @@ describe("toForm and fromForm", () => {
         reference_scope: "primary_publication",
       },
     });
-    expect(fromForm(toForm(value))).toEqual(value);
+    expect(fromForm(formOf(value))).toEqual(value);
   });
 
   it("round-trips the defaults of a minimal study.json as the server reads it", () => {
     const value = studyMetadata();
-    expect(fromForm(toForm(value))).toEqual(value);
+    expect(fromForm(formOf(value))).toEqual(value);
   });
 
   it("drops rows left empty, notes without content and absent values", () => {
-    const form = toForm(fullStudyMetadata());
+    const form = formOf(fullStudyMetadata());
     form.reference = { pmid: "", doi: "" };
     form.descriptions.push("");
     form.comments.push({ user: "mkoenig", text: "" });
@@ -90,18 +96,18 @@ describe("toForm and fromForm", () => {
       comments: [{ user: "mkoenig", text: "  " }],
       notes: { outputs: { descriptions: [" "], comments: [{ user: "janekg", text: " padded " }] } },
     });
-    expect(fromForm(toForm(value))).toEqual(value);
+    expect(fromForm(formOf(value))).toEqual(value);
   });
 
   it("keeps only the fields of the chosen provenance kind", () => {
-    const form = toForm(fullStudyMetadata());
+    const form = formOf(fullStudyMetadata());
     form.provenance.kind = "manual_curation";
     form.provenance.source_key = "pkdb.manual";
     expect(fromForm(form).provenance).toEqual({ kind: "manual_curation", source_key: "pkdb.manual" });
   });
 
   it("reads any JSON value without failing, with the defaults of a new study.json", () => {
-    const form = toForm({ creator: 7, curators: "x", licence: "maybe", notes: { outputs: "x" } });
+    const form = formOf({ creator: 7, curators: "x", licence: "maybe", notes: { outputs: "x" } });
     expect(form.creator).toBe("");
     expect(form.curators).toEqual([]);
     expect(form.licence).toBe("closed");
@@ -113,17 +119,17 @@ describe("toForm and fromForm", () => {
 
 describe("readStudyJson", () => {
   it("reads the content of a 409 answer, or null when it is no JSON object", () => {
-    expect(readStudyJson(JSON.stringify(fullStudyMetadata()))?.creator).toBe("curator");
-    expect(readStudyJson("{ not json")).toBeNull();
-    expect(readStudyJson("[]")).toBeNull();
-    expect(readStudyJson(null)).toBeNull();
+    expect(readStudyJson(JSON.stringify(fullStudyMetadata()), NOTE_KINDS)?.creator).toBe("curator");
+    expect(readStudyJson("{ not json", NOTE_KINDS)).toBeNull();
+    expect(readStudyJson("[]", NOTE_KINDS)).toBeNull();
+    expect(readStudyJson(null, NOTE_KINDS)).toBeNull();
   });
 });
 
 describe("changedFields", () => {
   it("lists the fields that differ, by their study.json path", () => {
-    const base = toForm(fullStudyMetadata());
-    const current = toForm(fullStudyMetadata());
+    const base = formOf(fullStudyMetadata());
+    const current = formOf(fullStudyMetadata());
     expect(changedFields(base, current)).toEqual([]);
 
     current.licence = "open";
@@ -139,9 +145,10 @@ describe("changedFields", () => {
   });
 
   it("knows every field of the form, with a label", () => {
-    expect(FIELD_KEYS).toContain("reference.pmid");
-    expect(FIELD_KEYS).toContain("notes.scatters.descriptions");
-    expect(FIELD_KEYS.map(fieldLabel)).not.toContain(undefined);
+    const keys = fieldKeys(formOf(fullStudyMetadata()));
+    expect(keys).toContain("reference.pmid");
+    expect(keys).toContain("notes.scatters.descriptions");
+    expect(keys.map(fieldLabel)).not.toContain(undefined);
     expect(fieldLabel("notes.outputs.comments")).toBe("Comments on outputs");
     expect(fieldLabel("provenance.run_id")).toBe("Run ID");
   });
@@ -149,9 +156,9 @@ describe("changedFields", () => {
 
 describe("mergeOnReload", () => {
   it("keeps a local licence edit while taking a curator change from disk", () => {
-    const base = toForm(fullStudyMetadata());
-    const mine = toForm(fullStudyMetadata({ licence: "open" }));
-    const theirs = toForm(
+    const base = formOf(fullStudyMetadata());
+    const mine = formOf(fullStudyMetadata({ licence: "open" }));
+    const theirs = formOf(
       fullStudyMetadata({
         curators: [
           { user: "mkoenig", rating: 3 },
@@ -169,9 +176,9 @@ describe("mergeOnReload", () => {
   });
 
   it("keeps mine for a field changed on both sides and lists it in conflicts", () => {
-    const base = toForm(fullStudyMetadata());
-    const mine = toForm(fullStudyMetadata({ licence: "open", descriptions: ["Mine."] }));
-    const theirs = toForm(fullStudyMetadata({ access: "private", descriptions: ["Theirs."] }));
+    const base = formOf(fullStudyMetadata());
+    const mine = formOf(fullStudyMetadata({ licence: "open", descriptions: ["Mine."] }));
+    const theirs = formOf(fullStudyMetadata({ access: "private", descriptions: ["Theirs."] }));
 
     const { merged, conflicts } = mergeOnReload(base, mine, theirs);
 
@@ -182,15 +189,15 @@ describe("mergeOnReload", () => {
   });
 
   it("sees no conflict when both sides made the same change", () => {
-    const base = toForm(fullStudyMetadata());
-    const same = toForm(fullStudyMetadata({ licence: "open" }));
-    expect(mergeOnReload(base, same, toForm(fullStudyMetadata({ licence: "open" }))).conflicts).toEqual([]);
+    const base = formOf(fullStudyMetadata());
+    const same = formOf(fullStudyMetadata({ licence: "open" }));
+    expect(mergeOnReload(base, same, formOf(fullStudyMetadata({ licence: "open" }))).conflicts).toEqual([]);
   });
 
   it("does not change its arguments", () => {
-    const base = toForm(fullStudyMetadata());
-    const mine = toForm(fullStudyMetadata({ licence: "open" }));
-    const theirs = toForm(fullStudyMetadata({ creator: "janekg" }));
+    const base = formOf(fullStudyMetadata());
+    const mine = formOf(fullStudyMetadata({ licence: "open" }));
+    const theirs = formOf(fullStudyMetadata({ creator: "janekg" }));
     const { merged } = mergeOnReload(base, mine, theirs);
     merged.descriptions.push("New.");
     expect(theirs.creator).toBe("janekg");
@@ -200,7 +207,7 @@ describe("mergeOnReload", () => {
 });
 
 describe("issueTarget", () => {
-  const form = toForm(fullStudyMetadata());
+  const form = formOf(fullStudyMetadata());
 
   it("maps the field of an issue to the field of the form", () => {
     expect(issueTarget(form, "creator")).toBe("creator");
@@ -220,7 +227,7 @@ describe("issueTarget", () => {
   });
 
   it("maps a list index of the sent study.json past the rows left empty", () => {
-    const blank = toForm(fullStudyMetadata());
+    const blank = formOf(fullStudyMetadata());
     blank.curators.unshift({ user: "", rating: 0 });
     expect(issueTarget(blank, "curators.1.user")).toBe("curators.2.user");
     // Whitespace-only text is sent, so its row keeps its index.
@@ -264,7 +271,7 @@ describe("issueTarget", () => {
 
 describe("withKind", () => {
   it("drops the source key of a manual curation for another kind and keeps a typed one", () => {
-    const manual = toForm(studyMetadata()).provenance;
+    const manual = formOf(studyMetadata()).provenance;
     expect(withKind(manual, "automatic_curation")).toMatchObject({ kind: "automatic_curation", source_key: "" });
     expect(withKind({ ...manual, source_key: "lab.notes" }, "automatic_curation").source_key).toBe("lab.notes");
     const automatic = withKind(manual, "automatic_curation");
@@ -275,7 +282,7 @@ describe("withKind", () => {
 
 describe("disk versions after a reload", () => {
   it("describes the value of a field for a sentence", () => {
-    const form = toForm(fullStudyMetadata());
+    const form = formOf(fullStudyMetadata());
     expect(fieldText(form, "creator")).toBe("curator");
     expect(fieldText(form, "curators")).toBe("mkoenig (3), janekg (4.5)");
     expect(fieldText(form, "collaborators")).toBe("Jane Doe");
@@ -284,13 +291,13 @@ describe("disk versions after a reload", () => {
     expect(fieldText(form, "descriptions")).toBe("Plasma levels in µg/l.");
     expect(fieldText(form, "notes.outputs.comments")).toBe("janekg: AUC rounded.");
     expect(fieldText(form, "release")).toBe("PKDB00198 · released 2026-09-28");
-    expect(fieldText(toForm(studyMetadata()), "reference.doi")).toBe("empty");
-    expect(fieldText(toForm(studyMetadata()), "descriptions")).toBe("none");
+    expect(fieldText(formOf(studyMetadata()), "reference.doi")).toBe("empty");
+    expect(fieldText(formOf(studyMetadata()), "descriptions")).toBe("none");
   });
 
   it("takes one field of the disk version into the form", () => {
-    const mine = toForm(fullStudyMetadata({ creator: "mkoenig", licence: "open" }));
-    const theirs = toForm(fullStudyMetadata({ creator: "janekg", curators: [] }));
+    const mine = formOf(fullStudyMetadata({ creator: "mkoenig", licence: "open" }));
+    const theirs = formOf(fullStudyMetadata({ creator: "janekg", curators: [] }));
     copyField(mine, theirs, "creator");
     expect(mine.creator).toBe("janekg");
     expect(mine.licence).toBe("open");

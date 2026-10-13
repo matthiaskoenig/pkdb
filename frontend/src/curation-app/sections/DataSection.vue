@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
-import { VBtn, VSelect, VSwitch } from "vuetify/components";
+import { VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
 import type { SourceSummary, SourceView, StudyDetail, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
@@ -17,34 +17,40 @@ import { useLoaded } from "../composables/useLoaded";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
 import {
-  defaultSource,
+  ALL_ROWS,
+  defaultFile,
   fileForSource,
   isShared,
   ownerOf,
   rowSource,
   selectionOf,
   selectionQuery,
+  sourceOfFile,
+  tablesByInfo,
+  type RowFilter,
   type Selection,
-  type SourceRows,
 } from "../data";
+import { INFO_HEADINGS, infoStyle } from "../info";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 
 /**
- * A source of the study beside the rows of a table, read only. The toolbar holds the source
- * filter of a shared table, the switch of the empty columns, Sync, Add table and what the sync
- * status means; below it the navigator of the sources and table files, the source pane and the
- * rows pane, which a separator resizes. Tables are edited in the workbook, which Open tables of
- * the study header opens: Sync syncs it, and Add table adds a sheet. While the workbook and the
- * tables conflict, the conflict panel shows at the top of the rows pane. Below 1100 px the
- * navigator becomes two selects, and below 960 px the panes stack. Beyond the upload limits a
- * note says, in place of the navigator and the panes, that the app cannot show the sources and
- * tables; the sync actions and the conflicts stay.
+ * A source of the study beside the rows of a table, read only. The toolbar holds the switch of
+ * the empty columns, Sync, Add table and what the sync status means; the head of a shared table
+ * holds its Source filter. Below the toolbar are the navigator of the tables and sources, the
+ * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
+ * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
+ * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
+ * toolbar, and below 960 px the panes stack.
+ * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
+ * cannot show the sources and tables; the sync actions and the conflicts stay.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
  * and Review sections can link to a row (`data.ts` has its rules). A route without a source and
- * a file gets the default selection once; after that only the actions of the curator change it.
+ * a file gets the default selection once: the first table with problems or open review items,
+ * else the first table, beside its source. After that only the actions of the curator change it.
  */
 const study = useStudyStore();
 const route = useRoute();
@@ -59,16 +65,29 @@ const query = computed(() => selectionOf(route.query));
 const files = computed(() => (detail.value ? tableFiles(detail.value) : []));
 const sourceNames = computed(() => detail.value?.sources.map((entry) => entry.source) ?? []);
 const findSource = (name: string | null) => detail.value?.sources.find((entry) => entry.source === name) ?? null;
+/**
+ * The attributes of the list in the menu of a select of the toolbar. The list scrolls when its
+ * entries do not fit, and the keyboard must reach a region that scrolls, which the tabindex of -1
+ * that VSelect gives the list would prevent.
+ */
+const MENU_LIST: Record<string, unknown> = { tabindex: 0 };
+/** The items of the Table select below 1100 px: the tables under the headings of their class of information, as in the navigator. */
+const tableItems = computed(() =>
+  (detail.value ? tablesByInfo(detail.value) : []).flatMap(({ info, tables }) => [
+    { type: "subheader" as const, title: INFO_HEADINGS[info], info },
+    ...tables.map((table) => ({ type: "item" as const, title: table.file, value: table.file, info })),
+  ]),
+);
 
 // The selection
 
-/** The file of the route when the study has it, else the file of the source. */
+/** The file of the route when the study has it, else the first table of the source of the route, else the default table. */
 const file = computed<string | null>(() => {
   const value = detail.value;
   if (!value) return null;
   if (query.value.file !== null && files.value.includes(query.value.file)) return query.value.file;
-  const source = findSource(query.value.source) ?? defaultSource(value);
-  return source ? fileForSource(value, source, null) : (files.value[0] ?? null);
+  const named = findSource(query.value.source);
+  return named ? fileForSource(value, named, null) : defaultFile(value);
 });
 
 const {
@@ -92,23 +111,20 @@ const table = computed(() => (rows.value && rows.value.key === file.value ? rows
 const rowsDetail = computed(() => (table.value ? (rows.value?.version ?? null) : null));
 
 /**
- * The source of the route; else, for a linked file, its owner or the source named in the linked
- * row of a shared table; else the default source.
+ * The source of the route; else, for a linked row of a shared table, the source that the row
+ * names once the rows load; else the source of the table, or the first source for a shared one.
  */
 const source = computed<SourceSummary | null>(() => {
   const value = detail.value;
   if (!value) return null;
   const named = findSource(query.value.source);
   if (named) return named;
-  if (query.value.file !== null && file.value === query.value.file) {
-    const owner = findSource(ownerOf(value, file.value));
-    if (owner) return owner;
-    if (table.value && query.value.line !== null) {
-      const fromRow = findSource(rowSource(table.value, query.value.line));
-      if (fromRow) return fromRow;
-    }
+  const linked = query.value.file !== null && file.value === query.value.file && query.value.line !== null;
+  if (linked && table.value && isShared(value, file.value!)) {
+    const fromRow = findSource(rowSource(table.value, query.value.line!));
+    if (fromRow) return fromRow;
   }
-  return defaultSource(value);
+  return sourceOfFile(value, file.value);
 });
 
 const {
@@ -125,24 +141,6 @@ const {
 /** The view of the selected source; null while another one is shown or it loads. */
 const sourceView = computed(() =>
   view.value && view.value.key === source.value?.source ? view.value.content : null,
-);
-/**
- * The rows of the selected source per file, for the navigator. While the next source loads, those
- * of the last one stay with its name, so that the counts and the dimmed files do not flicker on
- * every click; a source that failed to load, a study without sources and another study have none.
- */
-const sourceRows = shallowRef<SourceRows | null>(null);
-watch(
-  [sourceView, viewError, () => source.value === null, identity],
-  ([shown, error, none, study], previous) => {
-    if (shown)
-      sourceRows.value = {
-        source: shown.source,
-        files: new Map(shown.mapped.map((entry) => [entry.file, entry.rows.length])),
-      };
-    else if (error !== null || none || study !== previous?.[3]) sourceRows.value = null;
-  },
-  { immediate: true },
 );
 /** The cell of the route in the selected file: its line, and its column when it names one. */
 const focus = computed(() =>
@@ -197,11 +195,12 @@ watch(
 
 // Most tables leave many of their fixed columns empty, so they are hidden until the curator shows them.
 const hideEmpty = ref(true);
-// A shared table shows the rows of the selected source until the curator shows all.
-const onlySource = ref(true);
-watch(file, () => (onlySource.value = true));
-/** Whether the rows are of a shared table, which names the source of each row. */
-const shared = computed(() => detail.value !== null && file.value !== null && isShared(detail.value, file.value));
+/** The filter of the rows of the selected shared table, which the study keeps per table while it is open. */
+const filter = computed(() => (file.value ? study.rowFilter(file.value) : ALL_ROWS));
+
+function setFilter(next: RowFilter): void {
+  if (file.value) study.setRowFilter(file.value, next);
+}
 
 // Sync status and actions
 
@@ -283,8 +282,7 @@ const rowsPane = computed(() =>
         loading: rowsLoading.value,
         error: rowsError.value,
         focus: focus.value,
-        source: source.value?.source ?? null,
-        onlySource: onlySource.value,
+        filter: filter.value,
         hideEmpty: hideEmpty.value,
       }
     : null,
@@ -303,36 +301,36 @@ const conflictPanel = computed(() => {
       <div class="data-toolbar">
         <template v-if="!wide">
           <VSelect
+            v-if="files.length"
+            :model-value="file"
+            :items="tableItems"
+            :list-props="MENU_LIST"
+            label="Table"
+            density="compact"
+            hide-details
+            class="data-select data-select--table"
+            @update:model-value="selectFile"
+          >
+            <template #item="{ props: itemProps, item }">
+              <VListItem v-bind="itemProps">
+                <template #prepend>
+                  <span class="data-option-dot" :style="infoStyle(item.info)" aria-hidden="true"></span>
+                </template>
+              </VListItem>
+            </template>
+          </VSelect>
+          <VSelect
             v-if="sourceNames.length"
             :model-value="source?.source ?? null"
             :items="sourceNames"
+            :list-props="MENU_LIST"
             label="Source"
             density="compact"
             hide-details
             class="data-select"
             @update:model-value="selectSource"
           />
-          <VSelect
-            v-if="files.length"
-            :model-value="file"
-            :items="files"
-            label="Table"
-            density="compact"
-            hide-details
-            class="data-select data-select--table"
-            @update:model-value="selectFile"
-          />
         </template>
-        <VSwitch
-          v-if="shared && source"
-          v-model="onlySource"
-          :label="`Rows of ${source.source} only`"
-          color="primary"
-          density="compact"
-          hide-details
-          inset
-          class="data-switch"
-        />
         <VSwitch
           v-if="file"
           v-model="hideEmpty"
@@ -386,7 +384,6 @@ const conflictPanel = computed(() => {
           :detail="detail"
           :source="source?.source ?? null"
           :file="file"
-          :rows="sourceRows"
           class="data-navigator-pane"
           @select-source="selectSource"
           @select-file="selectFile"
@@ -407,7 +404,7 @@ const conflictPanel = computed(() => {
               v-bind="rowsPane"
               @select-line="selectLine"
               @retry="reloadRows"
-              @show-all="onlySource = false"
+              @update:filter="setFilter"
             >
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
             </RowsPane>
@@ -424,7 +421,7 @@ const conflictPanel = computed(() => {
             v-bind="rowsPane"
             @select-line="selectLine"
             @retry="reloadRows"
-            @show-all="onlySource = false"
+            @update:filter="setFilter"
           >
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
           </RowsPane>
@@ -489,7 +486,15 @@ const conflictPanel = computed(() => {
 .data-select--table {
   flex-basis: 240px;
 }
-/* A switch keeps apart from the label of the switch before it. */
+/* The class of information of a table in the Table select: a dot in its color. */
+.data-option-dot {
+  width: 8px;
+  height: 8px;
+  margin-inline-end: 8px;
+  border-radius: 50%;
+  background: rgb(var(--info));
+}
+/* The switch keeps its label apart from the button after it. */
 .data-switch {
   flex: 0 0 auto;
   margin-inline-end: 6px;
@@ -526,8 +531,14 @@ const conflictPanel = computed(() => {
   border-radius: 6px;
   background: rgb(var(--v-theme-surface));
 }
+/* As wide as its longest name beside its badges, whatever font the machine draws it in (DejaVu Sans
+   is about 14 % wider than Noto Sans), from 232 px up to 320 px; a longer name ends with an
+   ellipsis and its title gives it whole. A scrollbar widens it instead of cutting a name. */
 .data-navigator-pane {
-  flex: 0 0 184px;
+  flex: none;
+  width: max-content;
+  min-width: 232px;
+  max-width: 320px;
   border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .data-split {

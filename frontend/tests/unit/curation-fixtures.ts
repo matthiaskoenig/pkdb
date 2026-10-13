@@ -8,10 +8,33 @@ import type {
   StudyDetail,
   StudyMetadata,
   StudyRow,
+  TableEntry,
+  TableFileKind,
+  TableKind,
+  TableKindEntry,
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import { noteKinds } from "../../src/curation-app/tableKinds";
 import limitsFixture from "../fixtures/curation-contract/limits.json";
+import tablesFixture from "../fixtures/curation-contract/tables.json";
+
+/** The kinds of tables as the local server describes them (python/tests/test_curation_contract.py). */
+export const TABLE_KIND_ENTRIES = tablesFixture.table_kinds as TableKindEntry[];
+
+/** The table kinds with notes in study.json, as the study page describes them. */
+export const NOTE_KINDS: TableKind[] = noteKinds({ table_kinds: TABLE_KIND_ENTRIES });
+
+/**
+ * A table of `GET /local/studies/<id>`: its class of information from its kind, as the local
+ * server describes the kinds, and for a table of one source or a raw table the source after its
+ * last underscore, such as Tab2 of `outputs_Tab2.tsv`.
+ */
+export function tableEntry(file: string, kind: TableFileKind, rows: number | null = 3): TableEntry {
+  const described = TABLE_KIND_ENTRIES.find((entry) => entry.kind === kind)!;
+  const source = described.per_source ? file.slice(file.lastIndexOf("_") + 1, -".tsv".length) : null;
+  return { file, kind, info: described.info, source, rows };
+}
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -237,13 +260,14 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
       "timecourses_Fig1.tsv",
     ],
     tables: [
-      { file: "subjects.tsv", kind: "subjects" },
-      { file: "characteristica.tsv", kind: "characteristica" },
-      { file: "interventions.tsv", kind: "interventions" },
-      { file: "outputs_Tab2.tsv", kind: "outputs" },
-      { file: "timecourses_Fig1.tsv", kind: "timecourses" },
-      { file: "Example_Tab2.tsv", kind: "raw" },
+      tableEntry("subjects.tsv", "subjects"),
+      tableEntry("characteristica.tsv", "characteristica"),
+      tableEntry("interventions.tsv", "interventions"),
+      tableEntry("outputs_Tab2.tsv", "outputs"),
+      tableEntry("timecourses_Fig1.tsv", "timecourses"),
+      tableEntry("Example_Tab2.tsv", "raw"),
     ],
+    table_kinds: TABLE_KIND_ENTRIES,
     targets: {},
     ...changes,
   };

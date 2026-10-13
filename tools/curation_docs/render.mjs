@@ -104,7 +104,7 @@ async function render() {
 
     // Data: the digitization of the figure with the selected mapped point, and the rows of its table.
     await sections.getByRole("link", { name: /^Data\b/ }).click();
-    const navigator = page.getByRole("navigation", { name: "Sources and tables" });
+    const navigator = page.getByRole("navigation", { name: "Tables and sources" });
     await navigator.getByRole("button", { name: /^Fig1/ }).click();
     const legend = page.getByRole("list", { name: "Series" });
     await legend.waitFor();

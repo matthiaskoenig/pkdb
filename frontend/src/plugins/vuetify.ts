@@ -70,14 +70,23 @@ function mergeDefaults(extra: Readonly<Record<string, Readonly<Record<string, un
   return merged;
 }
 
+/** Colors and theme variables that an app adds to a theme of the website. */
+export interface ThemeExtension {
+  colors: Readonly<Record<string, string>>;
+  variables: Readonly<Record<string, string>>;
+}
+
 /**
  * The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles, and
- * `defaultTheme` sets the theme of the first paint (light by default).
+ * `defaultTheme` sets the theme of the first paint (light by default); `themes` adds colors and
+ * variables to its light and dark theme.
  */
 export function makeVuetify(
   options: { cspNonce?: string | undefined; defaultTheme?: "light" | "dark" | "system";
     /** Component defaults merged per component over those of the website. */
     defaults?: Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+    /** Colors and variables added to the light and the dark theme, such as those of the curation app. */
+    themes?: Readonly<Record<"light" | "dark", ThemeExtension>>;
   } = {},
 ) {
   return createVuetify({
@@ -141,7 +150,9 @@ export function makeVuetify(
             background: "#f5f7f7",
             surface: "#ffffff",
             error: "#b3261e",
+            ...options.themes?.light.colors,
           },
+          variables: { ...options.themes?.light.variables },
         },
         dark: {
           colors: {
@@ -154,7 +165,9 @@ export function makeVuetify(
             "on-error": "#601410",
             // The thumb of switches; Vuetify's default is lavender.
             "surface-bright": "#dcefef",
+            ...options.themes?.dark.colors,
           },
+          variables: { ...options.themes?.dark.variables },
         },
       },
     },
