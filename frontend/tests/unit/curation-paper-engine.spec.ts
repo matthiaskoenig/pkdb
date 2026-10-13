@@ -428,6 +428,31 @@ describe("the PDF.js engine of the paper viewer", () => {
     expect(reported(abort())).toBe(true);
   });
 
+  it("does not log the errors of PDF.js about a page that loads while its PDF closes, but any other error", async () => {
+    const logged = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    try {
+      const destroying = deferred<void>();
+      fake.state.task.destroy = vi.fn(() => destroying.promise);
+      const session = await openPaper(container(), URL_A, events(), START, signal());
+      const closed = session.close();
+      console.error("Unable to get page for page view", new Error("Transport destroyed"));
+      console.error("renderView:", new Error("pdfPage is not loaded"));
+      console.error("renderView:", new Error("Failed to fetch"));
+      destroying.resolve();
+      await closed;
+      // The viewer logs once its page request failed: the filter stays for one more task.
+      console.error("renderView:", new Error("pdfPage is not loaded"));
+      await nextTask();
+      console.error("Unable to get page for page view", new Error("Transport destroyed"));
+      expect(logged.mock.calls).toEqual([
+        ["renderView:", new Error("Failed to fetch")],
+        ["Unable to get page for page view", new Error("Transport destroyed")],
+      ]);
+    } finally {
+      logged.mockRestore();
+    }
+  });
+
   it("keeps not reporting cancelled requests until the last of two closing PDFs is gone", async () => {
     const firstDestroy = deferred<void>();
     fake.state.task.destroy = vi.fn(() => firstDestroy.promise);
