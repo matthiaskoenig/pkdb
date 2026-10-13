@@ -5,7 +5,7 @@
 The target must not exist or be empty. Each study is a copy of caffeine/Draft2021 of the
 fixture under another name, `<substance>/<Surname><Year>`, with a title of its own, one to
 four curators, the review statuses in turn, an issue in every fifth and a release in every
-ninth study, so that the overview shows the variety of a real workspace. The same arguments
+ninth study, and the typo of the template fixed in every fourth study, so that the overview shows the variety of a real workspace. The same arguments
 always create the same workspace. The studies are synthetic: they describe no real
 publication.
 """
@@ -104,7 +104,18 @@ def create(target: Path, studies: int = 1000) -> Path:
         if index % 9 == 0:
             study["release"] = {"pkdb_id": f"PKDB{index:05d}", "date": "2026-01-15"}
         _update(folder / "study.json", **study)
-        _update(folder / "review.json", status=STATUSES[index % len(STATUSES)])
+        status = STATUSES[index % len(STATUSES)]
+        review: dict[str, object] = {"status": status}
+        if status == "approved":
+            review["reviewers"] = [users[0]]
+            review["approved_by"] = users[0]
+            review["approved"] = "2026-02-10T09:30:00Z"
+        _update(folder / "review.json", **review)
+        if index % 4 == 2:
+            # Every fourth study has the typo of the template fixed: fewer problems.
+            table = folder / "outputs_Tab1.tsv"
+            text = table.read_text(encoding="utf-8").replace("cafeine", "caffeine")
+            table.write_text(text, encoding="utf-8", newline="")
     return target
 
 

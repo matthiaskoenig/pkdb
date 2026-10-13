@@ -112,3 +112,23 @@ def test_large_workspace_names_one_surname_in_25_of_1000_studies(tmp_path):
         for path in target.glob("*/*/reference.json")
     ]
     assert len(titles) == 40 and not any("dahlqvist" in title for title in titles)
+
+
+def test_large_workspace_writes_a_valid_review_for_each_status(tmp_path):
+    target = large_workspace.create(tmp_path / "reviews", 12)
+    seen: dict[str, Path] = {}
+    for folder in sorted(path.parent for path in target.glob("*/*/study.json")):
+        status = json.loads((folder / "review.json").read_text(encoding="utf-8"))[
+            "status"
+        ]
+        seen.setdefault(status, folder)
+    assert set(seen) == {"draft", "in_review", "approved"}
+    for status, folder in seen.items():
+        codes = {code for _, code, *_ in problems(folder)}
+        assert not codes & {"invalid_review_json", "review_json_invalid"}, status
+        review = json.loads((folder / "review.json").read_text(encoding="utf-8"))
+        assert ("approved_by" in review) == (status == "approved")
+    fixed = target / large_workspace.SUBSTANCES[2] / large_workspace.study_name(2)
+    assert ("error", "unknown_substance", "outputs_Tab1.tsv", 3, "substance") not in (
+        problems(fixed)
+    )
