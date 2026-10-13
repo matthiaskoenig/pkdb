@@ -416,11 +416,10 @@ describe("OverviewPage", () => {
     await rowOf("caffeine/Example").get("td.cell-select").trigger("click");
     expect(push).not.toHaveBeenCalled();
 
-    // Dragging over the title selects its text; the click that ends the drag keeps the page.
-    const title = rowOf("caffeine/Example").get(".study-row-title").element;
-    const range = document.createRange();
-    range.selectNodeContents(title);
-    window.getSelection()?.addRange(range);
+    // Dragging over the title selects its text; the click that ends the drag keeps the page. The
+    // selection replaces the one that jsdom keeps at the element focused last, also by an earlier
+    // test, which addRange would keep.
+    window.getSelection()?.selectAllChildren(rowOf("caffeine/Example").get(".study-row-title").element);
     expect(window.getSelection()?.toString()).toBe("Caffeine pharmacokinetics");
     await rowOf("caffeine/Example").get(".study-row-title").trigger("click");
     expect(push).not.toHaveBeenCalled();
