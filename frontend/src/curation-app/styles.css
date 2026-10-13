@@ -550,6 +550,11 @@ a.brand {
     linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
     var(--cover);
 }
+/* While the banner of unsaved changes shows, the page keeps the room of the app bar and of the
+   banner (UnsavedBanner): a region scrolls to 8 px below the banner, as the selected review item does. */
+html:has(.unsaved-banner) .rows-scroll {
+  scroll-margin-top: var(--rows-scroll-margin, 0px);
+}
 .rows-table {
   min-width: 100%;
   border-collapse: separate;

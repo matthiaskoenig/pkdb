@@ -320,11 +320,21 @@ function scrollToCell(cell: HTMLElement, nearest = false): boolean {
 }
 
 /**
+ * Where the page shows below what sticks at the top of the window: the bottom of the banner of
+ * unsaved changes, which publishes where it sticks and its height (UnsavedBanner), else of the app bar.
+ */
+function stickyBottom(element: HTMLElement): number {
+  const style = getComputedStyle(element);
+  const length = (name: string) => Number.parseFloat(style.getPropertyValue(name)) || 0;
+  return (length("--unsaved-banner-top") || length("--v-layout-top")) + length("--unsaved-banner-height");
+}
+
+/**
  * Scroll the region to the focused cell when it is not in view, bring the region into the page
- * view when the cell was not in the window either, then focus the cell without scrolling again.
- * A focus in view, such as of a clicked row, leaves the rows in place. Only the region scrolls to
- * the cell, so that the page keeps what is above the region in view (its margin:
- * `--rows-scroll-margin`).
+ * view when the cell was not in the window either, or under the app bar or the banner of unsaved
+ * changes, then focus the cell without scrolling again. A focus in view, such as of a clicked row,
+ * leaves the rows in place. Only the region scrolls to the cell, so that the page keeps what is
+ * above the region in view (its margin: `--rows-scroll-margin`).
  */
 async function reveal(): Promise<void> {
   const element = region.value;
@@ -334,7 +344,7 @@ async function reveal(): Promise<void> {
   const cell = element.querySelector<HTMLElement>(".grid-cell--focus");
   if (!cell) return;
   const { top, bottom } = cell.getBoundingClientRect();
-  const outside = top < 0 || bottom > window.innerHeight;
+  const outside = top < stickyBottom(element) || bottom > window.innerHeight;
   if (scrollToCell(cell) || moved || outside) element.scrollIntoView({ block: "nearest" });
   cell.focus({ preventScroll: true });
 }
