@@ -15,6 +15,7 @@ from pkdb.domain.pharmacokinetics import (
 )
 from pkdb.domain.statistics import (
     RELATIVE_TOLERANCE,
+    ROW_COUNT,
     complete_statistics,
     inconsistent_statistics,
 )
@@ -62,12 +63,16 @@ def prepare_study(
     study = study.model_copy(deep=True)
     observation_subjects = dict()
     reported = dict()
+    # The records that give their own count; the others get the subject's below.
+    own_count = set()
     for subject, record in subject_observations(study):
         observation_subjects[record.key] = subject
         reported[record.key] = record
         count = subject.count if isinstance(subject, Group) else 1
         if record.statistics.count is None:
             record.statistics.count = count
+        else:
+            own_count.add(record.key)
         if (
             isinstance(subject, Group)
             and record.calculation_type is None
@@ -535,7 +540,9 @@ def prepare_study(
             # Checked on the reported values, whose decimal places give the
             # rounding uncertainty; the comparison does not depend on the unit.
             if inconsistency := inconsistent_statistics(
-                reported[key].statistics, subject.count
+                reported[key].statistics,
+                subject.count,
+                ROW_COUNT if key in own_count else subject.name,
             ):
                 # Located at the field that disagrees with the most others, so
                 # a review item can acknowledge it at that column.

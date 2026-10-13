@@ -6,6 +6,7 @@ import pytest
 
 from pkdb.domain.normalization import SCALED_FIELDS, normalize_record
 from pkdb.domain.statistics import (
+    ROW_COUNT,
     _half_unit,
     complete_statistics,
     inconsistent_statistics,
@@ -200,8 +201,11 @@ def test_sd_and_se_that_disagree_are_inconsistent():
         "implied_sd": {"sd": 1.2, "se": 2.2},
         "implied_sigma_log": {},
         "disagreeing": [["sd", "se"]],
+        "count": 4,
+        "count_source": None,
+        "agreeing_count": None,
     }
-    assert result.message == "sd is 1.2, but se 1.1 implies sd 2.2"
+    assert result.message == "sd is 1.2, but se 1.1 with count 4 implies sd 2.2"
     assert result.field == "sd"
 
 
@@ -230,8 +234,8 @@ def test_message_names_only_the_disagreeing_pairs():
     assert result is not None
     assert result.disagreeing == [("sd", "se"), ("se", "cv")]
     assert result.message == (
-        "sd is 0.5, but se 1 implies sd 1.414; "
-        "se 1 implies sd 1.414, but cv 20% implies sd 0.5"
+        "sd is 0.5, but se 1 with count 2 implies sd 1.414; "
+        "se 1 with count 2 implies sd 1.414, but cv 20% implies sd 0.5"
     )
     assert result.reported == {"sd": 0.5, "se": 1.0, "cv": 0.2}
 
@@ -270,12 +274,18 @@ def test_error_bar_is_checked_against_reported_spreads():
         Statistics(mean=10.0, error_bar=12.0, error_type="sd", se=0.1, count=4)
     )
     assert result is not None
-    assert result.message == "se 0.1 implies sd 0.2, but error_bar 12 (sd) implies sd 2"
+    # Every count from 45 to 3600 fits the rounding: no count is named.
+    assert result.message == (
+        "se 0.1 with count 4 implies sd 0.2, but error_bar 12 (sd) implies sd 2"
+    )
     assert result.context == {
         "reported": {"se": 0.1, "error_bar": 12.0},
         "implied_sd": {"se": 0.2, "error_bar": 2.0},
         "implied_sigma_log": {},
         "disagreeing": [["se", "error_bar"]],
+        "count": 4,
+        "count_source": None,
+        "agreeing_count": None,
     }
     # A reported value is still checked against the error bar of its own type.
     result = inconsistent_statistics(
@@ -329,7 +339,8 @@ def test_rounding_of_the_reported_digits_is_tolerated():
     # Just outside: 1.06 - 0.9 exceeds 0.15 + 0.005.
     result = inconsistent_statistics(Statistics(sd=1.06, se=0.3, count=9))
     assert result is not None
-    assert result.message == "sd is 1.06, but se 0.3 implies sd 0.9"
+    # The counts 10 to 18 fit the rounding of se 0.3: no count is named.
+    assert result.message == "sd is 1.06, but se 0.3 with count 9 implies sd 0.9"
     # More reported digits leave less room.
     assert inconsistent_statistics(Statistics(sd=0.95, se=0.300, count=9)) is None
     assert inconsistent_statistics(Statistics(sd=0.95, se=0.301, count=9))
@@ -455,6 +466,178 @@ def test_geometric_and_arithmetic_families_are_reported_together():
 
 def test_arithmetic_and_geometric_values_are_not_compared_with_each_other():
     assert not inconsistent_statistics(Statistics(mean=10.0, sd=2.0, gsd=2.0, count=4))
+
+
+# The count in the messages
+
+# enalapril/Burckhardt2015, Figure 6, angiotensin I at 0 h: the curator read the
+# error bar as an se and derived sd with the count 5; the group has 9 subjects.
+BURCKHARDT_0_H = Statistics(
+    mean=0.380723103613002,
+    sd=0.367730570055817,
+    error_bar=0.545177214022913,
+    error_type="se",
+)
+
+
+def test_a_claim_that_needs_the_count_names_the_count_and_its_subjects():
+    result = inconsistent_statistics(BURCKHARDT_0_H, 9, "enalapril")
+    assert result is not None
+    assert result.message == (
+        "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of the group enalapril "
+        "implies sd 0.4934; they agree with count 5"
+    )
+    assert result.context == {
+        "reported": {"sd": 0.367730570055817, "error_bar": 0.545177214022913},
+        "implied_sd": {
+            "sd": 0.367730570055817,
+            "error_bar": pytest.approx(0.4933623312297),
+        },
+        "implied_sigma_log": {},
+        "disagreeing": [["sd", "error_bar"]],
+        "count": 9,
+        "count_source": "enalapril",
+        "agreeing_count": 5,
+    }
+
+
+def test_the_count_of_the_row_comes_before_the_count_of_the_subjects():
+    statistics = Statistics(
+        mean=0.3807, sd=0.3677, error_bar=0.5452, error_type="se", count=9
+    )
+    result = inconsistent_statistics(statistics, 2, ROW_COUNT)
+    assert result is not None
+    assert result.message == (
+        "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of this row "
+        "implies sd 0.4935; they agree with count 5"
+    )
+    assert (result.count, result.count_source) == (9, "this row")
+
+
+def test_only_claims_that_need_the_count_name_it():
+    # Both need the count, so it cancels: no count makes them agree.
+    result = inconsistent_statistics(
+        Statistics(mean=10.0, se=0.5, error_bar=12.0, error_type="se"), 4
+    )
+    assert result is not None
+    assert result.message == (
+        "se 0.5 with count 4 implies sd 1, "
+        "but error_bar 12 (se) with count 4 implies sd 4"
+    )
+    assert result.agreeing_count is None
+    # cv needs the mean, not the count.
+    result = inconsistent_statistics(Statistics(mean=10.12, cv=0.2236, se=1.012), 9)
+    assert result is not None
+    assert result.message == (
+        "se 1.012 with count 9 implies sd 3.036, but cv 22.36% implies sd 2.263; "
+        "they agree with count 5"
+    )
+
+
+def test_without_a_count_no_claim_names_one():
+    result = inconsistent_statistics(Statistics(mean=10.0, sd=1.2, cv=0.5), None, "all")
+    assert result is not None
+    assert result.message == "sd is 1.2, but cv 50% implies sd 5"
+    assert (result.count, result.count_source, result.agreeing_count) == (
+        None,
+        None,
+        None,
+    )
+
+
+@pytest.mark.parametrize(
+    ("statistics", "agreeing"),
+    [
+        # sd = se * sqrt(5) to the reported digits.
+        (Statistics(sd=2.795, se=1.25), 5),
+        # Derived with the count 5 and rounded to two digits: n = 5.35.
+        (Statistics(sd=0.37, se=0.16), 5),
+        # n = 5.38: no whole count within the rounding.
+        (Statistics(sd=2.9, se=1.25), None),
+        # n = 17.2: within 2 percent of 17, but not within the rounding.
+        (Statistics(sd=5.123, se=1.234), None),
+        # n = 9.48 is nearest to the count that was used.
+        (Statistics(sd=3.11, se=1.01), None),
+        # Several counts fit: se 0.05 means 0.045 to 0.055.
+        (Statistics(sd=0.5, se=0.05), None),
+    ],
+)
+def test_the_whole_count_with_which_sd_and_se_agree(statistics, agreeing):
+    result = inconsistent_statistics(statistics, 9)
+    assert result is not None
+    assert result.agreeing_count == agreeing
+    if agreeing is None:
+        assert "they agree" not in result.message
+    else:
+        assert result.message.endswith(f"; they agree with count {agreeing}")
+
+
+def test_the_only_count_that_fits_need_not_be_the_nearest_whole_number():
+    # n = 2.5: round(n) is 2, the count used; only 3 fits sd 0.0789 / se 0.05.
+    result = inconsistent_statistics(Statistics(sd=0.0789, se=0.05), 2)
+    assert result is not None
+    assert result.agreeing_count == 3
+    assert result.message.endswith("; they agree with count 3")
+
+
+def test_floating_point_error_of_the_error_bar_does_not_drop_the_count():
+    # sd derived with the count 28 from error_bar - mean, in 15 digits.
+    result = inconsistent_statistics(
+        Statistics(
+            mean=324.996256244919,
+            sd=25.1925521250765,
+            error_bar=329.757201088776,
+            error_type="se",
+        ),
+        30,
+    )
+    assert result is not None
+    assert result.agreeing_count == 28
+
+
+def test_near_gsd_1_the_digits_that_differ_show():
+    # Four significant digits of the gsd would print both as 1.001.
+    result = inconsistent_statistics(Statistics(gsd=1.0012345, gcv=0.0014))
+    assert result is not None
+    assert result.message == ("gsd is 1.001235, but gcv 0.14% implies gsd 1.001401")
+
+
+@pytest.mark.parametrize(
+    "statistics",
+    [
+        # n = 1 and n = 1,000,000 lie outside 2 to 10,000.
+        Statistics(sd=1.234, se=1.234),
+        Statistics(sd=123.4, se=0.1234),
+        # n overflows to infinity.
+        Statistics(sd=1e300, se=1e-300),
+        # An error bar at the mean implies sd 0: there is no ratio.
+        Statistics(mean=1.5, sd=0.5, error_bar=1.5, error_type="se"),
+        # the counts 1 and 2 fit: the floor must not make one unique
+        Statistics(sd=0.35, se=0.3),
+        Statistics(sd=0.5, se=0.4),
+        Statistics(sd=0.6, se=0.5),
+        Statistics(sd=3.5, se=3),
+        # The counts 10000 to 10019 all fit: the cap must not make one unique.
+        Statistics(sd=100.148, se=1.001),
+        Statistics(mean=10, error_bar=11, error_type="se", sd=199.993),
+        # A negative spread has no count.
+        Statistics(sd=-0.08, se=0.1),
+        Statistics(sd=4.99995, se=-0.1),
+    ],
+)
+def test_no_agreeing_count_outside_2_to_10000_or_without_a_ratio(statistics):
+    result = inconsistent_statistics(statistics, 9)
+    assert result is not None
+    assert result.agreeing_count is None
+    assert "they agree" not in result.message
+
+
+def test_reported_numbers_keep_four_significant_digits():
+    result = inconsistent_statistics(Statistics(mean=12345.6, sd=1234.56, cv=0.123456))
+    assert result is not None
+    assert result.message == "sd is 1235, but cv 12.35% implies sd 1524"
+    # The context keeps the reported values.
+    assert result.reported == {"sd": 1234.56, "cv": 0.123456}
 
 
 # Unit scaling during normalization

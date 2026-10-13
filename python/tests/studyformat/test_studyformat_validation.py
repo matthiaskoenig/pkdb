@@ -487,8 +487,8 @@ def test_postprocessing_issues_are_located_in_the_table(
         "scientific",
     )
     assert issue.message == (
-        "sd is 0.5, but se 1 implies sd 1.414; "
-        "se 1 implies sd 1.414, but cv 20% implies sd 0.5"
+        "sd is 0.5, but se 1 with count 2 of the group all implies sd 1.414; "
+        "se 1 with count 2 of the group all implies sd 1.414, but cv 20% implies sd 0.5"
     )
     assert issue.source is not None
     # The warning points to the statistic that disagrees with the most others.
@@ -524,13 +524,62 @@ def test_error_bar_contradictions_are_acknowledged_at_the_error_bar(
     folder = inconsistent_study(valid_study, tsv, **cells)
     [issue] = validate_folder(folder, sf_vocabulary).issues
     assert issue.message == (
-        "se 0.1 implies sd 0.1414, but error_bar 4.5 (sd) implies sd 2"
+        "se 0.1 with count 2 of the group all implies sd 0.1414, but error_bar 4.5 (sd) "
+        "implies sd 2"
     )
     assert issue.source is not None and issue.source.header == "error_bar"
     target = {"file": OUTPUTS, "column": column}
     item = {"acknowledges": "inconsistent_statistics", "target": target}
     folder = inconsistent_study(valid_study, tsv, item, **cells)
     assert bool(validate_folder(folder, sf_vocabulary).issues) is kept
+
+
+# Burckhardt2015 Fig6 at 0 h, rounded: sd derived from the se error bar with
+# the count 5.
+DERIVED_WITH_COUNT_5 = {
+    "mean": "0.3807",
+    "sd": "0.3677",
+    "se": "",
+    "cv": "",
+    "error_bar": "0.5452",
+    "error_type": "se",
+}
+
+
+@pytest.mark.parametrize(
+    ("cells", "message", "count", "source"),
+    [
+        pytest.param(
+            {},
+            "sd is 0.3677, but error_bar 0.5452 (se) with count 2 of the group all "
+            "implies sd 0.2326; they agree with count 5",
+            2,
+            "all",
+            id="group",
+        ),
+        pytest.param(
+            {"count": "9"},
+            "sd is 0.3677, but error_bar 0.5452 (se) with count 9 of this row "
+            "implies sd 0.4935; they agree with count 5",
+            9,
+            "this row",
+            id="row",
+        ),
+    ],
+)
+def test_statistics_warnings_name_the_count_and_whose_it_is(
+    valid_study, tsv, sf_vocabulary, cells, message, count, source
+):
+    # The group "all" has the count 2; a row may give its own count.
+    folder = inconsistent_study(valid_study, tsv, **DERIVED_WITH_COUNT_5, **cells)
+    [issue] = validate_folder(folder, sf_vocabulary).issues
+    assert issue.message == message
+    assert issue.context is not None
+    assert (
+        issue.context["count"],
+        issue.context["count_source"],
+        issue.context["agreeing_count"],
+    ) == (count, source, 5)
 
 
 def test_postprocessing_warnings_can_be_acknowledged(valid_study, tsv, sf_vocabulary):
