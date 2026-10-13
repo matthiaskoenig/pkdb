@@ -7,6 +7,10 @@ cleanup() { "${compose[@]}" down --volumes --remove-orphans; }
 trap cleanup EXIT
 # Start from a fresh disposable fixture, including account throttle state.
 cleanup
-"${compose[@]}" up --build --wait --wait-timeout 240
+# CI names the backend image that it built once for the run in PKDB_TEST_IMAGE;
+# without it the backend is built from this checkout.
+if [[ -n "${PKDB_TEST_IMAGE:-}" ]]; then build=--no-build; else build=--build; fi
+"${compose[@]}" up "$build" --wait --wait-timeout 240
 cd frontend
+# The arguments go to Playwright, for example --project=chromium for one browser.
 npx playwright test "$@"

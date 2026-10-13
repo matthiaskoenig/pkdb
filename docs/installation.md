@@ -129,7 +129,7 @@ npx playwright install --with-deps
 npm run test:e2e
 ```
 
-Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks).
+Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks). For a quick check, test one browser: `npx playwright install --with-deps chromium` once, then `npm run test:e2e -- --project=chromium`.
 
 The unit tests of the curation app read contract fixtures in `frontend/tests/fixtures/curation-contract/`. `python/tests/test_curation_contract.py` writes them from real answers of the local server on the fixture workspace and fails when an answer changes. Regenerate them from `python/` with `PKDB_UPDATE_CONTRACT=1 uv run --locked pytest -q tests/test_curation_contract.py`, review the diff, and run the frontend unit tests against them. Never edit them by hand.
 
