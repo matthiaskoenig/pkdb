@@ -1490,6 +1490,15 @@ describe("the unsaved banner", () => {
     expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: Creator");
   });
 
+  it("names a field typed into a new study.json", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    useStudyStore().draft.startNew(toForm({}, noteKinds(useStudyStore().detail!)));
+    await flushPromises();
+    await field("Source key").setValue("pkdb.new");
+    await flushPromises();
+    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: Source key");
+  });
+
   it("shows the shortcut beside Save and names it for assistive technology", async () => {
     await mountPage("/studies/caffeine/Example/metadata");
     useStudyStore().draft.form!.creator = "janekg";
