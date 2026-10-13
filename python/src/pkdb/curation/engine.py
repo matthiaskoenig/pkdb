@@ -24,7 +24,7 @@ from pkdb.curation.jobs import (
     maybe_sent,
     now,
 )
-from pkdb.curation.state import THEMES
+from pkdb.curation.state import THEMES, state_row
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -258,11 +258,7 @@ class CurationEngine(
                         },
                         "studies": [
                             {
-                                **{
-                                    k: v
-                                    for k, v in row.items()
-                                    if not k.startswith("_")
-                                },
+                                **state_row(row),
                                 "issue": self._issue_for(
                                     (row.get("summary") or {}).get("issue")
                                 ),

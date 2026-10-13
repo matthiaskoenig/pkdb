@@ -187,6 +187,25 @@ def test_limits_contract(workspace, engine_on, monkeypatch):
     check_contract("limits", {"details": details})
 
 
+def test_rows_contract(workspace, engine_on):
+    """The study rows of the state after a validation of Demo2020: counts, no problem lists."""
+    engine = engine_on(workspace)
+    detail = _validated(engine, DEMO)
+    rows = engine.snapshot()["studies"]
+    demo = next(row for row in rows if row["id"] == DEMO)
+    assert all("problems" not in row for row in rows)
+    assert demo["counts"] == {"errors": 0, "warnings": 2}
+    assert len(detail["problems"]) == 2
+    # The id of a report is random.
+    check_contract(
+        "rows",
+        [
+            {**row, "report_id": "<report>" if row["report_id"] else None}
+            for row in rows
+        ],
+    )
+
+
 def test_problems_contract(workspace, engine_on):
     """The problems of Demo2020 after a validation, whose warnings review items can acknowledge,
     and after a sync stopped by a conflict in a workbook without its base sheet, whose warning

@@ -1684,3 +1684,16 @@ def test_the_same_watcher_error_after_a_recovery_is_logged_once_but_kept(
     assert times[1]["recovered"] is False
     assert engine.watcher_error["recovered"] is True
     assert engine.log.path.read_text(encoding="utf-8").count("Traceback") == 1
+
+
+def test_the_state_leaves_out_the_problems_of_a_study_and_keeps_their_counts(
+    workspace,
+):
+    engine, _ = workspace
+    with engine.lock:
+        row(engine)["problems"] = [{"code": "unknown_substance"}]
+        row(engine)["counts"] = {"errors": 1, "warnings": 0}
+    state = engine.snapshot()["studies"][0]
+    assert "problems" not in state
+    assert state["counts"] == {"errors": 1, "warnings": 0}
+    assert row(engine)["problems"] == [{"code": "unknown_substance"}]

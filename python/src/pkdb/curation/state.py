@@ -16,6 +16,20 @@ from pkdb.curation.tree import SourceTree
 #: The color themes of the app: the system theme, or one that the curator chose.
 THEMES = ("light", "dark", "system")
 
+#: Row fields that only the study page serves: with them, every poll of the state would carry
+#: the problems of all studies.
+DETAIL_ONLY = frozenset({"problems"})
+
+
+def state_row(row: dict) -> dict:
+    """The fields of a study row in the state of the app: those without a leading
+    underscore, except the ones that only the study page serves."""
+    return {
+        key: value
+        for key, value in row.items()
+        if not key.startswith("_") and key not in DETAIL_ONLY
+    }
+
 
 class EngineState:
     lock: threading.RLock

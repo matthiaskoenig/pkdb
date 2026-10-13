@@ -11,6 +11,7 @@ import type {
   Problem,
   ReviewItem,
   SourceSummary,
+  StudyRow,
   SourceView,
   Suggestion,
   TableEntry,
@@ -20,6 +21,7 @@ import type {
   ValidationIssue,
 } from "../../src/curation-app/api/types";
 import { isSourceView, isTablePreview, isTargetMatch } from "../../src/curation-app/api/types";
+import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { issueMessage } from "../../src/curation-app/metadata";
@@ -44,6 +46,7 @@ import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
+import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
@@ -351,5 +354,21 @@ describe("papers contract", () => {
     expect(papers[0]!.bytes).toBeGreaterThan(0);
     expect(papers[0]!.version).toMatch(/^[0-9a-f]{16}$/);
     expect(Object.keys(papers[0]!).sort()).toEqual(["bytes", "file", "url", "version"]);
+  });
+});
+
+describe("rows contract", () => {
+  const rows = contract<StudyRow[]>(rowsFixture);
+
+  it("has the counts of the problems of each study and no problem list, which the study page has", () => {
+    expect(rows.every((row) => !("problems" in row))).toBe(true);
+    const demo = rows.find((row) => row.id === "caffeine/Demo2020")!;
+    expect(problemLabels(demo)).toEqual([{ label: "2 warnings", tone: "warning" }]);
+  });
+
+  it("is what the overview filters", () => {
+    const { shown, counts } = filterStudies(rows, { search: "demo", substance: "", curator: "", chip: "all" });
+    expect(shown.map((row) => row.id)).toEqual(["caffeine/Demo2020"]);
+    expect(counts.all).toBe(1);
   });
 });
