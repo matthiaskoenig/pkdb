@@ -12,7 +12,7 @@ import pytest
 
 from pkdb.schemas.source import SourceLocation
 from pkdb.studyformat import read_study
-from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.issues import make_issue, table_place
 from pkdb.studyformat.load import load_study, load_table
 from pkdb.studyformat.raw import load_raw
 from pkdb.studyformat.tables import TABLES, has_header, table_line, workbook_row
@@ -117,3 +117,14 @@ def test_a_file_out_of_canonical_form_names_the_line_that_differs(valid_study):
     assert issue.source is not None
     assert (issue.code, issue.source.row) == ("not_formatted", 1)
     assert "first difference in line 1" in issue.message
+
+
+def test_the_place_in_a_table_names_line_column_and_workbook_cell():
+    assert table_place(96, "error_bar", "Y97") == [
+        "line 96",
+        "error_bar",
+        "workbook cell Y97",
+    ]
+    assert table_place(0, "meen", "B1") == ["line 0", "meen", "workbook cell B1"]
+    assert table_place(3, None, None) == ["line 3"]
+    assert table_place(None, None, None) == []

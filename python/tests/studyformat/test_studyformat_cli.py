@@ -192,8 +192,22 @@ def test_format_human_locations(capsys):
     from pkdb.schemas.source import SourceLocation
     from pkdb.studyformat_cli import _location
 
-    assert _location(SourceLocation(file="a.tsv", cell="A1", row=1)) == "a.tsv A1"
+    assert (
+        _location(SourceLocation(file="a.tsv", cell="A2", row=1, header="name"))
+        == "a.tsv line 1, name, workbook cell A2"
+    )
+    assert (
+        _location(
+            SourceLocation(file="outputs_Tab2.tsv", row=0, cell="B1", header="meen")
+        )
+        == "outputs_Tab2.tsv line 0, meen, workbook cell B1"
+    )
     assert _location(SourceLocation(file="a.tsv", row=3)) == "a.tsv line 3"
+    assert _location(SourceLocation(file="study.json", row=3)) == "study.json line 3"
+    assert (
+        _location(SourceLocation(file="Example.xlsx", sheet="subjects", row=0))
+        == "Example.xlsx, sheet subjects, row 0"
+    )
     assert _location(SourceLocation(file="a.tsv")) == "a.tsv"
     assert _location(None) == ""
 

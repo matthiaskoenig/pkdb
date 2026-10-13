@@ -310,6 +310,35 @@ def test_terminal_groups_repeated_errors_and_shows_null(capsys):
     assert "Received: empty (null)" in output
 
 
+def test_terminal_names_the_line_and_the_workbook_cell_of_a_table(capsys):
+    from pkdb.terminal import Terminal
+
+    Terminal(True).result(
+        {
+            "ok": False,
+            "report": {
+                "issues": [
+                    {
+                        "code": "unknown_column",
+                        "message": "Unknown column",
+                        "source": {
+                            "file": "outputs_Fig6.tsv",
+                            "sheet": "outputs_Fig6",
+                            "row": row,
+                            "cell": f"Y{row + 1}",
+                            "header": "error_bar",
+                        },
+                    }
+                    for row in (0, 96)
+                ]
+            },
+        }
+    )
+    output = capsys.readouterr().out
+    assert "outputs_Fig6.tsv → line 0 → error_bar → workbook cell Y1" in output
+    assert "2 occurrences: line 0, line 96" in output
+
+
 def test_confirmed_commit_error_is_not_reported_as_unsaved(capsys):
     from pkdb.terminal import Terminal
 

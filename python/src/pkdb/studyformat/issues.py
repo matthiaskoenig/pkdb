@@ -217,6 +217,20 @@ def line_name(file: str, line: int, from_sheet: bool) -> str:
     return f"Row {workbook_row(file, line)}" if from_sheet else f"Line {line}"
 
 
+def table_place(row: int | None, header: str | None, cell: str | None) -> list[str]:
+    """The parts that locate an issue in a table file, as the command line names them.
+
+    Such as `line 96`, `error_bar` and `workbook cell Y97`, each when known. The
+    header of a table is line 0; the cell is the address in the workbook.
+    """
+    parts = [] if row is None else [f"line {row}"]
+    if header:
+        parts.append(header)
+    if cell:
+        parts.append(f"workbook cell {cell}")
+    return parts
+
+
 def make_issue(
     code: str,
     message: str,

@@ -91,19 +91,22 @@ def study_folder(path: Path, command: str) -> Path | None:
 
 
 def _location(source) -> str:
-    """Where an issue is: a TSV file with its line or cell, or a workbook sheet with its cell or row."""
+    """Where an issue is: a table file with its line, column and workbook cell, a workbook sheet with its cell or row, or a file with its line."""
+    from pkdb.studyformat.issues import table_place
+
     if source is None:
         return ""
     if source.sheet and not source.file.endswith(".tsv"):
         parts = [source.file, f"sheet {source.sheet}"]
         if source.cell:
             parts.append(f"cell {source.cell}")
-        elif source.row:
+        elif source.row is not None:
             parts.append(f"row {source.row}")
         return ", ".join(parts)
-    if source.cell:
-        return f"{source.file} {source.cell}"
-    if source.row:
+    if source.file.endswith(".tsv"):
+        place = table_place(source.row, source.header, source.cell)
+        return f"{source.file} {', '.join(place)}" if place else source.file
+    if source.row is not None:
         return f"{source.file} line {source.row}"
     return source.file
 

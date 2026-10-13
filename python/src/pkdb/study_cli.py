@@ -145,7 +145,11 @@ def register_review(commands) -> None:
     )
     acknowledge.add_argument("code", help="Warning code")
     acknowledge.add_argument("--file", required=True)
-    acknowledge.add_argument("--line", type=int)
+    acknowledge.add_argument(
+        "--line",
+        type=int,
+        help="Line of the warning; the header of a table is line 0 and its first row line 1",
+    )
     acknowledge.add_argument("--column")
     acknowledge.add_argument(
         "--key",

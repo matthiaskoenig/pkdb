@@ -54,7 +54,7 @@ def register(commands) -> None:
 def _line(problem) -> str:
     where = problem.study or ""
     if problem.file:
-        where += f" {problem.file}" + (f":{problem.row}" if problem.row else "")
+        where += f" {problem.file}" + ("" if problem.row is None else f":{problem.row}")
     mark = " (warning)" if problem.severity == "warning" else ""
     return f"{where} {problem.code}{mark}: {problem.message}".lstrip()
 
