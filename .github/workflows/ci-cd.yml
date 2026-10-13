@@ -14,9 +14,10 @@ concurrency:
   # a release is never superseded, every tag is a group of its own
   cancel-in-progress: true
 env:
-  # The backend image of this run: the job image builds it, and the jobs server and
-  # frontend-e2e start it from the artifact backend-image; the id of the run in the
-  # name makes sure that they never start an image of another run.
+  # The jobs server, compose and frontend-e2e each build the backend image from the
+  # layer cache that server writes, with this Python, and start it under this tag;
+  # the id of the run in the tag makes sure that they never start an older image.
+  PKDB_IMAGE_PYTHON: "3.14"
   PKDB_BACKEND_IMAGE: pkdb-ci-backend:run-${{ github.run_id }}
 jobs:
   changes:
@@ -74,24 +75,9 @@ jobs:
         with:
           persist-credentials: false
       - name: Run the test database without durable writes
-        # as compose.test.yaml does; a service takes no command line, and a reload
-        # applies these settings
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
-        run: |
-          docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -q \
-            -c "ALTER SYSTEM SET fsync = off" \
-            -c "ALTER SYSTEM SET synchronous_commit = off" \
-            -c "ALTER SYSTEM SET full_page_writes = off" \
-            -c "SELECT pg_reload_conf()"
-          for _ in 1 2 3 4 5; do
-            if [ "$(docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -Atc 'SHOW fsync')" = off ]; then
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "fsync is still on" >&2
-          exit 1
+        run: ../scripts/ci_postgres_without_fsync.sh "$POSTGRES_CONTAINER"
       - uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: ${{ matrix.python }}
@@ -120,62 +106,14 @@ jobs:
           cd ..
           PYTHONPATH=. backend/.venv/bin/python -m pytest tools/backend_migration -q
 
-  image:
-    # The backend image of the run, built once and handed to the jobs server, compose
-    # and frontend-e2e as the artifact backend-image; they start as soon as it exists.
+  server:
+    # The backend image, whose layers only this job caches, so that no two jobs race
+    # to write them; the server wheel; the system tests of the image: the installed
+    # container runtime and the restore of PostgreSQL and the attachments.
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.14"]
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
-      - name: Build the backend image
-        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
-        with:
-          context: .
-          file: backend/Dockerfile
-          build-args: PYTHON_VERSION=${{ matrix.python }}
-          # pkdb-local:latest is the name in compose.yaml, so that compose starts this image
-          tags: |
-            pkdb-local:latest
-            ${{ env.PKDB_BACKEND_IMAGE }}
-          load: true
-          provenance: false
-          # the layers are cached between runs; a release run builds without the
-          # cache, which zizmor cannot tell from the expression
-          cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend-image' || '' }}  # zizmor: ignore[cache-poisoning]
-          cache-to: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend-image,mode=max' || '' }}  # zizmor: ignore[cache-poisoning]
-      - name: Save the backend image
-        run: docker save pkdb-local:latest "$PKDB_BACKEND_IMAGE" | zstd -T0 -3 -q -o "$RUNNER_TEMP/backend-image.tar.zst"
-      - uses: actions/upload-artifact@v7
-        with:
-          name: backend-image
-          path: ${{ runner.temp }}/backend-image.tar.zst
-          # zstd compressed it already
-          compression-level: 0
-          retention-days: 1
-
-  server:
-    # The server wheel, and the system tests of the backend image of the run: the
-    # installed container runtime and the restore of PostgreSQL and the attachments.
-    needs: image
-    runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        # the Python of the image, see the job image
-        python: ["3.14"]
     services:
       postgres:
         image: postgres:18.6
@@ -202,37 +140,38 @@ jobs:
       - name: Run the test database without durable writes
         env:
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
-        run: |
-          docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -q \
-            -c "ALTER SYSTEM SET fsync = off" \
-            -c "ALTER SYSTEM SET synchronous_commit = off" \
-            -c "ALTER SYSTEM SET full_page_writes = off" \
-            -c "SELECT pg_reload_conf()"
-          for _ in 1 2 3 4 5; do
-            if [ "$(docker exec "$POSTGRES_CONTAINER" psql -U pkdb_test -d pkdb_test -Atc 'SHOW fsync')" = off ]; then
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "fsync is still on" >&2
-          exit 1
+        run: ../scripts/ci_postgres_without_fsync.sh "$POSTGRES_CONTAINER"
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+      - name: Build the backend image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
+        with:
+          context: .
+          file: backend/Dockerfile
+          build-args: PYTHON_VERSION=${{ env.PKDB_IMAGE_PYTHON }}
+          tags: ${{ env.PKDB_BACKEND_IMAGE }}
+          load: true
+          provenance: false
+          # the layers are cached between runs; a release run builds without the
+          # cache, which zizmor cannot tell from the expression
+          cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-to: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend,mode=max' || '' }}  # zizmor: ignore[cache-poisoning]
       - uses: astral-sh/setup-uv@v10.2.0
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ env.PKDB_IMAGE_PYTHON }}
           # a release run restores no cache, which zizmor cannot tell from the
           # expression; the released distributions are built without one
           enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
           cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
-      - run: uv sync --locked --python ${{ matrix.python }}
-      - run: uv build --python ${{ matrix.python }}
+      - run: uv sync --locked --python "$PKDB_IMAGE_PYTHON"
+      - run: uv build --python "$PKDB_IMAGE_PYTHON"
       - name: Install wheel in clean environment
         env:
           # The server environment does not ship the curation app; the client job builds it.
           PKDB_BUILD_WITHOUT_CURATION_APP: '1'
         run: |
-          uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
+          uv venv --python "$PKDB_IMAGE_PYTHON" /tmp/pkdb-wheel
           # Kept apart from dist/, so no pkdb wheel without the app sits next to release files.
-          uv build --python ${{ matrix.python }} --project ../python --out-dir "$RUNNER_TEMP/pkdb-dist"
+          uv build --python "$PKDB_IMAGE_PYTHON" --project ../python --out-dir "$RUNNER_TEMP/pkdb-dist"
           uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl "$RUNNER_TEMP"/pkdb-dist/*.whl
           cd /tmp
           /tmp/pkdb-wheel/bin/python -c 'import pkdb, pkdb_server, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
@@ -240,24 +179,19 @@ jobs:
         with:
           name: server-distributions
           path: backend/dist/pkdb_server-*
-      - uses: actions/download-artifact@v8
-        with:
-          name: backend-image
-          path: ${{ runner.temp }}/backend-image
-      - name: Load the backend image of the run
-        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
       - name: Verify installed container runtime
         env:
           PKDB_TEST_IMAGE: ${{ env.PKDB_BACKEND_IMAGE }}
-          PKDB_TEST_IMAGE_PYTHON: ${{ matrix.python }}
-        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_runtime.py -q
+          PKDB_TEST_IMAGE_PYTHON: ${{ env.PKDB_IMAGE_PYTHON }}
+        run: uv run --python "$PKDB_IMAGE_PYTHON" --locked pytest system_tests/test_runtime.py -q
       - name: Verify PostgreSQL and attachment restore
         env:
           PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
-        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q
+        run: uv run --python "$PKDB_IMAGE_PYTHON" --locked pytest system_tests/test_restore.py -q
 
   compose:
-    needs: image
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -269,14 +203,22 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/download-artifact@v8
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+      - name: Build the backend image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
         with:
-          name: backend-image
-          path: ${{ runner.temp }}/backend-image
-      - name: Load the backend image of the run
-        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
+          context: .
+          file: backend/Dockerfile
+          build-args: PYTHON_VERSION=${{ env.PKDB_IMAGE_PYTHON }}
+          # the name in compose.yaml, so that compose starts this image
+          tags: pkdb-local:latest
+          load: true
+          provenance: false
+          # the layers that the job server caches; a release run builds without the
+          # cache, which zizmor cannot tell from the expression
+          cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend' || '' }}  # zizmor: ignore[cache-poisoning]
       - name: Start the documented local stack
-        # compose.yaml names the image of the run, pkdb-local:latest, so compose builds nothing
+        # the image built above, so compose builds nothing
         run: docker compose up --no-build --wait --wait-timeout 180
       - name: Verify automatic schema and vocabulary bootstrap
         run: |
@@ -368,19 +310,23 @@ jobs:
       - run: uv sync --python ${{ matrix.python }} --locked --all-extras
       # The workbook round trip tests re-save workbooks with LibreOffice. Its packages
       # are cached per image of the runner, so a run installs them without downloading.
+      # A run that has to download them saves them as the newest packages of that image,
+      # so packages that no longer install are replaced.
       - name: Name the image of the runner
         id: runner-image
         if: runner.os == 'Linux'
         run: echo "name=$ImageOS-$ImageVersion" >> "$GITHUB_OUTPUT"
-      - name: Cache the LibreOffice Calc packages
+      - name: Restore the LibreOffice Calc packages
         # a release run restores no cache and downloads the packages, which zizmor
         # cannot tell from the condition
         if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
         with:
           path: ~/libreoffice-packages
-          key: libreoffice-calc-${{ steps.runner-image.outputs.name }}
+          key: libreoffice-calc-${{ steps.runner-image.outputs.name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: libreoffice-calc-${{ steps.runner-image.outputs.name }}-
       - name: Install LibreOffice Calc
+        id: libreoffice
         if: runner.os == 'Linux'
         run: |
           packages="$HOME/libreoffice-packages"
@@ -390,12 +336,22 @@ jobs:
             && sudo apt-get install -y --no-install-recommends "$packages"/*.deb; then
             exit 0
           fi
+          # no packages, or packages that no longer install: download them anew
+          rm -rf "$packages"
           sudo apt-get update
           sudo apt-get clean
           sudo apt-get install -y --no-install-recommends --download-only libreoffice-calc
           mkdir -p "$packages"
           cp /var/cache/apt/archives/*.deb "$packages"/
           sudo apt-get install -y --no-install-recommends libreoffice-calc
+          echo "downloaded=true" >> "$GITHUB_OUTPUT"
+      - name: Save the LibreOffice Calc packages
+        # a release run saves no cache, which zizmor cannot tell from the condition
+        if: steps.libreoffice.outputs.downloaded == 'true' && !startsWith(github.ref, 'refs/tags/')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/libreoffice-packages
+          key: libreoffice-calc-${{ steps.runner-image.outputs.name }}-${{ github.run_id }}-${{ github.run_attempt }}
       # The speed tests (-m slow) run in client-slow, see addopts in pyproject.toml.
       - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q -n auto --durations=15
         env:
@@ -565,7 +521,8 @@ jobs:
     # Every browser in a job of its own, against a disposable stack of the backend
     # image of the run, see tools/frontend_testing/run.sh.
     name: Frontend browser tests (${{ matrix.browser }})
-    needs: image
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -612,17 +569,23 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
         run: npx playwright install-deps "$BROWSER"
-      - uses: actions/download-artifact@v8
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+      - name: Build the backend image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
         with:
-          name: backend-image
-          path: ${{ runner.temp }}/backend-image
-      - name: Load the backend image of the run
-        run: zstd -dc "$RUNNER_TEMP/backend-image/backend-image.tar.zst" | docker load
+          context: .
+          file: backend/Dockerfile
+          build-args: PYTHON_VERSION=${{ env.PKDB_IMAGE_PYTHON }}
+          tags: ${{ env.PKDB_BACKEND_IMAGE }}
+          load: true
+          provenance: false
+          # the layers that the job server caches; a release run builds without the
+          # cache, which zizmor cannot tell from the expression
+          cache-from: ${{ !startsWith(github.ref, 'refs/tags/') && 'type=gha,scope=backend' || '' }}  # zizmor: ignore[cache-poisoning]
       - name: Test the frontend in the browser
         env:
           BROWSER: ${{ matrix.browser }}
-          # the harness starts this image instead of building one, and stops when
-          # it is missing
+          # the image built above, which the harness starts instead of building one
           PKDB_TEST_IMAGE: ${{ env.PKDB_BACKEND_IMAGE }}
         run: npm run test:e2e -- --project="$BROWSER"
       - uses: actions/upload-artifact@v7
@@ -637,7 +600,7 @@ jobs:
   tests:
     # the one required check of this workflow, see .github/rulesets/develop.json
     name: tests
-    needs: [changes, python, image, server, compose, client, client-slow, curation-e2e, frontend-unit, frontend-e2e]
+    needs: [changes, python, server, compose, client, client-slow, curation-e2e, frontend-unit, frontend-e2e]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

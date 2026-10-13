@@ -48,7 +48,11 @@ jobs:
         working-directory: python
         env:
           TY_OUTPUT_FORMAT: github
+        # every platform is checked, and the step fails at the end if any failed
         run: |
+          status=0
           for platform in linux win32 darwin; do
-            uv run --locked --python 3.14 ty check --python-version 3.14 --python-platform "$platform"
+            echo "ty check for $platform"
+            uv run --locked --python 3.14 ty check --python-version 3.14 --python-platform "$platform" || status=1
           done
+          exit "$status"
