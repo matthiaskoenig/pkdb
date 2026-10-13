@@ -34,6 +34,12 @@ async function openSubjectNotes(page: Page): Promise<Locator> {
   return pane.getByRole("textbox", { name: "Description 1" });
 }
 
+/** Whether the banner of Metadata and Data, which keeps its row there, shows unsaved changes. */
+async function isDirty(banner: Locator): Promise<boolean> {
+  await expect(banner).toBeVisible();
+  return banner.evaluate((element) => element.classList.contains("unsaved-banner--dirty"));
+}
+
 const SCREENS: Screen[] = [
   {
     name: "overview",
@@ -57,7 +63,7 @@ const SCREENS: Screen[] = [
     ready: async (page) => {
       const banner = page.locator(".unsaved-banner");
       // The draft stays while the window narrows, so the edit happens once.
-      if (!(await banner.isVisible())) await page.getByRole("textbox", { name: "Source key" }).fill("pkdb.manual.edited");
+      if (!(await isDirty(banner))) await page.getByRole("textbox", { name: "Source key" }).fill("pkdb.manual.edited");
       await expect(banner).toContainText("Unsaved changes to study.json: Source key");
     },
   },
@@ -125,7 +131,7 @@ const SCREENS: Screen[] = [
     hash: `${STUDY}/data?file=subjects.tsv`,
     ready: async (page) => {
       const banner = page.locator(".unsaved-banner");
-      if (!(await banner.isVisible())) {
+      if (!(await isDirty(banner))) {
         await (await openSubjectNotes(page)).fill("Healthy adult volunteers, edited.");
       }
       await expect(banner).toContainText("Unsaved changes to study.json: Notes of the subjects");

@@ -207,7 +207,8 @@ watch(
           :unsaved="study.draft.unsaved"
           :facts="facts"
         />
-        <!-- The draft of study.json, which Metadata and the notes in Data edit, in every section. -->
+        <!-- The draft of study.json, which Metadata and the notes in Data edit: its row stays in
+             these two sections, and the others show it while there are unsaved changes. -->
         <UnsavedBanner :section="section" :kind="notesKind" />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
           <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->

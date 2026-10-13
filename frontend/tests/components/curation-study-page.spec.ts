@@ -1238,22 +1238,77 @@ describe("the save shortcut", () => {
 });
 
 describe("the unsaved banner", () => {
+  const METADATA = "/local/studies/metadata";
+  const written = () => json({ revision: "study-2", reference: null, reference_error: null });
   /** The banner stands after the tabs and the live region of its notices, before the section. */
   const placed = () => page().find(".section-tabs-line + .unsaved-banner-notice + .unsaved-banner + .study-section");
+  const banner = () => page().get(".unsaved-banner");
+  const text = () => page().get(".unsaved-banner-text").text();
 
   // Its place in Data is a test of curation-data-section.spec.ts, which serves the tables.
-  it("stands under the section tabs in Metadata and Review while study.json has unsaved changes", async () => {
+  it("keeps its row in Metadata, and shows in Review only while study.json has unsaved changes", async () => {
     await mountPage("/studies/caffeine/Example/metadata");
+    expect(placed().exists()).toBe(true);
+    expect(banner().classes()).not.toContain("unsaved-banner--dirty");
+    expect(text()).toBe("No unsaved changes to study.json");
+    expect(button("Discard").element.disabled).toBe(true);
+    expect(button("Save").element.disabled).toBe(true);
+    await router.push("/studies/caffeine/Example/review");
+    await flushPromises();
     expect(page().find(".unsaved-banner").exists()).toBe(false);
+
     useStudyStore().draft.form!.provenance.source_key = "pkdb.edited";
     await flushPromises();
-    for (const section of ["metadata", "review"]) {
+    for (const section of ["review", "metadata"]) {
       await router.push(`/studies/caffeine/Example/${section}`);
       await flushPromises();
       expect(placed().exists(), section).toBe(true);
-      expect(page().get(".unsaved-banner").text()).toContain("Unsaved changes to study.json: Source key");
-      expect(page().get(".unsaved-banner").classes()).toContain("unsaved-banner--dirty");
+      expect(text()).toBe("Unsaved changes to study.json: Source key");
+      expect(banner().classes()).toContain("unsaved-banner--dirty");
     }
+  });
+
+  it("is a region named by its text, which keeps the focus after Save, Discard and Undo", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    const region = banner().element;
+    expect(region.getAttribute("role")).toBe("region");
+    expect(region.getAttribute("tabindex")).toBe("-1");
+    expect(document.getElementById(region.getAttribute("aria-labelledby")!)?.textContent).toBe(
+      "No unsaved changes to study.json",
+    );
+
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    button("Save").element.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(region);
+
+    draft.form!.creator = "mkoenig";
+    await flushPromises();
+    button("Discard").element.focus();
+    await click("Discard");
+    expect(text()).toBe("Changes discarded.");
+    expect(document.activeElement).toBe(region);
+    button("Undo").element.focus();
+    await click("Undo");
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(document.activeElement).toBe(region);
+  });
+
+  it("gives the focus to the heading of Review when its Save leaves no unsaved changes, and the banner goes", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    button("Save").element.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(page().find(".unsaved-banner").exists()).toBe(false);
+    expect(document.activeElement).toBe(page().get(".study-section > h2").element);
+    // The live region says that the save worked.
+    expect(page().get(".unsaved-banner-notice").text()).toBe("study.json saved.");
   });
 
   it("names the changed fields by their labels, three of them and how many more", async () => {
@@ -1275,13 +1330,44 @@ describe("the unsaved banner", () => {
     );
   });
 
-  it("says New study.json for a new study.json whose fields are all still empty", async () => {
+  it("names fewer fields, with how many more, where three would not fit into the lines of its text", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    const form = useStudyStore().draft.form!;
+    form.provenance.source_key = "pkdb.edited";
+    await flushPromises();
+    // A layout for jsdom, which has none: the text has one line of 18 pixels and 60 characters.
+    page().get<HTMLElement>(".unsaved-banner-measure").element.style.lineHeight = "18px";
+    const layout = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      const lines = this.classList.contains("unsaved-banner-measure") ? Math.ceil((this.textContent ?? "").length / 60) : 0;
+      return new DOMRect(0, 0, 600, lines * 18);
+    });
+    onTestFinished(() => layout.mockRestore());
+    form.reference.doi = "10.1000/xyz";
+    await flushPromises();
+    // 46 characters: one line.
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Source key");
+    form.licence = "closed";
+    form.notes.outputs.comments.push({ user: "curator", text: "Check the unit." });
+    form.notes.subjects.descriptions.push("Healthy adults.");
+    await flushPromises();
+    // Three names and how many more take 66 characters, two lines; two take 54.
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Licence and 3 more");
+    // On a phone the text has two lines.
+    page().get<HTMLElement>(".unsaved-banner-measure").element.style.setProperty("--unsaved-banner-lines", "2");
+    form.creator = "janekg";
+    await flushPromises();
+    expect(text()).toBe("Unsaved changes to study.json: DOI, Creator, Licence and 3 more");
+    // The measure is empty again: the name of the banner, its text, has the names once.
+    expect(page().get(".unsaved-banner-measure").text()).toBe("");
+  });
+
+  it("says that a new study.json whose fields are all still empty is not written yet", async () => {
     await mountPage("/studies/caffeine/Example/metadata");
     const draft = useStudyStore().draft;
     draft.startNew(toForm({}, noteKinds(useStudyStore().detail!)));
     await flushPromises();
     expect(draft.changed).toEqual([]);
-    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: New study.json");
+    expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: new file, not written yet");
     draft.form!.creator = "janekg";
     await flushPromises();
     expect(page().get(".unsaved-banner-text").text()).toBe("Unsaved changes to study.json: Creator");

@@ -78,7 +78,7 @@ describe("useStudyDraft", () => {
     draft.form.value!.creator = "curator";
     await nextTick();
     expect(draft.form.value?.creator).toBe("mkoenig");
-    expect(draft.bannerShown.value).toBe(false);
+    expect(draft.dirty.value).toBe(false);
   });
 
   it("names the changed fields by the section that shows them", async () => {
@@ -89,7 +89,6 @@ describe("useStudyDraft", () => {
     draft.form.value!.notes.scatters.comments.push({ user: "curator", text: "Figure 3." });
     expect(draft.unsaved.value).toEqual(["metadata", "data"]);
     expect(draft.dirty.value).toBe(true);
-    expect(draft.bannerShown.value).toBe(true);
     expect(draft.canSave.value).toBe(true);
   });
 
@@ -345,7 +344,7 @@ describe("useStudyDraft", () => {
     expect(draft.undoable.value).toBe(true);
     vi.advanceTimersByTime(NOTICE_MS);
     expect(draft.undoable.value).toBe(false);
-    expect(draft.bannerShown.value).toBe(false);
+    expect(draft.notice.value).toBe("");
   });
 
   it("brings back the edits over the revision they were read from when Undo follows a change on disk", async () => {
@@ -449,6 +448,5 @@ describe("useStudyDraft", () => {
     expect(draft.dirty.value).toBe(false);
     expect(draft.notesOpen.value.size).toBe(0);
     expect(draft.notice.value).toBe("");
-    expect(draft.bannerShown.value).toBe(false);
   });
 });

@@ -1619,7 +1619,9 @@ describe("notes of the tables", () => {
 
   it("edits the notes in the draft of study.json, marks the Data tab and saves from the banner under the tabs", async () => {
     await mountSection(withNotes(), { [`POST ${METADATA}`]: write }, `${SECTION}?file=subjects.tsv`);
-    expect(page().find(".unsaved-banner").exists()).toBe(false);
+    // Data keeps the row of the banner without unsaved changes, in its neutral state.
+    expect(page().get(".unsaved-banner").classes()).not.toContain("unsaved-banner--dirty");
+    expect(page().get(".unsaved-banner-text").text()).toBe("No unsaved changes to study.json");
     await toggle().trigger("click");
     await textArea("Description 1", rowsPane().element).setValue("Healthy adult volunteers.");
 

@@ -150,11 +150,107 @@ test("the banner under the tabs names the change, stays in view while the form s
     await expect(banner).toContainText("study.json saved.");
     await expect(banner).not.toHaveClass(/unsaved-banner--dirty/);
     await expect.poll(() => onDisk(path).provenance?.source_key).toBe(EDITED_KEY);
-    // The notice ends after a few seconds, and the banner with it.
-    await expect(banner).toBeHidden();
+    // The notice ends after a few seconds; Metadata keeps the row of the banner.
+    await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
   } finally {
     writeFileSync(path, original);
   }
+});
+
+test("nothing moves when the first edit turns the banner amber or the notice of a save ends", async ({ app, page }) => {
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await app.open(`${STUDY}/metadata`);
+    const banner = page.locator(".unsaved-banner");
+    await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+    const sourceKey = page.getByRole("textbox", { name: "Source key" });
+    const top = async () => (await sourceKey.boundingBox())!.y;
+    const start = await top();
+    await sourceKey.press("End");
+    await sourceKey.press(".");
+    await expect(banner).toHaveClass(/unsaved-banner--dirty/);
+    expect(await top()).toBe(start);
+    await sourceKey.press("Control+s");
+    await expect(banner).toContainText("study.json saved.");
+    expect(await top()).toBe(start);
+    await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+    expect(await top()).toBe(start);
+
+    // In Data, the panes keep their place and their height when an edit of the notes starts.
+    await page.evaluate(() => (window.location.hash = "#/studies/caffeine/Demo2020/data?file=subjects.tsv"));
+    const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+    await pane.getByRole("button", { name: /^Notes of the subjects/ }).click();
+    const description = pane.getByRole("textbox", { name: "Description 1" });
+    await expect(description).toBeVisible();
+    const before = (await pane.boundingBox())!;
+    await description.press("End");
+    await description.press("!");
+    await expect(banner).toHaveClass(/unsaved-banner--dirty/);
+    expect(await pane.boundingBox()).toEqual(before);
+  } finally {
+    writeFileSync(path, original);
+  }
+});
+
+test("the banner keeps its height with and without unsaved changes and with a notice, in wide and narrow windows", async ({
+  app,
+  page,
+}) => {
+  await app.open(`${STUDY}/metadata`);
+  const banner = page.locator(".unsaved-banner");
+  const undo = page.getByRole("button", { name: "Undo", exact: true });
+  const height = async () => (await banner.boundingBox())!.height;
+  for (const [width, height_] of [
+    [1440, 900],
+    [1280, 520],
+    [1000, 400],
+    [390, 700],
+  ] as const) {
+    await page.setViewportSize({ width, height: height_ });
+    await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+    const neutral = await height();
+    // Four changed fields: the text wraps to two lines in a narrow window.
+    await page.getByRole("textbox", { name: "PMID" }).fill("1");
+    await page.getByRole("textbox", { name: "DOI" }).fill("10.1000/xyz");
+    await page.getByRole("textbox", { name: "Source key" }).fill(EDITED_KEY);
+    await page.getByRole("textbox", { name: "Description 1" }).fill("Edited.");
+    await expect(banner).toContainText("Unsaved changes to study.json: PMID, DOI, Source key and 1 more");
+    expect(await height(), `with unsaved changes at ${width} px`).toBe(neutral);
+    // The notice of the discard, with Undo beside Discard and Save.
+    await page.getByRole("button", { name: "Discard", exact: true }).click();
+    await expect(undo).toBeVisible();
+    await expect(banner).toContainText("Changes discarded.");
+    expect(await height(), `with the notice at ${width} px`).toBe(neutral);
+    await undo.click();
+    await expect(banner).toHaveClass(/unsaved-banner--dirty/);
+    expect(await height(), `after Undo at ${width} px`).toBe(neutral);
+    await page.getByRole("button", { name: "Discard", exact: true }).click();
+    await expect(undo).toBeHidden();
+  }
+});
+
+test("a region of rows that scrolls into view stops 8 px below the banner, as the selected review item does", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 700, height: 700 });
+  await app.open(`${STUDY}/data?file=outputs_Tab2.tsv&source=Tab2`);
+  const banner = page.locator(".unsaved-banner");
+  await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+  // The raw table of Tab2 in the source pane, above the rows of the table.
+  const grid = page.locator(".rows-scroll").first();
+  await expect(grid.getByRole("row").nth(1)).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await grid.evaluate((region) => region.scrollIntoView({ block: "start" }));
+  await expect
+    .poll(async () => {
+      const [stuck, region] = [(await banner.boundingBox())!, (await grid.boundingBox())!];
+      expect(Math.round(stuck.y)).toBe(await appBarBottom(page));
+      return Math.round(region.y - (stuck.y + stuck.height));
+    })
+    .toBe(8);
 });
 
 test("the selected review item sticks below the banner while Review scrolls", async ({ app, page }) => {

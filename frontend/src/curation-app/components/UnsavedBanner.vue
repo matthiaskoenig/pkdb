@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { TableKind } from "../api/types";
+import { sectionHeading } from "../composables/useReturnFocus";
 import { saveShortcut } from "../composables/useSaveShortcut";
 import { changedLabels, fieldLabel, shortList } from "../metadata";
 import { useStudyStore } from "../stores/study";
@@ -11,14 +12,17 @@ import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**
- * The banner of the draft of study.json under the section tabs, in every section of the study
- * page. While the draft has unsaved changes it uses the caution color (amber) and names the changed fields, with Undo,
- * Discard and Save; afterwards it shows the outcome of the last save, reload, discard or
- * reference change. It sticks below the app bar while the page scrolls, with square top corners,
- * and publishes where it sticks and its height as `--unsaved-banner-top` and
- * `--unsaved-banner-height`, so that what scrolls into view or sticks stays below it. A
- * refused save lists the issues of the fields that `section` does not show, such as a wrong PMID
- * saved from Data. Ctrl+S (Cmd+S on macOS) saves too (useSaveShortcut).
+ * The banner of the draft of study.json under the section tabs of the study page. Metadata and
+ * Data, which edit study.json, keep its row at the same height in every state, so that nothing
+ * moves when an edit starts or a notice ends: without unsaved changes it says so in a neutral
+ * surface, with them it uses the caution color (amber) and names the changed fields, with Discard
+ * and Save, and without them again it shows the notice of the last action for a few seconds, such
+ * as `study.json saved.`, after a discard with Undo. The other sections show it only while study.json has unsaved changes, which were
+ * made in another section, so it is there when the section opens. It sticks below the app bar
+ * while the page scrolls, with square top corners, and publishes where it sticks and its height
+ * as `--unsaved-banner-top` and `--unsaved-banner-height`, so that what scrolls into view or
+ * sticks stays below it. A refused save lists the issues of the fields that `section` does not
+ * show, such as a wrong PMID saved from Data. Ctrl+S (Cmd+S on macOS) saves too (useSaveShortcut).
  */
 const props = withDefaults(
   defineProps<{
@@ -32,22 +36,58 @@ const props = withDefaults(
 
 const study = useStudyStore();
 const draft = study.draft;
+const textId = useId();
+/** Whether the banner is on the page: always in the sections that edit study.json, elsewhere while it has unsaved changes. */
+const shown = computed(
+  () => draft.form !== null && (props.section === "metadata" || props.section === "data" || draft.dirty),
+);
 const failure = computed(() => (props.section ? draft.failureIn(props.section, props.kind) : draft.failure));
+/** The changed fields by their labels, such as `Source key, Notes of the outputs`. */
+const labels = computed(() => {
+  const detail = study.detail;
+  return changedLabels(draft.changed, (kind) => (detail ? kindLabel(detail, kind) : kind));
+});
+/** How many changed fields the banner names: three, fewer where they would not fit into its lines. */
+const named = ref(3);
 /**
- * The changed fields by their labels, such as `Source key, Notes of the outputs`. A new
+ * The changed fields as the banner names them, such as `Source key, Licence and 2 more`. A new
  * study.json whose fields are all still empty has unsaved changes without any changed field.
  */
-const fields = computed(() => {
-  const detail = study.detail;
-  const labels = changedLabels(draft.changed, (kind) => (detail ? kindLabel(detail, kind) : kind));
-  return shortList(labels) || "New study.json";
-});
+const fields = computed(() => shortList(labels.value, named.value) || "new file, not written yet");
 const shortcut = saveShortcut();
 
 const root = ref<HTMLElement | null>(null);
+/** The box of the text, as wide as its lines, in which `measure` tries the names. */
+const lines = ref<HTMLElement | null>(null);
+const measure = ref<HTMLElement | null>(null);
 /** Whether the banner sticks below the app bar, with the page scrolled under it. */
 const stuck = ref(false);
 let observer: ResizeObserver | undefined;
+
+/**
+ * Names as many changed fields, at most three, as fit into the lines of the text, one beside the
+ * buttons and two on a phone (`--unsaved-banner-lines`), so that the banner keeps its height; one
+ * at least, whose end the last line cuts off where even that does not fit.
+ */
+function fit(): void {
+  const box = measure.value;
+  const style = box ? getComputedStyle(box) : null;
+  const lineHeight = style ? Number.parseFloat(style.lineHeight) : Number.NaN;
+  // A single name has nothing to leave out.
+  if (!box || !style || !Number.isFinite(lineHeight) || labels.value.length < 2) {
+    named.value = 3;
+    return;
+  }
+  const limit = (Number.parseInt(style.getPropertyValue("--unsaved-banner-lines")) || 1) * lineHeight + 0.5;
+  let count = 3;
+  for (; count > 1; count -= 1) {
+    const prefix = Object.assign(document.createElement("strong"), { textContent: "Unsaved changes" });
+    box.replaceChildren(prefix, ` to study.json: ${shortList(labels.value, count)}`);
+    if (box.getBoundingClientRect().height <= limit) break;
+  }
+  box.replaceChildren();
+  named.value = count;
+}
 
 /**
  * Sets on the root element where the banner sticks, below the app bar (`--unsaved-banner-top`),
@@ -83,13 +123,38 @@ watch(
     observer = new ResizeObserver(() => {
       publish(element);
       measureStuck();
+      fit();
     });
     observer.observe(element);
+    if (lines.value) observer.observe(lines.value);
   },
   { flush: "post" },
 );
+watch([() => labels.value.join("\n"), () => draft.dirty], fit, { flush: "post" });
 
-onMounted(() => window.addEventListener("scroll", measureStuck, { passive: true }));
+/**
+ * Save, Discard and Undo become disabled or go once they acted. The banner takes the focus from
+ * them, so that it does not fall to the page and a screen reader reads the new text of the banner.
+ */
+function act(action: () => unknown): void {
+  root.value?.focus({ preventScroll: true });
+  void action();
+}
+// Where the banner goes with the last unsaved change, the heading of the section takes the focus from it.
+watch(
+  shown,
+  (now) => {
+    if (now || !root.value?.contains(document.activeElement)) return;
+    void nextTick(() => sectionHeading()?.focus({ preventScroll: true }));
+  },
+  { flush: "pre" },
+);
+
+onMounted(() => {
+  window.addEventListener("scroll", measureStuck, { passive: true });
+  // The names fit again once the font of the app has loaded.
+  if ("fonts" in document) void document.fonts.ready.then(fit);
+});
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", measureStuck);
   observer?.disconnect();
@@ -102,27 +167,35 @@ onBeforeUnmount(() => {
        screen readers announce its text; the banner shows it. -->
   <span role="status" aria-live="polite" class="unsaved-banner-notice d-sr-only">{{ draft.notice }}</span>
   <div
-    v-if="draft.bannerShown && draft.form"
+    v-if="shown"
     ref="root"
+    role="region"
+    :aria-labelledby="textId"
+    tabindex="-1"
     class="unsaved-banner"
     :class="{ 'unsaved-banner--dirty': draft.dirty, 'unsaved-banner--stuck': stuck }"
   >
     <div class="unsaved-banner-row">
-      <p class="unsaved-banner-text">
+      <p :id="textId" class="unsaved-banner-text" :class="{ 'unsaved-banner-text--notice': !draft.dirty && draft.notice }">
         <i v-if="draft.dirty" class="fas fa-circle unsaved-banner-dot" aria-hidden="true"></i>
-        <span v-if="draft.dirty"><strong>Unsaved changes</strong> to study.json: {{ fields }}</span>
-        <span v-else>{{ draft.notice || "No unsaved changes" }}</span>
+        <span ref="lines" class="unsaved-banner-lines">
+          <span v-if="draft.dirty" class="unsaved-banner-message"
+            ><strong>Unsaved changes</strong> to study.json: {{ fields }}</span
+          >
+          <span v-else class="unsaved-banner-message">{{ draft.notice || "No unsaved changes to study.json" }}</span>
+          <span ref="measure" class="unsaved-banner-measure" aria-hidden="true"></span>
+        </span>
       </p>
       <div class="unsaved-banner-actions">
-        <VBtn v-if="draft.undoable" variant="text" color="primary" @click="draft.undoDiscard()">Undo</VBtn>
-        <VBtn variant="text" :disabled="!draft.dirty || draft.saving" @click="draft.discard()">Discard</VBtn>
+        <VBtn v-if="draft.undoable" variant="text" color="primary" @click="act(draft.undoDiscard)">Undo</VBtn>
+        <VBtn variant="text" :disabled="!draft.dirty || draft.saving" @click="act(draft.discard)">Discard</VBtn>
         <VBtn
           variant="flat"
           color="primary"
           :disabled="!draft.canSave"
           :loading="draft.saving"
           :aria-keyshortcuts="shortcut.keys"
-          @click="draft.save()"
+          @click="act(draft.save)"
         >
           Save
         </VBtn>
@@ -205,6 +278,10 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   background: rgb(var(--v-theme-surface));
 }
+/* It takes the focus after its buttons acted, for screen readers; the focus moves on from it. */
+.unsaved-banner:focus {
+  outline: none;
+}
 .unsaved-banner--dirty {
   border-color: rgb(var(--v-theme-caution));
   background: rgb(var(--v-theme-caution-tint));
@@ -218,34 +295,65 @@ onBeforeUnmount(() => {
 :global(html:has(.unsaved-banner)) {
   scroll-padding-top: calc(var(--unsaved-banner-top, 0px) + var(--unsaved-banner-height, 0px) + 8px);
 }
+/* The text in one line beside the buttons, so that the row keeps its height in every state; on a
+   phone in two lines above them (--unsaved-banner-lines). */
 .unsaved-banner-row {
-  display: flex;
-  flex-wrap: wrap;
+  --unsaved-banner-lines: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 4px 12px;
 }
 .unsaved-banner-text {
   display: flex;
-  flex: 1 1 16rem;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   min-width: 0;
   margin: 0;
   font-size: 13px;
-  overflow-wrap: anywhere;
+  line-height: 18px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.unsaved-banner-text--notice {
+  color: rgb(var(--v-theme-on-surface));
 }
 .unsaved-banner--dirty .unsaved-banner-text {
   color: rgb(var(--v-theme-caution));
 }
+/* In the middle of the first line. */
 .unsaved-banner-dot {
+  flex: none;
   font-size: 0.5rem;
+  line-height: 18px;
 }
-/* Wrapped below the text on a phone, the buttons stay at the end. */
+/* The names that do not fit into the lines become "and N more" (fit); the last line cuts off the
+   end of a single name that is still too long. */
+.unsaved-banner-lines {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.unsaved-banner-message {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--unsaved-banner-lines);
+  line-clamp: var(--unsaved-banner-lines);
+}
+.unsaved-banner-measure {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  overflow-wrap: anywhere;
+  visibility: hidden;
+}
 .unsaved-banner-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-inline-start: auto;
 }
 .unsaved-banner-key {
   align-self: center;
@@ -284,9 +392,18 @@ onBeforeUnmount(() => {
 .unsaved-banner-alert-row > .unsaved-banner-alert-text {
   flex: 1 1 18rem;
 }
+/* On a phone the buttons go below the text, at the end, which keeps the room of two lines. */
 @media (max-width: 599.98px) {
   .unsaved-banner {
     padding: 6px 6px 6px 10px;
+  }
+  .unsaved-banner-row {
+    --unsaved-banner-lines: 2;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: calc(var(--unsaved-banner-lines) * 18px) auto;
+  }
+  .unsaved-banner-actions {
+    justify-self: end;
   }
 }
 </style>

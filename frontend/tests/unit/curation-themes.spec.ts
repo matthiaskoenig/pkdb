@@ -5,9 +5,10 @@ import { makeVuetify } from "../../src/plugins/vuetify";
 
 type Rgb = [number, number, number];
 
-/** The channels of `#rrggbb`. */
+/** The channels of `#rrggbb` or `#rgb`. */
 function rgb(color: unknown): Rgb {
-  const hex = String(color).replace("#", "");
+  const short = String(color).replace("#", "");
+  const hex = short.length === 3 ? [...short].map((digit) => digit + digit).join("") : short;
   return [0, 2, 4].map((start) => Number.parseInt(hex.slice(start, start + 2), 16)) as Rgb;
 }
 
@@ -53,4 +54,22 @@ describe("the themes of the curation app", () => {
     // Undo, a text button in the primary color.
     expect(contrast(rgb(colors.primary), rgb(colors["caution-tint"]))).toBeGreaterThanOrEqual(4.5);
   });
+
+  it.each(["light", "dark"] as const)(
+    "keep 4.5:1 for the text of medium emphasis of the banner without unsaved changes, and for its shortcut, in the %s theme",
+    (name) => {
+      const { colors, variables } = themes[name]!;
+      const opacity = Number(variables["medium-emphasis-opacity"]);
+      expect(opacity).toBeGreaterThan(0);
+      /** The text color on-surface at the medium opacity over `background`. */
+      const medium = (background: Rgb) =>
+        rgb(colors["on-surface"]).map((value, index) => Math.round(value * opacity + background[index]! * (1 - opacity))) as Rgb;
+      // No unsaved changes to study.json, on the surface, and the Ctrl+S hint beside Save.
+      const surface = rgb(colors.surface);
+      expect(contrast(medium(surface), surface)).toBeGreaterThanOrEqual(4.5);
+      // The Ctrl+S hint on the amber tint while there are unsaved changes.
+      const tint = rgb(colors["caution-tint"]);
+      expect(contrast(medium(tint), tint)).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 });

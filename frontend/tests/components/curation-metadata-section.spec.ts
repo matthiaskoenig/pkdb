@@ -110,6 +110,12 @@ function unsavedBanner() {
   return page().find(".unsaved-banner");
 }
 
+/** Metadata keeps the row of the banner without unsaved changes, in its neutral state. */
+function expectNoChanges(): void {
+  expect(unsavedBanner().classes()).not.toContain("unsaved-banner--dirty");
+  expect(unsavedBanner().get(".unsaved-banner-text").text()).toBe("No unsaved changes to study.json");
+}
+
 function ratingOf(name: string) {
   return page().get(`[role="slider"][aria-label="${name}"]`);
 }
@@ -340,7 +346,7 @@ describe("access and provenance card", () => {
     expect(access.get(".data-import-facts").text()).toContain("pkdb-importer 1.2");
     for (const label of ["Source key", "Method", "Version", "Run ID"]) expect(() => field(label)).toThrow();
     expect(buttons("Add asset")).toHaveLength(0);
-    expect(unsavedBanner().exists()).toBe(false);
+    expectNoChanges();
   });
 });
 
@@ -546,7 +552,9 @@ describe("typing", () => {
 describe("saving", () => {
   it("shows an amber banner with Discard and Save for unsaved changes and marks the tab", async () => {
     await mountSection();
-    expect(unsavedBanner().exists()).toBe(false);
+    expectNoChanges();
+    expect(button("Discard").element.disabled).toBe(true);
+    expect(button("Save").element.disabled).toBe(true);
 
     await field("DOI").setValue("10.1000/xyz");
     expect(unsavedBanner().text()).toContain("Unsaved changes to study.json: DOI");
@@ -589,13 +597,13 @@ describe("saving", () => {
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
       expect(buttons("Undo")).toHaveLength(0);
-      expect(unsavedBanner().exists()).toBe(false);
+      expectNoChanges();
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it("posts the full study.json with its revision and hides the banner after the save", async () => {
+  it("posts the full study.json with its revision, and the banner says so until its notice ends", async () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     try {
       await mountSection();
@@ -616,7 +624,7 @@ describe("saving", () => {
       expect(page().get(".unsaved-banner-notice").text()).toBe("study.json saved.");
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
-      expect(unsavedBanner().exists()).toBe(false);
+      expectNoChanges();
 
       // The next save goes over the new revision.
       await field("DOI").setValue("10.1000/abc");
@@ -842,7 +850,7 @@ describe("saving", () => {
     await field("DOI").setValue("");
     await flushPromises();
     expect(textArea("Description 1", card("Descriptions and comments").element).element.value).toBe("New.");
-    expect(unsavedBanner().exists()).toBe(false);
+    expectNoChanges();
   });
 
   it("shows what failed in a save, with Details and a link to its entry in the Activity", async () => {
@@ -995,7 +1003,7 @@ describe("leaving the study with unsaved changes", () => {
     expect(router.currentRoute.value.params.name).toBe("Other");
     expect(field("DOI").element.value).toBe("10.1000/other");
     expect(radio("Closed").checked).toBe(true);
-    expect(unsavedBanner().exists()).toBe(false);
+    expectNoChanges();
     expect(tabLabel("Metadata")).toBe("Metadata");
     expect(useStudyStore().draft.dirty).toBe(false);
   });

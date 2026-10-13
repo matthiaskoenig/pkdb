@@ -68,8 +68,6 @@ export interface StudyDraft {
   saving: Readonly<Ref<boolean>>;
   /** A conflict with a readable study.json blocks Save until Reload. */
   canSave: ComputedRef<boolean>;
-  /** The banner shows unsaved changes and the outcome of the last save, reload, discard or reference change. */
-  bannerShown: ComputedRef<boolean>;
   /** A refused or failed save: why, and the issues that no field shows. Its alert closes it. */
   failure: Ref<ActionFailure | null>;
   /**
@@ -173,18 +171,6 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
   const unsaved = computed(() => unsavedSections(base.value, form.value, changed.value, tabled.value));
   const dirty = computed(() => unsaved.value.length > 0);
   const undoable = computed(() => undo.value !== null);
-  const bannerShown = computed(
-    () =>
-      dirty.value ||
-      saving.value ||
-      conflict.value !== null ||
-      failure.value !== null ||
-      noUser.value !== null ||
-      reloaded.value !== null ||
-      referenceError.value !== "" ||
-      notice.value !== "" ||
-      undo.value !== null,
-  );
   const canSave = computed(() => dirty.value && writable.value && !saving.value && !conflict.value?.theirs);
   const disk = computed<ReadonlyMap<string, string>>(() => {
     const theirs = base.value;
@@ -426,7 +412,6 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     unsaved,
     saving,
     canSave,
-    bannerShown,
     failure,
     failureIn,
     errors,
