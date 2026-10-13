@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useId } from "vue";
 import { VBtn, VChip, VProgressLinear } from "vuetify/components";
 import type { StudyDetail, TableResponse } from "../api/types";
 import {
@@ -26,11 +26,11 @@ import TableGrid from "./TableGrid.vue";
  * its line. A shared table, whose rows name their source, has a Source select in its head: all
  * rows, those of one source, or those without a source; the line of the route always shows, so
  * that a link to a row never lands on a hidden one. The default slot renders between the head
- * and the grid, where the section puts its conflict panel.
+ * and the grid, where the section puts the notes of the table kind and its conflict panel.
  *
  * The pane tints its table and shows its kind in the color of its class of information. Its head
- * wraps rather than cut what it shows in a narrow pane, and the notes about the rows follow below
- * it as sentences that wrap.
+ * wraps rather than cut what it shows in a narrow pane, and the notes about the rows stand right
+ * above the grid as sentences that wrap.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -53,6 +53,8 @@ defineSlots<{ default?: () => unknown }>();
 /** The table in the study page: its kind and class of information. */
 const entry = computed(() => findTable(props.detail, props.file));
 
+/** The id of the Source select, which a browser expects of a form field. */
+const filterId = useId();
 /** The options of the Source select; only a shared table has them. */
 const choices = computed(() => (props.table && isShared(props.detail, props.file) ? filterChoices(props.table) : []));
 /** The filter that applies: one whose source the rows no longer name shows all rows. */
@@ -121,7 +123,7 @@ const count = computed(() => {
   return `${shown.toLocaleString("en-US")} of ${plural(total, "row")}`;
 });
 
-/** The targets, the cells with problems and the hidden columns, in sentences, which show below the head. */
+/** The targets, the cells with problems and the hidden columns, in sentences, which show above the grid. */
 const sentences = computed(() => (hiddenColumns.value ? [...notes.value, hiddenText.value] : notes.value));
 
 /** The rows and the sentences, for screen readers. */
@@ -161,7 +163,13 @@ const missingLine = computed(() => {
         <span class="pane-head-part pane-head-part--fixed" aria-hidden="true">{{ count }}</span>
         <label v-if="choices.length" class="pane-head-filter">
           <span aria-hidden="true">Source</span>
-          <select class="pane-head-select" aria-label="Source of the rows" :value="filterValue(applied)" @change="choose">
+          <select
+            :id="filterId"
+            class="pane-head-select"
+            aria-label="Source of the rows"
+            :value="filterValue(applied)"
+            @change="choose"
+          >
             <option v-for="choice in choices" :key="choice.value" :value="choice.value">{{ choice.title }}</option>
           </select>
         </label>
@@ -169,12 +177,14 @@ const missingLine = computed(() => {
         <p class="d-sr-only">{{ caption }}</p>
       </template>
     </div>
-    <!-- The sentences of the caption after the count, whole: each wraps to a line of its own rather than be cut. -->
+    <!-- What the section shows between the head and the rows, such as the notes of the table kind and the conflicts. -->
+    <slot></slot>
+
+    <!-- The sentences of the caption after the count, whole, right above the rows they describe: each
+         wraps to a line of its own rather than be cut. -->
     <p v-if="table && sentences.length" class="rows-pane-notes" aria-hidden="true">
       <span v-for="sentence in sentences" :key="sentence">{{ sentence }}</span>
     </p>
-
-    <slot></slot>
 
     <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${file}`" />
     <!-- It goes when the rows load again, after Retry or a change of the study: no close button. -->
@@ -244,7 +254,7 @@ const missingLine = computed(() => {
 .pane-head-kind {
   flex: 0 0 auto;
 }
-/* The notes below the head: sentences in the size of the head, 8 px from the edges. */
+/* The notes above the grid: sentences in the size of the head, 8 px from the edges. */
 .rows-pane > .rows-pane-notes {
   display: flex;
   flex-wrap: wrap;
@@ -267,22 +277,6 @@ const missingLine = computed(() => {
   gap: 4px;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.pane-head-select {
-  height: 22px;
-  max-width: 12rem;
-  padding-inline: 4px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.42);
-  border-radius: 4px;
-  background: rgb(var(--v-theme-surface));
-  color: rgb(var(--v-theme-on-surface));
-  font: inherit;
-  appearance: auto;
-}
-.pane-head-select:focus-visible {
-  outline: 2px solid rgb(var(--v-theme-primary));
-  /* The head clips its content, so the ring reaches 1 px outside the select, into the head's padding. */
-  outline-offset: -1px;
-}
 /* The notes stand 8 px from the edges, as in the source pane, which has a padding. */
 .rows-pane > .pane-note {
   padding: 4px 8px;
@@ -291,10 +285,17 @@ const missingLine = computed(() => {
 .rows-pane > .status-alert {
   margin: 8px;
 }
+/* The rows take the room that they need, and what the head, the notes and the conflicts leave of
+   the pane: open notes grow into the room below a short table. In a pane too short for all, the
+   rows give up their room first, down to their header and four rows of 22 px with a scroll bar,
+   or all of their rows when they are fewer: their factor of shrinking outweighs that of the notes,
+   which outweighs that of the conflicts. Then the panels above them shrink and scroll on their own.
+   The basis is the height of the rows, and the height of 120 px only bounds their automatic
+   minimum, the smaller of it and the height of the rows. */
 .rows-pane-grid {
   --rows-max-height: 100%;
-  flex: 1;
-  min-height: 0;
+  flex: 1 1000000 content;
+  height: 120px;
 }
 .rows-pane-grid :deep(.rows-scroll) {
   height: 100%;

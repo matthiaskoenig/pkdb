@@ -1,6 +1,7 @@
 """Contract fixtures of the local curation API for the front-end tests; see curation_contract.py."""
 
 import json
+import os
 import shutil
 import subprocess
 import threading
@@ -213,10 +214,16 @@ def test_problems_contract(workspace, engine_on):
 
 def test_sources_contract(workspace, engine_on):
     """The sources of the study page of Demo2020 with the URLs of their images, which the
-    navigator of the Data section shows, and with the files that they lack."""
-    sources = engine_on(workspace).study_detail(DEMO)["sources"]
-    assert any(source["image_url"] for source in sources)
-    check_contract("sources", {"sources": sources})
+    navigator of the Data section shows, with the files that they lack, and its PDF, the paper."""
+    # The version of the PDF follows its modification time, which the checkout sets.
+    moment = 1_760_000_000_000_000_000
+    os.utime(workspace / DEMO / "Demo2020.pdf", ns=(moment, moment))
+    detail = engine_on(workspace).study_detail(DEMO)
+    assert any(source["image_url"] for source in detail["sources"])
+    assert [paper["file"] for paper in detail["papers"]] == ["Demo2020.pdf"]
+    check_contract(
+        "sources", {"sources": detail["sources"], "papers": detail["papers"]}
+    )
 
 
 def test_source_contract(workspace, engine_on):

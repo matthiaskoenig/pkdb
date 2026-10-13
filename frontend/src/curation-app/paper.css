@@ -1,0 +1,23 @@
+/*
+ * pdf_viewer.css of PDF.js gives the root of the page `color-scheme: light dark`, outside any
+ * cascade layer, so it wins over the color scheme of the theme, which Vuetify sets in a layer:
+ * the scroll bars and form controls of the page would follow the system instead of the theme of
+ * the app. The root keeps the scheme of the theme.
+ */
+:root:has(.v-application.v-theme--light) {
+  color-scheme: light;
+}
+:root:has(.v-application.v-theme--dark) {
+  color-scheme: dark;
+}
+/*
+ * pdf_viewer.css sizes a page for `content-box`: its 9 px border goes around the canvas and the
+ * text and annotation layers, which all take the size of the page. Vuetify gives every element
+ * the `box-sizing` of its parent, `border-box` from the root, which would take the border out of
+ * the canvas but not out of the layers: the canvas would be drawn smaller and blurred, and the
+ * text that is found or selected would lie beside the drawn words. The viewer and everything in
+ * it size as PDF.js expects; its own `border-box` rules still apply.
+ */
+.pdfViewer {
+  box-sizing: content-box;
+}

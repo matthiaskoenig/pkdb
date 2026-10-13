@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useId, watch, type Component } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { VContainer, VProgressLinear } from "vuetify/components";
+import { computed, onBeforeUnmount, onMounted, ref, useId, watch, type Component } from "vue";
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import {
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardItem,
+  VCardText,
+  VCardTitle,
+  VContainer,
+  VDialog,
+  VProgressLinear,
+  VSpacer,
+} from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
+import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
@@ -26,8 +38,8 @@ import {
 } from "../study";
 
 /**
- * The component of each section. A section gets the open study from the study store, and a
- * section with a form emits `unsaved` with whether it has unsaved changes, which the tabs mark.
+ * The component of each section. A section gets the open study from the study store; the
+ * Metadata and Data sections edit its draft of study.json, whose unsaved fields the tabs mark.
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
@@ -41,6 +53,7 @@ const route = useRoute();
 const router = useRouter();
 const study = useStudyStore();
 const headingId = useId();
+const leaveId = useId();
 
 const substance = computed(() => String(route.params.substance));
 const name = computed(() => String(route.params.name));
@@ -49,7 +62,6 @@ const section = computed<Section | null>(() => (isSection(route.params.section) 
 
 // The store polls the detail of the open study with its ETag until the page closes it.
 watch(identity, () => void study.open(substance.value, name.value), { immediate: true });
-onBeforeUnmount(() => study.close());
 
 /** The detail of the study of the route; null while it loads. */
 const detail = computed(() => (study.detail?.id === identity.value ? study.detail : null));
@@ -87,14 +99,50 @@ const facts = computed(() => {
   return list;
 });
 
-/** The section on the screen when it has unsaved changes; only that section can have any. */
-const unsaved = ref<Section | null>(null);
-const unsavedSections = computed(() => (unsaved.value ? [unsaved.value] : []));
-watch([section, identity], () => (unsaved.value = null));
+// Leaving the study
 
-function markUnsaved(value: boolean): void {
-  unsaved.value = value ? section.value : null;
+const leaving = ref(false);
+let answer: ((leave: boolean) => void) | null = null;
+
+/** Whether to leave the study: at once without unsaved edits of study.json, otherwise after the dialog answers. */
+function confirmLeave(): boolean | Promise<boolean> {
+  if (!study.draft.dirty) return true;
+  answer?.(false);
+  leaving.value = true;
+  return new Promise((resolve) => (answer = resolve));
 }
+
+/** Leaving closes the study, which forgets its draft. */
+function answerLeave(leave: boolean): void {
+  const resolve = answer;
+  answer = null;
+  leaving.value = false;
+  resolve?.(leave);
+}
+
+// Closing the dialog with Escape or a click outside stays.
+watch(leaving, (value) => {
+  if (!value && answer) answerLeave(false);
+});
+useReturnFocus(leaving, sectionHeading);
+
+// Another section of the study keeps the draft; another study or page asks first.
+onBeforeRouteLeave(() => confirmLeave());
+onBeforeRouteUpdate((to, from) =>
+  to.params.substance === from.params.substance && to.params.name === from.params.name ? true : confirmLeave(),
+);
+
+/** Closing or reloading the tab with unsaved edits asks through the browser. */
+function beforeUnload(event: BeforeUnloadEvent): void {
+  if (study.draft.dirty) event.preventDefault();
+}
+
+onMounted(() => window.addEventListener("beforeunload", beforeUnload));
+onBeforeUnmount(() => {
+  window.removeEventListener("beforeunload", beforeUnload);
+  answer?.(false);
+  study.close();
+});
 
 // Without a valid section, the page shows the section that the study needs first.
 watch(
@@ -143,19 +191,33 @@ watch(
           :name="name"
           :active="section"
           :counts="counts"
-          :unsaved="unsavedSections"
+          :unsaved="study.draft.unsaved"
           :facts="facts"
         />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
           <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
           <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>
-          <component :is="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
+          <component :is="SECTION_VIEWS[section]" />
         </section>
       </template>
       <div v-else-if="!study.error" class="study-loading">
         <VProgressLinear indeterminate color="primary" aria-label="Loading the study" />
       </div>
     </template>
+
+    <VDialog v-model="leaving" max-width="440" :aria-labelledby="leaveId">
+      <VCard>
+        <VCardItem class="leave-head">
+          <VCardTitle :id="leaveId" tag="h2">Leave without saving?</VCardTitle>
+        </VCardItem>
+        <VCardText>Your changes to study.json are not saved. Leaving discards them.</VCardText>
+        <VCardActions class="dialog-actions">
+          <VSpacer />
+          <VBtn variant="text" @click="answerLeave(false)">Stay</VBtn>
+          <VBtn variant="flat" color="primary" @click="answerLeave(true)">Discard and leave</VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </VContainer>
 </template>
 
@@ -193,5 +255,8 @@ watch(
 }
 .study-loading {
   max-width: 24rem;
+}
+.leave-head {
+  padding-bottom: 0;
 }
 </style>

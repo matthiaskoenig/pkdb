@@ -110,6 +110,14 @@ const harder: StudyDetail = studyDetail({
     "subjects.tsv",
     "timecourses_Fig1.tsv",
   ],
+  papers: [
+    {
+      file: "Harder1988.pdf",
+      url: "/local/studies/caffeine/Harder1988/files/Harder1988.pdf",
+      bytes: 1_204_331,
+      version: "5f1d0e2a9c3b7e41",
+    },
+  ],
   tables: [
     tableEntry("subjects.tsv", "subjects"),
     tableEntry("interventions.tsv", "interventions"),
@@ -136,7 +144,13 @@ let pinia: Pinia;
 let router: Router;
 let requests: ServedRequest[];
 
-/** The study page at `path` of the hash router, with `routes` of the local API besides the defaults. */
+/** The view of the router, as the app renders it, so that the guards of the study page apply. */
+const Routed = defineComponent({ render: () => h(RouterView) });
+
+/**
+ * The study page at `path` of the hash router, with `routes` of the local API besides the defaults. It
+ * renders in the view of the router, as in the app, so that its guards of leaving the study apply.
+ */
 async function mountPage(path: string, routes: Record<string, unknown> = {}, state: Snapshot = snapshot()) {
   requests = serveApi({
     "GET /local/state": state,
@@ -148,7 +162,10 @@ async function mountPage(path: string, routes: Record<string, unknown> = {}, sta
   router = makeRouter();
   await router.push(path);
   await router.isReady();
-  const wrapper = mount(StudyPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
+  const wrapper = mount(Routed, {
+    attachTo: document.body,
+    global: { plugins: [pinia, router] },
+  });
   await flushPromises();
   return wrapper;
 }
@@ -238,6 +255,14 @@ describe("routes", () => {
     expect(routes.resolve("/").matched[0]?.components?.default).toBe(OverviewPage);
     expect(routes.resolve("/studies/caffeine/Example/review").matched[0]?.components?.default).toBe(StudyPage);
   });
+
+  it("shows the overview for an address that the app does not know, such as a pasted launch URL", async () => {
+    const routes = makeRouter();
+    for (const path of ["/token=pasted", "/studies", "/studies/caffeine/Example/data/more"]) {
+      await routes.push(path);
+      expect(routes.currentRoute.value.name).toBe("Overview");
+    }
+  });
 });
 
 describe("StudyPage", () => {
@@ -245,7 +270,7 @@ describe("StudyPage", () => {
     requests = serveApi({ "GET /local/state": snapshot({ studies: [harderRow] }), [`GET ${HARDER}`]: harder });
     router = makeRouter();
     await router.push("/studies/caffeine/Harder1988/review");
-    mount(defineComponent({ render: () => h(RouterView) }), {
+    mount(Routed, {
       attachTo: document.body,
       global: { plugins: [pinia, router] },
     });
@@ -665,10 +690,33 @@ describe("StudyPage", () => {
 
   it("offers Open PDF only when the folder has the PDF", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
-      [`GET ${HARDER}`]: { ...harder, files: harder.files.filter((file) => !file.endsWith(".pdf")) },
+      [`GET ${HARDER}`]: { ...harder, papers: [] },
     });
     await click("More actions");
     expect(button("Open PDF").attributes("disabled")).toBeDefined();
+    expect(page().text()).toContain("No Harder1988.pdf in the folder");
+  });
+
+  it("offers Open PDF beyond the upload limits, where the study page lists the PDFs of the folder but no files", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, files: [], sources: [], tables: [] },
+      "POST /local/files/open": { ok: true },
+    });
+    await click("More actions");
+    expect(button("Open PDF").attributes("disabled")).toBeUndefined();
+    await click("Open PDF");
+    expect(posted("/local/files/open")).toEqual([{ study_id: "caffeine/Harder1988", file: "Harder1988.pdf" }]);
+  });
+
+  it("opens the PDF named after the study also with a suffix in capitals", async () => {
+    const [paper] = harder.papers;
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, papers: [{ ...paper!, file: "Harder1988.PDF" }] },
+      "POST /local/files/open": { ok: true },
+    });
+    await click("More actions");
+    await click("Open PDF");
+    expect(posted("/local/files/open")).toEqual([{ study_id: "caffeine/Harder1988", file: "Harder1988.PDF" }]);
   });
 
   it("adds a data table from the add table dialog", async () => {

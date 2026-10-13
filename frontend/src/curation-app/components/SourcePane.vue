@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useId } from "vue";
+import { computed, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
+import { useMoreBelow } from "../composables/useMoreBelow";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { rawTable } from "../grid";
@@ -10,6 +11,7 @@ import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../p
 import { SOURCE_ICONS, sourceProblems } from "../sources";
 import { tableFiles, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
+import MoreBelow from "./MoreBelow.vue";
 import ProblemItem from "./ProblemItem.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
@@ -92,31 +94,11 @@ const automatic = computed(() =>
   detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
 );
 
-// More of the pane below its view: a fade at its bottom shows it, inside its scroll bar.
-
+// More of the pane below its view: a fade at its bottom shows it, inside its scroll bar. The body
+// changes with the window and the separator, the content with a loaded view or image.
 const body = ref<HTMLElement | null>(null);
 const content = ref<HTMLElement | null>(null);
-/** Whether more of the pane follows below its view. */
-const more = ref(false);
-/** The width of the vertical scroll bar of the body, which the fade leaves free. */
-const scrollbar = ref(0);
-
-function updateMore(): void {
-  const element = body.value;
-  if (!element) return;
-  more.value = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
-  scrollbar.value = element.offsetWidth - element.clientWidth;
-}
-
-let observer: ResizeObserver | undefined;
-onMounted(() => {
-  updateMore();
-  // The body changes with the window and the separator, the content with a loaded view or image.
-  observer = new ResizeObserver(updateMore);
-  if (body.value) observer.observe(body.value);
-  if (content.value) observer.observe(content.value);
-});
-onBeforeUnmount(() => observer?.disconnect());
+const { more, scrollbar } = useMoreBelow(body, content);
 </script>
 
 <template>
@@ -136,7 +118,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <!-- The body scrolls on its own and takes the focus, so that a keyboard can scroll it: its
          first content is no control. While more of it follows below, a fade at its bottom shows it. -->
     <div class="pane-frame">
-      <div ref="body" class="pane-body" tabindex="0" @scroll.passive="updateMore">
+      <div ref="body" class="pane-body" tabindex="0">
         <div ref="content" class="pane-content">
           <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
           <!-- It goes when the view loads again, after Retry or a change of the study: no close button. -->
@@ -263,7 +245,7 @@ onBeforeUnmount(() => observer?.disconnect());
           </template>
         </div>
       </div>
-      <div v-if="more" class="pane-more" :style="{ '--pane-scrollbar': `${scrollbar}px` }" aria-hidden="true"></div>
+      <MoreBelow v-if="more" :scrollbar="scrollbar" />
     </div>
   </section>
 </template>
@@ -319,15 +301,6 @@ onBeforeUnmount(() => observer?.disconnect());
   flex-direction: column;
   gap: 10px;
   min-width: 0;
-}
-/* More follows below: the content fades out into the surface at the bottom of the view. */
-.pane-more {
-  position: absolute;
-  inset-inline: 0 var(--pane-scrollbar, 0px);
-  bottom: 0;
-  height: 32px;
-  background: linear-gradient(to top, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0));
-  pointer-events: none;
 }
 .pane-block {
   display: flex;

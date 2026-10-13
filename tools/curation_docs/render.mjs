@@ -29,6 +29,8 @@ const WIDTH = 1440;
 const HEIGHT = 900;
 /** The height that shows the review item with all its target rows below the study header. */
 const REVIEW_HEIGHT = 1010;
+/** The height that shows the whole form of Metadata with the save bar below it. */
+const METADATA_HEIGHT = 1090;
 /** The folder of the copy of the fixture workspace, whose name the header of every image shows. */
 const WORKSPACE = "demo_studies";
 /** The study of the fixture that the screenshots show, and its table of the digitized figure. */
@@ -54,7 +56,7 @@ function redact(text) {
   return token ? text.replaceAll(token, "<launch token>") : text;
 }
 
-/** Capture the five images; the paths of the files. */
+/** Capture the seven images; the paths of the files. */
 async function render() {
   const written = [];
   const browser = await chromium.launch();
@@ -119,12 +121,39 @@ async function render() {
       pointer: true,
     });
 
-    // Metadata: the forms of study.json with an unsaved change, which is discarded afterwards.
-    await page.setViewportSize({ width: WIDTH, height: HEIGHT });
+    // Data with the paper: page 1 of the PDF of the study, with the matches of a find.
+    await navigator.getByRole("button", { name: /^Paper\b/ }).click();
+    const paper = page.getByRole("region", { name: `Paper ${STUDY.split("/")[1]}.pdf` });
+    await paper.locator('.page[data-page-number="1"][data-loaded="true"]').waitFor();
+    await paper.getByRole("searchbox", { name: "Find in the paper" }).fill("the");
+    await capture("data-paper.png", [paper.locator(".paper-count").filter({ hasText: "1 of 3" })]);
+
+    // Metadata: the forms of study.json with an unsaved change, which is discarded afterwards. The
+    // whole page fits into the window, so that the save bar ends the form rather than cover its end.
+    await page.setViewportSize({ width: WIDTH, height: METADATA_HEIGHT });
     await sections.getByRole("link", { name: /^Metadata\b/ }).click();
     await page.getByRole("slider", { name: "Rating of curator" }).press("ArrowRight");
-    await capture("metadata.png", [page.getByText("Unsaved changes in study.json")]);
-    await page.getByRole("button", { name: "Discard", exact: true }).click();
+    await capture("metadata.png", [page.getByText("Unsaved changes in study.json"), page.getByText("Notes of a table are in")], {
+      fit: true,
+    });
+    await page.setViewportSize({ width: WIDTH, height: HEIGHT });
+    // The bar of the draft shows in Data too: its notice of the discard must be gone first.
+    await discardDraft(page);
+
+    // Data: the notes of the subjects opened above their rows, with an unsaved edit, discarded afterwards.
+    await sections.getByRole("link", { name: /^Data\b/ }).click();
+    await navigator.getByRole("button", { name: /^subjects\.tsv/ }).click();
+    // A shared table opens beside the paper; the text is the source of its row, as the rows name.
+    await navigator.getByRole("button", { name: /^Text\b/ }).click();
+    const subjects = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+    await subjects.getByRole("button", { name: /^Notes of the subjects/ }).click();
+    const description = subjects.getByRole("textbox", { name: "Description 1" });
+    await description.fill(`${await description.inputValue()} Smokers were excluded.`);
+    await capture("data-notes.png", [
+      subjects.getByRole("region", { name: "Rows of subjects.tsv", exact: true }),
+      page.getByText("Unsaved changes in study.json"),
+    ]);
+    await discardDraft(page);
 
     // Data in a conflict: the panel of the conflict between the workbook and the TSV file at the top of the rows.
     await sections.getByRole("link", { name: /^Data\b/ }).click();
@@ -150,9 +179,10 @@ async function render() {
  * Save the window as `name` from the top of the page once the app is ready: every locator of
  * `ready` is visible, the images are loaded, no menu or dialog is open, nothing animates, and
  * the tab bars stand still. The pointer moves to the empty middle of the app bar, so that nothing
- * shows a hover, unless `pointer` keeps it where it is. `whole` must fit into the window.
+ * shows a hover, unless `pointer` keeps it where it is. `whole` must fit into the window, and with
+ * `fit` the whole page, so that nothing scrolls under a sticky bar.
  */
-async function screenshot(page, name, ready, { pointer = false, whole = null } = {}) {
+async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false } = {}) {
   await page.evaluate(() => window.scrollTo(0, 0));
   if (!pointer) await page.mouse.move(600, 32);
   // A control that a click or a key focused shows no focus ring in the picture.
@@ -168,6 +198,9 @@ async function screenshot(page, name, ready, { pointer = false, whole = null } =
     const box = await whole.boundingBox();
     const height = page.viewportSize().height;
     if (!box || box.y + box.height > height) throw new Error(`${name} cuts off its content: raise its height.`);
+  }
+  if (fit && (await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight))) {
+    throw new Error(`${name} does not fit the page into the window: raise its height.`);
   }
   const path = join(destination, name);
   // Not `animations: "disabled"`: it plays the paused animations of hidden loaders afterwards.
@@ -257,6 +290,17 @@ async function hoverMappedRow(page, source, line) {
   const box = await figure.boundingBox();
   const [width, height] = view.image_size;
   await page.mouse.move(box.x + (point.px * box.width) / width, box.y + (point.py * box.height) / height);
+}
+
+/**
+ * Discard the unsaved edits of study.json and wait until the bar has gone: Undo shows for a few
+ * seconds after a discard, in every section that shows the bar.
+ */
+async function discardDraft(page) {
+  await page.getByRole("button", { name: "Discard", exact: true }).click();
+  const undo = page.getByRole("button", { name: "Undo", exact: true });
+  await undo.waitFor();
+  await undo.waitFor({ state: "hidden" });
 }
 
 /** Pause or resume the automatic actions from the File watching menu of the header. */

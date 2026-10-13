@@ -6,7 +6,8 @@
  * The study page lists every table with its source: a table of one source, such as
  * `outputs_Tab2.tsv` or the raw table `<name>_Tab2.tsv`, belongs to it as a whole; a shared table
  * (subjects, characteristica, interventions) has none and names the source of each row in its
- * `source` column.
+ * `source` column. The paper, the PDFs of the folder, comes first among the sources: a shared
+ * table shows beside it when the study has a PDF.
  */
 import type { LocationQuery } from "vue-router";
 import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
@@ -16,9 +17,14 @@ import { tableFiles } from "./study";
 type Study = Pick<StudyDetail, "sources" | "tables">;
 type Counted = Pick<StudyDetail, "sources" | "tables" | "problems" | "review">;
 
+/** The `source` of the route that shows the paper; no source of a study has this name (`SOURCE_PATTERN` of the study format). */
+export const PAPER = "paper";
+
 /** The selection of the Data section: the query of its route. */
 export interface Selection {
   source: string | null;
+  /** The PDF that the paper shows, while it shows (`source=paper`); none for the first. */
+  pdf: string | null;
   file: string | null;
   line: number | null;
   column: string | null;
@@ -33,6 +39,7 @@ export function selectionOf(query: LocationQuery): Selection {
   const line = typeof query.line === "string" ? Number(query.line) : Number.NaN;
   return {
     source: text(query.source),
+    pdf: text(query.pdf),
     file: text(query.file),
     line: Number.isInteger(line) && line >= 1 ? line : null,
     column: text(query.column),
@@ -43,6 +50,7 @@ export function selectionOf(query: LocationQuery): Selection {
 export function selectionQuery(selection: Selection): Record<string, string> {
   const query: Record<string, string> = {};
   if (selection.source !== null) query.source = selection.source;
+  if (selection.pdf !== null) query.pdf = selection.pdf;
   if (selection.file !== null) query.file = selection.file;
   if (selection.line !== null) query.line = String(selection.line);
   if (selection.column !== null) query.column = selection.column;
@@ -155,15 +163,17 @@ export function sourceCounts(detail: Counted, source: SourceSummary): Counts {
   );
 }
 
-/** The first source of the navigator, which a shared table shows beside its rows when no source is chosen. */
-export function firstSource(study: Pick<StudyDetail, "sources">): SourceSummary | null {
-  return study.sources[0] ?? null;
+/** The first entry of the Sources list of the navigator: the paper when the study has a PDF, else its first source. */
+export function firstSource(study: Pick<StudyDetail, "sources" | "papers">): string | null {
+  return study.papers.length ? PAPER : (study.sources[0]?.source ?? null);
 }
 
-/** The source that a table shows beside its rows when the route names none: its own, else the first source. */
-export function sourceOfFile(study: Study, file: string | null): SourceSummary | null {
-  const owner = file === null ? null : ownerOf(study, file);
-  return study.sources.find((entry) => entry.source === owner) ?? firstSource(study);
+/** The source that a table shows beside its rows when the route names none: its own, else the paper, else the first source. */
+export function sourceOfFile(
+  study: Pick<StudyDetail, "sources" | "tables" | "papers">,
+  file: string | null,
+): string | null {
+  return (file === null ? null : ownerOf(study, file)) ?? firstSource(study);
 }
 
 /** The table that the section opens on: the first with problems or open review items, else the first. */

@@ -19,6 +19,8 @@ import {
   type TableKind,
   type ValidationIssue,
 } from "./api/types";
+import { notesKindOf } from "./notes";
+import type { Section } from "./study";
 import { noteKinds } from "./tableKinds";
 
 export type ProvenanceKind = Provenance["kind"];
@@ -136,11 +138,27 @@ export const MARK_TEXT: Record<FieldMark, string> = {
   conflict: "Changed on disk too. Your edit is kept.",
 };
 
+/** A field of the notes of a table kind, such as `notes.outputs.comments`. */
+const NOTES_FIELD = /^notes\.(\w+)\.(descriptions|comments)$/;
+
 /** The name of a field for a sentence, such as `Comments on outputs`. */
 export function fieldLabel(key: string): string {
-  const notes = /^notes\.(\w+)\.(descriptions|comments)$/.exec(key);
+  const notes = NOTES_FIELD.exec(key);
   if (notes) return notes[2] === "descriptions" ? `Descriptions of ${notes[1]}` : `Comments on ${notes[1]}`;
   return LABELS[key] ?? key;
+}
+
+/**
+ * The name of the field that shows the target of an issue (`issueTarget`), such as `Curators` for
+ * `curators.0.user` or `Descriptions of outputs` for `notes.outputs.descriptions.1`.
+ */
+export function targetLabel(target: string): string {
+  const parts = target.split(".");
+  for (let end = parts.length; end > 0; end -= 1) {
+    const key = parts.slice(0, end).join(".");
+    if (Object.hasOwn(LABELS, key) || NOTES_FIELD.test(key)) return fieldLabel(key);
+  }
+  return target;
 }
 
 // Reading
@@ -354,6 +372,27 @@ export function copyField(target: MetadataForm, source: MetadataForm, key: strin
 export function changedFields(base: MetadataForm, current: MetadataForm): string[] {
   const keys = [...new Set([...fieldKeys(base), ...fieldKeys(current)])];
   return keys.filter((key) => !same(valueAt(base, key), valueAt(current, key)));
+}
+
+/**
+ * The sections whose fields have unsaved changes, for the marks of their tabs: Data for the notes
+ * of a kind in `dataKinds`, whose tables show them, and Metadata for the other fields, for the
+ * notes of a kind without a table, which Metadata shows, and for a new study.json. None without a
+ * form.
+ */
+export function unsavedSections(
+  base: MetadataForm | null,
+  form: MetadataForm | null,
+  dataKinds: readonly TableKind[],
+): Section[] {
+  if (form === null) return [];
+  if (base === null) return ["metadata"];
+  const changed = changedFields(base, form);
+  const inData = (key: string) => notesKindOf(key, dataKinds) !== null;
+  const sections: Section[] = [];
+  if (changed.some((key) => !inData(key))) sections.push("metadata");
+  if (changed.some(inData)) sections.push("data");
+  return sections;
 }
 
 /**

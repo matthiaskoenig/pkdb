@@ -1,6 +1,7 @@
-import { beforeEach, expect, it, vi } from "vitest";
+import { beforeEach, expect, it, onTestFinished, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
-import { makeVuetify } from "../../src/plugins/vuetify";
+import { defineComponent, h } from "vue";
+import { useTheme, type ThemeInstance } from "vuetify";
 import ScientificPlot from "../../src/features/plots/components/ScientificPlot.vue";
 const engine = vi.hoisted(() => ({
   react: vi.fn(),
@@ -173,11 +174,16 @@ it("rounds the table and the hover to four significant digits", async () => {
   wrapper.unmount();
 });
 it("draws the chart on the surface of the light and the dark theme", async () => {
-  const vuetify = makeVuetify();
-  const wrapper = mount(ScientificPlot, {
-    props: { points, kind: "timecourse" },
-    global: { plugins: [vuetify] },
+  // The chart follows the theme of the Vuetify instance of tests/setup.ts, which the tests share.
+  let theme: ThemeInstance | undefined;
+  const Host = defineComponent({
+    setup() {
+      theme = useTheme();
+      return () => h(ScientificPlot, { points, kind: "timecourse" });
+    },
   });
+  onTestFinished(() => theme?.change("light"));
+  const wrapper = mount(Host);
   await flushPromises();
   expect(engine.react).toHaveBeenLastCalledWith(
     expect.any(HTMLElement),
@@ -194,7 +200,7 @@ it("draws the chart on the surface of the light and the dark theme", async () =>
     }),
     expect.any(Object),
   );
-  vuetify.theme.change("dark");
+  theme!.change("dark");
   await flushPromises();
   const layout = engine.react.mock.lastCall?.[2];
   expect(layout).toMatchObject({

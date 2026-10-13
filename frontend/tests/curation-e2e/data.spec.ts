@@ -121,7 +121,7 @@ test.describe("sources", () => {
     await expect(names("Interventions")).toHaveText(["interventions.tsv"]);
     await expect(names("Data")).toHaveText(["outputs_Tab2.tsv", "timecourses_Fig1.tsv"]);
     await expect(names("Raw extractions")).toHaveText(["Demo2020_Tab2.tsv"]);
-    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Fig1", "Tab2", "Text"]);
+    await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Paper", "Fig1", "Tab2", "Text"]);
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-rows")).toHaveAttribute("title", "18 rows");
     await expect(navigatorButton(page, /^subjects\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(29, 95, 184)");
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(106, 63, 181)");
@@ -326,8 +326,9 @@ test("the Source filter of a shared table keeps its choice per table while the s
   await navigatorButton(page, /^outputs_Tab2\.tsv/).click();
   await expect(filter).toHaveCount(0);
   // The choice survives other sections of the study.
-  await page.getByRole("link", { name: /^Metadata\b/ }).click();
-  await page.getByRole("link", { name: /^Data\b/ }).click();
+  const tabs = page.getByRole("navigation", { name: "Study sections" });
+  await tabs.getByRole("link", { name: /^Metadata\b/ }).click();
+  await tabs.getByRole("link", { name: /^Data\b/ }).click();
   await navigatorButton(page, /^characteristica\.tsv/).click();
   await expect(filter).toHaveValue("none");
   await page.getByRole("button", { name: "Show all rows" }).click();
@@ -723,6 +724,57 @@ test.describe("tables", () => {
     await expect(panel).toBeHidden();
     await expect(gridCell(page, 7, "1.08")).toBeVisible();
     expect(cellOf(workspace, 7, "mean")).toBe("1.08");
+  });
+
+  test("the conflicts keep their room above the open notes, and in a short window scroll with a fade and leave rows in view", async ({
+    app,
+    page,
+  }) => {
+    const workspace = app.server.workspace;
+    await app.open("#/studies/caffeine/Demo2020/data?file=subjects.tsv");
+    // Both sides change line 8 of the timecourses before a sync runs.
+    await setAutomaticActions(page, true);
+    await editWorkbook(workspace, 8, "mean", "0.91");
+    editTable(workspace, 8, "mean", "0.92");
+    await setAutomaticActions(page, false);
+    const panel = page.getByRole("region", { name: "Conflicting rows", exact: true });
+    await expect(panel).toBeVisible();
+    const pane = page.getByRole("region", { name: "Table subjects.tsv", exact: true });
+    const toggle = pane.getByRole("button", { name: /^Notes of the subjects/ });
+    const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
+    await toggle.click();
+    // An unsaved edit adds the save bar below the panes.
+    await notes.getByRole("textbox", { name: "Description 1" }).fill("Edited.");
+    await expect(page.locator(".study-savebar")).toContainText("Unsaved changes in study.json");
+    const box = async (part: Locator) => (await part.boundingBox())!;
+    const bottom = (rect: { y: number; height: number }) => rect.y + rect.height;
+
+    // In a window of 1440 x 900 px the notes give up their room first: the conflicts show whole.
+    const lastVersion = panel.getByRole("row").last();
+    await expect(lastVersion).toContainText("Tables line 8");
+    expect(bottom(await box(lastVersion))).toBeLessThanOrEqual(bottom(await box(panel)));
+    await expect(panel.locator(".pane-more")).toHaveCount(0);
+    await expect(notes.locator(".pane-more")).toBeVisible();
+
+    // In a short window the notes keep their header, and the conflicts scroll and fade out at their bottom.
+    await page.setViewportSize({ width: 1366, height: 560 });
+    await expect(panel.locator(".pane-more")).toBeVisible();
+    const rows = pane.getByRole("region", { name: "Rows of subjects.tsv", exact: true });
+    const [conflicts, open, head, grid, header, row, section] = await Promise.all(
+      [panel, notes, toggle, rows, rows.getByRole("row").first(), rows.getByRole("row").last(), pane].map(box),
+    );
+    expect(bottom(conflicts!)).toBeLessThanOrEqual(open!.y);
+    // The header of the notes stays whole above their body.
+    expect(bottom(head!)).toBeLessThanOrEqual(bottom(open!));
+    expect(bottom(open!)).toBeLessThanOrEqual(grid!.y);
+    expect(bottom(grid!)).toBeLessThanOrEqual(bottom(section!));
+    // The rows keep their header and their one row in view (a longer table keeps four rows, notes.spec.ts).
+    expect(grid!.height).toBeGreaterThanOrEqual(2 * header!.height);
+    expect(bottom(row!)).toBeLessThanOrEqual(bottom(grid!));
+
+    // Keeping the workbook leaves the tables in sync for the next test.
+    await panel.getByRole("button", { name: "Keep workbook" }).click();
+    await expect(syncStatus(page, "In sync")).toBeVisible();
   });
 
   test("Add table previews the new table on the local server while the curator types, then adds its sheet", async ({ page }) => {

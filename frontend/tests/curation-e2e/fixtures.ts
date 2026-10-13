@@ -12,6 +12,10 @@ declare global {
     __cspViolations: string[];
     /** Reports a violation to the test also when the page goes away before the test reads them. */
     __reportCspViolation: (violation: string) => void;
+    /** The messages of the error events on the window, such as a loop of resize observers. */
+    __windowErrors: string[];
+    /** Reports an error event on the window to the test, also when the page goes away first. */
+    __reportWindowError: (message: string) => void;
   }
 }
 
@@ -263,7 +267,8 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
   if (servers.cookies.length) {
     await context.addCookies(servers.cookies);
     await page.goto(`${server.origin}/${hash}`);
-    await expect(header).toBeVisible();
+    // A PDF in a tab of its own has no app bar.
+    await expect(/^#\/studies\/[^/]+\/[^/]+\/paper\//.test(hash) ? page.locator(".paper-viewer") : header).toBeVisible();
     return;
   }
   const session = page.waitForResponse((response) => new URL(response.url()).pathname === "/local/session");
@@ -329,14 +334,22 @@ export const test = base.extend<
   app: async ({ page, context, servers, curation }, use, testInfo) => {
     const violations: string[] = [];
     const errors: string[] = [];
+    const windowErrors: string[] = [];
     const allowed: ExpectedError[] = [];
     await page.exposeFunction("__reportCspViolation", (violation: string) => violations.push(violation));
+    // Error events on the window that reach no console, such as a loop of resize observers.
+    await page.exposeFunction("__reportWindowError", (message: string) => windowErrors.push(message));
     await page.addInitScript(() => {
       window.__cspViolations = [];
       document.addEventListener("securitypolicyviolation", (event) => {
         const violation = `${event.violatedDirective} ${event.blockedURI} ${event.sourceFile}:${event.lineNumber}`;
         window.__cspViolations.push(violation);
         window.__reportCspViolation(violation);
+      });
+      window.__windowErrors = [];
+      window.addEventListener("error", (event) => {
+        window.__windowErrors.push(event.message);
+        window.__reportWindowError(event.message);
       });
     });
     page.on("console", (message) => {
@@ -357,11 +370,12 @@ export const test = base.extend<
     // The page's own list holds also the violations whose report is still on its way.
     const inPage = page.isClosed() ? [] : await page.evaluate(() => window.__cspViolations ?? []);
     const found = [...new Set([...violations, ...inPage])];
-    if (testInfo.status !== testInfo.expectedStatus || found.length || errors.length) {
+    if (testInfo.status !== testInfo.expectedStatus || found.length || errors.length || windowErrors.length) {
       await testInfo.attach("pkdb-curate.log", { body: servers.log, contentType: "text/plain" });
     }
     expect(found, "Content Security Policy violations").toEqual([]);
     expect(errors, "console errors").toEqual([]);
+    expect(windowErrors, "error events on the window").toEqual([]);
   },
 });
 

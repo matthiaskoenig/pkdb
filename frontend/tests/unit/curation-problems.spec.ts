@@ -14,6 +14,7 @@ import {
   lastWrite,
   NO_SUCH_WARNING,
   noIssuesText,
+  notesQuery,
   reportAfter,
   scopeText,
   severityCounts,
@@ -21,6 +22,7 @@ import {
   tableQuery,
   validatesAfterWrite,
 } from "../../src/curation-app/problems";
+import { TABLE_KIND_ENTRIES, tableEntry } from "./curation-fixtures";
 
 /** A problem of the study page; the local server marks its warnings of the validation as acknowledgeable. */
 function issue(
@@ -319,5 +321,29 @@ describe("links and acknowledgements", () => {
     expect(reportAfter({ jobs: [], report_id: "job-9" }, mark)).toBe(true);
     expect(reportAfter({ jobs: [], report_id: "job-1" }, mark)).toBe(false);
     expect(reportAfter({ jobs: [later], report_id: "job-2" }, { ...mark, since: null })).toBe(true);
+  });
+});
+
+describe("notesQuery", () => {
+  const study = {
+    tables: [
+      tableEntry("subjects.tsv", "subjects"),
+      tableEntry("outputs_Tab2.tsv", "outputs"),
+      tableEntry("outputs_Tab3.tsv", "outputs"),
+    ],
+    table_kinds: TABLE_KIND_ENTRIES,
+  };
+  const inStudyJson = (field: string) => issue("invalid_study_json", "error", { file: "study.json" }, { field });
+
+  it("opens the notes of a kind above the first table of the kind", () => {
+    expect(notesQuery(study, inStudyJson("notes.outputs.comments.0.user"))).toEqual({ file: "outputs_Tab2.tsv", notes: "outputs" });
+    expect(notesQuery(study, inStudyJson("notes.subjects"))).toEqual({ file: "subjects.tsv", notes: "subjects" });
+  });
+
+  it("has none for another field, another file, or a kind that the study has no table of", () => {
+    expect(notesQuery(study, inStudyJson("creator"))).toBeNull();
+    expect(notesQuery(study, inStudyJson("notes.scatters.descriptions.0"))).toBeNull();
+    expect(notesQuery(study, issue("invalid_value", "error", { file: "subjects.tsv" }, { field: "notes.subjects" }))).toBeNull();
+    expect(notesQuery(study, issue("row_limit", "error", null, { field: "notes.subjects" }))).toBeNull();
   });
 });

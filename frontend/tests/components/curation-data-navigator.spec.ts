@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import DataNavigator from "../../src/curation-app/components/DataNavigator.vue";
 import type { Problem, StudyDetail } from "../../src/curation-app/api/types";
-import { reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
+import { PAPER } from "../../src/curation-app/data";
+import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);
 
@@ -183,5 +184,55 @@ describe("data navigator", () => {
     await wrapper.findAll(".nav-file")[0]!.trigger("click");
     expect(wrapper.emitted("select-source")).toEqual([["Tab2"]]);
     expect(wrapper.emitted("select-file")).toEqual([["subjects.tsv"]]);
+  });
+
+  it("lists the paper first among the sources, with its PDF, and emits it", async () => {
+    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf")] }), source: PAPER });
+    const entries = wrapper.findAll(".nav-paper, .nav-source");
+    expect(entries.map((entry) => entry.get(".nav-name").text())).toEqual(["Paper", "Fig1", "Tab2"]);
+    const paper = entries[0]!;
+    expect(paper.classes()).toContain("nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example.pdf");
+    expect(paper.attributes("disabled")).toBeUndefined();
+    expect(paper.attributes("aria-current")).toBe("true");
+    expect(wrapper.findAll(".nav-source").some((entry) => entry.attributes("aria-current") === "true")).toBe(false);
+    await paper.trigger("click");
+    expect(wrapper.emitted("select-source")).toEqual([[PAPER]]);
+  });
+
+  it("names the first PDF, and how many more the folder has in a count of its own, which a long name never cuts", () => {
+    const wrapper = mountNavigator({
+      detail: detail({ papers: [paperFile("Example.pdf"), paperFile("Example_Supp.pdf"), paperFile("Example_Errata.pdf")] }),
+    });
+    const paper = wrapper.get(".nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example.pdf");
+    const more = paper.get(".nav-more");
+    expect(more.get("[aria-hidden='true']").text()).toBe("+2");
+    expect(more.get(".d-sr-only").text()).toBe("and 2 more PDFs");
+    expect(more.attributes("title")).toBe("Example_Supp.pdf, Example_Errata.pdf");
+  });
+
+  it("names the PDF that the paper shows, with the count of the others", () => {
+    const papers = [paperFile("Example.pdf"), paperFile("Example_Supp.pdf"), paperFile("Example_Errata.pdf")];
+    const wrapper = mountNavigator({ detail: detail({ papers }), paper: "Example_Supp.pdf" });
+    const paper = wrapper.get(".nav-paper");
+    expect(paper.get(".nav-kind").text()).toBe("Example_Supp.pdf");
+    expect(paper.get(".nav-kind").attributes("title")).toBe("Example_Supp.pdf");
+    expect(paper.get(".nav-more [aria-hidden='true']").text()).toBe("+2");
+    expect(paper.get(".nav-more").attributes("title")).toBe("Example.pdf, Example_Errata.pdf");
+    // A PDF that the folder no longer has: the paper shows the first.
+    const gone = mountNavigator({ detail: detail({ papers }), paper: "Gone.pdf" });
+    expect(gone.get(".nav-paper .nav-kind").text()).toBe("Example.pdf");
+  });
+
+  it("shows no count for a folder with one PDF", () => {
+    const wrapper = mountNavigator({ detail: detail({ papers: [paperFile("Example.pdf")] }) });
+    expect(wrapper.find(".nav-paper .nav-more").exists()).toBe(false);
+  });
+
+  it("shows the paper of a study without a PDF as a disabled entry that names the missing PDF", () => {
+    const paper = mountNavigator().get(".nav-paper");
+    expect(paper.attributes("disabled")).toBeDefined();
+    expect(paper.get(".nav-kind").text()).toBe("No Example.pdf");
   });
 });

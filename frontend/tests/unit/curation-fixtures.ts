@@ -1,6 +1,7 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
 import type {
   ConflictData,
+  PaperFile,
   Profile,
   ReviewItem,
   Snapshot,
@@ -259,6 +260,9 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
       "subjects.tsv",
       "timecourses_Fig1.tsv",
     ],
+    // No PDF by default, so that a shared table opens beside the first source; the tests of the
+    // paper add them with `paperFile`.
+    papers: [],
     tables: [
       tableEntry("subjects.tsv", "subjects"),
       tableEntry("characteristica.tsv", "characteristica"),
@@ -472,4 +476,9 @@ export function conflictAnswer(
     issues: conflicts.map(([, issue]) => issue),
     ...changes,
   };
+}
+
+/** A PDF of the study `caffeine/Example` as its study page lists it. */
+export function paperFile(file: string, bytes = 19_507, version = "5f1d0e2a9c3b7e41"): PaperFile {
+  return { file, url: `/local/studies/caffeine/Example/files/${encodeURIComponent(file)}`, bytes, version };
 }

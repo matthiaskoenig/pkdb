@@ -9,6 +9,7 @@ takes `folder_lock`; anything that takes the engine lock runs before it.
 
 import dataclasses
 import hashlib
+import io
 import json
 import os
 import stat
@@ -23,6 +24,7 @@ from pydantic import ValidationError
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
 from pkdb.curation.state import EngineState
+from pkdb.curation.tree import SourceTree
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
 from pkdb.references import ReferenceResolver
@@ -82,10 +84,22 @@ IMAGE_TYPES = {
     ".jpeg": "image/jpeg",
     ".webp": "image/webp",
 }
+#: The media types of the files that the file route serves: the images of the sources and the PDFs.
+FILE_TYPES = {**IMAGE_TYPES, ".pdf": "application/pdf"}
 
 
 class UnsafeFile(ValueError):
     """A file of the study that the app refuses to open or write, such as a symlink."""
+
+
+@dataclasses.dataclass(frozen=True)
+class StudyFile:
+    """A file of a study open for reading, which the file route sends in pieces and closes."""
+
+    name: str
+    stream: io.BufferedIOBase
+    size: int
+    media_type: str
 
 
 class AmbiguousStudy(ValueError):
@@ -458,6 +472,53 @@ def _tables(study: LoadedStudy) -> list[dict]:
     return entries
 
 
+def _content_version(status: os.stat_result) -> str:
+    """A version of the content of a file from its size and modification time, as the watcher
+    compares files: it changes when the file is written, also at the same size."""
+    key = f"{status.st_size}:{status.st_mtime_ns}".encode()
+    return hashlib.sha256(key).hexdigest()[:16]
+
+
+def _papers(identity: str, layout: Layout) -> list[dict]:
+    """The PDFs at the top of the study folder: `<name>.pdf` first, then the others by name.
+
+    Each with its size and the version of its content, by which the viewer opens a PDF again
+    that was written while it showed it: PDF.js reads a PDF in ranges and must not mix two.
+
+    The suffix counts in any case. A hidden file (also an AppleDouble `._name.pdf`), a symlink or a
+    folder is no paper: the scan registers none of them as an attachment, and the file route
+    refuses hidden names, so every listed PDF is served and every served PDF is listed. A file
+    that went away since the scan is left out.
+    """
+    files = [name for name in layout.attachments if Path(name).suffix.lower() == ".pdf"]
+    papers = []
+    for name in sorted(
+        files, key=lambda name: (Path(name).stem != layout.study, natural_key(name))
+    ):
+        try:
+            status = (layout.folder / name).stat(follow_symlinks=False)
+        except OSError:
+            continue
+        papers.append(
+            {
+                "file": name,
+                "url": _file_url(identity, name),
+                "bytes": status.st_size,
+                "version": _content_version(status),
+            }
+        )
+    return papers
+
+
+def _files_now(root: Path, folder: Path) -> tuple:
+    """The signature of the files of a study folder that the watcher compares, read now.
+
+    A tree of its own reads the folder, so that any thread can call this while a scan runs.
+    """
+    tree = SourceTree(root)
+    return (tree.files(folder), tree.workbook_open(folder))
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -487,7 +548,12 @@ class StudiesMixin(EngineState):
         """A key of everything the study page shows, cheap enough for every poll.
 
         The fingerprint hashes every file of the study, so the key also versions its tables and
-        sources.
+        sources. The fingerprint is the one of the last scan, while the page, a table and a
+        source are read from the folder as it is: the key also has the files as they are now,
+        their names, sizes and modification times and whether the workbook is open, as the
+        watcher compares them. A file that changes and changes back before the next scan then
+        changes the key twice, and an answer is never kept for content that the folder no
+        longer has. The files are read before the content that the key versions.
         """
         with self.lock:
             row = self._study_row(identity)
@@ -503,8 +569,9 @@ class StudiesMixin(EngineState):
                 "last_upload": row["last_upload"],
                 "jobs": self._study_jobs(identity),
             }
-            data = json.dumps(key, sort_keys=True, default=str).encode()
         _unlinked(folder, root)
+        key["files"] = _files_now(root, folder)
+        data = json.dumps(key, sort_keys=True, default=str).encode()
         return hashlib.sha256(data).hexdigest()
 
     def study_detail(self, identity: str) -> dict:
@@ -591,6 +658,8 @@ class StudiesMixin(EngineState):
             "conflicts": self._conflicts(folder) if conflicted else [],
             "sources": sources,
             "files": files,
+            # The PDFs of the folder, also beyond the upload limits: the paper of the Data section.
+            "papers": _papers(identity, layout),
             "tables": tables,
             # Also beyond the upload limits: Add table and the notes of study.json need them.
             "table_kinds": [dict(kind) for kind in TABLE_KINDS],
@@ -644,27 +713,55 @@ class StudiesMixin(EngineState):
         image_url = None if view.image is None else _file_url(identity, view.image)
         return {**dataclasses.asdict(view), "image_url": image_url}
 
-    def study_image(self, identity: str, file: str) -> tuple[bytes, str]:
+    def study_file(self, identity: str, file: str) -> StudyFile:
+        """An image or a PDF of the study, open for reading; the caller closes its stream.
+
+        Only a regular file at the top of the folder that the scan registers, never through a
+        symlink, also not one placed after the check: LookupError for any other file and for
+        one that is gone, the OSError of one that cannot be opened (a symlink placed after the
+        check fails to open too).
+        """
         folder = self.study_folder(identity)
-        media_type = IMAGE_TYPES.get(Path(file).suffix.lower())
-        # Registered files are regular files at the top level of the folder, never symlinks.
-        if media_type is None or file not in scan_folder(folder).files:
-            raise LookupError(f"{file} is not an image of {identity}")
+        media_type = FILE_TYPES.get(Path(file).suffix.lower())
+        # Registered files are regular files at the top level of the folder, never symlinks. A
+        # hidden file (also an AppleDouble `._name.pdf`) is no image and no paper: the scan lists
+        # it among the files but not among the attachments, which `papers` reads.
+        if (
+            media_type is None
+            or file.startswith(".")
+            or file not in scan_folder(folder).files
+        ):
+            raise LookupError(f"{file} is not an image or a PDF of {identity}")
         path = folder / file
         if not path.resolve().is_relative_to(folder.resolve()):
             raise LookupError(f"{file} is outside the study folder")
+        # A named pipe placed after the check would block the open until a writer comes.
+        nonblocking = getattr(os, "O_NONBLOCK", 0)
         try:
             # A symlink placed after the check is not followed either.
             descriptor = os.open(
                 path,
-                os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_BINARY", 0),
+                os.O_RDONLY
+                | getattr(os, "O_NOFOLLOW", 0)
+                | getattr(os, "O_BINARY", 0)
+                | nonblocking,
             )
-        except OSError:
-            raise LookupError(f"{file} cannot be read") from None
-        with os.fdopen(descriptor, "rb") as stream:
-            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+        except FileNotFoundError:
+            # Gone since the scan. Any other error, such as a file without read permission, is
+            # a file error with its reason, as for a page of the app: not a missing file.
+            raise LookupError(f"{file} is no longer in the study folder") from None
+        stream = os.fdopen(descriptor, "rb")
+        try:
+            status = os.fstat(stream.fileno())
+            if not stat.S_ISREG(status.st_mode):
                 raise LookupError(f"{file} is not a regular file")
-            return stream.read(), media_type
+            if nonblocking:
+                # Only the open was not to wait: the reads block as on any file.
+                os.set_blocking(stream.fileno(), True)
+        except BaseException:
+            stream.close()
+            raise
+        return StudyFile(file, stream, status.st_size, media_type)
 
     def _rescan(self) -> None:
         """Rescan, so that the study ETag changes at once after a write or a stale write.

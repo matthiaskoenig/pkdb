@@ -568,6 +568,22 @@ describe("actions", () => {
     // The tables open in the workbook.
     expect(page().find('button[aria-label="Open outputs_Tab2.tsv"]').exists()).toBe(false);
   });
+
+  it("shows the notes of an issue in the notes of a table above the first table of the kind", async () => {
+    const notesIssue: Problem = {
+      code: "invalid_study_json",
+      severity: "error",
+      acknowledgeable: false,
+      message: "notes.subjects.comments.0.user: A user name has no spaces.",
+      source: { file: "study.json", path: [] },
+      field: "notes.subjects.comments.0.user",
+    };
+    await mountSection(withProblems({ problems: [notesIssue, studyJson], counts: { errors: 2, warnings: 0 } }));
+    const link = control(problemWith("A user name has no spaces."), "Show notes");
+    expect(link.attributes("href")).toBe("#/studies/caffeine/Example/data?file=subjects.tsv&notes=subjects");
+    expect(controls(problemWith("curators.0.rating"), "Show notes")).toHaveLength(0);
+    expect(controls(problemWith("A user name has no spaces."), "Show in table")).toHaveLength(0);
+  });
 });
 
 describe("acknowledgements", () => {

@@ -8,6 +8,8 @@ import subprocess
 import sys
 import threading
 from types import SimpleNamespace
+from unittest.mock import ANY
+from urllib.parse import quote
 
 import openpyxl
 import pytest
@@ -250,6 +252,54 @@ def test_study_detail_lists_a_table_that_cannot_be_read_without_a_row_count(api)
         "rows": None,
     }
     assert tables["outputs_Tab2.tsv"]["rows"] == 1
+
+
+def test_detail_etag_follows_a_file_that_changes_and_changes_back_between_two_scans(
+    api,
+):
+    # The engine runs no watcher: the scan of the files is older than both changes.
+    server, engine, folder = api
+    headers = authenticate(server)
+    study_json = folder / "study.json"
+    original = study_json.read_text(encoding="utf-8")
+    study_json.write_text(
+        original.replace('"open"', '"closed"'), encoding="utf-8", newline=""
+    )
+    status, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    assert status == 200
+    assert json.loads(data)["metadata"]["value"]["licence"] == "closed"
+    study_json.write_text(original, encoding="utf-8", newline="")
+    status, _, data = request(
+        server,
+        "GET",
+        DETAIL,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert status == 200
+    assert json.loads(data)["metadata"]["value"]["licence"] == "open"
+
+
+def test_table_etag_follows_a_table_that_changes_and_changes_back_between_two_scans(
+    api,
+):
+    server, engine, folder = api
+    headers = authenticate(server)
+    path = f"{DETAIL}/tables/Example_Tab2.tsv"
+    table = folder / "Example_Tab2.tsv"
+    original = table.read_text(encoding="utf-8")
+    table.write_text("cmax\t3.5 ± 0.5\n", encoding="utf-8", newline="")
+    status, response_headers, data = request(server, "GET", path, headers=headers)
+    assert status == 200
+    assert json.loads(data)["rows"][0]["cells"] == ["cmax", "3.5 ± 0.5"]
+    table.write_text(original, encoding="utf-8", newline="")
+    status, _, data = request(
+        server,
+        "GET",
+        path,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert status == 200
+    assert json.loads(data)["rows"][0]["cells"] == ["cmax", "2.5 ± 0.5"]
 
 
 def test_detail_etag_changes_with_a_job(api):
@@ -1856,3 +1906,227 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     )
     assert entry["error"]["detail"] == body["detail"]
     assert "exited with status 4" in engine.log.path.read_text(encoding="utf-8")
+
+
+#: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
+PDF = b"%PDF-1.7\n" + bytes(range(256)) * 400 + b"%%EOF\n"
+
+
+def test_a_pdf_of_the_study_is_served_inline_whole_and_in_ranges(api):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(PDF)
+    engine.scan()
+    headers = authenticate(server)
+    url = f"{DETAIL}/files/Example.pdf"
+    status, answer, body = request(server, "GET", url, headers=headers)
+    assert (status, body) == (200, PDF)
+    assert (
+        answer["Content-Type"],
+        answer["Content-Disposition"],
+        answer["Accept-Ranges"],
+    ) == ("application/pdf", 'inline; filename="Example.pdf"', "bytes")
+    status, answer, body = request(
+        server, "GET", url, headers={**headers, "Range": "bytes=-6"}
+    )
+    assert (status, body) == (206, b"%%EOF\n")
+    assert answer["Content-Range"] == f"bytes {len(PDF) - 6}-{len(PDF) - 1}/{len(PDF)}"
+    over = {**headers, "Range": f"bytes={len(PDF)}-"}
+    assert request(server, "GET", url, headers=over)[0] == 416
+    several = {**headers, "Range": "bytes=0-1,4-5"}
+    status, answer, body = request(server, "GET", url, headers=several)
+    assert (status, body) == (200, PDF)
+    assert "Content-Range" not in answer
+
+
+def test_a_pdf_named_beyond_ascii_is_served_with_both_names(api):
+    server, engine, folder = api
+    (folder / "Müller Supp.pdf").write_bytes(PDF)
+    engine.scan()
+    status, answer, body = request(
+        server,
+        "GET",
+        f"{DETAIL}/files/{quote('Müller Supp.pdf')}",
+        headers=authenticate(server),
+    )
+    assert (status, body) == (200, PDF)
+    assert answer["Content-Disposition"] == (
+        "inline; filename=\"M_ller Supp.pdf\"; filename*=UTF-8''M%C3%BCller%20Supp.pdf"
+    )
+
+
+def test_a_symlinked_pdf_and_files_that_are_no_image_or_pdf_are_refused(api, tmp_path):
+    server, engine, folder = api
+    outside = tmp_path / "outside.pdf"
+    outside.write_bytes(PDF)
+    (folder / "Linked.pdf").symlink_to(outside)
+    (folder / "notes.txt").write_text("A note", encoding="utf-8")
+    engine.scan()
+    headers = authenticate(server)
+    for file in ("Linked.pdf", "notes.txt", "subjects.tsv", "Missing.pdf"):
+        assert (
+            request(server, "GET", f"{DETAIL}/files/{file}", headers=headers)[0] == 404
+        )
+
+
+def test_a_named_pipe_named_like_a_pdf_is_refused_without_waiting_for_a_writer(api):
+    if sys.platform == "win32":
+        pytest.skip("Named pipes are POSIX only")
+    server, engine, folder = api
+    os.mkfifo(folder / "Pipe.pdf")
+    engine.scan()
+    # The request times out after 3 s if opening the pipe waits for a writer.
+    status = request(
+        server, "GET", f"{DETAIL}/files/Pipe.pdf", headers=authenticate(server)
+    )[0]
+    assert status == 404
+
+
+def test_the_study_page_lists_its_pdfs_with_the_paper_first_in_any_case(api, tmp_path):
+    server, engine, folder = api
+    sizes = {
+        "Example.pdf": 30,
+        "Example_Supp.pdf": 20,
+        "Zeta.PDF": 7,
+        "appendix10.pdf": 10,
+        "appendix9.Pdf": 5,
+        ".hidden.pdf": 1,
+        "notes.txt": 3,
+    }
+    for name, size in sizes.items():
+        (folder / name).write_bytes(b"%" * size)
+    outside = tmp_path / "outside.pdf"
+    outside.write_bytes(b"%PDF")
+    (folder / "Linked.pdf").symlink_to(outside)
+    engine.scan()
+    detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
+    assert detail["papers"] == [
+        {
+            "file": name,
+            "url": f"{DETAIL}/files/{name}",
+            "bytes": sizes[name],
+            "version": ANY,
+        }
+        for name in (
+            "Example.pdf",
+            "appendix9.Pdf",
+            "appendix10.pdf",
+            "Example_Supp.pdf",
+            "Zeta.PDF",
+        )
+    ]
+
+
+def test_the_version_of_a_pdf_changes_when_it_is_written_also_at_the_same_size(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    pdf = folder / "Example.pdf"
+    pdf.write_bytes(b"%PDF-1.7\n%first\n")
+    os.utime(pdf, ns=(1_700_000_000_000_000_000, 1_700_000_000_000_000_000))
+    engine.scan()
+    version = _detail(server, headers)["papers"][0]["version"]
+    assert isinstance(version, str) and version
+    engine.scan()
+    assert _detail(server, headers)["papers"][0]["version"] == version
+    # A PDF program saves another PDF of the same size: PDF.js must not mix their ranges.
+    pdf.write_bytes(b"%PDF-1.7\n%other\n")
+    os.utime(pdf, ns=(1_700_000_001_000_000_000, 1_700_000_001_000_000_000))
+    engine.scan()
+    paper = _detail(server, headers)["papers"][0]
+    assert paper["bytes"] == len(b"%PDF-1.7\n%first\n")
+    assert paper["version"] != version
+
+
+def test_the_study_page_lists_its_pdfs_beyond_the_upload_limits(api, monkeypatch):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(b"%PDF-1.7\n")
+    engine.scan()
+    monkeypatch.setattr(studies, "MAX_FILES", 2)
+    detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
+    assert detail["problems"][0]["code"] == "file_limit"
+    assert [paper["file"] for paper in detail["papers"]] == ["Example.pdf"]
+
+
+def test_a_hidden_pdf_and_a_hidden_image_are_refused_by_the_file_route(api):
+    server, engine, folder = api
+    (folder / ".hidden.pdf").write_bytes(PDF)
+    (folder / "._Example.pdf").write_bytes(b"\x00\x05\x16\x07")
+    (folder / ".hidden.png").write_bytes(png(2, 2))
+    engine.scan()
+    headers = authenticate(server)
+    for file in (".hidden.pdf", "._Example.pdf", ".hidden.png"):
+        assert (
+            request(server, "GET", f"{DETAIL}/files/{file}", headers=headers)[0] == 404
+        )
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32" or os.geteuid() == 0,
+    reason="Windows ignores the file mode, and root reads any file",
+)
+def test_a_pdf_that_cannot_be_read_is_a_file_error_and_not_a_missing_file(api):
+    server, engine, folder = api
+    pdf = folder / "Example.pdf"
+    pdf.write_bytes(PDF)
+    engine.scan()
+    pdf.chmod(0o000)
+    try:
+        status, _, data = request(
+            server, "GET", f"{DETAIL}/files/Example.pdf", headers=authenticate(server)
+        )
+    finally:
+        pdf.chmod(0o644)
+    # The viewer says that the PDF cannot be read, with the reason of the server; a 404 would
+    # say that it is gone.
+    assert status == 400
+    body = error_body(data)
+    assert (body["error"], body["code"]) == (
+        "Could not read Example.pdf of caffeine/Example.",
+        "file_error",
+    )
+    assert body["detail"].startswith("PermissionError: [Errno 13] Permission denied")
+    assert body["action"] == f"Read a file (GET {DETAIL}/files/Example.pdf)"
+
+
+def test_a_pdf_that_vanished_since_the_check_is_no_longer_in_the_study_folder(
+    api, monkeypatch
+):
+    server, engine, folder = api
+    (folder / "Example.pdf").write_bytes(PDF)
+    engine.scan()
+    real_open = os.open
+
+    def vanished(path, flags, *args, **kwargs):
+        # Deleted after the scan listed it, before the file route opened it.
+        if os.fspath(path).endswith("Example.pdf"):
+            raise FileNotFoundError(2, "No such file or directory", os.fspath(path))
+        return real_open(path, flags, *args, **kwargs)
+
+    monkeypatch.setattr(studies.os, "open", vanished)
+    status, _, data = request(
+        server, "GET", f"{DETAIL}/files/Example.pdf", headers=authenticate(server)
+    )
+    assert status == 404
+    body = error_body(data)
+    assert (body["error"], body["code"], body["detail"]) == (
+        "Example.pdf is no longer in the study folder",
+        "not_found",
+        None,
+    )
+
+
+def test_every_pdf_that_the_study_page_lists_is_served_by_the_file_route(api):
+    server, engine, folder = api
+    # four names that stay four files on the case-insensitive file systems of
+    # macOS and Windows
+    for name in ("Example.pdf", "Appendix.PDF", "Example_Supp.pdf", "Zeta.Pdf"):
+        (folder / name).write_bytes(PDF)
+    engine.scan()
+    headers = authenticate(server)
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    assert len(detail["papers"]) == 4
+    for paper in detail["papers"]:
+        status, response_headers, _ = request(
+            server, "GET", paper["url"], headers=headers
+        )
+        assert status == 200
+        assert response_headers["Content-Type"] == "application/pdf"

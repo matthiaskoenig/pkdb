@@ -595,6 +595,19 @@ export interface SourceSummary {
   missing_raw: string | null;
 }
 
+/** A PDF at the top of the study folder: `<name>.pdf`, the paper, first, then the others by name. */
+export interface PaperFile {
+  file: string;
+  /** Where the local server serves it: whole, or in byte ranges as PDF.js reads it. */
+  url: string;
+  bytes: number;
+  /**
+   * The version of its content, which changes when the PDF is written, also at the same size:
+   * the viewer opens it again then, as PDF.js reads it in ranges, which must not mix two PDFs.
+   */
+  version: string;
+}
+
 export interface StudyDetail {
   id: string;
   path: string;
@@ -625,6 +638,8 @@ export interface StudyDetail {
   conflicts: ConflictData[];
   sources: SourceSummary[];
   files: string[];
+  /** The PDFs of the folder, `<name>.pdf` first; empty without any. */
+  papers: PaperFile[];
   /** The table files and raw tables in the order of the workbook sheets; empty beyond the upload limits. */
   tables: TableEntry[];
   /** The kinds of tables, also beyond the upload limits. */
@@ -858,6 +873,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "conflicts",
   "sources",
   "files",
+  "papers",
   "tables",
   "table_kinds",
   "targets",

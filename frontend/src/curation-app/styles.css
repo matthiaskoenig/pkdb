@@ -394,6 +394,23 @@ a.brand {
 .pane-head-part--fixed {
   flex: 0 0 auto;
 }
+/* The native select in the head of a pane: the Source filter of the rows, the PDF of the paper. */
+.pane-head-select {
+  height: 22px;
+  max-width: 12rem;
+  padding-inline: 4px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.42);
+  border-radius: 4px;
+  background: rgb(var(--v-theme-surface));
+  color: rgb(var(--v-theme-on-surface));
+  font: inherit;
+  appearance: auto;
+}
+.pane-head-select:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  /* The head clips its content, so the ring reaches 1 px outside the select, into the head's padding. */
+  outline-offset: -1px;
+}
 .pane-note {
   margin: 0;
   font-size: 13px;

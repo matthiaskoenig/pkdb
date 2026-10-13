@@ -3,14 +3,17 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
-import type { SourceSummary, SourceView, StudyDetail, TableResponse } from "../api/types";
+import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
 import ConflictPanel from "../components/ConflictPanel.vue";
 import DataNavigator from "../components/DataNavigator.vue";
+import PaperPane from "../components/PaperPane.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
+import StudySaveBar from "../components/StudySaveBar.vue";
+import TableNotes from "../components/TableNotes.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useLoaded } from "../composables/useLoaded";
@@ -20,8 +23,10 @@ import {
   ALL_ROWS,
   defaultFile,
   fileForSource,
+  findTable,
   isShared,
   ownerOf,
+  PAPER,
   rowSource,
   selectionOf,
   selectionQuery,
@@ -31,8 +36,10 @@ import {
   type Selection,
 } from "../data";
 import { INFO_HEADINGS, infoStyle } from "../info";
+import { paperLine, type PaperPlace } from "../paper";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
+import { noteKinds } from "../tableKinds";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 
 /**
@@ -42,13 +49,20 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
  * which Open tables of the study header opens: Sync syncs it, and Add table adds a sheet. While
  * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * Below it, the notes of the kind of the table in study.json open and close above the rows; they
+ * edit the draft of the study store, whose save bar ends the section while it has unsaved changes.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
  * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
  * cannot show the sources and tables; the sync actions and the conflicts stay.
+ * The first source is the paper, the PDFs of the folder: a shared table opens beside it, and its
+ * pane stays mounted, hidden, while other sources show. The route has `source=paper` while it
+ * shows, and `pdf=<file>` once a PDF was chosen in the head of its pane: a PDF that the study
+ * lacks shows the first. The pane keeps the PDF while other sources show, whose routes leave it out.
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
- * and Review sections can link to a row (`data.ts` has its rules). A route without a source and
+ * and Review sections can link to a row (`data.ts` has its rules). A link may name `notes=<kind>`,
+ * which opens those notes above the table and focuses them. A route without a source and
  * a file gets the default selection once: the first table with problems or open review items,
  * else the first table, beside its source. After that only the actions of the curator change it.
  */
@@ -63,7 +77,6 @@ const identity = computed(() => detail.value?.id ?? "");
 const limited = computed(() => (detail.value ? beyondLimits(detail.value) : false));
 const query = computed(() => selectionOf(route.query));
 const files = computed(() => (detail.value ? tableFiles(detail.value) : []));
-const sourceNames = computed(() => detail.value?.sources.map((entry) => entry.source) ?? []);
 const findSource = (name: string | null) => detail.value?.sources.find((entry) => entry.source === name) ?? null;
 /**
  * The attributes of the list in the menu of a select of the toolbar. The list scrolls when its
@@ -90,6 +103,46 @@ const file = computed<string | null>(() => {
   return named ? fileForSource(value, named, null) : defaultFile(value);
 });
 
+/** The PDF that the pane of the paper keeps while another source shows. */
+const keptPaper = ref<string | null>(null);
+/**
+ * The PDF that the pane of the paper shows, chosen in its head; null for the first, `<name>.pdf`.
+ * The route names it while the paper shows, and the pane keeps it while another source shows.
+ */
+const paperFile = computed(() => (query.value.source === PAPER ? query.value.pdf : keptPaper.value));
+watch(paperFile, (value) => (keptPaper.value = value), { immediate: true });
+
+/** The kind of the notes of the selected table in study.json; null for a raw table, which has none. */
+const notesKind = computed<TableKind | null>(() => {
+  const value = detail.value;
+  const entry = value && file.value ? findTable(value, file.value) : undefined;
+  return value && entry ? (noteKinds(value).find((kind) => kind === entry.kind) ?? null) : null;
+});
+
+/**
+ * The notes that a link of the Problems section opened, whose toggle takes the focus once: not
+ * again when the panes stack or stand side by side. The link names them as `notes=<kind>`; the
+ * section opens them, which the draft keeps, and leaves only the selection in the address.
+ */
+const linkedNotes = ref<TableKind | null>(null);
+watch(
+  () => route.query.notes,
+  (named) => {
+    const value = detail.value;
+    if (!value || typeof named !== "string") return;
+    const { substance, name, section } = route.params;
+    if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
+    const kind = noteKinds(value).find((candidate) => candidate === named) ?? null;
+    if (kind) {
+      study.draft.setNotesOpen(kind, true);
+      linkedNotes.value = kind;
+    }
+    go(query.value);
+  },
+  { immediate: true },
+);
+watch(file, () => (linkedNotes.value = null));
+
 const {
   data: rows,
   error: rowsError,
@@ -110,22 +163,72 @@ const table = computed(() => (rows.value && rows.value.key === file.value ? rows
  */
 const rowsDetail = computed(() => (table.value ? (rows.value?.version ?? null) : null));
 
+/** Whether the route links to a row of a shared table, whose row names the source to show. */
+const linkedShared = computed(() => {
+  const value = detail.value;
+  const linked = query.value.file !== null && file.value === query.value.file && query.value.line !== null;
+  return Boolean(value && linked && isShared(value, file.value!));
+});
+/** Whether the rows of a linked row of a shared table load: the source to show is not known yet. */
+const rowPending = computed(() => linkedShared.value && !table.value && rowsLoading.value);
+
 /**
- * The source of the route; else, for a linked row of a shared table, the source that the row
- * names once the rows load; else the source of the table, or the first source for a shared one.
+ * The name of the selected source: the paper when the route names it and the study has a PDF,
+ * else a source that the route names; else, for a linked row of a shared table, the source
+ * that the row names once the rows load, and none while they load; else the source of the
+ * table, else the paper, else the first source. Null for a study without sources and PDFs.
  */
-const source = computed<SourceSummary | null>(() => {
+const sourceName = computed<string | null>(() => {
   const value = detail.value;
   if (!value) return null;
+  if (query.value.source === PAPER && value.papers.length) return PAPER;
   const named = findSource(query.value.source);
-  if (named) return named;
-  const linked = query.value.file !== null && file.value === query.value.file && query.value.line !== null;
-  if (linked && table.value && isShared(value, file.value!)) {
+  if (named) return named.source;
+  // The paper does not show while the rows load: the row may name another source.
+  if (rowPending.value) return null;
+  if (linkedShared.value && table.value) {
     const fromRow = findSource(rowSource(table.value, query.value.line!));
-    if (fromRow) return fromRow;
+    if (fromRow) return fromRow.source;
   }
   return sourceOfFile(value, file.value);
 });
+/** Whether the source pane shows the paper. */
+const paperShown = computed(() => sourceName.value === PAPER);
+/** The selected source of the study; null while the paper shows. */
+const source = computed<SourceSummary | null>(() => findSource(sourceName.value));
+
+// The pane of the paper stays mounted once it showed, hidden while another source shows, so that
+// the viewer keeps its page and zoom; another study starts without it.
+const paperKept = ref(false);
+/**
+ * Where the viewer of the paper stands, kept here because the pane mounts again when the panes
+ * stack or stand side by side again: the viewer opens its PDF there again.
+ */
+const paperPlace = ref<PaperPlace | null>(null);
+watch(
+  paperShown,
+  (shown) => {
+    if (shown) paperKept.value = true;
+  },
+  { immediate: true },
+);
+watch(identity, () => {
+  paperKept.value = paperShown.value;
+  keptPaper.value = null;
+  paperPlace.value = null;
+});
+
+/** The items of the Source select below 1100 px: Paper first, disabled without a PDF, then the sources. */
+const sourceItems = computed(() => {
+  const value = detail.value;
+  if (!value) return [];
+  const paper = value.papers.length
+    ? { title: "Paper", value: PAPER }
+    : { title: paperLine(value), value: PAPER, props: { disabled: true } };
+  return [paper, ...value.sources.map((entry) => ({ title: entry.source, value: entry.source }))];
+});
+/** Whether the Source select has a source to choose: the paper or a source of the study. */
+const sourceChoices = computed(() => Boolean(detail.value && (detail.value.papers.length || detail.value.sources.length)));
 
 const {
   data: view,
@@ -153,11 +256,22 @@ const focus = computed(() =>
 /** The selected row, whose point the plot or overlay of the source rings. */
 const selectedRow = computed(() => (focus.value && file.value ? { file: file.value, line: focus.value.line } : null));
 
-function go(selection: Selection): void {
-  void router.replace({ query: selectionQuery(selection) });
+/** Show `selection`; while it shows the paper, the route names its PDF, the one of the pane by default. */
+function go(selection: Omit<Selection, "pdf">, pdf = paperFile.value): void {
+  void router.replace({ query: selectionQuery({ ...selection, pdf: selection.source === PAPER ? pdf : null }) });
+}
+
+/** Show the PDF chosen in the head of the pane of the paper, which shows. */
+function selectPaper(name: string): void {
+  go(query.value, name);
 }
 
 function selectSource(name: string): void {
+  if (name === PAPER) {
+    // The paper has no tables: the rows pane keeps its table and row.
+    if (detail.value?.papers.length) go({ ...query.value, source: PAPER, file: file.value });
+    return;
+  }
   const summary = findSource(name);
   if (!summary || !detail.value) return;
   go({ source: name, file: fileForSource(detail.value, summary, file.value), line: null, column: null });
@@ -166,16 +280,20 @@ function selectSource(name: string): void {
 function selectFile(name: string): void {
   if (!detail.value) return;
   const owner = ownerOf(detail.value, name);
-  go({ source: owner ?? source.value?.source ?? null, file: name, line: null, column: null });
+  go({ source: owner ?? sourceName.value, file: name, line: null, column: null });
 }
 
+/**
+ * Select a row of the rows pane. A row of a shared table that names a source shows that source,
+ * unless the paper shows: the curator reads the paper against the rows.
+ */
 function selectLine(line: number): void {
-  const named = table.value ? findSource(rowSource(table.value, line)) : null;
-  go({ source: named?.source ?? source.value?.source ?? null, file: file.value, line, column: null });
+  const named = table.value && !paperShown.value ? findSource(rowSource(table.value, line)) : null;
+  go({ source: named?.source ?? sourceName.value, file: file.value, line, column: null });
 }
 
 function selectRow(row: { file: string; line: number }): void {
-  go({ source: source.value?.source ?? null, file: row.file, line: row.line, column: null });
+  go({ source: sourceName.value, file: row.file, line: row.line, column: null });
 }
 
 // The default selection goes into the route as soon as the study is loaded, so that it stays when
@@ -187,7 +305,7 @@ watch(
     if (!value || selection.source !== null || selection.file !== null) return;
     const { substance, name, section } = route.params;
     if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
-    const chosen = source.value?.source ?? null;
+    const chosen = sourceName.value;
     if (chosen !== null || file.value !== null) go({ source: chosen, file: file.value, line: null, column: null });
   },
   { immediate: true },
@@ -320,9 +438,9 @@ const conflictPanel = computed(() => {
             </template>
           </VSelect>
           <VSelect
-            v-if="sourceNames.length"
-            :model-value="source?.source ?? null"
-            :items="sourceNames"
+            v-if="sourceChoices"
+            :model-value="sourceName"
+            :items="sourceItems"
             :list-props="MENU_LIST"
             label="Source"
             density="compact"
@@ -382,8 +500,9 @@ const conflictPanel = computed(() => {
         <DataNavigator
           v-if="wide"
           :detail="detail"
-          :source="source?.source ?? null"
+          :source="sourceName"
           :file="file"
+          :paper="paperFile"
           class="data-navigator-pane"
           @select-source="selectSource"
           @select-file="selectFile"
@@ -395,8 +514,17 @@ const conflictPanel = computed(() => {
           class="data-split"
         >
           <template #start>
-            <SourcePane v-if="sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
-            <p v-else class="data-empty data-pane-note">The study has no sources yet.</p>
+            <PaperPane
+              v-if="paperKept && detail.papers.length"
+              v-show="paperShown"
+              :file="paperFile"
+              v-model:place="paperPlace"
+              @update:file="selectPaper"
+              :study="identity"
+              :papers="detail.papers"
+            />
+            <SourcePane v-if="!paperShown && sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
+            <p v-else-if="!paperShown && !rowPending" class="data-empty data-pane-note">The study has no sources yet.</p>
           </template>
           <template #end>
             <RowsPane
@@ -407,6 +535,13 @@ const conflictPanel = computed(() => {
               @update:filter="setFilter"
             >
               <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+              <TableNotes
+                v-if="notesKind"
+                :key="notesKind"
+                :kind="notesKind"
+                :focused="linkedNotes === notesKind"
+                @took-focus="linkedNotes = null"
+              />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet. Add table adds a sheet to the workbook.
@@ -414,8 +549,17 @@ const conflictPanel = computed(() => {
           </template>
         </SplitPane>
         <div v-else class="data-stack">
-          <SourcePane v-if="sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
-          <p v-else class="data-empty data-pane-note">The study has no sources yet.</p>
+          <PaperPane
+            v-if="paperKept && detail.papers.length"
+            v-show="paperShown"
+            :file="paperFile"
+            v-model:place="paperPlace"
+            @update:file="selectPaper"
+            :study="identity"
+            :papers="detail.papers"
+          />
+          <SourcePane v-if="!paperShown && sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
+          <p v-else-if="!paperShown && !rowPending" class="data-empty data-pane-note">The study has no sources yet.</p>
           <RowsPane
             v-if="rowsPane"
             v-bind="rowsPane"
@@ -424,12 +568,21 @@ const conflictPanel = computed(() => {
             @update:filter="setFilter"
           >
             <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook" />
+            <TableNotes
+              v-if="notesKind"
+              :key="notesKind"
+              :kind="notesKind"
+              :focused="linkedNotes === notesKind"
+              @took-focus="linkedNotes = null"
+            />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
             The study has no tables yet. Add table adds a sheet to the workbook.
           </p>
         </div>
       </div>
+      <!-- The draft of study.json, which the notes above a table and the Metadata section edit. -->
+      <StudySaveBar section="data" :kind="notesKind" :sticky="stacked || limited" />
 
       <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
     </template>
@@ -553,6 +706,10 @@ const conflictPanel = computed(() => {
 /* Each stacked pane scrolls on its own. The rows pane has a fixed height, which its grid fills. */
 .data-stack > .source-pane {
   max-height: 70vh;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+.data-stack > .paper-pane {
+  height: 70vh;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .data-stack > .rows-pane {

@@ -7,7 +7,7 @@ import { sectionRoute } from "../study";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and
- * suggestions, with Show in table and Acknowledge. A component of its own, so that a long list
+ * suggestions, with Show in table, Show notes and Acknowledge. A component of its own, so that a long list
  * renders only the issues whose props changed.
  */
 const props = withDefaults(
@@ -29,8 +29,10 @@ const props = withDefaults(
     validating: boolean;
     /** Whether a warning offers Acknowledge; the Data section lists the problems without it. */
     offersAcknowledge?: boolean;
+    /** The query of the Data section that shows the notes of the issue above their table; null for another issue. */
+    notesQuery?: Record<string, string> | null;
   }>(),
-  { offersAcknowledge: true },
+  { offersAcknowledge: true, notesQuery: null },
 );
 const emit = defineEmits<{ acknowledge: []; validate: [] }>();
 
@@ -38,6 +40,7 @@ const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
 const acknowledgeable = computed(() => props.offersAcknowledge && acknowledgement(props.issue) !== null);
 const tableRoute = computed(() => sectionRoute(props.study, "data", tableQuery(props.issue) ?? {}));
+const notesRoute = computed(() => (props.notesQuery ? sectionRoute(props.study, "data", props.notesQuery) : null));
 /** The message and the location describe the actions. */
 const describedBy = computed(() =>
   where.value ? `${props.idBase}-message ${props.idBase}-location` : `${props.idBase}-message`,
@@ -87,7 +90,7 @@ const describedBy = computed(() =>
           : "Acknowledged. Validate the study to update this list."
       }}</span>
     </p>
-    <div v-if="showable || (acknowledgeable && (!pending || !automatic))" class="problem-actions">
+    <div v-if="showable || notesRoute || (acknowledgeable && (!pending || !automatic))" class="problem-actions">
       <VBtn
         v-if="showable"
         :to="tableRoute"
@@ -97,6 +100,16 @@ const describedBy = computed(() =>
         :aria-describedby="describedBy"
       >
         Show in table
+      </VBtn>
+      <VBtn
+        v-if="notesRoute"
+        :to="notesRoute"
+        variant="text"
+        color="primary"
+        prepend-icon="fas fa-note-sticky"
+        :aria-describedby="describedBy"
+      >
+        Show notes
       </VBtn>
       <VBtn
         v-if="acknowledgeable && !pending"

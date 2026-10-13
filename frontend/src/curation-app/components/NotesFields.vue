@@ -11,19 +11,24 @@ import PersonAvatar from "./PersonAvatar.vue";
 /** Descriptions and comments: of the study, or of one table kind in its notes. */
 const descriptions = defineModel<string[]>("descriptions", { required: true });
 const comments = defineModel<Comment[]>("comments", { required: true });
-const props = defineProps<{
-  /** The path of the notes in study.json before `descriptions`: "" or `notes.outputs.`. */
-  prefix: string;
-  /** The table kind of the notes, which names the buttons for screen readers; null for the study. */
-  kind: string | null;
-  /** Who writes new comments; null when no user is set. */
-  author: string | null;
-  profiles: ReadonlyMap<string, Profile>;
-  errors: ReadonlyMap<string, string[]>;
-  marks: ReadonlyMap<string, FieldMark>;
-  /** The disk values of the fields that changed on both sides at the last reload. */
-  disk: ReadonlyMap<string, string>;
-}>();
+const props = withDefaults(
+  defineProps<{
+    /** The path of the notes in study.json before `descriptions`: "" or `notes.outputs.`. */
+    prefix: string;
+    /** The table kind of the notes, which names the buttons for screen readers; null for the study. */
+    kind: string | null;
+    /** Who writes new comments; null when no user is set. */
+    author: string | null;
+    profiles: ReadonlyMap<string, Profile>;
+    errors: ReadonlyMap<string, string[]>;
+    marks: ReadonlyMap<string, FieldMark>;
+    /** The disk values of the fields that changed on both sides at the last reload. */
+    disk: ReadonlyMap<string, string>;
+    /** The level of the headings Descriptions and Comments: 4 in a card, 5 in a panel of notes, below its heading. */
+    headingLevel?: 4 | 5;
+  }>(),
+  { headingLevel: 4 },
+);
 const emit = defineEmits<{ useDisk: [key: string] }>();
 
 const autoGrow = !sizesFieldsByContent();
@@ -70,7 +75,7 @@ function addComment(): void {
 <template>
   <div class="notes-fields">
     <div class="field-block descriptions-block" :class="blockClass(descriptionsKey)">
-      <h4 class="field-heading">Descriptions</h4>
+      <component :is="`h${headingLevel}`" class="field-heading">Descriptions</component>
       <div v-if="markAt(descriptionsKey)" class="field-mark-row">
         <p class="field-mark">{{ markAt(descriptionsKey) }}</p>
         <DiskVersion
@@ -117,7 +122,7 @@ function addComment(): void {
     </div>
 
     <div class="field-block comments-block" :class="blockClass(commentsKey)">
-      <h4 class="field-heading">Comments</h4>
+      <component :is="`h${headingLevel}`" class="field-heading">Comments</component>
       <div v-if="markAt(commentsKey)" class="field-mark-row">
         <p class="field-mark">{{ markAt(commentsKey) }}</p>
         <DiskVersion v-if="disk.has(commentsKey)" :field="commentsKey" @use="emit('useDisk', commentsKey)" />

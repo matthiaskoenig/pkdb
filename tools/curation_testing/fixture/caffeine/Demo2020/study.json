@@ -14,5 +14,19 @@
   "access": "private",
   "descriptions": [
     "This is a synthetic test study of the PK-DB curation app. Its values are made up, and it describes no real publication."
-  ]
+  ],
+  "notes": {
+    "subjects": {
+      "descriptions": [
+        "Healthy adult volunteers who abstained from caffeine for 48 hours before the study day.",
+        "Age and body weight are the mean and the standard deviation of the group."
+      ],
+      "comments": [
+        {
+          "user": "curator",
+          "text": "The paper gives no sex distribution of the group."
+        }
+      ]
+    }
+  }
 }
