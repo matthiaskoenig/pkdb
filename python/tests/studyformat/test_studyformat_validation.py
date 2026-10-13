@@ -277,6 +277,7 @@ def timecourse_rows(count, **change):
     ]
 
 
+@pytest.mark.slow
 def test_misspelled_substance_in_a_large_study_is_fast(
     valid_study, tsv, sf_vocabulary, cpu_time
 ):
@@ -304,6 +305,7 @@ def test_misspelled_substance_in_a_large_study_is_fast(
     assert many <= 2 * few, f"{many:.2f} s with 2,002 and {few:.2f} s with 2 substances"
 
 
+@pytest.mark.slow
 def test_many_acknowledged_warnings_are_fast(
     valid_study, tsv, sf_vocabulary, linear_cpu_time
 ):

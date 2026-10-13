@@ -77,4 +77,7 @@ python-version = "3.14"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--strict-markers"
+# The speed tests measure CPU time and take about 100 s; `-m slow` runs them alone,
+# without `-n`, and `-m ""` runs every test.
+addopts = "--strict-markers -m 'not slow'"
+markers = ["slow: a speed test that measures CPU time, left out unless -m selects it"]
