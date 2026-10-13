@@ -24,5 +24,19 @@ export default defineConfig({
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } }],
+  projects: [
+    {
+      name: "chromium",
+      testIgnore: "speed.spec.ts",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+    },
+    {
+      // The timings need the processor to themselves: this project depends on the other one, so
+      // Playwright starts it after every other spec file finished, and it has one spec file.
+      name: "speed",
+      testMatch: "speed.spec.ts",
+      dependencies: ["chromium"],
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+    },
+  ],
 });

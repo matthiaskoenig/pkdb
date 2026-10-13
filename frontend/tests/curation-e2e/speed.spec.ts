@@ -5,69 +5,122 @@ import { expect, test } from "./fixtures.ts";
 const STUDIES = 1000;
 /** The longest median time from a keystroke to its paint, and from the search to its result. */
 const BUDGET_MS = 100;
-/** How long the search waits after the last keystroke (Part 2 of the spec). */
+/** The longest task that the polls may cause while jobs run. */
+const LONG_TASK_MS = 200;
+/** How long the search waits after the last keystroke: the debounce that Task 2 of #936 adds. */
 const SEARCH_DELAY_MS = 150;
 /** A surname of the generator: 25 of the 1,000 studies have it, and no title has it. */
 const SURNAME = "dahlqvist";
-
+const MATCHES = 25;
+/** Typing rounds of the search: one warm-up round that is not measured, then the measured ones. */
+const WARM_UP_ROUNDS = 1;
+const ROUNDS = 6;
+/** How long without a long task counts as quiet, a little more than two polls of the app. */
+const QUIET_MS = 3500;
+/** How long the jobs that were already running may need to finish after the pause. */
+const QUIET_TIMEOUT_MS = 300_000;
+/** How long the polls are watched while jobs run. */
+const WATCH_MS = 10_000;
 /** How long the server may need to pause its automatic actions while it validates 1,000 studies. */
 const PAUSE_MS = 120_000;
 
 test.use({ studies: STUDIES });
-// The timings need the processor to themselves: no sibling test runs beside them.
-test.describe.configure({ mode: "serial", timeout: PAUSE_MS + 60_000 });
+// The tests share the server and run in order; playwright.curation.config.ts runs this file in a
+// project of its own after all other spec files, so nothing else loads the processor.
+test.describe.configure({ mode: "serial", timeout: PAUSE_MS + QUIET_TIMEOUT_MS + 90_000 });
 
 interface Latency {
-  /** For each input event, the milliseconds until the paint after it. */
+  /** For each recorded input event, the milliseconds until the paint after it. */
   inputs: number[];
-  /** The milliseconds from the last input event to the paint that showed a new count, or null. */
+  /** The milliseconds from the last input event to the paint that showed exactly the matches, or null. */
   result: number | null;
-  /** The durations of the long tasks since the probe was installed. */
+  /** The durations of the long tasks since they were last cleared. */
   longTasks: number[];
 }
 
 /**
- * Measure in the page: each input event until the next paint, the last input event until the
- * count of the overview changed and painted, and the long tasks. A task queued from the next
- * animation frame runs once that frame painted.
+ * Measure in the page: each input event (while armed) until the next paint, the last input event
+ * until the table shows exactly the matches of the surname and painted, and the long tasks. A task
+ * queued from the next animation frame runs once that frame painted. The observer sits on the
+ * overview container, which stays, while the count and the rows come and go.
  */
 async function installLatencyProbe(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    const probe = {
-      inputs: [] as number[],
-      result: null as number | null,
-      longTasks: [] as number[],
-      last: 0,
-    };
-    (window as unknown as { __latency: typeof probe }).__latency = probe;
-    const afterPaint = (done: () => void) => requestAnimationFrame(() => setTimeout(done, 0));
-    document.addEventListener(
-      "input",
-      (event) => {
-        const start = event.timeStamp;
-        probe.last = start;
-        afterPaint(() => probe.inputs.push(performance.now() - start));
-      },
-      { capture: true },
-    );
-    new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) probe.longTasks.push(entry.duration);
-    }).observe({ type: "longtask" });
-    const count = document.querySelector(".overview-count");
-    if (count)
-      new MutationObserver(() => afterPaint(() => (probe.result = performance.now() - probe.last))).observe(count, {
+  await page.evaluate(
+    ({ surname, matches }) => {
+      const probe = {
+        inputs: [] as number[],
+        result: null as number | null,
+        longTasks: [] as number[],
+        last: 0,
+        armed: false,
+      };
+      (window as unknown as { __latency: typeof probe }).__latency = probe;
+      const afterPaint = (done: () => void) => requestAnimationFrame(() => setTimeout(done, 0));
+      const showsMatches = () => {
+        const rows = [...document.querySelectorAll(".study-table tbody tr:not([aria-hidden])")];
+        return (
+          rows.length === matches &&
+          rows.every((row) => row.querySelector(".study-identity")?.textContent?.toLowerCase().includes(surname))
+        );
+      };
+      // The result of the latest input: the table shows exactly the matches, painted after it. An
+      // input that leaves the rows as they are (the last letters of the surname) changes no DOM, so
+      // each input checks too.
+      const markResult = () => {
+        if (probe.result === null && probe.last !== 0 && showsMatches()) probe.result = performance.now() - probe.last;
+      };
+      document.addEventListener(
+        "input",
+        (event) => {
+          const start = event.timeStamp;
+          const armed = probe.armed;
+          probe.last = start;
+          probe.result = null;
+          afterPaint(() => {
+            if (armed) probe.inputs.push(performance.now() - start);
+            markResult();
+          });
+        },
+        { capture: true },
+      );
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) probe.longTasks.push(entry.duration);
+      }).observe({ type: "longtask" });
+      const root = document.querySelector(".overview") ?? document.body;
+      new MutationObserver(() => afterPaint(markResult)).observe(root, {
         childList: true,
         characterData: true,
         subtree: true,
       });
-  });
+    },
+    { surname: SURNAME, matches: MATCHES },
+  );
 }
 
 async function readLatency(page: Page): Promise<Latency> {
   return page.evaluate(() => {
     const { inputs, result, longTasks } = (window as unknown as { __latency: Latency }).__latency;
-    return { inputs, result, longTasks };
+    return { inputs: [...inputs], result, longTasks: [...longTasks] };
   });
+}
+
+async function resetLatency(page: Page, armed: boolean): Promise<void> {
+  await page.evaluate((on) => {
+    const probe = (window as unknown as { __latency: Latency & { armed: boolean; last: number } }).__latency;
+    probe.inputs.length = 0;
+    probe.longTasks.length = 0;
+    probe.result = null;
+    probe.armed = on;
+  }, armed);
+}
+
+/** Wait until a window of QUIET_MS passes without a long task, so the load of the page is over. */
+async function waitForQuiet(page: Page): Promise<void> {
+  await expect(async () => {
+    await resetLatency(page, false);
+    await page.waitForTimeout(QUIET_MS);
+    expect((await readLatency(page)).longTasks).toEqual([]);
+  }).toPass({ timeout: QUIET_TIMEOUT_MS, intervals: [0] });
 }
 
 function median(values: number[]): number {
@@ -78,32 +131,56 @@ function median(values: number[]): number {
 
 test.beforeEach(async ({ app, page }) => {
   await app.open();
-  await expect(
-    page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, {
-      exact: true,
-    }),
-  ).toBeVisible();
-  // The initial validations of 1,000 studies would compete with the measurements for the processor.
-  // The server is busy with them, so the pause takes longer than the default timeout.
-  await page.getByRole("button", { name: "File watching: Active" }).click();
-  await page.getByRole("button", { name: "Pause automatic actions" }).click();
-  await expect(page.getByRole("button", { name: "File watching: Paused" })).toBeVisible({ timeout: PAUSE_MS });
-  await page.keyboard.press("Escape");
+  await expect(page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, { exact: true })).toBeVisible();
+});
+
+test("while jobs run, a poll never blocks the page for more than 200 ms", async ({ page }, testInfo) => {
+  test.fail(true, "#936: every poll handles 5 to 6 MB of state and renders every study again");
+  // The initial validations of the 1,000 studies are the jobs. The load of the page is over after
+  // a few seconds; the polls are what is measured.
+  await page.waitForTimeout(QUIET_MS);
+  await installLatencyProbe(page);
+  await resetLatency(page, false);
+  await page.waitForTimeout(WATCH_MS);
+  const { longTasks } = await readLatency(page);
+  await testInfo.attach("long-tasks.json", { body: JSON.stringify(longTasks), contentType: "application/json" });
+  expect(Math.max(0, ...longTasks), JSON.stringify(longTasks)).toBeLessThanOrEqual(LONG_TASK_MS);
 });
 
 test("typing in Search studies paints each keystroke and the result within 100 ms", async ({ page }, testInfo) => {
   test.fail(true, "#936: the overview filters and renders every study on each keystroke");
-  await page.getByRole("textbox", { name: "Search studies" }).click();
+  // The server is busy with the validations, so the pause takes longer than the default timeout.
+  if (await page.getByRole("button", { name: "File watching: Active" }).isVisible()) {
+    await page.getByRole("button", { name: "File watching: Active" }).click();
+    await page.getByRole("button", { name: "Pause automatic actions" }).click();
+    await expect(page.getByRole("button", { name: "File watching: Paused" })).toBeVisible({ timeout: PAUSE_MS });
+    await page.keyboard.press("Escape");
+  }
+  const search = page.getByRole("textbox", { name: "Search studies" });
+  await search.click();
   await installLatencyProbe(page);
-  await page.keyboard.type(SURNAME, { delay: 60 });
-  await expect(page.getByText(`25 of ${STUDIES.toLocaleString("en-US")} studies`)).toBeVisible();
-  await expect.poll(async () => (await readLatency(page)).result).not.toBeNull();
-  const latency = await readLatency(page);
-  await testInfo.attach("latency.json", {
-    body: JSON.stringify(latency, null, 2),
-    contentType: "application/json",
-  });
+  await waitForQuiet(page);
+  const inputs: number[] = [];
+  const results: number[] = [];
+  for (let round = 0; round < WARM_UP_ROUNDS + ROUNDS; round++) {
+    const measured = round >= WARM_UP_ROUNDS;
+    await resetLatency(page, measured);
+    await page.keyboard.type(SURNAME, { delay: 60 });
+    await expect.poll(async () => (await readLatency(page)).result).not.toBeNull();
+    await expect(page.getByText(`${MATCHES} of ${STUDIES.toLocaleString("en-US")} studies`)).toBeVisible();
+    const latency = await readLatency(page);
+    if (measured) {
+      inputs.push(...latency.inputs);
+      results.push(latency.result! - SEARCH_DELAY_MS);
+    }
+    // Clear the field for the next round.
+    await resetLatency(page, false);
+    await search.fill("");
+    await expect(page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, { exact: true })).toBeVisible();
+  }
+  const summary = { inputs, results, medianInput: median(inputs), medianResult: median(results) };
+  await testInfo.attach("latency.json", { body: JSON.stringify(summary, null, 2), contentType: "application/json" });
   // The median, so that one pause of the garbage collector does not decide.
-  expect(median(latency.inputs), JSON.stringify(latency)).toBeLessThanOrEqual(BUDGET_MS);
-  expect(latency.result! - SEARCH_DELAY_MS, JSON.stringify(latency)).toBeLessThanOrEqual(BUDGET_MS);
+  expect(summary.medianInput, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
+  expect(summary.medianResult, JSON.stringify(summary)).toBeLessThanOrEqual(BUDGET_MS);
 });
