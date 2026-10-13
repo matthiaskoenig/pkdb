@@ -119,6 +119,16 @@ export function lineIssues(cells: IssueCells, line: number): ValidationIssue[] {
   return [...(cells.get(line)?.values() ?? [])].flatMap((cell) => cell.issues);
 }
 
+/** The `data-tip` of the line cell of `line` in a table grid, whose tooltip lists every problem of the line. */
+export function lineTipKey(line: number): string {
+  return `${line}:line`;
+}
+
+/** Whether `key` is the `data-tip` of a line cell. */
+export function isLineTipKey(key: string): boolean {
+  return key.endsWith(":line");
+}
+
 /**
  * The columns that stay when empty columns are hidden: the columns with a problem and the
  * columns of `names`, such as the marked and the focused column.

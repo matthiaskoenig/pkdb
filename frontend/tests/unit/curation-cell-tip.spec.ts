@@ -167,6 +167,21 @@ describe("useCellTip", () => {
     expect(tip.cell.value).toBe(first);
   });
 
+  it("shows the tip of a cell again after Escape hid it while the pointer rested on the tooltip", () => {
+    const { first } = cells();
+    const tooltip = document.createElement("div");
+    enter(first);
+    vi.advanceTimersByTime(TIP_DELAY);
+    leave(first, tooltip);
+    tip.enterTip();
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(tip.cell.value).toBeNull();
+    tip.leaveTip();
+    enter(first, tooltip);
+    vi.advanceTimersByTime(TIP_DELAY);
+    expect(tip.cell.value).toBe(first);
+  });
+
   it("shows the tip of a cell whose tip Escape hid when the keyboard focuses it", () => {
     const { lineButton } = cells();
     const line = lineButton.closest("th")!;

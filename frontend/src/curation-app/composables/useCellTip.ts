@@ -2,7 +2,7 @@
  * One tooltip for the cells of a grid. The cells that have one carry `data-tip`, whose value names
  * what the tooltip shows. The tooltip follows the pointer and the keyboard focus, as the tooltips
  * of Vuetify do, but one tooltip serves every cell, so that a large table renders none per cell.
- * Escape hides it; a tooltip of the pointer that Escape hid shows again once the pointer left its
+ * Escape hides it; when the pointer is in its cell, it shows there again once the pointer left the
  * cell.
  */
 import { onScopeDispose, ref, shallowRef, type Ref } from "vue";
@@ -66,7 +66,9 @@ export function useCellTip(): CellTip {
   let opener: "pointer" | "focus" | null = null;
   /** The cell that the pointer rests on while its tooltip waits for `TIP_DELAY`. */
   let waiting: HTMLElement | null = null;
-  /** The cell whose tooltip of the pointer Escape hid: it shows again once the pointer left the cell. */
+  /** The cell with a tooltip that the pointer is in. */
+  let hovered: HTMLElement | null = null;
+  /** The cell whose tooltip Escape hid while the pointer was in it: it shows again once the pointer left the cell. */
   let dismissed: HTMLElement | null = null;
   /** Whether the scope ended: then nothing shows any more. */
   let disposed = false;
@@ -83,7 +85,7 @@ export function useCellTip(): CellTip {
 
   function escape(event: KeyboardEvent): void {
     if (event.key !== "Escape") return;
-    if (opener === "pointer") dismissed = cell.value;
+    if (hovered !== null && hovered === cell.value) dismissed = hovered;
     hide();
   }
 
@@ -111,6 +113,7 @@ export function useCellTip(): CellTip {
 
   function over(event: MouseEvent): void {
     const target = cellOf(event.target);
+    if (target) hovered = target;
     if (disposed || !target || target === waiting || target === dismissed) return;
     if (target === cell.value) {
       clearTimeout(hideTimer);
@@ -129,6 +132,7 @@ export function useCellTip(): CellTip {
   function out(event: MouseEvent): void {
     const from = cellOf(event.target);
     if (!from || (event.relatedTarget instanceof Node && from.contains(event.relatedTarget))) return;
+    if (from === hovered) hovered = null;
     if (from === dismissed) dismissed = null;
     if (from === waiting) {
       clearTimeout(showTimer);

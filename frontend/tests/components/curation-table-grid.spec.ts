@@ -691,6 +691,33 @@ describe("the tooltip of the problems", () => {
     expect(wrapper.findAll("tbody tr[data-index]")[1]!.get("th button").attributes("title")).toBe(`Select line ${second}`);
   });
 
+  it("describes the problems of a line once: by its line button, which carries all of them, else by its line cell", () => {
+    const issues = [problem("duplicate_row", third, null), problem("unknown_term", third, "label")];
+    const lineCell = (wrapper: VueWrapper) => wrapper.findAll("tbody tr[data-index]")[2]!.get("th");
+    const buttons = mountTips(issues, { selectable: true, highlightLines: new Set([third]) });
+    expect(description(lineCell(buttons).element)).toBe("Targeted by an open review item.");
+    expect(description(lineCell(buttons).get("button").element)).toBe(
+      `duplicate_row at line ${third} unknown_term at line ${third}`,
+    );
+    expect(description(lineCell(mountTips(issues)).element)).toBe(`duplicate_row at line ${third}`);
+    const slotted = mount(TableGrid, {
+      props: { table: small, issueCells: issueCells(issues, small.file), selectable: true },
+      slots: { line: ({ line }: { line: number }) => h("a", { href: `#${line}` }, String(line)) },
+    });
+    expect(description(lineCell(slotted).element)).toBe(`duplicate_row at line ${third}`);
+  });
+
+  it("places the tooltip of a line from the start of its line cell, so that it extends over its row, and that of a cell below its middle", async () => {
+    const wrapper = mountTips([problem("unknown_term", third, "label")], { selectable: true });
+    const line = wrapper.findAll("tbody tr[data-index]")[2]!.get("th").element;
+    await hover(line);
+    expect(shownTip()).not.toBeNull();
+    expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom start");
+    cellAt(wrapper, third, HEADER.indexOf("label")).dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: line }));
+    await flushPromises();
+    expect(wrapper.findComponent(VTooltip).props("location")).toBe("bottom");
+  });
+
   it("adds no Tab stop for outlined cells, and shows every problem of a line when the keyboard moves to its line button", async () => {
     focusRing(true);
     const wrapper = mountTips(
@@ -817,6 +844,34 @@ describe("the tooltip of the problems", () => {
     await wrapper.setProps({ issueCells: new Map() });
     await flushPromises();
     expect(shownTip()).toBeNull();
+  });
+
+  it("renders the rows once, not again when the tooltip shows, moves or hides", async () => {
+    let renders = 0;
+    const issues = [problem("digitized_mismatch", second, "mean"), problem("unknown_term", third, "label")];
+    const wrapper = mount(TableGrid, {
+      props: { table: small, issueCells: issueCells(issues, small.file) },
+      // Each render of the grid renders the line cell of each row.
+      slots: {
+        line: ({ line }: { line: number }) => {
+          renders++;
+          return String(line);
+        },
+      },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    renders = 0;
+    const [mean, label] = [cellAt(wrapper, second, MEAN), cellAt(wrapper, third, HEADER.indexOf("label"))];
+    await hover(mean);
+    expect(shownTip()?.textContent).toContain("digitized_mismatch");
+    label.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, relatedTarget: mean }));
+    await flushPromises();
+    expect(shownTip()?.textContent).toContain("unknown_term");
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await flushPromises();
+    expect(shownTip()).toBeNull();
+    expect(renders).toBe(0);
   });
 
   it("keeps the problems in a hiding tooltip, which fades out", async () => {

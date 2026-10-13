@@ -35,6 +35,15 @@ async function editWorkbook(workspace: string, line: number, column: string, val
   await runTool("edit_workbook.py", workbook, SHEET, cell, value);
 }
 
+/** Expect `box` to lie inside the window of `page`. */
+function expectInWindow(page: Page, box: { x: number; y: number; width: number; height: number }): void {
+  const { width, height } = page.viewportSize()!;
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(width);
+  expect(box.y + box.height).toBeLessThanOrEqual(height);
+}
+
 /** The sync status of the study header, which starts with `text`; a chip, which has no role. */
 function syncStatus(page: Page, text: string) {
   return page.locator(".fact-sync").filter({ hasText: text });
@@ -707,7 +716,7 @@ test("an outlined cell lists its problems in a tooltip on hover, the button of i
   // The keyboard: Tab reaches the line buttons, the arrow keys the line of the outlined cell, whose
   // button shows the problems of the line at once. Lines are counted from the first button, so
   // that the test does not depend on how the lines are numbered.
-  await page.mouse.move(600, 32);
+  await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
   const buttons = rows.locator(".grid-line-button");
   const lineButton = rows
     .getByRole("row")
@@ -749,12 +758,45 @@ for (const theme of ["light", "dark"] as const) {
     await expectAccessible(page);
     const at = (await cell.boundingBox())!;
     const tip = (await tooltip.boundingBox())!;
-    // Below the cell, or above it at the bottom of the window, and inside the window.
-    expect(tip.y >= at.y + at.height || tip.y + tip.height <= at.y).toBe(true);
-    expect(tip.x).toBeGreaterThanOrEqual(0);
-    expect(tip.x + tip.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+    // Below the cell, and inside the window.
+    expect(tip.y).toBeGreaterThanOrEqual(at.y + at.height);
+    expectInWindow(page, tip);
   });
 }
+
+test("the tooltip of the problems follows the pointer to the line cell, which it starts at, and shows above a cell near the bottom of the window", async ({
+  app,
+  page,
+}) => {
+  await app.open(`#/studies/caffeine/Demo2020/data?source=Fig1&file=${TABLE}`);
+  const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
+  const cell = rows.getByRole("cell", { name: "1.24", exact: true });
+  await expect(cell).toHaveClass(/grid-cell--warning/);
+  const tooltip = page.locator(".problem-tooltip");
+  await cell.hover();
+  await expect(tooltip).toHaveCSS("opacity", "1");
+  // From the cell to the line cell of its row, which lists every problem of the line, at once.
+  const line = rows.getByRole("row").filter({ has: page.getByRole("cell", { name: "1.24", exact: true }) }).locator("th");
+  await line.hover();
+  const at = (await line.boundingBox())!;
+  await expect.poll(async () => Math.abs((await tooltip.boundingBox())!.x - at.x)).toBeLessThanOrEqual(1);
+  const tip = (await tooltip.boundingBox())!;
+  expect(tip.y).toBeGreaterThanOrEqual(at.y + at.height);
+  expectInWindow(page, tip);
+
+  // A window that ends below the cell leaves no room under it: the tooltip shows above the cell.
+  await page.getByRole("navigation", { name: "Tables and sources" }).getByRole("heading", { name: "Tables" }).hover();
+  await expect(tooltip).toBeHidden();
+  const below = (await cell.boundingBox())!;
+  await page.setViewportSize({ width: 1440, height: Math.ceil(below.y + below.height + 40) });
+  await cell.hover();
+  await expect(tooltip).toHaveCSS("opacity", "1");
+  const above = (await cell.boundingBox())!;
+  expect(above.y + above.height).toBeGreaterThan(page.viewportSize()!.height - 60);
+  const flipped = (await tooltip.boundingBox())!;
+  expect(flipped.y + flipped.height).toBeLessThanOrEqual(above.y);
+  expectInWindow(page, flipped);
+});
 
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");

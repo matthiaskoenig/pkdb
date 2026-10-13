@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import { VTooltip } from "vuetify/components";
 import type { TableResponse, ValidationIssue } from "../api/types";
 import { useCellTip } from "../composables/useCellTip";
 import {
@@ -8,12 +7,13 @@ import {
   HEADER_LINE,
   keptColumns,
   lineIssues,
+  lineTipKey,
   ROW,
   visibleColumns,
   type CellIssues,
   type IssueCells,
 } from "../grid";
-import ProblemTip from "./ProblemTip.vue";
+import ProblemTooltip from "./ProblemTooltip.vue";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */
 const VIRTUAL_ROWS = 500;
@@ -90,7 +90,7 @@ const props = withDefaults(
   },
 );
 const emit = defineEmits<{ "select-line": [line: number] }>();
-defineSlots<{
+const slots = defineSlots<{
   /** The content of the line cell of a row; its line by default. */
   line?: (props: { line: number }) => unknown;
 }>();
@@ -304,7 +304,6 @@ function headerClass(index: number, name: string | null): Record<string, boolean
 // which show every problem of their line, and the Line header, which shows those of the header.
 
 const tip = useCellTip();
-const tipCell = tip.cell;
 
 /** Every problem of each line whose problems the grid shows, also of columns that do not show. */
 const lineProblems = computed(() => {
@@ -316,25 +315,13 @@ const lineProblems = computed(() => {
   return found;
 });
 
-/** The `data-tip` of the line cell of `line`: its tooltip lists every problem of the line. */
-function lineKey(line: number): string {
-  return `${line}:line`;
-}
-
 /** The problems that a tooltip can list, by the `data-tip` of their cell. */
 const tips = computed(() => {
   const found = new Map<string, ValidationIssue[]>();
   for (const [key, note] of notes.value) found.set(key, note.issues);
-  for (const [line, issues] of lineProblems.value) found.set(lineKey(line), issues);
+  for (const [line, issues] of lineProblems.value) found.set(lineTipKey(line), issues);
   return found;
 });
-/**
- * The problems that the tooltip lists: those of the cell whose tooltip shows. A hiding tooltip
- * keeps them while it fades out.
- */
-const tipIssues = computed<ValidationIssue[]>((shown = []) =>
-  tip.key.value === null ? shown : (tips.value.get(tip.key.value) ?? shown),
-);
 
 /** The `data-tip` of the cell at `line` and the column `index` when it has problems. */
 function tipOf(line: number, index: number): string | undefined {
@@ -344,7 +331,7 @@ function tipOf(line: number, index: number): string | undefined {
 
 /** The `data-tip` of the line cell of `line` when the line has problems. */
 function lineTip(line: number): string | undefined {
-  return lineProblems.value.has(line) ? lineKey(line) : undefined;
+  return lineProblems.value.has(line) ? lineTipKey(line) : undefined;
 }
 
 /** The `data-tip` of a header cell; a raw table has no header line. */
@@ -363,21 +350,24 @@ function lineNoteId(line: number): string {
   return `${id}-${line}-all`;
 }
 
+/**
+ * The id of the problems of the whole row of `line`, which describe its line cell. A line button
+ * describes every problem of its line instead, of which they are a part.
+ */
+function rowNoteId(line: number): string | undefined {
+  return props.selectable && !slots.line ? undefined : notes.value.get(`${line}:-1`)?.id;
+}
+
 function onScroll(): void {
   update();
   tip.scrolled(region.value);
-}
-
-/** Vuetify closes the tooltip, such as on a click outside it. */
-function onTipToggle(open: boolean): void {
-  if (!open) tip.hide();
 }
 
 // A tooltip whose cell left the rendered rows, or has no problems any more, hides.
 watch(
   [rendered, tips],
   () => {
-    const cell = tipCell.value;
+    const cell = tip.cell.value;
     const key = tip.key.value;
     if (cell && (!cell.isConnected || key === null || !tips.value.has(key))) tip.hide();
   },
@@ -573,9 +563,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :class="lineClass(row.line)"
               :tabindex="isFocus(row.line, null) ? -1 : undefined"
               :data-tip="lineTip(row.line)"
-              :aria-describedby="
-                described(highlightLines.has(row.line) && targetNote, notes.get(`${row.line}:-1`)?.id)
-              "
+              :aria-describedby="described(highlightLines.has(row.line) && targetNote, rowNoteId(row.line))"
               @keydown="selectable && moveFocus($event, index)"
             >
               <slot name="line" :line="row.line">
@@ -620,23 +608,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
       }}</span>
     </div>
     <!-- One tooltip for the problems of every cell, at the cell under the pointer or of the keyboard. -->
-    <VTooltip
-      v-if="tips.size"
-      :model-value="tipCell !== null"
-      :target="tipCell ?? undefined"
-      :open-on-hover="false"
-      :open-on-focus="false"
-      :eager="false"
-      interactive
-      location="bottom"
-      :offset="4"
-      max-width="380"
-      content-class="problem-tooltip"
-      :content-props="{ onMouseenter: tip.enterTip, onMouseleave: tip.leaveTip }"
-      @update:model-value="onTipToggle"
-    >
-      <ProblemTip :issues="tipIssues" />
-    </VTooltip>
+    <ProblemTooltip v-if="tips.size" :tip="tip" :tips="tips" />
   </div>
 </template>
 
