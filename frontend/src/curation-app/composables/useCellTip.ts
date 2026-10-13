@@ -1,7 +1,8 @@
 /**
- * One tooltip for the cells of a grid. The cells that have one carry `data-tip`, whose value names
- * what the tooltip shows. The tooltip follows the pointer and the keyboard focus, as the tooltips
- * of Vuetify do, but one tooltip serves every cell, so that a large table renders none per cell.
+ * One tooltip for the cells of a grid, or for other elements of a large table, such as the study
+ * identities of the overview. The cells that have one carry `data-tip`, whose value names what the
+ * tooltip shows. The tooltip follows the pointer and the keyboard focus, as the tooltips of Vuetify
+ * do, but one tooltip serves every cell, so that a large table renders none per cell.
  * A tooltip of the pointer moves to another cell only once the pointer rested there for
  * `TIP_LINGER`, so that the pointer can cross the cells below its cell on its way onto it. Escape
  * hides it; when the pointer is in its cell, it shows there again once the pointer left the cell.

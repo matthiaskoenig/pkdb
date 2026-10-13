@@ -71,6 +71,16 @@ function keysOf(row: StudyRow): SearchKeys {
   return keys;
 }
 
+/** Whether the study is in the folder of `substance` or its tables name that substance folder. */
+export function namesSubstance(row: StudyRow, substance: string): boolean {
+  return row.substances.includes(substance);
+}
+
+/** The substance folders that the tables of the study name besides its own folder. */
+export function otherSubstances(row: StudyRow): string[] {
+  return row.substances.filter((name) => name !== row.substance);
+}
+
 export interface FilteredStudies {
   /** The rows of the filter, in the order of the input. */
   shown: StudyRow[];
@@ -88,7 +98,7 @@ export function filterStudies(
   const counts: Record<StatusChip, number> = { all: 0, attention: 0, draft: 0, in_review: 0, approved: 0 };
   const shown: StudyRow[] = [];
   for (const row of rows) {
-    if (substance && row.substance !== substance) continue;
+    if (substance && !namesSubstance(row, substance)) continue;
     const keys = keysOf(row);
     if (user && !keys.curators.includes(user)) continue;
     if (needle && !keys.id.includes(needle) && !keys.title.includes(needle)) continue;
@@ -122,9 +132,9 @@ export function curatorsOf(rows: StudyRow[]): { user: string; studies: number }[
   return [...curators.entries()].sort(([a], [b]) => COLLATOR.compare(a, b)).map(([, entry]) => entry);
 }
 
-/** The substances of the rows in alphabetical order. */
+/** The substance folders of the rows and those that their tables name, in alphabetical order. */
 export function substancesOf(rows: StudyRow[]): string[] {
-  return [...new Set(rows.map((row) => row.substance))].sort(COLLATOR.compare);
+  return [...new Set(rows.flatMap((row) => row.substances))].sort(COLLATOR.compare);
 }
 
 // Sorting

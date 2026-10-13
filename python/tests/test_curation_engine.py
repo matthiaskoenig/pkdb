@@ -15,7 +15,7 @@ import pytest
 from pkdb.curation import connection, jobs
 from pkdb.curation import engine as module
 from pkdb.curation import workspace as workspace_module
-from pkdb.curation.state import StateLock
+from pkdb.curation.state import StateLock, state_row
 from pkdb.curation.studies import job_parts
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
@@ -1740,17 +1740,23 @@ def test_the_state_lock_tells_whether_the_current_thread_holds_it():
     assert not lock.held() and seen == [False]
 
 
-def test_an_idle_engine_keeps_its_revision(workspace):
-    engine, _ = workspace
-    identity = row(engine)["id"]
-    # Validate, and let the watcher record what the jobs left behind, as its next ticks would.
+def _idle(engine):
+    """Validate, and let the watcher record what the jobs left behind, as its next ticks
+    would, so that nothing is left to change."""
     for _ in range(2):
         engine.scan()
         settle(engine)
         while engine.queue:
             run_next(engine)
         engine._check_workbooks()
+        engine._read_substances()
         engine._watch_recovered()
+
+
+def test_an_idle_engine_keeps_its_revision(workspace):
+    engine, _ = workspace
+    identity = row(engine)["id"]
+    _idle(engine)
     revision = engine.lock.revision
     for _ in range(3):
         engine.scan()
@@ -1767,6 +1773,40 @@ def test_an_idle_engine_keeps_its_revision(workspace):
     engine.study_folder(identity)
     engine.resolve_file(identity)
     assert engine.lock.revision == revision
+
+
+def _substances(engine):
+    return {study["id"]: study["substances"] for study in engine.snapshot()["studies"]}
+
+
+def test_a_change_of_the_substances_of_a_study_raises_the_revision_once(
+    workspace, make_study, valid_files
+):
+    engine, folder = workspace
+    # Studies of drug, which the tables of caffeine/Example name, and of codeine.
+    make_study(valid_files, name="Other", substance="drug")
+    make_study(valid_files, name="Third", substance="codeine")
+    _idle(engine)
+    assert _substances(engine)["caffeine/Example"] == ["caffeine", "drug"]
+    revision = engine.lock.revision
+    for _ in range(2):
+        engine._watch_tick()
+    assert engine.lock.revision == revision
+    interventions = folder / "interventions.tsv"
+    text = interventions.read_text(encoding="utf-8")
+    assert "\tdrug\t" in text
+    interventions.write_text(
+        text.replace("\tdrug\t", "\tcodeine\t"), encoding="utf-8", newline=""
+    )
+    # The scan counts the changed table as any changed file; the read of the watcher counts
+    # the changed names once more, and a read without a change counts nothing.
+    engine.scan()
+    revision = engine.lock.revision
+    engine._read_substances()
+    assert engine.lock.revision == revision + 1
+    assert _substances(engine)["caffeine/Example"] == ["caffeine", "codeine", "drug"]
+    engine._read_substances()
+    assert engine.lock.revision == revision + 1
 
 
 def _edit_study(engine, folder):
@@ -1891,6 +1931,40 @@ def _configured(**settings):
     return lambda engine, folder, monkeypatch: partial(engine.configure, **settings)
 
 
+def _named_substance(engine, folder, monkeypatch):
+    # A study of drug, which the tables of caffeine/Example name: the read of the watcher
+    # finds it among the substances of the study.
+    shutil.copytree(folder, folder.parent.parent / "drug" / "Other")
+    engine.scan()
+    return engine._read_substances
+
+
+def _linked_issue(engine, folder, monkeypatch):
+    # The study names its issue, which GitHub has after a refresh.
+    path = folder / "study.json"
+    study = json.loads(path.read_text(encoding="utf-8"))
+    path.write_text(
+        json.dumps({**study, "issue": 2158}, indent=2) + "\n", encoding="utf-8"
+    )
+    engine.scan()
+    issue = {
+        "number": 2158,
+        "state": "open",
+        "labels": ["caffeine"],
+        "assignees": [],
+        "html_url": "https://github.com/matthiaskoenig/pkdb_data/issues/2158",
+    }
+    engine.offline = False
+
+    def refresh():
+        # As `GitHubAssignments.refresh`, outside the lock of the engine.
+        engine.github.data = {**engine.github.data, "issues": [issue]}
+        return engine.github.data
+
+    monkeypatch.setattr(engine.github, "refresh", refresh)
+    return engine.refresh_assignments
+
+
 #: For each field of the state, what makes a change of it ready, which returns the change. A
 #: field that the state gains needs a change here, or a place among the fixed fields.
 FIELD_CHANGES = {
@@ -1929,9 +2003,16 @@ FIELD_CHANGES = {
 FIXED_FIELDS = {"client_version", "log_file"}
 
 
+#: For each field that the state adds to a study besides the fields of its row, what makes a
+#: change of it ready, which returns the change.
+STUDY_FIELD_CHANGES = {"substances": _named_substance, "issue": _linked_issue}
+
+
 def test_every_field_of_the_state_has_a_change_or_is_fixed(workspace):
     engine, _ = workspace
     assert set(engine.snapshot()) == set(FIELD_CHANGES) | FIXED_FIELDS
+    (study,) = engine.snapshot()["studies"]
+    assert set(study) == set(state_row(row(engine))) | set(STUDY_FIELD_CHANGES)
 
 
 @pytest.mark.parametrize("field", sorted(FIELD_CHANGES))
@@ -1943,6 +2024,24 @@ def test_a_change_of_each_field_of_the_state_raises_the_revision(
     before, revision = engine.snapshot()[field], engine.lock.revision
     change()
     assert engine.snapshot()[field] != before
+    assert engine.lock.revision > revision
+
+
+@pytest.mark.parametrize("field", sorted(STUDY_FIELD_CHANGES))
+def test_a_change_of_each_field_that_the_state_adds_to_a_study_raises_the_revision(
+    workspace, monkeypatch, field
+):
+    engine, folder = workspace
+    identity = row(engine)["id"]
+    change = STUDY_FIELD_CHANGES[field](engine, folder, monkeypatch)
+
+    def value():
+        studies = engine.snapshot()["studies"]
+        return next(study[field] for study in studies if study["id"] == identity)
+
+    before, revision = value(), engine.lock.revision
+    change()
+    assert value() != before
     assert engine.lock.revision > revision
 
 

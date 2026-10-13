@@ -1,5 +1,7 @@
 import json
 import os
+import re
+import shutil
 import sys
 import threading
 import time
@@ -390,3 +392,532 @@ def test_old_state_with_mappings_loads(tmp_path, tmp_path_factory):
         engine.snapshot()
     finally:
         engine.close()
+
+
+def start_engine(path, state_dir):
+    return module.CurationEngine(path, state_dir=state_dir, offline=True, start=False)
+
+
+@pytest.fixture
+def two_substances(tmp_path, tmp_path_factory, make_study, valid_files):
+    """An engine on caffeine/Example, whose tables name drug, and on drug/Other.
+
+    The watcher read their tables, as it does before its first wait.
+    """
+    folder = make_study(valid_files)
+    make_study(valid_files, name="Other", substance="drug")
+    engine = start_engine(tmp_path, tmp_path_factory.mktemp("state"))
+    engine._read_substances()
+    yield engine, folder
+    engine.close()
+
+
+def substances(engine):
+    return {row["id"]: row["substances"] for row in engine.snapshot()["studies"]}
+
+
+def saved_substances(engine):
+    return engine.state_dir / "substances.json"
+
+
+def name_in_interventions(folder, old, new):
+    """Let the interventions of a study name `new` where they named `old`."""
+    interventions = folder / "interventions.tsv"
+    text = interventions.read_text(encoding="utf-8")
+    assert f"\t{old}\t" in text
+    interventions.write_text(
+        text.replace(f"\t{old}\t", f"\t{new}\t"), encoding="utf-8", newline=""
+    )
+
+
+def counted_reads(monkeypatch):
+    """The study folders whose tables `study_substances` reads from now on."""
+    read = []
+    real = workspace_module.study_substances
+
+    def counted(folder, **options):
+        read.append(folder.name)
+        return real(folder, **options)
+
+    monkeypatch.setattr(workspace_module, "study_substances", counted)
+    return read
+
+
+def no_reads(monkeypatch):
+    def refused(folder, **options):
+        raise AssertionError(f"read the tables of {folder}")
+
+    monkeypatch.setattr(workspace_module, "study_substances", refused)
+
+
+class Waits(threading.Event):
+    """A stop event whose waits return at once; the wait after `ticks` ticks stops."""
+
+    def __init__(self, ticks):
+        super().__init__()
+        self.ticks = ticks
+
+    def wait(self, timeout=None):
+        if self.ticks == 0:
+            return True
+        self.ticks -= 1
+        return False
+
+
+def test_the_start_reads_no_table_and_serves_the_substances_read_before(
+    tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    make_study(valid_files)
+    make_study(valid_files, name="Other", substance="drug")
+    state = tmp_path_factory.mktemp("state")
+    read = counted_reads(monkeypatch)
+    first = start_engine(tmp_path, state)
+    try:
+        # Until the watcher reads the tables, a study has the substance of its folder.
+        assert read == []
+        assert substances(first) == {
+            "caffeine/Example": ["caffeine"],
+            "drug/Other": ["drug"],
+        }
+        first._read_substances()
+        assert sorted(read) == ["Example", "Other"]
+    finally:
+        first.close()
+    again = start_engine(tmp_path, state)
+    try:
+        # No validation ran: the substances are those that the first engine read.
+        assert not again.jobs
+        assert substances(again) == {
+            "caffeine/Example": ["caffeine", "drug"],
+            "drug/Other": ["drug"],
+        }
+        again._read_substances()
+        assert sorted(read) == ["Example", "Other"]
+    finally:
+        again.close()
+
+
+def test_a_workspace_switch_keeps_the_saved_substances_of_the_old_workspace(
+    two_substances, tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    other = tmp_path_factory.mktemp("other")
+    study = other / "codeine" / "Third"
+    shutil.copytree(folder, study)
+    name_in_interventions(study, "drug", "midazolam")
+    engine.select_workspace(str(other))
+    engine._read_substances()
+    saved = json.loads(saved_substances(engine).read_text(encoding="utf-8"))
+    assert str(folder) in saved["studies"]
+    assert str(study) in saved["studies"]
+    engine.close()
+    no_reads(monkeypatch)
+    again = start_engine(tmp_path, engine.state_dir)
+    try:
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+        again.stop.set()
+        again._read_substances()
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+    finally:
+        again.close()
+
+
+def test_a_save_drops_the_saved_substances_of_folders_that_are_gone(
+    two_substances, tmp_path_factory
+):
+    engine, folder = two_substances
+    other = tmp_path_factory.mktemp("other")
+    study = other / "codeine" / "Third"
+    shutil.copytree(folder, study)
+    engine.select_workspace(str(other))
+    engine._read_substances()
+    path = saved_substances(engine)
+    assert set(json.loads(path.read_text(encoding="utf-8"))["studies"]) >= {
+        str(folder),
+        str(study),
+    }
+    # The first workspace still exists on disk, so its entry stays.
+    name_in_interventions(study, "drug", "midazolam")
+    engine.scan()
+    engine._read_substances()
+    assert str(folder) in json.loads(path.read_text(encoding="utf-8"))["studies"]
+    # Once it is gone from disk, the next save drops its entry.
+    shutil.rmtree(folder)
+    name_in_interventions(study, "midazolam", "codeine")
+    engine.scan()
+    engine._read_substances()
+    saved = json.loads(path.read_text(encoding="utf-8"))["studies"]
+    assert str(folder) not in saved
+    assert str(study) in saved
+
+
+def test_tables_that_changed_while_stopped_are_read_again(
+    two_substances, tmp_path, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    engine.close()
+    name_in_interventions(folder, "drug", "codeine")
+    make_study(valid_files, name="Third", substance="codeine")
+    read = counted_reads(monkeypatch)
+    again = start_engine(tmp_path, engine.state_dir)
+    try:
+        # What was read before, until the watcher reads the changed tables.
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+        again._read_substances()
+        assert sorted(read) == ["Example", "Third"]
+        assert substances(again)["caffeine/Example"] == ["caffeine", "codeine", "drug"]
+    finally:
+        again.close()
+
+
+@pytest.mark.parametrize(
+    "damage",
+    [
+        lambda saved: b"{not json",
+        lambda saved: b"\xff\xfe",
+        lambda saved: json.dumps(list(saved)).encode(),
+        lambda saved: json.dumps({**saved, "studies": []}).encode(),
+        # Another version may count the substances of a table otherwise.
+        lambda saved: json.dumps({**saved, "version": "0.0.1"}).encode(),
+    ],
+    ids=["not json", "not utf-8", "no object", "no studies", "another version"],
+)
+def test_saved_substances_that_cannot_be_used_are_read_again(
+    two_substances, tmp_path, monkeypatch, damage
+):
+    engine, folder = two_substances
+    engine.close()
+    saved = json.loads(saved_substances(engine).read_text(encoding="utf-8"))
+    saved_substances(engine).write_bytes(damage(saved))
+    read = counted_reads(monkeypatch)
+    again = start_engine(tmp_path, engine.state_dir)
+    try:
+        assert substances(again)["caffeine/Example"] == ["caffeine"]
+        again._read_substances()
+        assert sorted(read) == ["Example", "Other"]
+        assert substances(again)["caffeine/Example"] == ["caffeine", "drug"]
+        assert json.loads(saved_substances(again).read_text(encoding="utf-8")) == saved
+    finally:
+        again.close()
+
+
+def test_damaged_saved_entries_and_studies_that_are_gone_are_dropped(
+    two_substances, tmp_path, monkeypatch
+):
+    engine, folder = two_substances
+    engine.close()
+    saved = json.loads(saved_substances(engine).read_text(encoding="utf-8"))
+    studies = saved["studies"]
+    other = str(tmp_path / "drug" / "Other")
+    gone = str(tmp_path / "caffeine" / "Gone")
+    damaged = {
+        other: {"tables": [["interventions.tsv", "1", 2]], "substances": ["drug"]},
+        gone: studies[str(folder)],
+    }
+    saved_substances(engine).write_text(
+        json.dumps({**saved, "studies": {**studies, **damaged}}), encoding="utf-8"
+    )
+    read = counted_reads(monkeypatch)
+    again = start_engine(tmp_path, engine.state_dir)
+    try:
+        again._read_substances()
+        assert read == ["Other"]
+        assert json.loads(saved_substances(again).read_text(encoding="utf-8")) == saved
+        assert sorted(saved["studies"]) == sorted([str(folder), other])
+    finally:
+        again.close()
+
+
+def test_requests_and_the_state_read_no_table(two_substances, monkeypatch, tmp_path):
+    engine, folder = two_substances
+    no_reads(monkeypatch)
+    name_in_interventions(folder, "drug", "codeine")
+    # The scan of an app write and a workspace switch, and the state, read no table:
+    # they serve what was read before until the watcher reads the changed tables.
+    engine.scan()
+    engine.select_workspace(str(tmp_path))
+    assert substances(engine) == {
+        "caffeine/Example": ["caffeine", "drug"],
+        "drug/Other": ["drug"],
+    }
+
+
+def test_selecting_the_workspace_again_reads_only_the_tables_that_changed(
+    two_substances, make_study, valid_files, monkeypatch, tmp_path
+):
+    engine, folder = two_substances
+    make_study(valid_files, name="Third", substance="codeine")
+    read = counted_reads(monkeypatch)
+    engine.select_workspace(str(tmp_path))
+    engine._read_substances()
+    assert read == ["Third"]
+    assert substances(engine) == {
+        "caffeine/Example": ["caffeine", "drug"],
+        "codeine/Third": ["codeine", "drug"],
+        "drug/Other": ["drug"],
+    }
+
+
+def test_the_watcher_reads_only_the_tables_that_changed(
+    two_substances, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    read = counted_reads(monkeypatch)
+    # A save of the metadata changes study.json alone and reads no table.
+    metadata = json.loads((folder / "study.json").read_text(encoding="utf-8"))
+    (folder / "study.json").write_text(
+        dump_json({**metadata, "issue": 7}), encoding="utf-8"
+    )
+    engine.scan()
+    engine._read_substances()
+    assert read == []
+    # The interventions name codeine now, the folder of a new study.
+    name_in_interventions(folder, "drug", "codeine")
+    make_study(valid_files, name="Third", substance="codeine")
+    engine.scan()
+    engine._read_substances()
+    assert sorted(read) == ["Example", "Third"]
+    # The data still name drug.
+    assert substances(engine)["caffeine/Example"] == ["caffeine", "codeine", "drug"]
+    engine.scan()
+    engine._read_substances()
+    assert sorted(read) == ["Example", "Third"]
+
+
+def test_a_substance_folder_added_later_counts_without_reading_the_tables_again(
+    tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    make_study(valid_files)
+    engine = start_engine(tmp_path, tmp_path_factory.mktemp("state"))
+    try:
+        engine._read_substances()
+        # drug has no folder yet, like a metabolite.
+        assert substances(engine) == {"caffeine/Example": ["caffeine"]}
+        no_reads(monkeypatch)
+        make_study(valid_files, name="Other", substance="drug")
+        engine.scan()
+        assert substances(engine)["caffeine/Example"] == ["caffeine", "drug"]
+    finally:
+        engine.close()
+
+
+def test_the_first_watcher_tick_reads_every_table_after_scheduling(
+    tmp_path, tmp_path_factory, make_study, valid_files, monkeypatch
+):
+    make_study(valid_files)
+    make_study(valid_files, name="Other", substance="drug")
+    engine = start_engine(tmp_path, tmp_path_factory.mktemp("state"))
+    try:
+        events = counted_reads(monkeypatch)
+        schedule_changes = engine.schedule_changes
+
+        def scheduled():
+            events.append("scheduled")
+            schedule_changes()
+
+        monkeypatch.setattr(engine, "schedule_changes", scheduled)
+        # Nothing happens before the first wait, so a start without saved substances
+        # schedules the validation of the studies before it reads their tables.
+        engine.stop = Waits(0)
+        engine._watch()
+        assert events == []
+        engine.stop = Waits(1)
+        engine._watch()
+        assert events[0] == "scheduled"
+        assert sorted(events[1:]) == ["Example", "Other"]
+        assert substances(engine) == {
+            "caffeine/Example": ["caffeine", "drug"],
+            "drug/Other": ["drug"],
+        }
+    finally:
+        engine.close()
+
+
+def test_a_watcher_tick_reads_a_changed_study_after_scheduling(
+    two_substances, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    events = counted_reads(monkeypatch)
+    schedule_changes = engine.schedule_changes
+
+    def scheduled():
+        events.append("scheduled")
+        schedule_changes()
+
+    monkeypatch.setattr(engine, "schedule_changes", scheduled)
+    name_in_interventions(folder, "drug", "codeine")
+    make_study(valid_files, name="Third", substance="codeine")
+    engine.stop = Waits(1)
+    engine._watch()
+    # The read before the first wait finds no change, as no scan saw it yet.
+    assert events[0] == "scheduled"
+    assert sorted(events[1:]) == ["Example", "Third"]
+    assert substances(engine)["caffeine/Example"] == ["caffeine", "codeine", "drug"]
+
+
+def test_a_read_during_a_workspace_switch_stores_nothing(
+    two_substances, tmp_path, monkeypatch
+):
+    engine, folder = two_substances
+    saved = saved_substances(engine).read_bytes()
+    name_in_interventions(folder, "drug", "codeine")
+    engine.scan()
+    old = engine.studies["caffeine/Example"]
+    real = workspace_module.study_substances
+
+    def switching(study, **options):
+        engine.select_workspace(str(tmp_path))
+        return real(study, **options)
+
+    monkeypatch.setattr(workspace_module, "study_substances", switching)
+    engine._read_substances()
+    assert old["_named_substances"] == ("drug",)
+    assert old["_tables"] != old["_table_signature"]
+    # The rows of the switch have what was saved, not what the read found.
+    new = engine.studies["caffeine/Example"]
+    assert new is not old
+    assert new["_named_substances"] == ("drug",)
+    assert new["_tables"] != new["_table_signature"]
+    assert saved_substances(engine).read_bytes() == saved
+
+
+def test_a_read_of_tables_that_change_meanwhile_stores_nothing_and_reads_them_again(
+    two_substances, make_study, valid_files, monkeypatch
+):
+    engine, folder = two_substances
+    make_study(valid_files, name="Fourth", substance="midazolam")
+    name_in_interventions(folder, "drug", "codeine")
+    engine.scan()
+    real = workspace_module.study_substances
+    read = []
+
+    def changing(study, **options):
+        named = real(study, **options)
+        read.append(study.name)
+        if read == ["Example"]:
+            # The curator saves the study again while its tables are read.
+            name_in_interventions(folder, "codeine", "midazolam")
+            engine.scan()
+        return named
+
+    monkeypatch.setattr(workspace_module, "study_substances", changing)
+    engine._read_substances()
+    row = engine.studies["caffeine/Example"]
+    assert "Example" in read
+    assert row["_named_substances"] == ("drug",)
+    assert row["_tables"] != row["_table_signature"]
+    engine._read_substances()
+    assert substances(engine)["caffeine/Example"] == ["caffeine", "drug", "midazolam"]
+
+
+def tracebacks(engine):
+    path = engine.log.path
+    return path.read_text(encoding="utf-8").count("Traceback") if path.exists() else 0
+
+
+@pytest.mark.parametrize(
+    ("error", "logged"),
+    [(RuntimeError("unexpected"), 1), (PermissionError("in use"), 0)],
+)
+def test_a_study_whose_tables_fail_to_read_keeps_its_substances_and_is_read_again(
+    two_substances, make_study, valid_files, monkeypatch, capsys, error, logged
+):
+    engine, folder = two_substances
+    make_study(valid_files, name="Fourth", substance="midazolam")
+    name_in_interventions(folder, "drug", "midazolam")
+    engine.scan()
+    real = workspace_module.study_substances
+
+    def failing(study, **options):
+        if study.name == "Example":
+            raise error
+        return real(study, **options)
+
+    monkeypatch.setattr(workspace_module, "study_substances", failing)
+    engine._read_substances()
+    engine._read_substances()
+    # The other studies are read; the study that failed keeps what was read before.
+    assert substances(engine)["midazolam/Fourth"] == ["midazolam", "drug"]
+    assert substances(engine)["caffeine/Example"] == ["caffeine", "drug"]
+    # An unexpected error is logged with its traceback once a minute, as the watcher
+    # logs its failures; a file that cannot be read now is read on the next call.
+    assert tracebacks(engine) == logged
+    lines = capsys.readouterr().err.splitlines()
+    assert len(lines) == logged
+    if logged:
+        assert re.fullmatch(
+            r"Error [0-9a-f]{8} in File watching: RuntimeError \(see .*curation\.log\)",
+            lines[0],
+        )
+    monkeypatch.setattr(workspace_module, "study_substances", real)
+    engine._read_substances()
+    assert substances(engine)["caffeine/Example"] == [
+        "caffeine",
+        "drug",
+        "midazolam",
+    ]
+
+
+def test_substances_that_cannot_be_saved_are_saved_on_the_next_read(
+    two_substances, make_study, valid_files, monkeypatch, capsys
+):
+    engine, folder = two_substances
+    make_study(valid_files, name="Third", substance="codeine")
+    engine.scan()
+    real = workspace_module.atomic_text
+
+    def full(path, text):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(workspace_module, "atomic_text", full)
+    engine._read_substances()
+    assert substances(engine)["codeine/Third"] == ["codeine", "drug"]
+    assert tracebacks(engine) == 1
+    assert len(capsys.readouterr().err.splitlines()) == 1
+    monkeypatch.setattr(workspace_module, "atomic_text", real)
+    engine._read_substances()
+    saved = json.loads(saved_substances(engine).read_text(encoding="utf-8"))
+    assert str(folder.parent.parent / "codeine" / "Third") in saved["studies"]
+
+
+def test_a_read_stops_when_the_engine_stops(two_substances, monkeypatch):
+    engine, folder = two_substances
+    name_in_interventions(folder, "drug", "codeine")
+    engine.scan()
+    read = counted_reads(monkeypatch)
+    engine.stop.set()
+    engine._read_substances()
+    assert read == []
+
+
+def test_saved_substances_keep_folder_names_that_are_no_text(tmp_path):
+    # A path on Linux with a byte that is no UTF-8, as Python decodes it.
+    folder = "/data/studies/caf\udce9/Example"
+    read = {folder: ((("interventions.tsv", 1, 2),), ("caffeine", "drug"))}
+    path = tmp_path / "substances.json"
+    workspace_module.save_substances(path, read)
+    assert workspace_module.load_substances(path) == read
+
+
+def test_the_table_signature_has_the_tables_whose_substances_count():
+    files = [
+        ("interventions.tsv", 1, 10),
+        ("outputs_Tab1.tsv", 2, 20),
+        ("timecourses_Fig2A.tsv", 3, 30),
+        ("scatters_Fig3.tsv", 4, 40),
+        # Tables whose substances do not count, and no tables.
+        ("subjects.tsv", 5, 50),
+        ("characteristica.tsv", 6, 60),
+        ("outputs.tsv", 7, 70),
+        ("outputs_Notes.tsv", 8, 80),
+        ("Example_Tab1.tsv", 9, 90),
+        ("interventions.xlsx", 10, 100),
+        ("archive/interventions.tsv", 11, 110),
+        ("old/outputs_Tab1.tsv", 12, 120),
+    ]
+    assert workspace_module.table_signature(files) == (
+        ("interventions.tsv", 1, 10),
+        ("outputs_Tab1.tsv", 2, 20),
+        ("timecourses_Fig2A.tsv", 3, 30),
+        ("scatters_Fig3.tsv", 4, 40),
+    )

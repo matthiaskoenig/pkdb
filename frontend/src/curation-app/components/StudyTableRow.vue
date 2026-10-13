@@ -61,10 +61,11 @@ function open(event: MouseEvent): void {
     <td class="cell-study">
       <div v-if="!sizer" class="study-row-line">
         <!-- The study keeps one line: the title after the identity is cut with an ellipsis first, the
-             identity only when it alone is wider than its cell, as with a large font; its tooltip
-             and the name of its link keep it whole. -->
-        <span v-if="item.row.duplicate" class="study-identity" :title="identity">{{ identity }}</span>
-        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity" :title="identity">{{
+             identity only when it alone is wider than its cell, as with a large font; the name of
+             its link and the one tooltip of the table (StudyTable.vue), which also names the other
+             substance folders that the tables of the study name, keep it whole. -->
+        <span v-if="item.row.duplicate" class="study-identity" :data-tip="item.row.path">{{ identity }}</span>
+        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity" :data-tip="item.row.path">{{
           identity
         }}</RouterLink>
         <VChip

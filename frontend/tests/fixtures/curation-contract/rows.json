@@ -105,6 +105,9 @@
     "report_complete": true,
     "report_truncated": false,
     "report_incomplete": false,
+    "substances": [
+      "caffeine"
+    ],
     "issue": null
   },
   {
@@ -193,6 +196,9 @@
       "errors": 0,
       "warnings": 0
     },
+    "substances": [
+      "caffeine"
+    ],
     "issue": null
   }
 ]

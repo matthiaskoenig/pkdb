@@ -147,6 +147,7 @@ class EngineState:
     format1_folders: int
     _formats: dict
     _tree: SourceTree | None
+    _saved_substances: dict | None
     reference_previews: dict
     jobs: list
     modes: dict

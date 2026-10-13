@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch, watchPostEffect } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
 import type { Profile, StudyRow } from "../api/types";
+import { useCellTip } from "../composables/useCellTip";
 import { useWindowPosition } from "../composables/useWindowPosition";
 import type { SortKey, StudySort } from "../overview";
 import {
@@ -15,6 +16,7 @@ import {
   type RowItem,
 } from "../studyTable";
 import StudyTableRow from "./StudyTableRow.vue";
+import StudyTooltip from "./StudyTooltip.vue";
 
 const props = defineProps<{
   rows: StudyRow[];
@@ -134,13 +136,42 @@ const parts = computed<BodyPart[]>((previous) => {
 /** Hidden rows that give the columns the widths of all shown rows; those that stay render once. */
 const sizers = computed<readonly StudyRow[]>((previous) => keepSizerRows(previous ?? [], sizerRows(props.rows)));
 
+// The tooltip of the identities: one for the table, at the identity under the pointer or of the
+// keyboard (`data-tip`, the folder of the study), so that the rows render no tooltip and none of
+// them renders again when it shows, moves or hides.
+const tip = useCellTip();
+
+function studyOf(path: string): StudyRow | undefined {
+  return props.rows.find((row) => row.path === path);
+}
+
+/** Anything in the page scrolled: a tooltip of the pointer hides, one of the focus follows its identity. */
+function onScroll(): void {
+  tip.scrolled(null);
+}
+
+onMounted(() => document.addEventListener("scroll", onScroll, { capture: true, passive: true }));
+onBeforeUnmount(() => document.removeEventListener("scroll", onScroll, { capture: true }));
+
+// A tooltip whose identity is no longer rendered, as after a filter or a scroll, hides.
+watch(
+  [parts, () => props.rows],
+  () => {
+    const cell = tip.cell.value;
+    if (cell && !cell.isConnected) tip.hide();
+  },
+  { flush: "post" },
+);
+
 function focusIn(event: FocusEvent): void {
   const row = event.target instanceof Element ? event.target.closest("tr[aria-rowindex]") : null;
   const index = row ? Number(row.getAttribute("aria-rowindex")) - 2 : -1;
   focusedPath.value = props.rows[index]?.path ?? null;
+  tip.focusIn(event);
 }
 
-function focusOut(): void {
+function focusOut(event: FocusEvent): void {
+  tip.focusOut(event);
   // Once the focus moved: when the window loses the focus, as to another application, the event
   // names no new target while the row keeps the focus of the page.
   setTimeout(() => {
@@ -185,7 +216,13 @@ function focusOut(): void {
               </th>
             </tr>
           </thead>
-          <tbody ref="body" @focusin="focusIn" @focusout="focusOut">
+          <tbody
+            ref="body"
+            @focusin="focusIn"
+            @focusout="focusOut"
+            @mouseover="tip.over"
+            @mouseout="tip.out"
+          >
             <StudyTableRow v-for="row in sizers" :key="row.path" :item="itemOf(row)" :selected="false" :row-index="null" />
             <template v-for="part in parts" :key="part.kind === 'row' ? rows[part.index]!.path : part.key">
               <tr v-if="part.kind === 'space'" class="study-space" aria-hidden="true">
@@ -202,6 +239,7 @@ function focusOut(): void {
             </template>
           </tbody>
         </table>
+        <StudyTooltip :tip="tip" :study-of="studyOf" />
       </div>
     </template>
   </VTable>

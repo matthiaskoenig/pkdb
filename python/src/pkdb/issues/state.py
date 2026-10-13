@@ -16,10 +16,13 @@ from pkdb.issues.github import Issue
 from pkdb.repository import location, study_folders
 from pkdb.schemas.curators import Curator
 from pkdb.studyformat.jsonio import JsonFileError, load_json
-from pkdb.studyformat.layout import scan_folder
-from pkdb.studyformat.load import load_table
 from pkdb.studyformat.metadata import MetadataError, read_metadata
 from pkdb.studyformat.review_edit import ReviewError, read_review
+from pkdb.studyformat.substances import (
+    folder_index,
+    folder_substances,
+    study_substances,
+)
 from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import is_v2_folder
@@ -28,14 +31,6 @@ WORKFLOW = {"draft": "curate", "in_review": "check", "approved": "approved"}
 LABEL_COLORS = {"curate": "fbca04", "check": "1d76db", "approved": "0e8a16"}
 SUBSTANCE_COLOR = "c5def5"
 MAX_ASSIGNEES = 10
-# The tables whose substances become labels: what the subjects were given and the
-# data; the baseline values of characteristica are not about a substance.
-SUBSTANCE_COLUMNS = {
-    "interventions": ("substance",),
-    "outputs": ("substance",),
-    "timecourses": ("substance",),
-    "scatters": ("x_substance", "y_substance"),
-}
 
 
 @dataclass(frozen=True)
@@ -108,39 +103,10 @@ def read_studies(root: Path) -> Studies:
                 users=tuple(dict.fromkeys(users)),
                 metadata_revision=metadata.revision,
                 review_revision=review.revision,
-                substances=_substances(folder),
+                substances=study_substances(folder),
             )
         )
     return Studies(states, errors, format_1, claimed)
-
-
-def _substances(folder: Path) -> tuple[str, ...]:
-    """The substances that the interventions and the data of a study name, sorted.
-
-    A table that cannot be read names none; validation reports it.
-    """
-    layout = scan_folder(folder)
-    found: dict[str, str] = {}
-    for table_file in layout.tables:
-        columns = SUBSTANCE_COLUMNS.get(table_file.spec.kind, ())
-        if not columns:
-            continue
-        try:
-            with (layout.folder / table_file.name).open("rb") as stream:
-                table, _ = load_table(
-                    table_file.name,
-                    stream,
-                    table_file.spec,
-                    table_file.source,
-                    study=layout.study,
-                )
-        except OSError:
-            continue
-        for row in table.rows if table is not None else ():
-            for column in columns:
-                if substance := row.cells.get(column, "").strip():
-                    found.setdefault(substance.casefold(), substance)
-    return tuple(sorted(found.values(), key=str.casefold))
 
 
 def _raw_issue(folder: Path) -> int | None:
@@ -371,12 +337,10 @@ def study_labels(state: StudyState, substance_names: Iterable[str]) -> list[str]
     the folders, so that the issue is found under each substance it has data of.
     """
     substance = state.location.partition("/")[0]
-    folders = {name.casefold(): name for name in substance_names}
-    folders.pop(substance.casefold(), None)
-    others = {
-        folders[key] for name in state.substances if (key := name.casefold()) in folders
-    }
-    return [substance, *sorted(others, key=str.casefold), WORKFLOW[state.status]]
+    named = folder_substances(
+        substance, state.substances, folder_index(substance_names)
+    )
+    return [*named, WORKFLOW[state.status]]
 
 
 def _labels(

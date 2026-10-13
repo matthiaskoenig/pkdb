@@ -35,6 +35,7 @@ from pkdb.curation.workspace import (
 )
 from pkdb.identity import IdentityError
 from pkdb.issues.github import token_from
+from pkdb.studyformat.substances import folder_index, folder_substances
 from pkdb.update import newer
 
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
@@ -118,6 +119,9 @@ class CurationEngine(
         self._formats = {}
         # The listings of the folders of the workspace, which scans reuse while unchanged.
         self._tree = None
+        # The substances that the watcher last saved in the state directory; None until its
+        # first save, which also drops the entries of studies that are gone.
+        self._saved_substances = None
         self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
@@ -233,6 +237,8 @@ class CurationEngine(
         except IdentityError as error:
             author = {"user": None, "reason": str(error)}
         with self.lock.reading():
+            # The substance folders of the workspace, by which a study is also found.
+            folders = folder_index(row["substance"] for row in self.studies.values())
             return json.loads(
                 json.dumps(
                     {
@@ -262,6 +268,11 @@ class CurationEngine(
                         "studies": [
                             {
                                 **state_row(row),
+                                # The folder substance, then the other substance folders
+                                # that the tables name, as the watcher last read them.
+                                "substances": folder_substances(
+                                    row["substance"], row["_named_substances"], folders
+                                ),
                                 "issue": self._issue_for(
                                     (row.get("summary") or {}).get("issue")
                                 ),

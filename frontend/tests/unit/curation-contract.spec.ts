@@ -374,6 +374,10 @@ describe("rows contract", () => {
     const { shown, counts } = filterStudies(rows, { search: "demo", substance: "", curator: "", chip: "all" });
     expect(shown.map((row) => row.id)).toEqual(["caffeine/Demo2020"]);
     expect(counts.all).toBe(1);
+    // Each row names its substance folders, its own first.
+    expect(rows.every((row) => row.substances[0] === row.substance)).toBe(true);
+    const caffeine = filterStudies(rows, { search: "", substance: "caffeine", curator: "", chip: "all" });
+    expect(caffeine.shown).toHaveLength(rows.length);
   });
 });
 

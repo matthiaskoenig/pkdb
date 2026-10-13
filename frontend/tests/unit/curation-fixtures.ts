@@ -67,6 +67,7 @@ export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
     sync: { status: "in_sync", changes: 0, conflicts: 0 },
     counts: { errors: 0, warnings: 0 },
     issue: null,
+    substances: [changes.substance ?? "caffeine"],
     ...changes,
   };
 }
