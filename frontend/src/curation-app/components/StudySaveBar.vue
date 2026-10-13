@@ -34,7 +34,7 @@ const failure = computed(() => draft.failureIn(props.section, props.kind));
   <!-- A live region stays in the page while it is empty and while the bar is hidden, so that
        screen readers announce its text; the bar shows it. -->
   <span role="status" aria-live="polite" class="savebar-notice d-sr-only">{{ draft.notice }}</span>
-  <div v-if="draft.barShown && draft.form" class="study-savebar" :class="{ 'study-savebar--static': !sticky }">
+  <div v-if="draft.bannerShown && draft.form" class="study-savebar" :class="{ 'study-savebar--static': !sticky }">
     <VAlert
       v-if="draft.referenceError"
       type="warning"

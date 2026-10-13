@@ -10,9 +10,10 @@
  * table shows beside it when the study has a PDF.
  */
 import type { LocationQuery } from "vue-router";
-import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableResponse } from "./api/types";
+import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableKind, TableResponse } from "./api/types";
 import { INFO_CLASSES } from "./info";
 import { tableFiles } from "./study";
+import { noteKinds } from "./tableKinds";
 
 type Study = Pick<StudyDetail, "sources" | "tables">;
 type Counted = Pick<StudyDetail, "sources" | "tables" | "problems" | "review">;
@@ -184,6 +185,25 @@ export function defaultFile(detail: Counted): string | null {
     return (problems ? problems.errors + problems.warnings : 0) + (counts.items.get(file) ?? 0) > 0;
   });
   return (flagged ?? detail.tables[0])?.file ?? null;
+}
+
+/**
+ * The table that the Data section shows for the route `selection`: its file when the study has
+ * it, else the first table of its source, else the table that the section opens on.
+ */
+export function selectedFile(study: Counted, selection: Pick<Selection, "source" | "file">): string | null {
+  if (selection.file !== null && tableFiles(study).includes(selection.file)) return selection.file;
+  const named = study.sources.find((entry) => entry.source === selection.source);
+  return named ? fileForSource(study, named, null) : defaultFile(study);
+}
+
+/** The kind of the notes in study.json of the table `file`; null for a raw table or a file that the study lacks, which have none. */
+export function tableNotesKind(
+  study: Pick<StudyDetail, "tables" | "table_kinds">,
+  file: string | null,
+): TableKind | null {
+  const entry = file === null ? undefined : findTable(study, file);
+  return entry ? (noteKinds(study).find((kind) => kind === entry.kind) ?? null) : null;
 }
 
 /** The text of the `source` cell of a row, or null for a raw table, a missing row or an empty cell. */

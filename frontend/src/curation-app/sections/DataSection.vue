@@ -21,16 +21,16 @@ import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
 import {
   ALL_ROWS,
-  defaultFile,
   fileForSource,
-  findTable,
   isShared,
   ownerOf,
   PAPER,
   rowSource,
+  selectedFile,
   selectionOf,
   selectionQuery,
   sourceOfFile,
+  tableNotesKind,
   tablesByInfo,
   type RowFilter,
   type Selection,
@@ -95,13 +95,7 @@ const tableItems = computed(() =>
 // The selection
 
 /** The file of the route when the study has it, else the first table of the source of the route, else the default table. */
-const file = computed<string | null>(() => {
-  const value = detail.value;
-  if (!value) return null;
-  if (query.value.file !== null && files.value.includes(query.value.file)) return query.value.file;
-  const named = findSource(query.value.source);
-  return named ? fileForSource(value, named, null) : defaultFile(value);
-});
+const file = computed<string | null>(() => (detail.value ? selectedFile(detail.value, query.value) : null));
 
 /** The PDF that the pane of the paper keeps while another source shows. */
 const keptPaper = ref<string | null>(null);
@@ -113,11 +107,7 @@ const paperFile = computed(() => (query.value.source === PAPER ? query.value.pdf
 watch(paperFile, (value) => (keptPaper.value = value), { immediate: true });
 
 /** The kind of the notes of the selected table in study.json; null for a raw table, which has none. */
-const notesKind = computed<TableKind | null>(() => {
-  const value = detail.value;
-  const entry = value && file.value ? findTable(value, file.value) : undefined;
-  return value && entry ? (noteKinds(value).find((kind) => kind === entry.kind) ?? null) : null;
-});
+const notesKind = computed<TableKind | null>(() => (detail.value ? tableNotesKind(detail.value, file.value) : null));
 
 /**
  * The notes that a link of the Problems section opened, whose toggle takes the focus once: not

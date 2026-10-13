@@ -161,6 +161,26 @@ export function targetLabel(target: string): string {
   return target;
 }
 
+/**
+ * The names of the changed fields `keys` for the banner of unsaved changes, in their order: a
+ * field of the study by its label, such as `Source key`, and the descriptions and comments of a
+ * table kind once as `Notes of the outputs`, with the label that `kindLabel` gives the kind, as
+ * the notes above its tables name it.
+ */
+export function changedLabels(keys: readonly string[], kindLabel: (kind: TableKind) => string): string[] {
+  const labels = keys.map((key) => {
+    const notes = NOTES_FIELD.exec(key);
+    return notes ? `Notes of the ${kindLabel(notes[1] as TableKind).toLowerCase()}` : fieldLabel(key);
+  });
+  return [...new Set(labels)];
+}
+
+/** Names for a sentence, the first `shown` of them and how many more: `PMID, DOI, Creator and 2 more`. */
+export function shortList(names: readonly string[], shown = 3): string {
+  if (names.length <= shown) return names.join(", ");
+  return `${names.slice(0, shown).join(", ")} and ${names.length - shown} more`;
+}
+
 // Reading
 
 function text(value: unknown): string {

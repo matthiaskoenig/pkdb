@@ -64,23 +64,24 @@ export interface StudyDraft {
   /** Whether the app can write study.json: it has a revision to save over. */
   writable: ComputedRef<boolean>;
   dirty: ComputedRef<boolean>;
-  /** The fields with unsaved changes, the keys of `changedFields(base, form)`. */
+  /** The unsaved fields of the form in its order, such as `provenance.source_key`, which the banner names. */
   changed: ComputedRef<string[]>;
   /** The sections with unsaved fields, whose tabs the study page marks. */
   unsaved: ComputedRef<Section[]>;
   saving: Readonly<Ref<boolean>>;
   /** A conflict with a readable study.json blocks Save until Reload. */
   canSave: ComputedRef<boolean>;
-  /** The bar shows unsaved changes and the outcome of the last save, reload, discard or reference change. */
-  barShown: ComputedRef<boolean>;
+  /** The banner shows unsaved changes and the outcome of the last save, reload, discard or reference change. */
+  bannerShown: ComputedRef<boolean>;
   /** A refused or failed save: why, and the issues that no field shows. Its alert closes it. */
   failure: Ref<ActionFailure | null>;
   /**
-   * The failure of the last save as the bar of `section` shows it. A refused save asks to fix the
-   * fields that the section marks, and lists the issues of the others with their fields: Data
-   * shows the notes of `kind` above the selected table, Metadata the other fields of the form.
+   * The failure of the last save as the banner shows it in `section`. A refused save asks to fix
+   * the fields that the section marks, and lists the issues of the others with their fields: Data
+   * marks the notes of `kind` above the selected table, Metadata the other fields of the form, the
+   * other sections none.
    */
-  failureIn(section: DraftSection, kind?: TableKind | null): ActionFailure | null;
+  failureIn(section: Section, kind?: TableKind | null): ActionFailure | null;
   /** The messages of a refused save by field. */
   errors: Readonly<Ref<ReadonlyMap<string, string[]>>>;
   /** Writes need a user: what to do about it. */
@@ -164,12 +165,18 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
   let undoTimer: ReturnType<typeof setTimeout> | undefined;
 
   const writable = computed(() => revision.value !== null);
-  /** The fields with unsaved changes, compared field by field. */
-  const changed = useChangedFields(base, form);
+  /**
+   * The unsaved fields, compared field by field: those that differ from the document that the form
+   * started from, or for a new study.json from an empty one with the notes of the study.
+   */
+  const changed = useChangedFields(
+    computed(() => base.value ?? toForm({}, kinds.value)),
+    form,
+  );
   const unsaved = computed(() => unsavedSections(base.value, form.value, changed.value, tabled.value));
   const dirty = computed(() => unsaved.value.length > 0);
   const undoable = computed(() => undo.value !== null);
-  const barShown = computed(
+  const bannerShown = computed(
     () =>
       dirty.value ||
       saving.value ||
@@ -264,13 +271,14 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     openNotes(notesKindsOf(grouped.fields.keys(), kinds.value));
   }
 
-  /** Whether `section` shows the field `key` of the form: Data the notes of `kind`, Metadata the others. */
-  function shownIn(key: string, section: DraftSection, kind: TableKind | null): boolean {
+  /** Whether `section` shows the field `key` of the form: Data the notes of `kind`, Metadata the others, the other sections none. */
+  function shownIn(key: string, section: Section, kind: TableKind | null): boolean {
     if (section === "data") return kind !== null && notesKindOf(key, [kind]) !== null;
-    return notesKindOf(key, tabled.value) === null;
+    if (section === "metadata") return notesKindOf(key, tabled.value) === null;
+    return false;
   }
 
-  function failureIn(section: DraftSection, kind: TableKind | null = null): ActionFailure | null {
+  function failureIn(section: Section, kind: TableKind | null = null): ActionFailure | null {
     const value = failure.value;
     // Only a refused save has issues by field, which every save, reload and discard clears first.
     if (!value || !errors.value.size) return value;
@@ -421,7 +429,7 @@ export function useStudyDraft(source: DraftSource): StudyDraft {
     unsaved,
     saving,
     canSave,
-    barShown,
+    bannerShown,
     failure,
     failureIn,
     errors,

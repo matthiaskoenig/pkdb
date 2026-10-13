@@ -14,10 +14,12 @@ import {
   ownerOf,
   PAPER,
   rowSource,
+  selectedFile,
   selectionOf,
   selectionQuery,
   sourceCounts,
   sourceOfFile,
+  tableNotesKind,
   tablesByInfo,
 } from "../../src/curation-app/data";
 import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
@@ -291,5 +293,22 @@ describe("tables by class of information", () => {
     const study = detail({ tables: [tableEntry("Example_Tab2.tsv", "raw"), tableEntry("subjects.tsv", "subjects")] });
     expect(tablesByInfo(study).map((group) => group.info)).toEqual(["subjects", "raw"]);
     expect(tablesByInfo(detail({ tables: [] }))).toEqual([]);
+  });
+});
+
+describe("the table that Data shows", () => {
+  it("takes the file of the route when the study has it, else the first table of the source, else the default table", () => {
+    expect(selectedFile(detail(), { source: null, file: "outputs_Tab2.tsv" })).toBe("outputs_Tab2.tsv");
+    expect(selectedFile(detail(), { source: "Fig1", file: "gone.tsv" })).toBe("timecourses_Fig1.tsv");
+    expect(selectedFile(detail(), { source: null, file: null })).toBe(defaultFile(detail()));
+    expect(selectedFile(detail({ tables: [] }), { source: null, file: null })).toBeNull();
+  });
+
+  it("gives the kind of the notes of a table, and none for a raw table or a file that the study lacks", () => {
+    expect(tableNotesKind(detail(), "outputs_Tab2.tsv")).toBe("outputs");
+    expect(tableNotesKind(detail(), "subjects.tsv")).toBe("subjects");
+    expect(tableNotesKind(detail(), "Example_Tab2.tsv")).toBeNull();
+    expect(tableNotesKind(detail(), "gone.tsv")).toBeNull();
+    expect(tableNotesKind(detail(), null)).toBeNull();
   });
 });
