@@ -414,13 +414,13 @@ a.brand {
 /* Buttons joined side by side in a named group, of which one is pressed (aria-pressed), filled
    with the primary color: the size of the image of a source and the scales of a plot. As high as
    the smallest target of the app, 24 px, which fits the 26 px head of a pane with its line below. */
-.toggle-group {
+.switch-group {
   display: flex;
   flex: 0 0 auto;
 }
 /* The other buttons show the surface below them, not the gray of the browser, which differs
    between browsers and is too close to the primary color of the dark theme. */
-.toggle-group button {
+.switch-group button {
   height: 24px;
   padding-inline: 8px;
   font-size: 12px;
@@ -428,30 +428,30 @@ a.brand {
   background: transparent;
   color: rgb(var(--v-theme-on-surface));
 }
-.toggle-group button:hover {
+.switch-group button:hover {
   background: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
 }
-.toggle-group button:first-child {
+.switch-group button:first-child {
   border-radius: 4px 0 0 4px;
 }
-.toggle-group button:last-child {
+.switch-group button:last-child {
   border-radius: 0 4px 4px 0;
 }
-.toggle-group button + button {
+.switch-group button + button {
   margin-inline-start: -1px;
 }
-.toggle-group button[aria-pressed="true"] {
+.switch-group button[aria-pressed="true"] {
   background: rgb(var(--v-theme-primary));
   border-color: rgb(var(--v-theme-primary));
   color: rgb(var(--v-theme-on-primary));
 }
 /* The ring of the keyboard focus stays inside the button, where the head of a pane does not clip
    it and the button beside it does not cover it; on the primary fill, in its text color. */
-.toggle-group button:focus-visible {
+.switch-group button:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: -2px;
 }
-.toggle-group button[aria-pressed="true"]:focus-visible {
+.switch-group button[aria-pressed="true"]:focus-visible {
   outline-color: rgb(var(--v-theme-on-primary));
   outline-offset: -3px;
 }

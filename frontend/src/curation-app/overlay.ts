@@ -225,7 +225,9 @@ function decades(values: readonly number[]): number {
 /**
  * The ticks of a log axis of the plot of mapped rows whose drawn values span `span` decades, so that
  * its labels do not overlap; chosen by rendering on the 176 px of the y axis and on x axes of 200 to
- * 850 px. Plotly pads the range of the values, by up to 30 % with the ring of a selected row, and
+ * 850 px. On the narrowest x axes (about 208 to 264 px), labels of 4 or more characters can still
+ * touch at about 2.5 decades or below 0.75 decades, as with Plotly's own ticks. Plotly pads the
+ * range of the values, by up to 30 % with the ring of a selected row, and
  * from a range of one decade, so from about 0.78 decades of values, labels every digit of each
  * decade (0.8 0.9 1 2 3 ... 9 10 20), which overlap. From 0.75 to 2.5 decades of values, the labels
  * are 1, 2 and 5 of each decade, which come too close from about 3 decades; above, every n-th power

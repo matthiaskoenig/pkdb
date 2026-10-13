@@ -7,7 +7,7 @@ import { AXES, logAxes, type Axis, type AxisScale, type AxisScales } from "../ov
  * The scales of a plot of mapped rows, above it: `x: lin | log` and `y: lin | log`, and a note of
  * the points that a log axis leaves out, as it shows only values above 0. Each axis is a named
  * group of two native buttons, of which the scale of the axis is pressed, drawn as the zoom of the
- * image (`toggle-group` of styles.css). The note is a polite live region that stays in the page,
+ * image (`switch-group` of styles.css). The note is a polite live region that stays in the page,
  * so that a screen reader says it after a switch.
  */
 const props = defineProps<{
@@ -38,7 +38,7 @@ const note = computed(() => {
     <div class="plot-scales-axes">
       <div v-for="axis in AXES" :key="axis" class="plot-scale">
         <span class="plot-scale-axis" aria-hidden="true">{{ axis }}:</span>
-        <div class="toggle-group" role="group" :aria-label="`Scale of the ${axis} axis`">
+        <div class="switch-group" role="group" :aria-label="`Scale of the ${axis} axis`">
           <button
             v-for="choice in CHOICES"
             :key="choice.scale"

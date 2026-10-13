@@ -118,7 +118,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
       <!-- The source and its kind keep their room in a narrow pane; the image file name shortens first. -->
       <span class="pane-head-part pane-head-part--fixed">{{ summary.kind }}</span>
       <span v-if="summary.image" class="pane-head-part">{{ summary.image }}</span>
-      <div v-if="showsImage && view?.image_url" class="zoom toggle-group" role="group" aria-label="Image size">
+      <div v-if="showsImage && view?.image_url" class="zoom switch-group" role="group" aria-label="Image size">
         <button type="button" :aria-pressed="zoom === 'fit'" @click="setZoom('fit')">Fit</button>
         <button type="button" :aria-pressed="zoom === 'full'" @click="setZoom('full')">100 %</button>
       </div>
@@ -275,7 +275,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
   min-height: 0;
   height: 100%;
 }
-/* The zoom of the image (`toggle-group` of styles.css) goes to the end of the head. */
+/* The zoom of the image (`switch-group` of styles.css) goes to the end of the head. */
 .zoom {
   margin-inline-start: auto;
 }

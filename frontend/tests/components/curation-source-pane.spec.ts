@@ -322,7 +322,7 @@ describe("scales of the plot", () => {
     const { wrapper, study, requests } = await mountPlot();
     const zoom = wrapper.get('[role="group"][aria-label="Image size"]');
     for (const control of [zoom, group(wrapper, "x"), group(wrapper, "y")]) {
-      expect(control.classes()).toContain("toggle-group");
+      expect(control.classes()).toContain("switch-group");
       expect(control.findAll("button").map((button) => button.attributes("type"))).toEqual(["button", "button"]);
       expect(control.find(".v-btn").exists()).toBe(false);
     }

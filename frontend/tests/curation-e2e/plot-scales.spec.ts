@@ -135,7 +135,6 @@ test("a log axis over 1.3 decades labels 1, 2 and 5 of each decade apart from ea
   // Fig1 beside its image, with its 18 concentrations spread from 1 to 20 mg/l: there, Plotly
   // labels every digit of a decade by default (0.8 0.9 1 2 3 ... 9 10 20), and the labels overlap.
   const project = join(app.server.workspace, PROJECT);
-  renameSync(project, `${project}.away`);
   await page.route("**/local/studies/caffeine/Demo2020/sources/Fig1", async (route) => {
     const response = await route.fetch();
     const view = (await response.json()) as { points: { y: number; y_text: string; error_bar: number | null }[] };
@@ -146,6 +145,7 @@ test("a log axis over 1.3 decades labels 1, 2 and 5 of each decade apart from ea
     });
     await route.fulfill({ response, json: view });
   });
+  renameSync(project, `${project}.away`);
   try {
     await app.open(FIG1);
     const pane = page.getByRole("region", { name: "Source Fig1" });
