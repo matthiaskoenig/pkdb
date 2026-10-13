@@ -274,6 +274,8 @@ def test_source_contract(workspace, engine_on):
         ("caf_plasma_200mg", False),
         ("caf_plasma_200mg", True),
     }
+    # The project of Fig1 has linear axes.
+    assert (view["log_x"], view["log_y"]) == (False, False)
     check_contract("source-fig1", view)
 
 
