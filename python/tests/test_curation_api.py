@@ -1,5 +1,6 @@
 """The read and write routes of a study page on a real loopback server over a real engine."""
 
+import errno
 import json
 import os
 import re
@@ -1619,6 +1620,69 @@ def test_open_tables_at_a_table_without_a_sheet_says_so(opened):
     assert status == 200 and result["opened"]
     assert result["notice"] == "The workbook has no sheet outputs_Tab9."
     assert workbook_path(folder).read_bytes() == before
+
+
+def test_open_tables_at_a_hidden_sheet_says_to_show_it(opened):
+    server, engine, folder, headers, paths = opened
+    book = openpyxl.load_workbook(workbook_path(folder))
+    book["timecourses_Fig1"].sheet_state = "hidden"
+    book.save(workbook_path(folder))
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "Sheet timecourses_Fig1 is hidden in the workbook. Show it, then go to cell O6."
+    )
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv")
+    assert (
+        result["notice"] == "Sheet timecourses_Fig1 is hidden in the workbook. Show it."
+    )
+
+
+@pytest.mark.parametrize(
+    ("error", "reason"),
+    [
+        (
+            lambda path: OSError(errno.ENOSPC, os.strerror(errno.ENOSPC), str(path)),
+            os.strerror(errno.ENOSPC),
+        ),
+        (lambda path: OSError(f"Could not write {path}"), "OSError"),
+    ],
+)
+def test_open_tables_names_a_failed_write_without_its_path(
+    opened, monkeypatch, error, reason
+):
+    server, engine, folder, headers, paths = opened
+
+    def failing(path, data):
+        raise error(path)
+
+    monkeypatch.setattr("pkdb.studyformat.workbook.view.atomic_bytes", failing)
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        f"Could not select sheet timecourses_Fig1: {reason}. "
+        "Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert str(folder) not in result["notice"]
+
+
+def test_open_tables_at_a_cell_while_a_job_of_the_study_runs(opened):
+    server, engine, folder, headers, paths = opened
+    before = workbook_path(folder).read_bytes()
+    engine.active = "caffeine/Example"
+
+    status, result = _open(server, headers, file="timecourses_Fig1.tsv", cell="O6")
+
+    assert status == 200 and result["opened"]
+    assert result["notice"] == (
+        "A job of the study is running. Go to sheet timecourses_Fig1, cell O6."
+    )
+    assert workbook_path(folder).read_bytes() == before
+    assert paths == [workbook_path(folder)] * 2
 
 
 @pytest.mark.parametrize(

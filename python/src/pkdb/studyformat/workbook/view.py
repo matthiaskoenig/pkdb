@@ -72,6 +72,10 @@ class NoSheet(Exception):
     """The workbook has no visible sheet of that name."""
 
 
+class HiddenSheet(NoSheet):
+    """The workbook has a sheet of that name, but it is hidden."""
+
+
 class WorkbookOpen(Exception):
     """A spreadsheet program has the workbook open, so it is not replaced."""
 
@@ -392,9 +396,9 @@ def with_view(data: bytes, sheet: str, cell: str | None = None) -> bytes | None:
     """The workbook `data` opening at `sheet`, with `cell` selected when given.
 
     None when it opens there already. NoSheet when the workbook has no visible sheet of the
-    name, ViewError when its view cannot be found, ValueError for a cell that is no workbook
-    address. The entries keep their order, names, times and compression; only the parts
-    whose view changes differ in their content.
+    name, HiddenSheet when that sheet is hidden, ViewError when its view cannot be found,
+    ValueError for a cell that is no workbook address. The entries keep their order, names,
+    times and compression; only the parts whose view changes differ in their content.
     """
     if cell is not None:
         parse_cell(cell)
@@ -410,8 +414,10 @@ def with_view(data: bytes, sheet: str, cell: str | None = None) -> bytes | None:
                 (number for number, entry in enumerate(sheets) if entry.name == sheet),
                 None,
             )
-            if index is None or not sheets[index].visible:
+            if index is None:
                 raise NoSheet(sheet)
+            if not sheets[index].visible:
+                raise HiddenSheet(sheet)
             values: dict[str, str | None] = {"activeTab": str(index)}
             # The tab bar starts at the active sheet at the latest.
             if _number(view, "firstSheet") > index:

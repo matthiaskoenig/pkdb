@@ -24,7 +24,7 @@ from pydantic import ValidationError
 from pkdb.curation.actions import action_of
 from pkdb.curation.launch import open_path
 from pkdb.curation.metadata import people, reference_match, reference_summary
-from pkdb.curation.state import EngineState
+from pkdb.curation.state import EngineState, JobRunning
 from pkdb.curation.tree import SourceTree
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
@@ -80,6 +80,7 @@ from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
 from pkdb.studyformat.workbook.base import open_lock, workbook_path
 from pkdb.studyformat.workbook.view import (
+    HiddenSheet,
     NoSheet,
     ViewError,
     WorkbookOpen,
@@ -993,19 +994,31 @@ class StudiesMixin(EngineState):
         """Make the workbook open at `sheet` with `cell` selected; a notice when it cannot.
 
         A workbook that a spreadsheet program has open cannot be switched from outside: it
-        opens as it is, and the notice names the sheet and the cell to go to. The rewrite
+        opens as it is, and the notice names the sheet and the cell to go to. So does a
+        workbook of a study with a running job, which a rewrite would stop. The rewrite
         changes no cell, so the watcher takes it as seen and starts no job for it.
         """
         if open_lock(workbook) is not None:
             return f"The workbook is already open. {_go_to(sheet, cell)}"
         try:
-            self._unwatched_write(folder, lambda: show_place(workbook, sheet, cell))
+            self._unwatched_write(
+                folder, workbook.name, lambda: show_place(workbook, sheet, cell)
+            )
         except WorkbookOpen:
             return f"The workbook is already open. {_go_to(sheet, cell)}"
+        except JobRunning:
+            return f"A job of the study is running. {_go_to(sheet, cell)}"
+        except HiddenSheet:
+            then = f", then go to cell {cell}." if cell else "."
+            return f"Sheet {sheet} is hidden in the workbook. Show it{then}"
         except NoSheet:
             return f"The workbook has no sheet {sheet}."
-        except (ViewError, OSError) as error:
+        except ViewError as error:
             return f"Could not select sheet {sheet}: {error}. {_go_to(sheet, cell)}"
+        except OSError as error:
+            # Its text names the absolute path of the file.
+            reason = error.strerror or type(error).__name__
+            return f"Could not select sheet {sheet}: {reason}. {_go_to(sheet, cell)}"
         return None
 
     def table_preview(self, identity: str, payload: dict) -> dict:

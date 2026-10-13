@@ -19,7 +19,7 @@ from uuid import uuid4
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
-from pkdb.curation.state import EngineState, state_row
+from pkdb.curation.state import EngineState, JobRunning, state_row
 from pkdb.curation.studies import study_summary
 from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
@@ -56,11 +56,16 @@ def folder_kind(path):
     return "folder"
 
 
-def _digest(folder: Path) -> str | None:
-    """The fingerprint of the source files of a folder as a scan computes it; None when
-    they cannot be read."""
+def _study_id(folder: Path) -> str:
+    """The study that a folder holds, as rows, jobs and the queue name it."""
+    return f"{folder.parent.name}/{folder.name}"
+
+
+def _hashes(folder: Path) -> dict[str, str] | None:
+    """The hashes of the source files of a folder as a scan reads them; None when they
+    cannot be read."""
     try:
-        return fingerprint(source_hashes(folder))
+        return source_hashes(folder)
     except OSError, StudyValidationError:
         return None
 
@@ -155,7 +160,7 @@ class WorkspaceMixin(EngineState):
         }
 
     def _row(self, folder, root):
-        identifier = f"{folder.parent.name}/{folder.name}"
+        identifier = _study_id(folder)
         path = folder.relative_to(root).as_posix()
         uploads = [
             job["upload"]
@@ -411,25 +416,41 @@ class WorkspaceMixin(EngineState):
             status = "in_sync"
         return {"status": status, "changes": changes, "conflicts": conflicts}
 
-    def _unwatched_write[T](self, folder: Path, write: Callable[[], T]) -> T:
-        """`write()` under the folder lock, with what it changes taken as seen by the watcher.
+    def _unwatched_write[T](self, folder: Path, file: str, write: Callable[[], T]) -> T:
+        """`write()` of `file` under the folder lock, taken as seen by the watcher.
 
         For a write that changes no content that a job reads, such as the view of the
-        workbook: the row of the folder takes the fingerprint after the write when it had
-        the one before it, so the next scan finds nothing to validate or upload. A row with
-        changes that no scan has seen yet keeps them. Scans hold the scan lock and never a
-        folder lock, so it is taken first: no scan sees the write before the row has it.
+        workbook; `file` is its path in the folder. When only `file` changed, the row of
+        the folder takes the fingerprint after the write if it had the one before it, so
+        the next scan finds nothing to validate or upload. A row with changes that no scan
+        has seen yet keeps them, and so does a row whose other files changed meanwhile, as
+        an editor or a checkout saves them. JobRunning, without a write, while a job of
+        the study runs. Scans hold the scan lock and never a folder lock, so it is taken
+        first: no scan sees the write before the row has it.
         """
         with self.scan_lock:
             with folder_lock(folder):
-                before = _digest(folder)
+                # Read without the engine lock, which is never awaited under a folder lock.
+                # A job that starts after this read syncs after the write, as its sync
+                # takes the folder lock, and so it starts from the written source.
+                if self.active == _study_id(folder):
+                    raise JobRunning(self.active)
+                before = _hashes(folder)
                 result = write()
-                after = _digest(folder)
-            if before is not None and after is not None and after != before:
+                after = _hashes(folder)
+            if before is None or after is None or after == before:
+                return result
+            changed = {
+                name
+                for name in before.keys() | after.keys()
+                if before.get(name) != after.get(name)
+            }
+            if changed <= {file}:
+                old, new = fingerprint(before), fingerprint(after)
                 with self.lock:
                     for row in self.studies.values():
-                        if row["_folder"] == folder and row["_fingerprint"] == before:
-                            row["_fingerprint"] = after
+                        if row["_folder"] == folder and row["_fingerprint"] == old:
+                            row["_fingerprint"] = new
         return result
 
     def _watch(self):

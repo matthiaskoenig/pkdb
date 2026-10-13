@@ -6,13 +6,14 @@ import openpyxl
 import pytest
 
 from pkdb.curation import engine as module
-from pkdb.curation import jobs, studies
+from pkdb.curation import jobs, state, studies
 from pkdb.curation import workspace as workspace_module
 from pkdb.studyformat import pipeline as pipeline_module
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.sync import SyncResult, sync_study
 from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.view import show_place
 
 
 @pytest.fixture
@@ -861,3 +862,138 @@ def test_a_symlink_in_the_study_waits_without_requeueing(workspace):
     settle(engine)
     assert run_next(engine)["status"] == "succeeded"
     assert "message" not in engine.studies["caffeine/Example"]
+
+
+@pytest.fixture
+def seen(workspace, sf_vocabulary):
+    """The engine and a study in step with its workbook, whose files the watcher has seen."""
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    engine.scan()
+    study = engine.studies["caffeine/Example"]
+    study["_pending"], study["stale"] = False, False
+    return engine, folder, study
+
+
+def view_write(engine, folder, *, also=None):
+    """Write the view of the workbook as Open tables does; `also` runs during the write."""
+
+    def write():
+        show_place(workbook_path(folder), "timecourses_Fig1", "O6")
+        if also is not None:
+            also()
+
+    engine._unwatched_write(folder, workbook_path(folder).name, write)
+
+
+def appended(path):
+    """Save `path` with a line more, as an editor or a checkout changes it."""
+    return lambda: path.write_bytes(path.read_bytes() + b"\n")
+
+
+def test_a_view_write_is_no_change_for_the_watcher(seen):
+    engine, folder, study = seen
+
+    view_write(engine, folder)
+    engine.scan()
+
+    assert study["_pending"] is False and study["stale"] is False
+
+
+def test_an_edit_before_a_view_write_stays_a_change(seen):
+    engine, folder, study = seen
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+
+    # No scan saw the edit before the view write.
+    view_write(engine, folder)
+    engine.scan()
+
+    assert study["_pending"] is True
+
+
+@pytest.mark.parametrize("name", ["timecourses_Fig1.tsv", "study.json"])
+def test_an_edit_during_a_view_write_stays_a_change(seen, name):
+    """An editor or a checkout saves meanwhile: only a change of the workbook is taken."""
+    engine, folder, study = seen
+
+    view_write(engine, folder, also=appended(folder / name))
+    engine.scan()
+
+    assert study["_pending"] is True
+
+
+def test_a_file_added_during_a_view_write_is_a_change(seen):
+    engine, folder, study = seen
+
+    view_write(engine, folder, also=lambda: (folder / "notes.txt").write_text("new"))
+    engine.scan()
+
+    assert study["_pending"] is True
+
+
+def test_a_cell_edit_after_a_view_write_is_a_change(seen):
+    engine, folder, study = seen
+    view_write(engine, folder)
+    engine.scan()
+    assert study["_pending"] is False
+
+    set_workbook_mean(folder, "timecourses_Fig1", 7)
+    engine.scan()
+
+    assert study["_pending"] is True
+
+
+def test_no_view_write_while_a_job_of_the_study_runs(seen):
+    """A running job compares the source with the one it started on; a write stops it."""
+    engine, folder, study = seen
+    before = workbook_path(folder).read_bytes()
+    engine.active = "caffeine/Example"
+
+    with pytest.raises(state.JobRunning):
+        view_write(engine, folder)
+    assert workbook_path(folder).read_bytes() == before
+
+
+def test_a_view_write_while_a_job_of_another_study_runs(seen):
+    engine, folder, study = seen
+    engine.active = "caffeine/Other"
+
+    view_write(engine, folder)
+
+    assert openpyxl.load_workbook(workbook_path(folder)).active.title == (
+        "timecourses_Fig1"
+    )
+
+
+def test_opening_the_tables_at_a_place_while_a_job_runs_keeps_the_job(
+    seen, monkeypatch
+):
+    engine, folder, study = seen
+    engine.user = "curator"
+    monkeypatch.setattr(studies, "open_path", lambda path, **kwargs: None)
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    answers = []
+    real_prepare = jobs.prepare
+
+    def preparing(*args, **kwargs):
+        # The curator opens the tables at a cell while the job validates.
+        place = {"action": "open", "file": "timecourses_Fig1.tsv", "cell": "O6"}
+        answers.append(engine.tables_action("caffeine/Example", place))
+        return real_prepare(*args, **kwargs)
+
+    monkeypatch.setattr(jobs, "prepare", preparing)
+    settle(engine)
+
+    job = run_next(engine)
+
+    assert job["status"] == "succeeded", job["message"]
+    [answer] = answers
+    assert answer["opened"]
+    assert answer["notice"] == (
+        "A job of the study is running. Go to sheet timecourses_Fig1, cell O6."
+    )
+    # The workbook opens as it is.
+    assert openpyxl.load_workbook(workbook_path(folder)).active.title == "subjects"
+    assert study["_pending"] is False

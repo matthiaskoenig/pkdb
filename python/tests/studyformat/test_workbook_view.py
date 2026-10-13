@@ -13,6 +13,7 @@ from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.workbook import view
 from pkdb.studyformat.workbook.base import workbook_path
 from pkdb.studyformat.workbook.view import (
+    HiddenSheet,
     NoSheet,
     ViewError,
     WorkbookOpen,
@@ -202,6 +203,22 @@ def test_a_sheet_that_the_workbook_lacks_or_hides_is_no_place(workbook, sheet):
     with pytest.raises(NoSheet):
         show_place(workbook, sheet, "A1")
     assert workbook.read_bytes() == before
+
+
+def test_a_hidden_sheet_of_a_table_is_no_place_of_its_own_kind():
+    """The curator hid the sheet: it is there, but the workbook cannot open at it."""
+    parts = changed(
+        "xl/workbook.xml",
+        b'<x:sheet name="outputs_Fig6" sheetId="2" r:id="rId2"/>',
+        b'<x:sheet name="outputs_Fig6" sheetId="2" state="hidden" r:id="rId2"/>',
+    )
+
+    with pytest.raises(HiddenSheet) as error:
+        with_view(package(parts), "outputs_Fig6", "Y97")
+    assert isinstance(error.value, NoSheet)
+    with pytest.raises(NoSheet) as error:
+        with_view(package(parts), "outputs_Fig7", "Y97")
+    assert not isinstance(error.value, HiddenSheet)
 
 
 def test_an_open_workbook_is_left_as_it_is(workbook):
