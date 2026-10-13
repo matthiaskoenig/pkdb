@@ -8,6 +8,7 @@ import shlex
 import socket
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 from http.client import HTTPConnection, IncompleteRead
@@ -366,15 +367,42 @@ def test_a_thread_that_cannot_start_closes_the_stderr_file_of_the_command(
     process = Mock(wait=Mock(side_effect=[timeout, -9]))
     runner = Mock(return_value=process)
     monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
-    monkeypatch.setattr(
-        launch.threading.Thread, "start", Mock(side_effect=RuntimeError("no threads"))
-    )
+    thread = Mock()
+    thread.return_value.start.side_effect = RuntimeError("no threads")
+    monkeypatch.setattr(launch, "threading", SimpleNamespace(Thread=thread))
     with pytest.raises(RuntimeError):
         open_path(file)
     assert runner.call_args.kwargs["stderr"].closed
     # Nothing waits for the command any more: it is stopped and reaped.
     process.kill.assert_called_once_with()
     assert process.wait.call_count == 2
+
+
+def test_a_missing_temporary_folder_is_not_a_missing_open_command(
+    tmp_path, monkeypatch
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", "pkdb-no-such-opener")
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path / "gone"))
+    with pytest.raises(ActionFailed) as failed:
+        open_path(file)
+    assert failed.value.code == "open_failed"
+    assert isinstance(failed.value.__cause__, FileNotFoundError)
+
+
+def test_a_command_on_windows_gets_a_process_group_of_its_own(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", "opener")
+    monkeypatch.setattr(launch, "sys", SimpleNamespace(platform="win32"))
+    monkeypatch.setattr(
+        launch.subprocess, "CREATE_NEW_PROCESS_GROUP", 512, raising=False
+    )
+    runner = Mock(return_value=Mock(wait=Mock(return_value=0)))
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
+    open_path(file)
+    assert runner.call_args.kwargs["creationflags"] == 512
 
 
 def test_curate_names_the_source_checkout_without_built_assets(
@@ -1406,6 +1434,7 @@ def test_an_opener_whose_program_keeps_its_streams_returns_at_once(
         open_path(file)
     finally:
         elapsed = time.monotonic() - started
+        wait_for_open_commands()
         stop_program(pid_file)
     # Far below the 30 seconds of the program, with room for a loaded machine.
     assert elapsed < 15

@@ -83,12 +83,25 @@ def _start(
     xdg-open, inherits its streams and keeps them open until it quits, so reading a pipe
     to its end would wait for the program (#933). stdin and stdout are the null device,
     stderr is a temporary file. The command runs in a session of its own, so that the
-    program outlives a Ctrl+C in the terminal of pkdb; Windows ignores start_new_session.
+    program outlives a Ctrl+C in the terminal of pkdb; Windows ignores start_new_session
+    and gets a new process group instead. A program that the command starts, such as
+    LibreOffice, keeps writing its stderr into the deleted temporary file while it runs.
 
     CalledProcessError, with the end of stderr, says that the command failed in time. A
     command that still runs counts as started: a daemon thread waits for it (`_reap`).
     """
-    errors = tempfile.TemporaryFile()
+    try:
+        errors = tempfile.TemporaryFile()
+    except OSError as error:
+        # Not the command: a missing temporary folder is no missing open command.
+        raise _open_failed(failed, error) from error
+    # Windows ignores start_new_session; a new process group keeps the Ctrl+C of the
+    # terminal of pkdb away from a console command.
+    group = (
+        {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
+        if sys.platform == "win32"
+        else {}
+    )
     try:
         process = subprocess.Popen(
             arguments,
@@ -97,6 +110,7 @@ def _start(
             stderr=errors,
             close_fds=True,
             start_new_session=True,
+            **group,
         )
     except BaseException:
         errors.close()

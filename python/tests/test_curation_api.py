@@ -1927,6 +1927,7 @@ def test_open_tables_answers_while_the_program_that_it_started_runs(
             headers,
         )
     finally:
+        wait_for_open_commands()
         stop_program(pid_file)
     assert status == 200
     assert json.loads(data)["opened"] is True
