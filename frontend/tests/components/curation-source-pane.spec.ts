@@ -1,8 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
+import { defineComponent, h, type PropType } from "vue";
 import type { Problem, SourceView } from "../../src/curation-app/api/types";
 import SourcePane from "../../src/curation-app/components/SourcePane.vue";
+import type { AxisScales } from "../../src/curation-app/overlay";
+import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import { serveApi } from "./curation-dom";
@@ -224,5 +227,151 @@ describe("scrolling", () => {
     const wrapper = mountPane();
     expect(wrapper.get(".pane-body").attributes("tabindex")).toBe("0");
     expect(wrapper.find(".pane-body > .pane-content").exists()).toBe(true);
+  });
+});
+
+describe("scales of the plot", () => {
+  /** The plot is drawn by Plotly; the pane passes it the view, the mode and the scales. */
+  const OverlayStub = defineComponent({
+    name: "SourceOverlay",
+    props: {
+      view: { type: Object as PropType<SourceView>, required: true },
+      mode: { type: String, default: undefined },
+      selected: { type: Object, default: null },
+      scales: { type: Object as PropType<AxisScales>, default: undefined },
+    },
+    setup(props) {
+      return () =>
+        h("div", {
+          class: "overlay-stub",
+          "data-mode": props.mode,
+          "data-scales": props.scales ? `${props.scales.x} ${props.scales.y}` : "",
+        });
+    },
+  });
+
+  const point = (line: number, x: number, y: number) => ({
+    series: "drug_plasma",
+    kind: "timecourses" as const,
+    file: "timecourses_Fig2.tsv",
+    line,
+    x,
+    y,
+    error_bar: null,
+    x_text: String(x),
+    y_text: String(y),
+  });
+
+  /** Fig2 beside its image, with a predose point at (0, 0) and a point at x 0. */
+  const plotView: SourceView = {
+    ...view,
+    source: "Fig2",
+    image: "Example_Fig2.png",
+    image_url: `${EXAMPLE}/files/Example_Fig2.png`,
+    raw_grid: null,
+    points: [point(1, 0, 0), point(2, 0, 3), point(3, 1, 5), point(4, 2, 2.5)],
+    series: [{ name: "drug_plasma", color: "#1a2b3c", dark_color: "#4d5e6f", x_label: "time (h)", y_label: "c (mg/l)" }],
+  };
+  const figure = sourceSummary({ source: "Fig2", kind: "figure", image: "Example_Fig2.png" });
+
+  /** The pane of `shown` with the plot scales `saved` of the local server, which answers every save. */
+  async function mountPlot(shown: SourceView = plotView, saved: Record<string, AxisScales> = {}) {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    const requests = serveApi({
+      "GET /local/state": snapshot({ plot_scales: saved }),
+      "POST /local/settings": snapshot({ plot_scales: saved }),
+      [`GET ${EXAMPLE}`]: studyDetail(),
+    });
+    await useOverviewStore().refresh();
+    const study = useStudyStore();
+    await study.open("caffeine", "Example");
+    const wrapper = mount(SourcePane, {
+      props: { summary: figure, view: shown, loading: false, error: null, selected: null },
+      global: { plugins: [pinia], stubs: { SourceOverlay: OverlayStub } },
+    });
+    await flushPromises();
+    return { wrapper, study, requests };
+  }
+
+  type Wrapper = Awaited<ReturnType<typeof mountPlot>>["wrapper"];
+
+  const group = (wrapper: Wrapper, axis: "x" | "y") =>
+    wrapper.get(`[role="group"][aria-label="Scale of the ${axis} axis"]`);
+  const pressed = (wrapper: Wrapper, axis: "x" | "y") =>
+    group(wrapper, axis)
+      .findAll("button")
+      .filter((button) => button.attributes("aria-pressed") === "true")
+      .map((button) => button.text());
+  const note = (wrapper: Wrapper) => wrapper.get(".plot-scales-note").text();
+
+  it("shows lin and log for x and y above the plot, linear without a digitization", async () => {
+    const { wrapper, study } = await mountPlot();
+    expect(group(wrapper, "x").findAll("button").map((button) => button.text())).toEqual(["lin", "log"]);
+    expect([pressed(wrapper, "x"), pressed(wrapper, "y")]).toEqual([["lin"], ["lin"]]);
+    expect(wrapper.get(".overlay-stub").attributes("data-scales")).toBe("linear linear");
+    // The switches come before the plot.
+    const html = wrapper.html();
+    expect(html.indexOf("Scale of the x axis")).toBeLessThan(html.indexOf("overlay-stub"));
+    expect(note(wrapper)).toBe("");
+    expect(wrapper.get(".plot-scales-note").attributes("aria-live")).toBe("polite");
+    study.close();
+  });
+
+  it("takes the scales of the digitization and says how many points the log axis leaves out", async () => {
+    const { wrapper, study } = await mountPlot({ ...plotView, log_y: true });
+    expect(pressed(wrapper, "y")).toEqual(["log"]);
+    expect(wrapper.get(".overlay-stub").attributes("data-scales")).toBe("linear log");
+    expect(note(wrapper)).toBe("1 point at 0 or below is not shown on the log axis");
+    study.close();
+  });
+
+  it("saves the choice of the curator for the figure of the study, which wins over the digitization", async () => {
+    const { wrapper, study, requests } = await mountPlot();
+    await group(wrapper, "x").findAll("button")[1]!.trigger("click");
+    expect(pressed(wrapper, "x")).toEqual(["log"]);
+    expect(note(wrapper)).toBe("2 points at 0 or below are not shown on the log axis");
+    await group(wrapper, "y").findAll("button")[1]!.trigger("click");
+    expect(wrapper.get(".overlay-stub").attributes("data-scales")).toBe("log log");
+    expect(note(wrapper)).toBe("2 points at 0 or below are not shown on the log axes");
+    await flushPromises();
+    expect(
+      requests.filter((request) => request.method === "POST" && request.path === "/local/settings").map((request) => request.body),
+    ).toEqual([
+      { plot_scale: { figure: "caffeine/Example/Fig2", x: "log", y: "linear" } },
+      { plot_scale: { figure: "caffeine/Example/Fig2", x: "log", y: "log" } },
+    ]);
+    study.close();
+    // The next page reads the scales that the local server kept.
+    const again = await mountPlot(plotView, { "caffeine/Example/Fig2": { x: "log", y: "log" } });
+    expect(again.wrapper.get(".overlay-stub").attributes("data-scales")).toBe("log log");
+    again.study.close();
+  });
+
+  it("follows the figure when the pane shows another source", async () => {
+    const { wrapper, study } = await mountPlot();
+    await group(wrapper, "y").findAll("button")[1]!.trigger("click");
+    await wrapper.setProps({ summary: sourceSummary({ source: "Fig3", kind: "figure" }), view: { ...plotView, source: "Fig3" } });
+    expect(wrapper.get(".overlay-stub").attributes("data-scales")).toBe("linear linear");
+    expect(note(wrapper)).toBe("");
+    study.close();
+  });
+
+  it("shows the switches above the plot of the series without a dataset, and not on the overlay or a table", async () => {
+    const calibrated: SourceView = {
+      ...plotView,
+      digitization: "Example_Fig2.wpd.json",
+      layout: "overlay",
+      image_size: [640, 220],
+      unmatched: ["drug_plasma"],
+    };
+    const { wrapper, study } = await mountPlot(calibrated);
+    expect(wrapper.findAll('[role="group"][aria-label^="Scale of the"]')).toHaveLength(2);
+    expect(wrapper.findAll(".overlay-stub").map((stub) => stub.attributes("data-scales"))).toEqual(["", "linear linear"]);
+    await wrapper.setProps({ view: { ...calibrated, unmatched: [] } });
+    expect(wrapper.find('[role="group"][aria-label^="Scale of the"]').exists()).toBe(false);
+    await wrapper.setProps({ summary, view });
+    expect(wrapper.find('[role="group"][aria-label^="Scale of the"]').exists()).toBe(false);
+    study.close();
   });
 });

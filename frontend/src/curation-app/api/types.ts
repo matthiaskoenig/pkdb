@@ -7,6 +7,8 @@
  * `schemas/validation.py`. Optional fields are those the server leaves out.
  */
 
+import type { AxisScales } from "../overlay";
+
 /** A JSON value. */
 export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
@@ -525,6 +527,12 @@ export interface Snapshot {
   paused: boolean;
   /** Kept by the local server: the browser forgets it, as the port and so the origin change with every start. */
   theme: ThemeChoice;
+  /**
+   * The scales that the curator chose for the plots of mapped rows, by figure
+   * `<substance>/<study>/<source>`. Kept by the local server, as the browser forgets them with
+   * every new port; a figure without an entry follows its digitization.
+   */
+  plot_scales: Record<string, AxisScales>;
   vocabulary: VocabularyState;
   github: GitHubAssignments & { user: string; repository: string };
   studies: StudyRow[];
@@ -856,6 +864,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "offline",
   "paused",
   "theme",
+  "plot_scales",
   "vocabulary",
   "github",
   "studies",
