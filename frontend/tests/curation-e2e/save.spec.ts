@@ -194,6 +194,39 @@ test("nothing moves when the first edit turns the banner amber or the notice of 
   }
 });
 
+test("the banner with nothing to say stays in its place in the page with its buttons hidden, and sticks once there are changes", async ({
+  app,
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 700 });
+  await app.open(`${STUDY}/metadata`);
+  const banner = page.locator(".unsaved-banner");
+  await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+  // Nothing to act on: the buttons keep their room, hidden, and the text stands in the middle.
+  for (const name of ["Undo", "Discard", "Save"]) {
+    const control = banner.locator("button").filter({ hasText: name });
+    await expect(control).toHaveCount(1);
+    await expect(control).toBeHidden();
+  }
+  const middle = (box: { y: number; height: number }) => box.y + box.height / 2;
+  const [outer, text] = [(await banner.boundingBox())!, (await banner.locator(".unsaved-banner-text").boundingBox())!];
+  expect(Math.abs(middle(text) - middle(outer))).toBeLessThanOrEqual(1);
+
+  // It scrolls with the page, and the page keeps no room for it at the top.
+  const sourceKey = page.getByRole("textbox", { name: "Source key" });
+  const place = () => sourceKey.evaluate((field) => field.getBoundingClientRect().top + window.scrollY);
+  const before = await place();
+  await page.evaluate((y) => window.scrollTo(0, y - 300), before);
+  await expect.poll(async () => (await banner.boundingBox())!.y).toBeLessThan(0);
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingTop)).toBe("auto");
+
+  // With a change it sticks below the app bar, with Discard and Save, and nothing in the page moves.
+  await sourceKey.fill(EDITED_KEY);
+  await expect.poll(async () => Math.round((await banner.boundingBox())!.y)).toBe(await appBarBottom(page));
+  await expect(banner.getByRole("button", { name: "Save", exact: true })).toBeVisible();
+  expect(await place()).toBe(before);
+});
+
 test("the banner keeps its height with and without unsaved changes and with a notice, in wide and narrow windows", async ({
   app,
   page,
@@ -236,9 +269,10 @@ test("a region of rows that scrolls into view stops 8 px below the banner, as th
   page,
 }) => {
   await page.setViewportSize({ width: 700, height: 700 });
-  await app.open(`${STUDY}/data?file=outputs_Tab2.tsv&source=Tab2`);
-  const banner = page.locator(".unsaved-banner");
-  await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+  await app.open(`${STUDY}/metadata`);
+  // With unsaved changes the banner sticks.
+  const banner = await editSourceKey(page);
+  await page.evaluate(() => (window.location.hash = "#/studies/caffeine/Demo2020/data?file=outputs_Tab2.tsv&source=Tab2"));
   // The raw table of Tab2 in the source pane, above the rows of the table.
   const grid = page.locator(".rows-scroll").first();
   await expect(grid.getByRole("row").nth(1)).toBeVisible();

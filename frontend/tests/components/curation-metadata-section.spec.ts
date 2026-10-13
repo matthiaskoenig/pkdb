@@ -110,6 +110,12 @@ function unsavedBanner() {
   return page().find(".unsaved-banner");
 }
 
+/** Whether the banner offers Undo: without anything to undo, the button keeps its room, hidden. */
+function undoOffered(): boolean {
+  const undo = button("Undo");
+  return !undo.element.disabled && !undo.classes().includes("unsaved-banner-off");
+}
+
 /** Metadata keeps the row of the banner without unsaved changes, in its neutral state. */
 function expectNoChanges(): void {
   expect(unsavedBanner().classes()).not.toContain("unsaved-banner--dirty");
@@ -584,19 +590,19 @@ describe("saving", () => {
       await click("Undo");
       expect(field("DOI").element.value).toBe("10.1000/xyz");
       expect(unsavedBanner().text()).toContain("Unsaved changes to study.json");
-      expect(buttons("Undo")).toHaveLength(0);
+      expect(undoOffered()).toBe(false);
 
       // The next edit ends the undo.
       await click("Discard");
       await field("PMID").setValue("1");
-      expect(buttons("Undo")).toHaveLength(0);
+      expect(undoOffered()).toBe(false);
 
       // So do a few seconds.
       await click("Discard");
-      expect(buttons("Undo")).toHaveLength(1);
+      expect(undoOffered()).toBe(true);
       vi.advanceTimersByTime(NOTICE_MS);
       await flushPromises();
-      expect(buttons("Undo")).toHaveLength(0);
+      expect(undoOffered()).toBe(false);
       expectNoChanges();
     } finally {
       vi.useRealTimers();

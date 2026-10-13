@@ -241,13 +241,21 @@ function added(table: string): void {
         {{ provenance }}
       </VChip>
     </template>
-      <p
-        class="study-title"
-        :class="{ 'study-title--missing': !summary.title }"
-        :title="summary.title || undefined"
-      >
-        {{ summary.title || "No reference title yet" }}
-      </p>
+      <!-- What the study is doing, such as Validating for a moment after every save, takes its
+           room from the title, so that the line never wraps for it. -->
+      <div class="study-title-box">
+        <p
+          class="study-title"
+          :class="{ 'study-title--missing': !summary.title }"
+          :title="summary.title || undefined"
+        >
+          {{ summary.title || "No reference title yet" }}
+        </p>
+        <template v-if="activity">
+          <span class="study-title-dot" aria-hidden="true">·</span>
+          <span class="fact-activity" :title="activity">{{ activity }}</span>
+        </template>
+      </div>
       <span v-if="pmid" class="fact-pmid">
         <span class="fact-name">PMID</span>
         <a :href="`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`" target="_blank" rel="noopener noreferrer">{{ pmid }}</a>
@@ -255,7 +263,7 @@ function added(table: string): void {
       <VChip size="x-small" variant="tonal" :color="SYNC_TONES[detail.sync.status]" class="status-chip fact-sync">
         {{ SYNC_LABELS[detail.sync.status] }}
       </VChip>
-      <span v-if="problems.length || activity" class="fact-problems">
+      <span v-if="problems.length" class="fact-problems">
         <VChip
           v-for="problem in problems"
           :key="problem.label"
@@ -266,7 +274,6 @@ function added(table: string): void {
         >
           {{ problem.label }}
         </VChip>
-        <span v-if="activity" class="fact-activity">{{ activity }}</span>
       </span>
       <div class="study-actions">
         <!-- The field keeps "Review status" as its name; its label stands beside it, as PMID does,
@@ -443,13 +450,35 @@ function added(table: string): void {
 .header-chip {
   border-color: rgba(var(--v-theme-on-surface), 0.3);
 }
-.study-title {
+/* The title and what the study is doing: the box gives way first, down to 8rem, before the line
+   wraps, and keeps its width whatever it holds. In it the title gives way to the activity, down
+   to 4rem. */
+.study-title-box {
+  display: flex;
   flex: 1 1 8rem;
+  align-items: baseline;
+  gap: 6px;
   min-width: 0;
+}
+.study-title {
+  flex: 0 1000 auto;
+  min-width: min(4rem, 100%);
   margin: 0;
   overflow: hidden;
   font-size: 12.5px;
   line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.study-title-dot {
+  flex: none;
+  font-size: 12px;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.fact-activity {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }

@@ -389,7 +389,7 @@ function added(item: ReviewItem | null): void {
   .review-body {
     grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
   }
-  /* Below the app bar, and below the banner of unsaved changes of study.json while it shows. */
+  /* Below the app bar, and below the banner of unsaved changes of study.json while it sticks. */
   .review-selected {
     position: sticky;
     top: calc(80px + var(--unsaved-banner-height, 0px));
@@ -422,8 +422,8 @@ function added(item: ReviewItem | null): void {
   scroll-margin-top: 80px;
 }
 /* The page keeps the room of the app bar and of the banner of unsaved changes while the banner
-   shows (UnsavedBanner): the item scrolls to just below the banner. */
-:global(html:has(.unsaved-banner) .review-selected) {
+   sticks (UnsavedBanner): the item scrolls to just below the banner. */
+:global(html:has(.unsaved-banner--sticky) .review-selected) {
   scroll-margin-top: 0;
 }
 .review-notice {

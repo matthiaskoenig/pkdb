@@ -612,10 +612,10 @@ const conflictPanel = computed(() => {
 }
 /* A short window scrolls the page rather than squeezing the panes. The section and the banner of
    unsaved changes above it take at least 480 px together, so that the banner, which sticks while
-   the page scrolls, covers no more of the panes than needed. */
+   the page scrolls and it has something to say, covers no more of the panes than needed. */
 .data-section--fill {
   flex: 1 1 0;
-  min-height: calc(480px - var(--unsaved-banner-height, 0px));
+  min-height: calc(480px - var(--unsaved-banner-space, 0px));
 }
 /* A wrapped line leaves room for the labels of the selects, which stand above their fields. */
 .data-toolbar {

@@ -321,7 +321,8 @@ function scrollToCell(cell: HTMLElement, nearest = false): boolean {
 
 /**
  * Where the page shows below what sticks at the top of the window: the bottom of the banner of
- * unsaved changes, which publishes where it sticks and its height (UnsavedBanner), else of the app bar.
+ * unsaved changes while it sticks, which publishes where and its height (UnsavedBanner), else of
+ * the app bar.
  */
 function stickyBottom(element: HTMLElement): number {
   const style = getComputedStyle(element);

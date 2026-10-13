@@ -78,6 +78,13 @@ watch(
 const shown = computed(
   () => draft.form !== null && (props.section === "metadata" || props.section === "data" || kept.value),
 );
+/**
+ * Whether the banner sticks below the app bar while the page scrolls: while it has something to
+ * say. Without, it stays in its place in the page and covers nothing.
+ */
+const sticky = computed(() => pending.value);
+/** Whether no button has anything to act on: they keep their room, hidden, and the text stands alone. */
+const idle = computed(() => !draft.dirty && !draft.undoable);
 const failure = computed(() => (props.section ? draft.failureIn(props.section, props.kind) : draft.failure));
 /** The changed fields by their labels, such as `Source key, Notes of the outputs`. */
 const labels = computed(() => {
@@ -127,26 +134,29 @@ function fit(): void {
 }
 
 /**
- * Sets on the root element where the banner sticks, below the app bar (`--unsaved-banner-top`),
- * and its height (`--unsaved-banner-height`); removes both for a hidden banner.
+ * Sets on the root element the room that the banner takes in the page (`--unsaved-banner-space`)
+ * and, while it sticks, where it sticks below the app bar (`--unsaved-banner-top`) and its height
+ * (`--unsaved-banner-height`), which it covers of the page scrolled under it; removes them for a
+ * hidden banner (null).
  */
-function publish(element: HTMLElement | null): void {
+function publish(element: HTMLElement | null = root.value): void {
   const style = document.documentElement.style;
-  const height = element ? element.getBoundingClientRect().height : 0;
-  if (element && height > 0) {
-    style.setProperty("--unsaved-banner-top", getComputedStyle(element).top);
-    style.setProperty("--unsaved-banner-height", `${Math.ceil(height)}px`);
-  } else {
-    style.removeProperty("--unsaved-banner-top");
-    style.removeProperty("--unsaved-banner-height");
-  }
+  const height = element ? Math.ceil(element.getBoundingClientRect().height) : 0;
+  const set = (name: string, value: string | null) =>
+    value === null ? style.removeProperty(name) : style.setProperty(name, value);
+  set("--unsaved-banner-space", element && height > 0 ? `${height}px` : null);
+  const covers = element && height > 0 && sticky.value;
+  set("--unsaved-banner-top", covers ? getComputedStyle(element).top : null);
+  set("--unsaved-banner-height", covers ? `${height}px` : null);
 }
 
-/** Notes whether the page has scrolled the banner up to where it sticks. */
+/** Notes whether the page has scrolled the sticky banner up to where it sticks. */
 function measureStuck(): void {
   const element = root.value;
   stuck.value =
-    element !== null && element.getBoundingClientRect().top <= Number.parseFloat(getComputedStyle(element).top) + 0.5;
+    element !== null &&
+    sticky.value &&
+    element.getBoundingClientRect().top <= Number.parseFloat(getComputedStyle(element).top) + 0.5;
 }
 
 watch(
@@ -154,11 +164,11 @@ watch(
   (element) => {
     observer?.disconnect();
     observer = undefined;
-    publish(element);
+    publish();
     measureStuck();
     if (!element) return;
     observer = new ResizeObserver(() => {
-      publish(element);
+      publish();
       measureStuck();
       fit();
     });
@@ -167,15 +177,26 @@ watch(
   },
   { flush: "post" },
 );
+watch(sticky, () => {
+  publish();
+  measureStuck();
+}, { flush: "post" });
 watch([() => labels.value.join("\n"), () => draft.dirty], fit, { flush: "post" });
 
 /**
- * Save, Discard and Undo become disabled or go once they acted. The banner takes the focus from
- * them, so that it does not fall to the page and a screen reader reads the new text of the banner.
+ * Save, Discard and Undo become disabled or hidden once they acted. The banner takes the focus from
+ * them when the action has ended and the banner says how, so that the focus does not fall to the
+ * page and a screen reader reads the new text of the banner; focus that moved on stays.
  */
 function act(action: () => unknown): void {
-  root.value?.focus({ preventScroll: true });
-  void action();
+  void (async () => {
+    await action();
+    await nextTick();
+    const element = root.value;
+    const active = document.activeElement;
+    if (element && (active === null || active === document.body || element.contains(active)))
+      element.focus({ preventScroll: true });
+  })();
 }
 // Where the banner goes while it has the focus, as when study.json on disk can no longer be read,
 // the heading of the section takes the focus from it.
@@ -211,7 +232,12 @@ onBeforeUnmount(() => {
     :aria-labelledby="textId"
     tabindex="-1"
     class="unsaved-banner"
-    :class="{ 'unsaved-banner--dirty': draft.dirty, 'unsaved-banner--stuck': stuck }"
+    :class="{
+      'unsaved-banner--dirty': draft.dirty,
+      'unsaved-banner--sticky': sticky,
+      'unsaved-banner--stuck': stuck,
+      'unsaved-banner--idle': idle,
+    }"
   >
     <div class="unsaved-banner-row">
       <p :id="textId" class="unsaved-banner-text" :class="{ 'unsaved-banner-text--notice': !draft.dirty && draft.notice }">
@@ -224,20 +250,40 @@ onBeforeUnmount(() => {
           <span ref="measure" class="unsaved-banner-measure" aria-hidden="true"></span>
         </span>
       </p>
+      <!-- Without anything to act on, the buttons keep their room, hidden (unsaved-banner-off),
+           which takes them from the Tab order and from screen readers too. -->
       <div class="unsaved-banner-actions">
-        <VBtn v-if="draft.undoable" variant="text" color="primary" @click="act(draft.undoDiscard)">Undo</VBtn>
-        <VBtn variant="text" :disabled="!draft.dirty || draft.saving" @click="act(draft.discard)">Discard</VBtn>
+        <VBtn
+          variant="text"
+          color="primary"
+          :disabled="!draft.undoable"
+          :class="{ 'unsaved-banner-off': !draft.undoable }"
+          @click="act(draft.undoDiscard)"
+        >
+          Undo
+        </VBtn>
+        <VBtn
+          variant="text"
+          :disabled="!draft.dirty || draft.saving"
+          :class="{ 'unsaved-banner-off': !draft.dirty }"
+          @click="act(draft.discard)"
+        >
+          Discard
+        </VBtn>
         <VBtn
           variant="flat"
           color="primary"
           :disabled="!draft.canSave"
           :loading="draft.saving"
           :aria-keyshortcuts="shortcut.keys"
+          :class="{ 'unsaved-banner-off': !draft.dirty }"
           @click="act(draft.save)"
         >
           Save
         </VBtn>
-        <kbd class="unsaved-banner-key" aria-hidden="true">{{ shortcut.label }}</kbd>
+        <kbd class="unsaved-banner-key" :class="{ 'unsaved-banner-off': !draft.dirty }" aria-hidden="true">{{
+          shortcut.label
+        }}</kbd>
       </div>
     </div>
     <VAlert
@@ -296,12 +342,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* Under the section tabs. It sticks below the app bar while the page scrolls, opaque, since the
-   form scrolls under it, and scrolls on its own when its alerts are taller than half the window.
-   Amber while study.json has unsaved changes (the theme colors caution and caution-tint), the surface
-   otherwise. */
+/* Under the section tabs. While it has something to say, it sticks below the app bar while the
+   page scrolls, opaque, since the form scrolls under it, and scrolls on its own when its alerts
+   are taller than half the window. Amber while study.json has unsaved changes (the theme colors
+   caution and caution-tint), the surface otherwise. */
 .unsaved-banner {
-  position: sticky;
   top: var(--v-layout-top, 0px);
   z-index: 2;
   display: flex;
@@ -320,6 +365,9 @@ onBeforeUnmount(() => {
 .unsaved-banner:focus {
   outline: none;
 }
+.unsaved-banner--sticky {
+  position: sticky;
+}
 .unsaved-banner--dirty {
   border-color: rgb(var(--v-theme-caution));
   background: rgb(var(--v-theme-caution-tint));
@@ -330,7 +378,7 @@ onBeforeUnmount(() => {
   border-top-right-radius: 0;
 }
 /* What scrolls into view, such as a focused field, stops 8 px below the stuck banner. */
-:global(html:has(.unsaved-banner)) {
+:global(html:has(.unsaved-banner--sticky)) {
   scroll-padding-top: calc(var(--unsaved-banner-top, 0px) + var(--unsaved-banner-height, 0px) + 8px);
 }
 /* The text in one line beside the buttons, so that the row keeps its height in every state; on a
@@ -393,6 +441,9 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
 }
+.unsaved-banner-off {
+  visibility: hidden;
+}
 .unsaved-banner-key {
   align-self: center;
   /* Its text sits on the baseline of the label of Save: the smaller font and the thicker bottom
@@ -441,7 +492,14 @@ onBeforeUnmount(() => {
     grid-template-rows: calc(var(--unsaved-banner-lines) * 18px) auto;
   }
   .unsaved-banner-actions {
+    grid-row: 2;
+    grid-column: 1;
     justify-self: end;
+  }
+  /* With no button to show, the text stands in the middle of the room of both lines. */
+  .unsaved-banner--idle .unsaved-banner-text {
+    grid-row: 1 / -1;
+    grid-column: 1;
   }
 }
 </style>

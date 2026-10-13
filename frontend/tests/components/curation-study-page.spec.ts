@@ -461,7 +461,9 @@ describe("StudyPage", () => {
     expect(header.get(".study-title").text()).toBe("No reference title yet");
     expect(header.find(".fact-pmid").exists()).toBe(false);
     expect(header.get(".fact-sync").text()).toBe("Not checked yet");
-    expect(header.get(".fact-problems").text()).toBe("Not validated yet");
+    // Beside the title, which gives way to it, so that the line never wraps for it.
+    expect(header.find(".fact-problems").exists()).toBe(false);
+    expect(header.get(".study-title-box .fact-activity").text()).toBe("Not validated yet");
   });
 
   it("sets the review status over the revision of review.json", async () => {
@@ -1296,6 +1298,52 @@ describe("the unsaved banner", () => {
     await click("Undo");
     expect(text()).toBe("Unsaved changes to study.json: Creator");
     expect(document.activeElement).toBe(region);
+  });
+
+  it("hides its buttons where they have nothing to act on, and sticks only while it has something to say", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    /** The buttons and the shortcut that show, by their text. */
+    const shown = () =>
+      page()
+        .findAll(".unsaved-banner-actions > *")
+        .filter((part) => !part.classes().includes("unsaved-banner-off"))
+        .map((part) => part.text());
+    expect(shown()).toEqual([]);
+    expect(banner().classes()).toEqual(expect.arrayContaining(["unsaved-banner--idle"]));
+    expect(banner().classes()).not.toContain("unsaved-banner--sticky");
+    // Hidden, they keep their room: they are still there, disabled.
+    expect(button("Save").element.disabled).toBe(true);
+
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(shown()).toEqual(["Discard", "Save", "Ctrl+S"]);
+    expect(banner().classes()).toContain("unsaved-banner--sticky");
+    expect(banner().classes()).not.toContain("unsaved-banner--idle");
+
+    await click("Discard");
+    expect(shown()).toEqual(["Undo"]);
+    expect(banner().classes()).toContain("unsaved-banner--sticky");
+    expect(banner().classes()).not.toContain("unsaved-banner--idle");
+  });
+
+  it("takes the focus from Save once the save has ended, when the banner says how", async () => {
+    let answer: (response: Response) => void = () => {};
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
+    });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    const save = button("Save").element;
+    save.focus();
+    await click("Save");
+    expect(posted(METADATA)).toHaveLength(1);
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(document.activeElement).not.toBe(banner().element);
+    answer(written());
+    await flushPromises();
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(banner().element);
   });
 
   it("stays in Review after a save there, with its notice and then neutral, until the curator leaves the section", async () => {

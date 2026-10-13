@@ -45,8 +45,9 @@ test("the chips of the study header keep their whole text where the header line 
           chips.filter((chip) => chip.scrollWidth > chip.clientWidth).map((chip) => chip.textContent?.trim()),
         );
       expect(cut, `chips cut at ${width} px`).toEqual([]);
-      // The title gives way first, but keeps 8rem of its text (the app sets the root font size to 87.5 %).
-      const title = (await line.locator(".study-title").boundingBox())!;
+      // The title gives way first, but keeps 8rem (the app sets the root font size to 87.5 %), with
+      // what the study is doing beside it, if anything.
+      const title = (await line.locator(".study-title-box").boundingBox())!;
       const rem = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
       expect(title.width, `width of the title at ${width} px`).toBeGreaterThanOrEqual(8 * rem - 0.5);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
@@ -97,5 +98,50 @@ test("nothing in the study header overlaps another part from 900 to 1100 px, als
     expect(covers, `the tooltip covers the Review select at ${width} px`).toBe(false);
     await page.mouse.move(0, 400);
     await expect(tooltip).toBeHidden();
+  }
+});
+
+test("what the study does for a moment after a save moves nothing on the page, at 1000, 1280 and 390 px", async ({
+  app,
+  page,
+}) => {
+  const path = join(app.server.workspace, "caffeine/Demo2020/study.json");
+  const original = readFileSync(path, "utf8");
+  try {
+    await app.open("#/studies/caffeine/Demo2020/metadata");
+    const sourceKey = page.getByRole("textbox", { name: "Source key" });
+    const banner = page.locator(".unsaved-banner");
+    for (const width of [1000, 1280, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      await layoutSettled(page, width);
+      // Every change of the header: what the study does, the height of the header and where the form starts in the page.
+      await page.evaluate(() => {
+        const header = document.querySelector(".study-header")!;
+        const form = document.querySelector(".metadata-form")!;
+        const seen: string[] = [];
+        const note = () =>
+          seen.push(
+            [
+              header.querySelector(".fact-activity")?.textContent?.trim() ?? "",
+              header.getBoundingClientRect().height,
+              form.getBoundingClientRect().top + window.scrollY,
+            ].join(" | "),
+          );
+        note();
+        Object.assign(window, { __header: seen });
+        new MutationObserver(note).observe(header, { subtree: true, childList: true, characterData: true });
+      });
+      const seen = () => page.evaluate(() => (window as unknown as { __header: string[] }).__header);
+      await sourceKey.fill(`pkdb.manual.${width}`);
+      await sourceKey.press("Control+s");
+      await expect(banner).toContainText("study.json saved.");
+      // The check after the save shows what it does, then its result.
+      await expect.poll(async () => (await seen()).some((entry) => !entry.startsWith(" |"))).toBe(true);
+      await expect(page.locator(".study-header .fact-activity")).toHaveCount(0);
+      const parts = (await seen()).map((entry) => entry.split(" | ").slice(1).join(" | "));
+      expect(new Set(parts), `the header and the form at ${width} px: ${(await seen()).join("; ")}`).toEqual(new Set([parts[0]]));
+    }
+  } finally {
+    writeFileSync(path, original);
   }
 });
