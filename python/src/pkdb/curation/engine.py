@@ -25,7 +25,7 @@ from pkdb.curation.jobs import (
     maybe_sent,
     now,
 )
-from pkdb.curation.state import THEMES, StateLock, state_row
+from pkdb.curation.state import THEMES, StateLock, StateVersion, state_row
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -223,15 +223,15 @@ class CurationEngine(
         """Add tokens, such as the session token of the local server, to the secrets."""
         self.protected.extend(value for value in values if value)
 
-    def snapshot(self):
-        with self.lock.reading():
-            recent = list(self.recent_workspaces)
+    def snapshot(self, recent: list[dict] | None = None):
+        """The state of the app. `recent` is the recent workspaces with whether each exists,
+        as a `StateVersion` has them; without it, they are checked now."""
+        if recent is None:
+            recent = self._recent()[1]
         try:
             author = {"user": self.author().user, "reason": None}
         except IdentityError as error:
             author = {"user": None, "reason": str(error)}
-        # Existence checks may touch slow mounts, so they run outside the lock.
-        recent = [{"path": path, "exists": Path(path).is_dir()} for path in recent]
         with self.lock.reading():
             return json.loads(
                 json.dumps(
@@ -280,15 +280,24 @@ class CurationEngine(
                 )
             )
 
-    def state_version(self) -> str:
-        """A version of `snapshot`, cheap enough for every poll: the epoch of the engine, the
-        revision of its state, and which recent workspaces exist, which no section of the lock
-        sees change. Read before building the state, so the state is at least as new."""
+    def _recent(self) -> tuple[int, list[dict]]:
+        """The revision of the state, and the recent workspaces with whether each exists."""
         with self.lock.reading():
             revision, recent = self.lock.revision, list(self.recent_workspaces)
         # Existence checks may touch slow mounts, so they run outside the lock.
-        exists = "".join("1" if Path(path).is_dir() else "0" for path in recent)
-        return f"{self.epoch}-{revision}-{exists}"
+        return revision, [
+            {"path": path, "exists": Path(path).is_dir()} for path in recent
+        ]
+
+    def state_version(self) -> StateVersion:
+        """A version of `snapshot`, cheap enough for every poll: the epoch of the engine, the
+        revision of its state, and which recent workspaces exist, which no section of the lock
+        sees change. Read before building the state, so the state is at least as new; the
+        state built with `snapshot(version.recent)` has the recent workspaces as the version
+        has them, also when a mount comes and goes meanwhile."""
+        revision, recent = self._recent()
+        exists = "".join("1" if item["exists"] else "0" for item in recent)
+        return StateVersion(f"{self.epoch}-{revision}-{exists}", recent)
 
     def close(self):
         self.stop.set()

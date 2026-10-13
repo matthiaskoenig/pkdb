@@ -380,12 +380,15 @@ class Handler(BaseHTTPRequestHandler):
 
         def build():
             cached = server.state_cache
-            if cached is None or cached[0] != version:
-                state = {**engine.snapshot(), "csrf_token": server.csrf_token}
-                cached = server.state_cache = (version, _dump(state))
+            if cached is None or cached[0] != version.tag:
+                state = {
+                    **engine.snapshot(version.recent),
+                    "csrf_token": server.csrf_token,
+                }
+                cached = server.state_cache = (version.tag, _dump(state))
             return cached[1]
 
-        self._versioned(version, build)
+        self._versioned(version.tag, build)
 
     def _reject(self, status, message, *, code, headers=None):
         """Refuse a request before it runs, with the error body of the local API."""

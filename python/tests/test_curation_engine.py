@@ -1722,6 +1722,24 @@ def test_the_state_lock_counts_the_outermost_sections_that_may_change_the_state(
     assert lock.revision == 4
 
 
+def test_the_state_lock_tells_whether_the_current_thread_holds_it():
+    lock = StateLock()
+    seen = []
+
+    def other():
+        seen.append(lock.held())
+
+    assert not lock.held()
+    with lock.reading():
+        with lock:
+            assert lock.held()
+        assert lock.held()
+        thread = threading.Thread(target=other)
+        thread.start()
+        thread.join()
+    assert not lock.held() and seen == [False]
+
+
 def test_an_idle_engine_keeps_its_revision(workspace):
     engine, _ = workspace
     identity = row(engine)["id"]
@@ -1776,6 +1794,39 @@ def test_every_change_of_the_state_raises_the_revision(workspace, change):
     before = engine.lock.revision
     change(engine, folder)
     assert engine.lock.revision > before
+
+
+def test_a_folder_that_stays_unreadable_keeps_the_revision(workspace, monkeypatch):
+    engine, folder = workspace
+
+    def unreadable(path):
+        raise PermissionError(f"Permission denied: {path}")
+
+    monkeypatch.setattr(workspace_module, "source_hashes", unreadable)
+    revision = engine.lock.revision
+    _edit_study(engine, folder)
+    assert row(engine)["status"] == "waiting"
+    assert engine.lock.revision > revision
+    revision = engine.lock.revision
+    for _ in range(3):
+        engine.scan()
+    assert row(engine)["status"] == "waiting"
+    assert engine.lock.revision == revision
+
+
+def test_a_suspended_upload_on_save_keeps_the_revision_of_an_idle_engine(workspace):
+    engine, _ = workspace
+    with engine.lock:
+        row(engine).update(mode="upload", _pending=True, _initial=False)
+        row(engine)["_changed_at"] -= 2
+    revision = engine.lock.revision
+    engine.schedule_changes()
+    message = "Upload on save suspended: connect an authorized account"
+    assert row(engine)["message"] == message
+    assert engine.lock.revision == revision + 1
+    for _ in range(3):
+        engine.schedule_changes()
+    assert engine.lock.revision == revision + 1
 
 
 def _connected(engine, folder, monkeypatch):

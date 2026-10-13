@@ -8,7 +8,7 @@ import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 from pkdb.cache import VocabularyCache
 from pkdb.curation.errors import ErrorLog
@@ -43,28 +43,26 @@ class StateLock:
     without building the state.
 
     So a change that no section counts stays hidden behind `304` until an unrelated change.
-    Every change of what `CurationEngine.snapshot` returns happens in a section that counts
-    it, or is followed by one on every path, also when it fails. This holds for every thread
-    (the watcher, a job, a server check, a reaper thread) and every value: one written
-    outside the lock and stored later, or one that a later step derives, such as a workbook
-    signature that the sync state records after a write. A reading section calls `changed()`
-    only when a value really changes, so that an idle engine keeps its revision. What
-    `snapshot` reads from outside the engine is a function of fields that only such sections
-    change (`author`, `connection`, `update_required`), fixed for the engine
-    (`client_version`, `log_file`), or part of `state_version` (whether each recent workspace
-    exists).
+    Every change of what `CurationEngine.snapshot` returns, by any thread, happens in a
+    section that counts it, or is followed by one on every path, also when it fails, as
+    `run_job` ends in one after the outcome it writes outside the lock. A reading section
+    calls `changed()` only when a value really changes, so that an idle engine keeps its
+    revision. What `snapshot` reads from outside the engine is a function of fields that
+    only such sections change (`author`, `connection`, `update_required`), fixed for the
+    engine (`client_version`, `log_file`), or part of `state_version` (whether each recent
+    workspace exists).
     """
 
     def __init__(self) -> None:
         self._lock = threading.RLock()
-        # Only the thread that holds the lock touches these two.
+        # Only the thread that holds the lock changes these; `held` reads the owner.
         self._depth = 0
         self._changed = False
+        self._owner: int | None = None
         self.revision = 0
 
     def __enter__(self) -> StateLock:
-        self._lock.acquire()
-        self._depth += 1
+        self._acquire()
         self._changed = True
         return self
 
@@ -73,8 +71,7 @@ class StateLock:
 
     @contextmanager
     def reading(self) -> Iterator[StateLock]:
-        self._lock.acquire()
-        self._depth += 1
+        self._acquire()
         try:
             yield self
         finally:
@@ -84,12 +81,33 @@ class StateLock:
         """Count a change of the state in a reading section; called with the lock held."""
         self._changed = True
 
+    def held(self) -> bool:
+        """Whether the current thread holds the lock."""
+        return self._owner == threading.get_ident()
+
+    def _acquire(self) -> None:
+        self._lock.acquire()
+        self._depth += 1
+        self._owner = threading.get_ident()
+
     def _release(self) -> None:
         self._depth -= 1
-        if self._depth == 0 and self._changed:
-            self._changed = False
-            self.revision += 1
+        if self._depth == 0:
+            self._owner = None
+            if self._changed:
+                self._changed = False
+                self.revision += 1
         self._lock.release()
+
+
+class StateVersion(NamedTuple):
+    """A version of the state of an engine (`CurationEngine.state_version`)."""
+
+    #: The ETag of the state: the epoch of the engine, the revision of its state, and which
+    #: recent workspaces exist.
+    tag: str
+    #: The recent workspaces with whether each exists, as `tag` has them.
+    recent: list[dict]
 
 
 class EngineState:
@@ -143,8 +161,8 @@ class EngineState:
 
         def secrets(self) -> list[str]: ...
         def _save(self) -> None: ...
-        def snapshot(self) -> dict: ...
-        def state_version(self) -> str: ...
+        def snapshot(self, recent: list[dict] | None = None) -> dict: ...
+        def state_version(self) -> StateVersion: ...
         def scan(self, initial: bool = False) -> Any: ...
         def connect(self) -> Any: ...
         def _context(self) -> str: ...
