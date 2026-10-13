@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip, VTooltip } from "vuetify/components";
 import { formatTime, MODE_LABELS, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
 import { aiTitle, studyRoute, type RowItem } from "../studyTable";
@@ -64,23 +64,17 @@ function open(event: MouseEvent): void {
              identity only when it alone is wider than its cell, as with a large font; its tooltip
              and the name of its link keep it whole. The tooltip also names the other substance
              folders that the tables of the study name; it is not eager. -->
-        <span v-if="item.row.duplicate" class="study-identity"
+        <component
+          :is="item.row.duplicate ? 'span' : RouterLink"
+          v-bind="item.row.duplicate ? {} : { to: studyRoute(item.row) }"
+          class="study-identity"
           >{{ identity
-          }}<VTooltip activator="parent" location="top" :eager="false"
+          }}<VTooltip activator="parent" location="top" :eager="false" open-delay="300"
             ><div>{{ identity }}</div>
             <div v-if="item.alsoNamed.length" class="study-substances-more">
               + {{ item.alsoNamed.join(", ") }}
             </div></VTooltip
-          ></span
-        >
-        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity"
-          >{{ identity
-          }}<VTooltip activator="parent" location="top" :eager="false"
-            ><div>{{ identity }}</div>
-            <div v-if="item.alsoNamed.length" class="study-substances-more">
-              + {{ item.alsoNamed.join(", ") }}
-            </div></VTooltip
-          ></RouterLink
+          ></component
         >
         <VChip
           v-if="item.row.duplicate"
