@@ -9,6 +9,7 @@ import shlex
 import signal
 import subprocess
 import sys
+import threading
 from pathlib import Path
 
 
@@ -53,3 +54,22 @@ def stop_program(pid_file: Path) -> None:
     except OSError:
         # The program has ended already.
         pass
+
+
+def late_opener(seconds: float, status: int, stderr: str = "") -> list[str]:
+    """An opener that runs for `seconds`, then writes `stderr` and exits with `status`."""
+    return python_program(
+        f"import sys, time; time.sleep({seconds}); "
+        f"sys.stderr.write({stderr!r}); sys.exit({status})"
+    )
+
+
+def wait_for_open_commands() -> None:
+    """Wait until every open command that counted as started has ended and was reported.
+
+    open_path waits for such a command in a thread named pkdb-open-command-<pid>.
+    """
+    for thread in threading.enumerate():
+        if thread.name.startswith("pkdb-open-command-"):
+            thread.join(10)
+            assert not thread.is_alive(), thread.name

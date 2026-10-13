@@ -1,13 +1,18 @@
 """Start the local workspace and open files using operating-system associations."""
 
+import io
 import os
 import shlex
 import subprocess
 import sys
+import tempfile
+import threading
 import webbrowser
+from collections.abc import Callable
 from pathlib import Path
+from typing import IO
 
-from pkdb.curation.errors import ActionFailed
+from pkdb.curation.errors import STDERR_TAIL, ActionFailed
 
 
 def windows_quoted(path: str) -> str:
@@ -21,17 +26,109 @@ def windows_quoted(path: str) -> str:
     return f'"{path}{"\\" * trailing}"'
 
 
-#: How long the command that opens a file may run; it should start a program and return.
-OPEN_TIMEOUT = 15
+#: How long the command that opens a file has to fail. A command that still runs then
+#: counts as started: xdg-open, for example, may run as long as the program it started.
+EARLY_FAILURE_SECONDS: float = 2
+
+#: Hears that an open command failed after it counted as started, with the ActionFailed
+#: that open_path raises for a command that fails in time.
+LateFailure = Callable[[ActionFailed], None]
 
 
-def open_path(path: Path, *, reveal=False, subject: str | None = None):
+def _stderr_of(errors: IO[bytes]) -> bytes:
+    """The end of what a command wrote to `errors`: as much as an error body keeps.
+
+    A command may write megabytes; only the last STDERR_TAIL bytes are read.
+    """
+    size = errors.seek(0, io.SEEK_END)
+    errors.seek(max(0, size - STDERR_TAIL))
+    return errors.read()
+
+
+def _reap(
+    process: subprocess.Popen[bytes],
+    arguments: list[str] | str,
+    errors: IO[bytes],
+    failed: str,
+    late_failure: LateFailure | None,
+) -> None:
+    """Wait for an open command that counted as started, so that no zombie remains.
+
+    A later exit with a non-zero status goes to `late_failure`; without it, the failure is
+    dropped, as for `pkdb tables open`, which has exited by then.
+    """
+    with errors:
+        status = process.wait()
+        if status == 0 or late_failure is None:
+            return
+        error = subprocess.CalledProcessError(
+            status, arguments, stderr=_stderr_of(errors)
+        )
+    failure = ActionFailed(f"{failed}.", code="open_failed", cause=error)
+    failure.__cause__ = error
+    late_failure(failure)
+
+
+def _start(
+    arguments: list[str] | str, failed: str, late_failure: LateFailure | None
+) -> None:
+    """Start the open command detached, and wait EARLY_FAILURE_SECONDS for it to fail.
+
+    The command gets no pipe: a program that it starts, such as LibreOffice started by
+    xdg-open, inherits its streams and keeps them open until it quits, so reading a pipe
+    to its end would wait for the program (#933). stdin and stdout are the null device,
+    stderr is a temporary file. The command runs in a session of its own, so that the
+    program outlives a Ctrl+C in the terminal of pkdb; Windows ignores start_new_session.
+
+    CalledProcessError, with the end of stderr, says that the command failed in time. A
+    command that still runs counts as started: a daemon thread waits for it (`_reap`).
+    """
+    errors = tempfile.TemporaryFile()
+    try:
+        process = subprocess.Popen(
+            arguments,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=errors,
+            close_fds=True,
+            start_new_session=True,
+        )
+    except BaseException:
+        errors.close()
+        raise
+    try:
+        status = process.wait(timeout=EARLY_FAILURE_SECONDS)
+    except subprocess.TimeoutExpired:
+        threading.Thread(
+            target=_reap,
+            args=(process, arguments, errors, failed, late_failure),
+            name=f"pkdb-open-command-{process.pid}",
+            daemon=True,
+        ).start()
+        return
+    with errors:
+        if status != 0:
+            raise subprocess.CalledProcessError(
+                status, arguments, stderr=_stderr_of(errors)
+            )
+
+
+def open_path(
+    path: Path,
+    *,
+    reveal: bool = False,
+    subject: str | None = None,
+    late_failure: LateFailure | None = None,
+) -> None:
     """Open `path`, or its folder with `reveal`, with the program of the system.
 
-    PKDB_OPEN_COMMAND replaces the program of the system. ActionFailed says what could not
-    be opened or shown in its folder, `subject`, by default the name of the file, and what
-    to do when the command is missing or does not return; its cause holds the command, its
-    exit status and its stderr.
+    PKDB_OPEN_COMMAND replaces the program of the system. The command starts detached.
+    ActionFailed says what could not be opened or shown in its folder, `subject`, by
+    default the name of the file, when the command is missing or fails within
+    EARLY_FAILURE_SECONDS; its cause holds the command, its exit status and its stderr. A
+    command that still runs then counts as started; when it fails later, `late_failure`
+    gets that ActionFailed. Windows without PKDB_OPEN_COMMAND opens the file with its
+    file association, which returns at once.
     """
     path = Path(path).resolve(strict=True)
     # A folder has no folder to be shown in: it opens.
@@ -53,27 +150,14 @@ def open_path(path: Path, *, reveal=False, subject: str | None = None):
                 arguments = f"{command} {windows_quoted(str(path))}"
             else:
                 arguments = [*shlex.split(command), str(path)]
-            subprocess.run(
-                arguments, check=True, timeout=OPEN_TIMEOUT, capture_output=True
-            )
         elif sys.platform == "win32":
             os.startfile(str(path))
+            return
         else:
-            subprocess.run(
-                [executable, str(path)],
-                check=True,
-                timeout=OPEN_TIMEOUT,
-                capture_output=True,
-            )
+            arguments = [executable, str(path)]
+        _start(arguments, failed, late_failure)
     except subprocess.CalledProcessError as error:
         raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error
-    except subprocess.TimeoutExpired as error:
-        raise ActionFailed(
-            f"{failed}: the command did not return within "
-            f"{OPEN_TIMEOUT} seconds. Use a command that starts the program and returns.",
-            code="open_timeout",
-            cause=error,
-        ) from error
     except FileNotFoundError as error:
         if not command and sys.platform == "win32":
             raise ActionFailed(f"{failed}.", code="open_failed", cause=error) from error

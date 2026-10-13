@@ -17,12 +17,20 @@ from unittest.mock import Mock
 
 import pytest
 from curation_http import authenticate, error_body, request
-from open_commands import FAILING_OPENER, command_line, holding_opener, stop_program
+from open_commands import (
+    FAILING_OPENER,
+    command_line,
+    holding_opener,
+    late_opener,
+    python_program,
+    stop_program,
+    wait_for_open_commands,
+)
 
 from pkdb.curation import launch
 from pkdb.curation import server as transport
 from pkdb.curation.engine import CurationEngine, WorkspaceError
-from pkdb.curation.errors import ActionFailed, ErrorLog, MissingField
+from pkdb.curation.errors import STDERR_TAIL, ActionFailed, ErrorLog, MissingField
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.launch import open_path, windows_quoted
 from pkdb.curation.studies import AmbiguousStudy, StudyFile, UnsafeFile
@@ -283,15 +291,32 @@ def test_only_a_study_beyond_the_upload_limits_answers_413(local_server):
         assert [issue["code"] for issue in refused["issues"]] == ["invalid_tsv"]
 
 
+def exits(status: int = 0) -> Mock:
+    """A stand-in for subprocess.Popen whose command exits at once with `status`."""
+    return Mock(return_value=Mock(wait=Mock(return_value=status)))
+
+
 def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     file = tmp_path / "study; echo secret.xlsx"
     file.touch()
-    runner = Mock()
+    runner = exits(0)
+    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
     monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
-    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
     open_path(file)
     assert runner.call_args.args[0] == ["xdg-open", str(file)]
-    assert "shell" not in runner.call_args.kwargs
+    options = runner.call_args.kwargs
+    assert "shell" not in options
+    # No pipe: the program that the command starts inherits its streams (#933).
+    assert (options["stdin"], options["stdout"]) == (
+        subprocess.DEVNULL,
+        subprocess.DEVNULL,
+    )
+    assert hasattr(options["stderr"], "fileno")
+    assert options["close_fds"] is True and options["start_new_session"] is True
+    runner.return_value.wait.assert_called_once_with(
+        timeout=launch.EARLY_FAILURE_SECONDS
+    )
     open_path(file, reveal=True)
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
 
@@ -655,12 +680,12 @@ def test_open_command_is_split_like_a_shell_command_on_posix(
 ):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
-    runner = Mock()
+    runner = exits(0)
     monkeypatch.setattr(
         "pkdb.curation.launch.os",
         SimpleNamespace(name="posix", environ={"PKDB_OPEN_COMMAND": command}),
     )
-    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
     open_path(file)
     path = str(file.resolve())
     assert runner.call_args.args[0] == [a.format(file=path) for a in expected]
@@ -679,12 +704,12 @@ def test_open_command_is_a_command_line_on_windows(
     folder.mkdir()
     file = folder / "outputs.xlsx"
     file.write_text("x")
-    runner = Mock()
+    runner = exits(0)
     monkeypatch.setattr(
         "pkdb.curation.launch.os",
         SimpleNamespace(name="nt", environ={"PKDB_OPEN_COMMAND": command}),
     )
-    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
     open_path(file)
     assert runner.call_args.args[0] == f'{command} "{file.resolve()}"'
 
@@ -1271,7 +1296,7 @@ def test_a_missing_opener_says_to_set_the_open_command(tmp_path, monkeypatch):
     monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
     monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
     runner = Mock(side_effect=FileNotFoundError(2, "No such file", "xdg-open"))
-    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", runner)
     with pytest.raises(ActionFailed) as failed:
         open_path(file)
     assert failed.value.code == "open_command_missing"
@@ -1293,7 +1318,6 @@ def test_a_missing_open_command_is_named(tmp_path, monkeypatch):
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#933: open_path waits until the program quits")
 def test_an_opener_whose_program_keeps_its_streams_returns_at_once(
     tmp_path, monkeypatch
 ):
@@ -1309,24 +1333,95 @@ def test_an_opener_whose_program_keeps_its_streams_returns_at_once(
         elapsed = time.monotonic() - started
         stop_program(pid_file)
     # At most the 2 seconds in which a command may fail, not the 30 of the program.
-    assert elapsed < 3
+    assert elapsed < launch.EARLY_FAILURE_SECONDS + 1
 
 
-def test_an_opener_that_does_not_return_is_named(tmp_path, monkeypatch):
+def started_processes(monkeypatch) -> list[subprocess.Popen]:
+    """The processes that open_path starts from now on, started by the real Popen."""
+    processes = []
+    popen = subprocess.Popen
+
+    def recording(*arguments, **options):
+        process = popen(*arguments, **options)
+        processes.append(process)
+        return process
+
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.Popen", recording)
+    return processes
+
+
+def test_an_opener_that_keeps_running_counts_as_started_and_is_waited_for(
+    tmp_path, monkeypatch
+):
     file = tmp_path / "outputs.xlsx"
     file.write_text("x")
-    monkeypatch.delenv("PKDB_OPEN_COMMAND", raising=False)
-    monkeypatch.setattr("pkdb.curation.launch.sys.platform", "linux")
-    runner = Mock(side_effect=subprocess.TimeoutExpired(["xdg-open", str(file)], 15))
-    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(2, 0)))
+    processes = started_processes(monkeypatch)
+    late = []
+    started = time.monotonic()
+    open_path(file, late_failure=late.append)
+    assert time.monotonic() - started < 1.5
+    [process] = processes
+    assert process.returncode is None
+    wait_for_open_commands()
+    # Waited for: no zombie remains, and a success is no failure.
+    assert process.returncode == 0
+    assert late == []
+
+
+def test_an_opener_that_fails_after_it_started_reports_the_failure_later(
+    tmp_path, monkeypatch
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
+    monkeypatch.setenv(
+        "PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "lost the display"))
+    )
+    late = []
+    open_path(file, subject="the tables of caffeine/Example", late_failure=late.append)
+    wait_for_open_commands()
+    [failure] = late
+    assert (failure.message, failure.code) == (
+        "Could not open the tables of caffeine/Example.",
+        "open_failed",
+    )
+    cause = failure.cause
+    assert isinstance(cause, subprocess.CalledProcessError)
+    assert (cause.returncode, cause.stderr) == (3, b"lost the display")
+
+
+def test_a_later_failure_without_a_listener_is_dropped_quietly(tmp_path, monkeypatch):
+    # pkdb tables open passes no late_failure: the waiting thread must not fail.
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    monkeypatch.setattr(launch, "EARLY_FAILURE_SECONDS", 0.2)
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(late_opener(1, 3, "gone")))
+    processes = started_processes(monkeypatch)
+    errors = []
+    monkeypatch.setattr(threading, "excepthook", errors.append)
+    open_path(file)
+    wait_for_open_commands()
+    [process] = processes
+    assert process.returncode == 3
+    assert errors == []
+
+
+def test_a_failed_opener_keeps_the_end_of_a_long_stderr(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    noisy = python_program(
+        "import sys; sys.stderr.write('x' * 1000000 + 'the end'); sys.exit(4)"
+    )
+    monkeypatch.setenv("PKDB_OPEN_COMMAND", command_line(noisy))
     with pytest.raises(ActionFailed) as failed:
         open_path(file)
-    assert failed.value.code == "open_timeout"
-    assert failed.value.message == (
-        "Could not open outputs.xlsx: the command did not return within 15 seconds. "
-        "Use a command that starts the program and returns."
-    )
-    assert launch.OPEN_TIMEOUT == 15
+    cause = failed.value.cause
+    assert isinstance(cause, subprocess.CalledProcessError)
+    assert cause.returncode == 4
+    assert len(cause.stderr) == STDERR_TAIL
+    assert cause.stderr.endswith(b"the end")
 
 
 FILE = "/local/studies/caffeine/Example/files/Example.pdf"

@@ -1901,13 +1901,6 @@ def test_a_failing_open_command_is_listed_in_the_activity_with_its_exit_status_a
     assert "exited with status 4" in engine.log.path.read_text(encoding="utf-8")
 
 
-#: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
-PDF = b"%PDF-1.7\n" + bytes(range(256)) * 400 + b"%%EOF\n"
-
-
-@pytest.mark.xfail(
-    strict=True, reason="#933: Open tables waits until the program quits"
-)
 def test_open_tables_answers_while_the_program_that_it_started_runs(
     api, monkeypatch, tmp_path
 ):
@@ -1928,6 +1921,10 @@ def test_open_tables_answers_while_the_program_that_it_started_runs(
         stop_program(pid_file)
     assert status == 200
     assert json.loads(data)["opened"] is True
+
+
+#: A PDF larger than one piece of the file route (64 kB), with an end to ask for by a range.
+PDF = b"%PDF-1.7\n" + bytes(range(256)) * 400 + b"%%EOF\n"
 
 
 def test_a_pdf_of_the_study_is_served_inline_whole_and_in_ranges(api):

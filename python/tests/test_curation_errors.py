@@ -72,13 +72,6 @@ def test_a_windows_command_line_names_its_program():
     assert detail_of(error) == "CalledProcessError: rec.exe exited with status 1"
 
 
-def test_a_command_that_did_not_return():
-    error = subprocess.TimeoutExpired(["xdg-open", "/x"], 15)
-    assert (
-        detail_of(error) == "TimeoutExpired: xdg-open did not return within 15 seconds"
-    )
-
-
 def test_other_errors_give_their_type_and_text():
     assert detail_of(ValueError("Unknown setting")) == "ValueError: Unknown setting"
     assert detail_of(RuntimeError()) == "RuntimeError"
