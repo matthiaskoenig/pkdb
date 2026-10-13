@@ -54,10 +54,12 @@ function quietAbort(event: Event & { reason?: unknown }): void {
 /**
  * The errors that the viewer of PDF.js 6.4.299 logs for a page that it still loads when its PDF
  * closes, by their label and the message of their reason: the page fails with "Transport
- * destroyed", and the viewer then draws the page view without its page.
+ * destroyed", and the viewer then draws the page view without its page. A viewer that still
+ * loads the first page of the PDF fails to initialize with "Transport destroyed" too.
  */
 const CLOSING_ERRORS = new Map([
   ["Unable to get page for page view", "Transport destroyed"],
+  ["Unable to initialize viewer", "Transport destroyed"],
   ["renderView:", "pdfPage is not loaded"],
 ]);
 
