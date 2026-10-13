@@ -51,6 +51,24 @@ function rowsPane(page: Page, file: string) {
   return page.getByRole("region", { name: `Table ${file}`, exact: true });
 }
 
+/**
+ * The height of an element once it stopped changing from one frame to the next. Open notes first
+ * take the height of their content, and a resize observer limits them to the room that the rows
+ * leave in the next frame.
+ */
+async function settledHeight(locator: Locator): Promise<number> {
+  return locator.evaluate(async (element) => {
+    const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+    let last = -1;
+    for (;;) {
+      await frame();
+      const height = element.getBoundingClientRect().height;
+      if (height === last) return height;
+      last = height;
+    }
+  });
+}
+
 test("the notes of the subjects show above subjects.tsv in the Data section", async ({ app, page }) => {
   await app.open(`${STUDY}/data?file=subjects.tsv`);
   const pane = rowsPane(page, "subjects.tsv");
@@ -238,7 +256,7 @@ test("open notes grow with their content without a loop of resize observers", as
       const panel = pane.getByRole("region", { name: new RegExp(`^Notes of the ${kind}`) });
       const description = panel.getByRole("textbox", { name: "Description 1" });
       await expect(description).toBeVisible();
-      const before = (await panel.boundingBox())!.height;
+      const before = await settledHeight(panel);
       // A longer description wraps to more lines: the notes grow with it.
       await description.press("End");
       await description.pressSequentially(
