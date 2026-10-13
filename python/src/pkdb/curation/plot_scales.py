@@ -37,7 +37,10 @@ def figure_scales(value: object) -> tuple[str, dict[str, str]]:
 
 
 def saved_plot_scales(value: object) -> dict[str, dict[str, str]]:
-    """The valid entries of saved plot scales; a damaged state.json keeps the defaults."""
+    """The valid entries of saved plot scales, the latest MAX_FIGURES of them.
+
+    A damaged state.json keeps the defaults.
+    """
     if not isinstance(value, dict):
         return {}
     result: dict[str, dict[str, str]] = {}
@@ -49,7 +52,7 @@ def saved_plot_scales(value: object) -> dict[str, dict[str, str]]:
         except ValueError:
             continue
         result[key] = kept
-    return result
+    return dict(list(result.items())[max(0, len(result) - MAX_FIGURES) :])
 
 
 def keep_plot_scales(

@@ -1,6 +1,6 @@
 import { computed, ref, toValue, type ComputedRef, type MaybeRefOrGetter } from "vue";
-import type { SourceView } from "../api/types";
-import { digitizedScales, LINEAR_SCALES, type Axis, type AxisScale, type AxisScales } from "../overlay";
+import type { Axis, AxisScale, AxisScales, SourceView } from "../api/types";
+import { digitizedScales, LINEAR_SCALES } from "../overlay";
 import { useOverviewStore } from "../stores/overview";
 
 /** The figure of the plot scales of the local server: `caffeine/Demo2020/Fig1`. */
@@ -40,13 +40,19 @@ export function usePlotScales(
     return chosen.value[name] ?? overview.snapshot?.plot_scales[name] ?? fallback;
   });
 
+  /**
+   * The last save: each save waits for the one before, so that the local server keeps the last of
+   * two quick choices. A failed save does not stop the next one.
+   */
+  let saved: Promise<unknown> = Promise.resolve();
+
   function choose(axis: Axis, scale: AxisScale): void {
     const name = figure.value;
     if (name === null) return;
     const next = { ...scales.value, [axis]: scale };
     chosen.value = { ...chosen.value, [name]: next };
     // The scales apply also when the local server cannot keep them, until the page is reloaded.
-    overview.configure({ plot_scale: { figure: name, ...next } }).catch(() => undefined);
+    saved = saved.then(() => overview.configure({ plot_scale: { figure: name, ...next } })).catch(() => undefined);
   }
 
   return { scales, choose };

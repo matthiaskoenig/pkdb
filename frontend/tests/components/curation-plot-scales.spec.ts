@@ -96,6 +96,56 @@ describe("usePlotScales", () => {
     expect(scales.value).toEqual({ x: "linear", y: "linear" });
   });
 
+  it("posts two quick choices in order: the second after the answer to the first", async () => {
+    const events: string[] = [];
+    let answerFirst = () => {};
+    let kept: Record<string, AxisScales> = {};
+    serveApi({
+      "GET /local/state": () => json(snapshot({ plot_scales: kept })),
+      // The local server keeps a choice when it answers; it holds back the answer to the first.
+      "POST /local/settings": (body: Record<string, unknown> | null) => {
+        const { figure, x, y } = body?.plot_scale as { figure: string } & AxisScales;
+        events.push(`sent ${x} ${y}`);
+        const answer = () => {
+          kept = { [figure]: { x, y } };
+          return json(snapshot({ plot_scales: kept }));
+        };
+        if (events.length > 1) return answer();
+        return new Promise<Response>((resolve) => {
+          answerFirst = () => {
+            events.push("answered");
+            resolve(answer());
+          };
+        });
+      },
+    });
+    await useOverviewStore().refresh();
+    const { scales, choose } = usePlotScales(STUDY, view("Fig1"));
+    choose("x", "log");
+    choose("y", "log");
+    await flushPromises();
+    // Both apply at once; the second save waits for the first.
+    expect(scales.value).toEqual({ x: "log", y: "log" });
+    expect(events).toEqual(["sent log linear"]);
+    answerFirst();
+    await flushPromises();
+    expect(events).toEqual(["sent log linear", "answered", "sent log log"]);
+    // The last answer of the local server has the last choice.
+    expect(useOverviewStore().snapshot?.plot_scales).toEqual({ [FIG1]: { x: "log", y: "log" } });
+  });
+
+  it("posts the next choice after a save that failed", async () => {
+    const requests = await serve({}, 500);
+    const { choose } = usePlotScales(STUDY, view("Fig1"));
+    choose("x", "log");
+    choose("y", "log");
+    await flushPromises();
+    expect(posted(requests)).toEqual([
+      { plot_scale: { figure: FIG1, x: "log", y: "linear" } },
+      { plot_scale: { figure: FIG1, x: "log", y: "log" } },
+    ]);
+  });
+
   it("keeps the choice for the page when the local server cannot keep it", async () => {
     await serve({}, 500);
     const { scales, choose } = usePlotScales(STUDY, view("Fig1"));

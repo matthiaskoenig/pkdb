@@ -8,7 +8,16 @@
  * in table units, the values as printed, and the series in one order with their colors and axis
  * labels. This module only lays them out for Plotly.
  */
-import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "./api/types";
+import type {
+  Axis,
+  AxisScale,
+  AxisScales,
+  OverlayPoint,
+  SourcePoint,
+  SourceSeries,
+  SourceView,
+  ValidationIssue,
+} from "./api/types";
 import { SEVERITY_LABELS, tipProblems } from "./problems";
 import { CAUTION_COLORS } from "./themes";
 import { plotColors, type PlotColors } from "../features/plots/theme";
@@ -103,6 +112,10 @@ export interface OverlayAxis {
   /** Full values on a log axis (0.2, 0.5, 1), not bare mantissas. */
   tickformat?: string;
   exponentformat?: "none";
+  /** The ticks of a log axis by its span (`logTicks`): 1, 2 and 5 of each decade, or every n-th power of 10. */
+  dtick?: "D2" | number;
+  /** Fewer linear ticks of a log axis below a decade (`logTicks`). */
+  nticks?: number;
   automargin?: true;
   gridcolor?: string;
   linecolor?: string;
@@ -166,17 +179,7 @@ function plottedPoints(view: SourceView) {
   return view.points.filter((point) => series.has(point.series));
 }
 
-/** An axis of the data plot. */
-export type Axis = "x" | "y";
-
-/** The scale of an axis of the data plot, as Plotly names it. */
-export type AxisScale = "linear" | "log";
-
-/** The scales of the axes of the data plot. */
-export interface AxisScales {
-  x: AxisScale;
-  y: AxisScale;
-}
+export type { Axis, AxisScale, AxisScales };
 
 export const AXES: readonly Axis[] = ["x", "y"];
 
@@ -206,6 +209,34 @@ export function pointsOffScale(view: SourceView, scales: AxisScales): number {
 /** The points that the data plot draws on `scales`. */
 function drawnPoints(view: SourceView, scales: AxisScales) {
   return plottedPoints(view).filter((point) => onScales(point, scales));
+}
+
+/** The span in decades of the values above 0, which a log axis draws; 0 without two such values. */
+function decades(values: readonly number[]): number {
+  let [low, high] = [Infinity, 0];
+  for (const value of values) {
+    if (value <= 0) continue;
+    low = Math.min(low, value);
+    high = Math.max(high, value);
+  }
+  return high > low ? Math.log10(high) - Math.log10(low) : 0;
+}
+
+/**
+ * The ticks of a log axis of the plot of mapped rows whose drawn values span `span` decades, so that
+ * its labels do not overlap; chosen by rendering on the 176 px of the y axis and on x axes of 200 to
+ * 850 px. Plotly pads the range of the values, by up to 30 % with the ring of a selected row, and
+ * from a range of one decade, so from about 0.78 decades of values, labels every digit of each
+ * decade (0.8 0.9 1 2 3 ... 9 10 20), which overlap. From 0.75 to 2.5 decades of values, the labels
+ * are 1, 2 and 5 of each decade, which come too close from about 3 decades; above, every n-th power
+ * of 10, at most about five. Below 0.75 decades, Plotly's linear ticks, at most 6, as more crowd at
+ * the top of a log axis.
+ */
+export function logTicks(span: number): Pick<OverlayAxis, "dtick" | "nticks"> {
+  if (span > 2.5) return { dtick: Math.ceil(span / 4) };
+  if (span >= 0.75) return { dtick: "D2" };
+  // Plotly draws 1.5 times `nticks` linear ticks below a decade.
+  return { nticks: 4 };
 }
 
 /** The series of the source view by name. */
@@ -632,11 +663,20 @@ export function plotTraces(
   // The axes of the first series, as `pkdb plot` labels them.
   const first = styles.get(series[0] ?? "");
   const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
-  const axis = (text: string, type: AxisScale): OverlayAxis => ({
-    type,
+  // The values that each axis draws: the points, and the ends of their error bars on the y axis.
+  const drawn: Record<Axis, number[]> = {
+    x: points.map((point) => point.x),
+    y: points.flatMap((point) =>
+      point.error_bar === null ? [point.y] : [point.y, point.error_bar, 2 * point.y - point.error_bar],
+    ),
+  };
+  const axis = (name: Axis, text: string): OverlayAxis => ({
+    type: scales[name],
     title: { text, font: { size: 11 } },
     tickfont: { size: 11 },
-    ...(type === "log" ? { tickformat: "~g", exponentformat: "none" as const } : {}),
+    ...(scales[name] === "log"
+      ? { tickformat: "~g", exponentformat: "none" as const, ...logTicks(decades(drawn[name])) }
+      : {}),
     visible: true,
     fixedrange: true,
     automargin: true,
@@ -657,8 +697,8 @@ export function plotTraces(
       height: 220,
       paper_bgcolor: theme.colors.surface,
       plot_bgcolor: theme.colors.surface,
-      xaxis: axis(xTitle, scales.x),
-      yaxis: axis(yTitle, scales.y),
+      xaxis: axis("x", xTitle),
+      yaxis: axis("y", yTitle),
       margin: { l: 48, r: 8, t: 8, b: 36, pad: 2 },
     },
   };

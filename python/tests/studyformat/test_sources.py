@@ -294,12 +294,42 @@ def test_scales_follow_the_log_axes_of_the_digitization(
     assert (view.log_x, view.log_y) == expected
 
 
-def test_an_axis_is_log_only_on_every_axes_of_the_datasets(make_study, valid_files):
-    data = scaled_project(log_y=True)
-    inset = {**data["axesColl"][0], "name": "Inset", "isLogY": False}
-    data["axesColl"].append(inset)
+def inset(data, **changes):
+    """Add the axes `Inset`, a copy of the first axes with `changes`, to the project `data`."""
+    data["axesColl"].append({**data["axesColl"][0], "name": "Inset", **changes})
+
+
+def log_y_on_the_axes_of_a_dataset_only(data):
+    inset(data, isLogY=False)
     data["datasetColl"].append(
         {"name": "drug_urine", "axesName": "Inset", "data": [{"x": 50, "y": 50}]}
     )
+
+
+def without_datasets(data):
+    inset(data, isLogX=True)
+    data["datasetColl"] = []
+
+
+def log_on_every_axes(data):
+    inset(data)
+    data["datasetColl"].append(
+        {"name": "drug_urine", "axesName": "Inset", "data": [{"x": 50, "y": 50}]}
+    )
+
+
+@pytest.mark.parametrize(
+    ("log_x", "change", "expected"),
+    [
+        # An axis is log only when it is log on every axes that a dataset uses.
+        (False, log_y_on_the_axes_of_a_dataset_only, (False, False)),
+        # A project without datasets counts all its axes: y is log on both, x on the inset only.
+        (False, without_datasets, (False, True)),
+        (True, log_on_every_axes, (True, True)),
+    ],
+)
+def test_the_scales_of_several_axes(make_study, valid_files, log_x, change, expected):
+    data = scaled_project(log_x=log_x, log_y=True)
+    change(data)
     view = figure_view(make_study, valid_files, data)
-    assert (view.log_x, view.log_y) == (False, False)
+    assert (view.log_x, view.log_y) == expected

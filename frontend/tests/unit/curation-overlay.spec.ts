@@ -9,6 +9,7 @@ import {
   FADED,
   legendEntries,
   logAxes,
+  logTicks,
   overlayTraces,
   plotTraces,
   PROBLEM_COLORS,
@@ -410,10 +411,10 @@ describe("the selected row", () => {
     expect([linear.xaxis.type, linear.yaxis.type]).toEqual(["linear", "linear"]);
     const log = plotTraces(plain, null, undefined, null, { scales: { x: "linear", y: "log" } }).layout;
     expect([log.xaxis.type, log.yaxis.type]).toEqual(["linear", "log"]);
-    // The titles and the compact axes stay.
     // A log axis labels full values (0.5), not bare mantissas; a linear axis keeps the default.
     expect(log.yaxis).toEqual(expect.objectContaining({ tickformat: "~g", exponentformat: "none" }));
     expect(log.xaxis.tickformat).toBeUndefined();
+    // The titles and the compact axes stay.
     expect(log.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
   });
 
@@ -644,6 +645,71 @@ describe("problems in the plot", () => {
 
   it("rings nothing on the overlay of the image", () => {
     expect(overlayTraces(figure()).traces.some((entry) => entry.meta.startsWith("problem"))).toBe(false);
+  });
+});
+
+describe("the ticks of a log axis", () => {
+  /** A plot of drug_plasma at x 1, 2, 3 and so on, at the values `ys` with the error bar ends `bars`. */
+  function plotOf(ys: number[], bars: (number | null)[] = []): SourceView {
+    return figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: ys.map((y, index) =>
+        mapped({ series: "drug_plasma", line: index + 1, x: index + 1, y, error_bar: bars[index] ?? null }),
+      ),
+    });
+  }
+  const LOG: AxisScales = { x: "log", y: "log" };
+
+  it.each([
+    [0, { nticks: 4 }],
+    [0.5, { nticks: 4 }],
+    [0.74, { nticks: 4 }],
+    [0.75, { dtick: "D2" }],
+    [1, { dtick: "D2" }],
+    [1.3, { dtick: "D2" }],
+    [2, { dtick: "D2" }],
+    [2.5, { dtick: "D2" }],
+    [2.6, { dtick: 1 }],
+    [3, { dtick: 1 }],
+    [4, { dtick: 1 }],
+    [4.1, { dtick: 2 }],
+    [5, { dtick: 2 }],
+    [9, { dtick: 3 }],
+  ])("ticks a log axis over %s decades with %o", (span, ticks) => {
+    expect(logTicks(span)).toEqual(ticks);
+  });
+
+  it("chooses the ticks of each log axis by the span of its drawn values", () => {
+    // y from 1 to 20 spans 1.3 decades, where Plotly would label every digit; x from 1 to 4, 0.6.
+    const view = plotOf([1, 2, 5, 20]);
+    const { layout } = plotTraces(view, null, undefined, null, { scales: LOG });
+    expect(layout.yaxis).toEqual(expect.objectContaining({ dtick: "D2", tickformat: "~g", exponentformat: "none" }));
+    expect(layout.yaxis.nticks).toBeUndefined();
+    expect(layout.xaxis).toEqual(expect.objectContaining({ nticks: 4, tickformat: "~g", exponentformat: "none" }));
+    expect(layout.xaxis.dtick).toBeUndefined();
+    // A linear axis keeps the ticks of Plotly.
+    const linear = plotTraces(view, null, undefined, null, { scales: { x: "linear", y: "linear" } }).layout;
+    expect([linear.xaxis.dtick, linear.xaxis.nticks, linear.yaxis.dtick, linear.yaxis.nticks]).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("counts the ends of the error bars above 0 and leaves out the points at 0 or below", () => {
+    // 1 to 5 spans 0.7 decades; the point at 0 is not drawn on the log axis.
+    expect(plotTraces(plotOf([1, 5, 0]), null, undefined, null, { scales: LOG }).layout.yaxis.nticks).toBe(4);
+    // The error bar of 5 to 20 also reaches down to -10, which a log axis does not draw: 1 to 20.
+    const { layout } = plotTraces(plotOf([1, 5, 0], [null, 20, 1000]), null, undefined, null, { scales: LOG });
+    expect(layout.yaxis.dtick).toBe("D2");
+    // Without values above 0, a log axis has nothing to span.
+    expect(plotTraces(plotOf([0, -1]), null, undefined, null, { scales: LOG }).layout.yaxis).toEqual(
+      expect.objectContaining({ nticks: 4 }),
+    );
   });
 });
 

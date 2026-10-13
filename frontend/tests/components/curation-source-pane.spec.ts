@@ -318,6 +318,22 @@ describe("scales of the plot", () => {
     study.close();
   });
 
+  it("draws the switches as the zoom of the image: native buttons joined in a named group", async () => {
+    const { wrapper, study, requests } = await mountPlot();
+    const zoom = wrapper.get('[role="group"][aria-label="Image size"]');
+    for (const control of [zoom, group(wrapper, "x"), group(wrapper, "y")]) {
+      expect(control.classes()).toContain("toggle-group");
+      expect(control.findAll("button").map((button) => button.attributes("type"))).toEqual(["button", "button"]);
+      expect(control.find(".v-btn").exists()).toBe(false);
+    }
+    // A click on the pressed button changes and saves nothing.
+    await group(wrapper, "y").findAll("button")[0]!.trigger("click");
+    await flushPromises();
+    expect(pressed(wrapper, "y")).toEqual(["lin"]);
+    expect(requests.filter((request) => request.method === "POST")).toEqual([]);
+    study.close();
+  });
+
   it("takes the scales of the digitization and says how many points the log axis leaves out", async () => {
     const { wrapper, study } = await mountPlot({ ...plotView, log_y: true });
     expect(pressed(wrapper, "y")).toEqual(["log"]);

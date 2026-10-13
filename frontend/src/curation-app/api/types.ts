@@ -7,8 +7,6 @@
  * `schemas/validation.py`. Optional fields are those the server leaves out.
  */
 
-import type { AxisScales } from "../overlay";
-
 /** A JSON value. */
 export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
@@ -507,6 +505,18 @@ export interface GitHubAssignments {
 
 /** The color theme of the app: one that the curator chose, or the theme of the system. */
 export type ThemeChoice = "light" | "dark" | "system";
+
+/** An axis of the plot of mapped rows. */
+export type Axis = "x" | "y";
+
+/** The scale of an axis of the plot of mapped rows, as Plotly names it. */
+export type AxisScale = "linear" | "log";
+
+/** The scales of the axes of the plot of mapped rows. */
+export interface AxisScales {
+  x: AxisScale;
+  y: AxisScale;
+}
 
 export interface Snapshot {
   workspace: string;

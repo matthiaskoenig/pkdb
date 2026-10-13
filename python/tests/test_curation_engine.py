@@ -1314,6 +1314,28 @@ def test_the_oldest_plot_scales_go_beyond_the_limit(workspace, monkeypatch):
     assert list(engine.snapshot()["plot_scales"]) == [FIG1, "caffeine/Example/Fig3"]
 
 
+def test_the_latest_saved_plot_scales_are_kept_up_to_the_limit(workspace, monkeypatch):
+    engine, folder = workspace
+    monkeypatch.setattr(plot_scales, "MAX_FIGURES", 2)
+    path = engine.state_dir / "state.json"
+    saved = {
+        f"caffeine/Example/Fig{number}": {"x": "log", "y": "log"}
+        for number in (1, 2, 3)
+    }
+    path.write_text(json.dumps({**json.loads(path.read_text()), "plot_scales": saved}))
+    replacement = module.CurationEngine(
+        folder.parent.parent, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        # A state.json from before a lower limit, or written by hand, keeps the latest choices.
+        assert list(replacement.snapshot()["plot_scales"]) == [
+            "caffeine/Example/Fig2",
+            "caffeine/Example/Fig3",
+        ]
+    finally:
+        replacement.close()
+
+
 def test_reference_preview_save_and_stale_review(workspace):
     import httpx2
 
