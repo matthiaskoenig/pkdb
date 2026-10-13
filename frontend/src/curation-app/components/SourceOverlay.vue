@@ -64,20 +64,20 @@ const markScale = computed(() => {
 const dark = computed(() => theme.current.value.dark);
 /** The font of the page, which the plot uses too. */
 const font = pageFont();
+/** The problems of the plotted rows by `rowKey`; the overlay on the image shows none. */
+const rowProblems = computed(() =>
+  shown.value === "plot" ? plottedProblems(props.view, props.problems ?? []) : new Map<string, ValidationIssue[]>(),
+);
 const plot = computed(() => {
   const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors), font };
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
     ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
-    : plotTraces(props.view, highlight, colors, props.selected ?? null, props.problems ?? []);
+    : plotTraces(props.view, highlight, colors, props.selected ?? null, rowProblems.value);
 });
 
 const legend = computed(() => legendEntries(props.view, shown.value, dark.value));
 const rows = computed(() => dataRows(props.view, shown.value));
-/** The problems of the plotted rows by `rowKey`; the overlay on the image shows none. */
-const rowProblems = computed(() =>
-  shown.value === "plot" ? plottedProblems(props.view, props.problems ?? []) : new Map<string, ValidationIssue[]>(),
-);
 /** The severities of the rings of the plot, errors first, for the key. */
 const ringed = computed(() => {
   const found = new Set([...rowProblems.value.values()].map(worstSeverity));
@@ -332,7 +332,7 @@ onBeforeUnmount(() => {
       <p v-if="ringed.length" class="overlay-key overlay-key--problems" aria-hidden="true">
         <span v-for="severity in ringed" :key="severity" class="overlay-key-item">
           <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--ring" :style="{ stroke: ringColors[severity] }">
-            <circle cx="6" cy="6" r="4.5" />
+            <circle cx="6" cy="6" r="4.5" :stroke-dasharray="severity === 'warning' ? '2.5 1.8' : undefined" />
           </svg>
           {{ RING_LABELS[severity] }}
         </span>

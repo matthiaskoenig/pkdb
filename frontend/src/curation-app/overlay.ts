@@ -79,7 +79,7 @@ export interface OverlayTrace {
   y: (number | null)[];
   opacity: number;
   showlegend: false;
-  marker?: { symbol: string; size: number; color: string; opacity?: number[]; line?: { width: number; color: string } };
+  marker?: { symbol: string; size: number; color: string; opacity?: number[]; line?: { width: number; color: string; dash?: string } };
   line?: { color: string; width: number };
   error_y?: { type: "data"; array: (number | null)[]; visible: true; color: string; thickness: number; width: number };
   customdata?: Customdata[];
@@ -435,8 +435,9 @@ export function wrapText(text: string, width = HOVER_WIDTH): string[] {
 }
 
 /**
- * The problems of a row in the hover label of its point, after a blank line: the severity in
- * bold, the code and the message of each, at most `TIP_LIMIT` with the count of the others,
+ * The problems of a row in the hover label of its point, after a blank line: the severity and
+ * the code, then the message of each (no bold: Plotly sets the style attribute for it, which the
+ * content security policy of the app blocks), at most `TIP_LIMIT` with the count of the others,
  * escaped; empty without problems.
  */
 export function problemHover(issues: readonly ValidationIssue[]): string {
@@ -444,7 +445,7 @@ export function problemHover(issues: readonly ValidationIssue[]): string {
   const { shown, more } = tipProblems(issues);
   const parts = shown.map(
     (issue) =>
-      `<b>${SEVERITY_LABELS[issue.severity]}</b> · ${escapeMarkup(issue.code)}<br>${wrapText(issue.message).map(escapeMarkup).join("<br>")}`,
+      `${SEVERITY_LABELS[issue.severity]} · ${escapeMarkup(issue.code)}<br>${wrapText(issue.message).map(escapeMarkup).join("<br>")}`,
   );
   if (more) parts.push(`and ${more} more`);
   return `<br><br>${parts.join("<br>")}`;
@@ -463,7 +464,7 @@ export function problemLines(issues: readonly ValidationIssue[]): string[] {
  */
 function problemTraces(
   points: readonly SourcePoint[],
-  problems: Map<string, ValidationIssue[]>,
+  problems: ReadonlyMap<string, ValidationIssue[]>,
   opacity: (series: string) => number,
   dark: boolean,
 ): OverlayTrace[] {
@@ -484,7 +485,14 @@ function problemTraces(
         showlegend: false,
         // A thin halo outside the ring of the selected row (`selectedTrace`, which ends 10.75 px from
         // the center): the two differ in size and weight, and both show on a selected point.
-        marker: { symbol: "circle-open", size: 24, color, opacity: ringed.map((point) => opacity(point.series)), line: { width: 1.5, color } },
+        // A warning ring is dashed and an error ring solid, so that they differ by more than color.
+        marker: {
+          symbol: "circle-open",
+          size: 28,
+          color,
+          opacity: ringed.map((point) => opacity(point.series)),
+          line: { width: 2, color, ...(severity === "warning" ? { dash: "dash" } : {}) },
+        },
         hoverinfo: "skip",
       },
     ];
@@ -502,13 +510,12 @@ export function plotTraces(
   highlight: string | null = null,
   theme: PlotTheme = LIGHT,
   selected: SelectedRow = null,
-  problems: readonly ValidationIssue[] = [],
+  rowProblems: ReadonlyMap<string, ValidationIssue[]> = new Map(),
 ): OverlayPlot {
   const styles = seriesStyles(view);
   const points = plottedPoints(view);
   const series = unique(points.map((point) => point.series));
   const opacity = opacities(series, highlight);
-  const rowProblems = plottedProblems(view, problems);
   const traces = series.map((name): OverlayTrace => {
     const rows = points.filter((point) => point.series === name);
     const color = colorOf(styles, name, theme.dark);

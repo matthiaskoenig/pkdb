@@ -938,3 +938,59 @@ test.describe("tables", () => {
     await expect(page.getByRole("status").filter({ hasText: "Added the sheet Demo2020_Tab3 to the workbook." })).toBeVisible();
   });
 });
+
+test.describe("plot of the mapped rows", () => {
+  test("rings the point of a row with a problem, and its hover label lists the problem", async ({ app, page }) => {
+    // Without its digitization, Fig1 shows its image above a plot of its mapped rows.
+    await page.route(
+      (url) => url.pathname === "/local/studies/caffeine/Demo2020/sources/Fig1",
+      async (route) => {
+        const response = await route.fetch();
+        // A request that the page cancels, as it leaves, has no body to change.
+        const view = (await response.json().catch(() => null)) as (SourceView & { series: { name: string }[] }) | null;
+        if (!view) return;
+        await route.fulfill({
+          response,
+          json: {
+            ...view,
+            digitization: null,
+            overlay: [],
+            unmatched: view.series.map((series) => series.name),
+            layout: "side_by_side",
+          },
+        });
+      },
+    );
+    await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
+    const plot = page.getByRole("img", { name: /^Plot of \d+ mapped rows of Fig1/ });
+    await expect(plot).toBeVisible();
+    // Plotly keeps its traces on the element. Other tests of this file change the rows of the table,
+    // so the ringed rows are read from the plot rather than assumed.
+    const rings = () =>
+      plot.evaluate((element) => {
+        const data = (element as HTMLElement & { data?: { meta: string; x: number[]; y: number[] }[] }).data ?? [];
+        return data.filter((trace) => trace.meta.startsWith("problem")).map(({ meta, x, y }) => ({ meta, x, y }));
+      });
+    // The first validation of the study can take a few seconds on a busy machine.
+    await expect.poll(async () => (await rings()).length, { timeout: 45_000 }).toBeGreaterThan(0);
+    const [ring] = await rings();
+    expect(ring!.meta).toMatch(/^problem (error|warning)$/);
+    await expect(page.getByText(ring!.meta === "problem error" ? "Row with an error" : "Row with a warning", { exact: true })).toBeVisible();
+
+    // The first ringed point, in the pixels of the plot.
+    const point = await plot.evaluate(
+      (element, [x, y]) => {
+        type Axis = { l2p: (value: number) => number; _offset: number };
+        const { xaxis, yaxis } = (element as HTMLElement & { _fullLayout: { xaxis: Axis; yaxis: Axis } })._fullLayout;
+        return { x: xaxis._offset + xaxis.l2p(x!), y: yaxis._offset + yaxis.l2p(y!) };
+      },
+      [ring!.x[0], ring!.y[0]],
+    );
+    const box = (await plot.boundingBox())!;
+    await page.mouse.move(box.x + point.x, box.y + point.y);
+    // The label of the point below the ring names its row and lists the problem of that row.
+    const label = page.locator(".hoverlayer .hovertext");
+    await expect(label).toContainText("timecourses_Fig1.tsv line");
+    await expect(label).toContainText(ring!.meta === "problem error" ? "Error · " : "Warning · ");
+  });
+});

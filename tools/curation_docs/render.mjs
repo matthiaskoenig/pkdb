@@ -56,7 +56,7 @@ function redact(text) {
   return token ? text.replaceAll(token, "<launch token>") : text;
 }
 
-/** Capture the seven images; the paths of the files. */
+/** Capture the eight images; the paths of the files. */
 async function render() {
   const written = [];
   const browser = await chromium.launch();
@@ -121,6 +121,12 @@ async function render() {
       pointer: true,
     });
 
+    // Data with a problem: the tooltip of the outlined cell of the misplaced row, under the pointer.
+    await rowsOfTable.locator("td.grid-cell--warning").first().hover();
+    const tooltip = page.locator(".problem-tooltip");
+    await tooltip.waitFor();
+    await capture("data-problem.png", [tooltip.getByText("digitized_mismatch")], { pointer: true, tooltip: true });
+
     // Data with the paper: page 1 of the PDF of the study, with the matches of a find.
     await navigator.getByRole("button", { name: /^Paper\b/ }).click();
     const paper = page.getByRole("region", { name: `Paper ${STUDY.split("/")[1]}.pdf` });
@@ -180,9 +186,10 @@ async function render() {
  * `ready` is visible, the images are loaded, no menu or dialog is open, nothing animates, and
  * the tab bars stand still. The pointer moves to the empty middle of the app bar, so that nothing
  * shows a hover, unless `pointer` keeps it where it is. `whole` must fit into the window, and with
- * `fit` the whole page, so that nothing scrolls under a sticky bar.
+ * `fit` the whole page, so that nothing scrolls under a sticky bar. With `tooltip`, the tooltip
+ * under the pointer stays open; any other overlay must be closed.
  */
-async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false } = {}) {
+async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false, tooltip = false } = {}) {
   await page.evaluate(() => window.scrollTo(0, 0));
   if (!pointer) await page.mouse.move(600, 32);
   // A control that a click or a key focused shows no focus ring in the picture.
@@ -190,7 +197,11 @@ async function screenshot(page, name, ready, { pointer = false, whole = null, fi
   for (const locator of ready) await locator.waitFor();
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => [...document.images].every((image) => image.complete));
-  await page.waitForFunction(() => !document.querySelector(".v-overlay--active"));
+  await page.waitForFunction(
+    (tooltip) =>
+      [...document.querySelectorAll(".v-overlay--active")].every((overlay) => tooltip && overlay.classList.contains("v-tooltip")),
+    tooltip,
+  );
   await settled(page);
   for (const tabs of await page.getByRole("tablist").all()) await alignTabs(tabs);
   await settled(page);

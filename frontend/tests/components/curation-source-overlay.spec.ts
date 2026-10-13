@@ -377,6 +377,8 @@ describe("SourceOverlay", () => {
     expect((traces as OverlayTrace[])[0]!.customdata?.[0]?.[6]).toContain("digitized_mismatch");
     expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with a warning");
     expect(wrapper.get(".overlay-key--problems").attributes("aria-hidden")).toBe("true");
+    // The key draws the dashed ring of a warning.
+    expect(wrapper.get(".overlay-key--problems circle").attributes("stroke-dasharray")).toBeTruthy();
     expect(wrapper.findAll(".overlay-data thead th").map((cell) => cell.text()).at(-1)).toBe("Problems");
     expect(wrapper.get(".overlay-data tbody .overlay-problems").text()).toBe(
       "Warning digitized_mismatch: mean 1.2 lies 12 pixels from its point.",
