@@ -50,7 +50,6 @@ for (const theme of ["light", "dark"] as const) {
     app,
     page,
   }) => {
-    test.fail(true, "#941: the Substance filter compares the folder of a study only");
     test.setTimeout(120_000);
     addMidazolam(app.server.workspace);
     await page.emulateMedia({ colorScheme: theme });
@@ -69,7 +68,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(studyRows(page)).toHaveCount(3, { timeout: VALIDATED_MS });
 
     await studyRow(page, "caffeine/Draft2021").getByRole("link", { name: "caffeine/Draft2021" }).hover();
-    await expect(page.getByRole("tooltip")).toHaveText(/^\s*caffeine\s*\+ midazolam\s*$/);
+    await expect(page.getByRole("tooltip")).toHaveText(/^\s*caffeine\/Draft2021\s*\+ midazolam\s*$/);
     await expectAccessible(page);
   });
 }

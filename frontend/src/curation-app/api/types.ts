@@ -357,6 +357,11 @@ export interface StudyRow {
   path: string;
   duplicate: boolean;
   substance: string;
+  /**
+   * The folder substance first, then the other substance folders of the workspace that the tables
+   * of the study name, as the app last read them (`pkdb issues sync` labels its issue so).
+   */
+  substances: string[];
   mode: SaveMode;
   status: RowStatus;
   stale: boolean;

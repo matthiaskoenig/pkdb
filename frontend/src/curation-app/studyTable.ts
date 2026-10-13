@@ -8,6 +8,7 @@ import {
   activityLabel,
   issueUrl,
   MODE_LABELS,
+  otherSubstances,
   problemLabels,
   REVIEW_LABELS,
   SYNC_LABELS,
@@ -37,6 +38,8 @@ export interface RowItem {
   activity: string | null;
   issue: { number: number; url: string } | null;
   upload: string | null;
+  /** The substance folders that the tables of the study name besides its own folder. */
+  alsoNamed: string[];
 }
 
 function curatorOf(user: string, profiles: ReadonlyMap<string, Profile>): Curator {
@@ -66,6 +69,7 @@ export function rowItem(row: StudyRow, profiles: ReadonlyMap<string, Profile>, r
     activity: activityLabel(row),
     issue: number !== null && url !== null ? { number, url } : null,
     upload: webUrl(row.last_upload?.url),
+    alsoNamed: otherSubstances(row),
   };
 }
 

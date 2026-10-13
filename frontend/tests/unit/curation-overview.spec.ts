@@ -8,6 +8,7 @@ import {
   formatTime,
   issueUrl,
   needsAttention,
+  otherSubstances,
   plural,
   problemLabels,
   REVIEW_LABELS,
@@ -76,6 +77,15 @@ describe("filterStudies", () => {
 
   it("keeps the rows of one substance", () => {
     expect(ids(filterStudies(rows, { ...all, substance: "codeine" }).shown)).toEqual(["codeine/Kirchheiner2007"]);
+  });
+
+  it("keeps the rows whose tables name the substance", () => {
+    const named = row("caffeine/Nussberger2002", { substances: ["caffeine", "midazolam"] });
+    expect(ids(filterStudies([...rows, named], { ...all, substance: "midazolam" }).shown)).toEqual([
+      "midazolam/Conflict2001",
+      "caffeine/Nussberger2002",
+    ]);
+    expect(ids(filterStudies([...rows, named], { ...all, substance: "caffeine" }).shown)).toContain("caffeine/Nussberger2002");
   });
 
   it("keeps the rows of one curator, ignoring the case of the user name", () => {
@@ -329,6 +339,18 @@ describe("labels", () => {
 
   it("lists the substances in order", () => {
     expect(substancesOf(rows)).toEqual(["caffeine", "codeine", "midazolam"]);
+  });
+
+  it("lists the substance folders that the tables name once", () => {
+    const named = row("caffeine/Nussberger2002", { substances: ["caffeine", "tramadol"] });
+    expect(substancesOf([...rows, named])).toEqual(["caffeine", "codeine", "midazolam", "tramadol"]);
+  });
+
+  it("names the substance folders of a study besides its own", () => {
+    expect(otherSubstances(row("caffeine/Nussberger2002", { substances: ["caffeine", "midazolam"] }))).toEqual([
+      "midazolam",
+    ]);
+    expect(otherSubstances(example)).toEqual([]);
   });
 });
 

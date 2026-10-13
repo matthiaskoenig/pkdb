@@ -165,6 +165,11 @@ function unknownJob(changes: Partial<Job> = {}): Job {
   };
 }
 
+/** The tooltip that is open; tooltips are not eager, and one that closed stays in the page. */
+function openTooltip() {
+  return page().find(".v-tooltip.v-overlay--active");
+}
+
 /** The calls of `rowItem` for studies; the rows that size the columns (StudyTable.vue) have no identity. */
 function studyItemCalls() {
   return vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
@@ -370,8 +375,16 @@ describe("OverviewPage", () => {
     await mountPage(snapshot({ studies: [harder, studyRow({ duplicate: true, path: "archive/caffeine/Example" })] }));
     const link = rowOf("caffeine/Harder1988").get("a.study-identity");
     expect(link.text()).toBe("caffeine/Harder1988");
-    expect(link.attributes("title")).toBe("caffeine/Harder1988");
-    expect(rowOf("caffeine/Example").get("span.study-identity").attributes("title")).toBe("caffeine/Example");
+    // One tooltip: the identity has no native one besides it.
+    expect(link.attributes("title")).toBeUndefined();
+    await link.trigger("mouseenter");
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Harder1988"));
+    await link.trigger("mouseleave");
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false));
+    const duplicate = rowOf("caffeine/Example").get("span.study-identity");
+    expect(duplicate.attributes("title")).toBeUndefined();
+    await duplicate.trigger("mouseenter");
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"));
   });
 
   it("opens the study page when a row is clicked", async () => {
@@ -957,6 +970,30 @@ describe("OverviewPage", () => {
     await click("Clear filters");
     expect(identities()).toHaveLength(3);
     expect(field("Search studies").element.value).toBe("");
+  });
+
+  it("finds a study under every substance folder that its tables name and names them at its identity", async () => {
+    const pair = studyRow({
+      id: "codeine/Pair2002",
+      name: "Pair2002",
+      substance: "codeine",
+      substances: ["codeine", "caffeine"],
+      path: "studies/codeine/Pair2002",
+    });
+    const wrapper = await mountPage(snapshot({ studies: [example, approved, pair] }));
+    await choose(wrapper, "Substance", "caffeine");
+    expect(identities()).toEqual(["caffeine/Example", "codeine/Pair2002"]);
+
+    // The tooltip of the identity names the other substance folders below it.
+    await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseenter");
+    await vi.waitFor(() => expect(openTooltip().find(".study-substances-more").text()).toBe("+ caffeine"));
+    expect(openTooltip().text()).toMatch(/^codeine\/Pair2002\s*\+ caffeine$/);
+    await rowOf("codeine/Pair2002").get(".study-identity").trigger("mouseleave");
+    await vi.waitFor(() => expect(openTooltip().exists()).toBe(false));
+    // A study that names none has the identity alone.
+    await rowOf("caffeine/Example").get(".study-identity").trigger("mouseenter");
+    await vi.waitFor(() => expect(openTooltip().text()).toBe("caffeine/Example"));
+    expect(openTooltip().find(".study-substances-more").exists()).toBe(false);
   });
 
   it("filters by curator, with the user of the app first", async () => {
