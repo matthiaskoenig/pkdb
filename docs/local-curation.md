@@ -68,6 +68,8 @@ To switch the workspace without a restart, open the workspace menu, the folder n
 
 The overview lists the study format 2 folders of the workspace by their identity `<substance>/<name>`, with the title of the publication from `reference.json`.
 
+The overview renders only the rows in view, so the browser's own find (Ctrl+F, Cmd+F on macOS) finds only those rows. **Search studies** finds every study.
+
 [![The overview of the synthetic test workspace: two studies with their review status, open items, problems and sync status, and one study selected for the batch actions.](images/curation/overview.png)](images/curation/overview.png)
 
 | Column | Shows |
