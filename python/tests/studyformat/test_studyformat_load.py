@@ -137,6 +137,7 @@ def test_merge_conflict_markers_stop_loading():
     assert table is None
     assert codes(issues) == ["merge_conflict"]
     assert issues[0].source is not None and issues[0].source.row == 1
+    assert issues[0].message.startswith("Line 1 is a git conflict marker")
     assert "resolve the git conflict" in issues[0].message
     _, header = load_table(
         "outputs_Tab1.tsv", b"<<<<<<< HEAD\nsubjects\n", OUT, "Tab1", study="Example"
@@ -163,7 +164,8 @@ def test_text_only_in_owned_columns_stops_loading(line):
     issue = issues[0]
     assert issue.severity == "error" and issue.category == "format"
     assert issue.source is not None and issue.source.row == 2
-    assert "only in" in issue.message
+    # A TSV file names the line of the table.
+    assert issue.message.startswith("Line 2 has text only in the ")
 
 
 def test_owned_cells_of_a_shared_table_are_compared_with_the_study_only():

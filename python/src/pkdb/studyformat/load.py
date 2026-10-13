@@ -11,7 +11,7 @@ from pydantic import BaseModel, ValidationError
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue, refusal
 from pkdb.studyformat.cells import canonical_cell, parse_cell
 from pkdb.studyformat.digitize import LoadedDigitization, load_digitization
-from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
+from pkdb.studyformat.issues import LISTED, IssueCap, line_name, make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.models import ReferenceSnapshot, Review, StudyMetadata
@@ -233,12 +233,15 @@ def load_table(
     *,
     study: str,
     limit: RowLimit | None = None,
+    from_sheet: bool = False,
 ) -> tuple[LoadedTable | None, list[ValidationIssue]]:
     """Read one table; `study` and `source` are the values of the owned columns.
 
     `data` is the content of the file, or its lines as a binary file yields
     them. The file is read one line at a time; `limit` counts its data lines
-    and stops reading at the first line beyond the row limit.
+    and stops reading at the first line beyond the row limit. `from_sheet`
+    tells that the lines were read from the sheet of the table, one per sheet
+    row: a message then names the sheet row of a line, not the line.
     """
     lines = read_tsv(BytesIO(data) if isinstance(data, bytes) else data)
     owned = {"study": study, "source": source or ""}
@@ -290,15 +293,20 @@ def load_table(
             if broken or extra:
                 # The table cannot load; its cells are not judged.
                 continue
-            row, problems, unexpected = _read_row(file, line, spec, positions, owned)
+            row, problems, unexpected = _read_row(
+                file, line, spec, positions, owned, from_sheet
+            )
             issues.extend(problems)
             if row is not None:
                 rows.append(row)
             elif unexpected is not None:
                 stray.append(unexpected)
     except TooManyCells as error:
+        place = line_name(file, error.number, from_sheet)
         return None, [
-            make_issue("too_many_columns", str(error), file=file, line=error.number)
+            make_issue(
+                "too_many_columns", error.message(place), file=file, line=error.number
+            )
         ]
     except TsvError as error:
         return None, [make_issue("invalid_encoding", str(error), file=file)]
@@ -306,7 +314,7 @@ def load_table(
         return None, [
             make_issue(
                 "merge_conflict",
-                f"Line {conflict} is a git conflict marker; resolve the git conflict and remove the markers",
+                f"{line_name(file, conflict, from_sheet)} is a git conflict marker; resolve the git conflict and remove the markers",
                 file=file,
                 line=conflict,
             )
@@ -334,6 +342,7 @@ def _read_row(
     spec: TableSpec,
     positions: Mapping[str, int],
     owned: Mapping[str, str],
+    from_sheet: bool,
 ) -> tuple[Row | None, list[ValidationIssue], ValidationIssue | None]:
     # The row with the issues of its cells, or no row for an empty line and
     # the stray_text issue when an owned column has text it should not have.
@@ -374,7 +383,7 @@ def _read_row(
         issues,
         make_issue(
             "stray_text",
-            f"Line {line.number} has text only in the {name} column, which pkdb format writes; this is often a broken multi-line cell or a leftover of a merge",
+            f"{line_name(file, line.number, from_sheet)} has text only in the {name} column, which pkdb format writes; this is often a broken multi-line cell or a leftover of a merge",
             file=file,
             line=line.number,
             column=positions[name],

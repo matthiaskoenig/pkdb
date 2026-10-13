@@ -409,7 +409,7 @@ def _read_sheet(
         name,
         _lines,
         lambda lines: load_table(
-            file, lines, spec, source, study=study_name, limit=limit
+            file, lines, spec, source, study=study_name, limit=limit, from_sheet=True
         ),
     )
 
@@ -432,7 +432,7 @@ def _read_raw_sheet(
         workbook,
         name,
         _raw_lines,
-        lambda lines: load_raw(file, lines, source, limit=limit),
+        lambda lines: load_raw(file, lines, source, limit=limit, from_sheet=True),
     )
     if raw is None or (text := render_raw(raw)) is None:
         return None, issues

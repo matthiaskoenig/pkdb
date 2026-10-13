@@ -474,15 +474,18 @@ def set_mean(path, sheet, row, mean):
     workbook.save(path)
 
 
-def edit_mean(folder, file, line, mean):
-    """Change the mean of a TSV line, as in a text editor."""
+def edit_mean(folder, file, physical, mean):
+    """Change the mean in a physical line of a TSV file, as in a text editor.
+
+    Physical line n, from 1, is line n - 1 of the table and row n of its sheet.
+    """
     parsed = parse_table_file(file)
     assert parsed is not None
     path = folder / file
     rows = path.read_text(encoding="utf-8").removesuffix("\n").split("\n")
-    cells = rows[line - 1].split("\t")
+    cells = rows[physical - 1].split("\t")
     cells[parsed[0].names.index("mean")] = mean
-    rows[line - 1] = "\t".join(cells)
+    rows[physical - 1] = "\t".join(cells)
     path.write_text("\n".join(rows) + "\n", encoding="utf-8", newline="")
 
 
@@ -660,7 +663,7 @@ def test_upload_syncs_a_workbook_saved_during_the_sync_again(
         built = build(*arguments, **options)
         calls.append(arguments)
         if len(calls) <= saves:
-            # A row apart from the tables edit at line 4, so that it merges.
+            # Row 2, apart from the tables edit in row 4, so that it merges.
             set_mean(workbook_path(study), "timecourses_Fig1", 2, 0.25)
         return built
 

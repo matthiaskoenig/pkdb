@@ -84,9 +84,11 @@ class TooManyCells(TsvError):
 
     def __init__(self, number: int, width: int):
         self.number, self.width = number, width
-        super().__init__(
-            f"Line {number} has {width:,} cells; a table has at most {MAX_CELLS:,}"
-        )
+        super().__init__(self.message(f"Line {number}"))
+
+    def message(self, line: str) -> str:
+        """The message that names the line as `line`, such as `Line 2` or `Row 3`."""
+        return f"{line} has {self.width:,} cells; a table has at most {MAX_CELLS:,}"
 
 
 @dataclass(frozen=True)

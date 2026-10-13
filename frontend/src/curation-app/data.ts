@@ -37,12 +37,13 @@ function text(value: unknown): string | null {
 
 /** The selection of a route query; a line is a whole number from 0, the header of a table. */
 export function selectionOf(query: LocationQuery): Selection {
-  const line = typeof query.line === "string" ? Number(query.line) : Number.NaN;
+  // Only digits: Number("") and Number(" ") are 0, which an empty line is not.
+  const line = typeof query.line === "string" && /^\d+$/.test(query.line) ? Number(query.line) : Number.NaN;
   return {
     source: text(query.source),
     pdf: text(query.pdf),
     file: text(query.file),
-    line: Number.isInteger(line) && line >= 0 ? line : null,
+    line: Number.isSafeInteger(line) ? line : null,
     column: text(query.column),
   };
 }

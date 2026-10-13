@@ -51,16 +51,19 @@ def table_lines(folder, file):
     return (folder / file).read_text(encoding="utf-8").removesuffix("\n").split("\n")
 
 
-def cell(folder, file, line, column):
-    return table_lines(folder, file)[line - 1].split("\t")[names(file).index(column)]
-
-
-def edit_table(folder, file, line, **cells):
+def cell(folder, file, physical, column):
+    """A cell of a physical line, from 1, which is its sheet row."""
     rows = table_lines(folder, file)
-    values = rows[line - 1].split("\t")
+    return rows[physical - 1].split("\t")[names(file).index(column)]
+
+
+def edit_table(folder, file, physical, **cells):
+    """Change cells of a physical line, from 1, which is its sheet row."""
+    rows = table_lines(folder, file)
+    values = rows[physical - 1].split("\t")
     for column, value in cells.items():
         values[names(file).index(column)] = value
-    rows[line - 1] = "\t".join(values)
+    rows[physical - 1] = "\t".join(values)
     (folder / file).write_text("\n".join(rows) + "\n", encoding="utf-8", newline="")
 
 

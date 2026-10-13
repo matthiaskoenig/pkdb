@@ -208,6 +208,15 @@ def column_letter(index: int) -> str:
     return letters
 
 
+def line_name(file: str, line: int, from_sheet: bool) -> str:
+    """How a message names a line of a table file, such as `Line 5`.
+
+    A line read from the sheet of the table in the workbook is named by the
+    sheet row that the curator sees, such as `Row 6`.
+    """
+    return f"Row {workbook_row(file, line)}" if from_sheet else f"Line {line}"
+
+
 def make_issue(
     code: str,
     message: str,

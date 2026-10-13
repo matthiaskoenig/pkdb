@@ -555,6 +555,20 @@ def test_a_problem_of_a_line_is_reported_at_its_sheet_row(workbook):
         6,
     )
     assert issue.source.cell == "A6"
+    # The message names the row that the curator sees in the sheet.
+    assert issue.message.startswith("Row 6 has text only in the study column")
+
+
+def test_a_conflict_marker_in_a_sheet_is_reported_at_its_row(workbook):
+    def marker(book):
+        book["subjects"]["A6"] = "<<<<<<< HEAD"
+
+    content = read_workbook(edit(workbook, marker), STUDY)
+
+    issue = only(content, "merge_conflict")
+    assert issue.source is not None
+    assert (issue.source.sheet, issue.source.row) == ("subjects", 6)
+    assert issue.message.startswith("Row 6 is a git conflict marker")
 
 
 def test_a_missing_base_is_a_warning(workbook, study_tables):

@@ -90,6 +90,9 @@ describe("selection of the route", () => {
     // Line 0 is the header of a table.
     expect(selectionOf({ source: "", line: "0" })).toEqual({ source: null, pdf: null, file: null, line: 0, column: null });
     expect(selectionOf({ line: "-1" }).line).toBeNull();
+    // An empty line is no line 0.
+    expect(selectionOf({ line: "" }).line).toBeNull();
+    expect(selectionOf({ line: " " }).line).toBeNull();
     expect(selectionOf({ line: "2.5" }).line).toBeNull();
     expect(selectionOf({ line: ["2", "3"] }).line).toBeNull();
   });
