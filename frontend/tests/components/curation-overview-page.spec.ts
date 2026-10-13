@@ -815,6 +815,45 @@ describe("OverviewPage", () => {
     expect(rowIndices()).toEqual(inView);
   });
 
+  it("does not pin a row again that a filter removed while it had the focus", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    rows()[0]!.get("input").element.focus();
+    await scrollBody(-2400);
+    expect(rowIndices()[0]).toBe(2);
+    await search("study999");
+    await search("");
+    expect(rowIndices()).toEqual(Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2));
+  });
+
+  it("measures the window again when the page changes its size, as after a change above the table", async () => {
+    const observed: unknown[] = [];
+    let resized: () => void = () => {};
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          resized = callback;
+        }
+        observe(target: unknown) {
+          observed.push(target);
+        }
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    expect(observed).toContain(document.documentElement);
+    // The body moved without a scroll event, as when an alert above the table wrapped.
+    const body = page().get(".study-table tbody").element;
+    vi.spyOn(body, "getBoundingClientRect").mockReturnValue({ top: -2400 } as DOMRect);
+    resized();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    await flushPromises();
+    expect(rowIndices()[0]).toBe(90 + 2);
+  });
+
   it("sizes the window and the spaces by the height of a rendered row, which a larger font raises", async () => {
     // jsdom has no layout: every row is 30 px high, as with a larger font than the default one.
     vi.spyOn(HTMLTableRowElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 0, height: 30 } as DOMRect);

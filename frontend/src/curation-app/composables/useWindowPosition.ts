@@ -50,6 +50,9 @@ export function useWindowPosition(
     // which the browser would report as a loop of the observer.
     observer = new ResizeObserver(schedule);
     if (element.value) observer.observe(element.value);
+    // A change above the element, as a wrapping alert or chips, moves it without any of the
+    // events above, and without scroll anchoring (Safari) nothing else corrects the window.
+    observer.observe(document.documentElement);
     measure();
   });
   onBeforeUnmount(() => {

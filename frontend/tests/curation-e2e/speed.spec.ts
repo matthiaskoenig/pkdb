@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Page, Response } from "@playwright/test";
 import { SEARCH_DELAY_MS } from "../../src/curation-app/overview.ts";
 import { OVERSCAN, ROW_HEIGHT } from "../../src/curation-app/studyTable.ts";
 import { expect, expectAccessible, test } from "./fixtures.ts";
@@ -23,9 +23,11 @@ const QUIET_TIMEOUT_MS = 60_000;
 const WATCH_MS = 10_000;
 
 test.use({ studies: STUDIES });
-// The tests share the server and run in order; playwright.curation.config.ts runs this file in a
-// project of its own after all other spec files, so nothing else loads the processor.
-test.describe.configure({ mode: "serial", timeout: QUIET_TIMEOUT_MS + 90_000 });
+// The tests share the server through worker-scoped fixtures; playwright.curation.config.ts runs
+// this file in a project of its own after all other spec files, so nothing else loads the
+// processor, and the tests of the file run in order in one worker. A failing test does not skip
+// the others: they run in a new worker with a server of its own.
+test.describe.configure({ timeout: QUIET_TIMEOUT_MS + 90_000 });
 
 interface Latency {
   /** For each recorded input event, the milliseconds until the paint after it. */
@@ -149,11 +151,19 @@ test("while jobs run, a poll never blocks the page for more than 200 ms", async 
   await page.waitForTimeout(QUIET_MS);
   await installLatencyProbe(page);
   await resetLatency(page, false);
+  // A poll that changes the state is answered with 200: without any, nothing was measured.
+  let changing = 0;
+  const count = (response: Response): void => {
+    if (response.url().endsWith("/local/state") && response.status() === 200) changing++;
+  };
+  page.on("response", count);
   await page.waitForTimeout(WATCH_MS);
+  page.off("response", count);
   const { longTasks } = await readLatency(page);
   await testInfo.attach("long-tasks.json", { body: JSON.stringify(longTasks), contentType: "application/json" });
   // The margin in the output of a passing run too: the attachments are kept only on failures.
-  console.log(`polls: ${longTasks.length} long tasks, the longest ${Math.round(Math.max(0, ...longTasks))} ms`);
+  console.log(`polls: ${changing} changed states, ${longTasks.length} long tasks, the longest ${Math.round(Math.max(0, ...longTasks))} ms`);
+  expect(changing, "polls that changed the state").toBeGreaterThanOrEqual(3);
   expect(Math.max(0, ...longTasks), JSON.stringify(longTasks)).toBeLessThanOrEqual(LONG_TASK_MS);
 });
 

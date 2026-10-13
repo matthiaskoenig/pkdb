@@ -108,6 +108,13 @@ const rowHeight = computed(() => position.value.rowHeight ?? ROW_HEIGHT);
 
 /** The folder of the study whose row has the keyboard focus: it stays rendered wherever it is. */
 const focusedPath = ref<string | null>(null);
+// A row that a filter removed has lost its focus with the element: it is not pinned when it returns.
+watch(
+  () => props.rows,
+  (rows) => {
+    if (focusedPath.value !== null && !rows.some((row) => row.path === focusedPath.value)) focusedPath.value = null;
+  },
+);
 const pinned = computed(() => {
   const path = focusedPath.value;
   if (path === null) return null;

@@ -17,7 +17,7 @@ import {
 import { findProfile } from "./study";
 
 /** The circles of the curators of a row: avatars, or avatars and a count of the others. */
-export const CURATOR_SLOTS = 3;
+const CURATOR_SLOTS = 3;
 
 export interface Curator {
   name: string;
@@ -146,7 +146,7 @@ export function sameParts(a: readonly BodyPart[], b: readonly BodyPart[]): boole
 // The rows that size the columns
 
 /** The most rows that size the columns of the table. */
-export const SIZER_LIMIT = 12;
+const SIZER_LIMIT = 12;
 
 /** A column of the table as its sizer rows see it. */
 interface SizedColumn {
