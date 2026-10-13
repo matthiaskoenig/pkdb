@@ -18,6 +18,7 @@ import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
+import { useSaveShortcut } from "../composables/useSaveShortcut";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
@@ -142,6 +143,12 @@ onBeforeUnmount(() => {
   window.removeEventListener("beforeunload", beforeUnload);
   answer?.(false);
   study.close();
+});
+
+// Ctrl+S (Cmd+S on macOS) saves the draft of study.json from any section; the draft saves only
+// what it can: nothing without changes, during a save, or before the Reload of a conflict.
+useSaveShortcut(() => {
+  if (study.draft.canSave) void study.draft.save();
 });
 
 // Without a valid section, the page shows the section that the study needs first.

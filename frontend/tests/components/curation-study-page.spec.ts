@@ -1139,3 +1139,74 @@ describe("StudyPage", () => {
     );
   });
 });
+
+describe("the save shortcut", () => {
+  const METADATA = "/local/studies/metadata";
+  const written = () => json({ revision: "study-2", reference: null, reference_error: null });
+
+  /** Sends the keydown of S with `init` to the focused part of the page; whether the page prevented the default. */
+  function press(init: KeyboardEventInit): boolean {
+    const event = new KeyboardEvent("keydown", { key: "s", bubbles: true, cancelable: true, ...init });
+    (document.activeElement ?? document.body).dispatchEvent(event);
+    return event.defaultPrevented;
+  }
+
+  it("saves the draft with Ctrl+S or Cmd+S from any section, and keeps the save dialog of the browser closed", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+
+    useStudyStore().draft.form!.creator = "mkoenig";
+    await flushPromises();
+    expect(press({ metaKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(2);
+  });
+
+  it("writes nothing without unsaved changes, with Shift or Alt, or while a dialog is open", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", { [`POST ${METADATA}`]: written });
+    // Without changes the browser's save dialog stays closed too.
+    expect(press({ ctrlKey: true })).toBe(true);
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    expect(press({ ctrlKey: true, shiftKey: true })).toBe(false);
+    expect(press({ ctrlKey: true, altKey: true })).toBe(false);
+    expect(press({})).toBe(false);
+
+    // The dialog of leaving answers with its own buttons.
+    void router.push("/");
+    await vi.waitFor(() => expect(buttons("Stay")).toHaveLength(1));
+    expect(press({ ctrlKey: true })).toBe(true);
+    await flushPromises();
+    expect(posted(METADATA)).toEqual([]);
+  });
+
+  it("writes once when Ctrl+S repeats while the save runs", async () => {
+    let answer: (response: Response) => void = () => {};
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: (() => new Promise<Response>((resolve) => (answer = resolve))) satisfies Handler,
+    });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    press({ ctrlKey: true });
+    press({ ctrlKey: true, repeat: true });
+    await flushPromises();
+    press({ ctrlKey: true });
+    await flushPromises();
+    expect(posted(METADATA)).toHaveLength(1);
+    answer(written());
+    await flushPromises();
+    expect(useStudyStore().draft.dirty).toBe(false);
+  });
+
+  it("leaves Ctrl+S to the browser once the study page closed", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    await router.push("/");
+    await flushPromises();
+    expect(router.currentRoute.value.name).toBe("Overview");
+    expect(press({ ctrlKey: true })).toBe(false);
+  });
+});
