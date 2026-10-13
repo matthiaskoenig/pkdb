@@ -943,6 +943,14 @@ test.describe("tables", () => {
       .toContain(workbook);
   });
 
+  test("Open sheet opens the workbook at the sheet of the shown table", async ({ app, page }) => {
+    await page.getByRole("button", { name: "Open sheet" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "The workbook opened." })).toBeVisible();
+    const workbook = join(app.server.workspace, "caffeine/Demo2020/Demo2020.xlsx");
+    expect(readFileSync(app.server.openLog, "utf8").split("\n")).toContain(workbook);
+    expect((await runTool("workbook_view.py", workbook)).split("!")[0]).toBe(SHEET);
+  });
+
   test("a saved workbook updates the tables within the next polls", async ({ app, page }) => {
     await expect(gridCell(page, 5, "1.24")).toBeVisible();
     await editWorkbook(app.server.workspace, 5, "mean", "1.42");

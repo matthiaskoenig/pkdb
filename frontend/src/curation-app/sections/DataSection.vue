@@ -43,12 +43,12 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
 
 /**
  * A source of the study beside the rows of a table, read only. The toolbar holds the switch of
- * the empty columns, Open sheet, Sync, Add table and what the sync status means; the head of a shared table
- * holds its Source filter. Below the toolbar are the navigator of the tables and sources, the
- * source pane and the rows pane, which a separator resizes. Tables are edited in the workbook,
- * which Open tables of the study header opens where it was left, and Open sheet at the sheet of
- * the shown table: Sync syncs it, and Add table adds a sheet. While
- * the workbook and the tables conflict, the conflict panel shows at the top of the rows pane.
+ * the empty columns, Open sheet, Sync, Add table and what the sync status means; the head of a
+ * shared table holds its Source filter. Below the toolbar are the navigator of the tables and
+ * sources, the source pane and the rows pane, which a separator resizes. Tables are edited in the
+ * workbook, which Open tables of the study header opens where it was left, and Open sheet at the
+ * sheet of the shown table: Sync syncs it, and Add table adds a sheet. While the workbook and the
+ * tables conflict, the conflict panel shows at the top of the rows pane.
  * Below it, the notes of the kind of the table in study.json open and close above the rows; they
  * edit the draft of the study store, whose banner under the section tabs shows its unsaved changes.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
@@ -330,6 +330,8 @@ const { busy, working, failure, userText, run } = useAction<Action>(announce);
 const addTable = ref(false);
 /** What to do in the workbook after an open found it open already; it stays until it is closed or the next action. */
 const openNotice = ref<string | null>(null);
+// The notice names a sheet of the table that was shown, so it ends with the table and with the study.
+watch([file, identity], () => (openNotice.value = null));
 
 /**
  * Open the workbook at the sheet of the shown table: Open sheet of the toolbar (`sheet`), and Open

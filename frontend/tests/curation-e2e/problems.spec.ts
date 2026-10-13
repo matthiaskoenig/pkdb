@@ -1,13 +1,14 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures.ts";
+import { expect, expectAccessible, runTool, test } from "./fixtures.ts";
 
 interface ReviewJson {
   items: { state: string; acknowledges?: string; text: string; target?: object }[];
 }
 
 const REASON = "D400 was planned, but the study reports no results for it.";
+const WORKBOOK = "caffeine/Demo2020/Demo2020.xlsx";
 
 function problem(page: Page, code: string) {
   return page.getByRole("listitem").filter({ has: page.getByText(code, { exact: true }) });
@@ -76,4 +77,46 @@ test("a problem names its line, counted from the header line 0, and its workbook
   const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
   await expect(grid.getByRole("columnheader", { name: "Line 0", exact: true })).toBeVisible();
   await expect(grid.getByRole("rowheader", { name: "1", exact: true })).toBeVisible();
+});
+
+test("Open in tables opens the workbook at the sheet and the cell of the problem", async ({ app, page }) => {
+  await problem(page, "digitized_mismatch").getByRole("button", { name: "Open in tables" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "The workbook opened." })).toBeVisible();
+  const workbook = join(app.server.workspace, WORKBOOK);
+  expect(readFileSync(app.server.openLog, "utf8").split("\n")).toContain(workbook);
+  // The mean 1.24 at 4 hr: the column mean and the row of its line in timecourses_Fig1.
+  expect(await runTool("workbook_view.py", workbook)).toBe("timecourses_Fig1!O6\n");
+});
+
+test("Open in tables of an open workbook names the sheet and the cell to go to", async ({ app, page }) => {
+  const workbook = join(app.server.workspace, WORKBOOK);
+  const lock = join(app.server.workspace, "caffeine/Demo2020/.~lock.Demo2020.xlsx#");
+  const before = readFileSync(workbook);
+  writeFileSync(lock, "curator");
+  try {
+    await problem(page, "digitized_mismatch").getByRole("button", { name: "Open in tables" }).click();
+    const notice = page
+      .getByRole("status")
+      .filter({ hasText: "The workbook is already open. Go to sheet timecourses_Fig1, cell O6." });
+    await expect(notice).toBeVisible();
+    expect(readFileSync(workbook).equals(before)).toBe(true);
+    await expectAccessible(page);
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(notice).toBeVisible();
+    await expectAccessible(page);
+  } finally {
+    rmSync(lock, { force: true });
+  }
+});
+
+test("Open in tables of a problem of a raw table opens the workbook at the sheet of the raw table", async ({ app, page }) => {
+  const raw = join(app.server.workspace, "caffeine/Demo2020/Demo2020_Tab2.tsv");
+  writeFileSync(raw, `<<<<<<< HEAD\n${readFileSync(raw, "utf8")}`);
+  await page.getByRole("button", { name: "Validate" }).click();
+  const conflict = problem(page, "merge_conflict");
+  await expect(conflict).toBeVisible();
+  await conflict.getByRole("button", { name: "Open in tables" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "The workbook opened." })).toBeVisible();
+  const workbook = join(app.server.workspace, WORKBOOK);
+  expect(await runTool("workbook_view.py", workbook)).toBe("Demo2020_Tab2!A1\n");
 });

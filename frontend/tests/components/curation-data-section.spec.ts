@@ -1127,6 +1127,19 @@ describe("sync status", () => {
     expect(page().find(".data-open-notice").exists()).toBe(false);
   });
 
+  it("closes the notice of an open workbook when another table is shown", async () => {
+    await mountSection(
+      detail(),
+      { [`POST ${TABLES}`]: { ...synced, opened: true, notice: "The workbook is already open. Go to sheet outputs_Tab2." } },
+      `${SECTION}?file=outputs_Tab2.tsv`,
+    );
+    await press("Open sheet");
+    expect(page().find(".data-open-notice").exists()).toBe(true);
+    await router.push(`${SECTION}?file=subjects.tsv`);
+    await flushPromises();
+    expect(page().find(".data-open-notice").exists()).toBe(false);
+  });
+
   it("leaves Open tables to the study header, and shows the progress on the running button only", async () => {
     let finish: (response: Response) => void = () => undefined;
     await mountSection(reviewed(sync("changed", 1)), {
