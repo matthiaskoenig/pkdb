@@ -302,10 +302,15 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
   if (hash !== "#/") await showRoute(page, hash);
 }
 
-/** Show the route `hash` of the open app, as a link in the app does. */
+/**
+ * Show the route `hash` of the open app, as a link in the app does. The router may replace it,
+ * as it replaces an old address, so any new route shows that it went there.
+ */
 async function showRoute(page: Page, hash: string): Promise<void> {
+  const shown = new URL(page.url()).hash;
+  if (shown === hash) return;
   await page.evaluate((target) => (window.location.hash = target), hash);
-  await expect.poll(() => new URL(page.url()).hash).toBe(hash);
+  await expect.poll(() => new URL(page.url()).hash).not.toBe(shown);
 }
 
 /**
