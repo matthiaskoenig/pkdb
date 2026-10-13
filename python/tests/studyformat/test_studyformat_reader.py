@@ -234,13 +234,13 @@ def test_subjects_become_groups_and_individuals(valid_study):
     assert [
         (c.key, c.measurement_type, c.choice, c.image) for c in group.characteristica
     ] == [
-        ("characteristica.tsv:2", "healthy", "Y", "Example_Tab1.png"),
-        ("characteristica.tsv:3", "sex", "M", "Example_Tab1.png"),
-        ("characteristica.tsv:4", "species", "Homo sapiens", "Example_Tab1.png"),
+        ("characteristica.tsv:1", "healthy", "Y", "Example_Tab1.png"),
+        ("characteristica.tsv:2", "sex", "M", "Example_Tab1.png"),
+        ("characteristica.tsv:3", "species", "Homo sapiens", "Example_Tab1.png"),
     ]
     [age] = study.individuals[0].characteristica
     assert (age.key, age.measurement_type, age.unit) == (
-        "characteristica.tsv:5",
+        "characteristica.tsv:4",
         "age",
         "yr",
     )
@@ -408,7 +408,7 @@ def test_outputs_carry_subjects_interventions_and_all_statistics(valid_study, ts
         ),
     )
     outputs = by_key(read(valid_study).measurements)
-    group = outputs["outputs_Tab2.tsv:2"]
+    group = outputs["outputs_Tab2.tsv:1"]
     assert (group.group, group.individual, group.interventions) == ("all", None, ["D1"])
     assert (group.output_type, group.label, group.series_key) == ("output", None, None)
     assert (group.tissue, group.method, group.image) == (
@@ -433,7 +433,7 @@ def test_outputs_carry_subjects_interventions_and_all_statistics(valid_study, ts
         max=3.0,
     )
     assert group.comments == [Comment(text="Table 2.")]
-    individual = outputs["outputs_Tab2.tsv:3"]
+    individual = outputs["outputs_Tab2.tsv:2"]
     assert (individual.group, individual.individual) == (None, "S1")
     assert individual.statistics == Statistics(mean=2.0, error_bar=2.6, error_type="sd")
 
@@ -443,9 +443,9 @@ def test_timecourse_points_keep_their_label(valid_study):
         m for m in read(valid_study).measurements if m.output_type == "timecourse"
     ]
     assert [(p.key, p.time, p.statistics.mean) for p in points] == [
-        ("timecourses_Fig1.tsv:2", 0.0, 0.0),
-        ("timecourses_Fig1.tsv:3", 1.0, 2.0),
-        ("timecourses_Fig1.tsv:4", 2.0, 1.0),
+        ("timecourses_Fig1.tsv:1", 0.0, 0.0),
+        ("timecourses_Fig1.tsv:2", 1.0, 2.0),
+        ("timecourses_Fig1.tsv:3", 2.0, 1.0),
     ]
     for point in points:
         assert point.label == "drug_plasma"
@@ -458,8 +458,8 @@ def test_timecourse_points_keep_their_label(valid_study):
 def test_scatter_rows_become_paired_measurements_and_a_dataset(valid_study):
     study = read(valid_study)
     measurements = by_key(study.measurements)
-    x = measurements["scatters_Fig2.tsv:2:x"]
-    y = measurements["scatters_Fig2.tsv:2:y"]
+    x = measurements["scatters_Fig2.tsv:1:x"]
+    y = measurements["scatters_Fig2.tsv:1:y"]
     assert (x.label, x.individual, x.interventions) == ("age_vs_cmax_x", "S1", [])
     assert (x.measurement_type, x.statistics, x.unit) == (
         "age",
@@ -473,7 +473,7 @@ def test_scatter_rows_become_paired_measurements_and_a_dataset(valid_study):
         "mg/l",
         "Example_Fig2.png",
     )
-    assert measurements["scatters_Fig2.tsv:3:y"].individual == "S2"
+    assert measurements["scatters_Fig2.tsv:2:y"].individual == "S2"
     [dataset] = study.scatters
     assert (dataset.key, dataset.name, dataset.data_type) == (
         "scatters_Fig2.tsv:age_vs_cmax",
@@ -508,20 +508,20 @@ def test_scatter_of_groups_pairs_by_group(valid_study, tsv):
     write(valid_study, "scatters_Fig2.tsv", tsv("scatters", point))
     study = read(valid_study)
     assert study.scatters[0].subsets[0].shared == ["group"]
-    assert by_key(study.measurements)["scatters_Fig2.tsv:2:y"].group == "all"
+    assert by_key(study.measurements)["scatters_Fig2.tsv:1:y"].group == "all"
 
 
 def test_source_locations_point_to_rows_and_cells(valid_study):
     study = read(valid_study)
-    output = by_key(study.measurements)["outputs_Tab2.tsv:2"]
+    output = by_key(study.measurements)["outputs_Tab2.tsv:1"]
     source = output.source
     assert source == SourceLocation(
-        file="outputs_Tab2.tsv", sheet="outputs_Tab2", row=2
+        file="outputs_Tab2.tsv", sheet="outputs_Tab2", row=1
     )
     assert source.for_header("mean") == SourceLocation(
         file="outputs_Tab2.tsv",
         sheet="outputs_Tab2",
-        row=2,
+        row=1,
         column="N",
         cell="N2",
         header="mean",
@@ -530,9 +530,9 @@ def test_source_locations_point_to_rows_and_cells(valid_study):
     assert source.for_field("group").header == "subjects"
     assert source.for_field("unknown") is source
     scatter = by_key(study.measurements)
-    assert scatter["scatters_Fig2.tsv:3:x"].source.for_field("mean").cell == "L3"
-    assert scatter["scatters_Fig2.tsv:3:y"].source.for_field("mean").cell == "U3"
-    assert scatter["scatters_Fig2.tsv:3:y"].source.for_field("individual").cell == "D3"
+    assert scatter["scatters_Fig2.tsv:2:x"].source.for_field("mean").cell == "L3"
+    assert scatter["scatters_Fig2.tsv:2:y"].source.for_field("mean").cell == "U3"
+    assert scatter["scatters_Fig2.tsv:2:y"].source.for_field("individual").cell == "D3"
     individual = study.individuals[1]
     assert individual.source.for_field("group").cell == "C4"
     characteristic = study.individuals[0].characteristica[0]
@@ -581,8 +581,8 @@ def test_prepare_folder_runs_the_server_stages(valid_study, sf_vocabulary):
     assert ("drug_plasma",) * 3 in labels
     scatter = next(record for record in study.scatters if record.name == "age_vs_cmax")
     assert scatter.subsets[0].points == [
+        ["scatters_Fig2.tsv:1:x:normalized", "scatters_Fig2.tsv:1:y:normalized"],
         ["scatters_Fig2.tsv:2:x:normalized", "scatters_Fig2.tsv:2:y:normalized"],
-        ["scatters_Fig2.tsv:3:x:normalized", "scatters_Fig2.tsv:3:y:normalized"],
     ]
     assert any(m.calculated for m in study.measurements)
 
@@ -610,8 +610,8 @@ def test_prepare_folder_keeps_warnings_of_every_layer(valid_study, tsv, sf_vocab
     assert sorted(
         (issue.code, issue.source and issue.source.row) for issue in report.issues
     ) == [
-        ("duplicate_observation", 3),
-        ("inconsistent_statistics", 2),
+        ("duplicate_observation", 2),
+        ("inconsistent_statistics", 1),
     ]
 
 
@@ -627,7 +627,7 @@ def test_prepare_folder_reports_postprocessing_errors_at_their_cell(
     assert issue.source == SourceLocation(
         file="outputs_Tab2.tsv",
         sheet="outputs_Tab2",
-        row=2,
+        row=1,
         column="Y",
         cell="Y2",
         header="error_bar",
@@ -669,4 +669,4 @@ def test_over_long_names_are_reported_at_their_cell(valid_study, tsv, sf_vocabul
     issue = error.value.report.issues[0]
     assert issue.code == "string_too_long"
     assert issue.source is not None
-    assert (issue.source.file, issue.source.row) == ("scatters_Fig2.tsv", 2)
+    assert (issue.source.file, issue.source.row) == ("scatters_Fig2.tsv", 1)

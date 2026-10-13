@@ -420,6 +420,8 @@ def test_a_cell_longer_than_a_spreadsheet_cell_is_an_issue(sf_vocabulary):
     assert issue.code == "cell_too_long"
     assert issue.severity == "error"
     assert issue.source.file == "outputs_Tab1.tsv"
+    # The second entry is line 2 of the table and row 3 of its sheet.
+    assert issue.source.row == 2
     assert issue.source.cell == f"{letter('outputs', 'comment')}3"
     assert result.base.files == tables
 

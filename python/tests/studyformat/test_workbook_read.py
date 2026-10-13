@@ -535,8 +535,26 @@ def test_an_unknown_header_column_is_reported_at_its_cell(workbook):
     assert not content.ok
     issue = only(content, "unknown_column")
     assert at(issue) == ("subjects", "G1")
+    assert issue.source.row == 1
     assert "subjects.tsv" not in content.tables
     assert "subjects" in content.sheets
+
+
+def test_a_problem_of_a_line_is_reported_at_its_sheet_row(workbook):
+    def stray(book):
+        # Row 5 stays empty, so the text is in line 5 of subjects.tsv and row 6.
+        book["subjects"]["A6"] = "Other"
+
+    content = read_workbook(edit(workbook, stray), STUDY)
+
+    issue = only(content, "stray_text")
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.sheet, issue.source.row) == (
+        "Example.xlsx",
+        "subjects",
+        6,
+    )
+    assert issue.source.cell == "A6"
 
 
 def test_a_missing_base_is_a_warning(workbook, study_tables):

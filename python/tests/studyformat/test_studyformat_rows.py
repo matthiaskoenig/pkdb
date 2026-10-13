@@ -315,7 +315,7 @@ def test_issues_are_located_at_row_and_column(make_study, valid_files, tsv):
     assert (issue.source.file, issue.source.sheet, issue.source.row) == (
         "outputs_Tab2.tsv",
         "outputs_Tab2",
-        2,
+        1,
     )
     assert issue.source.header == "sd"
     letter = chr(ord("A") + table.header.index("sd"))

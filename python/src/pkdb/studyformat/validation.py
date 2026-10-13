@@ -29,7 +29,7 @@ from pkdb.studyformat.load import LoadedStudy, load_study
 from pkdb.studyformat.reader import read_study
 from pkdb.studyformat.relations import check_relations
 from pkdb.studyformat.rows import check_rows
-from pkdb.studyformat.tables import STUDY_JSON
+from pkdb.studyformat.tables import STUDY_JSON, table_line
 from pkdb.studyformat.terms import check_terms
 
 FORMAT_VERSION = 2
@@ -93,7 +93,7 @@ def format_issues(study: LoadedStudy) -> list[ValidationIssue]:
                 )
             )
         elif (data := (study.folder / name).read_bytes()) != text.encode("utf-8"):
-            line = first_difference(data, text.encode("utf-8"))
+            line = table_line(name, first_difference(data, text.encode("utf-8")))
             issues.append(
                 make_issue(
                     "not_formatted",
@@ -106,7 +106,7 @@ def format_issues(study: LoadedStudy) -> list[ValidationIssue]:
 
 
 def first_difference(current: bytes, canonical: bytes) -> int:
-    """Number of the first line that differs, counting line endings as part of a line."""
+    """Number of the first physical line that differs, from 1, counting line endings as part of a line."""
     lines = current.splitlines(keepends=True)
     expected = canonical.splitlines(keepends=True)
     for number, (line, wanted) in enumerate(zip(lines, expected, strict=False), 1):

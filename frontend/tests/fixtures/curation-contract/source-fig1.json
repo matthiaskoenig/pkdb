@@ -43,7 +43,7 @@
       ],
       "rows": [
         [
-          2,
+          1,
           [
             "Demo2020",
             "Fig1",
@@ -76,7 +76,7 @@
           ]
         ],
         [
-          3,
+          2,
           [
             "Demo2020",
             "Fig1",
@@ -109,7 +109,7 @@
           ]
         ],
         [
-          4,
+          3,
           [
             "Demo2020",
             "Fig1",
@@ -142,7 +142,7 @@
           ]
         ],
         [
-          5,
+          4,
           [
             "Demo2020",
             "Fig1",
@@ -175,7 +175,7 @@
           ]
         ],
         [
-          6,
+          5,
           [
             "Demo2020",
             "Fig1",
@@ -208,7 +208,7 @@
           ]
         ],
         [
-          7,
+          6,
           [
             "Demo2020",
             "Fig1",
@@ -241,7 +241,7 @@
           ]
         ],
         [
-          8,
+          7,
           [
             "Demo2020",
             "Fig1",
@@ -274,7 +274,7 @@
           ]
         ],
         [
-          9,
+          8,
           [
             "Demo2020",
             "Fig1",
@@ -307,7 +307,7 @@
           ]
         ],
         [
-          10,
+          9,
           [
             "Demo2020",
             "Fig1",
@@ -340,7 +340,7 @@
           ]
         ],
         [
-          11,
+          10,
           [
             "Demo2020",
             "Fig1",
@@ -373,7 +373,7 @@
           ]
         ],
         [
-          12,
+          11,
           [
             "Demo2020",
             "Fig1",
@@ -406,7 +406,7 @@
           ]
         ],
         [
-          13,
+          12,
           [
             "Demo2020",
             "Fig1",
@@ -439,7 +439,7 @@
           ]
         ],
         [
-          14,
+          13,
           [
             "Demo2020",
             "Fig1",
@@ -472,7 +472,7 @@
           ]
         ],
         [
-          15,
+          14,
           [
             "Demo2020",
             "Fig1",
@@ -505,7 +505,7 @@
           ]
         ],
         [
-          16,
+          15,
           [
             "Demo2020",
             "Fig1",
@@ -538,7 +538,7 @@
           ]
         ],
         [
-          17,
+          16,
           [
             "Demo2020",
             "Fig1",
@@ -571,7 +571,7 @@
           ]
         ],
         [
-          18,
+          17,
           [
             "Demo2020",
             "Fig1",
@@ -604,7 +604,7 @@
           ]
         ],
         [
-          19,
+          18,
           [
             "Demo2020",
             "Fig1",
@@ -1139,7 +1139,7 @@
       "x": 0.25,
       "y": 1.48,
       "file": "timecourses_Fig1.tsv",
-      "line": 2,
+      "line": 1,
       "error_px": [
         124.401,
         377.94
@@ -1156,7 +1156,7 @@
       "x": 0.5,
       "y": 1.97,
       "file": "timecourses_Fig1.tsv",
-      "line": 3,
+      "line": 2,
       "error_px": [
         131.871,
         330.38
@@ -1173,7 +1173,7 @@
       "x": 1.0,
       "y": 2.1,
       "file": "timecourses_Fig1.tsv",
-      "line": 4,
+      "line": 3,
       "error_px": [
         146.813,
         317.26
@@ -1190,7 +1190,7 @@
       "x": 2.0,
       "y": 1.87,
       "file": "timecourses_Fig1.tsv",
-      "line": 5,
+      "line": 4,
       "error_px": [
         176.696,
         340.22
@@ -1207,7 +1207,7 @@
       "x": 4.0,
       "y": 1.24,
       "file": "timecourses_Fig1.tsv",
-      "line": 6,
+      "line": 5,
       "error_px": [
         236.462,
         384.5
@@ -1224,7 +1224,7 @@
       "x": 6.0,
       "y": 1.07,
       "file": "timecourses_Fig1.tsv",
-      "line": 7,
+      "line": 6,
       "error_px": [
         296.228,
         418.94
@@ -1241,7 +1241,7 @@
       "x": 8.0,
       "y": 0.81,
       "file": "timecourses_Fig1.tsv",
-      "line": 8,
+      "line": 7,
       "error_px": [
         355.993,
         444.36
@@ -1258,7 +1258,7 @@
       "x": 12.0,
       "y": 0.47,
       "file": "timecourses_Fig1.tsv",
-      "line": 9,
+      "line": 8,
       "error_px": [
         475.525,
         477.98
@@ -1275,7 +1275,7 @@
       "x": 24.0,
       "y": 0.09,
       "file": "timecourses_Fig1.tsv",
-      "line": 10,
+      "line": 9,
       "error_px": [
         834.12,
         514.88
@@ -1292,7 +1292,7 @@
       "x": 0.25,
       "y": 2.95,
       "file": "timecourses_Fig1.tsv",
-      "line": 11,
+      "line": 10,
       "error_px": [
         124.401,
         233.62
@@ -1309,7 +1309,7 @@
       "x": 0.5,
       "y": 3.93,
       "file": "timecourses_Fig1.tsv",
-      "line": 12,
+      "line": 11,
       "error_px": [
         131.871,
         136.86
@@ -1326,7 +1326,7 @@
       "x": 1.0,
       "y": 4.2,
       "file": "timecourses_Fig1.tsv",
-      "line": 13,
+      "line": 12,
       "error_px": [
         146.813,
         110.62
@@ -1343,7 +1343,7 @@
       "x": 2.0,
       "y": 3.74,
       "file": "timecourses_Fig1.tsv",
-      "line": 14,
+      "line": 13,
       "error_px": [
         176.696,
         155.72
@@ -1360,7 +1360,7 @@
       "x": 4.0,
       "y": 2.83,
       "file": "timecourses_Fig1.tsv",
-      "line": 15,
+      "line": 14,
       "error_px": [
         236.462,
         245.1
@@ -1377,7 +1377,7 @@
       "x": 6.0,
       "y": 2.15,
       "file": "timecourses_Fig1.tsv",
-      "line": 16,
+      "line": 15,
       "error_px": [
         296.228,
         312.34
@@ -1394,7 +1394,7 @@
       "x": 8.0,
       "y": 1.63,
       "file": "timecourses_Fig1.tsv",
-      "line": 17,
+      "line": 16,
       "error_px": [
         355.993,
         363.18
@@ -1411,7 +1411,7 @@
       "x": 12.0,
       "y": 0.93,
       "file": "timecourses_Fig1.tsv",
-      "line": 18,
+      "line": 17,
       "error_px": [
         475.525,
         432.06
@@ -1428,7 +1428,7 @@
       "x": 24.0,
       "y": 0.18,
       "file": "timecourses_Fig1.tsv",
-      "line": 19,
+      "line": 18,
       "error_px": [
         834.12,
         505.86
@@ -1445,7 +1445,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 2,
+      "line": 1,
       "x": 0.25,
       "y": 1.48,
       "error_bar": 1.83,
@@ -1456,7 +1456,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 3,
+      "line": 2,
       "x": 0.5,
       "y": 1.97,
       "error_bar": 2.41,
@@ -1467,7 +1467,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 4,
+      "line": 3,
       "x": 1.0,
       "y": 2.1,
       "error_bar": 2.57,
@@ -1478,7 +1478,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 5,
+      "line": 4,
       "x": 2.0,
       "y": 1.87,
       "error_bar": 2.29,
@@ -1489,7 +1489,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 6,
+      "line": 5,
       "x": 4.0,
       "y": 1.24,
       "error_bar": 1.75,
@@ -1500,7 +1500,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 7,
+      "line": 6,
       "x": 6.0,
       "y": 1.07,
       "error_bar": 1.33,
@@ -1511,7 +1511,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 8,
+      "line": 7,
       "x": 8.0,
       "y": 0.81,
       "error_bar": 1.02,
@@ -1522,7 +1522,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 9,
+      "line": 8,
       "x": 12.0,
       "y": 0.47,
       "error_bar": 0.61,
@@ -1533,7 +1533,7 @@
       "series": "caf_plasma_100mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 10,
+      "line": 9,
       "x": 24.0,
       "y": 0.09,
       "error_bar": 0.16,
@@ -1544,7 +1544,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 11,
+      "line": 10,
       "x": 0.25,
       "y": 2.95,
       "error_bar": 3.59,
@@ -1555,7 +1555,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 12,
+      "line": 11,
       "x": 0.5,
       "y": 3.93,
       "error_bar": 4.77,
@@ -1566,7 +1566,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 13,
+      "line": 12,
       "x": 1.0,
       "y": 4.2,
       "error_bar": 5.09,
@@ -1577,7 +1577,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 14,
+      "line": 13,
       "x": 2.0,
       "y": 3.74,
       "error_bar": 4.54,
@@ -1588,7 +1588,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 15,
+      "line": 14,
       "x": 4.0,
       "y": 2.83,
       "error_bar": 3.45,
@@ -1599,7 +1599,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 16,
+      "line": 15,
       "x": 6.0,
       "y": 2.15,
       "error_bar": 2.63,
@@ -1610,7 +1610,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 17,
+      "line": 16,
       "x": 8.0,
       "y": 1.63,
       "error_bar": 2.01,
@@ -1621,7 +1621,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 18,
+      "line": 17,
       "x": 12.0,
       "y": 0.93,
       "error_bar": 1.17,
@@ -1632,7 +1632,7 @@
       "series": "caf_plasma_200mg",
       "kind": "timecourses",
       "file": "timecourses_Fig1.tsv",
-      "line": 19,
+      "line": 18,
       "x": 24.0,
       "y": 0.18,
       "error_bar": 0.27,

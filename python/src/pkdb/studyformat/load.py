@@ -68,7 +68,7 @@ STRUCTURAL = frozenset(
 
 @dataclass(frozen=True)
 class Row:
-    """One data line of a table: its line number and the cell texts and typed values."""
+    """One data line of a table: its line number (the header is line 0, the first entry line 1) and the cell texts and typed values."""
 
     line: int
     cells: dict[str, str]
@@ -198,7 +198,7 @@ def _header_issues(
                         "duplicate_column",
                         f"Column {name!r} appears twice",
                         file=file,
-                        line=1,
+                        line=0,
                         column=index,
                         header=name,
                     )
@@ -209,7 +209,7 @@ def _header_issues(
                     "unknown_column",
                     f"Unknown column {name!r}",
                     file=file,
-                    line=1,
+                    line=0,
                     column=index,
                     header=name,
                     candidates=_candidates(name, spec),
@@ -218,7 +218,7 @@ def _header_issues(
     kinds = {"duplicate_column": "repeat a column", "unknown_column": "are unknown"}
     issues.extend(
         make_issue(
-            code, f"{total:,} header columns {kinds[code]}; {LISTED}", file=file, line=1
+            code, f"{total:,} header columns {kinds[code]}; {LISTED}", file=file, line=0
         )
         for code, total in cap.beyond()
     )
@@ -254,7 +254,7 @@ def load_table(
     stray: list[ValidationIssue] = []
     try:
         for line in lines:
-            if line.number == 1:
+            if line.number == 0:
                 header = line.cells
                 unnamed = {index for index, name in enumerate(header) if name == ""}
                 positions, broken = _header_issues(file, header, spec, set())
@@ -262,7 +262,7 @@ def load_table(
                 limit.count()
             if line.conflict and conflict is None:
                 conflict = line.number
-            if line.number == 1 or conflict is not None or not any(header):
+            if line.number == 0 or conflict is not None or not any(header):
                 # Only the encoding and the row limit still matter.
                 continue
             if unnamed:
@@ -317,7 +317,7 @@ def load_table(
                 "missing_header",
                 "The first line must contain the column names",
                 file=file,
-                line=1,
+                line=0,
             )
         ]
     _, structure = _header_issues(file, header, spec, filled)

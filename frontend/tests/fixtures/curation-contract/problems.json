@@ -7,7 +7,7 @@
       "source": {
         "file": "interventions.tsv",
         "sheet": "interventions",
-        "row": 4,
+        "row": 3,
         "column": "C",
         "path": [],
         "cell": "C4",
@@ -30,7 +30,7 @@
       "source": {
         "file": "timecourses_Fig1.tsv",
         "sheet": "timecourses_Fig1",
-        "row": 6,
+        "row": 5,
         "column": "O",
         "path": [],
         "cell": "O6",

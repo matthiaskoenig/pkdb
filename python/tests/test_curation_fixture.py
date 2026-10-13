@@ -48,14 +48,14 @@ def problems(folder: Path) -> list[tuple]:
 
 def test_demo_study_has_only_its_two_deliberate_warnings():
     assert sorted(problems(FIXTURE / "Demo2020")) == [
-        ("warning", "digitized_mismatch", "timecourses_Fig1.tsv", 6, "mean"),
-        ("warning", "unused_intervention", "interventions.tsv", 4, "name"),
+        ("warning", "digitized_mismatch", "timecourses_Fig1.tsv", 5, "mean"),
+        ("warning", "unused_intervention", "interventions.tsv", 3, "name"),
     ]
 
 
 def test_draft_study_has_one_deliberate_error():
     assert problems(FIXTURE / "Draft2021") == [
-        ("error", "unknown_substance", "outputs_Tab1.tsv", 3, "substance"),
+        ("error", "unknown_substance", "outputs_Tab1.tsv", 2, "substance"),
     ]
 
 

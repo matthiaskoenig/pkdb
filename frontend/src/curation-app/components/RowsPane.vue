@@ -137,11 +137,11 @@ const emptyText = computed(() =>
     : `Every row of ${props.file} names a source.`,
 );
 
-/** The line of the route when it is no row of the table; line 1 of a table is its header. */
+/** The line of the route when it is no row of the table; line 0 of a table is its header. */
 const missingLine = computed(() => {
   const shown = props.table;
   const line = props.focus?.line;
-  if (!shown || line === undefined || (shown.kind === "table" && line === 1)) return null;
+  if (!shown || line === undefined || (shown.kind === "table" && line === 0)) return null;
   return shown.rows.some((row) => row.line === line) ? null : line;
 });
 </script>

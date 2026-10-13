@@ -7,7 +7,7 @@ import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
 
-/** The cells of the TSV table of Demo2020 by line, the header being line 1. */
+/** The cells of the TSV table of Demo2020 by line, the header being line 0. */
 function readTable(workspace: string): string[][] {
   return readFileSync(join(workspace, "caffeine/Demo2020", TABLE), "utf8")
     .split("\n")
@@ -17,20 +17,20 @@ function readTable(workspace: string): string[][] {
 
 function cellOf(workspace: string, line: number, column: string): string {
   const rows = readTable(workspace);
-  return rows[line - 1]?.[rows[0]!.indexOf(column)] ?? "";
+  return rows[line]?.[rows[0]!.indexOf(column)] ?? "";
 }
 
 /** Change a cell of the TSV table, as an editor saves it. */
 function editTable(workspace: string, line: number, column: string, value: string): void {
   const rows = readTable(workspace);
-  rows[line - 1]![rows[0]!.indexOf(column)] = value;
+  rows[line]![rows[0]!.indexOf(column)] = value;
   writeFileSync(join(workspace, "caffeine/Demo2020", TABLE), rows.map((cells) => `${cells.join("\t")}\n`).join(""));
 }
 
 /** Change a cell of the workbook with openpyxl, as a spreadsheet program saves it. */
 async function editWorkbook(workspace: string, line: number, column: string, value: string): Promise<void> {
-  // The sheet has the rows and columns of the table: line 6 is row 6, the header is row 1.
-  const cell = `${columnLetters(readTable(workspace)[0]!.indexOf(column))}${line}`;
+  // The sheet has the rows and columns of the table: the header, line 0, is row 1, so line 5 is row 6.
+  const cell = `${columnLetters(readTable(workspace)[0]!.indexOf(column))}${line + 1}`;
   const workbook = join(workspace, "caffeine/Demo2020/Demo2020.xlsx");
   await runTool("edit_workbook.py", workbook, SHEET, cell, value);
 }
@@ -188,23 +188,23 @@ test.describe("sources", () => {
       .toBeGreaterThan(0);
     await expect(page.getByRole("list", { name: "Series" })).toContainText("caf_plasma_100mg");
 
-    // The misplaced point of line 6 has no digitized point near it, so the cross is alone there.
+    // The misplaced point of line 5 has no digitized point near it, so the cross is alone there.
     const view = await sourceView(page, "Fig1");
-    const point = view.overlay.find((entry) => entry.role === "mapped" && entry.line === 6);
+    const point = view.overlay.find((entry) => entry.role === "mapped" && entry.line === 5);
     expect(point).toMatchObject({ file: "timecourses_Fig1.tsv" });
     const box = await figure.boundingBox();
-    if (!point || !box) throw new Error("The overlay has no point of line 6");
+    if (!point || !box) throw new Error("The overlay has no point of line 5");
     const [width, height] = view.image_size;
     const x = box.x + (point.px * box.width) / width;
     const y = box.y + (point.py * box.height) / height;
     await page.mouse.move(x, y);
-    await expect(page.getByText("timecourses_Fig1.tsv line 6")).toBeVisible();
+    await expect(page.getByText("timecourses_Fig1.tsv line 5")).toBeVisible();
 
     await page.mouse.click(x, y);
     await expect(page.getByRole("heading", { name: "Data", level: 2 })).toBeVisible();
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/)).toHaveAttribute("aria-current", "true");
     const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
-    await expect(grid.getByRole("rowheader", { name: "6", exact: true })).toBeFocused();
+    await expect(grid.getByRole("rowheader", { name: "5", exact: true })).toBeFocused();
   });
 
   test("the Tab2 source shows the table image, the raw extraction and the rows of its table", async ({ page }) => {
@@ -215,7 +215,7 @@ test.describe("sources", () => {
     await expect(raw.getByRole("cell", { name: "36.1 ± 8.5" })).toBeVisible();
     await expect(navigatorButton(page, /^outputs_Tab2\.tsv/)).toHaveAttribute("aria-current", "true");
     const rows = page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" });
-    await expect(rows.getByRole("button", { name: "2", exact: true })).toBeVisible();
+    await expect(rows.getByRole("button", { name: "1", exact: true })).toBeVisible();
   });
 });
 
@@ -308,7 +308,7 @@ test("subjects.tsv shows all of its rows when it is chosen, whichever source is 
   await navigatorButton(page, /^subjects\.tsv/).click();
   // subjects.tsv of Demo2020 has one row, the group all, whose source is Text.
   const rows = page.getByRole("region", { name: "Rows of subjects.tsv" });
-  await expect(rows.getByRole("rowheader", { name: "2", exact: true })).toBeVisible();
+  await expect(rows.getByRole("rowheader", { name: "1", exact: true })).toBeVisible();
   await expect(rows.getByRole("cell", { name: "all", exact: true })).toBeVisible();
   await expect(page.getByText(/^No rows of /)).toHaveCount(0);
 });
@@ -476,10 +476,10 @@ test("the section tabs keep their places when another one becomes active and bol
 });
 
 test("old addresses of the Sources and Tables sections open the Data section", async ({ app, page }) => {
-  await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=6");
-  await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=6$/);
+  await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=5");
+  await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=5$/);
   await expect(
-    page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "6", exact: true }),
+    page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "5", exact: true }),
   ).toBeFocused();
 });
 
@@ -643,8 +643,8 @@ test("the source pane shows that more of it follows below, and scrolls to its en
 });
 
 test("the ring of the selected line leaves room around its number in a row of 22 px", async ({ app, page }) => {
-  await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=6");
-  const cell = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "6", exact: true });
+  await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv&line=5");
+  const cell = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("rowheader", { name: "5", exact: true });
   await expect(cell).toBeFocused();
   const room = await cell.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -673,23 +673,23 @@ test("the line buttons of the rows are one Tab stop, which the arrow keys move, 
   const rows = page.getByRole("region", { name: `Rows of ${TABLE}` });
   await rows.focus();
   await page.keyboard.press("Tab");
-  await expect(rows.getByRole("button", { name: "2", exact: true })).toBeFocused();
+  await expect(rows.getByRole("button", { name: "1", exact: true })).toBeFocused();
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("ArrowDown");
-  await expect(rows.getByRole("button", { name: "4", exact: true })).toBeFocused();
+  await expect(rows.getByRole("button", { name: "3", exact: true })).toBeFocused();
   await expect(page).not.toHaveURL(/line=/);
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/line=4/);
+  await expect(page).toHaveURL(/line=3/);
   // Tab leaves the rows: the other line buttons are no Tab stops.
-  await rows.getByRole("button", { name: "4", exact: true }).focus();
+  await rows.getByRole("button", { name: "3", exact: true }).focus();
   await page.keyboard.press("Tab");
   expect(await page.evaluate(() => document.activeElement?.closest(".rows-scroll") === null)).toBe(true);
 });
 
 test("a clicked row of a figure rings its point", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?source=Fig1&file=timecourses_Fig1.tsv");
-  await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "6", exact: true }).click();
-  await expect(page).toHaveURL(/line=6/);
+  await page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" }).getByRole("button", { name: "5", exact: true }).click();
+  await expect(page).toHaveURL(/line=5/);
   const figure = page.getByRole("img", { name: /^Figure Fig1/ });
   await expect
     .poll(() =>
@@ -716,19 +716,19 @@ test.describe("tables", () => {
   });
 
   test("a saved workbook updates the tables within the next polls", async ({ app, page }) => {
-    await expect(gridCell(page, 6, "1.24")).toBeVisible();
-    await editWorkbook(app.server.workspace, 6, "mean", "1.42");
-    await expect(gridCell(page, 6, "1.42")).toBeVisible();
-    expect(cellOf(app.server.workspace, 6, "mean")).toBe("1.42");
+    await expect(gridCell(page, 5, "1.24")).toBeVisible();
+    await editWorkbook(app.server.workspace, 5, "mean", "1.42");
+    await expect(gridCell(page, 5, "1.42")).toBeVisible();
+    expect(cellOf(app.server.workspace, 5, "mean")).toBe("1.42");
     await expect(syncStatus(page, "In sync")).toBeVisible();
   });
 
   test("a conflict between the workbook and the tables is resolved by keeping the workbook", async ({ app, page }) => {
     const workspace = app.server.workspace;
-    // Both sides change line 7 before a sync runs.
+    // Both sides change line 6 before a sync runs.
     await setAutomaticActions(page, true);
-    await editWorkbook(workspace, 7, "mean", "1.08");
-    editTable(workspace, 7, "mean", "1.06");
+    await editWorkbook(workspace, 6, "mean", "1.08");
+    editTable(workspace, 6, "mean", "1.06");
     await setAutomaticActions(page, false);
 
     await expect(syncStatus(page, "Conflict")).toBeVisible();
@@ -741,8 +741,8 @@ test.describe("tables", () => {
 
     await expect(syncStatus(page, "In sync")).toBeVisible();
     await expect(panel).toBeHidden();
-    await expect(gridCell(page, 7, "1.08")).toBeVisible();
-    expect(cellOf(workspace, 7, "mean")).toBe("1.08");
+    await expect(gridCell(page, 6, "1.08")).toBeVisible();
+    expect(cellOf(workspace, 6, "mean")).toBe("1.08");
   });
 
   test("the conflicts keep their room above the open notes, and in a short window scroll with a fade and leave rows in view", async ({
@@ -751,10 +751,10 @@ test.describe("tables", () => {
   }) => {
     const workspace = app.server.workspace;
     await app.open("#/studies/caffeine/Demo2020/data?file=subjects.tsv");
-    // Both sides change line 8 of the timecourses before a sync runs.
+    // Both sides change line 7 of the timecourses before a sync runs.
     await setAutomaticActions(page, true);
-    await editWorkbook(workspace, 8, "mean", "0.91");
-    editTable(workspace, 8, "mean", "0.92");
+    await editWorkbook(workspace, 7, "mean", "0.91");
+    editTable(workspace, 7, "mean", "0.92");
     await setAutomaticActions(page, false);
     const panel = page.getByRole("region", { name: "Conflicting rows", exact: true });
     await expect(panel).toBeVisible();

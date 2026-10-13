@@ -91,7 +91,7 @@ class TooManyCells(TsvError):
 
 @dataclass(frozen=True)
 class TsvLine:
-    """A line of a TSV file: its 1-based line number and its cell texts."""
+    """A line of a TSV table: its number, the header being line 0, and its cell texts."""
 
     number: int
     cells: tuple[str, ...]
@@ -145,12 +145,13 @@ def read_tsv(chunks: Iterable[bytes]) -> Iterator[TsvLine]:
     """Read a tab-separated table lazily, one line at a time.
 
     `chunks` are the bytes of the file, split after each LF as a binary file
-    yields them. The header comes first, followed by the data lines; blank
-    data lines are skipped. A line that is not UTF-8 raises TsvError, and a
+    yields them. The header comes first as line 0, followed by the data lines
+    from line 1; blank data lines are skipped but keep their number, so line n
+    is physical line n + 1. A line that is not UTF-8 raises TsvError, and a
     line of more than MAX_CELLS cells TooManyCells, when it is reached.
     """
-    for number, text in enumerate(text_lines(chunks), start=1):
-        if number == 1 or text.strip():
+    for number, text in enumerate(text_lines(chunks)):
+        if number == 0 or text.strip():
             if (width := text.count("\t") + 1) > MAX_CELLS:
                 raise TooManyCells(number, width)
             yield TsvLine(number, cells_of(text), text.startswith(CONFLICT_MARKERS))

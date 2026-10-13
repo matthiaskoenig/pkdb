@@ -16,15 +16,11 @@ from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.load import load_study, load_table
 from pkdb.studyformat.raw import load_raw
 from pkdb.studyformat.tables import TABLES, has_header, table_line, workbook_row
+from pkdb.studyformat.validation import format_issues
 
 OUTPUTS = TABLES["outputs"]
-# Strict: a test that passes before its task removes the mark fails.
-NUMBERED_FROM_THE_HEADER = pytest.mark.xfail(
-    strict=True, reason="#938: the header of a table is still line 1"
-)
 
 
-@NUMBERED_FROM_THE_HEADER
 def test_the_header_is_line_0_and_the_first_entry_line_1():
     data = b"subjects\tmean\tcount\nall\t2,5\t1.5\n\nS1\t3\t2\n"
     table, issues = load_table(
@@ -41,7 +37,6 @@ def test_the_header_is_line_0_and_the_first_entry_line_1():
     ] == [("invalid_integer", 1, "C2"), ("invalid_number", 1, "B2")]
 
 
-@NUMBERED_FROM_THE_HEADER
 def test_a_problem_of_the_header_is_at_line_0_and_row_1():
     data = b"subjects\tmeen\nall\t1\n"
     table, issues = load_table(
@@ -70,7 +65,6 @@ def test_a_raw_table_starts_at_line_1_and_row_1():
     assert (issue.source.row, issue.source.cell) == (3, "B3")
 
 
-@NUMBERED_FROM_THE_HEADER
 def test_a_record_points_to_its_line_and_its_workbook_cell(valid_study):
     study = read_study(load_study(valid_study))
     records = {record.key: record for record in study.measurements}
@@ -108,3 +102,18 @@ def test_a_row_offset_moves_the_cell_of_a_header_and_keeps_line_0():
     sheet = SourceLocation(file="Example.xlsx", sheet="Tab1", row=7)
     sheet._columns = {"mean": "C"}
     assert sheet.for_header("mean").cell == "C7"
+
+
+def test_a_file_out_of_canonical_form_names_the_line_that_differs(valid_study):
+    path = valid_study / "outputs_Tab2.tsv"
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    lines[1] = lines[1].replace("\t2.5\t", "\t2.50\t")
+    path.write_text("".join(lines), encoding="utf-8", newline="")
+    [issue] = [
+        issue
+        for issue in format_issues(load_study(valid_study))
+        if issue.source and issue.source.file == "outputs_Tab2.tsv"
+    ]
+    assert issue.source is not None
+    assert (issue.code, issue.source.row) == ("not_formatted", 1)
+    assert "first difference in line 1" in issue.message

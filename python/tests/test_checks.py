@@ -270,9 +270,9 @@ def test_problems_of_form_validation_workbooks_and_the_repository(
     assert form == Problem(
         study="caffeine/A",
         code="not_canonical",
-        message="subjects.tsv is not in canonical form (first difference in line 1); run pkdb format",
+        message="subjects.tsv is not in canonical form (first difference in line 0); run pkdb format",
         file="subjects.tsv",
-        row=1,
+        row=0,
     )
 
 
@@ -300,7 +300,7 @@ def test_each_problem_is_listed_once(checkout, sf_vocabulary):
     (folder / "review.json").write_text('{"status": "draft"}', encoding="utf-8")
     report = check(root, [folder], sf_vocabulary)
     assert sorted((p.code, p.file, p.row) for p in report.problems) == [
-        ("merge_conflict", "subjects.tsv", 1),
+        ("merge_conflict", "subjects.tsv", 0),
         ("not_canonical", "review.json", 1),
     ]
 
@@ -402,7 +402,7 @@ def test_validation_warnings_do_not_fail_the_check(checkout, sf_vocabulary):
     add_unused_intervention(studies["caffeine/A"])
     report = check(root, [studies["caffeine/A"]], sf_vocabulary)
     assert [(p.code, p.severity, p.file, p.row) for p in report.problems] == [
-        ("unused_intervention", "warning", "interventions.tsv", 3)
+        ("unused_intervention", "warning", "interventions.tsv", 2)
     ]
     assert report.ok
 

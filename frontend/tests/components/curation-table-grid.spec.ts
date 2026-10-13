@@ -127,6 +127,16 @@ describe("TableGrid", () => {
     expect(cell.text()).toBe("3.1");
   });
 
+  it("outlines a header cell with a problem of the header, line 0 of a table", () => {
+    const issues: IssueCells = new Map([
+      [0, new Map<string, CellIssues>([["mean", { severity: "error", messages: ["Unknown column 'meen'."] }]])],
+    ]);
+    const wrapper = mount(TableGrid, { props: { table: small, issueCells: issues }, attachTo: document.body });
+    const header = wrapper.findAll("thead th").find((cell) => cell.text() === "mean")!;
+    expect(header.classes()).toContain("grid-cell--error");
+    expect(description(header.element)).toBe("Unknown column 'meen'.");
+  });
+
   it("marks a column, and hides empty columns except the ones to show", () => {
     const issues: IssueCells = new Map([
       [2, new Map<string, CellIssues>([["comment", { severity: "warning", messages: ["Add a comment."] }]])],

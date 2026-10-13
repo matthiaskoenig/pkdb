@@ -412,6 +412,8 @@ def _locator(table: LoadedTable) -> Callable[[Row, dict], SourceLocation]:
         location = SourceLocation(file=table.file, sheet=sheet, row=row.line)
         location._columns = columns
         location._headers = headers
+        # The header is line 0, so the cells of line n are in row n + 1.
+        location._row_offset = 1
         return location
 
     return locate

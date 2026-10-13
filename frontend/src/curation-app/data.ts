@@ -35,14 +35,14 @@ function text(value: unknown): string | null {
   return typeof value === "string" && value !== "" ? value : null;
 }
 
-/** The selection of a route query; a line is a whole number from 1. */
+/** The selection of a route query; a line is a whole number from 0, the header of a table. */
 export function selectionOf(query: LocationQuery): Selection {
   const line = typeof query.line === "string" ? Number(query.line) : Number.NaN;
   return {
     source: text(query.source),
     pdf: text(query.pdf),
     file: text(query.file),
-    line: Number.isInteger(line) && line >= 1 ? line : null,
+    line: Number.isInteger(line) && line >= 0 ? line : null,
     column: text(query.column),
   };
 }

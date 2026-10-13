@@ -21,7 +21,7 @@ from pkdb.studyformat.formatter import subject_order, table_rows
 from pkdb.studyformat.issues import LISTED, IssueCap, column_letter, make_issue
 from pkdb.studyformat.load import STRUCTURAL, LoadedTable, RowLimit, load_table
 from pkdb.studyformat.raw import load_raw, parse_raw_file, raw_lines, render_raw
-from pkdb.studyformat.tables import TableSpec, parse_table_file
+from pkdb.studyformat.tables import TableSpec, parse_table_file, workbook_row
 from pkdb.studyformat.text import format_number, render_tsv
 from pkdb.studyformat.workbook.base import (
     BASE_SHEET,
@@ -74,8 +74,8 @@ type Report = Callable[[Problem, int, int, str | None], None]
 class SheetTable:
     """A data or raw sheet as the canonical TSV text of its table file.
 
-    `rows[i]` is the sheet row of canonical line `i + 1`; for a data sheet,
-    `rows[0]` is 1, the header.
+    `rows[i]` is the sheet row of the line at index `i` of `text`; for a data
+    sheet `rows[0]` is 1, the header, which is line 0.
     """
 
     file: str
@@ -268,7 +268,7 @@ def _outside(index: int) -> Problem:
 
 
 def _lines(rows: Iterable[tuple[tuple, tuple]], report: Report) -> Iterator[bytes]:
-    """TSV lines of a sheet, one per sheet row, so that line numbers are sheet rows.
+    """TSV lines of a sheet, one per sheet row, so that line n is sheet row n + 1.
 
     The header is row 1 without trailing empty cells. A value in a column past
     the header is reported. Empty rows become empty lines, which `load_table`
@@ -331,12 +331,15 @@ def _raw_lines(rows: Iterable[tuple[tuple, tuple]], report: Report) -> Iterator[
 def _in_sheet(issue: ValidationIssue, workbook: str) -> ValidationIssue:
     """An issue of the table text of a sheet, located in the workbook.
 
-    The lines of the text are the sheet rows, so the row and the cell stay.
+    The text has a line per sheet row, so the row becomes the sheet row of the
+    line, row 1 for the header of a data sheet, and the cell stays.
     """
-    if issue.source is None:
+    source = issue.source
+    if source is None:
         return issue
+    row = None if source.row is None else workbook_row(source.file, source.row)
     return issue.model_copy(
-        update={"source": issue.source.model_copy(update={"file": workbook})}
+        update={"source": source.model_copy(update={"file": workbook, "row": row})}
     )
 
 
@@ -471,7 +474,7 @@ def _sheet_table(
     return SheetTable(
         table.file,
         render_tsv(table.spec.names, [cells for _, cells in rows]),
-        (1, *(line for line, _ in rows)),
+        (1, *(workbook_row(table.file, line) for line, _ in rows)),
     )
 
 

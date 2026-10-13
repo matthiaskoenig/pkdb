@@ -1512,6 +1512,12 @@ describe("tables", () => {
     expect(rowsPane().text()).toContain("Line 40 is not a row of outputs_Tab2.tsv.");
   });
 
+  it("takes line 0 of the route as the header of the table, which is no missing row", async () => {
+    await mountSection(reviewed(), {}, `${SECTION}?file=outputs_Tab2.tsv&line=0`);
+    expect(rowsPane().get(".pane-head-line").text()).toBe("Line 0");
+    expect(rowsPane().text()).not.toContain("is not a row");
+  });
+
   it("opens the table of the source for a file that the study does not have", async () => {
     await mountSection(reviewed(), {}, `${SECTION}?file=missing.tsv`);
     expect(current("source")).toBe("Tab2");

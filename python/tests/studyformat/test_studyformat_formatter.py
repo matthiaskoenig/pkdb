@@ -103,7 +103,7 @@ def test_broken_multi_line_cell_is_left_unchanged(valid_study):
     result = format_folder(valid_study)
     assert not result.ok
     assert [(i.code, i.source.row) for i in result.issues if i.source] == [
-        ("stray_text", 3)
+        ("stray_text", 2)
     ]
     assert result.changes == []
     assert path.read_bytes() == data
@@ -221,9 +221,9 @@ def test_table_rows_keep_the_source_line_of_each_sorted_row():
     rows = table_rows(table, "Example", order)
     assert rows is not None
     assert rows == [
-        (4, ("Example", "all", "", "2", "", "")),
-        (5, ("Example", "S1", "all", "1", "", "")),
-        (2, ("Example", "S2", "all", "1", "", "")),
+        (3, ("Example", "all", "", "2", "", "")),
+        (4, ("Example", "S1", "all", "1", "", "")),
+        (1, ("Example", "S2", "all", "1", "", "")),
     ]
     assert render_table(table, "Example", order) == render_tsv(
         TABLES["subjects"].names, [cells for _, cells in rows]

@@ -95,8 +95,8 @@ def test_parse_tsv_normalizes_line_endings_bom_and_whitespace():
     parsed = parse_tsv(text.encode())
     assert parsed.header == ("name", "count")
     assert [(line.number, line.cells) for line in parsed.lines] == [
-        (2, ("all", "4")),
-        (5, ("S1", "1")),
+        (1, ("all", "4")),
+        (4, ("S1", "1")),
     ]
 
 

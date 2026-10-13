@@ -30,6 +30,7 @@ from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.tables import has_header
 from pkdb.studyformat.text import format_number
 
 TOLERANCE = 1e-9
@@ -903,9 +904,9 @@ class _Rows:
         if (
             source is None
             or source.row is None
-            or source.row < 2
+            or source.row < 1
             or Path(source.file).name != source.file
-            or not source.file.endswith(".tsv")
+            or not has_header(source.file)
         ):
             return ""
         if source.file not in self.tables:
@@ -915,9 +916,10 @@ class _Rows:
                 text = ""
             self.tables[source.file] = [line.split("\t") for line in text.split("\n")]
         lines = self.tables[source.file]
-        if source.row > len(lines):
+        if source.row >= len(lines):
             return ""
-        row = dict(zip(lines[0], lines[source.row - 1], strict=False))
+        # Line 0 is the header, so line n is at index n.
+        row = dict(zip(lines[0], lines[source.row], strict=False))
         shown = [f"{name}={row[name]}" for name in IDENTIFYING if row.get(name)]
         return f"[{' '.join(shown)}]" if shown else ""
 
