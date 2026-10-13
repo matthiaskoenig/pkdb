@@ -262,9 +262,9 @@ def test_review_acknowledge_one_row(valid_study, reviewer, capsys):
     assert output["error"] == "ambiguous_warning"
     assert output["message"] == (
         "2 warnings [outside_range] match in timecourses_Fig1.tsv; "
-        "narrow them with --line (3, 4)"
+        "narrow them with --line (2, 3)"
     )
-    assert main([*command, "--line", "3", "--format", "human"]) == 0
+    assert main([*command, "--line", "2", "--format", "human"]) == 0
     out = capsys.readouterr().out
     assert re.fullmatch(
         r"caffeine/Example: acknowledged outside_range with review item "

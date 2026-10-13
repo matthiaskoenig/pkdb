@@ -241,7 +241,7 @@ def test_a_missing_value_names_the_row_of_the_converted_study(tmp_path, sf_vocab
     v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
     v2 = converted(tmp_path, v1)
     lines = (v2 / "characteristica.tsv").read_text(encoding="utf-8").splitlines()
-    [row] = [n for n, line in enumerate(lines, 1) if "\tall\tage\t" in line]
+    [row] = [n for n, line in enumerate(lines) if "\tall\tage\t" in line]
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
     assert [d.path for d in result.differences] == [

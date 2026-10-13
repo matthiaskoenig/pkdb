@@ -51,16 +51,19 @@ def table_lines(folder, file):
     return (folder / file).read_text(encoding="utf-8").removesuffix("\n").split("\n")
 
 
-def cell(folder, file, line, column):
-    return table_lines(folder, file)[line - 1].split("\t")[names(file).index(column)]
-
-
-def edit_table(folder, file, line, **cells):
+def cell(folder, file, physical, column):
+    """A cell of a physical line, from 1, which is its sheet row."""
     rows = table_lines(folder, file)
-    values = rows[line - 1].split("\t")
+    return rows[physical - 1].split("\t")[names(file).index(column)]
+
+
+def edit_table(folder, file, physical, **cells):
+    """Change cells of a physical line, from 1, which is its sheet row."""
+    rows = table_lines(folder, file)
+    values = rows[physical - 1].split("\t")
     for column, value in cells.items():
         values[names(file).index(column)] = value
-    rows[line - 1] = "\t".join(values)
+    rows[physical - 1] = "\t".join(values)
     (folder / file).write_text("\n".join(rows) + "\n", encoding="utf-8", newline="")
 
 
@@ -257,7 +260,7 @@ def test_a_conflict_fails_and_lists_both_versions(conflicting, vocabulary, capsy
     [workbook_row] = conflict["workbook_rows"]
     [table_line] = conflict["table_lines"]
     [base_line] = conflict["base_lines"]
-    assert workbook_row["row"] == 2 and table_line["line"] == 2
+    assert workbook_row["row"] == 2 and table_line["line"] == 1
     mean = names(TIMECOURSES).index("mean")
     assert workbook_row["text"].split("\t")[mean] == "0.25"
     assert table_line["text"].split("\t")[mean] == "0.75"
@@ -271,7 +274,7 @@ def test_a_conflict_fails_and_lists_both_versions(conflicting, vocabulary, capsy
     start = out.index("  conflict in sheet timecourses_Fig1")
     workbook, tsv = out[start + 1 : start + 3]
     assert workbook.startswith("    workbook row 2: ") and "mean=0.25" in workbook
-    assert tsv.startswith(f"    {TIMECOURSES} line 2: ") and "mean=0.75" in tsv
+    assert tsv.startswith(f"    {TIMECOURSES} line 1: ") and "mean=0.75" in tsv
     assert "label=drug_plasma" in workbook and "\t" not in workbook
     assert any("--keep workbook or --keep tables" in line for line in out)
 
@@ -292,7 +295,7 @@ def test_a_conflict_is_located_at_the_sheet_row(study, vocabulary, capsys):
     assert issue["source"]["row"] == 4
     assert issue["source"].get("cell") is None
     assert issue["message"].endswith(
-        "row 4 of the sheet, line 2 of timecourses_Fig1.tsv"
+        "row 4 of the sheet, line 1 of timecourses_Fig1.tsv"
     )
 
     assert tables("sync", study, "--format", "human", *vocabulary) == 1
@@ -768,7 +771,7 @@ def test_a_removed_sheet_whose_table_changed_lists_the_table_lines(
     out = capsys.readouterr().out.splitlines()
     start = out.index("  conflict in sheet outputs_Tab2")
     assert out[start + 1] == "    workbook: rows removed"
-    assert out[start + 2].startswith(f"    {OUTPUTS} line 2: ")
+    assert out[start + 2].startswith(f"    {OUTPUTS} line 1: ")
     assert "mean=3.5" in out[start + 2]
 
 
@@ -777,7 +780,7 @@ def test_a_long_conflict_lists_the_first_rows(capsys):
 
     rows = [(number, "x\tTab2\tall") for number in range(1, LISTED_ROWS + 4)]
 
-    _print_rows(OUTPUTS, "workbook row", rows, "workbook: rows removed")
+    _print_rows(OUTPUTS, "workbook row", rows, "workbook: rows removed", 1)
 
     out = capsys.readouterr().out.splitlines()
     # The header row is left out, and the owned columns are not shown.

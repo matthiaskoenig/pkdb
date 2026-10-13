@@ -211,21 +211,21 @@ const outputs: TableResponse = {
   kind: "table",
   header: OUTPUTS_HEADER,
   rows: [
-    { line: 2, cells: ["Example", "Tab2", "caf_cl", "clearance", "1.2", "0.3", "ml/min/kg", ""] },
-    { line: 3, cells: ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "", "h", ""] },
-    { line: 4, cells: ["Example", "Tab2", "caf_vd", "vd", "0.7", "", "l/kg", ""] },
+    { line: 1, cells: ["Example", "Tab2", "caf_cl", "clearance", "1.2", "0.3", "ml/min/kg", ""] },
+    { line: 2, cells: ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "", "h", ""] },
+    { line: 3, cells: ["Example", "Tab2", "caf_vd", "vd", "0.7", "", "l/kg", ""] },
   ],
 };
-/** A shared table: its rows name their source, and line 5 one that the study does not have. */
+/** A shared table: its rows name their source, and line 4 one that the study does not have. */
 const subjects: TableResponse = {
   file: "subjects.tsv",
   kind: "table",
   header: ["study", "name", "source"],
   rows: [
-    { line: 2, cells: ["Example", "all", "Tab2"] },
-    { line: 3, cells: ["Example", "men", "Fig1"] },
-    { line: 4, cells: ["Example", "women", "Tab2"] },
-    { line: 5, cells: ["Example", "old", "Fig9"] },
+    { line: 1, cells: ["Example", "all", "Tab2"] },
+    { line: 2, cells: ["Example", "men", "Fig1"] },
+    { line: 3, cells: ["Example", "women", "Tab2"] },
+    { line: 4, cells: ["Example", "old", "Fig9"] },
   ],
 };
 const figureRows: TableResponse = {
@@ -341,8 +341,8 @@ function reviewed(changes: Partial<StudyDetail> = {}): StudyDetail {
       issues: [],
     },
     // As the local server matches the targets in the rows of `outputs`.
-    targets: { a: { lines: [4], series: null, total: 3 }, b: { lines: [2], series: null, total: 3 } },
-    problems: [problem("invalid_number", 3, "mean"), problem("unknown_unit", 4, "unit", "warning")],
+    targets: { a: { lines: [3], series: null, total: 3 }, b: { lines: [1], series: null, total: 3 } },
+    problems: [problem("invalid_number", 2, "mean"), problem("unknown_unit", 3, "unit", "warning")],
     counts: { errors: 1, warnings: 1 },
     ...changes,
   });
@@ -550,7 +550,7 @@ describe("sources", () => {
     expect(sources()[2]?.attributes("aria-current")).toBe("true");
     expect(sourcePane().text()).toContain("Caffeine 150 mg");
     expect(rowsPane().attributes("aria-label")).toBe("Table outputs_Tab2.tsv");
-    expect(lines()).toEqual(["2", "3", "4"]);
+    expect(lines()).toEqual(["1", "2", "3"]);
   });
 
   it("opens the source of the route", async () => {
@@ -613,7 +613,7 @@ describe("table sources", () => {
     expect(sourcePane().find("img").exists()).toBe(false);
     // Tab3 has no table, so the section shows the first table, a shared one with all of its rows.
     expect(rowsPane().attributes("aria-label")).toBe("Table subjects.tsv");
-    expect(lines()).toEqual(["2", "3", "4", "5"]);
+    expect(lines()).toEqual(["1", "2", "3", "4"]);
   });
 });
 
@@ -738,15 +738,15 @@ describe("problems of a source", () => {
     code: "digitized_mismatch",
     severity: "warning",
     acknowledgeable: true,
-    message: "Line 3 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
-    source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 3, column: "F", cell: "F3", header: "mean" },
+    message: "Line 2 lies 4.1 pixels from every point of dataset caf_plasma_D150.",
+    source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 2, column: "F", cell: "F3", header: "mean" },
   };
   const other: Problem = {
     code: "unused_intervention",
     severity: "warning",
     acknowledgeable: true,
     message: "'caf_po_300' is not referenced by any row",
-    source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
+    source: { file: "interventions.tsv", sheet: "interventions", row: 2, column: "B", cell: "B3", header: "name" },
   };
 
   it("lists the problems of the files of the source with a link to the cell", async () => {
@@ -757,7 +757,7 @@ describe("problems of a source", () => {
     expect(problems.text()).not.toContain("unused_intervention");
     const link = problems.get("a");
     expect(link.text()).toBe("Show in table");
-    expect(link.attributes("href")).toBe("#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=3&column=mean");
+    expect(link.attributes("href")).toBe("#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=2&column=mean");
   });
 
   it("shows the problems as the Problems section does: by file, errors first, without Acknowledge", async () => {
@@ -775,7 +775,7 @@ describe("problems of a source", () => {
       "timecourses_Fig1.tsv",
     ]);
     expect(problems.findAll(".problem-severity").map((chip) => chip.text())).toEqual(["Error", "Warning"]);
-    expect(problems.get(".problem-location").text()).toBe("line 3 · mean · sheet cell timecourses_Fig1!F3");
+    expect(problems.get(".problem-location").text()).toBe("line 2 · mean · workbook cell F3");
     expect(problems.findAll("button").filter((control) => control.text() === "Acknowledge")).toHaveLength(0);
   });
 
@@ -823,25 +823,25 @@ describe("linked selection", () => {
   });
 
   it("selects the source named in the linked row of a shared table once its rows load", async () => {
-    // The default source is Fig1; line 4 of subjects.tsv names Tab2, and a shared table has no owner.
-    await mountSection(detail(), {}, `${SECTION}?file=subjects.tsv&line=4`);
+    // The default source is Fig1; line 3 of subjects.tsv names Tab2, and a shared table has no owner.
+    await mountSection(detail(), {}, `${SECTION}?file=subjects.tsv&line=3`);
     expect(current("source")).toBe("Tab2");
     expect(current("file")).toBe("subjects.tsv");
   });
 
   it("switches the source with a row of a shared table that names another source", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
-    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
+    await page().get('th[scope="row"] button[title="Select line 3"]').trigger("click");
     await flushPromises();
-    await routed({ source: "Tab2", file: "subjects.tsv", line: "4" }, "partly");
+    await routed({ source: "Tab2", file: "subjects.tsv", line: "3" }, "partly");
   });
 
   it("keeps the source for a row naming an unknown source", async () => {
-    // subjects.tsv line 5 names "Fig9", which the study does not have.
+    // subjects.tsv line 4 names "Fig9", which the study does not have.
     await mountSection(detail(), {}, `${SECTION}?source=Fig1&file=subjects.tsv`);
-    await page().get('th[scope="row"] button[title="Select line 5"]').trigger("click");
+    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
     await flushPromises();
-    await routed({ source: "Fig1", line: "5" }, "partly");
+    await routed({ source: "Fig1", line: "4" }, "partly");
   });
 
   it("selects the owner of a clicked table file", async () => {
@@ -895,7 +895,7 @@ describe("linked selection", () => {
 
   it("shows every row of a shared table, whichever source is selected", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig2&file=subjects.tsv`);
-    expect(lines()).toEqual(["2", "3", "4", "5"]);
+    expect(lines()).toEqual(["1", "2", "3", "4"]);
     expect(page().text()).not.toContain("Rows of Fig2 only");
   });
 
@@ -904,7 +904,7 @@ describe("linked selection", () => {
     const filter = () => page().get<HTMLSelectElement>(".rows-pane select.pane-head-select");
     await filter().setValue("source:Tab2");
     await flushPromises();
-    expect(lines()).toEqual(["2", "4"]);
+    expect(lines()).toEqual(["1", "3"]);
     await choose("file", "outputs_Tab2.tsv");
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
     // A table of one source has no filter.
@@ -912,7 +912,7 @@ describe("linked selection", () => {
     await choose("file", "subjects.tsv");
     await routed({ source: "Tab2", file: "subjects.tsv" });
     expect(filter().element.value).toBe("source:Tab2");
-    expect(lines()).toEqual(["2", "4"]);
+    expect(lines()).toEqual(["1", "3"]);
   });
 
   it("offers Show all rows when no row of the shared table has the chosen source", async () => {
@@ -921,7 +921,7 @@ describe("linked selection", () => {
     await flushPromises();
     expect(rowsPane().text()).toContain("Every row of subjects.tsv names a source.");
     await click(/Show all rows/);
-    expect(lines()).toEqual(["2", "3", "4", "5"]);
+    expect(lines()).toEqual(["1", "2", "3", "4"]);
   });
 
   it("falls back for a source and a file the study does not have", async () => {
@@ -1155,7 +1155,7 @@ describe("conflicts", () => {
     expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
       ["Last sync", "5.9"],
       ["Workbook row 2", "6.1"],
-      ["Tables line 2", "6.3"],
+      ["Tables line 1", "6.3"],
     ]);
   });
 
@@ -1188,7 +1188,7 @@ describe("conflicts", () => {
     expect(page().get(".conflict-note").text()).toBe("The workbook removed these rows, and the tables changed them.");
     expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
       ["Last sync", "1"],
-      ["Tables line 3", "2"],
+      ["Tables line 1", "2"],
     ]);
   });
 
@@ -1389,7 +1389,7 @@ describe("tables", () => {
     await mountSection(reviewed(), {}, `${SECTION}?source=Fig1`);
     await choose("file", "outputs_Tab2.tsv");
     await routed({ source: "Tab2", file: "outputs_Tab2.tsv" });
-    expect(lines()).toEqual(["2", "3", "4"]);
+    expect(lines()).toEqual(["1", "2", "3"]);
     const rows = rowsPane().findAll("tbody tr[data-index]");
     expect(rows.map((row) => row.classes().includes("grid-row--target"))).toEqual([false, false, true]);
     expect(rows[1]!.findAll("td")[4]!.classes()).toContain("grid-cell--error");
@@ -1423,13 +1423,13 @@ describe("tables", () => {
     let answerRows: ((response: Response) => void) | null = null;
     let hold = false;
     const rowsAt = (line: number) => outputs.rows.find((row) => row.line === line)!;
-    // The table after an edit: caf_vd moved from line 4 to line 2.
+    // The table after an edit: caf_vd moved from line 3 to line 1.
     const edited: TableResponse = {
       ...outputs,
       rows: [
-        { ...rowsAt(4), line: 2 },
-        { ...rowsAt(3), line: 3 },
-        { ...rowsAt(2), line: 4 },
+        { ...rowsAt(3), line: 1 },
+        { ...rowsAt(2), line: 2 },
+        { ...rowsAt(1), line: 3 },
       ],
     };
     const marked = () =>
@@ -1444,19 +1444,19 @@ describe("tables", () => {
       },
       `${SECTION}?file=outputs_Tab2.tsv`,
     );
-    expect(marked()).toEqual(["4 caf_vd"]);
+    expect(marked()).toEqual(["3 caf_vd"]);
 
     // The page with the new line of caf_vd arrives before the edited rows.
     hold = true;
-    served = { ...served, files_version: "files-2", targets: { ...served.targets, a: { lines: [2], series: null, total: 3 } } };
+    served = { ...served, files_version: "files-2", targets: { ...served.targets, a: { lines: [1], series: null, total: 3 } } };
     await useStudyStore().refresh();
     await flushPromises();
     expect(answerRows).not.toBeNull();
-    expect(marked()).toEqual(["4 caf_vd"]);
+    expect(marked()).toEqual(["3 caf_vd"]);
 
     answerRows!(json(edited));
     await flushPromises();
-    expect(marked()).toEqual(["2 caf_vd"]);
+    expect(marked()).toEqual(["1 caf_vd"]);
   });
 
   it("shows a raw table with the letters of its columns", async () => {
@@ -1477,7 +1477,7 @@ describe("tables", () => {
       .find((entry) => entry.text().includes("Hide empty columns"))!;
     expect(hideEmpty.get("input").element).toHaveProperty("checked", true);
     expect(rowsPane().findAll("thead th").map((cell) => cell.text())).toEqual([
-      "Line",
+      "Line 0",
       "study",
       "source",
       "label",
@@ -1493,7 +1493,7 @@ describe("tables", () => {
   });
 
   it("opens the table of a problem and moves the focus to its cell", async () => {
-    await mountSection(reviewed(), {}, `${SECTION}?file=outputs_Tab2.tsv&line=3&column=mean`);
+    await mountSection(reviewed(), {}, `${SECTION}?file=outputs_Tab2.tsv&line=2&column=mean`);
     expect(current("file")).toBe("outputs_Tab2.tsv");
     const cell = rowsPane().findAll("tbody tr[data-index]")[1]!.findAll("td")[4]!;
     expect(cell.classes()).toContain("grid-cell--focus");
@@ -1510,6 +1510,12 @@ describe("tables", () => {
   it("says when the line of the route is not a row of the table", async () => {
     await mountSection(reviewed(), {}, `${SECTION}?file=outputs_Tab2.tsv&line=40`);
     expect(rowsPane().text()).toContain("Line 40 is not a row of outputs_Tab2.tsv.");
+  });
+
+  it("takes line 0 of the route as the header of the table, which is no missing row", async () => {
+    await mountSection(reviewed(), {}, `${SECTION}?file=outputs_Tab2.tsv&line=0`);
+    expect(rowsPane().get(".pane-head-line").text()).toBe("Line 0");
+    expect(rowsPane().text()).not.toContain("is not a row");
   });
 
   it("opens the table of the source for a file that the study does not have", async () => {
@@ -1543,7 +1549,7 @@ describe("loading of the rows", () => {
     failing = false;
     await click("Retry");
     expect(rowsPane().text()).not.toContain("could not be loaded");
-    expect(lines()).toEqual(["2", "3", "4"]);
+    expect(lines()).toEqual(["1", "2", "3"]);
   });
 });
 
@@ -1812,29 +1818,29 @@ describe("the paper in the Data section", () => {
   });
 
   it("keeps the table and its row when the paper is chosen, and a shared table keeps the paper", async () => {
-    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=Fig1&file=subjects.tsv&line=3`);
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=Fig1&file=subjects.tsv&line=2`);
     await page().get(".nav-paper").trigger("click");
-    await routed({ source: "paper", file: "subjects.tsv", line: "3" });
+    await routed({ source: "paper", file: "subjects.tsv", line: "2" });
     await choose("file", "interventions.tsv");
     await routed({ source: "paper", file: "interventions.tsv" });
   });
 
   it("keeps the paper when a row of a shared table that names a source is selected beside it", async () => {
     await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&file=subjects.tsv`);
-    // Line 4 names Tab2: the curator reads the paper against the rows.
-    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
-    await routed({ source: "paper", file: "subjects.tsv", line: "4" });
+    // Line 3 names Tab2: the curator reads the paper against the rows.
+    await page().get('th[scope="row"] button[title="Select line 3"]').trigger("click");
+    await routed({ source: "paper", file: "subjects.tsv", line: "3" });
     expect(paperPane().isVisible()).toBe(true);
     expect(page().find(".source-pane").exists()).toBe(false);
   });
 
   it("shows the source of a linked row of a shared table without drawing the paper while the rows load", async () => {
-    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=4`);
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=3`);
     expect(page().get(".source-pane").attributes("aria-label")).toBe("Source Tab2");
     expect(paperPane().exists()).toBe(false);
     expect(paperViewer.mounts).toBe(0);
     // A row without a known source shows the paper, as the table would without a row.
-    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=5`);
+    await mountSection(detail({ papers: papers() }), {}, `${SECTION}?file=subjects.tsv&line=4`);
     expect(paperPane().isVisible()).toBe(true);
   });
 
@@ -1854,8 +1860,8 @@ describe("the paper in the Data section", () => {
     );
     expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
     // A row of the table keeps the PDF in the address.
-    await page().get('th[scope="row"] button[title="Select line 4"]').trigger("click");
-    await routed({ source: "paper", pdf: "Example_Supp.pdf", file: "subjects.tsv", line: "4" });
+    await page().get('th[scope="row"] button[title="Select line 3"]').trigger("click");
+    await routed({ source: "paper", pdf: "Example_Supp.pdf", file: "subjects.tsv", line: "3" });
     expect(paperPane().attributes("aria-label")).toBe("Paper Example_Supp.pdf");
     reloaded.unmount();
     await mountSection(detail({ papers: papers() }), {}, `${SECTION}?source=paper&pdf=Gone.pdf`);

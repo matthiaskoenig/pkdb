@@ -158,11 +158,11 @@ describe("SourceOverlay", () => {
     const kinds = wrapper.findAll("details tbody tr").map((row) => row.findAll("td")[0]?.text());
     expect(kinds.filter((kind) => kind === "Digitized error bar")).toHaveLength(18);
 
-    // A click on the end of the error bar of line 6 selects line 6.
+    // A click on the end of the error bar of line 5 selects line 5.
     const traces = engine.react.mock.calls[0]![1] as OverlayTrace[];
     const bars = traces.find((trace) => trace.meta === "raw-bar caf_plasma_100mg")!;
     handlers.get("plotly_click")?.({ points: [{ customdata: bars.customdata?.[4], x: bars.x[4], y: bars.y[4] }] });
-    expect(wrapper.emitted("select-row")).toEqual([[{ file: "timecourses_Fig1.tsv", line: 6 }]]);
+    expect(wrapper.emitted("select-row")).toEqual([[{ file: "timecourses_Fig1.tsv", line: 5 }]]);
   });
 
   it("reserves the size of the image before Plotly draws, and shows the legend after", async () => {

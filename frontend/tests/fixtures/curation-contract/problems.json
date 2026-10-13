@@ -7,7 +7,7 @@
       "source": {
         "file": "interventions.tsv",
         "sheet": "interventions",
-        "row": 4,
+        "row": 3,
         "column": "C",
         "path": [],
         "cell": "C4",
@@ -30,7 +30,7 @@
       "source": {
         "file": "timecourses_Fig1.tsv",
         "sheet": "timecourses_Fig1",
-        "row": 6,
+        "row": 5,
         "column": "O",
         "path": [],
         "cell": "O6",
@@ -79,7 +79,7 @@
     {
       "code": "sync_conflict",
       "severity": "error",
-      "message": "The workbook and the tables changed the same rows of subjects differently since the last sync: rows 1-2 of the sheet, lines 1-2 of subjects.tsv",
+      "message": "The workbook and the tables changed the same rows of subjects differently since the last sync: rows 1-2 of the sheet, lines 0-1 of subjects.tsv",
       "source": {
         "file": "Demo2020.xlsx",
         "sheet": "subjects",

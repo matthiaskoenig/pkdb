@@ -183,7 +183,7 @@ def test_timecourse_label_conflicts_are_reported_once_per_label(
     issues = check_relations(load_study(make_study(files)))
     [issue] = [issue for issue in issues if issue.code == "duplicate_label"]
     assert issue.source is not None
-    assert (issue.source.row, issue.source.cell) == (2, "C2")
+    assert (issue.source.row, issue.source.cell) == (1, "C2")
     assert "age_vs_cmax" in issue.message and "scatters_Fig2.tsv" in issue.message
 
 
@@ -202,7 +202,7 @@ def test_parent_must_be_a_group(make_study, valid_files, tsv):
     assert (issue.severity, issue.category) == ("error", "reference")
     assert issue.source is not None
     assert (issue.source.row, issue.source.header, issue.source.cell) == (
-        4,
+        3,
         "parent",
         "C4",
     )
@@ -412,12 +412,12 @@ def test_scatter_mixing_groups_and_individuals_is_reported_at_the_other_rows(
     assert issue.source is not None
     assert (issue.source.file, issue.source.row, issue.source.header) == (
         "scatters_Fig2.tsv",
-        3,
+        2,
         "subjects",
     )
     assert issue.message == (
         "Scatter 'age_vs_cmax' mixes groups and individuals: 'all' is a group, "
-        "but 'S1' in line 2 is an individual"
+        "but 'S1' in line 1 is an individual"
     )
 
 
@@ -438,7 +438,7 @@ def test_scatter_with_as_many_groups_as_individuals_follows_its_first_row(
     )
     study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
     [issue] = [i for i in check_relations(study) if i.code == "mixed_scatter_subjects"]
-    assert issue.source is not None and issue.source.row == 3
+    assert issue.source is not None and issue.source.row == 2
 
 
 def test_names_of_one_cell_are_reported_a_bounded_number_of_times(
@@ -458,8 +458,8 @@ def test_names_of_one_cell_are_reported_a_bounded_number_of_times(
     }
     issues = check_relations(load_study(make_study(files)))
     for code, total, row in (
-        ("unknown_reference", 10_000, 2),
-        ("duplicate_reference", 9_999, 3),
+        ("unknown_reference", 10_000, 1),
+        ("duplicate_reference", 9_999, 2),
     ):
         found = [i for i in issues if i.code == code]
         assert len(found) == REPEATED_ISSUES + 1, code

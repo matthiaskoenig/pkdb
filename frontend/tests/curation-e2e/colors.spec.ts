@@ -50,16 +50,16 @@ test("the header row fades out to its own tint where more columns follow", async
 });
 
 test("the selected row has a frame of 1 px, and a problem in it keeps its outline inside the frame", async ({ app, page }) => {
-  await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv&line=6");
+  await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv&line=5");
   const row = page
     .getByRole("region", { name: "Rows of timecourses_Fig1.tsv" })
     .getByRole("row")
-    .filter({ has: page.getByRole("rowheader", { name: "6", exact: true }) });
+    .filter({ has: page.getByRole("rowheader", { name: "5", exact: true }) });
   // The line cell draws the start and the top of the frame and the other cells its top and bottom.
   const line = `${PRIMARY} 0px 1px 0px 0px inset, ${PRIMARY} 0px -1px 0px 0px inset`;
   await expect(row.getByRole("rowheader")).toHaveCSS("box-shadow", new RegExp(`${PRIMARY} 1px 1px 0px 0px inset, ${PRIMARY} 0px -1px 0px 0px inset$`));
   await expect(row.getByRole("cell").first()).toHaveCSS("box-shadow", new RegExp(`${line}$`));
-  // The amber outline of the warning digitized_mismatch at the mean of line 6, once validation reported it, inside the frame.
+  // The amber outline of the warning digitized_mismatch at the mean of line 5, once validation reported it, inside the frame.
   await expect(row.locator("td.grid-cell--warning")).toHaveCSS(
     "box-shadow",
     new RegExp(`^rgb\\(143, 83, 0\\) 0px 0px 0px 2px inset, ${line}$`),

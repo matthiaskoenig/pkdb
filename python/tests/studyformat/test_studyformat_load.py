@@ -30,7 +30,7 @@ def test_load_valid_study(make_study, valid_files):
     outputs = study.of_kind("outputs")[0]
     assert outputs.source == "Tab2"
     row = outputs.rows[0]
-    assert row.line == 2
+    assert row.line == 1
     assert row.values["mean"] == 2.5
     assert row.values["interventions"] == ("D1",)
     assert row.cells["sd"] == "0.5"
@@ -85,7 +85,7 @@ def test_structural_problems():
     )
     assert codes(extra) == ["extra_cells"]
     assert extra[0].source is not None
-    assert (extra[0].source.row, extra[0].source.column) == (2, "C")
+    assert (extra[0].source.row, extra[0].source.column) == (1, "C")
     _, empty = load_table("outputs_Tab1.tsv", b"", OUT, "Tab1", study="Example")
     assert codes(empty) == ["missing_header"]
     _, latin = load_table(
@@ -125,7 +125,7 @@ def test_owned_cells_are_not_judged_and_blank_rows_are_skipped():
     table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
     assert issues == []
     assert table is not None
-    assert [row.line for row in table.rows] == [2]
+    assert [row.line for row in table.rows] == [1]
 
 
 def test_merge_conflict_markers_stop_loading():
@@ -136,7 +136,8 @@ def test_merge_conflict_markers_stop_loading():
     table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
     assert table is None
     assert codes(issues) == ["merge_conflict"]
-    assert issues[0].source is not None and issues[0].source.row == 2
+    assert issues[0].source is not None and issues[0].source.row == 1
+    assert issues[0].message.startswith("Line 1 is a git conflict marker")
     assert "resolve the git conflict" in issues[0].message
     _, header = load_table(
         "outputs_Tab1.tsv", b"<<<<<<< HEAD\nsubjects\n", OUT, "Tab1", study="Example"
@@ -162,8 +163,9 @@ def test_text_only_in_owned_columns_stops_loading(line):
     assert codes(issues) == ["stray_text"]
     issue = issues[0]
     assert issue.severity == "error" and issue.category == "format"
-    assert issue.source is not None and issue.source.row == 3
-    assert "only in" in issue.message
+    assert issue.source is not None and issue.source.row == 2
+    # A TSV file names the line of the table.
+    assert issue.message.startswith("Line 2 has text only in the ")
 
 
 def test_owned_cells_of_a_shared_table_are_compared_with_the_study_only():
@@ -171,7 +173,7 @@ def test_owned_cells_of_a_shared_table_are_compared_with_the_study_only():
     spec = TABLES["characteristica"]
     _, issues = load_table("characteristica.tsv", data, spec, None, study="Example")
     assert codes(issues) == ["stray_text"]
-    assert issues[0].source is not None and issues[0].source.row == 3
+    assert issues[0].source is not None and issues[0].source.row == 2
 
 
 def test_broken_files_are_reported(make_study, valid_files):
@@ -379,9 +381,9 @@ def test_a_line_with_more_cells_than_any_table_is_not_split():
     assert table is None
     [issue] = issues
     assert issue.code == "too_many_columns"
-    assert issue.source is not None and issue.source.row == 2
+    assert issue.source is not None and issue.source.row == 1
     assert issue.message == (
-        f"Line 2 has {MAX_CELLS + 1:,} cells; a table has at most {MAX_CELLS:,}"
+        f"Line 1 has {MAX_CELLS + 1:,} cells; a table has at most {MAX_CELLS:,}"
     )
 
 

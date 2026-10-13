@@ -73,7 +73,7 @@ def test_a_scatter_series_is_named_by_its_name(make_study, valid_files):
     study = load_study(folder)
     target = ReviewTarget(file="scatters_Fig2.tsv", rows={"name": "age_vs_cmax"})
     assert match_target(study, target) == TargetMatch(
-        (2, 3), DigitizedSeries("Fig2", "age_vs_cmax"), 2
+        (1, 2), DigitizedSeries("Fig2", "age_vs_cmax"), 2
     )
     # A scatter series is named by `name`, not by `label`.
     label = ReviewTarget(file="scatters_Fig2.tsv", rows={"label": "age_vs_cmax"})

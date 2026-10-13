@@ -169,6 +169,7 @@ def column_reference() -> str:
         "- UTF-8 without byte order mark, LF line endings and a final newline.",
         "- Tab separated without quoting. Cells contain no tabs or line breaks.",
         "- One header row with every template column in template order.",
+        "- The header is line 0 and the first entry line 1, so line n is row n + 1 of the sheet in the workbook. A raw table has no header: its first line is line 1 and row 1. Validation, `pkdb curate` and the command line name lines this way, with the address of the cell in the workbook, such as `line 96 · error_bar · workbook cell Y97`.",
         "- An empty cell means missing. `NR` (not reported) is allowed only in `time` and `time_unit` and their scatter variants `x_time`, `x_time_unit`, `y_time` and `y_time_unit`.",
         "- Numbers use a decimal point and are written in their shortest form.",
         "- `pkdb format` sorts the rows and writes the `study` column and, in files named after a source, the `source` column.",

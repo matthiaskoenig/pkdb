@@ -270,9 +270,9 @@ def test_problems_of_form_validation_workbooks_and_the_repository(
     assert form == Problem(
         study="caffeine/A",
         code="not_canonical",
-        message="subjects.tsv is not in canonical form (first difference in line 1); run pkdb format",
+        message="subjects.tsv is not in canonical form (first difference in line 0); run pkdb format",
         file="subjects.tsv",
-        row=1,
+        row=0,
     )
 
 
@@ -300,7 +300,7 @@ def test_each_problem_is_listed_once(checkout, sf_vocabulary):
     (folder / "review.json").write_text('{"status": "draft"}', encoding="utf-8")
     report = check(root, [folder], sf_vocabulary)
     assert sorted((p.code, p.file, p.row) for p in report.problems) == [
-        ("merge_conflict", "subjects.tsv", 1),
+        ("merge_conflict", "subjects.tsv", 0),
         ("not_canonical", "review.json", 1),
     ]
 
@@ -402,7 +402,7 @@ def test_validation_warnings_do_not_fail_the_check(checkout, sf_vocabulary):
     add_unused_intervention(studies["caffeine/A"])
     report = check(root, [studies["caffeine/A"]], sf_vocabulary)
     assert [(p.code, p.severity, p.file, p.row) for p in report.problems] == [
-        ("unused_intervention", "warning", "interventions.tsv", 3)
+        ("unused_intervention", "warning", "interventions.tsv", 2)
     ]
     assert report.ok
 
@@ -755,3 +755,19 @@ def test_the_top_of_the_work_tree_is_compared_by_identity(
     assert pkdb.checks._tracked_studies(root) is not None
     report = check(root, [], sf_vocabulary, staged=True)
     assert codes(report) == {(None, "duplicate_identifier")}
+
+
+def test_a_human_line_names_line_0():
+    from pkdb.checks import Problem
+    from pkdb.checks_cli import _line
+
+    problem = Problem(
+        study="caffeine/A",
+        code="unknown_column",
+        message="Unknown column 'meen'",
+        file="outputs_Tab2.tsv",
+        row=0,
+    )
+    assert _line(problem) == (
+        "caffeine/A outputs_Tab2.tsv:0 unknown_column: Unknown column 'meen'"
+    )

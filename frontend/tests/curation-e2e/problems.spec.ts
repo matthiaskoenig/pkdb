@@ -66,3 +66,14 @@ test("Show in table opens the Data section with the cell of the problem focused"
   const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
   await expect(grid.getByRole("cell", { name: "1.24", exact: true })).toBeFocused();
 });
+
+test("a problem names its line, counted from the header line 0, and its workbook cell (#938)", async ({ page }) => {
+  const mismatch = problem(page, "digitized_mismatch");
+  // The misplaced mean is entry 5 of timecourses_Fig1.tsv, in row 6 of its sheet.
+  await expect(mismatch).toContainText("line 5 · mean · workbook cell O6");
+  await mismatch.getByRole("link", { name: "Show in table" }).click();
+  await expect(page).toHaveURL(/[?&]line=5(&|$)/);
+  const grid = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
+  await expect(grid.getByRole("columnheader", { name: "Line 0", exact: true })).toBeVisible();
+  await expect(grid.getByRole("rowheader", { name: "1", exact: true })).toBeVisible();
+});

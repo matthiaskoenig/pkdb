@@ -54,7 +54,7 @@ const unknownGroup: Problem = {
   severity: "error",
   acknowledgeable: false,
   message: "subjects.tsv has no row named 'al'",
-  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 3, column: "E", cell: "E3", header: "group" },
+  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "E", cell: "E3", header: "group" },
   suggestions: [groupSuggestion!],
 };
 const unknownSubstance: Problem = {
@@ -62,7 +62,7 @@ const unknownSubstance: Problem = {
   severity: "error",
   acknowledgeable: false,
   message: "Unknown substance: cafeine",
-  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "H", cell: "H2", header: "substance" },
+  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 1, column: "H", cell: "H2", header: "substance" },
   suggestions: [termSuggestion!],
 };
 const unitDimension: Problem = {
@@ -70,7 +70,7 @@ const unitDimension: Problem = {
   severity: "error",
   acknowledgeable: false,
   message: "mg cannot be converted to a unit of concentration",
-  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "X", cell: "X2", header: "unit" },
+  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 1, column: "X", cell: "X2", header: "unit" },
   suggestions: [unitSuggestion!],
 };
 const outsideRange: Problem = {
@@ -78,14 +78,14 @@ const outsideRange: Problem = {
   severity: "warning",
   acknowledgeable: true,
   message: "mean 512 is above the usual range of a plasma concentration",
-  source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 6, column: "O", cell: "O6", header: "mean" },
+  source: { file: "timecourses_Fig1.tsv", sheet: "timecourses_Fig1", row: 5, column: "O", cell: "O6", header: "mean" },
 };
 const unusedIntervention: Problem = {
   code: "unused_intervention",
   severity: "warning",
   acknowledgeable: true,
   message: "'caf_po_300' is not referenced by any row",
-  source: { file: "interventions.tsv", sheet: "interventions", row: 3, column: "B", cell: "B3", header: "name" },
+  source: { file: "interventions.tsv", sheet: "interventions", row: 2, column: "B", cell: "B3", header: "name" },
 };
 const digitizedMismatch: Problem = {
   code: "digitized_mismatch",
@@ -411,7 +411,7 @@ describe("issues", () => {
     const group = problem("unknown_reference");
     expect(group.get(".problem-severity").text()).toBe("Error");
     expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'al'");
-    expect(group.get(".problem-location").text()).toBe("line 3 · group · sheet cell outputs_Tab2!E3");
+    expect(group.get(".problem-location").text()).toBe("line 2 · group · workbook cell E3");
     // Each candidate is a chip of its own.
     expect(group.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
     expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["all"]);
@@ -456,7 +456,7 @@ describe("issues", () => {
     const many: Problem[] = Array.from({ length: 250 }, (_, index) => ({
       ...outsideRange,
       message: `mean ${index} lies outside [min, max]`,
-      source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
+      source: { ...outsideRange.source!, row: index + 1, cell: `O${index + 2}` },
     }));
     // Only the steps count here: the items are bare list items.
     await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }), {}, snapshot(), {
@@ -514,7 +514,7 @@ describe("actions", () => {
     await mountSection();
     const link = control(problem("outside_range"), "Show in table");
     expect(link.attributes("href")).toBe(
-      "#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=6&column=mean",
+      "#/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=5&column=mean",
     );
     // Only the tables of the study can be shown.
     expect(controls(problem("invalid_study_json"), "Show in table")).toHaveLength(0);
@@ -523,7 +523,7 @@ describe("actions", () => {
     await link.trigger("click");
     await vi.waitFor(() =>
       expect(router.currentRoute.value.fullPath).toBe(
-        "/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=6&column=mean",
+        "/studies/caffeine/Example/data?file=timecourses_Fig1.tsv&line=5&column=mean",
       ),
     );
   });
@@ -616,7 +616,7 @@ describe("acknowledgements", () => {
     const shown = dialog();
     expect(shown.get("h2").text()).toBe("Acknowledge warning");
     expect(shown.text()).toContain("unused_intervention");
-    expect(shown.text()).toContain("interventions.tsv · line 3 · name · sheet cell interventions!B3");
+    expect(shown.text()).toContain("interventions.tsv · line 2 · name · workbook cell B3");
     expect(shown.text()).toContain("'caf_po_300' is not referenced by any row");
     const reason = textArea("Reason", shown.element);
     expect(reason.attributes("required")).toBeDefined();
@@ -635,7 +635,7 @@ describe("acknowledgements", () => {
         action: "acknowledge",
         code: "unused_intervention",
         file: "interventions.tsv",
-        line: 3,
+        line: 2,
         column: "name",
         key: null,
         text: "The paper lists the dose, but no group received it.",

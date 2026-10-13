@@ -45,7 +45,7 @@ def test_figure_overlay_in_pixels(make_study, valid_files):
     mapped = [(p.px, p.py) for p in view.overlay if p.role == "mapped"]
     raw = [(p.px, p.py) for p in view.overlay if p.role == "raw"]
     assert mapped == [(0.0, 100.0), (10.0, 80.0), (20.0, 90.0)] == raw
-    assert {p.line for p in view.overlay if p.role == "mapped"} == {2, 3, 4}
+    assert {p.line for p in view.overlay if p.role == "mapped"} == {1, 2, 3}
     assert view.unmatched == ()
 
 
@@ -100,9 +100,9 @@ def test_points_are_the_mapped_rows_in_the_units_of_their_table(
         load_study(with_error_bars(make_study, valid_files, tsv)), "Fig1"
     )
     assert [(p.series, p.line, p.x, p.y, p.error_bar) for p in view.points] == [
-        ("drug_plasma", 2, 0.0, 0.0, None),
-        ("drug_plasma", 3, 1.0, 2.5, 3.0),
-        ("drug_urine", 5, 2.0, 4.0, None),
+        ("drug_plasma", 1, 0.0, 0.0, None),
+        ("drug_plasma", 2, 1.0, 2.5, 3.0),
+        ("drug_urine", 4, 2.0, 4.0, None),
     ]
     # The hover shows the cells as printed, after pkdb format.
     assert [(p.x_text, p.y_text) for p in view.points] == [

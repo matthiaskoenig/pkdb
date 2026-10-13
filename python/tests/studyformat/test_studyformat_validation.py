@@ -46,10 +46,10 @@ def test_unformatted_study_is_invalid(make_study, valid_files, sf_vocabulary):
 @pytest.mark.parametrize(
     ("change", "line"),
     [
-        (lambda text: text.replace("\t2.5\t", "\t2.50\t"), 2),
-        (lambda text: text + "Example\tTab2\n", 3),
-        (lambda text: text.replace("\n", "\r\n"), 1),
-        (lambda text: text.rstrip("\n"), 2),
+        (lambda text: text.replace("\t2.5\t", "\t2.50\t"), 1),
+        (lambda text: text + "Example\tTab2\n", 2),
+        (lambda text: text.replace("\n", "\r\n"), 0),
+        (lambda text: text.rstrip("\n"), 1),
     ],
     ids=["number", "extra_line", "crlf", "final_newline"],
 )
@@ -498,7 +498,7 @@ def test_postprocessing_issues_are_located_in_the_table(
         issue.source.row,
         issue.source.cell,
         issue.source.header,
-    ) == ("outputs_Tab2.tsv", "outputs_Tab2", 2, "P2", "se")
+    ) == ("outputs_Tab2.tsv", "outputs_Tab2", 1, "P2", "se")
 
 
 @pytest.mark.parametrize(
@@ -624,8 +624,8 @@ def test_scatter_of_groups_and_individuals_is_reported_before_postprocessing(
     assert issue.code == "mixed_scatter_subjects"
     assert issue.source is not None
     # pkdb format sorts the group first; the individuals are the usual kind.
-    assert (issue.source.row, issue.source.header) == (2, "subjects")
-    assert "'all' is a group, but 'S1' in line 3 is an individual" in issue.message
+    assert (issue.source.row, issue.source.header) == (1, "subjects")
+    assert "'all' is a group, but 'S1' in line 2 is an individual" in issue.message
 
 
 def test_dismissed_item_no_longer_acknowledges(valid_study, sf_vocabulary, tsv):

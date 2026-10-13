@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Literal
 
 from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.validation import Suggestion, ValidationIssue
+from pkdb.studyformat.tables import workbook_row
 
 if TYPE_CHECKING:
     from pkdb.studyformat.load import LoadedTable, Row
@@ -207,6 +208,29 @@ def column_letter(index: int) -> str:
     return letters
 
 
+def line_name(file: str, line: int, from_sheet: bool) -> str:
+    """How a message names a line of a table file, such as `Line 5`.
+
+    A line read from the sheet of the table in the workbook is named by the
+    sheet row that the curator sees, such as `Row 6`.
+    """
+    return f"Row {workbook_row(file, line)}" if from_sheet else f"Line {line}"
+
+
+def table_place(row: int | None, header: str | None, cell: str | None) -> list[str]:
+    """The parts that locate an issue in a table file, as the command line names them.
+
+    Such as `line 96`, `error_bar` and `workbook cell Y97`, each when known. The
+    header of a table is line 0; the cell is the address in the workbook.
+    """
+    parts = [] if row is None else [f"line {row}"]
+    if header:
+        parts.append(header)
+    if cell:
+        parts.append(f"workbook cell {cell}")
+    return parts
+
+
 def make_issue(
     code: str,
     message: str,
@@ -225,14 +249,17 @@ def make_issue(
 ) -> ValidationIssue:
     """Create a validation issue at an optional file, line and column.
 
-    An issue of a TSV file is located at its line, and its sheet is the file
-    name without `.tsv`. An issue found in the workbook names the workbook as
-    `file` and its `sheet`, and `line` is the sheet row. `key` names the place
-    of an issue in a file without rows, such as the dataset of a
-    WebPlotDigitizer project, so that a review item can acknowledge exactly
-    this issue. A hint or candidates add a suggestion of the kind
-    `suggestion`, by default FIX with a hint and CANDIDATES without. The
-    severity defaults to warning for warning codes and to error otherwise.
+    An issue of a TSV file is located at its line: in a table with a header the
+    header is line 0 and the first entry line 1, a raw table starts at line 1.
+    Its sheet is the file name without `.tsv`, and its cell is the address in
+    the workbook, in the sheet row of the line (`workbook_row`). An issue found
+    in the workbook names the workbook as `file` and its `sheet`, and `line` is
+    the sheet row. `key` names the place of an issue in a file without rows,
+    such as the dataset of a WebPlotDigitizer project, so that a review item
+    can acknowledge exactly this issue. A hint or candidates add a suggestion
+    of the kind `suggestion`, by default FIX with a hint and CANDIDATES
+    without. The severity defaults to warning for warning codes and to error
+    otherwise.
     """
     source = None
     if file is not None:
@@ -244,7 +271,11 @@ def make_issue(
             sheet=sheet,
             row=line,
             column=letter,
-            cell=f"{letter}{line}" if letter and line else None,
+            cell=(
+                f"{letter}{workbook_row(file, line)}"
+                if letter and line is not None
+                else None
+            ),
             header=header,
             key=key,
         )

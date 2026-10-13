@@ -37,9 +37,9 @@ const WORKSPACE = "demo_studies";
 const STUDY = "caffeine/Demo2020";
 const TABLE = "timecourses_Fig1.tsv";
 /** The line of the table whose mapped point lies away from its digitized point. */
-const MISPLACED_LINE = 6;
+const MISPLACED_LINE = 5;
 /** The line of the table that the workbook and the TSV file change differently. */
-const CONFLICT_LINE = 7;
+const CONFLICT_LINE = 6;
 
 try {
   await mkdir(destination, { recursive: true });
@@ -323,11 +323,11 @@ async function conflict(folder) {
     .filter(Boolean)
     .map((text) => text.split("\t"));
   const column = rows[0].indexOf("mean");
-  // The sheet has the rows and columns of the table: the header is row 1, line 7 is row 7.
-  const cell = `${columnLetters(column)}${CONFLICT_LINE}`;
+  // The sheet has the rows and columns of the table: the header, line 0, is row 1, so line 6 is row 7.
+  const cell = `${columnLetters(column)}${CONFLICT_LINE + 1}`;
   // openpyxl saves the workbook as a spreadsheet program does.
   const workbook = join(folder, `${STUDY.split("/")[1]}.xlsx`);
   python("tools/curation_testing/edit_workbook.py", workbook, TABLE.replace(/\.tsv$/, ""), cell, "1.08");
-  rows[CONFLICT_LINE - 1][column] = "1.06";
+  rows[CONFLICT_LINE][column] = "1.06";
   await writeFile(path, rows.map((cells) => `${cells.join("\t")}\n`).join(""));
 }

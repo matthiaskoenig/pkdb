@@ -143,6 +143,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
               :mark-column="view.changed"
               mark-text="changed"
               line-header="Version"
+              :header-line="false"
               :label="`Conflicting rows of ${conflict.file}`"
               class="conflict-grid"
             >

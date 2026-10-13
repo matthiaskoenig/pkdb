@@ -358,7 +358,7 @@ def test_a_warning_of_a_whole_file_is_acknowledged_by_its_key(valid_study):
         {"file": "Example_Fig1.wpd.json"},
         {"file": "Example.xlsx", "line": 4},
         {"file": "Example_Tab2.tsv", "line": 3},
-        {"file": "timecourses_Fig1.tsv", "line": 1, "header": "mean"},
+        {"file": "timecourses_Fig1.tsv", "line": 0, "header": "mean"},
     ],
 )
 def test_a_warning_without_a_row_or_a_key_is_not_acknowledged_alone(

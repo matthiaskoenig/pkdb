@@ -336,7 +336,8 @@ def _write_table(
                             code,
                             message,
                             file=plan.file,
-                            line=number,
+                            # Row `number` of the sheet shows line number - 1.
+                            line=number - 1,
                             column=index,
                             header=column.name,
                             hint=hint,

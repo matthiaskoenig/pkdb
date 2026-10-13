@@ -27,6 +27,20 @@ def test_actual_omitted_distinguished_from_null_and_legacy_shape():
     }
 
 
+def test_issues_without_a_row_sort_before_line_0_and_line_1():
+    report = ValidationReport(
+        issues=[
+            ValidationIssue(
+                code="example",
+                message="Example",
+                source=SourceLocation(file="a.tsv", row=row),
+            )
+            for row in (1, 0, None)
+        ]
+    ).finalize()
+    assert [i.source.row for i in report.issues if i.source] == [None, 0, 1]
+
+
 def test_bounded_diagnostics_preserve_total_counts_and_order():
     report = ValidationReport(
         issues=[

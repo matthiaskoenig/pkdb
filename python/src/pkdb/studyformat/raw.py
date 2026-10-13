@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from pkdb.schemas.validation import ValidationIssue
-from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.issues import line_name, make_issue
 from pkdb.studyformat.tables import parse_table_file
 from pkdb.studyformat.text import (
     CONFLICT_MARKERS,
@@ -69,11 +69,18 @@ def parse_raw_file(name: str, study: str) -> str | None:
 
 
 def load_raw(
-    file: str, chunks: Iterable[bytes], source: str, *, limit: RowLimit | None = None
+    file: str,
+    chunks: Iterable[bytes],
+    source: str,
+    *,
+    limit: RowLimit | None = None,
+    from_sheet: bool = False,
 ) -> tuple[LoadedRaw | None, list[ValidationIssue]]:
     """Read a raw table; None and the issue when it is not UTF-8, too wide or conflicted.
 
     `limit` is the RowLimit of the study, which counts the non-empty lines.
+    `from_sheet` tells that the lines were read from the sheet of the table: a
+    message then names the sheet row of a line, not the line.
     """
     rows: list[RawRow] = []
     try:
@@ -82,15 +89,16 @@ def load_raw(
                 return None, [
                     make_issue(
                         "merge_conflict",
-                        f"Line {number} is a git conflict marker; resolve the conflict",
+                        f"{line_name(file, number, from_sheet)} is a git conflict marker; resolve the conflict",
                         file=file,
                         line=number,
                     )
                 ]
             if (width := text.count("\t") + 1) > MAX_CELLS:
                 error = TooManyCells(number, width)
+                message = error.message(line_name(file, number, from_sheet))
                 return None, [
-                    make_issue("too_many_columns", str(error), file=file, line=number)
+                    make_issue("too_many_columns", message, file=file, line=number)
                 ]
             cells = cells_of(text)
             if any(cells):

@@ -28,7 +28,7 @@ def test_make_issue_location_and_defaults():
         "invalid_number",
         "Expected a number",
         file="outputs_Tab2.tsv",
-        line=3,
+        line=2,
         column=13,
         header="mean",
     )
@@ -37,7 +37,7 @@ def test_make_issue_location_and_defaults():
     assert issue.stage == "parse"
     assert issue.source is not None
     assert issue.source.sheet == "outputs_Tab2"
-    assert (issue.source.row, issue.source.column, issue.source.cell) == (3, "N", "N3")
+    assert (issue.source.row, issue.source.column, issue.source.cell) == (2, "N", "N3")
     assert issue.source.header == "mean"
     warning = make_issue("unused_subject", "unused", file="subjects.tsv", line=2)
     assert warning.severity == "warning"

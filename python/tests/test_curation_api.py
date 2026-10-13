@@ -460,7 +460,7 @@ def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
     [conflict] = detail["conflicts"]
     assert conflict["file"] == "timecourses_Fig1.tsv"
     assert conflict["workbook_rows"][0]["row"] == 3
-    assert conflict["table_lines"][0]["line"] == 3
+    assert conflict["table_lines"][0]["line"] == 2
 
 
 def test_acknowledged_warnings_are_listed_until_dismissed(api):
@@ -529,7 +529,7 @@ def test_tables_sources_and_images(api):
             server, "GET", f"{DETAIL}/tables/timecourses_Fig1.tsv", headers=headers
         )[2]
     )
-    assert table["kind"] == "table" and table["rows"][0]["line"] == 2
+    assert table["kind"] == "table" and table["rows"][0]["line"] == 1
     assert table["rows"][0]["cells"][table["header"].index("label")] == "drug_plasma"
     raw = json.loads(
         request(server, "GET", f"{DETAIL}/tables/Example_Tab2.tsv", headers=headers)[2]
@@ -951,7 +951,7 @@ def test_detail_and_preview_match_review_targets(api):
     lines = (folder / "timecourses_Fig1.tsv").read_text(encoding="utf-8").splitlines()
     time = lines[0].split("\t").index("time")
     at = {
-        row.split("\t")[time]: number for number, row in enumerate(lines[1:], start=2)
+        row.split("\t")[time]: number for number, row in enumerate(lines[1:], start=1)
     }
     headers = authenticate(server)
     detail = _detail(server, headers)
@@ -1391,8 +1391,8 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     assert status == 422
     # A line and a column that are left out match every line and column.
     assert error_body(data) == {
-        "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
-        "column mean, line 4 column mean; give the line, column and key of one",
+        "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 2 "
+        "column mean, line 3 column mean; give the line, column and key of one",
         "issues": [],
         "code": "ambiguous_warning",
         "detail": None,
@@ -1409,7 +1409,7 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
         "action": "Acknowledge a warning (POST /local/studies/review)",
     }
     # A null line or column matches only warnings without one.
-    for exact in ({"line": None}, {"column": None}, {"line": 4, "column": None}):
+    for exact in ({"line": None}, {"column": None}, {"line": 3, "column": None}):
         status, _, data = request(
             server, "POST", "/local/studies/review", {**body, **exact}, headers
         )
@@ -1419,7 +1419,7 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
         server,
         "POST",
         "/local/studies/review",
-        {**body, "line": 4, "column": "mean"},
+        {**body, "line": 3, "column": "mean"},
         headers,
     )
     assert status == 200

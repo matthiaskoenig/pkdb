@@ -22,6 +22,47 @@ def safe_text(value: object) -> str:
     return re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", str(value))[:2000]
 
 
+def _is_table(source: dict) -> bool:
+    """Whether a location is a line of a format 2 table.
+
+    Format 2 issues name the file stem as the sheet; the hidden TSV sources of
+    format 1 studies have no sheet and keep their cell or row.
+    """
+    file = source.get("file")
+    return (
+        isinstance(file, str)
+        and file.endswith(".tsv")
+        and source.get("sheet") == file.removesuffix(".tsv")
+    )
+
+
+def _place(source: dict) -> list[str | None]:
+    """The file and the place of an issue, as `pkdb validate` prints them.
+
+    A table file names the line (its header is line 0), the column and the
+    workbook cell; a workbook or a study format 1 file its sheet and its cell,
+    else its row.
+    """
+    from pkdb.studyformat.issues import table_place
+
+    file, row = source.get("file"), source.get("row")
+    if _is_table(source):
+        return [file, *table_place(row, source.get("header"), source.get("cell"))]
+    return [
+        file,
+        source.get("sheet"),
+        source.get("cell") or (None if row is None else f"row {row}"),
+    ]
+
+
+def _occurrence(source: dict) -> str:
+    """One place of a repeated issue: the line in a table file, else the cell or row."""
+    row = source.get("row")
+    if _is_table(source):
+        return "?" if row is None else f"line {row}"
+    return source.get("cell") or ("?" if row is None else str(row))
+
+
 class Terminal:
     """Render live stages on terminals and stable lines on redirected streams."""
 
@@ -205,12 +246,7 @@ class Terminal:
         for group in displayed if self.verbose else displayed[:5]:
             issue = group[0]
             source = issue.get("source") or {}
-            location = [
-                source.get("file"),
-                source.get("sheet"),
-                source.get("cell")
-                or (f"row {source['row']}" if source.get("row") else None),
-            ]
+            location = _place(source)
             if source.get("path"):
                 location.append(
                     "/"
@@ -224,11 +260,7 @@ class Terminal:
                 f"    {safe_text(issue.get('message', ''))} [{safe_text(issue.get('code', ''))}]"
             )
             if len(group) > 1:
-                locations = [
-                    (item.get("source") or {}).get("cell")
-                    or str((item.get("source") or {}).get("row", "?"))
-                    for item in group
-                ]
+                locations = [_occurrence(item.get("source") or {}) for item in group]
                 self.console.print(
                     f"    {len(group)} occurrences: {safe_text(', '.join(locations))}"
                 )
@@ -254,13 +286,7 @@ class Terminal:
             for related in issue.get("related_sources", []):
                 location = related.get("source", {})
                 coordinate = " → ".join(
-                    str(value)
-                    for value in (
-                        location.get("file"),
-                        location.get("sheet"),
-                        location.get("cell") or location.get("row"),
-                    )
-                    if value
+                    str(value) for value in _place(location) if value
                 )
                 self.console.print(
                     f"    Related {safe_text(related.get('label', 'source'))}: {safe_text(coordinate)}"

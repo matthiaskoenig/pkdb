@@ -310,6 +310,61 @@ def test_terminal_groups_repeated_errors_and_shows_null(capsys):
     assert "Received: empty (null)" in output
 
 
+def test_terminal_names_the_line_and_the_workbook_cell_of_a_table(capsys):
+    from pkdb.terminal import Terminal
+
+    Terminal(True).result(
+        {
+            "ok": False,
+            "report": {
+                "issues": [
+                    {
+                        "code": "unknown_column",
+                        "message": "Unknown column",
+                        "source": {
+                            "file": "outputs_Fig6.tsv",
+                            "sheet": "outputs_Fig6",
+                            "row": row,
+                            "cell": f"Y{row + 1}",
+                            "header": "error_bar",
+                        },
+                    }
+                    for row in (0, 96)
+                ]
+            },
+        }
+    )
+    output = capsys.readouterr().out
+    assert "outputs_Fig6.tsv → line 0 → error_bar → workbook cell Y1" in output
+    assert "2 occurrences: line 0, line 96" in output
+
+
+def test_terminal_keeps_the_cell_of_a_format_1_tsv_source(capsys):
+    from pkdb.terminal import Terminal
+
+    def issue(sheet):
+        return {
+            "code": "unknown_column",
+            "message": "Unknown column",
+            "source": {
+                "file": ".Study_Fig1.tsv",
+                "sheet": sheet,
+                "row": 7,
+                "cell": "C7",
+                "header": "mean",
+            },
+        }
+
+    Terminal(True).result({"ok": False, "report": {"issues": [issue(None)]}})
+    output = capsys.readouterr().out
+    assert ".Study_Fig1.tsv → C7" in output
+    assert "line 7" not in output
+    Terminal(True).result({"ok": False, "report": {"issues": [issue(".Study_Fig1")]}})
+    assert ".Study_Fig1.tsv → line 7 → mean → workbook cell C7" in (
+        capsys.readouterr().out
+    )
+
+
 def test_confirmed_commit_error_is_not_reported_as_unsaved(capsys):
     from pkdb.terminal import Terminal
 

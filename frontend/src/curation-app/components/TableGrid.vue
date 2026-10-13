@@ -46,6 +46,11 @@ const props = withDefaults(
     label?: string | null;
     /** The header of the line column, such as Row for the rows of a sheet; null leaves the column out. */
     lineHeader?: string | null;
+    /**
+     * Whether the header row is line 0 of the file, so that its line cell shows 0; a raw table has
+     * no header line, and a grid of other rows, such as the versions of a conflict, sets it false.
+     */
+    headerLine?: boolean;
     /** Whether a click on a row selects its line: the line cell becomes a button. */
     selectable?: boolean;
     /** The lines of the rows to show; null shows every row. */
@@ -63,6 +68,7 @@ const props = withDefaults(
     columns: null,
     label: null,
     lineHeader: "Line",
+    headerLine: true,
     selectable: false,
     visibleLines: null,
     tinted: false,
@@ -84,6 +90,8 @@ const shownRows = computed(() =>
 
 const raw = computed(() => props.table.kind === "raw");
 const lines = computed(() => props.lineHeader !== null);
+/** Whether the line cell of the header row shows 0, the line of the header of a table. */
+const numberedHeader = computed(() => props.headerLine && !raw.value);
 
 const marked = computed(
   () => new Set(typeof props.markColumn === "string" ? [props.markColumn] : (props.markColumn ?? [])),
@@ -203,12 +211,12 @@ interface Note {
 
 /**
  * The problems of the rendered cells by `<line>:<column index>`, -1 for the line cell: a problem
- * of the whole row or of a column that does not show. Line 1 of a table is its header.
+ * of the whole row or of a column that does not show. Line 0 of a table is its header.
  */
 const notes = computed(() => {
   const found = new Map<string, Note>();
   const shown = new Map(headers.value.map(({ index, name }) => [name, index]));
-  const lines = [...(raw.value ? [] : [1]), ...rendered.value.map(({ row }) => row.line)];
+  const lines = [...(raw.value ? [] : [0]), ...rendered.value.map(({ row }) => row.line)];
   for (const line of lines)
     for (const [name, cell] of props.issueCells.get(line) ?? []) {
       const index = name === ROW ? -1 : (shown.get(name) ?? -1);
@@ -255,9 +263,9 @@ function lineClass(line: number): Record<string, boolean> {
   };
 }
 
-/** The problems of the header of a table, at its line 1; a raw table has no header line. */
+/** The problems of the header of a table, at its line 0; a raw table has no header line. */
 function headerNote(index: number): Note | undefined {
-  return raw.value ? undefined : notes.value.get(`1:${index}`);
+  return raw.value ? undefined : notes.value.get(`0:${index}`);
 }
 
 /** The classes of a header cell; the index -1 is the header of the line column. */
@@ -419,7 +427,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :class="headerClass(-1, null)"
               :aria-describedby="described(headerNote(-1)?.id)"
             >
-              {{ lineHeader }}
+              <template v-if="numberedHeader"><span class="d-sr-only">{{ lineHeader }}</span> 0</template>
+              <template v-else>{{ lineHeader }}</template>
             </th>
             <th
               v-for="column in headers"

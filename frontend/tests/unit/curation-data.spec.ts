@@ -72,7 +72,7 @@ const subjects: TableResponse = {
 };
 
 describe("selection of the route", () => {
-  it("reads source, file, a positive whole line and column, and drops empty values", () => {
+  it("reads source, file, a whole line from 0 and column, and drops empty values", () => {
     expect(selectionOf({ source: "Fig1", file: "subjects.tsv", line: "3", column: "name" })).toEqual({
       source: "Fig1",
       pdf: null,
@@ -87,7 +87,12 @@ describe("selection of the route", () => {
       line: null,
       column: null,
     });
-    expect(selectionOf({ source: "", line: "0" })).toEqual({ source: null, pdf: null, file: null, line: null, column: null });
+    // Line 0 is the header of a table.
+    expect(selectionOf({ source: "", line: "0" })).toEqual({ source: null, pdf: null, file: null, line: 0, column: null });
+    expect(selectionOf({ line: "-1" }).line).toBeNull();
+    // An empty line is no line 0.
+    expect(selectionOf({ line: "" }).line).toBeNull();
+    expect(selectionOf({ line: " " }).line).toBeNull();
     expect(selectionOf({ line: "2.5" }).line).toBeNull();
     expect(selectionOf({ line: ["2", "3"] }).line).toBeNull();
   });
