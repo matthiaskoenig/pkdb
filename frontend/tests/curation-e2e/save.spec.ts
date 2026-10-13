@@ -253,6 +253,55 @@ test("a region of rows that scrolls into view stops 8 px below the banner, as th
     .toBe(8);
 });
 
+test("Ctrl+S in Review keeps the banner there, with its notice and then neutral, and nothing below it moves", async ({
+  app,
+  page,
+}) => {
+  const path = studyJsonPath(app.server.workspace);
+  const original = readFileSync(path, "utf8");
+  try {
+    await app.open(`${STUDY}/metadata`);
+    const banner = await editSourceKey(page);
+    const sections = page.getByRole("navigation", { name: "Study sections" });
+    await sections.getByRole("link", { name: /^Review\b/ }).click();
+    await expect(banner).toHaveClass(/unsaved-banner--dirty/);
+    const content = page.locator(".study-section .review");
+    await expect(page.getByRole("article", { name: "Question" })).toBeVisible();
+    const top = async () => (await content.boundingBox())!.y;
+    const start = await top();
+
+    await page.keyboard.press("Control+s");
+    await expect(banner).toContainText("study.json saved.");
+    await expect(banner).not.toHaveClass(/unsaved-banner--dirty/);
+    await expect.poll(() => onDisk(path).provenance?.source_key).toBe(EDITED_KEY);
+    expect(await top()).toBe(start);
+    // The notice ends; the banner stays, neutral, until the curator leaves the section.
+    await expect(banner).toHaveText(/^No unsaved changes to study\.json/);
+    expect(await top()).toBe(start);
+
+    // Without changes and notices, a section opens without the banner.
+    await sections.getByRole("link", { name: /^Problems\b/ }).click();
+    await expect(page.getByText("digitized_mismatch", { exact: true })).toBeVisible();
+    await expect(banner).toBeHidden();
+  } finally {
+    writeFileSync(path, original);
+  }
+});
+
+test("a discard in Problems keeps the banner there and offers Undo", async ({ app, page }) => {
+  await app.open(`${STUDY}/metadata`);
+  const banner = await editSourceKey(page);
+  const sections = page.getByRole("navigation", { name: "Study sections" });
+  await sections.getByRole("link", { name: /^Problems\b/ }).click();
+  await expect(banner).toHaveClass(/unsaved-banner--dirty/);
+  await page.getByRole("button", { name: "Discard", exact: true }).click();
+  await expect(banner).toContainText("Changes discarded.");
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await expect(banner).toContainText("Unsaved changes to study.json: Source key");
+  await sections.getByRole("link", { name: /^Metadata\b/ }).click();
+  await expect(page.getByRole("textbox", { name: "Source key" })).toHaveValue(EDITED_KEY);
+});
+
 test("the selected review item sticks below the banner while Review scrolls", async ({ app, page }) => {
   await page.setViewportSize({ width: 1440, height: 500 });
   await app.open(`${STUDY}/metadata`);
@@ -276,17 +325,20 @@ test("a field that the keyboard focuses or that scrolls into view stops below th
   await expect(banner).toContainText("Unsaved changes to study.json: Source key");
   const doi = page.getByRole("textbox", { name: "DOI" });
   const outline = page.locator(".v-field").filter({ has: doi });
+  const appBar = await appBarBottom(page);
   /** How far the top of the outline of DOI is below the stuck banner. */
   const clearance = async () => {
     const [stuck, field] = [(await banner.boundingBox())!, (await outline.boundingBox())!];
-    expect(Math.round(stuck.y)).toBe(await appBarBottom(page));
+    expect(Math.round(stuck.y)).toBe(appBar);
     return field.y - (stuck.y + stuck.height);
   };
 
-  // Tab from PMID to DOI, which is under the banner.
+  // Tab from PMID to DOI, whose top is 10 px under the stuck banner, whatever its height.
   await page.getByRole("textbox", { name: "PMID" }).evaluate((field: HTMLElement) => field.focus({ preventScroll: true }));
   const top = await outline.evaluate((field) => field.getBoundingClientRect().top + window.scrollY);
-  await page.evaluate((y) => window.scrollTo(0, y - 60), top);
+  const { height } = (await banner.boundingBox())!;
+  await page.evaluate((y) => window.scrollTo(0, y), top - (appBar + height - 10));
+  await expect.poll(clearance).toBeLessThan(0);
   await page.keyboard.press("Tab");
   await expect(doi).toBeFocused();
   await expect.poll(clearance).toBeGreaterThanOrEqual(0);

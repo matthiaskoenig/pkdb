@@ -17,8 +17,10 @@ import UserHint from "./UserHint.vue";
  * moves when an edit starts or a notice ends: without unsaved changes it says so in a neutral
  * surface, with them it uses the caution color (amber) and names the changed fields, with Discard
  * and Save, and without them again it shows the notice of the last action for a few seconds, such
- * as `study.json saved.`, after a discard with Undo. The other sections show it only while study.json has unsaved changes, which were
- * made in another section, so it is there when the section opens. It sticks below the app bar
+ * as `study.json saved.`, after a discard with Undo. The other sections show it from their
+ * opening while study.json has unsaved changes, which were made in another section, or a notice
+ * or an alert, and keep it until the curator leaves the section: a save there leaves it neutral
+ * rather than taking it away. It never goes on a timer. It sticks below the app bar
  * while the page scrolls, with square top corners, and publishes where it sticks and its height
  * as `--unsaved-banner-top` and `--unsaved-banner-height`, so that what scrolls into view or
  * sticks stays below it. A refused save lists the issues of the fields that `section` does not
@@ -37,9 +39,44 @@ const props = withDefaults(
 const study = useStudyStore();
 const draft = study.draft;
 const textId = useId();
-/** Whether the banner is on the page: always in the sections that edit study.json, elsewhere while it has unsaved changes. */
+/** Whether the draft has something to say: unsaved changes, a notice, Undo of a discard, or an alert. */
+const pending = computed(
+  () =>
+    draft.dirty ||
+    draft.notice !== "" ||
+    draft.undoable ||
+    draft.failure !== null ||
+    draft.noUser !== null ||
+    draft.conflict !== null ||
+    draft.reloaded !== null ||
+    draft.referenceError !== "",
+);
+/**
+ * In the sections that do not edit study.json, whether the banner shows: from the opening of the
+ * section or the study while the draft has something to say, until the curator leaves it; neutral
+ * after a save and on no timer, so that nothing moves below it later.
+ */
+const kept = ref(false);
+watch(
+  [() => props.section, () => study.identity],
+  () => {
+    kept.value = pending.value;
+  },
+  { immediate: true, flush: "sync" },
+);
+watch(
+  pending,
+  (value) => {
+    if (value) kept.value = true;
+  },
+  { flush: "sync" },
+);
+/**
+ * Whether the banner is on the page: always in the sections that edit study.json, elsewhere once
+ * the draft has something to say there (`kept`).
+ */
 const shown = computed(
-  () => draft.form !== null && (props.section === "metadata" || props.section === "data" || draft.dirty),
+  () => draft.form !== null && (props.section === "metadata" || props.section === "data" || kept.value),
 );
 const failure = computed(() => (props.section ? draft.failureIn(props.section, props.kind) : draft.failure));
 /** The changed fields by their labels, such as `Source key, Notes of the outputs`. */
@@ -140,7 +177,8 @@ function act(action: () => unknown): void {
   root.value?.focus({ preventScroll: true });
   void action();
 }
-// Where the banner goes with the last unsaved change, the heading of the section takes the focus from it.
+// Where the banner goes while it has the focus, as when study.json on disk can no longer be read,
+// the heading of the section takes the focus from it.
 watch(
   shown,
   (now) => {

@@ -1246,7 +1246,7 @@ describe("the unsaved banner", () => {
   const text = () => page().get(".unsaved-banner-text").text();
 
   // Its place in Data is a test of curation-data-section.spec.ts, which serves the tables.
-  it("keeps its row in Metadata, and shows in Review only while study.json has unsaved changes", async () => {
+  it("keeps its row in Metadata, and shows in Review once study.json has unsaved changes", async () => {
     await mountPage("/studies/caffeine/Example/metadata");
     expect(placed().exists()).toBe(true);
     expect(banner().classes()).not.toContain("unsaved-banner--dirty");
@@ -1298,17 +1298,86 @@ describe("the unsaved banner", () => {
     expect(document.activeElement).toBe(region);
   });
 
-  it("gives the focus to the heading of Review when its Save leaves no unsaved changes, and the banner goes", async () => {
+  it("stays in Review after a save there, with its notice and then neutral, until the curator leaves the section", async () => {
     await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
     useStudyStore().draft.form!.creator = "janekg";
     await flushPromises();
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    onTestFinished(() => void vi.useRealTimers());
     button("Save").element.focus();
     await click("Save");
     expect(posted(METADATA)).toHaveLength(1);
-    expect(page().find(".unsaved-banner").exists()).toBe(false);
-    expect(document.activeElement).toBe(page().get(".study-section > h2").element);
-    // The live region says that the save worked.
+    expect(banner().classes()).not.toContain("unsaved-banner--dirty");
+    expect(text()).toBe("study.json saved.");
+    expect(document.activeElement).toBe(banner().element);
     expect(page().get(".unsaved-banner-notice").text()).toBe("study.json saved.");
+
+    // No timer takes it away: nothing below it moves.
+    vi.advanceTimersByTime(NOTICE_MS);
+    await flushPromises();
+    expect(placed().exists()).toBe(true);
+    expect(text()).toBe("No unsaved changes to study.json");
+    expect(button("Save").element.disabled).toBe(true);
+    // The router waits for timers of its own.
+    vi.useRealTimers();
+
+    // A section opened without changes and notices shows none.
+    for (const section of ["problems", "review"]) {
+      await router.push(`/studies/caffeine/Example/${section}`);
+      await flushPromises();
+      expect(page().find(".unsaved-banner").exists(), section).toBe(false);
+    }
+  });
+
+  it("offers Undo of a discard in Problems", async () => {
+    await mountPage("/studies/caffeine/Example/problems");
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Discard");
+    expect(text()).toBe("Changes discarded.");
+    expect(draft.form!.creator).not.toBe("janekg");
+    await click("Undo");
+    expect(text()).toBe("Unsaved changes to study.json: Creator");
+    expect(draft.form!.creator).toBe("janekg");
+  });
+
+  it("shows a notice that is still pending in a section opened after it, and the refresh error of reference.json where the save was", async () => {
+    await mountPage("/studies/caffeine/Example/metadata", {
+      [`POST ${METADATA}`]: () =>
+        json({ revision: "study-2", reference: null, reference_error: "PubMed did not answer." }),
+    });
+    const draft = useStudyStore().draft;
+    draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Save");
+    await router.push("/studies/caffeine/Example/activity");
+    await flushPromises();
+    expect(placed().exists()).toBe(true);
+    expect(text()).toBe("study.json saved.");
+    expect(page().get(".unsaved-banner-reference-error").text()).toBe(
+      "study.json saved; reference.json could not be refreshed: PubMed did not answer.",
+    );
+
+    // Saved from Review, the error shows there too.
+    await router.push("/studies/caffeine/Example/review");
+    draft.referenceError = "";
+    draft.form!.creator = "mkoenig";
+    await flushPromises();
+    await click("Save");
+    expect(page().get(".unsaved-banner-reference-error").text()).toContain("PubMed did not answer.");
+  });
+
+  it("starts hidden in the sections of another study", async () => {
+    await mountPage("/studies/caffeine/Example/review", { [`POST ${METADATA}`]: written });
+    useStudyStore().draft.form!.creator = "janekg";
+    await flushPromises();
+    await click("Save");
+    expect(text()).toBe("study.json saved.");
+    await router.push("/studies/caffeine/Harder1988/review");
+    await flushPromises();
+    expect(useStudyStore().detail?.id).toBe("caffeine/Harder1988");
+    expect(page().find(".unsaved-banner").exists()).toBe(false);
   });
 
   it("names the changed fields by their labels, three of them and how many more", async () => {
