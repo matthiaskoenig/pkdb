@@ -22,15 +22,18 @@ SUBSTANCE_COLUMNS = {
 }
 
 
-def study_substances(folder: Path) -> tuple[str, ...]:
+def study_substances(folder: Path, *, strict: bool = False) -> tuple[str, ...]:
     """The substances that the interventions and the data of a study name, sorted.
 
     Names that differ only in case count once, in their first spelling. A folder or a
-    table that cannot be read names none; validation reports it.
+    table that cannot be read names none; validation reports it. With `strict`, it raises
+    the OSError instead, for a caller that reads the study again later.
     """
     try:
         layout = scan_folder(folder)
     except OSError:
+        if strict:
+            raise
         return ()
     found: dict[str, str] = {}
     for table_file in layout.tables:
@@ -47,6 +50,8 @@ def study_substances(folder: Path) -> tuple[str, ...]:
                     study=layout.study,
                 )
         except OSError:
+            if strict:
+                raise
             continue
         for row in table.rows if table is not None else ():
             for column in columns:

@@ -1750,6 +1750,7 @@ def test_an_idle_engine_keeps_its_revision(workspace):
         while engine.queue:
             run_next(engine)
         engine._check_workbooks()
+        engine._read_substances()
         engine._watch_recovered()
     revision = engine.lock.revision
     for _ in range(3):

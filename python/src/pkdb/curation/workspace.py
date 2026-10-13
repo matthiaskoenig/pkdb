@@ -1,8 +1,9 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
 Reads and writes engine attributes: lock, scan_lock, root, studies, modes, recent_workspaces,
-reference_previews, paused, queue, stop, wakeup, state_dir, _formats, _tree. Uses engine
-methods _save, _enqueue_one, snapshot, _local_vocabulary and _sync_later.
+reference_previews, paused, queue, stop, wakeup, state_dir, _formats, _tree,
+_saved_substances. Uses engine methods _save, _enqueue_one, snapshot, _local_vocabulary and
+_sync_later.
 """
 
 import hashlib
@@ -16,6 +17,8 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
+from pkdb import __version__
+from pkdb.cache import atomic_text
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
@@ -40,6 +43,9 @@ NOT_CHECKED_SYNC = {"status": "not_checked", "changes": 0, "conflicts": 0}
 # The workbooks that the watcher plans in one tick for rows that no job checks; a few per
 # tick keep the start of a large workspace fast.
 CHECK_LIMIT = 5
+# The substances that the watcher read, by study folder, with the signature of the tables
+# that they were read at; the start serves them without reading a table.
+SUBSTANCES_FILE = "substances.json"
 
 
 class WorkspaceError(ValueError):
@@ -84,6 +90,57 @@ def table_signature(files):
         and (table := parse_table_file(entry[0])) is not None
         and table[0].kind in SUBSTANCE_COLUMNS
     )
+
+
+def load_substances(path):
+    """The saved substances of `path`: (table signature, names) by study folder.
+
+    A file that cannot be read, or that another version of pkdb wrote, which may count
+    the substances of a table otherwise, gives none; a damaged entry is left out.
+    """
+    try:
+        saved = json.loads(path.read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return {}
+    if not isinstance(saved, dict) or saved.get("version") != __version__:
+        return {}
+    studies = saved.get("studies")
+    if not isinstance(studies, dict):
+        return {}
+    loaded = {}
+    for folder, entry in studies.items():
+        if not isinstance(entry, dict):
+            continue
+        tables, names = entry.get("tables"), entry.get("substances")
+        if (
+            isinstance(tables, list)
+            and all(
+                isinstance(table, list)
+                and len(table) == 3
+                and isinstance(table[0], str)
+                and type(table[1]) is int
+                and type(table[2]) is int
+                for table in tables
+            )
+            and isinstance(names, list)
+            and all(isinstance(name, str) for name in names)
+        ):
+            loaded[folder] = (tuple(map(tuple, tables)), tuple(names))
+    return loaded
+
+
+def save_substances(path, read):
+    """Replace the saved substances of `path` with `read`, as `load_substances` gives them."""
+    studies = {
+        folder: {"tables": tables, "substances": names}
+        for folder, (tables, names) in read.items()
+    }
+    text = json.dumps(
+        {"version": __version__, "studies": studies},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    atomic_text(path, text + "\n")
 
 
 class WorkspaceMixin(EngineState):
@@ -364,22 +421,45 @@ class WorkspaceMixin(EngineState):
                     self.lock.changed()
                     row["duplicate"] = duplicate
 
+    def _load_substances(self):
+        """Serve the substances that the watcher read before, without reading a table.
+
+        Called at the start of the engine. A study whose tables changed since keeps them
+        until the watcher reads its tables again.
+        """
+        saved = load_substances(self.state_dir / SUBSTANCES_FILE)
+        with self.lock:
+            for row in self.studies.values():
+                if (entry := saved.get(str(row["_folder"]))) is not None:
+                    row["_tables"], row["_named_substances"] = entry
+
     def _read_substances(self):
         """Read the substances of the studies whose tables changed since they were read.
 
-        Only the start of the engine and the watcher thread call this, never a request:
-        the scan of a request notes the table signature only. Tables are read outside
-        the engine lock; a row whose tables change meanwhile is read on the next call.
+        Only the watcher thread calls this, never a request: the scan of a request notes
+        the table signature only. Tables are read outside the engine lock; a study whose
+        tables change meanwhile, or cannot be read now, keeps what was read before and is
+        read on the next call. What was read is saved for the next start.
         """
         with self.lock.reading():
             root = self.root
             due = [
-                (row, row["_folder"], row["_table_signature"])
+                (row, row["id"], row["_folder"], row["_table_signature"])
                 for row in self.studies.values()
                 if row["_table_signature"] != row["_tables"]
             ]
-        for row, folder, tables in due:
-            named = study_substances(folder)
+        for row, identity, folder, tables in due:
+            if self.stop.is_set():
+                return
+            try:
+                named = study_substances(folder, strict=True)
+            except OSError:
+                # A table that another program writes or locks right now.
+                continue
+            except Exception as error:
+                # One study must not keep the others from being read.
+                self._substances_failed(f"Reading the substances of {identity}", error)
+                continue
             with self.lock.reading():
                 if self.root is not root:
                     return
@@ -388,6 +468,35 @@ class WorkspaceMixin(EngineState):
                     if row["_named_substances"] != named:
                         self.lock.changed()
                     row["_tables"], row["_named_substances"] = tables, named
+        with self.lock.reading():
+            if self.root is not root:
+                return
+            read = {
+                str(row["_folder"]): (row["_tables"], row["_named_substances"])
+                for row in self.studies.values()
+                if row["_tables"] is not None
+            }
+        # Also drops what the file keeps of studies that are gone.
+        if read != self._saved_substances:
+            try:
+                save_substances(self.state_dir / SUBSTANCES_FILE, read)
+            except Exception as error:
+                self._substances_failed("Saving the substances of the studies", error)
+            else:
+                self._saved_substances = read
+
+    def _substances_failed(self, action, error):
+        """Log a failure of `_read_substances` once a minute, as the watcher its failures."""
+        body = describe(
+            error,
+            action="File watching",
+            request_id=new_request_id(),
+            message=f"{action} failed.",
+            code="watch_failed",
+            unexpected=True,
+            secrets=self.secrets(),
+        )
+        self.log.unexpected(body, error, label="File watching", quiet_repeats=True)
 
     def _is_v2(self, folder, tree):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
@@ -501,16 +610,22 @@ class WorkspaceMixin(EngineState):
         return result
 
     def _watch(self):
+        # The first pass reads the tables that changed since the substances were saved,
+        # right away: the start of the engine scanned the workspace and read no table.
+        self._watch_tick(first=True)
         while not self.stop.wait(1):
             self._watch_tick()
 
-    def _watch_tick(self) -> None:
-        """Run one pass of the watcher; a failure is recorded and never raised."""
+    def _watch_tick(self, first: bool = False) -> None:
+        """Run one pass of the watcher; a failure is recorded and never raised. The
+        `first` pass only reads the substances."""
         try:
-            self.scan()
+            if not first:
+                self.scan()
+                self.schedule_changes()
+                self._check_workbooks()
+            # Last, so that reading the tables of many studies delays no job.
             self._read_substances()
-            self.schedule_changes()
-            self._check_workbooks()
         except Exception as error:
             # The watcher retries every second and must outlive any failure.
             try:

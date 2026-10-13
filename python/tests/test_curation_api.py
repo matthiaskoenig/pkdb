@@ -2601,7 +2601,9 @@ def test_the_state_names_the_substance_folders_of_each_study(
 ):
     server, engine, folder = api
     make_study(valid_files, name="Other", substance="drug")
+    # A tick of the watcher.
     engine.scan()
+    engine._read_substances()
     status, _, data = request(
         server, "GET", "/local/state", headers=authenticate(server)
     )

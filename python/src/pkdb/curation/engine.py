@@ -119,6 +119,9 @@ class CurationEngine(
         self._formats = {}
         # The listings of the folders of the workspace, which scans reuse while unchanged.
         self._tree = None
+        # The substances that the watcher last saved in the state directory; None until its
+        # first save, which also drops the entries of studies that are gone.
+        self._saved_substances = None
         self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
@@ -179,9 +182,9 @@ class CurationEngine(
             # A removed or unmounted workspace must not prevent startup.
             remembered = None
         self.select_workspace(path or remembered or default_workspace)
-        # Before the server starts, so that the first state finds each study under every
-        # substance folder that its tables name; the watcher reads tables that change.
-        self._read_substances()
+        # The substances that the tables name, as the watcher read them before; it reads
+        # the tables that changed since, so that the start waits for no table.
+        self._load_substances()
         if start:
             for target in (self._watch, self._worker, self._connect):
                 thread = threading.Thread(target=target, daemon=True)
