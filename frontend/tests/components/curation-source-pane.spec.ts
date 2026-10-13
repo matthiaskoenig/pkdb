@@ -351,6 +351,7 @@ describe("scales of the plot", () => {
   it("follows the figure when the pane shows another source", async () => {
     const { wrapper, study } = await mountPlot();
     await group(wrapper, "y").findAll("button")[1]!.trigger("click");
+    await flushPromises();
     await wrapper.setProps({ summary: sourceSummary({ source: "Fig3", kind: "figure" }), view: { ...plotView, source: "Fig3" } });
     expect(wrapper.get(".overlay-stub").attributes("data-scales")).toBe("linear linear");
     expect(note(wrapper)).toBe("");
