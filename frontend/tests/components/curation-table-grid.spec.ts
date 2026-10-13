@@ -411,26 +411,26 @@ describe("revealing the focus", () => {
     });
     const wrapper = mount(TableGrid, { props: { table: large(60), selectable: true }, attachTo: document.body });
     const element = region(wrapper);
-    // Line 3 is the 2nd row, 44 to 66 pixels from the top of the window: in the region, but under
+    // Line 2 is the 2nd row, 44 to 66 pixels from the top of the window: in the region, but under
     // an app bar of 64 pixels.
     style.setProperty("--v-layout-top", "64px");
-    await wrapper.setProps({ focus: { line: 3 } });
+    await wrapper.setProps({ focus: { line: 2 } });
     await flushPromises();
     expect(element.scrollTop).toBe(0);
     expect(scrolled).toEqual([element]);
 
-    // Line 5 is the 4th row, 88 to 110 pixels: below the app bar, under the banner that sticks below it.
+    // Line 4 is the 4th row, 88 to 110 pixels: below the app bar, under the banner that sticks below it.
     style.setProperty("--unsaved-banner-top", "64px");
     style.setProperty("--unsaved-banner-height", "50px");
-    await wrapper.setProps({ focus: { line: 5 } });
+    await wrapper.setProps({ focus: { line: 4 } });
     await flushPromises();
     expect(scrolled).toEqual([element, element]);
 
-    // Line 7 is the 6th row, 132 to 154 pixels: below the banner, in view.
-    await wrapper.setProps({ focus: { line: 7 } });
+    // Line 6 is the 6th row, 132 to 154 pixels: below the banner, in view.
+    await wrapper.setProps({ focus: { line: 6 } });
     await flushPromises();
     expect(scrolled).toEqual([element, element]);
-    expect(document.activeElement?.textContent?.trim()).toBe("7");
+    expect(document.activeElement?.textContent?.trim()).toBe("6");
   });
 
   it("scrolls a focus that is partly in view by the least amount", async () => {
