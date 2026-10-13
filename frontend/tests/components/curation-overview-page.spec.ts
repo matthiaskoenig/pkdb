@@ -10,10 +10,16 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
+import { rowItem } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
 import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
+
+vi.mock("../../src/curation-app/studyTable", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../src/curation-app/studyTable")>();
+  return { ...actual, rowItem: vi.fn(actual.rowItem) };
+});
 
 const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
 
@@ -88,7 +94,7 @@ async function mountPage(state: Snapshot, curators: Profile[] = profiles) {
 
 /** The rows of the study table. */
 function rows(): DOMWrapper<HTMLTableRowElement>[] {
-  return page().findAll<HTMLTableRowElement>(".study-table tbody tr");
+  return page().findAll<HTMLTableRowElement>(".study-table tbody tr.study-row");
 }
 
 /** The identities of the rows, in their order. */
@@ -664,6 +670,36 @@ describe("OverviewPage", () => {
       vi.advanceTimersByTime(1);
       await flushPromises();
       expect(identities()).toEqual(["caffeine/Harder1988"]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("builds the item of each row once per snapshot, not per filter or sort change", async () => {
+    // Rows without an identity stand for no study (the sizer rows of the table).
+    const studyItems = () => vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    vi.mocked(rowItem).mockClear();
+    await search("smoking");
+    await search("");
+    await click("Open items");
+    expect(studyItems()).toHaveLength(0);
+    serve({ "/local/state": snapshot({ studies: [example, harder, approved] }), "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(studyItems()).toHaveLength(3);
+  });
+
+  it("applies the search at once when the keyboard empties the field", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await search("smoking");
+    expect(identities()).toHaveLength(1);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await field("Search studies").setValue("");
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      expect(useOverviewFilters().search).toBe("");
     } finally {
       vi.useRealTimers();
     }
