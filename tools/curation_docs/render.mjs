@@ -137,7 +137,7 @@ async function render() {
       fit: true,
     });
     await page.setViewportSize({ width: WIDTH, height: HEIGHT });
-    // The banner of the draft shows in Data too: its notice of the discard must be gone first.
+    // Data keeps the row of the banner of the draft too: the notice of the discard must be gone first.
     await discardDraft(page);
 
     // Data: the notes of the subjects opened above their rows, with an unsaved edit, discarded afterwards.
@@ -293,14 +293,15 @@ async function hoverMappedRow(page, source, line) {
 }
 
 /**
- * Discard the unsaved edits of study.json and wait until the banner has gone: Undo shows for a few
- * seconds after a discard, in every section, which shows the banner.
+ * Discard the unsaved edits of study.json and wait until the banner says that there are none: its
+ * notice of the discard and Undo show for a few seconds.
  */
 async function discardDraft(page) {
   await page.getByRole("button", { name: "Discard", exact: true }).click();
   const undo = page.getByRole("button", { name: "Undo", exact: true });
   await undo.waitFor();
   await undo.waitFor({ state: "hidden" });
+  await page.getByText("No unsaved changes to study.json", { exact: true }).waitFor();
 }
 
 /** Pause or resume the automatic actions from the File watching menu of the header. */
