@@ -84,10 +84,12 @@ const unmatchedNote = computed(() => {
 const alt = computed(() => `${props.summary.source} of ${identity.value}`);
 
 const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
-/** The problems of the files of the source by file, in the order of the Problems section. */
-const problemGroups = computed(() =>
-  props.view && detail.value ? groupByFile(sourceProblems(detail.value.problems, props.summary, props.view)) : [],
+/** The problems of the files of the source, in the order of the Problems section; the plot rings their rows. */
+const sourceIssues = computed(() =>
+  props.view && detail.value ? sourceProblems(detail.value.problems, props.summary, props.view) : [],
 );
+/** The problems of the files of the source by file. */
+const problemGroups = computed(() => groupByFile(sourceIssues.value));
 const problemCount = computed(() => problemGroups.value.reduce((sum, group) => sum + group.issues.length, 0));
 /** Whether the local server validates the study after a write, for the mark of an acknowledged warning. */
 const automatic = computed(() =>
@@ -146,6 +148,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
                 :view="view"
                 mode="plot"
                 :selected="selected"
+                :problems="sourceIssues"
                 @select-row="emit('select-row', $event)"
               />
             </section>
@@ -191,6 +194,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
                   :view="view"
                   mode="plot"
                   :selected="selected"
+                  :problems="sourceIssues"
                   @select-row="emit('select-row', $event)"
                 />
                 <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
