@@ -757,6 +757,10 @@ export interface SourceView {
   layout: "overlay" | "side_by_side";
   points: SourcePoint[];
   series: SourceSeries[];
+  /** Whether the digitization draws the x axis on a log scale; false without a digitization. */
+  log_x: boolean;
+  /** Whether the digitization draws the y axis on a log scale; false without a digitization. */
+  log_y: boolean;
 }
 
 // Folder browser
@@ -910,6 +914,8 @@ export const isSourceView = hasKeys<SourceView>(
   "layout",
   "points",
   "series",
+  "log_x",
+  "log_y",
 );
 
 export const isCurators = hasKeys<{ curators: Profile[] }>("curators");

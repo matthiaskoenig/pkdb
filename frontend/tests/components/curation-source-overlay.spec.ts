@@ -74,6 +74,8 @@ const view: SourceView = {
   ],
   unmatched: ["caf_plasma_D75"],
   layout: "overlay",
+  log_x: false,
+  log_y: false,
   points: [
     {
       series: "caf_plasma_D150",

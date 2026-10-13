@@ -159,6 +159,8 @@ const figure: SourceView = {
   overlay: [],
   unmatched: [],
   layout: "overlay",
+  log_x: false,
+  log_y: false,
   points: [],
   series: [],
 };

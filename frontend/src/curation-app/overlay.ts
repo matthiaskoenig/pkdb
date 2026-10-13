@@ -92,6 +92,8 @@ export interface OverlayTrace {
 }
 
 export interface OverlayAxis {
+  /** The scale of an axis of the data plot; the overlay keeps the pixels of the image without one. */
+  type?: AxisScale;
   range?: [number, number];
   autorange?: false;
   visible: boolean;
@@ -159,6 +161,48 @@ export function plottedSeries(view: SourceView): string[] {
 function plottedPoints(view: SourceView) {
   const series = new Set(plottedSeries(view));
   return view.points.filter((point) => series.has(point.series));
+}
+
+/** An axis of the data plot. */
+export type Axis = "x" | "y";
+
+/** The scale of an axis of the data plot, as Plotly names it. */
+export type AxisScale = "linear" | "log";
+
+/** The scales of the axes of the data plot. */
+export interface AxisScales {
+  x: AxisScale;
+  y: AxisScale;
+}
+
+export const AXES: readonly Axis[] = ["x", "y"];
+
+/** Both axes linear, as without a choice and without a digitization. */
+export const LINEAR_SCALES: AxisScales = { x: "linear", y: "linear" };
+
+/** The scales of the digitization of the figure (`isLogX`, `isLogY` of its project), else linear. */
+export function digitizedScales(view: SourceView): AxisScales {
+  return { x: view.log_x ? "log" : "linear", y: view.log_y ? "log" : "linear" };
+}
+
+/** The axes on a log scale, x first. */
+export function logAxes(scales: AxisScales): Axis[] {
+  return AXES.filter((axis) => scales[axis] === "log");
+}
+
+/** Whether the axes can show a point: a log axis shows values above 0 only. */
+function onScales(point: { x: number; y: number }, scales: AxisScales): boolean {
+  return logAxes(scales).every((axis) => point[axis] > 0);
+}
+
+/** How many points of the data plot its log axes leave out, as they are at 0 or below. */
+export function pointsOffScale(view: SourceView, scales: AxisScales): number {
+  return plottedPoints(view).filter((point) => !onScales(point, scales)).length;
+}
+
+/** The points that the data plot draws on `scales`. */
+function drawnPoints(view: SourceView, scales: AxisScales) {
+  return plottedPoints(view).filter((point) => onScales(point, scales));
 }
 
 /** The series of the source view by name. */
@@ -409,9 +453,16 @@ export function worstSeverity(issues: readonly ValidationIssue[]): ValidationIss
   return issues.some((issue) => issue.severity === "error") ? "error" : "warning";
 }
 
-/** The problems of the rows that the data plot draws, by `rowKey`, in the order of the report. */
-export function plottedProblems(view: SourceView, problems: readonly ValidationIssue[]): Map<string, ValidationIssue[]> {
-  const plotted = new Set(plottedPoints(view).map((point) => rowKey(point.file, point.line)));
+/**
+ * The problems of the rows whose points the data plot draws on `scales`, by `rowKey`, in the order
+ * of the report: a log axis leaves out the points at 0 or below, and with them their problems.
+ */
+export function plottedProblems(
+  view: SourceView,
+  problems: readonly ValidationIssue[],
+  scales: AxisScales = LINEAR_SCALES,
+): Map<string, ValidationIssue[]> {
+  const plotted = new Set(drawnPoints(view, scales).map((point) => rowKey(point.file, point.line)));
   const rows = new Map<string, ValidationIssue[]>();
   for (const issue of problems) {
     const source = issue.source;
@@ -521,22 +572,32 @@ function problemTraces(
   });
 }
 
+/** The options of the data plot of `plotTraces`. */
+export interface PlotOptions {
+  /** The scales of the axes, linear without them. */
+  scales?: AxisScales;
+  /** The problems of the rows that the plot draws, by `rowKey` (`plottedProblems`). */
+  rowProblems?: ReadonlyMap<string, ValidationIssue[]>;
+}
+
 /**
  * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
  * as lines with error bars to the error bar end, scatters as points. With `highlight`, the other
- * series fade. Points of rows with problems get a ring in the color of their worst problem, and
- * their hover text lists the problems.
+ * series fade. `scales` sets the type of each axis; a log axis leaves out the points at 0 or
+ * below, which `pointsOffScale` counts, and keeps their series in the legend. Drawn points of rows
+ * with `rowProblems` (`plottedProblems`) get a ring in the color of their worst problem, and their
+ * hover text lists the problems.
  */
 export function plotTraces(
   view: SourceView,
   highlight: string | null = null,
   theme: PlotTheme = LIGHT,
   selected: SelectedRow = null,
-  rowProblems: ReadonlyMap<string, ValidationIssue[]> = new Map(),
+  { scales = LINEAR_SCALES, rowProblems = new Map() }: PlotOptions = {},
 ): OverlayPlot {
   const styles = seriesStyles(view);
-  const points = plottedPoints(view);
-  const series = unique(points.map((point) => point.series));
+  const points = drawnPoints(view, scales);
+  const series = unique(plottedPoints(view).map((point) => point.series));
   const opacity = opacities(series, highlight);
   const traces = series.map((name): OverlayTrace => {
     const rows = points.filter((point) => point.series === name);
@@ -568,7 +629,8 @@ export function plotTraces(
   // The axes of the first series, as `pkdb plot` labels them.
   const first = styles.get(series[0] ?? "");
   const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
-  const axis = (text: string): OverlayAxis => ({
+  const axis = (text: string, type: AxisScale): OverlayAxis => ({
+    type,
     title: { text, font: { size: 11 } },
     tickfont: { size: 11 },
     visible: true,
@@ -591,8 +653,8 @@ export function plotTraces(
       height: 220,
       paper_bgcolor: theme.colors.surface,
       plot_bgcolor: theme.colors.surface,
-      xaxis: axis(xTitle),
-      yaxis: axis(yTitle),
+      xaxis: axis(xTitle, scales.x),
+      yaxis: axis(yTitle, scales.y),
       margin: { l: 48, r: 8, t: 8, b: 36, pad: 2 },
     },
   };

@@ -102,6 +102,8 @@ const table: SourceView = {
   overlay: [],
   unmatched: [],
   layout: "side_by_side",
+  log_x: false,
+  log_y: false,
   points: [],
   series: [],
 };
@@ -170,6 +172,8 @@ const digitized: SourceView = {
   ],
   unmatched: ["caf_plasma_D75"],
   layout: "overlay",
+  log_x: false,
+  log_y: false,
   points: points("timecourses_Fig1.tsv"),
   series: SERIES,
 };
@@ -185,6 +189,8 @@ const plain: SourceView = {
   overlay: [],
   unmatched: ["caf_plasma_D150", "caf_plasma_D75"],
   layout: "side_by_side",
+  log_x: false,
+  log_y: false,
   points: points("timecourses_Fig2.tsv"),
   series: SERIES,
 };
@@ -200,6 +206,8 @@ const missing: SourceView = {
   overlay: [],
   unmatched: [],
   layout: "side_by_side",
+  log_x: false,
+  log_y: false,
   points: [],
   series: [],
 };

@@ -73,7 +73,7 @@ const plot = computed(() => {
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
     ? overlayTraces(props.view, highlight, colors, markScale.value, props.selected ?? null)
-    : plotTraces(props.view, highlight, colors, props.selected ?? null, rowProblems.value);
+    : plotTraces(props.view, highlight, colors, props.selected ?? null, { rowProblems: rowProblems.value });
 });
 
 const legend = computed(() => legendEntries(props.view, shown.value, dark.value));
