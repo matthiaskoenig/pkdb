@@ -49,7 +49,6 @@ export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
     status: "valid",
     stale: false,
     files: [{ id: "study.json", path: "study.json" }],
-    problems: [],
     last_upload: null,
     progress: null,
     report_id: null,

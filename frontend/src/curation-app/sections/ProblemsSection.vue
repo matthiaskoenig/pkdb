@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
 import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../api/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
@@ -164,7 +164,7 @@ const automatic = computed(() =>
   detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
 );
 
-const chosen = ref<Problem | null>(null);
+const chosen = shallowRef<Problem | null>(null);
 const dialog = ref(false);
 /** Whether the dialog writes an acknowledgement; the other actions wait meanwhile. */
 const acknowledging = ref(false);

@@ -5,8 +5,10 @@ methods are declared for type checking only and are provided by `CurationEngine`
 """
 
 import threading
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 from pkdb.cache import VocabularyCache
 from pkdb.curation.errors import ErrorLog
@@ -16,9 +18,102 @@ from pkdb.curation.tree import SourceTree
 #: The color themes of the app: the system theme, or one that the curator chose.
 THEMES = ("light", "dark", "system")
 
+#: Row fields that only the study page serves: with them, every poll of the state would carry
+#: the problems of all studies.
+DETAIL_ONLY = frozenset({"problems"})
+
+
+def state_row(row: dict) -> dict:
+    """The fields of a study row in the state of the app: those without a leading
+    underscore, except the ones that only the study page serves."""
+    return {
+        key: value
+        for key, value in row.items()
+        if not key.startswith("_") and key not in DETAIL_ONLY
+    }
+
+
+class StateLock:
+    """The reentrant lock of the state of an engine, which counts the changes of the state.
+
+    `with lock:` is a section that may change the state: when the outermost section of the
+    thread that holds the lock ends after one, `revision` grows by one, also after an error.
+    `with lock.reading():` only reads and keeps the revision, unless it calls `changed()` or
+    enters `with lock:` inside. The local server answers a poll of the state from the revision
+    without building the state.
+
+    So a change that no section counts stays hidden behind `304` until an unrelated change.
+    Every change of what `CurationEngine.snapshot` returns, by any thread, happens in a
+    section that counts it, or is followed by one on every path, also when it fails, as
+    `run_job` ends in one after the outcome it writes outside the lock. A reading section
+    calls `changed()` only when a value really changes, so that an idle engine keeps its
+    revision. What `snapshot` reads from outside the engine is a function of fields that
+    only such sections change (`author`, `connection`, `update_required`), fixed for the
+    engine (`client_version`, `log_file`), or part of `state_version` (whether each recent
+    workspace exists).
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+        # Only the thread that holds the lock changes these; `held` reads the owner.
+        self._depth = 0
+        self._changed = False
+        self._owner: int | None = None
+        self.revision = 0
+
+    def __enter__(self) -> StateLock:
+        self._acquire()
+        self._changed = True
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self._release()
+
+    @contextmanager
+    def reading(self) -> Iterator[StateLock]:
+        self._acquire()
+        try:
+            yield self
+        finally:
+            self._release()
+
+    def changed(self) -> None:
+        """Count a change of the state in a reading section; called with the lock held."""
+        self._changed = True
+
+    def held(self) -> bool:
+        """Whether the current thread holds the lock."""
+        return self._owner == threading.get_ident()
+
+    def _acquire(self) -> None:
+        self._lock.acquire()
+        self._depth += 1
+        self._owner = threading.get_ident()
+
+    def _release(self) -> None:
+        self._depth -= 1
+        if self._depth == 0:
+            self._owner = None
+            if self._changed:
+                self._changed = False
+                self.revision += 1
+        self._lock.release()
+
+
+class StateVersion(NamedTuple):
+    """A version of the state of an engine (`CurationEngine.state_version`)."""
+
+    #: The ETag of the state: the epoch of the engine, the revision of its state, and which
+    #: recent workspaces exist.
+    tag: str
+    #: The recent workspaces with whether each exists, as `tag` has them.
+    recent: list[dict]
+
 
 class EngineState:
-    lock: threading.RLock
+    lock: StateLock
+    # Tells the versions of the state of this engine from those of an engine before it.
+    epoch: str
     scan_lock: threading.Lock
     stop: threading.Event
     wakeup: threading.Event
@@ -66,7 +161,8 @@ class EngineState:
 
         def secrets(self) -> list[str]: ...
         def _save(self) -> None: ...
-        def snapshot(self) -> dict: ...
+        def snapshot(self, recent: list[dict] | None = None) -> dict: ...
+        def state_version(self) -> StateVersion: ...
         def scan(self, initial: bool = False) -> Any: ...
         def connect(self) -> Any: ...
         def _context(self) -> str: ...

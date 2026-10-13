@@ -7,11 +7,19 @@ import type { Job, Profile, Snapshot, SyncStatus } from "../../src/curation-app/
 import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
+import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
+import { OVERSCAN, ROW_HEIGHT, rowItem } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
 import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
+
+vi.mock("../../src/curation-app/studyTable", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../src/curation-app/studyTable")>();
+  return { ...actual, rowItem: vi.fn(actual.rowItem) };
+});
 
 const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
 
@@ -86,7 +94,7 @@ async function mountPage(state: Snapshot, curators: Profile[] = profiles) {
 
 /** The rows of the study table. */
 function rows(): DOMWrapper<HTMLTableRowElement>[] {
-  return page().findAll<HTMLTableRowElement>(".study-table tbody tr");
+  return page().findAll<HTMLTableRowElement>(".study-table tbody tr.study-row");
 }
 
 /** The identities of the rows, in their order. */
@@ -104,6 +112,18 @@ function rowOf(id: string): DOMWrapper<HTMLTableRowElement> {
 /** The checkbox with the accessible name `name`. */
 function checkbox(name: string) {
   return page().get<HTMLInputElement>(`input[type="checkbox"][aria-label="${name}"]`);
+}
+
+/** Type `text` into the search and wait until the table follows it. */
+async function search(text: string): Promise<void> {
+  vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+  try {
+    await field("Search studies").setValue(text);
+    vi.advanceTimersByTime(SEARCH_DELAY_MS);
+    await flushPromises();
+  } finally {
+    vi.useRealTimers();
+  }
 }
 
 async function check(name: string): Promise<void> {
@@ -143,6 +163,54 @@ function unknownJob(changes: Partial<Job> = {}): Job {
     sid: "caffeine/Example",
     ...changes,
   };
+}
+
+/** The calls of `rowItem` for studies; the rows that size the columns (StudyTable.vue) have no identity. */
+function studyItemCalls() {
+  return vi.mocked(rowItem).mock.calls.filter(([row]) => row.id !== "");
+}
+
+/** `count` studies of three substances with titles of their own. */
+function manyStudies(count = 1000) {
+  return Array.from({ length: count }, (_, index) => {
+    const substance = ["caffeine", "codeine", "midazolam"][index % 3]!;
+    const name = `Study${index}`;
+    return studyRow({
+      id: `${substance}/${name}`,
+      name,
+      substance,
+      path: `studies/${substance}/${name}`,
+      summary: { ...example.summary, title: `Title ${index}` },
+    });
+  });
+}
+
+/** The rows that a window of `height` px renders at the top of the table, beyond the overscan. */
+function windowRows(height: number): number {
+  return Math.ceil(height / ROW_HEIGHT) + OVERSCAN;
+}
+
+/** The positions of the rendered study rows (`aria-rowindex`, 2 for the first study). */
+function rowIndices(): number[] {
+  return rows().map((row) => Number(row.attributes("aria-rowindex")));
+}
+
+/** Waits for the next task, after the updates and promises before it. */
+async function afterTask(): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve));
+  await flushPromises();
+}
+
+/**
+ * Moves the body of the study table to `top` px from the top of the window, as scrolling the page
+ * would, and waits for the frame that measures it; jsdom has no layout.
+ */
+async function scrollBody(top: number): Promise<void> {
+  const body = page().get(".study-table tbody").element;
+  vi.spyOn(body, "getBoundingClientRect").mockReturnValue({ top } as DOMRect);
+  document.dispatchEvent(new Event("scroll"));
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  await flushPromises();
 }
 
 beforeEach(() => {
@@ -298,12 +366,18 @@ describe("OverviewPage", () => {
     expect(row.findAll(".study-row-line")).toHaveLength(1);
   });
 
+  it("names the whole identity of a study in its link and its tooltip, as a narrow cell cuts it", async () => {
+    await mountPage(snapshot({ studies: [harder, studyRow({ duplicate: true, path: "archive/caffeine/Example" })] }));
+    const link = rowOf("caffeine/Harder1988").get("a.study-identity");
+    expect(link.text()).toBe("caffeine/Harder1988");
+    expect(link.attributes("title")).toBe("caffeine/Harder1988");
+    expect(rowOf("caffeine/Example").get("span.study-identity").attributes("title")).toBe("caffeine/Example");
+  });
+
   it("opens the study page when a row is clicked", async () => {
     await mountPage(snapshot());
     const identity = rowOf("caffeine/Example").get(".study-identity");
     expect(identity.attributes("href")).toBe("#/studies/caffeine/Example");
-    // A long identity wraps after the slash rather than inside a name.
-    expect(identity.findAll("wbr")).toHaveLength(1);
     await rowOf("caffeine/Example").get(".cell-sync").trigger("click");
     await vi.waitFor(() => expect(window.location.hash).toBe("#/studies/caffeine/Example"));
   });
@@ -400,16 +474,14 @@ describe("OverviewPage", () => {
   it("selects all shown studies", async () => {
     const enqueue = vi.spyOn(useOverviewStore(), "enqueue").mockResolvedValue();
     await mountPage(snapshot({ studies: [example, harder, approved] }));
-    await field("Search studies").setValue("caffeine");
-    await flushPromises();
+    await search("caffeine");
     await check("Select all shown studies");
     expect(page().get(".batch-count").text()).toBe("2 studies selected");
     await click("Validate");
     expect(enqueue).toHaveBeenCalledWith(["caffeine/Example", "caffeine/Harder1988"], "validate");
 
     // A study that a filter hides leaves the selection.
-    await field("Search studies").setValue("harder");
-    await flushPromises();
+    await search("harder");
     expect(page().get(".batch-count").text()).toBe("1 study selected");
   });
 
@@ -637,16 +709,232 @@ describe("OverviewPage", () => {
     expect(button("Validate and upload again").attributes("disabled")).toBeDefined();
   });
 
+  it("filters the table 150 ms after the last keystroke", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await field("Search studies").setValue("smok");
+      vi.advanceTimersByTime(SEARCH_DELAY_MS - 1);
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      await field("Search studies").setValue("smoking");
+      vi.advanceTimersByTime(SEARCH_DELAY_MS - 1);
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      vi.advanceTimersByTime(1);
+      await flushPromises();
+      expect(identities()).toEqual(["caffeine/Harder1988"]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("builds the item of each row once per snapshot, not per filter or sort change", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    vi.mocked(rowItem).mockClear();
+    await search("smoking");
+    await search("");
+    await click("Open items");
+    expect(studyItemCalls()).toHaveLength(0);
+    serve({ "/local/state": snapshot({ studies: [example, harder, approved] }), "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(studyItemCalls()).toHaveLength(3);
+  });
+
+  it("renders the rows of 1,000 studies that the window shows and selects all of them", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    expect(page().get(".study-table table").attributes("aria-rowcount")).toBe("1001");
+    expect(rows()).toHaveLength(windowRows(400));
+    expect(rows()[0]!.attributes("aria-rowindex")).toBe("2");
+    expect(page().findAll("tr.study-space")).toHaveLength(1);
+    expect(page().findAll("tr.study-sizer").length).toBeGreaterThan(0);
+    await check("Select all shown studies");
+    expect(page().get(".batch-count").text()).toBe("1,000 studies selected");
+  });
+
+  it("renders only the rows in the window while the search filters 1,000 studies", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    for (const [text, shown] of [
+      ["study1", 111],
+      ["title 9", 111],
+      ["codeine", 333],
+      ["study999", 1],
+      ["", 1000],
+    ] as const) {
+      await search(text);
+      expect(page().get(".study-table table").attributes("aria-rowcount"), text).toBe(String(shown + 1));
+      expect(rowIndices(), text).toEqual(Array.from({ length: Math.min(shown, windowRows(400)) }, (_, index) => index + 2));
+    }
+  });
+
+  it("builds the items of the rendered rows only when a poll brings 1,000 new rows", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    vi.mocked(rowItem).mockClear();
+    // While jobs run, every poll brings new rows; here one study validates.
+    const studies = manyStudies().map((row, index) => (index === 0 ? { ...row, status: "validating" as const } : row));
+    serve({ "/local/state": snapshot({ studies }), "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(rows()[0]!.get(".cell-problems").text()).toBe("Validating");
+    expect(studyItemCalls()).toHaveLength(windowRows(400));
+  });
+
+  it("follows the scrolled page and keeps the row with the keyboard focus until the focus leaves the table", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    const input = rows()[0]!.get("input").element;
+    input.focus();
+    // The body scrolled 2,400 px above the window: rows 100 to 116 are in view.
+    await scrollBody(-2400);
+    const inView = Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2);
+    expect(rowIndices()).toEqual([2, ...inView]);
+    // A space between the focused row and the window, and one below the window.
+    expect(page().findAll("tr.study-space")).toHaveLength(2);
+    expect(document.activeElement).toBe(input);
+
+    // The focus moves within the row: it stays.
+    const link = rows()[0]!.get<HTMLAnchorElement>("a.study-identity").element;
+    link.focus();
+    await afterTask();
+    expect(rowIndices()).toEqual([2, ...inView]);
+
+    // The window loses the focus, as to another application: the event names no new target, and
+    // the row keeps the focus of the page.
+    link.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: null }));
+    await afterTask();
+    expect(document.activeElement).toBe(link);
+    expect(rowIndices()).toEqual([2, ...inView]);
+
+    // The focus leaves the table: the row goes.
+    link.blur();
+    await afterTask();
+    expect(rowIndices()).toEqual(inView);
+  });
+
+  it("does not pin a row again that a filter removed while it had the focus", async () => {
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    rows()[0]!.get("input").element.focus();
+    await scrollBody(-2400);
+    expect(rowIndices()[0]).toBe(2);
+    await search("study999");
+    await search("");
+    expect(rowIndices()).toEqual(Array.from({ length: 127 - 90 }, (_, index) => 90 + index + 2));
+  });
+
+  it("measures the window again when the page changes its size, as after a change above the table", async () => {
+    const observed: unknown[] = [];
+    let resized: () => void = () => {};
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          resized = callback;
+        }
+        observe(target: unknown) {
+          observed.push(target);
+        }
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    expect(observed).toContain(document.documentElement);
+    // The body moved without a scroll event, as when an alert above the table wrapped.
+    const body = page().get(".study-table tbody").element;
+    vi.spyOn(body, "getBoundingClientRect").mockReturnValue({ top: -2400 } as DOMRect);
+    resized();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    await flushPromises();
+    expect(rowIndices()[0]).toBe(90 + 2);
+  });
+
+  it("sizes the window and the spaces by the height of a rendered row, which a larger font raises", async () => {
+    // jsdom has no layout: every row is 30 px high, as with a larger font than the default one.
+    vi.spyOn(HTMLTableRowElement.prototype, "getBoundingClientRect").mockReturnValue({ top: 0, height: 30 } as DOMRect);
+    setViewport(1280, 400);
+    await mountPage(snapshot({ studies: manyStudies() }));
+    const shown = Math.ceil(400 / 30) + OVERSCAN;
+    expect(rowIndices()).toEqual(Array.from({ length: shown }, (_, index) => index + 2));
+    expect(page().get<HTMLTableCellElement>("tr.study-space td").element.style.height).toBe(`${(1000 - shown) * 30}px`);
+  });
+
+  it("shows the profiles of the curators in the rows that were shown before the roster arrived", async () => {
+    let release: () => void = () => {};
+    const roster = new Promise<void>((resolve) => (release = resolve));
+    const state = snapshot({ studies: [harder] });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const path = new URL(input instanceof Request ? input.url : String(input), "http://127.0.0.1").pathname;
+      if (path === "/local/curators") await roster;
+      return new Response(JSON.stringify(path === "/local/state" ? state : { curators: profiles }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    });
+    await useOverviewStore().refresh();
+    router = makeRouter();
+    await router.push("/");
+    await router.isReady();
+    mount(OverviewPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
+    await flushPromises();
+    const before = rowOf("caffeine/Harder1988").get(".cell-curators");
+    expect(before.get('[role="img"][aria-label="mkoenig"]').text()).toBe("M");
+    expect(before.find("img").exists()).toBe(false);
+    vi.mocked(rowItem).mockClear();
+
+    release();
+    await flushPromises();
+    const after = rowOf("caffeine/Harder1988").get(".cell-curators");
+    expect(after.get('img[alt="Matthias König"]').attributes("src")).toBe("/avatars/matthias_koenig.webp");
+    expect(after.get('[role="img"][aria-label="Jan Grzegorzewski"]').text()).toBe("JG");
+    expect(studyItemCalls()).toHaveLength(1);
+  });
+
+  it("applies the search at once when the keyboard empties the field", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await search("smoking");
+    expect(identities()).toHaveLength(1);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await field("Search studies").setValue("");
+      await flushPromises();
+      expect(identities()).toHaveLength(3);
+      expect(useOverviewFilters().search).toBe("");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("clears the search at once with its clear icon", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await search("smoking");
+    expect(identities()).toHaveLength(1);
+    await page().get('[aria-label="Clear Search studies"]').trigger("click");
+    await flushPromises();
+    expect(identities()).toHaveLength(3);
+    expect(field("Search studies").element.value).toBe("");
+  });
+
+  it("keeps a search typed just before the overview is left", async () => {
+    const wrapper = await mountPage(snapshot({ studies: [example, harder, approved] }));
+    await field("Search studies").setValue("smoking");
+    wrapper.unmount();
+    expect(useOverviewFilters().search).toBe("smoking");
+  });
+
   it("filters by search, substance and status chip", async () => {
     const wrapper = await mountPage(snapshot({ studies: [example, harder, approved] }));
     expect(page().get(".overview-count").text()).toBe("3 studies");
 
-    await field("Search studies").setValue("smoking");
-    await flushPromises();
+    await search("smoking");
     expect(identities()).toEqual(["caffeine/Harder1988"]);
     expect(page().get(".overview-count").text()).toBe("1 of 3 studies");
-    await field("Search studies").setValue("");
-    await flushPromises();
+    await search("");
 
     await choose(wrapper, "Substance", "codeine");
     expect(identities()).toEqual(["codeine/Kirchheiner2007"]);
@@ -663,8 +951,7 @@ describe("OverviewPage", () => {
     await click(/^Approved/);
     expect(identities()).toEqual(["codeine/Kirchheiner2007"]);
 
-    await field("Search studies").setValue("smoking");
-    await flushPromises();
+    await search("smoking");
     expect(rows()).toHaveLength(0);
     expect(page().text()).toContain("No studies match these filters.");
     await click("Clear filters");

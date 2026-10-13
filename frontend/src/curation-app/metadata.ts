@@ -368,31 +368,55 @@ export function copyField(target: MetadataForm, source: MetadataForm, key: strin
   if (isRecord(node) && last !== undefined) node[last] = clone(valueAt(source, key));
 }
 
+/** Whether the field `key` has the same value in both forms. */
+export function sameField(left: MetadataForm, right: MetadataForm, key: string): boolean {
+  return same(valueAt(left, key), valueAt(right, key));
+}
+
 /** The fields whose values differ between `base` and `current`, in the order of `fieldKeys`. */
 export function changedFields(base: MetadataForm, current: MetadataForm): string[] {
   const keys = [...new Set([...fieldKeys(base), ...fieldKeys(current)])];
-  return keys.filter((key) => !same(valueAt(base, key), valueAt(current, key)));
+  return keys.filter((key) => !sameField(base, current, key));
 }
 
 /**
  * The sections whose fields have unsaved changes, for the marks of their tabs: Data for the notes
  * of a kind in `dataKinds`, whose tables show them, and Metadata for the other fields, for the
  * notes of a kind without a table, which Metadata shows, and for a new study.json. None without a
- * form.
+ * form. `changed` are the changed fields of `form` against `base`.
  */
 export function unsavedSections(
   base: MetadataForm | null,
   form: MetadataForm | null,
+  changed: readonly string[],
   dataKinds: readonly TableKind[],
 ): Section[] {
   if (form === null) return [];
   if (base === null) return ["metadata"];
-  const changed = changedFields(base, form);
   const inData = (key: string) => notesKindOf(key, dataKinds) !== null;
   const sections: Section[] = [];
   if (changed.some((key) => !inData(key))) sections.push("metadata");
   if (changed.some(inData)) sections.push("data");
   return sections;
+}
+
+/**
+ * No messages: one frozen array for every field without messages, so that the props of the
+ * field stay the same between renders and Vue does not render it again.
+ */
+export const NO_MESSAGES: readonly string[] = Object.freeze([]);
+
+/** The messages of the field `key`, or NO_MESSAGES. */
+export function messagesAt(messages: ReadonlyMap<string, readonly string[]>, key: string): readonly string[] {
+  return messages.get(key) ?? NO_MESSAGES;
+}
+
+/** The message of each marked field, one array per field until the marks or the disk values change. */
+export function markMessages(
+  marks: ReadonlyMap<string, FieldMark>,
+  disk: ReadonlyMap<string, string>,
+): ReadonlyMap<string, readonly string[]> {
+  return new Map([...marks].map(([key, mark]) => [key, [markMessage(mark, disk.get(key) ?? null)]]));
 }
 
 /**

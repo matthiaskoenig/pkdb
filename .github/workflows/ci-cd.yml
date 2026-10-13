@@ -485,11 +485,73 @@ jobs:
       - name: Install the system dependencies of the cached Chromium
         if: steps.browser-cache.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
-      - run: npm run test:curation-e2e
+      - run: npm run test:curation-e2e -- --project=chromium
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: curation-browser-failures
+          path: |
+            frontend/playwright-report/curation
+            frontend/test-results/curation
+          retention-days: 7
+
+  curation-speed:
+    # The speed tests of the curation app in Chromium, one worker and no other job on
+    # the runner, so that other tests do not disturb the timings.
+    name: Curation app speed tests
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.14"
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          enable-cache: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+          # every job has its own cache, or one job's packages win over the others'
+          cache-suffix: ${{ github.job }}
+          cache-python: ${{ !startsWith(github.ref, 'refs/tags/') }}  # zizmor: ignore[cache-poisoning]
+      - run: uv sync --project ../python --locked --python 3.14
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          # a release run restores no cache, which zizmor cannot tell from the expression
+          cache: ${{ !startsWith(github.ref, 'refs/tags/') && 'npm' || '' }}  # zizmor: ignore[cache-poisoning]
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+      - run: npm run build:curation
+      - name: Read the Playwright version
+        id: playwright
+        run: echo "version=$(node -p 'require("./package-lock.json").packages["node_modules/playwright"].version')" >> "$GITHUB_OUTPUT"
+      - name: Cache Chromium
+        id: browser-cache
+        # a release run restores no cache and downloads Chromium, which zizmor
+        # cannot tell from the condition
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0  # zizmor: ignore[cache-poisoning]
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium
+      - name: Install Chromium
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install the system dependencies of the cached Chromium
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npx playwright test -c playwright.curation.config.ts --project=speed --no-deps --workers=1
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: curation-speed-failures
           path: |
             frontend/playwright-report/curation
             frontend/test-results/curation
@@ -611,7 +673,7 @@ jobs:
   tests:
     # the one required check of this workflow, see .github/rulesets/develop.json
     name: tests
-    needs: [changes, python, server, compose, client, client-slow, curation-e2e, frontend-unit, frontend-e2e]
+    needs: [changes, python, server, compose, client, client-slow, curation-e2e, curation-speed, frontend-unit, frontend-e2e]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

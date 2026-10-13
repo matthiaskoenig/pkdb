@@ -15,6 +15,7 @@ import {
   VTextField,
 } from "vuetify/components";
 import type { Profile } from "../api/types";
+import DiskField from "../components/DiskField.vue";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
@@ -22,7 +23,15 @@ import ReferenceDialog from "../components/ReferenceDialog.vue";
 import StudySaveBar from "../components/StudySaveBar.vue";
 import TableNotes from "../components/TableNotes.vue";
 import { sectionHeading } from "../composables/useReturnFocus";
-import { markMessage, PROVENANCE_LABELS, startForm, withKind, type ProvenanceKind } from "../metadata";
+import {
+  markMessages,
+  messagesAt,
+  NO_MESSAGES,
+  PROVENANCE_LABELS,
+  startForm,
+  withKind,
+  type ProvenanceKind,
+} from "../metadata";
 import { hasNotes, kindsWithTable } from "../notes";
 import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
@@ -141,14 +150,21 @@ const issueLink = computed(() =>
 
 // Fields
 
-function errorsAt(key: string): string[] {
-  return errors.value.get(key) ?? [];
+/** The mark message of each marked field: one array per field, kept until the marks change. */
+const marked = computed(() => markMessages(marks.value, disk.value));
+
+function errorsAt(key: string): readonly string[] {
+  return messagesAt(errors.value, key);
 }
 
-function markAt(key: string): string[] {
-  const mark = marks.value.get(key);
-  return mark ? [markMessage(mark, disk.value.get(key) ?? null)] : [];
+function markAt(key: string): readonly string[] {
+  return marked.value.get(key) ?? NO_MESSAGES;
 }
+
+/** The messages of the provenance kind: who set it, for an import, and its mark. */
+const kindMessages = computed(() =>
+  imported.value ? ["Set by the importer", ...markAt("provenance.kind")] : markAt("provenance.kind"),
+);
 
 /** Replace the edit of a field that changed on both sides with the version on disk. */
 function useDisk(key: string): void {
@@ -240,7 +256,10 @@ const newFields = computed(() => {
         </VCardItem>
         <VCardText class="metadata-card-body">
           <div class="field-row">
-            <VTextField
+            <DiskField
+              :control="VTextField"
+              field="reference.pmid"
+              :shown="disk.has('reference.pmid')"
               v-model="form.reference.pmid"
               label="PMID"
               hide-details="auto"
@@ -250,12 +269,12 @@ const newFields = computed(() => {
               :messages="markAt('reference.pmid')"
               :base-color="markColor('reference.pmid')"
               class="field-pmid"
-            >
-              <template v-if="disk.has('reference.pmid')" #details>
-                <DiskVersion field="reference.pmid" @use="useDisk('reference.pmid')" />
-              </template>
-            </VTextField>
-            <VTextField
+              @use="useDisk('reference.pmid')"
+            />
+            <DiskField
+              :control="VTextField"
+              field="reference.doi"
+              :shown="disk.has('reference.doi')"
               v-model="form.reference.doi"
               label="DOI"
               hide-details="auto"
@@ -265,11 +284,8 @@ const newFields = computed(() => {
               :error-messages="errorsAt('reference.doi')"
               :messages="markAt('reference.doi')"
               :base-color="markColor('reference.doi')"
-            >
-              <template v-if="disk.has('reference.doi')" #details>
-                <DiskVersion field="reference.doi" @use="useDisk('reference.doi')" />
-              </template>
-            </VTextField>
+              @use="useDisk('reference.doi')"
+            />
           </div>
           <p v-if="identifiersChanged" class="field-note">
             Saving study.json fetches reference.json for the new identifiers.
@@ -320,6 +336,8 @@ const newFields = computed(() => {
         </VCardItem>
         <VCardText class="metadata-card-body">
           <div class="field-row field-row--radios">
+            <!-- Not DiskField: it needs an options prop, and forwarding the VRadio slot brings back
+                 the forced update. -->
             <VRadioGroup
               v-model="form.licence"
               label="Licence"
@@ -349,7 +367,10 @@ const newFields = computed(() => {
               </template>
             </VRadioGroup>
           </div>
-          <VSelect
+          <DiskField
+            :control="VSelect"
+            field="provenance.kind"
+            :shown="disk.has('provenance.kind')"
             :model-value="form.provenance.kind"
             :items="kindItems"
             label="Provenance"
@@ -357,15 +378,12 @@ const newFields = computed(() => {
             :readonly="imported !== null"
             :menu-icon="imported ? '' : '$dropdown'"
             :error-messages="errorsAt('provenance.kind')"
-            :messages="imported ? ['Set by the importer', ...markAt('provenance.kind')] : markAt('provenance.kind')"
+            :messages="kindMessages"
             :base-color="markColor('provenance.kind')"
             class="field-provenance"
             @update:model-value="setKind"
-          >
-            <template v-if="disk.has('provenance.kind')" #details>
-              <DiskVersion field="provenance.kind" @use="useDisk('provenance.kind')" />
-            </template>
-          </VSelect>
+            @use="useDisk('provenance.kind')"
+          />
           <!-- The importer sets a data import: the form shows it and has no fields for it. -->
           <template v-if="imported">
             <dl class="panel-facts data-import-facts">
@@ -384,7 +402,10 @@ const newFields = computed(() => {
           </template>
           <template v-else>
             <div class="field-grid">
-              <VTextField
+              <DiskField
+                :control="VTextField"
+                field="provenance.source_key"
+                :shown="disk.has('provenance.source_key')"
                 v-model="form.provenance.source_key"
                 label="Source key"
                 hide-details="auto"
@@ -393,13 +414,13 @@ const newFields = computed(() => {
                 :error-messages="errorsAt('provenance.source_key')"
                 :messages="markAt('provenance.source_key')"
                 :base-color="markColor('provenance.source_key')"
-              >
-                <template v-if="disk.has('provenance.source_key')" #details>
-                  <DiskVersion field="provenance.source_key" @use="useDisk('provenance.source_key')" />
-                </template>
-              </VTextField>
+                @use="useDisk('provenance.source_key')"
+              />
               <template v-if="form.provenance.kind === 'automatic_curation'">
-                <VTextField
+                <DiskField
+                  :control="VTextField"
+                  field="provenance.method"
+                  :shown="disk.has('provenance.method')"
                   v-model="form.provenance.method"
                   label="Method"
                   hide-details="auto"
@@ -408,12 +429,12 @@ const newFields = computed(() => {
                   :error-messages="errorsAt('provenance.method')"
                   :messages="markAt('provenance.method')"
                   :base-color="markColor('provenance.method')"
-                >
-                  <template v-if="disk.has('provenance.method')" #details>
-                    <DiskVersion field="provenance.method" @use="useDisk('provenance.method')" />
-                  </template>
-                </VTextField>
-                <VTextField
+                  @use="useDisk('provenance.method')"
+                />
+                <DiskField
+                  :control="VTextField"
+                  field="provenance.version"
+                  :shown="disk.has('provenance.version')"
                   v-model="form.provenance.version"
                   label="Version"
                   hide-details="auto"
@@ -422,12 +443,12 @@ const newFields = computed(() => {
                   :error-messages="errorsAt('provenance.version')"
                   :messages="markAt('provenance.version')"
                   :base-color="markColor('provenance.version')"
-                >
-                  <template v-if="disk.has('provenance.version')" #details>
-                    <DiskVersion field="provenance.version" @use="useDisk('provenance.version')" />
-                  </template>
-                </VTextField>
-                <VTextField
+                  @use="useDisk('provenance.version')"
+                />
+                <DiskField
+                  :control="VTextField"
+                  field="provenance.run_id"
+                  :shown="disk.has('provenance.run_id')"
                   v-model="form.provenance.run_id"
                   label="Run ID"
                   hide-details="auto"
@@ -436,11 +457,8 @@ const newFields = computed(() => {
                   :error-messages="errorsAt('provenance.run_id')"
                   :messages="markAt('provenance.run_id')"
                   :base-color="markColor('provenance.run_id')"
-                >
-                  <template v-if="disk.has('provenance.run_id')" #details>
-                    <DiskVersion field="provenance.run_id" @use="useDisk('provenance.run_id')" />
-                  </template>
-                </VTextField>
+                  @use="useDisk('provenance.run_id')"
+                />
               </template>
             </div>
             <div

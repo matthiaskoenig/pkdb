@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
-import { defineComponent, h } from "vue";
+import { defineComponent, h, type ComponentOptions, type ComponentPublicInstance } from "vue";
 import { RouterView, type Router } from "vue-router";
 import { VAutocomplete, VCombobox, VSelect, VTextarea } from "vuetify/components";
 import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
@@ -63,7 +63,11 @@ function changedOnDisk(disk: StudyMetadata): Handler {
  * The metadata section of `detail` inside the app's router view, with `routes` besides the
  * defaults. A save writes like the local server, unless `routes` answers it otherwise.
  */
-async function mountSection(detail: StudyDetail = studyDetail(), routes: Record<string, unknown> = {}) {
+async function mountSection(
+  detail: StudyDetail = studyDetail(),
+  routes: Record<string, unknown> = {},
+  mixins: ComponentOptions[] = [],
+) {
   served = detail;
   requests = serveApi({
     "GET /local/state": snapshot(),
@@ -78,7 +82,7 @@ async function mountSection(detail: StudyDetail = studyDetail(), routes: Record<
   await router.isReady();
   wrapper = mount(defineComponent({ render: () => h(RouterView) }), {
     attachTo: document.body,
-    global: { plugins: [pinia, router] },
+    global: { plugins: [pinia, router], mixins },
   });
   await flushPromises();
   return wrapper;
@@ -455,6 +459,87 @@ describe("notes of kinds without a table", () => {
       "Notes of the characteristica 1 description",
       "Notes of the scatters 1 description",
     ]);
+  });
+});
+
+describe("typing", () => {
+  /** The labels of the fields that render again while `type` runs, after the first keystroke. */
+  async function renderedWhileTyping(
+    type: () => Promise<void>,
+    prepare: () => Promise<void> = async () => undefined,
+    routes: Record<string, unknown> = {},
+  ): Promise<string[]> {
+    const updated: string[] = [];
+    const counting: ComponentOptions = {
+      updated(this: ComponentPublicInstance) {
+        const name = this.$options.name;
+        const tracked = ["VTextField", "VTextarea", "VSelect", "VAutocomplete", "VRadioGroup"];
+        if (typeof name === "string" && tracked.includes(name))
+          updated.push(String((this.$props as { label?: unknown }).label ?? name));
+      },
+    };
+    await mountSection(studyDetail(), routes, [counting]);
+    await prepare();
+    updated.length = 0;
+    await type();
+    await flushPromises();
+    return updated;
+  }
+
+  it("renders no other field again while the curator types into one", async () => {
+    // The first keystroke shows that study.json has changes; the next one changes only the field.
+    const updated = await renderedWhileTyping(
+      async () => void (await field("PMID").setValue("98")),
+      async () => {
+        await field("PMID").setValue("9");
+        await flushPromises();
+      },
+    );
+    expect(updated.filter((label) => label !== "PMID")).toEqual([]);
+  });
+
+  it("renders only the radio groups of its card besides the field of Source key", async () => {
+    // The radio groups of Licence and Access are not wrapped in DiskField: forwarding their VRadio
+    // slot would bring the forced update back. They render in about 0.1 ms.
+    const updated = await renderedWhileTyping(
+      async () => void (await field("Source key").setValue("pkdb.other")),
+      async () => {
+        await field("Source key").setValue("pkdb.o");
+        await flushPromises();
+      },
+    );
+    expect(updated.filter((label) => !["Source key", "Licence", "Access"].includes(label))).toEqual([]);
+  });
+
+  it("renders a field with a reload mark only when its own value changes", async () => {
+    const disk = studyMetadata({ reference: { pmid: "111" } });
+    let saves = 0;
+    const conflict = (() => {
+      saves += 1;
+      return saves === 1
+        ? json(
+            {
+              error: "study.json changed on disk since it was read",
+              file: "study.json",
+              revision: "study-2",
+              content: JSON.stringify(disk, null, 2),
+            },
+            { status: 409 },
+          )
+        : json({ revision: "study-3", reference: null, reference_error: null });
+    }) satisfies Handler;
+    const updated = await renderedWhileTyping(
+      async () => void (await field("DOI").setValue("10.1000/xyz")),
+      async () => {
+        radio("Closed").click();
+        await flushPromises();
+        await click("Save");
+        await click("Reload");
+        expect(page().text()).toContain("Changed on disk");
+      },
+      { [`POST ${METADATA}`]: conflict },
+    );
+    expect(updated.filter((label) => label !== "DOI")).toEqual([]);
   });
 });
 

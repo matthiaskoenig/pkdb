@@ -58,7 +58,7 @@ def row_list(engine):
 
 def owned(lock):
     """Whether the current thread holds the engine lock."""
-    return lock._is_owned()
+    return lock.held()
 
 
 def set_mean(folder, table, value):
@@ -124,8 +124,9 @@ def test_conflict_stops_before_validation(workspace, sf_vocabulary, monkeypatch)
     )
     assert report["conflicts"][0]["workbook_rows"][0]["row"] == 3
     assert any(issue["code"] == "sync_conflict" for issue in report["pipeline_issues"])
-    # The overview and the study page show the conflict as a problem.
-    assert "sync_conflict" in {problem["code"] for problem in row(engine)["problems"]}
+    # The study page lists the conflict as a problem; the overview has its count.
+    problems = engine.study_detail("caffeine/Example")["problems"]
+    assert "sync_conflict" in {problem["code"] for problem in problems}
     assert row(engine)["counts"]["errors"] >= 1
 
 
@@ -147,7 +148,9 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
     current = row(engine)
     assert current["status"] == "invalid"
     assert current["counts"]["errors"] >= 1
-    assert "unknown_column" in {problem["code"] for problem in current["problems"]}
+    assert "problems" not in current
+    problems = engine.study_detail("caffeine/Example")["problems"]
+    assert "unknown_column" in {problem["code"] for problem in problems}
 
 
 def outside_range(folder):
@@ -194,8 +197,8 @@ def test_only_warnings_of_the_validation_can_be_acknowledged(
     assert [(p["code"], p["acknowledgeable"]) for p in problems] == [
         ("workbook_changed", False)
     ]
-    # The overview rows keep the problems as the report has them.
-    assert "acknowledgeable" not in row(engine)["problems"][0]
+    # The rows of the engine keep the problems as the report has them.
+    assert "acknowledgeable" not in engine.studies["caffeine/Example"]["problems"][0]
 
 
 def test_beyond_the_limits_the_refusal_cannot_be_acknowledged(workspace, monkeypatch):

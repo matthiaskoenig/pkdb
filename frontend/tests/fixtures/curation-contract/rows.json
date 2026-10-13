@@ -1,0 +1,198 @@
+[
+  {
+    "id": "caffeine/Demo2020",
+    "name": "Demo2020",
+    "path": "caffeine/Demo2020",
+    "duplicate": false,
+    "substance": "caffeine",
+    "mode": "validate",
+    "status": "valid",
+    "stale": false,
+    "files": [
+      {
+        "id": "Demo2020.pdf",
+        "path": "Demo2020.pdf"
+      },
+      {
+        "id": "Demo2020_Fig1.png",
+        "path": "Demo2020_Fig1.png"
+      },
+      {
+        "id": "Demo2020_Fig1.wpd.json",
+        "path": "Demo2020_Fig1.wpd.json"
+      },
+      {
+        "id": "Demo2020_Tab2.png",
+        "path": "Demo2020_Tab2.png"
+      },
+      {
+        "id": "Demo2020_Tab2.tsv",
+        "path": "Demo2020_Tab2.tsv"
+      },
+      {
+        "id": "characteristica.tsv",
+        "path": "characteristica.tsv"
+      },
+      {
+        "id": "interventions.tsv",
+        "path": "interventions.tsv"
+      },
+      {
+        "id": "outputs_Tab2.tsv",
+        "path": "outputs_Tab2.tsv"
+      },
+      {
+        "id": "reference.json",
+        "path": "reference.json"
+      },
+      {
+        "id": "review.json",
+        "path": "review.json"
+      },
+      {
+        "id": "study.json",
+        "path": "study.json"
+      },
+      {
+        "id": "subjects.tsv",
+        "path": "subjects.tsv"
+      },
+      {
+        "id": "timecourses_Fig1.tsv",
+        "path": "timecourses_Fig1.tsv"
+      }
+    ],
+    "last_upload": null,
+    "progress": null,
+    "report_id": "<report>",
+    "summary": {
+      "title": "Caffeine in plasma after two oral doses in a synthetic test study",
+      "review_status": "in_review",
+      "open_items": 2,
+      "curators": [
+        "curator"
+      ],
+      "creator": "curator",
+      "release": null,
+      "issue": null,
+      "provenance": {
+        "kind": "manual_curation"
+      },
+      "ai": false
+    },
+    "reference": {
+      "sid": "10.5555/pkdb.demo.2020",
+      "pmid": null,
+      "doi": "10.5555/pkdb.demo.2020",
+      "title": "Caffeine in plasma after two oral doses in a synthetic test study",
+      "journal": "Journal of Example Data",
+      "abstract": null,
+      "publication_date": "2020-03-01",
+      "authors": [
+        "Ada Example",
+        "Ben Sample"
+      ]
+    },
+    "sync": {
+      "status": "no_workbook",
+      "changes": 0,
+      "conflicts": 0
+    },
+    "counts": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "report_complete": true,
+    "report_truncated": false,
+    "report_incomplete": false,
+    "issue": null
+  },
+  {
+    "id": "caffeine/Draft2021",
+    "name": "Draft2021",
+    "path": "caffeine/Draft2021",
+    "duplicate": false,
+    "substance": "caffeine",
+    "mode": "validate",
+    "status": "discovered",
+    "stale": true,
+    "files": [
+      {
+        "id": "Draft2021.pdf",
+        "path": "Draft2021.pdf"
+      },
+      {
+        "id": "Draft2021_Tab1.png",
+        "path": "Draft2021_Tab1.png"
+      },
+      {
+        "id": "characteristica.tsv",
+        "path": "characteristica.tsv"
+      },
+      {
+        "id": "interventions.tsv",
+        "path": "interventions.tsv"
+      },
+      {
+        "id": "outputs_Tab1.tsv",
+        "path": "outputs_Tab1.tsv"
+      },
+      {
+        "id": "reference.json",
+        "path": "reference.json"
+      },
+      {
+        "id": "review.json",
+        "path": "review.json"
+      },
+      {
+        "id": "study.json",
+        "path": "study.json"
+      },
+      {
+        "id": "subjects.tsv",
+        "path": "subjects.tsv"
+      }
+    ],
+    "last_upload": null,
+    "progress": null,
+    "report_id": null,
+    "summary": {
+      "title": "A synthetic draft study of caffeine tablets",
+      "review_status": "draft",
+      "open_items": 0,
+      "curators": [
+        "curator"
+      ],
+      "creator": "curator",
+      "release": null,
+      "issue": null,
+      "provenance": {
+        "kind": "manual_curation"
+      },
+      "ai": false
+    },
+    "reference": {
+      "sid": "10.5555/pkdb.draft.2021",
+      "pmid": null,
+      "doi": "10.5555/pkdb.draft.2021",
+      "title": "A synthetic draft study of caffeine tablets",
+      "journal": "Journal of Example Data",
+      "abstract": null,
+      "publication_date": "2021-06-01",
+      "authors": [
+        "Cleo Placeholder"
+      ]
+    },
+    "sync": {
+      "status": "not_checked",
+      "changes": 0,
+      "conflicts": 0
+    },
+    "counts": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "issue": null
+  }
+]

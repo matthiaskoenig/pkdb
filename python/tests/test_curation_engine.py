@@ -5,6 +5,7 @@ import re
 import shutil
 import threading
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -14,6 +15,7 @@ import pytest
 from pkdb.curation import connection, jobs
 from pkdb.curation import engine as module
 from pkdb.curation import workspace as workspace_module
+from pkdb.curation.state import StateLock
 from pkdb.curation.studies import job_parts
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
@@ -1684,3 +1686,290 @@ def test_the_same_watcher_error_after_a_recovery_is_logged_once_but_kept(
     assert times[1]["recovered"] is False
     assert engine.watcher_error["recovered"] is True
     assert engine.log.path.read_text(encoding="utf-8").count("Traceback") == 1
+
+
+def test_the_state_leaves_out_the_problems_of_a_study_and_keeps_their_counts(
+    workspace,
+):
+    engine, _ = workspace
+    with engine.lock:
+        row(engine)["problems"] = [{"code": "unknown_substance"}]
+        row(engine)["counts"] = {"errors": 1, "warnings": 0}
+    state = engine.snapshot()["studies"][0]
+    assert "problems" not in state
+    assert state["counts"] == {"errors": 1, "warnings": 0}
+    assert row(engine)["problems"] == [{"code": "unknown_substance"}]
+
+
+def test_the_state_lock_counts_the_outermost_sections_that_may_change_the_state():
+    lock = StateLock()
+    with lock:
+        with lock:
+            pass
+    assert lock.revision == 1
+    with lock.reading():
+        pass
+    assert lock.revision == 1
+    with lock.reading():
+        lock.changed()
+    assert lock.revision == 2
+    with lock.reading():
+        with lock:
+            pass
+    assert lock.revision == 3
+    with pytest.raises(RuntimeError), lock:
+        raise RuntimeError("changed halfway")
+    assert lock.revision == 4
+
+
+def test_the_state_lock_tells_whether_the_current_thread_holds_it():
+    lock = StateLock()
+    seen = []
+
+    def other():
+        seen.append(lock.held())
+
+    assert not lock.held()
+    with lock.reading():
+        with lock:
+            assert lock.held()
+        assert lock.held()
+        thread = threading.Thread(target=other)
+        thread.start()
+        thread.join()
+    assert not lock.held() and seen == [False]
+
+
+def test_an_idle_engine_keeps_its_revision(workspace):
+    engine, _ = workspace
+    identity = row(engine)["id"]
+    # Validate, and let the watcher record what the jobs left behind, as its next ticks would.
+    for _ in range(2):
+        engine.scan()
+        settle(engine)
+        while engine.queue:
+            run_next(engine)
+        engine._check_workbooks()
+        engine._watch_recovered()
+    revision = engine.lock.revision
+    for _ in range(3):
+        engine.scan()
+        engine.schedule_changes()
+        engine._check_workbooks()
+        engine._watch_recovered()
+        assert engine._next_job() is None
+    for _ in range(3):
+        engine._watch_tick()
+    engine.snapshot()
+    engine.state_version()
+    engine.study_version(identity)
+    engine.study_detail(identity)
+    engine.study_folder(identity)
+    engine.resolve_file(identity)
+    assert engine.lock.revision == revision
+
+
+def _edit_study(engine, folder):
+    path = folder / "study.json"
+    study = json.loads(path.read_text(encoding="utf-8"))
+    study["descriptions"] = [*study.get("descriptions", []), "Changed on disk."]
+    path.write_text(json.dumps(study, indent=2) + "\n", encoding="utf-8")
+    engine.scan()
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        lambda engine, folder: engine.set_mode([row(engine)["id"]], "off"),
+        lambda engine, folder: engine.enqueue([row(engine)["id"]], "validate"),
+        lambda engine, folder: engine.set_paused(True),
+        lambda engine, folder: engine.configure(theme="dark"),
+        lambda engine, folder: (settle(engine), run_next(engine)),
+        _edit_study,
+        lambda engine, folder: engine._watch_failed(OSError("unmounted")),
+        lambda engine, folder: engine._watch_unrecorded(RuntimeError("no record")),
+    ],
+    ids=["mode", "enqueue", "pause", "theme", "job", "file", "watcher", "unrecorded"],
+)
+def test_every_change_of_the_state_raises_the_revision(workspace, change):
+    engine, folder = workspace
+    before = engine.lock.revision
+    change(engine, folder)
+    assert engine.lock.revision > before
+
+
+def test_a_folder_that_stays_unreadable_keeps_the_revision(workspace, monkeypatch):
+    engine, folder = workspace
+
+    def unreadable(path):
+        raise PermissionError(f"Permission denied: {path}")
+
+    monkeypatch.setattr(workspace_module, "source_hashes", unreadable)
+    revision = engine.lock.revision
+    _edit_study(engine, folder)
+    assert row(engine)["status"] == "waiting"
+    assert engine.lock.revision > revision
+    revision = engine.lock.revision
+    for _ in range(3):
+        engine.scan()
+    assert row(engine)["status"] == "waiting"
+    assert engine.lock.revision == revision
+
+
+def test_a_suspended_upload_on_save_keeps_the_revision_of_an_idle_engine(workspace):
+    engine, _ = workspace
+    with engine.lock:
+        row(engine).update(mode="upload", _pending=True, _initial=False)
+        row(engine)["_changed_at"] -= 2
+    revision = engine.lock.revision
+    engine.schedule_changes()
+    message = "Upload on save suspended: connect an authorized account"
+    assert row(engine)["message"] == message
+    assert engine.lock.revision == revision + 1
+    for _ in range(3):
+        engine.schedule_changes()
+    assert engine.lock.revision == revision + 1
+
+
+def _connected(engine, folder, monkeypatch):
+    connection_engine(engine, monkeypatch)
+    return engine.connect
+
+
+def _unreachable(engine, folder, monkeypatch):
+    failure = ClientError("PK-DB request failed", code="unreachable")
+    connection_engine(engine, monkeypatch, failure=failure)
+    return engine.connect
+
+
+def _checked_vocabulary(engine, folder, monkeypatch):
+    vocabulary = jobs.bundled_vocabulary()
+    client = Mock()
+    client.capabilities.return_value = SimpleNamespace(
+        server_version="1.0.0",
+        processing_version=PROCESSING_VERSION,
+        vocabulary_hash=vocabulary_hash(vocabulary),
+    )
+    monkeypatch.setattr(engine.cache, "load", Mock(return_value=vocabulary))
+    return partial(engine._vocabulary, client)
+
+
+def _refreshed_assignments(engine, folder, monkeypatch):
+    engine.offline = False
+
+    def refresh():
+        # As `GitHubAssignments.refresh`, outside the lock of the engine.
+        engine.github.data = {**engine.github.data, "status": "ready"}
+        return engine.github.data
+
+    monkeypatch.setattr(engine.github, "refresh", refresh)
+    return engine.refresh_assignments
+
+
+def _format_1_folder(engine, folder, monkeypatch):
+    legacy = folder.parent / "Legacy1990"
+    legacy.mkdir()
+    (legacy / "study.json").write_text(json.dumps({"sid": "Legacy1990"}))
+    return engine.scan
+
+
+def _finished_validations(engine, folder, monkeypatch):
+    prepare_mock(monkeypatch)
+    for _ in range(2):
+        engine.enqueue([row(engine)["id"]], "validate")
+        run_next(engine)
+    return engine.clear_history
+
+
+def _authenticated(engine, folder, monkeypatch):
+    # The engine takes the key of the environment, PKDB_API_KEY, if there is one.
+    engine.api_key = None
+    return partial(engine.configure, api_key="key")
+
+
+def _configured(**settings):
+    return lambda engine, folder, monkeypatch: partial(engine.configure, **settings)
+
+
+#: For each field of the state, what makes a change of it ready, which returns the change. A
+#: field that the state gains needs a change here, or a place among the fixed fields.
+FIELD_CHANGES = {
+    "workspace": lambda engine, folder, _: partial(
+        engine.select_workspace, folder.parent
+    ),
+    "endpoint": _configured(endpoint="https://example.test"),
+    "user": _configured(user="another-curator"),
+    "author": _configured(user="another-curator"),
+    "authenticated": _authenticated,
+    "account": _connected,
+    "can_upload": _connected,
+    "connection": _connected,
+    "connection_error": _unreachable,
+    "checked_at": _connected,
+    "server_version": _connected,
+    "update_required": _connected,
+    "offline": _configured(offline=False),
+    "paused": lambda engine, *_: partial(engine.set_paused, True),
+    "theme": _configured(theme="dark"),
+    "vocabulary": _checked_vocabulary,
+    "github": _refreshed_assignments,
+    "studies": lambda engine, *_: partial(engine.set_mode, [row(engine)["id"]], "off"),
+    "format1_folders": _format_1_folder,
+    "jobs": lambda engine, *_: partial(engine.enqueue, [row(engine)["id"]], "validate"),
+    "clearable_jobs": _finished_validations,
+    # Whether a recent workspace exists is part of `state_version`, not of the revision.
+    "recent_workspaces": lambda engine, *_: partial(
+        engine.forget_workspace, str(engine.root)
+    ),
+    "watcher_error": lambda engine, *_: partial(
+        engine._watch_failed, OSError("unmounted")
+    ),
+}
+#: The fields of the state that never change while an engine runs.
+FIXED_FIELDS = {"client_version", "log_file"}
+
+
+def test_every_field_of_the_state_has_a_change_or_is_fixed(workspace):
+    engine, _ = workspace
+    assert set(engine.snapshot()) == set(FIELD_CHANGES) | FIXED_FIELDS
+
+
+@pytest.mark.parametrize("field", sorted(FIELD_CHANGES))
+def test_a_change_of_each_field_of_the_state_raises_the_revision(
+    workspace, monkeypatch, field
+):
+    engine, folder = workspace
+    change = FIELD_CHANGES[field](engine, folder, monkeypatch)
+    before, revision = engine.snapshot()[field], engine.lock.revision
+    change()
+    assert engine.snapshot()[field] != before
+    assert engine.lock.revision > revision
+
+
+def test_a_resume_that_refuses_a_later_upload_counts_the_one_it_reconciled(
+    workspace, monkeypatch
+):
+    engine, folder = workspace
+    shutil.copytree(folder, folder.parent / "Other")
+    engine.scan()
+    prepare_mock(monkeypatch)
+    client, _ = enable_upload(
+        engine, monkeypatch, ClientError("lost", persistence="unknown")
+    )
+    for identifier in ("caffeine/Example", "caffeine/Other"):
+        engine.set_paused(False)
+        engine.enqueue([identifier], "upload")
+        assert run_next(engine)["status"] == "unknown"
+    polled = []
+
+    def publication(sid):
+        # The app polls the state while Resume checks the upload of the first study.
+        polled.append(engine.state_version())
+        digest = "snapshot" if len(polled) == 1 else "other"
+        return SimpleNamespace(model_dump=lambda: {"digest": digest})
+
+    client.publication.side_effect = publication
+    with pytest.raises(jobs.ResumeRefused, match="another version of caffeine/Other"):
+        engine.resume()
+    assert [item["_blocked"] for item in engine.studies.values()] == [False, True]
+    assert engine.state_version() != polled[0]

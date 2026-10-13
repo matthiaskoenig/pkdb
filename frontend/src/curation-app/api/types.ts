@@ -346,6 +346,7 @@ export type ReferenceSummary =
       authors: string[];
     };
 
+/** A study row of the state: the counts of its problems; the study page lists them. */
 export interface StudyRow {
   /** The identity `<substance>/<name>`. */
   id: string;
@@ -358,7 +359,6 @@ export interface StudyRow {
   status: RowStatus;
   stale: boolean;
   files: { id: string; path: string }[];
-  problems: ValidationIssue[];
   last_upload: Upload | null;
   progress: Progress | null;
   report_id: string | null;

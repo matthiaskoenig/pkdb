@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watchPostEffect } from "vue";
-import { useRouter } from "vue-router";
-import { VAvatar, VBtn, VCheckboxBtn, VChip, VIcon, VTable } from "vuetify/components";
+import { computed, ref, useTemplateRef, watch, watchPostEffect } from "vue";
+import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
 import type { Profile, StudyRow } from "../api/types";
+import { useWindowPosition } from "../composables/useWindowPosition";
+import type { SortKey, StudySort } from "../overview";
 import {
-  activityLabel,
-  formatTime,
-  issueUrl,
-  MODE_LABELS,
-  problemLabels,
-  REVIEW_LABELS,
-  REVIEW_TONES,
-  SYNC_LABELS,
-  SYNC_TONES,
-  type SortKey,
-  type StudySort,
-  webUrl,
-} from "../overview";
-import { findProfile } from "../study";
-
-/** The circles of the curators of a row: avatars, or avatars and a count of the others. */
-const CURATOR_SLOTS = 3;
+  bodyParts,
+  keepSizerRows,
+  ROW_HEIGHT,
+  rowItem,
+  sameParts,
+  sizerRows,
+  type BodyPart,
+  type RowItem,
+} from "../studyTable";
+import StudyTableRow from "./StudyTableRow.vue";
 
 const props = defineProps<{
   rows: StudyRow[];
@@ -32,8 +26,6 @@ const props = defineProps<{
 const selected = defineModel<string[]>("selected", { required: true });
 const sort = defineModel<StudySort>("sort", { required: true });
 const emit = defineEmits<{ retry: [row: StudyRow] }>();
-
-const router = useRouter();
 
 const columns: { key: SortKey | null; label: string; cell: string }[] = [
   { key: "study", label: "Study", cell: "cell-study" },
@@ -90,246 +82,128 @@ function sortIcon(key: SortKey): string {
   return sort.value.descending ? "fas fa-sort-down" : "fas fa-sort-up";
 }
 
-function studyRoute(row: StudyRow) {
-  return { name: "Study", params: { substance: row.substance, name: row.name } };
-}
-
 /**
- * A click on a row opens its study, unless it hits a control of the row or the cell of its
- * checkbox, or ends a drag that selected text.
+ * The item of each row object, built once per snapshot (the rows of a snapshot keep their
+ * objects through filters and sorting) and again when the profiles or the repository change.
  */
-function openRow(row: StudyRow, event: MouseEvent): void {
-  if (row.duplicate) return;
-  if (event.target instanceof Element && event.target.closest("a, button, input, label, .cell-select")) return;
-  if (window.getSelection()?.toString()) return;
-  void router.push(studyRoute(row));
+const cache = computed(() => ({
+  profiles: props.profiles,
+  repository: props.repository,
+  items: new WeakMap<StudyRow, RowItem>(),
+}));
+
+function itemOf(row: StudyRow): RowItem {
+  const { profiles, repository, items } = cache.value;
+  let item = items.get(row);
+  if (!item) items.set(row, (item = rowItem(row, profiles, repository)));
+  return item;
 }
 
-interface Curator {
-  name: string;
-  avatar: string | null;
-  initials: string;
-}
+const body = useTemplateRef<HTMLElement>("body");
+const { position, schedule } = useWindowPosition(body, "tr.study-row");
+// The filters above the table wrap differently with other counts and move the table.
+watch(() => props.rows, schedule, { flush: "post" });
+/** The height of every study row: ROW_HEIGHT at the default font size, more with a larger one. */
+const rowHeight = computed(() => position.value.rowHeight ?? ROW_HEIGHT);
 
-function curator(user: string): Curator {
-  const profile = findProfile(props.profiles, user);
-  const name = profile?.display_name ?? user;
-  const words = name.split(/\s+/).filter(Boolean);
-  const initials = (words.length > 1 ? `${words[0]![0]}${words.at(-1)![0]}` : name.slice(0, 1)).toUpperCase();
-  return { name, avatar: profile?.avatar_url ?? null, initials };
-}
-
-function aiTitle(row: StudyRow): string {
-  const method = row.summary.provenance?.method;
-  return method ? `AI curated with ${method}` : "AI curated";
-}
-
-/** What a row shows besides the fields of the study row. */
-const items = computed(() =>
-  props.rows.map((row) => {
-    const people = (row.summary.curators ?? []).map(curator);
-    // Beyond the slots, the last slot counts the curators that it hides.
-    const cut = people.length > CURATOR_SLOTS ? CURATOR_SLOTS - 1 : people.length;
-    const number = row.issue?.number ?? row.summary.issue ?? null;
-    const url = issueUrl(row, props.repository);
-    return {
-      row,
-      curators: people.slice(0, cut),
-      others: people
-        .slice(cut)
-        .map((person) => person.name)
-        .join(", "),
-      hidden: people.length - cut,
-      problems: problemLabels(row),
-      activity: activityLabel(row),
-      issue: number !== null && url !== null ? { number, url } : null,
-      upload: webUrl(row.last_upload?.url),
-    };
-  }),
+/** The folder of the study whose row has the keyboard focus: it stays rendered wherever it is. */
+const focusedPath = ref<string | null>(null);
+// A row that a filter removed has lost its focus with the element: it is not pinned when it returns.
+watch(
+  () => props.rows,
+  (rows) => {
+    if (focusedPath.value !== null && !rows.some((row) => row.path === focusedPath.value)) focusedPath.value = null;
+  },
 );
+const pinned = computed(() => {
+  const path = focusedPath.value;
+  if (path === null) return null;
+  const index = props.rows.findIndex((row) => row.path === path);
+  return index < 0 ? null : index;
+});
+
+/** The rendered rows and the spaces between them; the same list while scrolling keeps them. */
+const parts = computed<BodyPart[]>((previous) => {
+  const next = bodyParts(
+    { count: props.rows.length, top: position.value.top, height: position.value.height, pinned: pinned.value },
+    rowHeight.value,
+  );
+  return previous && sameParts(previous, next) ? previous : next;
+});
+
+/** Hidden rows that give the columns the widths of all shown rows; those that stay render once. */
+const sizers = computed<readonly StudyRow[]>((previous) => keepSizerRows(previous ?? [], sizerRows(props.rows)));
+
+function focusIn(event: FocusEvent): void {
+  const row = event.target instanceof Element ? event.target.closest("tr[aria-rowindex]") : null;
+  const index = row ? Number(row.getAttribute("aria-rowindex")) - 2 : -1;
+  focusedPath.value = props.rows[index]?.path ?? null;
+}
+
+function focusOut(): void {
+  // Once the focus moved: when the window loses the focus, as to another application, the event
+  // names no new target while the row keeps the focus of the page.
+  setTimeout(() => {
+    if (!body.value?.contains(document.activeElement)) focusedPath.value = null;
+  });
+}
 </script>
 
 <template>
   <VTable class="study-table" density="compact">
-    <caption class="d-sr-only">
-      Studies of the workspace
-    </caption>
-    <thead>
-      <tr>
-        <th ref="select-all" scope="col" class="cell-select">
-          <VCheckboxBtn
-            :model-value="allSelected"
-            :indeterminate="someSelected"
-            :disabled="selectable.length === 0"
-            density="compact"
-            aria-label="Select all shown studies"
-            @update:model-value="toggleAll"
-          />
-        </th>
-        <th
-          v-for="column in columns"
-          :key="column.cell"
-          scope="col"
-          :class="column.cell"
-          :aria-sort="ariaSort(column.key)"
-        >
-          <button v-if="column.key" type="button" class="sort-button" @click="sortBy(column.key)">
-            {{ column.label }}<VIcon :icon="sortIcon(column.key)" size="12" class="sort-icon" />
-          </button>
-          <template v-else>{{ column.label }}</template>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="{ row, curators, others, hidden, problems, activity, issue, upload } in items"
-        :key="row.path"
-        :data-study="row.duplicate ? undefined : row.id"
-        :class="{ 'study-row--link': !row.duplicate, 'study-row--selected': isSelected(row) }"
-        @click="openRow(row, $event)"
-      >
-        <td class="cell-select">
-          <VCheckboxBtn
-            :model-value="isSelected(row)"
-            :disabled="row.duplicate"
-            density="compact"
-            :aria-label="`Select ${row.id}`"
-            @update:model-value="toggle(row)"
-          />
-        </td>
-        <td class="cell-study">
-          <div class="study-row-line">
-            <!-- A long identity stays on its line; the title after it is cut with an ellipsis. -->
-            <span v-if="row.duplicate" class="study-identity">{{ row.substance }}/{{ row.name }}</span>
-            <RouterLink v-else :to="studyRoute(row)" class="study-identity"
-              >{{ row.substance }}/<wbr />{{ row.name }}</RouterLink
-            >
-            <VChip
-              v-if="row.duplicate"
-              size="x-small"
-              color="error"
-              variant="tonal"
-              class="status-chip"
-              title="Two folders have this identity. Rename one of them."
-            >
-              Duplicate identity
-            </VChip>
-            <span v-if="row.duplicate" class="study-path" :title="row.path">{{ row.path }}</span>
-            <span
-              v-if="row.summary.title"
-              class="study-row-title"
-              :title="row.summary.title"
-              >{{ row.summary.title }}</span
-            >
-            <span v-else class="study-row-title study-row-title--missing">No reference title yet</span>
-          </div>
-        </td>
-        <td class="cell-review">
-          <div class="cell-chips">
-            <VChip
-              v-if="row.summary.review_status"
-              size="small"
-              variant="tonal"
-              :color="REVIEW_TONES[row.summary.review_status]"
-              class="status-chip"
-            >
-              {{ REVIEW_LABELS[row.summary.review_status] }}
-            </VChip>
-            <span v-else class="cell-empty">-</span>
-            <VChip v-if="row.summary.ai" size="small" variant="outlined" class="ai-marker" :title="aiTitle(row)">
-              AI
-            </VChip>
-          </div>
-        </td>
-        <td class="cell-open">{{ row.summary.open_items ?? 0 }}</td>
-        <td v-if="row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
-        <td v-else class="cell-problems">
-          <div class="cell-chips">
-            <VChip
-              v-for="problem in problems"
-              :key="problem.label"
-              size="small"
-              variant="tonal"
-              :color="problem.tone"
-              class="status-chip"
-            >
-              {{ problem.label }}
-            </VChip>
-            <span v-if="activity" class="cell-note" :title="activity">{{ activity }}</span>
-            <span v-if="row.message" class="cell-message" :title="row.message">{{ row.message }}</span>
-            <VBtn
-              v-if="row.status === 'unknown'"
-              size="x-small"
-              variant="tonal"
-              color="primary"
-              prepend-icon="fas fa-triangle-exclamation"
-              class="retry-button"
-              :aria-label="`Review uncertain upload of ${row.id}`"
-              @click="emit('retry', row)"
-            >
-              Review
-            </VBtn>
-          </div>
-        </td>
-        <td class="cell-sync">
-          <VChip size="small" variant="tonal" :color="SYNC_TONES[row.sync.status]" class="status-chip">
-            {{ SYNC_LABELS[row.sync.status] }}
-          </VChip>
-        </td>
-        <td class="cell-release">
-          <span v-if="row.summary.release" :title="`Released on ${row.summary.release.date}`">
-            {{ row.summary.release.pkdb_id }}
-          </span>
-          <span v-else class="cell-empty">-</span>
-        </td>
-        <td class="cell-issue">
-          <a
-            v-if="issue"
-            :href="issue.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            :aria-label="`GitHub issue #${issue.number}`"
-          >
-            #{{ issue.number }}
-          </a>
-          <span v-else class="cell-empty">-</span>
-        </td>
-        <td class="cell-curators">
-          <div v-if="curators.length" class="curators">
-            <VAvatar
-              v-for="(person, index) in curators"
-              :key="index"
-              size="22"
-              color="primary"
-              variant="tonal"
-              class="curator"
-              :title="person.name"
-            >
-              <img v-if="person.avatar" :src="person.avatar" :alt="person.name" class="curator-photo" />
-              <span v-else role="img" :aria-label="person.name" class="curator-initials">{{ person.initials }}</span>
-            </VAvatar>
-            <span v-if="hidden" role="img" class="curator-more" :aria-label="`And ${others}`" :title="others">
-              +{{ hidden }}
-            </span>
-          </div>
-          <span v-else class="cell-empty">-</span>
-        </td>
-        <td class="cell-mode">{{ MODE_LABELS[row.mode] }}</td>
-        <td class="cell-upload">
-          <a
-            v-if="upload && row.last_upload"
-            :href="upload"
-            target="_blank"
-            rel="noopener noreferrer"
-            :title="`Open ${row.id} in PK-DB`"
-          >
-            {{ formatTime(row.last_upload.at) }}
-          </a>
-          <span v-else-if="row.last_upload">{{ formatTime(row.last_upload.at) }}</span>
-          <span v-else class="cell-empty">-</span>
-        </td>
-      </tr>
-    </tbody>
+    <!-- The wrapper slot renders the table itself, so that it gets aria-rowcount: VTable passes
+         only aria-label attributes to its table. -->
+    <template #wrapper>
+      <div class="v-table__wrapper">
+        <table :aria-rowcount="rows.length + 1">
+          <caption class="d-sr-only">
+            Studies of the workspace
+          </caption>
+          <thead>
+            <tr aria-rowindex="1">
+              <th ref="select-all" scope="col" class="cell-select">
+                <VCheckboxBtn
+                  :model-value="allSelected"
+                  :indeterminate="someSelected"
+                  :disabled="selectable.length === 0"
+                  density="compact"
+                  aria-label="Select all shown studies"
+                  @update:model-value="toggleAll"
+                />
+              </th>
+              <th
+                v-for="column in columns"
+                :key="column.cell"
+                scope="col"
+                :class="column.cell"
+                :aria-sort="ariaSort(column.key)"
+              >
+                <button v-if="column.key" type="button" class="sort-button" @click="sortBy(column.key)">
+                  {{ column.label }}<VIcon :icon="sortIcon(column.key)" size="12" class="sort-icon" />
+                </button>
+                <template v-else>{{ column.label }}</template>
+              </th>
+            </tr>
+          </thead>
+          <tbody ref="body" @focusin="focusIn" @focusout="focusOut">
+            <StudyTableRow v-for="row in sizers" :key="row.path" :item="itemOf(row)" :selected="false" :row-index="null" />
+            <template v-for="part in parts" :key="part.kind === 'row' ? rows[part.index]!.path : part.key">
+              <tr v-if="part.kind === 'space'" class="study-space" aria-hidden="true">
+                <td :colspan="columns.length + 1" :style="{ height: `${part.rows * rowHeight}px` }" />
+              </tr>
+              <StudyTableRow
+                v-else
+                :item="itemOf(rows[part.index]!)"
+                :selected="isSelected(rows[part.index]!)"
+                :row-index="part.index + 2"
+                @toggle="toggle(rows[part.index]!)"
+                @retry="emit('retry', rows[part.index]!)"
+              />
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
   </VTable>
 </template>
 
@@ -340,14 +214,6 @@ const items = computed(() =>
 .study-table :deep(table) {
   min-width: 100%;
 }
-.study-table th,
-.study-table td {
-  box-sizing: border-box;
-  height: 24px;
-  padding: 0 8px;
-  white-space: nowrap;
-  vertical-align: middle;
-}
 .study-table th {
   vertical-align: middle;
   /* Every header has one line height, also those of the columns whose cells set their own, so
@@ -356,28 +222,6 @@ const items = computed(() =>
   font-size: 0.8125rem;
   font-weight: 600;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.study-table .cell-select {
-  width: 48px;
-  min-width: 48px;
-  padding-inline: 8px 0;
-  vertical-align: middle;
-}
-.cell-select :deep(.v-selection-control) {
-  justify-content: center;
-}
-/* The checkbox and the chips of a row fit the 24px of the row, of which 1px is its border. The
-   input of the checkbox, its target, is 24px and reaches over the border. */
-.cell-select :deep(.v-selection-control) {
-  min-height: 23px;
-  --v-selection-control-size: 20px;
-}
-.cell-select :deep(.v-selection-control__input) {
-  width: 24px;
-  height: 24px;
-}
-.study-table :deep(.v-chip) {
-  height: 20px;
 }
 .sort-button {
   display: inline-flex;
@@ -401,148 +245,69 @@ th[aria-sort] .sort-button {
 th[aria-sort] .sort-icon {
   opacity: 1;
 }
-.study-row--link {
-  cursor: pointer;
-}
-.study-table tbody tr:hover {
-  background: rgba(var(--v-theme-primary), 0.04);
-}
-.study-table tbody tr.study-row--selected {
-  background: rgba(var(--v-theme-primary), 0.08);
-}
-/* The study column takes the room that the table has left: its title is cut with an ellipsis
-   instead of wrapping, so that every study keeps one 24px line, and every other cell stays on
-   one line at the width of its content. */
-.study-table th,
-.study-table td {
-  width: 1px;
-}
-.study-table .cell-study {
-  width: 100%;
-  min-width: 12rem;
-}
-.study-table td.cell-study {
-  max-width: 0;
-  overflow: hidden;
-}
-.study-row-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  height: 23px;
-}
-.study-identity {
-  flex: none;
-  font-weight: 600;
-}
-a.study-identity {
-  text-decoration: none;
-}
-a.study-identity:hover {
-  text-decoration: underline;
-}
-.study-path,
-.study-row-title {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.study-row-title {
-  flex: 1 1 0;
-}
-.study-path {
-  flex: 0 1 auto;
-}
-.study-row-title--missing {
-  font-style: italic;
-}
-.ai-marker {
-  border-color: rgba(var(--v-theme-on-surface), 0.3);
-}
-.cell-chips {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 23px;
-}
-.study-table td.cell-open {
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
 .study-table th.cell-open .sort-button {
   flex-direction: row-reverse;
 }
 .study-table th.cell-open {
   text-align: end;
 }
-/* The problems of a row stay on its line within a fixed measure, so that the table fits a window
-   of 1280px: the chips and the button are never cut, while a long note or message is cut with an
-   ellipsis. */
-.cell-problems .cell-chips {
-  flex-wrap: nowrap;
-  max-width: 14rem;
+</style>
+
+<style>
+/* The cells of the header and of every row (StudyTableRow.vue): one 24px line per study. The
+   study column takes the room that the table has left: its title is cut with an ellipsis
+   instead of wrapping, and every other cell stays on one line at the width of its content. */
+.study-table th,
+.study-table td {
+  box-sizing: border-box;
+  width: 1px;
+  height: 24px;
+  padding: 0 8px;
+  white-space: nowrap;
+  vertical-align: middle;
 }
-.cell-problems .cell-chips > * {
-  flex: none;
-}
-.cell-problems .cell-chips > .cell-note,
-.cell-problems .cell-chips > .cell-message {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.cell-release,
-.cell-issue,
-.cell-mode,
-.cell-upload {
-  line-height: 23px;
-}
-.cell-release,
-.cell-upload {
-  font-variant-numeric: tabular-nums;
-}
-.cell-empty {
-  line-height: 23px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* The avatars are taller than a line of the row; they center on the first line. */
-.curators {
-  display: flex;
-  align-items: center;
-}
-/* Avatars overlap a little, each with a ring of the surface color. */
-.curator {
-  border: 1px solid rgb(var(--v-theme-surface));
-  font-size: 0.6875rem;
-  font-weight: 700;
-}
-.curator + .curator,
-.curators .curator-more {
-  margin-inline-start: -6px;
-}
-.curator-photo {
+.study-table .cell-study {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  min-width: 12rem;
 }
-.curator-more {
-  display: inline-flex;
-  align-items: center;
+.study-table .cell-select {
+  width: 48px;
+  min-width: 48px;
+  padding-inline: 8px 0;
+}
+/* The checkbox and the chips of a row fit the 24px of the row, of which 1px is its border. The
+   input of the checkbox, its target, is 24px and reaches over the border. */
+.study-table .cell-select .v-selection-control {
   justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 4px;
-  border: 1px solid rgb(var(--v-theme-surface));
-  border-radius: 11px;
-  background: rgba(var(--v-theme-on-surface), 0.08);
-  font-size: 0.6875rem;
-  font-weight: 700;
+  min-height: 23px;
+  --v-selection-control-size: 20px;
+}
+.study-table .cell-select .v-selection-control__input {
+  width: 24px;
+  height: 24px;
+}
+/* The window renders other rows as the page scrolls. Should a row ever not have the height that
+   the window measured, the browser must not anchor the scroll position to a row: it would pull the
+   page back across the edge of a row, and the window would follow, without end. */
+.study-table tbody {
+  overflow-anchor: none;
+}
+/* The sizer rows (StudyTableRow.vue without a row index) take no height but keep the widths of
+   their cells, and the space of the rows that are not rendered draws nothing. A space takes its
+   height at once: Vuetify animates the height of cells, which would move the rendered rows away
+   from their places, and so out of the window while it scrolls. */
+.study-table tr.study-sizer {
+  visibility: collapse;
+}
+.study-table tr.study-space > td {
+  padding: 0;
+  border: 0;
+  transition: none;
+}
+/* A printed overview shows the rendered rows, without the pages of the space of the others. */
+@media print {
+  .study-table tr.study-space {
+    display: none;
+  }
 }
 </style>

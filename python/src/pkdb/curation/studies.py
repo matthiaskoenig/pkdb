@@ -541,7 +541,7 @@ class StudiesMixin(EngineState):
         ]
 
     def study_folder(self, identity: str) -> Path:
-        with self.lock:
+        with self.lock.reading():
             folder, root = self._study_row(identity)["_folder"], self.root
         return _unlinked(folder, root)
 
@@ -556,7 +556,7 @@ class StudiesMixin(EngineState):
         changes the key twice, and an answer is never kept for content that the folder no
         longer has. The files are read before the content that the key versions.
         """
-        with self.lock:
+        with self.lock.reading():
             row = self._study_row(identity)
             folder, root = row["_folder"], self.root
             key = {
@@ -576,7 +576,7 @@ class StudiesMixin(EngineState):
         return hashlib.sha256(data).hexdigest()
 
     def study_detail(self, identity: str) -> dict:
-        with self.lock:
+        with self.lock.reading():
             row = self._study_row(identity)
             folder, root = row["_folder"], self.root
             conflicted = row["sync"]["status"] == "conflict"

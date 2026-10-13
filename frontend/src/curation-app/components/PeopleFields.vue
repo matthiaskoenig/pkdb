@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { VAutocomplete, VBtn, VCombobox, VListItem } from "vuetify/components";
 import type { Profile } from "../api/types";
-import { markMessage, type CuratorRow, type FieldMark } from "../metadata";
+import { markMessages, messagesAt, NO_MESSAGES, type CuratorRow, type FieldMark } from "../metadata";
 import { profileOf as knownProfile } from "../study";
 import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
@@ -52,13 +52,15 @@ const people = computed<Person[]>(() => {
 
 const creatorProfile = computed(() => (creator.value ? profileOf(creator.value) : null));
 
-function errorsAt(key: string): string[] {
-  return props.errors.get(key) ?? [];
+/** The mark message of each marked field: one array per field, kept until the marks change. */
+const marked = computed(() => markMessages(props.marks, props.disk));
+
+function errorsAt(key: string): readonly string[] {
+  return messagesAt(props.errors, key);
 }
 
-function markAt(key: string): string[] {
-  const mark = props.marks.get(key);
-  return mark ? [markMessage(mark, props.disk.get(key) ?? null)] : [];
+function markAt(key: string): readonly string[] {
+  return marked.value.get(key) ?? NO_MESSAGES;
 }
 
 function markColor(key: string): string | undefined {

@@ -75,7 +75,7 @@ class ConnectionMixin(EngineState):
         succeeded, otherwise the configured user. UserMismatch when the last check found that
         the key belongs to another account; IdentityError without a usable user.
         """
-        with self.lock:
+        with self.lock.reading():
             checked = (
                 self.api_key
                 and self.account
@@ -185,7 +185,7 @@ class ConnectionMixin(EngineState):
             self.refresh_assignments()
         # Keep the displayed server and database state current while the service runs.
         while not self.stop.wait(HEARTBEAT_SECONDS):
-            with self.lock:
+            with self.lock.reading():
                 idle = not self.connecting
             if idle:
                 self.connect()

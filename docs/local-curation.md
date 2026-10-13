@@ -68,6 +68,8 @@ To switch the workspace without a restart, open the workspace menu, the folder n
 
 The overview lists the study format 2 folders of the workspace by their identity `<substance>/<name>`, with the title of the publication from `reference.json`.
 
+The overview renders only the rows in view, so the browser's own find (Ctrl+F, Cmd+F on macOS) finds only those rows. **Search studies** finds every study.
+
 [![The overview of the synthetic test workspace: two studies with their review status, open items, problems and sync status, and one study selected for the batch actions.](images/curation/overview.png)](images/curation/overview.png)
 
 | Column | Shows |
@@ -83,7 +85,7 @@ The overview lists the study format 2 folders of the workspace by their identity
 | On save | What a save does, see [What happens on save](#what-happens-on-save). |
 | Last upload | The time of the last upload, with a link to the study on PK-DB. |
 
-**Search studies** matches the identity and the title, **Substance** shows one substance, and **Curator** shows the studies of one curator of `study.json`, with the number of their studies. **Me**, the first curator, is the PK-DB user of the app, so it shows your own studies. The status chips **All**, **Needs attention**, **Draft**, **In review** and **Approved** count their studies. **Needs attention** lists the studies with errors, with a sync conflict, or with open items while they are in review. Click a column header to sort by it; every column except Curators sorts. The filters and the sort order stay while the app runs, also when you open a study and return, and start again in another workspace. Click a row to open the study.
+**Search studies** matches the identity and the title, and the table follows it when you pause typing. **Substance** shows one substance, and **Curator** shows the studies of one curator of `study.json`, with the number of their studies. **Me**, the first curator, is the PK-DB user of the app, so it shows your own studies. The status chips **All**, **Needs attention**, **Draft**, **In review** and **Approved** count their studies. **Needs attention** lists the studies with errors, with a sync conflict, or with open items while they are in review. Click a column header to sort by it; every column except Curators sorts. The filters and the sort order stay while the app runs, also when you open a study and return, and start again in another workspace. Click a row to open the study.
 
 Select studies with their checkboxes for the batch actions above the table. **Validate** queues a validation of each. **Upload** shows the server, the account and the studies, and then validates and uploads them. **On save** with **Apply** sets the On save action of the selected studies. Upload needs a connected server and the API key of an account that may upload studies; the disabled button says what is missing.
 
@@ -242,9 +244,9 @@ Agents may add, answer, resolve and dismiss items, but a person approves a study
 
 ## Local API
 
-This section is for developers. The front end talks to the local server through `/local/` routes. Every route except `POST /local/session`, which takes the launch token, needs the session cookie. Writes also need the CSRF header and a JSON body of at most 1 MiB. GET responses carry an `ETag` and answer `304` to `If-None-Match`, so the app polls cheaply.
+This section is for developers. The front end talks to the local server through `/local/` routes. Every route except `POST /local/session`, which takes the launch token, needs the session cookie. Writes also need the CSRF header and a JSON body of at most 1 MiB. GET responses carry an `ETag` and answer `304` to `If-None-Match`, so the app polls cheaply. `GET /local/state` takes its `ETag` from a revision that every change of the state of `pkdb curate` raises: it builds the state once per revision and answers a poll of an unchanged state with `304` without building it.
 
-- `GET /local/state`: the workspace, the connection, the author of writes, the study rows and the jobs.
+- `GET /local/state`: the workspace, the connection, the author of writes, the study rows with the counts of their problems, and the jobs. The study page lists the problems.
 - `GET /local/studies/{substance}/{name}`: the study page with metadata, review, problems (each says whether a review item can acknowledge it), acknowledged warnings, sync status and conflicts, sources, files, the table files with their kinds in the order of the workbook sheets, the PDFs at the top of the folder with `<name>.pdf` first, each with its URL, size and a version of its content that changes when it is written, the rows and the digitized series of each review target, a version of its files that changes with their content, and jobs. Below it, `.../tables/{file}`, `.../sources/{source}` and `.../files/{file}` serve one table, one source view and one registered image or PDF. The file route sends a file in pieces of 64 kB and answers one byte range (`Range: bytes=...`) with `206` and `Content-Range`, a range beyond the end with `416`, and several ranges with the whole file; a PDF comes inline with its name.
 - `POST /local/studies/metadata`, `POST /local/studies/review` and `POST /local/studies/tables` write `study.json`, change `review.json` (add, reply, resolve, dismiss, reopen, status, acknowledge), and open, sync, resolve or add to the workbook.
 - `POST /local/studies/tables/preview` and `POST /local/studies/review/preview` read without writing: what Add table would add for a kind and a source, with the sheet, the file, the image and why it would refuse, and which rows and digitized series a draft review target selects. The `add` action of `POST /local/studies/tables` takes the same `kind` and `source`.

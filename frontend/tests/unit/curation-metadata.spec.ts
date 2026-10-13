@@ -11,7 +11,11 @@ import {
   issueMessage,
   issuesByTarget,
   issueTarget,
+  MARK_TEXT,
+  markMessages,
   mergeOnReload,
+  messagesAt,
+  NO_MESSAGES,
   type MetadataForm,
   readStudyJson,
   startForm,
@@ -360,21 +364,37 @@ describe("unsavedSections", () => {
   it("names Metadata for the fields of the study and Data for the notes of a kind with a table", () => {
     const notes = clone(base());
     notes.notes.outputs.descriptions.push("More.");
-    expect(unsavedSections(base(), notes, ["outputs"])).toEqual(["data"]);
+    expect(unsavedSections(base(), notes, changedFields(base(), notes), ["outputs"])).toEqual(["data"]);
     const both = clone(notes);
     both.creator = "janekg";
-    expect(unsavedSections(base(), both, ["outputs"])).toEqual(["metadata", "data"]);
-    expect(unsavedSections(base(), clone(base()), ["outputs"])).toEqual([]);
+    expect(unsavedSections(base(), both, changedFields(base(), both), ["outputs"])).toEqual(["metadata", "data"]);
+    expect(unsavedSections(base(), clone(base()), [], ["outputs"])).toEqual([]);
   });
 
   it("names Metadata for the notes of a kind without a table, which Metadata shows", () => {
     const notes = clone(base());
     notes.notes.scatters.descriptions.push("From Figure 3.");
-    expect(unsavedSections(base(), notes, ["subjects", "outputs"])).toEqual(["metadata"]);
+    expect(unsavedSections(base(), notes, changedFields(base(), notes), ["subjects", "outputs"])).toEqual(["metadata"]);
   });
 
   it("names Metadata for a new study.json, and nothing without a form", () => {
-    expect(unsavedSections(null, toForm({}, NOTE_KINDS), NOTE_KINDS)).toEqual(["metadata"]);
-    expect(unsavedSections(base(), null, NOTE_KINDS)).toEqual([]);
+    expect(unsavedSections(null, toForm({}, NOTE_KINDS), [], NOTE_KINDS)).toEqual(["metadata"]);
+    expect(unsavedSections(base(), null, [], NOTE_KINDS)).toEqual([]);
+  });
+});
+
+describe("messages", () => {
+  it("gives every field without messages the same frozen array", () => {
+    const errors = new Map([["creator", ["Unknown user."]]]);
+    expect(messagesAt(errors, "licence")).toBe(NO_MESSAGES);
+    expect(messagesAt(errors, "access")).toBe(messagesAt(errors, "licence"));
+    expect(Object.isFrozen(NO_MESSAGES)).toBe(true);
+    expect(messagesAt(errors, "creator")).toBe(errors.get("creator"));
+  });
+
+  it("keeps one array per marked field", () => {
+    const messages = markMessages(new Map([["licence", "disk" as const]]), new Map());
+    expect(messages.get("licence")).toEqual([MARK_TEXT.disk]);
+    expect(messages.get("access")).toBeUndefined();
   });
 });

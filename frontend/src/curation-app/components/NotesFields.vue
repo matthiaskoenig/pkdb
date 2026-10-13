@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { VBtn, VTextarea } from "vuetify/components";
 import type { Comment, Profile } from "../api/types";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { markMessage, type FieldMark } from "../metadata";
+import { markMessage, messagesAt, type FieldMark } from "../metadata";
 import { profileOf as knownProfile } from "../study";
 import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
@@ -36,8 +36,8 @@ const autoGrow = !sizesFieldsByContent();
 const descriptionsKey = computed(() => `${props.prefix}descriptions`);
 const commentsKey = computed(() => `${props.prefix}comments`);
 
-function errorsAt(key: string): string[] {
-  return props.errors.get(key) ?? [];
+function errorsAt(key: string): readonly string[] {
+  return messagesAt(props.errors, key);
 }
 
 function markAt(key: string): string | null {

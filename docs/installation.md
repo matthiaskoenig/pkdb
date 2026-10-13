@@ -133,12 +133,14 @@ Browser tests use a separate disposable Compose project. See [isolated frontend 
 
 The unit tests of the curation app read contract fixtures in `frontend/tests/fixtures/curation-contract/`. `python/tests/test_curation_contract.py` writes them from real answers of the local server on the fixture workspace and fails when an answer changes. Regenerate them from `python/` with `PKDB_UPDATE_CONTRACT=1 uv run --locked pytest -q tests/test_curation_contract.py`, review the diff, and run the frontend unit tests against them. Never edit them by hand.
 
-The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`, so the spec files run in parallel, on every CPU core in continuous integration and on half of them elsewhere. The tests of `screens.spec.ts` change nothing, so they also run in parallel, each worker with a server of its own. On a busy machine, use fewer workers, for example `npm run test:curation-e2e -- --workers 4`. Run them from `frontend/`:
+The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`, so the spec files run in parallel, on every CPU core in continuous integration and on half of them elsewhere. The tests of `screens.spec.ts` change nothing, so they also run in parallel, each worker with a server of its own. `speed.spec.ts` runs on a workspace of 1,000 studies that `tools/curation_testing/large_workspace.py` generates from caffeine/Draft2021, and fails when typing in **Search studies** takes more than 100 ms to paint. On a busy machine, use fewer workers, for example `npm run test:curation-e2e -- --workers 4`. Run them from `frontend/`:
 
 ```bash
 npx playwright install --with-deps chromium
 npm run build:curation && npm run test:curation-e2e
 ```
+
+To run only the speed tests, use `npx playwright test --config playwright.curation.config.ts --project=speed --no-deps`; without `--no-deps`, Playwright first runs the project that the speed tests wait for, which is all other spec files. Continuous integration runs the speed tests in the job `curation-speed`, with one worker, and `curation-e2e` runs `npm run test:curation-e2e -- --project=chromium`, which leaves them out.
 
 `tools/curation_testing/make_fixture.py` draws the figure, the table images and the WebPlotDigitizer project of that fixture from its tables; run `uv run --project python python tools/curation_testing/make_fixture.py` from the repository root after changing them.
 

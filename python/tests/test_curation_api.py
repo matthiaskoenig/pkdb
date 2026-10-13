@@ -5,6 +5,8 @@ import os
 import re
 import sys
 import threading
+import time
+from collections import Counter
 from types import SimpleNamespace
 from unittest.mock import ANY
 from urllib.parse import quote
@@ -743,6 +745,172 @@ def test_state_etag(api):
         headers={**headers, "If-None-Match": response_headers["ETag"]},
     )
     assert changed[0] == 200 and changed[1]["ETag"] != response_headers["ETag"]
+
+
+STATE = "/local/state"
+
+
+def test_the_state_answers_304_until_the_engine_state_changes(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    status, response_headers, _ = request(server, "GET", STATE, headers=headers)
+    assert status == 200
+    etag = response_headers["ETag"]
+    again = request(server, "GET", STATE, headers={**headers, "If-None-Match": etag})
+    assert again[0] == 304 and again[2] == b""
+    with engine.lock:
+        engine.theme = "dark"
+    changed = request(server, "GET", STATE, headers={**headers, "If-None-Match": etag})
+    assert changed[0] == 200 and changed[1]["ETag"] != etag
+    assert json.loads(changed[2])["theme"] == "dark"
+
+
+def test_the_state_answers_304_across_watcher_ticks(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    for _ in range(2):
+        engine._watch_tick()
+    first = request(server, "GET", STATE, headers=headers)
+    assert first[0] == 200
+    conditional = {**headers, "If-None-Match": first[1]["ETag"]}
+    for _ in range(2):
+        engine._watch_tick()
+        assert request(server, "GET", STATE, headers=conditional)[0] == 304
+
+
+def test_the_state_is_built_once_per_revision_and_never_for_a_poll(api, monkeypatch):
+    server, engine, _ = api
+    headers = authenticate(server)
+    built = []
+    snapshot = engine.snapshot
+
+    def counted(*args, **kwargs):
+        built.append(1)
+        return snapshot(*args, **kwargs)
+
+    monkeypatch.setattr(engine, "snapshot", counted)
+    first = request(server, "GET", STATE, headers=headers)
+    second = request(server, "GET", STATE, headers=headers)
+    poll = request(
+        server, "GET", STATE, headers={**headers, "If-None-Match": first[1]["ETag"]}
+    )
+    assert (first[0], second[0], poll[0]) == (200, 200, 304)
+    assert second[2] == first[2] and len(built) == 1
+    with engine.lock:
+        engine.paused = True
+    request(server, "GET", STATE, headers=headers)
+    assert len(built) == 2
+
+
+def test_the_state_etag_changes_when_a_recent_workspace_disappears(api, tmp_path):
+    server, engine, _ = api
+    headers = authenticate(server)
+    gone = tmp_path / "gone"
+    gone.mkdir()
+    with engine.lock:
+        engine.recent_workspaces.append(str(gone))
+    etag = request(server, "GET", STATE, headers=headers)[1]["ETag"]
+    gone.rmdir()
+    status, _, data = request(
+        server, "GET", STATE, headers={**headers, "If-None-Match": etag}
+    )
+    assert status == 200
+    assert {"path": str(gone), "exists": False} in json.loads(data)["recent_workspaces"]
+
+
+def test_the_state_keeps_whether_a_recent_workspace_exists_as_its_version_has_it(
+    api, tmp_path, monkeypatch
+):
+    server, engine, _ = api
+    headers = authenticate(server)
+    mount = tmp_path / "mount"
+    mount.mkdir()
+    with engine.lock:
+        engine.recent_workspaces.append(str(mount))
+    snapshot = engine.snapshot
+
+    def unmounted_while_built(*args, **kwargs):
+        # The mount goes away while the state is built, and is back before the next poll.
+        mount.rmdir()
+        try:
+            return snapshot(*args, **kwargs)
+        finally:
+            mount.mkdir()
+
+    monkeypatch.setattr(engine, "snapshot", unmounted_while_built)
+    status, response_headers, data = request(server, "GET", STATE, headers=headers)
+    assert status == 200
+    monkeypatch.setattr(engine, "snapshot", snapshot)
+    poll = request(
+        server,
+        "GET",
+        STATE,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    kept = json.loads(data if poll[0] == 304 else poll[2])
+    assert {"path": str(mount), "exists": True} in kept["recent_workspaces"]
+
+
+def test_a_change_while_the_state_is_built_is_served_by_the_next_poll(api, monkeypatch):
+    server, engine, _ = api
+    headers = authenticate(server)
+    snapshot = engine.snapshot
+
+    def changed_after_the_read(*args, **kwargs):
+        state = snapshot(*args, **kwargs)
+        with engine.lock:
+            engine.theme = "dark"
+        return state
+
+    monkeypatch.setattr(engine, "snapshot", changed_after_the_read)
+    status, response_headers, data = request(server, "GET", STATE, headers=headers)
+    assert status == 200 and json.loads(data)["theme"] != "dark"
+    monkeypatch.setattr(engine, "snapshot", snapshot)
+    status, _, data = request(
+        server,
+        "GET",
+        STATE,
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert status == 200 and json.loads(data)["theme"] == "dark"
+
+
+def test_every_answer_of_the_state_holds_the_state_of_its_version(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    stop = threading.Event()
+
+    def change():
+        # Writing sections that change a field of the state, as the watcher and jobs do.
+        dark = False
+        while not stop.is_set():
+            dark = not dark
+            with engine.lock:
+                engine.theme = "dark" if dark else "light"
+            time.sleep(0.002)
+
+    writer = threading.Thread(target=change)
+    writer.start()
+    kept, etag, answers = None, None, Counter()
+    try:
+        for _ in range(300):
+            condition = {"If-None-Match": etag} if etag else {}
+            status, response_headers, data = request(
+                server, "GET", STATE, headers={**headers, **condition}
+            )
+            if status == 200:
+                kept, etag = json.loads(data), response_headers["ETag"]
+            assert status in {200, 304} and response_headers["ETag"] == etag
+            # The state as it is now, if the version is still the one of the answer.
+            with engine.lock.reading():
+                if f'"{engine.state_version().tag}"' == etag:
+                    current = {**engine.snapshot(), "csrf_token": server.csrf_token}
+                    assert kept == current
+                    answers[status] += 1
+    finally:
+        stop.set()
+        writer.join()
+    assert answers[200] and answers[304]
 
 
 def _detail(server, headers):
