@@ -52,17 +52,31 @@ def copies(source, root, count):
 
 
 def test_spawn_workers_overlap_and_checkpoint_before_put(
-    study_folder, vocabulary, tmp_path
+    study_folder, vocabulary, tmp_path, monkeypatch
 ):
+    from pkdb.cache import atomic_json as write
+
     folders = copies(study_folder, tmp_path / "sources", 4)
     report = tmp_path / "report.json"
     active = 0
     maximum = 0
     writes = []
+    errors = []
     lock = threading.Lock()
     # Set when two uploads are active at once. The timeout only bounds a hung
     # run: preparing a workbook in a spawned worker can take long under load.
     overlapped = threading.Event()
+    # The last report that upload_many wrote. The server checks it instead of
+    # reading report.json: on Windows, opening a file while another thread
+    # replaces it can fail, and a reader blocks the replace.
+    checkpoints = []
+
+    def checkpoint(path, value, **options):
+        write(path, value, **options)
+        with lock:
+            checkpoints.append(json.loads(json.dumps(value)))
+
+    monkeypatch.setattr("pkdb.batch.atomic_json", checkpoint)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format, *args):
@@ -79,10 +93,20 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
             self.reply(capabilities(vocabulary))
 
         def do_PUT(self):
+            try:
+                self.upload()
+            except BaseException as error:
+                # Fail the test with this error, and let the other upload go on.
+                errors.append(repr(error))
+                overlapped.set()
+                raise
+
+        def upload(self):
             nonlocal active, maximum
             self.rfile.read(int(self.headers["Content-Length"]))
             sid = self.path.rsplit("/", 1)[-1]
-            saved = json.loads(report.read_text())
+            with lock:
+                saved = checkpoints[-1]
             assert (
                 next(r for r in saved["results"] if r["sid"] == sid)["status"]
                 == "submitting"
@@ -119,6 +143,8 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
         server.shutdown()
         server.server_close()
         thread.join()
+    assert errors == []
+    assert "report_error" not in result
     assert maximum == 2
     assert len(writes) == 4
     assert all(row["ok"] for row in result["results"])
@@ -131,6 +157,7 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
             if row["sid"][-1] in "02"
             else f"http://127.0.0.1:{server.server_port}/api/v1/studies/{row['sid']}/"
         )
+    assert json.loads(report.read_text()) == checkpoints[-1]
     assert "secret" not in report.read_text()
 
 
@@ -225,10 +252,10 @@ def test_checkpoint_failure_prevents_dispatch(
     report = tmp_path / "report.json"
     writes = []
 
-    def checkpoint(path, value):
+    def checkpoint(path, value, **options):
         if any(row["status"] == "submitting" for row in value["results"]):
             raise OSError("disk full")
-        write(path, value)
+        write(path, value, **options)
 
     def handler(request):
         writes.append(request.method)
@@ -247,6 +274,54 @@ def test_checkpoint_failure_prevents_dispatch(
     assert writes == ["GET"]
     assert result["report_error"] == "disk full"
     assert result["results"][0]["persistence"] == "not_attempted"
+
+
+def test_checkpoint_waits_while_windows_locks_the_report(
+    study_folder, vocabulary, tmp_path, monkeypatch
+):
+    from pathlib import Path
+
+    report = tmp_path / "report.json"
+    replace = Path.replace
+    refused = []
+    methods = []
+
+    def locked(self, destination):
+        # Another program reads the report while the upload is submitted.
+        if (
+            Path(destination) == report
+            and len(refused) < 3
+            and "submitting" in self.read_text(encoding="utf-8")
+        ):
+            refused.append(destination)
+            raise PermissionError(13, "Permission denied", str(destination))
+        return replace(self, destination)
+
+    def handler(request):
+        methods.append(request.method)
+        if request.method == "PUT":
+            sid = request.url.path.rsplit("/", 1)[-1]
+            return httpx2.Response(
+                200, json=dict(sid=sid, created=True, digest="digest", counts={})
+            )
+        return httpx2.Response(200, json=capabilities(vocabulary))
+
+    monkeypatch.setattr("pkdb.cache._LOCKS_OPEN_FILES", True)
+    monkeypatch.setattr("pkdb.cache.Path.replace", locked)
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        result = upload_many(
+            [study_folder],
+            endpoint="https://example.test",
+            api_key="secret",
+            vocabulary=vocabulary,
+            transport=transport,
+            options=BatchOptions(report=report),
+        )
+    assert len(refused) == 3
+    assert "report_error" not in result
+    assert methods.count("PUT") == 1
+    assert result["results"][0]["status"] == "confirmed"
+    assert json.loads(report.read_text())["results"][0]["status"] == "confirmed"
 
 
 def test_unknown_mismatch_never_retries(study_folder, vocabulary, tmp_path):
