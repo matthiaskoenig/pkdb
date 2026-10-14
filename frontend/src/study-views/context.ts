@@ -76,7 +76,11 @@ export interface StudyViewData {
   table(file: string, signal?: AbortSignal): Promise<TableResponse>;
   /** The view of a source of the study: its image, raw extraction, mapped rows and plot. */
   source(name: string, signal?: AbortSignal): Promise<SourceView>;
-  /** The profiles of the curators that the page knows, such as the roster of the curation app. */
+  /**
+   * The profiles of the curators that the page knows, such as the roster of the curation app.
+   * Every view that names people calls it when it mounts, so the page loads them once and
+   * answers every call with that answer.
+   */
   curators(): Promise<Profile[]>;
   /** The location keys of the warnings acknowledged on this page that no later validation checked yet. */
   acknowledgedKeys: Readonly<Ref<readonly string[]>>;

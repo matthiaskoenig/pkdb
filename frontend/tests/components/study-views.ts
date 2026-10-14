@@ -75,6 +75,8 @@ export interface MemoryOptions {
 export function memoryData(options: MemoryOptions = {}): StudyViewData {
   const filters = shallowRef<ReadonlyMap<string, RowFilter>>(new Map());
   const missing = (name: string) => Promise.reject(new Error(`${name} could not be loaded.`));
+  // Loaded once, as every page answers the views that call it when they mount.
+  const curators = Promise.resolve(options.profiles ?? []);
   return {
     detail: shallowRef(options.detail ?? null),
     error: shallowRef<unknown>(null),
@@ -86,7 +88,7 @@ export function memoryData(options: MemoryOptions = {}): StudyViewData {
       const source = options.sources?.[name];
       return source ? Promise.resolve(source) : missing(name);
     },
-    curators: () => Promise.resolve(options.profiles ?? []),
+    curators: () => curators,
     acknowledgedKeys: shallowRef<readonly string[]>([]),
     rowFilter: (file) => filters.value.get(file) ?? ALL_ROWS,
     setRowFilter(file, filter) {

@@ -5,7 +5,7 @@
  * curation or a data import.
  */
 import type { Tone } from "./overview";
-import type { Provenance, ReferenceSummary } from "./types";
+import type { Provenance, ReferenceSummary, StudyReference } from "./types";
 
 export type ProvenanceKind = Provenance["kind"];
 
@@ -15,11 +15,34 @@ export const PROVENANCE_LABELS: Record<ProvenanceKind, string> = {
   data_import: "Data import",
 };
 
-/** A fact of a card: its name, its text, and the page that it links to. */
+/** A fact of a card: its name, its text, and the page that it links to with the name of the link. */
 export interface Fact {
   name: string;
   value: string;
   href?: string;
+  /** The accessible name of the link: what it opens and that it opens in a new tab. */
+  label?: string;
+}
+
+/** What the name of a link that opens in a new tab ends with. */
+export const NEW_TAB = "(opens in a new tab)";
+
+/**
+ * The identifiers of a reference as links: the PMID to PubMed, the DOI to doi.org. The parts of a
+ * DOI between its slashes are encoded whole, so that a `#` or `?` in a DOI stays part of it.
+ */
+export function identifierFacts(reference: StudyReference | undefined): Fact[] {
+  const facts: Fact[] = [];
+  const { pmid, doi } = reference ?? {};
+  if (pmid) {
+    const href = `https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
+    facts.push({ name: "PMID", value: pmid, href, label: `PubMed ${pmid} ${NEW_TAB}` });
+  }
+  if (doi) {
+    const href = `https://doi.org/${doi.split("/").map(encodeURIComponent).join("/")}`;
+    facts.push({ name: "DOI", value: doi, href, label: `DOI ${doi} ${NEW_TAB}` });
+  }
+  return facts;
 }
 
 export type ReferenceView =

@@ -11,7 +11,8 @@ import type { Profile, TableKind } from "../types";
  * opens and closes, with the header of the notes that the curation app edits there (TableNotes),
  * and the descriptions and the comments with their authors. Nothing shows for a kind without
  * notes. A link that names the notes (`focused`) opens them and moves the focus to their toggle,
- * once, which `took-focus` tells.
+ * once, which `took-focus` tells; for a kind without notes it tells it at once, as there is
+ * nothing to open, so that the page forgets the link.
  */
 const props = withDefaults(defineProps<{ kind: TableKind; focused?: boolean }>(), { focused: false });
 const emit = defineEmits<{ "took-focus": [] }>();
@@ -38,12 +39,14 @@ function authorName(user: string): string {
   return profileOf(profiles.value, user).display_name;
 }
 
-/** Open the notes that a link named and give their toggle the focus. */
+/** Open the notes that a link named and give their toggle the focus, once the study shows. */
 async function takeFocus(): Promise<void> {
-  if (!props.focused || !shown.value) return;
-  open.value = true;
-  await nextTick();
-  toggle.value?.focus();
+  if (!props.focused || !detail.value) return;
+  if (shown.value) {
+    open.value = true;
+    await nextTick();
+    toggle.value?.focus();
+  }
   emit("took-focus");
 }
 
@@ -56,7 +59,7 @@ onMounted(() => {
   void takeFocus();
 });
 watch(
-  () => props.focused,
+  () => props.focused && detail.value !== null,
   () => void takeFocus(),
 );
 </script>

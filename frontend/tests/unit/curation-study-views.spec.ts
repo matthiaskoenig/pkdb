@@ -36,7 +36,7 @@ describe("the study views of the curation app", () => {
     // Made before Pinia is active, as the plugin of tests/setup.ts makes it.
     const views = curationStudyViews();
     const state = snapshot({ studies: [studyRow()] });
-    serveApi({
+    const requests = serveApi({
       "GET /local/state": state,
       [`GET ${EXAMPLE}`]: studyDetail(),
       [`GET ${EXAMPLE}/tables/subjects.tsv`]: SUBJECTS,
@@ -54,6 +54,9 @@ describe("the study views of the curation app", () => {
     expect(views.data.validatesAfterWrite.value).toBe(validatesAfterWrite(state));
     expect(views.data.profiles.value.size).toBe(0);
     expect((await views.data.curators()).map((profile) => profile.username)).toEqual(["janekg", "mkoenig", "curator"]);
+    // Every view that names people asks when it mounts: the store answers them all with one load.
+    await Promise.all([views.data.curators(), views.data.curators()]);
+    expect(requests.filter(({ path }) => path === "/local/curators")).toHaveLength(1);
     expect([...views.data.profiles.value.keys()]).toEqual(["janekg", "mkoenig", "curator"]);
     views.data.setRowFilter("subjects.tsv", { kind: "source", source: "Tab2" });
     expect(useStudyStore().rowFilter("subjects.tsv")).toEqual({ kind: "source", source: "Tab2" });

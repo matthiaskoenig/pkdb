@@ -88,7 +88,8 @@ describe("the metadata of a study as text", () => {
       Version: "2026-10",
       "Run ID": "run-2026-10-07-01",
     });
-    expect(facts(wrapper, "Issue and release")).toEqual({ Release: "PKDB00198 · released 2026-09-28" });
+    expect(facts(wrapper, "Release")).toEqual({ Release: "PKDB00198 · released 2026-09-28" });
+    expect(wrapper.findAll("h3").map((heading) => heading.text())).not.toContain("Issue and release");
     expect(wrapper.text()).toContain("Plasma levels in µg/l.");
     expect(wrapper.get(".metadata-view-comment").text()).toContain("Checked against the PDF.");
     expect(wrapper.get(".metadata-view-author").text()).toBe("Matthias König");
@@ -120,7 +121,8 @@ describe("the metadata of a study as text", () => {
       const wrapper = view(detail([null, null], { issue: null, metadata }));
       expect(facts(wrapper, "People").Curators).toBe("Matthias König, Jan Grzegorzewski");
       expect(facts(wrapper, "Access and provenance")).toEqual({ Licence: "Closed", Access: "Public", Provenance: label });
-      expect(facts(wrapper, "Issue and release")).toEqual({ Release: "PKDB00198 · released 2026-09-28" });
+      expect(facts(wrapper, "Release")).toEqual({ Release: "PKDB00198 · released 2026-09-28" });
+      expect(wrapper.findAll("h3").map((heading) => heading.text())).not.toContain("Issue and release");
       expect(wrapper.text()).not.toMatch(/null|undefined|rating|#\d/);
       for (const card of wrapper.findAll("section")) expect(card.text()).not.toBe(card.get("h3").text());
     }
@@ -142,6 +144,33 @@ describe("the metadata of a study as text", () => {
     );
     await flushPromises();
     expect(wrapper.get(".metadata-view-author").text()).toBe("Rita Reviewer");
+  });
+
+  it("names each link by what it opens, in a new tab", () => {
+    const wrapper = view(detail([null, null]), CURATOR);
+    expect(wrapper.get('a[href="https://pubmed.ncbi.nlm.nih.gov/2895442/"]').attributes("aria-label")).toBe(
+      "PubMed 2895442 (opens in a new tab)",
+    );
+    expect(wrapper.get('a[href="https://doi.org/10.1007/BF00637675"]').attributes("aria-label")).toBe(
+      "DOI 10.1007/BF00637675 (opens in a new tab)",
+    );
+    expect(wrapper.get('a[href="https://github.com/matthiaskoenig/pkdb_data/issues/2158"]').attributes("aria-label")).toBe(
+      "Issue #2158 on GitHub (opens in a new tab)",
+    );
+    for (const link of wrapper.findAll("a")) {
+      expect(link.attributes("target")).toBe("_blank");
+      expect(link.attributes("rel")).toBe("noopener noreferrer");
+    }
+  });
+
+  it("encodes a DOI in its link, also with the characters that end a path", () => {
+    const doi = "10.1002/(SICI)1097-4636(199706)35:4<477::AID-JBM8>3.0.CO;2-#";
+    const value = fullStudyMetadata({ reference: { doi } });
+    const wrapper = view(detail([null, null], { metadata: { revision: null, value, issues: [] } }));
+    const link = wrapper.get('a[aria-label^="DOI "]');
+    expect(link.attributes("href")).toBe("https://doi.org/10.1002/(SICI)1097-4636(199706)35%3A4%3C477%3A%3AAID-JBM8%3E3.0.CO%3B2-%23");
+    expect(link.text()).toBe(doi);
+    expect(wrapper.find('a[aria-label^="PubMed "]').exists()).toBe(false);
   });
 
   it("says when study.json is not valid", () => {

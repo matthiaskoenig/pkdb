@@ -2,7 +2,15 @@
 import { computed, onMounted, ref, useId } from "vue";
 import { VCard, VCardItem, VCardText, VCardTitle, VChip } from "vuetify/components";
 import { useStudyViews } from "../context";
-import { PROVENANCE_LABELS, provenanceFacts, referenceMatch, referenceView, type Fact } from "../metadataView";
+import {
+  identifierFacts,
+  NEW_TAB,
+  PROVENANCE_LABELS,
+  provenanceFacts,
+  referenceMatch,
+  referenceView,
+  type Fact,
+} from "../metadataView";
 import { issueUrl } from "../overview";
 import { knownProfiles, profileOf, releaseLabel } from "../study";
 import type { Profile } from "../types";
@@ -12,7 +20,8 @@ import type { Profile } from "../types";
  * (MetadataSection.vue): the reference with its identifiers, the people (the ratings of the
  * curators when the page has them), the licence, access and provenance, the issue and the
  * release, and the descriptions and comments. The issue and the match of reference.json show
- * with the curation.
+ * with the curation; without it the card of the issue and the release is titled Release. Every
+ * link opens in a new tab and its name says what it opens.
  */
 const views = useStudyViews();
 const detail = views.data.detail;
@@ -35,13 +44,7 @@ const nameOf = (user: string) => profileOf(profiles.value, user).display_name;
 
 const reference = computed(() => referenceView(detail.value?.reference ?? null));
 const match = computed(() => referenceMatch(detail.value?.reference_match ?? null));
-const identifiers = computed<Fact[]>(() => {
-  const value = metadata.value?.reference;
-  return [
-    ...(value?.pmid ? [{ name: "PMID", value: value.pmid, href: `https://pubmed.ncbi.nlm.nih.gov/${value.pmid}/` }] : []),
-    ...(value?.doi ? [{ name: "DOI", value: value.doi, href: `https://doi.org/${value.doi}` }] : []),
-  ];
-});
+const identifiers = computed(() => identifierFacts(metadata.value?.reference));
 
 const people = computed<Fact[]>(() => {
   const value = detail.value?.people;
@@ -82,7 +85,8 @@ const release = computed<Fact[]>(() => {
       // The link goes to the issue that the card names, also when only study.json names it.
       const named = { issue: shown.issue, summary: { ...shown.summary, issue: number } };
       const href = issueUrl(named, views.data.repository.value);
-      facts.push({ name: "Issue", value: `#${number}`, ...(href ? { href } : {}) });
+      const link = href ? { href, label: `Issue #${number} on GitHub ${NEW_TAB}` } : {};
+      facts.push({ name: "Issue", value: `#${number}`, ...link });
     }
   }
   facts.push({ name: "Release", value: value?.release ? releaseLabel(value.release) : "Not released" });
@@ -92,7 +96,8 @@ const release = computed<Fact[]>(() => {
 const cards = computed(() => [
   { id: ids.people, title: "People", facts: people.value },
   { id: ids.access, title: "Access and provenance", facts: access.value },
-  { id: ids.release, title: "Issue and release", facts: release.value },
+  // The public never sees an issue, so its card names the release alone.
+  { id: ids.release, title: capabilities.value.curation ? "Issue and release" : "Release", facts: release.value },
 ]);
 </script>
 
@@ -120,7 +125,11 @@ const cards = computed(() => [
           <dl v-if="identifiers.length" class="panel-facts">
             <template v-for="fact in identifiers" :key="fact.name">
               <dt>{{ fact.name }}</dt>
-              <dd><a :href="fact.href" target="_blank" rel="noopener noreferrer">{{ fact.value }}</a></dd>
+              <dd>
+                <a :href="fact.href" :aria-label="fact.label" target="_blank" rel="noopener noreferrer">{{
+                  fact.value
+                }}</a>
+              </dd>
             </template>
           </dl>
         </VCardText>
@@ -134,7 +143,14 @@ const cards = computed(() => [
             <template v-for="fact in card.facts" :key="fact.name">
               <dt>{{ fact.name }}</dt>
               <dd>
-                <a v-if="fact.href" :href="fact.href" target="_blank" rel="noopener noreferrer">{{ fact.value }}</a>
+                <a
+                  v-if="fact.href"
+                  :href="fact.href"
+                  :aria-label="fact.label"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ fact.value }}</a
+                >
                 <template v-else>{{ fact.value }}</template>
               </dd>
             </template>

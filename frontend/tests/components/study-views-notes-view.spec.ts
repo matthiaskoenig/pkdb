@@ -25,6 +25,13 @@ const OUTPUTS: TableResponse = {
   rows: [{ line: 1, cells: ["Example", "Tab2", "caf_cl"] }],
 };
 
+const SUBJECTS: TableResponse = {
+  file: "subjects.tsv",
+  kind: "table",
+  header: ["study", "name", "source"],
+  rows: [{ line: 1, cells: ["Example", "all", "Tab2"] }],
+};
+
 function notes(props: Record<string, unknown>) {
   return mountViews(NotesView, {
     context: viewsContext({ capabilities: PUBLIC, data: memoryData({ detail: DETAIL }) }),
@@ -73,8 +80,13 @@ describe("the notes of a table kind, read only", () => {
     expect(wrapper.findComponent(NotesView).emitted("took-focus")).toHaveLength(1);
   });
 
-  it("show nothing for a kind without notes", () => {
+  it("show nothing for a kind without notes, and let a link that names them go at once", async () => {
     expect(notes({ kind: "subjects" }).find(".notes-view").exists()).toBe(false);
+    const linked = notes({ kind: "subjects", focused: true });
+    await flushPromises();
+    expect(linked.find(".notes-view").exists()).toBe(false);
+    expect(linked.findComponent(NotesView).emitted("took-focus")).toHaveLength(1);
+    expect(document.activeElement).toBe(document.body);
   });
 
   it("stand above the rows of the Data section of a page without edit", async () => {
@@ -90,6 +102,24 @@ describe("the notes of a table kind, read only", () => {
     const toggle = wrapper.get(".rows-pane .notes-view-toggle");
     expect(toggle.attributes("aria-expanded")).toBe("true");
     expect(document.activeElement).toBe(toggle.element);
+    expect(router.currentRoute.value.query.notes).toBeUndefined();
+  });
+
+  it("let the Data section forget a link to the notes of a kind without notes", async () => {
+    const router = websiteRouter();
+    await router.push("/data/caffeine/Example/data?file=subjects.tsv&notes=subjects");
+    const wrapper = mountViews(DataSection, {
+      context: viewsContext({ capabilities: PUBLIC, data: memoryData({ detail: DETAIL, tables: { "subjects.tsv": SUBJECTS } }) }),
+      plugins: [router],
+      stubs: { SourceOverlay: true, PaperViewer: true, SourcePane: true },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    const view = wrapper.findComponent(NotesView);
+    expect(view.props("kind")).toBe("subjects");
+    expect(view.emitted("took-focus")).toHaveLength(1);
+    expect(view.props("focused")).toBe(false);
+    expect(wrapper.find(".notes-view").exists()).toBe(false);
     expect(router.currentRoute.value.query.notes).toBeUndefined();
   });
 });
