@@ -63,6 +63,7 @@ def maybe_sent(job: dict) -> bool:
 #: The message of a queued job that the curator canceled, and of one that earlier versions
 #: canceled while keeping its message "Queued".
 CANCELED_BEFORE_START = "Canceled before it started"
+SUSPENDED_MESSAGE = "Upload on save suspended: connect an authorized account"
 
 #: The action of a job in a sentence.
 ACTION_NAMES = {
@@ -343,6 +344,8 @@ class JobsMixin(EngineState):
                 for row in self.studies.values():
                     if not row.get("_initial") and row["_resume_action"] is None:
                         row["_pending"] = False
+                        if row.get("message") == SUSPENDED_MESSAGE:
+                            row.pop("message", None)
                 self._save()
         return self.snapshot()
 

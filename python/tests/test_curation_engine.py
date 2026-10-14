@@ -1163,6 +1163,18 @@ def test_rows_that_scheduling_skips_get_their_workbook_planned(workspace):
     assert not engine.queue and item["message"].startswith("Upload on save suspended")
 
 
+def test_leaving_upload_clears_the_suspended_message_of_the_dropped_saves(workspace):
+    engine, _ = workspace
+    item = row(engine)
+    engine.save_modes[engine._context()] = "upload"
+    item["_initial"] = False
+    settle(engine)
+    assert item["message"].startswith("Upload on save suspended")
+    engine.set_mode("off")
+    assert item["_pending"] is False
+    assert not item.get("message")
+
+
 def test_a_paused_engine_plans_the_workbooks_of_pending_rows(workspace):
     engine, _ = workspace
     engine.set_paused(True)
