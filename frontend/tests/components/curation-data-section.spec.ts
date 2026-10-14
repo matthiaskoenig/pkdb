@@ -224,6 +224,23 @@ const outputs: TableResponse = {
     { line: 3, cells: ["Example", "Tab2", "caf_vd", "vd", "0.7", "", "l/kg", ""] },
   ],
 };
+
+/** outputs_Tab2.tsv with the subjects and interventions that its rows name. */
+const dosed: TableResponse = {
+  file: "outputs_Tab2.tsv",
+  kind: "table",
+  header: ["study", "source", "subjects", "interventions", "measurement", "mean"],
+  rows: [
+    { line: 1, cells: ["Example", "Tab2", "all", "D1", "cmax", "1.2"] },
+    { line: 2, cells: ["Example", "Tab2", "all", "D1", "tmax", "4.8"] },
+  ],
+};
+
+/** The lines of the names of the study: `all` is line 1 of subjects.tsv, which names the source Tab2. */
+const NAME_LINES: StudyDetail["name_lines"] = {
+  subjects: { file: "subjects.tsv", lines: { all: 1 } },
+  interventions: { file: "interventions.tsv", lines: { D1: 1 } },
+};
 /** A shared table: its rows name their source, and line 4 one that the study does not have. */
 const subjects: TableResponse = {
   file: "subjects.tsv",
@@ -942,6 +959,53 @@ describe("linked selection", () => {
     await mountSection(detail({ sources: [] }));
     expect(page().text()).toContain("The study has no sources yet.");
     expect(page().get(".nav-file[aria-current='true']").text()).toContain("subjects.tsv");
+  });
+});
+
+describe("links of names", () => {
+  it("follows a name to its row in a step of its own in the history, with the row of the link selected first", async () => {
+    await mountSection(detail({ name_lines: NAME_LINES }), { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed }, `${SECTION}?source=Tab2&file=outputs_Tab2.tsv`);
+    const replace = vi.spyOn(router, "replace");
+    const push = vi.spyOn(router, "push");
+    const row = rowsPane().findAll("tbody tr[data-index]")[1]!;
+    await row.findAll(".grid-link")[0]!.trigger("click");
+    await vi.waitFor(() => expect(push).toHaveBeenCalled());
+    await flushPromises();
+    // Back returns to line 2 of outputs_Tab2.tsv, selected as a click on it selects it.
+    expect(replace).toHaveBeenCalledWith({ query: { source: "Tab2", file: "outputs_Tab2.tsv", line: "2" } });
+    expect(push).toHaveBeenCalledWith({ query: { file: "subjects.tsv", line: "1" } });
+    expect(replace.mock.invocationCallOrder[0]!).toBeLessThan(push.mock.invocationCallOrder[0]!);
+    expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" });
+    // The rows pane shows subjects.tsv with line 1 selected beside the source that the row names.
+    expect(rowsPane().get("tr.grid-row--focus th").text()).toBe("1");
+    expect(page().get(".nav-source[aria-current='true'] .nav-name").text()).toBe("Tab2");
+  });
+
+  it("keeps the paper and its PDF when it follows a name while the paper shows", async () => {
+    const papers = [paperFile("Example.pdf"), paperFile("Example_Supp.pdf")];
+    await mountSection(
+      detail({ name_lines: NAME_LINES, papers }),
+      { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed },
+      `${SECTION}?source=paper&pdf=Example_Supp.pdf&file=outputs_Tab2.tsv`,
+    );
+    const push = vi.spyOn(router, "push");
+    await rowsPane().findAll("tbody tr[data-index]")[0]!.findAll(".grid-link")[1]!.trigger("click");
+    await vi.waitFor(() => expect(push).toHaveBeenCalled());
+    await flushPromises();
+    expect(push).toHaveBeenCalledWith({
+      query: { source: "paper", pdf: "Example_Supp.pdf", file: "interventions.tsv", line: "1" },
+    });
+  });
+
+  it("keeps replacing the address for the other changes of the selection", async () => {
+    await mountSection(detail({ name_lines: NAME_LINES }), { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed }, `${SECTION}?source=Tab2&file=outputs_Tab2.tsv`);
+    const push = vi.spyOn(router, "push");
+    await rowsPane().findAll("tbody tr[data-index]")[1]!.find("td").trigger("click");
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({ source: "Tab2", file: "outputs_Tab2.tsv", line: "2" }),
+    );
+    await flushPromises();
+    expect(push).not.toHaveBeenCalled();
   });
 });
 

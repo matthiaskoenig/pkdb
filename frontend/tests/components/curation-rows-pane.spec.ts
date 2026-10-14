@@ -150,4 +150,25 @@ describe("rows pane", () => {
     const order = [...wrapper.get("section").element.children].map((child) => child.classList[0]);
     expect(order).toEqual(["pane-head", "section-content", "rows-pane-notes", "table-grid"]);
   });
+
+  it("links the names in its rows to their rows, and passes a followed link on with the line of its row", async () => {
+    const outputs = studyDetail({
+      tables: [tableEntry("outputs_Tab2.tsv", "outputs")],
+      name_lines: {
+        subjects: { file: "subjects.tsv", lines: { all: 1 } },
+        interventions: { file: "interventions.tsv", lines: { D1: 3 } },
+      },
+    });
+    const table: TableResponse = {
+      file: "outputs_Tab2.tsv",
+      kind: "table",
+      header: ["study", "source", "subjects", "interventions"],
+      rows: [{ line: 4, cells: ["Example", "Tab2", "all", "D1"] }],
+    };
+    const wrapper = mountPane({ detail: outputs, rowsDetail: outputs, file: "outputs_Tab2.tsv", table });
+    expect(wrapper.findAll(".grid-link").map((link) => link.text())).toEqual(["all", "D1"]);
+    await wrapper.findAll(".grid-link")[1]!.trigger("click");
+    expect(wrapper.emitted("follow")).toEqual([[{ file: "interventions.tsv", line: 3 }, 4]]);
+    expect(wrapper.emitted("select-line")).toBeUndefined();
+  });
 });

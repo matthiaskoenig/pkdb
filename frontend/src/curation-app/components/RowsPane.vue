@@ -16,6 +16,7 @@ import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, vi
 import { infoColor, infoOutlined } from "../info";
 import { plural } from "../overview";
 import type { ActionFailure } from "../study";
+import type { NameLink } from "../links";
 import { kindLabel } from "../tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
@@ -31,7 +32,8 @@ import TableGrid from "./TableGrid.vue";
  * The pane shows the kind of its table in the color of its class of information, outlined for a
  * raw table, and its grid tints the columns by what they name. Its head wraps rather than
  * cut what it shows in a narrow pane, and the notes about the rows stand right above the grid
- * as sentences that wrap.
+ * as sentences that wrap. A name of a subject or an intervention in a cell links to its row; the
+ * pane passes the link on to the section.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -48,7 +50,12 @@ const props = defineProps<{
   filter: RowFilter;
   hideEmpty: boolean;
 }>();
-const emit = defineEmits<{ "select-line": [line: number]; retry: []; "update:filter": [filter: RowFilter] }>();
+const emit = defineEmits<{
+  "select-line": [line: number];
+  follow: [link: NameLink, line: number];
+  retry: [];
+  "update:filter": [filter: RowFilter];
+}>();
 defineSlots<{ default?: () => unknown }>();
 
 /** The table in the study page: its kind and class of information. */
@@ -221,9 +228,11 @@ const missingLine = computed(() => {
         :visible-lines="visible"
         :tinted="entry !== undefined"
         selectable
+        :names="detail.name_lines"
         :label="table.kind === 'raw' ? `Raw table ${table.file}` : `Rows of ${table.file}`"
         class="rows-pane-grid"
         @select-line="emit('select-line', $event)"
+        @follow="(link, line) => emit('follow', link, line)"
       />
     </template>
   </section>
