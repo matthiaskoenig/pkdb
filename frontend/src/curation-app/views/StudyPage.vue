@@ -47,9 +47,9 @@ import {
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
-  review: ReviewSection,
-  problems: ProblemsSection,
   data: DataSection,
+  problems: ProblemsSection,
+  review: ReviewSection,
   activity: ActivitySection,
 };
 

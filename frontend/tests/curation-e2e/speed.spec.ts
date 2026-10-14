@@ -21,6 +21,8 @@ const QUIET_MS = 3500;
 const QUIET_TIMEOUT_MS = 60_000;
 /** How long the polls are watched while jobs run. */
 const WATCH_MS = 10_000;
+/** How long the server may take after its start to queue the initial validations of the studies. */
+const JOBS_START_MS = 60_000;
 
 test.use({ studies: STUDIES });
 // The tests share the server through worker-scoped fixtures; playwright.curation.config.ts runs
@@ -145,25 +147,49 @@ test.beforeEach(async ({ app, page }) => {
   await expect(page.getByText(`${STUDIES.toLocaleString("en-US")} studies`, { exact: true })).toBeVisible();
 });
 
+/** Whether `response` answers a poll of the state with a changed state (200), not with 304. */
+function isChangedState(response: Response): boolean {
+  return new URL(response.url()).pathname === "/local/state" && response.status() === 200;
+}
+
+/** The jobs of the state in `response` that are queued or running. */
+async function unfinishedJobs(response: Response): Promise<number> {
+  const { jobs } = (await response.json()) as { jobs: { status: string }[] };
+  return jobs.filter((job) => job.status === "queued" || job.status === "running").length;
+}
+
 test("while jobs run, a poll never blocks the page for more than 200 ms", async ({ page }, testInfo) => {
-  // The initial validations of the 1,000 studies are the jobs. The load of the page is over after
-  // a few seconds; the polls are what is measured.
-  await page.waitForTimeout(QUIET_MS);
+  // The initial validations of the 1,000 studies are the jobs. The server queues them a few
+  // seconds after its start, later on a slower machine, and runs them one after another for much
+  // longer than the watch. So the watch starts once a poll shows them and the load of the page is
+  // over, not at a fixed time after the start: before the jobs, few polls change the state, and
+  // nothing would be measured.
+  const jobsQueued = page.waitForResponse(
+    async (response) => isChangedState(response) && (await unfinishedJobs(response)) > 0,
+    { timeout: JOBS_START_MS },
+  );
+  await Promise.all([jobsQueued, page.waitForTimeout(QUIET_MS)]);
   await installLatencyProbe(page);
   await resetLatency(page, false);
-  // A poll that changes the state is answered with 200: without any, nothing was measured.
-  let changing = 0;
+  // For each poll that changed the state, the jobs that it shows still to run.
+  const polls: Promise<number>[] = [];
   const count = (response: Response): void => {
-    if (response.url().endsWith("/local/state") && response.status() === 200) changing++;
+    if (isChangedState(response)) polls.push(unfinishedJobs(response));
   };
   page.on("response", count);
   await page.waitForTimeout(WATCH_MS);
   page.off("response", count);
   const { longTasks } = await readLatency(page);
+  const unfinished = await Promise.all(polls);
   await testInfo.attach("long-tasks.json", { body: JSON.stringify(longTasks), contentType: "application/json" });
   // The margin in the output of a passing run too: the attachments are kept only on failures.
-  console.log(`polls: ${changing} changed states, ${longTasks.length} long tasks, the longest ${Math.round(Math.max(0, ...longTasks))} ms`);
-  expect(changing, "polls that changed the state").toBeGreaterThanOrEqual(3);
+  console.log(
+    `polls: ${unfinished.length} changed states, ${longTasks.length} long tasks, ` +
+      `the longest ${Math.round(Math.max(0, ...longTasks))} ms; jobs left ${unfinished.join(", ")}`,
+  );
+  // The jobs ran through the whole watch, so every poll of it had a new state to load.
+  expect(unfinished.at(-1), "jobs left at the last poll that changed the state").toBeGreaterThan(0);
+  expect(unfinished.length, "polls that changed the state").toBeGreaterThanOrEqual(3);
   expect(Math.max(0, ...longTasks), JSON.stringify(longTasks)).toBeLessThanOrEqual(LONG_TASK_MS);
 });
 
