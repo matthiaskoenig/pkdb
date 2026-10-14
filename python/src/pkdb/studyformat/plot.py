@@ -7,6 +7,7 @@ safe in the threads of the curation server.
 """
 
 import math
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -41,6 +42,8 @@ def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
     return _side_by_side(study, view, path)
 
 
+# The most series that a legend lists; the figure still draws every series.
+LEGEND_LIMIT = 20
 DPI = 100
 # The space in pixels around and between the legends below the image of an overlay.
 STRIP_PAD = 8
@@ -192,29 +195,52 @@ def _overlay(study, view, path: Path) -> PlotResult:
         )
         if (segment := _error_segment(point, height)) is not None:
             axes.plot(*segment, color=base[point.series])
+    names, more = capped(series)
     handles = [
         Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
-        for name in series
+        for name in names
     ]
+    if more:
+        handles.append(_more_series(more))
     _legend_strip(figure, canvas.get_renderer(), width, height, [handles, _key()])
     _save(figure, path)
     return PlotResult(
         path,
         "overlay",
         tuple(mapped),
-        tuple(series),
+        tuple(names),
         tuple(sorted((name, base[name]) for name in drawn)),
         view.unmatched,
     )
 
 
-def _linestyle(kind: str) -> str:
+def _linestyle(kind: str) -> Literal["-", ""]:
     """Timecourse and outputs series as lines through their points by time, scatters as points."""
     return "" if kind == "scatters" else "-"
 
 
+def capped[T](items: Sequence[T], limit: int = LEGEND_LIMIT) -> tuple[list[T], int]:
+    """The first `limit` items and how many more there are."""
+    return list(items[:limit]), max(0, len(items) - limit)
+
+
+def axis_title(labels: Iterable[str | None]) -> str:
+    """The title of an axis for the labels of its series: the one that all share, else the
+    distinct ones (at most three, then "and N more") joined with " / "; empty without a label."""
+    shown, more = capped(list(dict.fromkeys(label for label in labels if label)), 3)
+    return " / ".join(shown) + (f" and {more} more" if more else "")
+
+
+def _more_series(count: int):
+    """An empty legend entry that counts the series beyond the limit."""
+    from matplotlib.lines import Line2D
+
+    return Line2D([], [], linestyle="", label=f"and {count} more series")
+
+
 def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
     from matplotlib.figure import Figure
+    from matplotlib.lines import Line2D
 
     series: dict[str, list] = {}
     for point in view.points:
@@ -227,7 +253,12 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
 
         left.imshow(imread(study.folder / view.image))
     left.axis("off")
+    # A series of one point is no line: all of them are drawn by two calls, so that a figure with a
+    # series per individual stays fast.
+    singles = [rows[0] for rows in series.values() if len(rows) == 1]
     for name, rows in series.items():
+        if len(rows) == 1:
+            continue
         right.errorbar(
             [p.x for p in rows],
             [p.y for p in rows],
@@ -235,19 +266,44 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
             marker="o",
             linestyle=_linestyle(rows[0].kind),
             color=styles[name].color,
-            label=name,
+        )
+    if singles:
+        colors = [styles[p.series].color for p in singles]
+        right.scatter([p.x for p in singles], [p.y for p in singles], color=colors)
+        bars = [
+            p for p in singles if p.error_low is not None or p.error_high is not None
+        ]
+        right.vlines(
+            [p.x for p in bars],
+            [p.y if p.error_low is None else p.error_low for p in bars],
+            [p.y if p.error_high is None else p.error_high for p in bars],
+            colors=[styles[p.series].color for p in bars],
         )
     if series:
-        first = styles[next(iter(series))]
-        right.set_xlabel(first.x_label or "")
-        right.set_ylabel(first.y_label or "")
-        right.legend()
+        right.set_xlabel(axis_title(styles[name].x_label for name in series))
+        right.set_ylabel(axis_title(styles[name].y_label for name in series))
+        names, more = capped(list(series))
+        handles = [
+            Line2D(
+                [],
+                [],
+                marker="o",
+                color=styles[name].color,
+                linestyle=_linestyle(series[name][0].kind),
+                label=name,
+            )
+            for name in names
+        ]
+        if more:
+            handles.append(_more_series(more))
+        # The default "best" place weighs every point, which is slow for many.
+        right.legend(handles=handles, loc="best" if not more else "upper right")
     figure.tight_layout()
     _save(figure, path)
     return PlotResult(
         path,
         "side_by_side",
-        legend=tuple(series),
+        legend=tuple(capped(list(series))[0]),
         colors=tuple(sorted((name, styles[name].color) for name in series)),
         unmatched=view.unmatched,
     )
