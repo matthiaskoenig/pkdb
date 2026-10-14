@@ -459,16 +459,60 @@ def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float]
 
 # The column that names the series of a timecourse or scatter row, as its dataset is named.
 SERIES_COLUMNS = {"timecourses": "label", "scatters": "name"}
+# The cells that name the series of an outputs row with a time, joined without the empty ones.
+OUTPUT_SERIES_COLUMNS = (
+    "subjects",
+    "interventions",
+    "measurement",
+    "substance",
+    "tissue",
+)
+OUTPUT_SERIES_SEPARATOR = " · "
+# The tables whose mapped rows the checks compare with the datasets of a project; outputs rows
+# with a time are plotted, but not compared.
+CHECKED_KINDS = ("timecourses", "scatters")
+
+
+def outputs_series(row: Row) -> str:
+    """The series of an outputs row: its subjects, interventions, measurement, substance and
+    tissue, joined with " · ", such as `all · D150 · concentration · caffeine · plasma`."""
+    return OUTPUT_SERIES_SEPARATOR.join(
+        cell for name in OUTPUT_SERIES_COLUMNS if (cell := row.cells.get(name, ""))
+    )
+
+
+def _series_name(table: LoadedTable, row: Row) -> str:
+    """The series of a row over time: the label of a timecourse row, `outputs_series` of an
+    outputs row."""
+    if table.kind == "outputs":
+        return outputs_series(row)
+    return row.cells.get(SERIES_COLUMNS["timecourses"], "")
+
+
+def _by_time(points: list[MappedPoint]) -> list[MappedPoint]:
+    """The points of each series by time and line, the series in the order of their first row."""
+    order = {
+        name: index
+        for index, name in enumerate(dict.fromkeys(p.dataset for p in points))
+    }
+    return sorted(points, key=lambda p: (order[p.dataset], p.x, p.line))
 
 
 def mapped_points(table: LoadedTable) -> list[MappedPoint]:
-    """The rows of a timecourse or scatter table as dataset points."""
+    """The rows of a timecourse or scatter table, and the outputs rows with a time, as dataset points.
+
+    A timecourse row is a point of the series of its `label`, an outputs row with a numeric
+    `time` one of its `outputs_series`, each at its time and its central value, with the
+    ends of its error bar and the digitized end of it as a point of `<series>;error_bar`; the
+    points of an outputs series are sorted by time. A scatter row is a point of the series of
+    its `name`.
+    """
     points: list[MappedPoint] = []
     for row in table.rows:
         values = row.values
-        if table.kind == "timecourses":
+        if table.kind in ("timecourses", "outputs"):
             time = values.get("time")
-            label = row.cells.get(SERIES_COLUMNS["timecourses"], "")
+            label = _series_name(table, row)
             column = central_column(row)
             if not isinstance(time, float) or column is None or not label:
                 continue
@@ -519,7 +563,7 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                         row.cells["y_mean"],
                     )
                 )
-    return points
+    return _by_time(points) if table.kind == "outputs" else points
 
 
 def _outside_image(
@@ -570,7 +614,7 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
         points = [
             point
             for table in study.tables
-            if table.source == digitization.source
+            if table.source == digitization.source and table.kind in CHECKED_KINDS
             for point in mapped_points(table)
         ]
         tables = {table.file: table for table in study.tables}
