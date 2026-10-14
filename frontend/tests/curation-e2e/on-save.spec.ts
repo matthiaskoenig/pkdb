@@ -62,6 +62,21 @@ test("On save in the top bar sets what a save does for every study", async ({ ap
     await page.keyboard.press("Escape");
     await expect(actions).toBeHidden();
 
+    // The keyboard keeps its focus on the chosen action while the change is in flight.
+    await page.getByRole("button", { name: "On save: Validate" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(actions).toBeVisible();
+    for (const [to, from] of [["Off", "Validate"], ["Validate", "Off"]] as const) {
+      const choice = actions.getByRole("button", { name: to, exact: true });
+      await choice.focus();
+      await page.keyboard.press("Enter");
+      await expect(choice).toHaveAttribute("aria-pressed", "true");
+      await expect(actions.getByRole("button", { name: from, exact: true })).toHaveAttribute("aria-pressed", "false");
+      await expect(choice).toBeFocused();
+    }
+    await page.keyboard.press("Escape");
+    await expect(actions).toBeHidden();
+
     // Off: a save marks the study as changed and starts no job.
     await setOnSave(page, "Validate", "Off");
     const jobs = await jobCount(page);
@@ -85,6 +100,7 @@ test("On save in the top bar sets what a save does for every study", async ({ ap
     expect(await jobCount(page)).toBeGreaterThan(jobs);
   } finally {
     writeFileSync(path, original);
+    await page.keyboard.press("Escape");
     if (await page.getByRole("button", { name: "On save: Off" }).isVisible()) await setOnSave(page, "Off", "Validate");
   }
 });

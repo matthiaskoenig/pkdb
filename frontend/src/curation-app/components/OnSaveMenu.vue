@@ -63,12 +63,12 @@ const stale = computed(() => overview.error !== null);
 const blocker = computed(() => uploadBlocker(props.snapshot));
 
 function disabled(value: SaveMode): boolean {
-  return stale.value || busy.value !== null || (value === "upload" && blocker.value !== null);
+  return stale.value || (value === "upload" && blocker.value !== null);
 }
 
 /** Set Validate or Off for every study; Upload goes through the confirmation of the header. */
 async function choose(value: SaveMode): Promise<void> {
-  if (value === props.snapshot.mode) return;
+  if (busy.value !== null || value === props.snapshot.mode) return;
   if (value === "upload") {
     open.value = false;
     emit("upload");
