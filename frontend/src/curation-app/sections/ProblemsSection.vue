@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef, useId, watch } from "vue";
-import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
+import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { VAlert, VChip, VChipGroup } from "vuetify/components";
 import { useStudyViews } from "../../study-views/context";
 import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../../study-views/types";
-import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import ProblemItem from "../components/ProblemItem.vue";
-import UserHint from "../components/UserHint.vue";
-import { useAction } from "../composables/useAction";
-import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../../study-views/overview";
 import {
   acknowledgement,
@@ -19,29 +13,36 @@ import {
   locationKey,
   noIssuesText,
   notesQuery,
-  openPlace,
+  openTablesKey,
   scopeText,
   SEVERITY_CHIPS,
   severityCounts,
   type SeverityFilter,
 } from "../../study-views/problems";
 import { targetParts } from "../../study-views/review";
-import { useOverviewStore } from "../stores/overview";
-import { useStudyStore } from "../stores/study";
 import { isLimitIssue, knownProfiles, profileOf, tableFiles } from "../../study-views/study";
-import { tablesOutcome } from "../local";
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the
  * tables, Open in tables, Open tables, and Acknowledge for warnings; below them the warnings that review items
- * acknowledge. A study beyond the upload limits names the limit first.
+ * acknowledge. A study beyond the upload limits names the limit first. The actions on the issues
+ * come from the page through the events and slots.
  */
-const study = useStudyStore();
-const overview = useOverviewStore();
+const props = withDefaults(defineProps<{ busy?: string | null; working?: boolean }>(), { busy: null, working: false });
+const emit = defineEmits<{
+  acknowledge: [issue: Problem, order: string[]];
+  validate: [];
+  "open-tables": [issue: Problem];
+}>();
+defineSlots<{
+  toolbar?: () => unknown;
+  status?: () => unknown;
+  "group-actions"?: (props: { file: string | null }) => unknown;
+  dialogs?: () => unknown;
+}>();
+
 const views = useStudyViews();
-const { notice, announce } = useNotice();
 const id = useId();
-const section = ref<HTMLElement | null>(null);
 
 const detail = views.data.detail;
 const identity = computed(() => detail.value?.id ?? "");
@@ -116,11 +117,6 @@ function notesOf(issue: ValidationIssue): Record<string, string> | null {
   return detail.value ? notesQuery(detail.value, issue) : null;
 }
 
-/** A file of the study that opens with the system; tables open in the workbook instead. */
-function openable(file: string | null): file is string {
-  return file !== null && !tables.value.has(file) && (detail.value?.files.includes(file) ?? false);
-}
-
 // Profiles: the roster, and the people of the study who are not in it.
 const roster = ref<Profile[]>([]);
 onMounted(() => {
@@ -165,108 +161,15 @@ function isPending(issue: ValidationIssue): boolean {
 /** Whether the server validates the study after the acknowledgement, or the curator does. */
 const automatic = views.data.validatesAfterWrite;
 
-const chosen = shallowRef<Problem | null>(null);
-const dialog = ref(false);
-/** Whether the dialog writes an acknowledgement; the other actions wait meanwhile. */
-const acknowledging = ref(false);
-/** The shown issues, in order, when the dialog opened: the place to move the focus to afterwards. */
-let order: string[] = [];
-
+/** Ask the page to acknowledge `issue`, with the shown issues in order for the focus afterwards. */
 function acknowledge(issue: Problem): void {
-  if (working.value) return;
-  chosen.value = issue;
-  order = groups.value.flatMap((group) => group.issues.map(locationKey));
-  dialog.value = true;
+  if (props.working) return;
+  emit("acknowledge", issue, groups.value.flatMap((group) => group.issues.map(locationKey)));
 }
-
-function acknowledgedWarning(issue: Problem): void {
-  // The acknowledgement covers exactly this warning. A validation that left it out already needs no mark.
-  const key = locationKey(issue);
-  if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
-  announce(`Warning ${issue.code} acknowledged.`);
-}
-
-/**
- * Where the focus goes when the dialog closed and the Acknowledge button of its warning went
- * away: the Acknowledge button of the next warning, else the heading of the file of the warning,
- * else the acknowledged warnings, else the heading of the section.
- */
-function afterAcknowledge(): HTMLElement | null | undefined {
-  const root = section.value;
-  const issue = chosen.value;
-  if (!root || !issue) return sectionHeading();
-  const key = locationKey(issue);
-  const items = [...root.querySelectorAll<HTMLElement>(".problem")];
-  const button = (item: HTMLElement | undefined) =>
-    item?.querySelector<HTMLButtonElement>(".problem-acknowledge:not([disabled])") ?? null;
-  const next = order
-    .slice(order.indexOf(key) + 1)
-    .map((later) => button(items.find((item) => item.dataset.key === later)))
-    .find((found) => found !== null);
-  const heading = [...root.querySelectorAll<HTMLElement>(".problem-group")]
-    .find((group) => group.dataset.file === (issue.source?.file ?? ""))
-    ?.querySelector<HTMLElement>(".problem-file");
-  return next ?? heading ?? root.querySelector<HTMLElement>(".problems-heading") ?? sectionHeading();
-}
-
-// Open tables and files
-
-/**
- * The action that runs: `tables`, `validate` or the file that opens; one at a time, and none
- * while an acknowledgement is written.
- */
-const { busy, working, failure, userText, run } = useAction<string>(announce, () => acknowledging.value);
-
-/** What to do in the workbook after an open found it open already; it stays until it is closed or the next open. */
-const openNotice = ref<string | null>(null);
-watch(identity, () => (openNotice.value = null));
-
-function openTables(): Promise<void> {
-  return run("tables", async () => {
-    openNotice.value = null;
-    const result = await study.tablesAction("open");
-    failure.value = tablesOutcome(result);
-    return result.opened ? "The workbook opened." : "";
-  });
-}
-
-/** The action of Open in tables of an issue, one per place. */
-function openKey(issue: ValidationIssue): string {
-  return `open:${locationKey(issue)}`;
-}
-
-/** Open the workbook at the sheet of the table of an issue, with its cell selected when it has one. */
-function openAt(issue: ValidationIssue): Promise<void> {
-  const place = openPlace(issue);
-  if (!place) return Promise.resolve();
-  return run(openKey(issue), async () => {
-    openNotice.value = null;
-    const result = await study.tablesAction("open", place);
-    failure.value = tablesOutcome(result);
-    openNotice.value = result.notice ?? null;
-    // The notice says what to do when the workbook could not be switched, so the status stays silent then.
-    return result.opened && !result.notice ? "The workbook opened." : "";
-  });
-}
-
-function validate(): Promise<void> {
-  return run("validate", async () => {
-    await overview.enqueue([identity.value], "validate");
-    return "Validation queued.";
-  });
-}
-
-function openFile(file: string): Promise<void> {
-  return run(file, async () => {
-    await overview.openFile(identity.value, file);
-    return `Opened ${file}.`;
-  });
-}
-
 </script>
 
 <template>
-  <div ref="section" class="problems">
+  <div class="problems">
     <VAlert v-if="limits.length" type="error" variant="tonal" density="compact" class="status-alert problems-limit">
       <p class="problems-alert-text">
         This study is beyond the upload limits. The app cannot show its tables and sources, and the study cannot be
@@ -302,44 +205,13 @@ function openFile(file: string): Promise<void> {
             {{ chip.label }}<span class="chip-count">{{ counts[chip.value] }}</span>
           </VChip>
         </VChipGroup>
-        <VBtn
-          variant="tonal"
-          color="primary"
-          prepend-icon="fas fa-table"
-          :disabled="working"
-          :loading="busy === 'tables'"
-          class="problems-open-tables"
-          @click="openTables"
-        >
-          Open tables
-        </VBtn>
+        <slot name="toolbar" />
       </div>
       <p v-if="omitted" class="problems-note problems-omitted">{{ omitted }}</p>
       <p v-if="blocked && acknowledgeable" class="problems-note problems-blocked">{{ blocked }}</p>
     </template>
 
-    <ActionFailureAlert
-      v-if="failure"
-      :failure="failure"
-      :study="identity"
-      class="problems-failure"
-      @close="failure = null"
-    />
-    <UserHint v-else-if="userText" :text="userText" />
-    <VAlert
-      v-if="openNotice"
-      type="info"
-      variant="tonal"
-      density="compact"
-      closable
-      role="status"
-      class="status-alert problems-open-notice"
-      @click:close="openNotice = null"
-    >
-      {{ openNotice }}
-    </VAlert>
-    <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
-    <span role="status" aria-live="polite" class="problems-notice">{{ notice }}</span>
+    <slot name="status" />
 
     <div v-if="groups.length" class="problems-groups">
       <section
@@ -354,20 +226,7 @@ function openFile(file: string): Promise<void> {
             <h3 :id="`${id}-${groupIndex}`" tabindex="-1" class="problem-file">{{ group.file ?? "Whole study" }}</h3>
             <span class="problem-group-counts">{{ groupCounts(group.all) }}</span>
           </div>
-          <VBtn
-            v-if="openable(group.file)"
-            variant="text"
-            size="small"
-            color="primary"
-            prepend-icon="fas fa-arrow-up-right-from-square"
-            :disabled="working"
-            :loading="busy === group.file"
-            :aria-label="`Open ${group.file}`"
-            class="problem-open"
-            @click="openFile(group.file)"
-          >
-            Open
-          </VBtn>
+          <slot name="group-actions" :file="group.file" />
         </div>
         <ul class="problem-list">
           <ProblemItem
@@ -383,11 +242,11 @@ function openFile(file: string): Promise<void> {
             :disabled="blocked !== null || working"
             :validating="busy === 'validate'"
             :opens-tables="showable(issue)"
-            :opening="busy === openKey(issue)"
+            :opening="busy === openTablesKey(issue)"
             :open-disabled="working"
-            @open-tables="openAt(issue)"
+            @open-tables="emit('open-tables', issue)"
             @acknowledge="acknowledge(issue)"
-            @validate="validate"
+            @validate="emit('validate')"
           />
         </ul>
       </section>
@@ -435,13 +294,7 @@ function openFile(file: string): Promise<void> {
       </ul>
     </section>
 
-    <AcknowledgeDialog
-      v-model="dialog"
-      v-model:busy="acknowledging"
-      :issue="chosen"
-      :fallback-focus="afterAcknowledge"
-      @acknowledged="acknowledgedWarning"
-    />
+    <slot name="dialogs" />
   </div>
 </template>
 
@@ -477,23 +330,10 @@ function openFile(file: string): Promise<void> {
 .problems-empty {
   font-size: 1rem;
 }
-.problems-notice {
-  font-size: 0.875rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* Empty, it stays in the page for screen readers but takes no gap. */
-.problems-notice:empty {
-  position: absolute;
-}
 .problems-groups {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-/* The text of the button lines up with the end of the bar. */
-.problem-open {
-  flex: 0 0 auto;
-  margin-inline-end: -8px;
 }
 .acknowledged {
   display: flex;

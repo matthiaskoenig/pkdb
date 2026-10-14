@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { VAlert, VBtn, VChip, VChipGroup, VSelect } from "vuetify/components";
+import { VAlert, VChip, VChipGroup, VSelect } from "vuetify/components";
 import { useStudyViews } from "../../study-views/context";
 import type { Profile, ReviewItem } from "../../study-views/types";
-import NewItemDialog from "../components/NewItemDialog.vue";
 import ReviewItemCard from "../components/ReviewItemCard.vue";
 import ReviewItemDetail from "../components/ReviewItemDetail.vue";
 import TargetView from "../components/TargetView.vue";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
-import UserHint from "../components/UserHint.vue";
-import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
 import {
   emptyText,
   filterItems,
@@ -22,8 +17,6 @@ import {
   type KindFilter,
   type StateFilter,
 } from "../../study-views/review";
-import { reviewFailure, type ReviewFailure } from "../reviewWrites";
-import { useStudyStore } from "../stores/study";
 import { knownProfiles, profileOf } from "../../study-views/study";
 
 /**
@@ -31,14 +24,24 @@ import { knownProfiles, profileOf } from "../../study-views/study";
  * selected item with its thread, its actions and its target. The selected item is the `item` of
  * the route, so that other sections can link to it; without one, the first shown item.
  *
- * Every write goes over the revision that the page read. One action runs at a time; a stale
- * revision reloads the items and asks to repeat the action.
+ * The page runs the actions on the selected item (`act`), with `busy` and `blocked` while it
+ * writes, and fills the slots: its tools after the Kind filter, what it says about the selected
+ * item, and its dialogs.
  */
-const study = useStudyStore();
+const props = withDefaults(defineProps<{ busy?: ItemAction | null; blocked?: boolean }>(), {
+  busy: null,
+  blocked: false,
+});
+const emit = defineEmits<{ act: [action: ItemAction, item: ReviewItem, text: string] }>();
+defineSlots<{
+  tools?: () => unknown;
+  detail?: (props: { item: ReviewItem | null }) => unknown;
+  dialogs?: () => unknown;
+}>();
+
 const route = useRoute();
 const router = useRouter();
 const views = useStudyViews();
-const { notice, announce } = useNotice();
 const detail = views.data.detail;
 
 const review = computed(() => detail.value?.review ?? null);
@@ -155,74 +158,24 @@ const draft = computed({
   },
 });
 
-/** The action on an item that runs; one write at a time, so that feedback and revisions never mix. */
-const busy = ref<ItemAction | null>(null);
-/** Whether the New item dialog writes a new item. */
-const adding = ref(false);
-/**
- * The failure of the last action; it stays until it is dismissed, the next action starts or
- * another item is selected.
- */
-const failure = ref<ReviewFailure | null>(null);
-const newItem = ref(false);
-
-watch(
-  () => selected.value?.id,
-  () => (failure.value = null),
-);
-
-const REFUSED: Record<ItemAction, string> = {
-  reply: "The reply was not posted.",
-  resolve: "The item was not resolved.",
-  dismiss: "The item was not dismissed.",
-  reopen: "The item was not reopened.",
-};
-
-/** What an action did; for an acknowledgement, also what became of its warning. */
-function doneText(action: ItemAction, item: ReviewItem): string {
-  const code = item.acknowledges;
-  switch (action) {
-    case "reply":
-      return "Reply posted.";
-    case "resolve":
-      return "Item resolved.";
-    case "dismiss":
-      return code ? `Item dismissed. Its warning ${code} is no longer acknowledged.` : "Item dismissed.";
-    case "reopen":
-      return code && item.state === "dismissed"
-        ? `Item reopened. It acknowledges ${code} again.`
-        : "Item reopened.";
-  }
-}
-
-async function act(action: ItemAction): Promise<void> {
+/** Ask the page to run `action` on the selected item, with its reply; the item stays selected after the write. */
+function act(action: ItemAction): void {
   const item = selected.value;
-  const revision = review.value?.revision;
-  if (!item || revision == null || busy.value !== null || adding.value) return;
+  if (!item || review.value?.revision == null || props.busy !== null || props.blocked) return;
   // A dismissed item has no reply box, so a draft left from before is not posted.
   const text = item.state === "dismissed" ? "" : (drafts.value[item.id] ?? "").trim();
   if (action === "reply" && !text) return;
-  busy.value = action;
-  failure.value = null;
-  announce("");
-  try {
-    // The item stays selected after the write, also when the filters hide it then.
-    select(item.id);
-    await study.reviewAction(revision, action, { item: item.id, ...(text ? { text } : {}) });
-    drafts.value = { ...drafts.value, [item.id]: "" };
-    announce(doneText(action, item));
-  } catch (caught) {
-    failure.value = reviewFailure(caught, REFUSED[action]);
-  } finally {
-    busy.value = null;
-  }
+  // The item stays selected after the write, also when the filters hide it then.
+  select(item.id);
+  emit("act", action, item, text);
 }
 
-function added(item: ReviewItem | null): void {
-  failure.value = null;
-  if (item) select(item.id, { show: true });
-  announce("Item added.");
+/** Forget the reply draft of the item `id`, after its page posted it. */
+function clearDraft(id: string): void {
+  drafts.value = { ...drafts.value, [id]: "" };
 }
+
+defineExpose({ selected, select, clearDraft });
 </script>
 
 <template>
@@ -268,15 +221,7 @@ function added(item: ReviewItem | null): void {
         </VChipGroup>
         <div class="review-tools">
           <VSelect v-model="kind" :items="KIND_FILTERS" label="Kind" hide-details class="review-kind" />
-          <VBtn
-            color="primary"
-            prepend-icon="fas fa-plus"
-            :disabled="!writable || approved || busy !== null"
-            class="review-new"
-            @click="newItem = true"
-          >
-            New item
-          </VBtn>
+          <slot name="tools" />
         </div>
       </div>
       <p v-if="approved" class="review-approved">
@@ -306,31 +251,17 @@ function added(item: ReviewItem | null): void {
             :profiles="profiles"
             :busy="busy"
             :writable="writable"
-            :blocked="adding"
+            :blocked="blocked"
             :can-reopen="!approved"
             @act="act"
           />
-          <VAlert
-            v-if="failure?.kind === 'conflict'"
-            type="warning"
-            variant="tonal"
-            density="compact"
-            closable
-            class="status-alert review-conflict"
-            @click:close="failure = null"
-          >
-            {{ failure.text }}
-          </VAlert>
-          <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-          <ActionFailureAlert v-else-if="failure" :failure="failure" :study="detail?.id ?? null" class="review-failure" @close="failure = null" />
-          <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
-          <span role="status" aria-live="polite" class="review-notice">{{ notice }}</span>
+          <slot name="detail" :item="selected" />
           <TargetView v-if="selected" :item="selected" />
         </div>
       </div>
     </template>
 
-    <NewItemDialog v-model="newItem" v-model:busy="adding" :fallback-focus="sectionHeading" @added="added" />
+    <slot name="dialogs" />
   </div>
 </template>
 
@@ -400,7 +331,8 @@ function added(item: ReviewItem | null): void {
     overflow-y: auto;
   }
   /* The cards keep their height in the limited column, which scrolls instead. */
-  .review-selected > * {
+  .review-selected > *,
+  .review-selected > :slotted(*) {
     flex-shrink: 0;
   }
 }
@@ -428,14 +360,6 @@ function added(item: ReviewItem | null): void {
    sticks (UnsavedBanner): the item scrolls to just below the banner. */
 :global(html:has(.unsaved-banner--sticky) .review-selected) {
   scroll-margin-top: 0;
-}
-.review-notice {
-  font-size: 0.875rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* Empty, it stays in the page for screen readers but takes no gap. */
-.review-notice:empty {
-  position: absolute;
 }
 /* On a phone the kind and New item share the line below the chips. */
 @media (max-width: 599.98px) {

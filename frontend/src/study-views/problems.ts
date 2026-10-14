@@ -282,3 +282,8 @@ export function locationKey(issue: ValidationIssue): string {
     source?.key ?? null,
   ]);
 }
+
+/** The action of Open in tables of an issue, one per place, which a page runs and its section shows as busy. */
+export function openTablesKey(issue: ValidationIssue): string {
+  return `open:${locationKey(issue)}`;
+}

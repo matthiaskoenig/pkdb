@@ -23,9 +23,9 @@ import { useSaveShortcut } from "../composables/useSaveShortcut";
 import { selectedNotesKind, selectionOf } from "../../study-views/data";
 import ActivitySection from "../sections/ActivitySection.vue";
 import CurationDataSection from "../sections/CurationDataSection.vue";
+import CurationProblemsSection from "../sections/CurationProblemsSection.vue";
+import CurationReviewSection from "../sections/CurationReviewSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
-import ProblemsSection from "../sections/ProblemsSection.vue";
-import ReviewSection from "../sections/ReviewSection.vue";
 import { formatTime } from "../../study-views/overview";
 import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
@@ -47,8 +47,8 @@ import { duplicateFolders, duplicateHeading, lastUploadUrl } from "../local";
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
   data: CurationDataSection,
-  problems: ProblemsSection,
-  review: ReviewSection,
+  problems: CurationProblemsSection,
+  review: CurationReviewSection,
   activity: ActivitySection,
 };
 
