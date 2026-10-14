@@ -1,1 +1,3 @@
 # Unreleased
+
+- The plot of mapped rows in the Data section of the local curation app and `pkdb plot` draw the error bar of each timecourse row from its reported statistics: the statistic that `error_type` names, else `sd`, else `se`, as the value minus and plus it, or the value divided and multiplied by a `gsd` around a `gmean`; a digitized `error_bar` without a statistic is mirrored around the value, as before. The bars can differ above and below the value, the overlay on the image draws the error bar of a mapped row from its low to its high end, and a log axis cuts a bar that reaches 0 or below at the axis (#958).
