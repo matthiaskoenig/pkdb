@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import type { ColumnClass, TableResponse, ValidationIssue } from "../api/types";
+import type { ColumnClass, NameKind, StudyNameLines, TableResponse, TableRow, ValidationIssue } from "../api/types";
 import { useCellTip } from "../composables/useCellTip";
 import {
   columnClass,
@@ -14,6 +14,7 @@ import {
   type CellIssues,
   type IssueCells,
 } from "../grid";
+import { cellParts, NAME_KINDS, namedKind, type CellPart, type NameLink } from "../links";
 import { problemsText } from "../problems";
 import ProblemTooltip from "./ProblemTooltip.vue";
 
@@ -47,6 +48,11 @@ const STEP = 10;
  * subjects, the interventions and the data in their colors, the header cells in a stronger tint
  * than the cells, and `study` and `source` muted, in italics and without a tint. A raw table
  * and a table without classes have no tint.
+ *
+ * A selectable grid that has the lines of the names (`names`) links each name in a column of
+ * names, such as `subjects`, `parent` or `interventions`, to its row: a click, or Enter on its
+ * focus, emits `follow` with the file and the line of the row and the line of its own row. The
+ * arrow keys Right and Left move from the line button of a row to its links and back.
  */
 const props = withDefaults(
   defineProps<{
@@ -76,6 +82,8 @@ const props = withDefaults(
     visibleLines?: ReadonlySet<number> | null;
     /** Whether the columns show the class of information that the table gives each of them. */
     tinted?: boolean;
+    /** The lines of the names of subjects.tsv and interventions.tsv: a selectable grid links the names in its cells to their rows. */
+    names?: StudyNameLines | null;
   }>(),
   {
     highlightLines: () => new Set<number>(),
@@ -91,9 +99,10 @@ const props = withDefaults(
     selectable: false,
     visibleLines: null,
     tinted: false,
+    names: null,
   },
 );
-const emit = defineEmits<{ "select-line": [line: number] }>();
+const emit = defineEmits<{ "select-line": [line: number]; follow: [link: NameLink, line: number] }>();
 const slots = defineSlots<{
   /** The content of the line cell of a row; its line by default. */
   line?: (props: { line: number }) => unknown;
@@ -117,13 +126,30 @@ const marked = computed(
 );
 /** The columns that stay when empty columns are hidden: marked, focused, or with a problem. */
 const kept = computed(() => keptColumns(props.issueCells, ...marked.value, props.focus?.column));
+/** Whether the names in the cells link to their rows: in a selectable grid that has their lines, not of a raw table. */
+const linking = computed(() => props.selectable && props.names !== null && !raw.value);
 const headers = computed(() =>
-  (props.columns ?? visibleColumns(props.table, props.hideEmpty, kept.value)).map((index) => ({
-    index,
-    name: columnName(props.table, index),
-    info: props.tinted ? columnClass(props.table, index) : null,
-  })),
+  (props.columns ?? visibleColumns(props.table, props.hideEmpty, kept.value)).map((index) => {
+    const name = columnName(props.table, index);
+    return {
+      index,
+      name,
+      info: props.tinted ? columnClass(props.table, index) : null,
+      links: linking.value ? namedKind(name) : null,
+    };
+  }),
 );
+
+/** The parts of a cell of a column of names: its names with their links and the text between them. */
+function partsOf(row: TableRow, column: { index: number; links: NameKind | null }): CellPart[] {
+  const text = row.cells[column.index] ?? "";
+  return column.links && props.names ? cellParts(text, props.names[column.links]) : [{ text, link: null }];
+}
+
+/** The id of the hidden text that says where the links of a kind go. */
+function linkNoteId(kind: NameKind): string {
+  return `${id}-to-${kind}`;
+}
 
 /** The class of a cell of a column of the class `info`, which gives it its tint or its italics. */
 function infoClass(info: ColumnClass | null): string | undefined {
@@ -524,12 +550,43 @@ const MOVES: Record<string, (index: number, last: number) => number> = {
   End: (_, last) => last,
 };
 
-/** Move the focus from the line cell of the shown row `index`, or its button, to the button of another row. */
+/**
+ * A key on a row of a selectable grid, from its line cell, its line button or a link of a name:
+ * Up and Down move to the line button of the row above or below, Home and End to that of the
+ * first or the last row, Right and Left along the line button and the links of the row. A cell
+ * of a column, such as one that the route focused, keeps its keys.
+ */
+async function onRowKey(event: KeyboardEvent, index: number): Promise<void> {
+  const row = event.currentTarget as HTMLElement;
+  const from = event.target instanceof Element ? event.target.closest<HTMLElement>(".rows-line, .grid-link") : null;
+  if (!from || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (!row.querySelector(".grid-line-button")) return;
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    moveAlong(event, row, from);
+    return;
+  }
+  await moveFocus(event, index);
+}
+
+/**
+ * Move the focus along the line button and the links of `row` in their order, one step from
+ * `from`, without wrapping; the line cell stands for its button. The view scrolls sideways to
+ * the link.
+ */
+function moveAlong(event: KeyboardEvent, row: HTMLElement, from: HTMLElement): void {
+  event.preventDefault();
+  const stops = [...row.querySelectorAll<HTMLElement>(".grid-line-button, .grid-link")];
+  const at = Math.max(0, stops.indexOf(from));
+  const next = stops[Math.min(stops.length - 1, Math.max(0, at + (event.key === "ArrowRight" ? 1 : -1)))];
+  if (!next || next === document.activeElement) return;
+  scrollToCell(next.closest<HTMLElement>("td, th") ?? next, true);
+  next.focus({ preventScroll: true });
+}
+
+/** Move the focus from the shown row `index` to the line button of another row. */
 async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   const move = MOVES[event.key];
-  const cell = event.currentTarget as HTMLElement;
-  if (!move || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-  if (!cell.querySelector(".grid-line-button")) return;
+  if (!move) return;
   event.preventDefault();
   const last = shownRows.value.length - 1;
   const next = Math.min(last, Math.max(0, move(index, last)));
@@ -607,6 +664,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
             :aria-rowindex="index + 2"
             :class="{ 'grid-row--target': highlightLines.has(row.line), 'grid-row--focus': row.line === focusLine }"
             @click="selectable && emit('select-line', row.line)"
+            @keydown="selectable && onRowKey($event, index)"
           >
             <th
               v-if="lines"
@@ -616,7 +674,6 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :tabindex="isFocus(row.line, null) ? -1 : undefined"
               :data-tip="lineTip(row.line)"
               :aria-describedby="described(highlightLines.has(row.line) && targetNote, rowNoteId(row.line))"
-              @keydown="selectable && moveFocus($event, index)"
             >
               <slot name="line" :line="row.line">
                 <button
@@ -641,9 +698,17 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               :tabindex="isFocus(row.line, column.name) ? -1 : undefined"
               :data-tip="tipOf(row.line, column.index)"
               :aria-describedby="described(notes.get(`${row.line}:${column.index}`)?.id)"
-            >
-              {{ row.cells[column.index] ?? "" }}
-            </td>
+            ><template v-if="column.links"><template v-for="(part, at) in partsOf(row, column)" :key="at"><button
+                    v-if="part.link"
+                    type="button"
+                    class="grid-link"
+                    :class="`grid-link--${column.links}`"
+                    tabindex="-1"
+                    :title="tipOf(row.line, column.index) ? undefined : `Line ${part.link.line} of ${part.link.file}`"
+                    :aria-describedby="described(linkNoteId(column.links), notes.get(`${row.line}:${column.index}`)?.id)"
+                    @focus="keyLine = row.line"
+                    @click.stop="emit('follow', part.link, row.line)"
+                  >{{ part.text }}</button><template v-else>{{ part.text }}</template></template></template><template v-else>{{ row.cells[column.index] ?? "" }}</template></td>
           </tr>
           <tr v-if="after" aria-hidden="true" class="grid-spacer" :style="{ height: `${after}px` }">
             <th v-if="lines" class="rows-line"></th>
@@ -655,6 +720,9 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
     <!-- What the marks mean, for screen readers; descriptions may name hidden elements. -->
     <div hidden>
       <span :id="targetNote">Targeted by an open review item.</span>
+      <template v-if="linking && names">
+        <span v-for="kind in NAME_KINDS" :id="linkNoteId(kind)" :key="kind">Goes to its row in {{ names[kind].file }}.</span>
+      </template>
       <span v-for="note in notes.values()" :id="note.id" :key="note.id">{{ note.text }}</span>
       <span v-for="[line, issues] in lineProblems" :id="lineNoteId(line)" :key="lineNoteId(line)">{{
         problemsText(issues)
@@ -784,6 +852,31 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .grid-line-button:focus-visible {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
+}
+/* A name that links to its row in subjects.tsv or interventions.tsv: the text of its cell in the
+   color of the cell, which keeps its contrast on every tint of a row, with a dotted line below it
+   in the color of the table that it opens; solid under the pointer and with the keyboard focus. */
+.grid-link {
+  all: unset;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.grid-link--subjects {
+  text-decoration-color: rgb(var(--v-theme-info-subjects));
+}
+.grid-link--interventions {
+  text-decoration-color: rgb(var(--v-theme-info-interventions));
+}
+.grid-link:hover,
+.grid-link:focus-visible {
+  text-decoration-style: solid;
+}
+.grid-link:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 1px;
+  border-radius: 2px;
 }
 /* A cell with a problem has an outline inside, which leaves the content and the lines in place,
    and a cell of the selected row the lines of its frame. Both are inset shadows, so that a

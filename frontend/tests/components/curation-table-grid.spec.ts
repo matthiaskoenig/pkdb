@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
-import type { ColumnClass, TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
+import type { ColumnClass, StudyNameLines, TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
 import { VTooltip } from "vuetify/components";
 import { TIP_DELAY, TIP_LINGER } from "../../src/curation-app/composables/useCellTip";
@@ -27,6 +27,23 @@ const small: TableResponse = {
     { line: 1, cells: ["Example", "Fig1", "caf_plasma_D150", "0.5", "2.419", ""] },
     { line: 2, cells: ["Example", "Fig1", "caf_plasma_D150", "1", "3.1", ""] },
     { line: 3, cells: ["Example", "Fig1", "caf_plasma_D75", "0.5", "1.2", ""] },
+  ],
+};
+
+/** The lines of the names of the subjects and the interventions, as the study page has them. */
+const NAMES: StudyNameLines = {
+  subjects: { file: "subjects.tsv", lines: { all: 1, S1: 2 } },
+  interventions: { file: "interventions.tsv", lines: { D1: 1, D2: 2 } },
+};
+
+/** Rows whose cells name subjects and interventions, known and unknown; `name` names no other row. */
+const named: TableResponse = {
+  file: "outputs_Tab2.tsv",
+  kind: "table",
+  header: ["study", "source", "subjects", "interventions", "measurement", "name"],
+  rows: [
+    { line: 1, cells: ["Example", "Tab2", "all", "D1,D2", "cmax", "all"] },
+    { line: 2, cells: ["Example", "Tab2", "S9", "D1, D9", "tmax", ""] },
   ],
 };
 
@@ -679,6 +696,64 @@ describe("selection and the line filter", () => {
   });
 });
 
+describe("links of names", () => {
+  /** The text and the title of each link of a row. */
+  function links(row: DOMWrapper<Element>): [string, string | undefined][] {
+    return row.findAll(".grid-link").map((entry) => [entry.text(), entry.attributes("title")]);
+  }
+
+  it("links each name of a column of names to its row, and leaves the other names and columns as text", () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES } });
+    const [first, second] = wrapper.findAll("tbody tr[data-index]");
+    expect(links(first!)).toEqual([
+      ["all", "Line 1 of subjects.tsv"],
+      ["D1", "Line 1 of interventions.tsv"],
+      ["D2", "Line 2 of interventions.tsv"],
+    ]);
+    // S9 and D9 are no rows of their tables.
+    expect(links(second!)).toEqual([["D1", "Line 1 of interventions.tsv"]]);
+    // The cells read as before, with their commas and spaces.
+    expect(first!.findAll("td").map((cell) => cell.text())).toEqual(["Example", "Tab2", "all", "D1,D2", "cmax", "all"]);
+    expect(second!.findAll("td")[3]!.text()).toBe("D1, D9");
+    expect(first!.findAll("td")[5]!.find(".grid-link").exists()).toBe(false);
+    for (const entry of wrapper.findAll(".grid-link")) {
+      expect(entry.element.tagName).toBe("BUTTON");
+      expect(entry.attributes("type")).toBe("button");
+      expect(entry.attributes("tabindex")).toBe("-1");
+    }
+    expect(wrapper.findAll(".grid-link").map((entry) => entry.classes().find((name) => name.startsWith("grid-link--")))).toEqual([
+      "grid-link--subjects",
+      "grid-link--interventions",
+      "grid-link--interventions",
+      "grid-link--interventions",
+    ]);
+  });
+
+  it("describes where a link goes", () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES }, attachTo: document.body });
+    const [subject, dose] = wrapper.findAll(".grid-link");
+    expect(description(subject!.element)).toBe("Goes to its row in subjects.tsv.");
+    expect(description(dose!.element)).toBe("Goes to its row in interventions.tsv.");
+  });
+
+  it("emits the link of a clicked name with the line of its row, and selects no row", async () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES } });
+    await wrapper.findAll(".grid-link")[2]!.trigger("click");
+    expect(wrapper.emitted("follow")).toEqual([[{ file: "interventions.tsv", line: 2 }, 1]]);
+    expect(wrapper.emitted("select-line")).toBeUndefined();
+  });
+
+  it("renders no links without the lines of the names, in a grid that is not selectable, or in a raw table", () => {
+    const printed: TableResponse = { file: "Example_Tab2.tsv", kind: "raw", rows: [{ line: 1, cells: ["all", "D1"] }] };
+    const cases: { table: TableResponse; selectable?: boolean; names?: StudyNameLines }[] = [
+      { table: named, selectable: true },
+      { table: named, names: NAMES },
+      { table: printed, selectable: true, names: NAMES },
+    ];
+    for (const props of cases) expect(mount(TableGrid, { props }).find(".grid-link").exists()).toBe(false);
+  });
+});
+
 describe("the keyboard in a selectable grid", () => {
   /** The tab indices of the line buttons in the order of the rows. */
   function stops(wrapper: VueWrapper): (string | undefined)[] {
@@ -741,6 +816,64 @@ describe("the keyboard in a selectable grid", () => {
     expect(stops(wrapper).filter((stop) => stop === "0")).toHaveLength(1);
     await press(document.activeElement!, "ArrowUp");
     expect(document.activeElement?.textContent?.trim()).toBe("4999");
+  });
+
+  it("moves from the line button to the links of its row and back with Right and Left, and on to other rows from a link", async () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES }, attachTo: document.body });
+    const links = (index: number) =>
+      wrapper.findAll("tbody tr[data-index]")[index]!.findAll<HTMLElement>(".grid-link").map((entry) => entry.element);
+    lineButton(wrapper, 1).element.focus();
+    await press(lineButton(wrapper, 1).element, "ArrowRight");
+    expect(document.activeElement).toBe(links(0)[0]);
+    await press(links(0)[0]!, "ArrowRight");
+    await press(links(0)[1]!, "ArrowRight");
+    expect(document.activeElement).toBe(links(0)[2]);
+    // Right stays at the last link and Left at the line button: no wrapping.
+    await press(links(0)[2]!, "ArrowRight");
+    expect(document.activeElement).toBe(links(0)[2]);
+    await press(links(0)[2]!, "ArrowLeft");
+    expect(document.activeElement).toBe(links(0)[1]);
+    // Down from a link moves to the line button of the next row, which becomes the Tab stop.
+    await press(links(0)[1]!, "ArrowDown");
+    expect(document.activeElement).toBe(lineButton(wrapper, 2).element);
+    expect(stops(wrapper)).toEqual(["-1", "0"]);
+    await press(lineButton(wrapper, 2).element, "ArrowRight");
+    expect(document.activeElement).toBe(links(1)[0]);
+    await press(links(1)[0]!, "ArrowLeft");
+    expect(document.activeElement).toBe(lineButton(wrapper, 2).element);
+    await press(lineButton(wrapper, 2).element, "ArrowLeft");
+    expect(document.activeElement).toBe(lineButton(wrapper, 2).element);
+    // A focused link makes its row the Tab stop. Moving selects and follows nothing; Enter and Space press the button.
+    links(0)[0]!.focus();
+    await flushPromises();
+    expect(stops(wrapper)).toEqual(["0", "-1"]);
+    expect(wrapper.emitted("select-line")).toBeUndefined();
+    expect(wrapper.emitted("follow")).toBeUndefined();
+  });
+
+  it("moves to the links from the line cell that the focus of the route focused", async () => {
+    const wrapper = mount(TableGrid, {
+      props: { table: named, selectable: true, names: NAMES, focus: { line: 1 } },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    const cell = wrapper.findAll("tbody tr")[0]!.get("th").element;
+    expect(document.activeElement).toBe(cell);
+    await press(cell, "ArrowRight");
+    expect(document.activeElement?.textContent).toBe("all");
+  });
+
+  it("leaves the keys of a cell that the route focused", async () => {
+    mount(TableGrid, {
+      props: { table: named, selectable: true, names: NAMES, focus: { line: 1, column: "measurement" } },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    const cell = document.activeElement as HTMLElement;
+    expect(cell.textContent?.trim()).toBe("cmax");
+    await press(cell, "ArrowRight");
+    await press(cell, "ArrowDown");
+    expect(document.activeElement).toBe(cell);
   });
 });
 
@@ -1048,5 +1181,37 @@ describe("the tooltip of the problems", () => {
     await flushPromises();
     expect(lines(wrapper)).not.toContain("4001");
     expect(shownTip()).toBeNull();
+  });
+
+  it("shows and describes the problems of an outlined cell when the keyboard reaches a link in it", async () => {
+    focusRing(true);
+    const table: TableResponse = {
+      file: small.file,
+      kind: "table",
+      header: ["study", "subjects"],
+      rows: [{ line: 1, cells: ["Example", "S9,all"] }],
+    };
+    const unknown: ValidationIssue = {
+      code: "unknown_reference",
+      severity: "error",
+      message: "subjects.tsv has no row named 'S9'",
+      source: { file: small.file, row: 1, header: "subjects" },
+    };
+    const wrapper = mount(TableGrid, {
+      props: { table, selectable: true, names: NAMES, issueCells: issueCells([unknown], small.file) },
+      attachTo: document.body,
+    });
+    const link = wrapper.get<HTMLElement>(".grid-link").element;
+    expect(link.textContent).toBe("all");
+    // The tooltip of the cell shows its problems: the link has no title of its own.
+    expect(link.title).toBe("");
+    expect(description(link)).toContain("Goes to its row in subjects.tsv.");
+    expect(description(link)).toContain("subjects.tsv has no row named 'S9'");
+    const button = wrapper.get<HTMLButtonElement>(".grid-line-button").element;
+    button.focus();
+    button.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.activeElement).toBe(link);
+    expect(shownTip()?.textContent).toContain("unknown_reference");
   });
 });
