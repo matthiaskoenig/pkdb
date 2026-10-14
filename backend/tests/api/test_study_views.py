@@ -243,9 +243,19 @@ def test_review_json_is_only_for_who_may_write_the_study(
 
 
 def test_an_upload_whose_page_cannot_be_built_keeps_the_study(
-    client, creator_headers, folder, session_factory, monkeypatch, caplog
+    client,
+    creator_headers,
+    folder,
+    session_factory,
+    ingestion_context,
+    monkeypatch,
+    caplog,
 ):
+    from fastapi.testclient import TestClient
+
+    from pkdb_server.app import create_app
     from pkdb_server.commands.views import stale_view_count
+    from pkdb_server.config import Settings
     from pkdb_server.services import study_views
 
     def broken(*args, **kwargs):
@@ -264,6 +274,21 @@ def test_an_upload_whose_page_cannot_be_built_keeps_the_study(
         assert stale_view_count(session) == 1
     [record] = [r for r in caplog.records if "caffeine/Example" in r.getMessage()]
     assert "KeyError" in record.getMessage() and record.exc_info
+    # The server counts the study when it starts.
+    ingestion, _ = ingestion_context
+    settings = Settings(
+        database_url=session_factory.kw["bind"].url.render_as_string(
+            hide_password=False
+        ),
+        file_root=ingestion.file_store.root,
+    )
+    caplog.clear()
+    with TestClient(create_app(settings)):
+        pass
+    assert (
+        "1 studies have no study page of this version; run pkdb-server rebuild-views"
+        in caplog.messages
+    )
 
 
 def test_the_row_counts_the_warnings_of_the_report(

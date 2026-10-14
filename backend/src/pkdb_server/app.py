@@ -124,7 +124,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             stale = 0
         if stale:
             log.warning(
-                "%d studies have study pages of an older version; run "
+                "%d studies have no study page of this version; run "
                 "pkdb-server rebuild-views",
                 stale,
             )

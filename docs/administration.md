@@ -88,7 +88,7 @@ Imports fill only empty fields that the account owner has not edited. If a title
 
 Run `pkdb-server cleanup` regularly to remove unreferenced avatar files after their grace period, expired credentials and leases, and old audit events. Back up the database and managed files together; see [Deployment](deployment.md).
 
-The server stores the study pages of the website with each study format 2 upload. When it starts, it logs the number of studies whose stored pages an older version built, or whose page could not be built at upload. Build them again with:
+The server stores the study pages of the website with each study format 2 upload. When it starts, it logs the number of studies that have no study page of this version: their stored pages an older version built, or their page could not be built at upload. Build them again with:
 
 ```bash
 docker compose exec backend pkdb-server rebuild-views
