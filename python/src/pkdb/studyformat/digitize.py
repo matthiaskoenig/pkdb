@@ -405,10 +405,10 @@ def _around(
     """The error bar of a reported statistic: the value ± sd or se, or the value ÷ gsd to the
     value × gsd around a gmean only."""
     if name == "gsd":
-        if column != "gmean" or statistic <= 0:
+        if column != "gmean" or value <= 0 or statistic < 1:
             return None
         return _ends(value / statistic, value * statistic)
-    return _ends(value - statistic, value + statistic)
+    return None if statistic < 0 else _ends(value - statistic, value + statistic)
 
 
 def _digitized(
@@ -428,20 +428,23 @@ def _digitized(
 
 
 def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float] | None:
-    """The low and the high end of the error bar of a row around its central value in `column`.
+    """The low and the high end of the error bar of a row around its value in `column`.
 
     The statistic that `error_type` names, as reported or as its digitized `error_bar` gives
-    it, else `sd`, else `se`, else a reported `gsd`, else the digitized `error_bar` mirrored around the value. `sd`
-    and `se` give the value ± the statistic, `gsd` the value ÷ gsd to the value × gsd around a
-    `gmean` only; a statistic that does not fit the value, or whose ends are not finite, falls
-    through to the next one. None without an error bar.
+    it, else around a `gmean` a reported `gsd`, else `sd`, else `se`, else the digitized
+    `error_bar` mirrored around the value. `sd` and `se` give the value ± the statistic,
+    `gsd` the value ÷ gsd to the value × gsd around a `gmean` only. A statistic that does
+    not fit the value (a negative `sd` or `se`, a `gsd` below 1, a `gsd` around a value at
+    or below 0), or whose ends are not finite, falls through to the next one. None without
+    an error bar.
     """
     value = values[column]
     assert isinstance(value, float)
     kind = values.get("error_type")
     named = kind if isinstance(kind, str) and kind in ERROR_TYPES else None
     bar = values.get("error_bar")
-    for name in dict.fromkeys(name for name in (named, "sd", "se", "gsd") if name):
+    order = ("gsd", "sd", "se") if column == "gmean" else ("sd", "se")
+    for name in dict.fromkeys(name for name in (named, *order) if name):
         statistic = values.get(name)
         if isinstance(statistic, float):
             ends = _around(value, column, name, statistic)

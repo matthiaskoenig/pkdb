@@ -85,8 +85,29 @@ def ends(column: str, **values: object) -> tuple[float, float] | None:
         pytest.param(
             "mean",
             {"mean": 2.0, "sd": -0.5},
-            (1.5, 2.5),
-            id="negative_sd_keeps_its_ends_in_order",
+            None,
+            id="negative_sd_gives_no_bar",
+        ),
+        pytest.param(
+            "mean",
+            {"mean": 2.0, "sd": -0.5, "se": 0.25},
+            (1.75, 2.25),
+            id="negative_sd_falls_through",
+        ),
+        pytest.param(
+            "gmean", {"gmean": 4.0, "gsd": 0.5}, None, id="gsd_below_1_does_not_fit"
+        ),
+        pytest.param(
+            "gmean",
+            {"gmean": 0.0, "gsd": 2.0, "sd": 1.0},
+            (-1.0, 1.0),
+            id="gmean_at_0_has_no_gsd_bar",
+        ),
+        pytest.param(
+            "gmean",
+            {"gmean": 4.0, "gsd": 2.0, "sd": 1.0},
+            (2.0, 8.0),
+            id="gsd_before_sd_around_a_gmean",
         ),
         pytest.param("mean", {"mean": 2.0}, None, id="no_statistic"),
         pytest.param(
