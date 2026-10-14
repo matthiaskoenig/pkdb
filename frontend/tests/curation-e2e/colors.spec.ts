@@ -37,6 +37,14 @@ test("subjects.tsv is blue but for study and source, which are muted in italics 
   await expect(study).toHaveCSS("font-style", "italic");
   await expect(study).toHaveCSS("color", MUTED);
   expectColor((await pixelStats(study)).dominant, WHITE);
+  // Inter is bundled, and with font-synthesis off the browser draws no slant of its own: the italic face must load.
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        [...document.fonts].some((font) => font.family.includes("Inter") && font.style === "italic" && font.status === "loaded"),
+      ),
+    )
+    .toBe(true);
   const studyHeader = rows.getByRole("columnheader", { name: "study", exact: true });
   await expect(studyHeader).toHaveCSS("font-style", "italic");
   expectColor((await pixelStats(studyHeader)).dominant, WHITE);
