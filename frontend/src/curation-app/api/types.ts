@@ -84,6 +84,18 @@ export type TableFileKind = TableKind | "raw";
 /** The class of information of a table, by which the Data section groups and colors it. */
 export type InfoClass = "subjects" | "interventions" | "data" | "raw";
 
+/** The tables whose rows the cells of other tables name: subjects.tsv and interventions.tsv. */
+export type NameKind = "subjects" | "interventions";
+
+/** The rows of the names of subjects.tsv or interventions.tsv: its file, and the line of each name (of its first row). */
+export interface NameLines {
+  file: string;
+  lines: Record<string, number>;
+}
+
+/** The lines of the names of subjects.tsv and interventions.tsv, by which a name in a cell links to its row. */
+export type StudyNameLines = Record<NameKind, NameLines>;
+
 /**
  * What a column of a table names, by which the Data section tints it: the subjects, the
  * interventions, the data, or `meta` for `study` and `source`, which say where a row comes from.
@@ -682,6 +694,8 @@ export interface StudyDetail {
    * it; empty beyond the upload limits.
    */
   targets: Record<string, TargetMatch>;
+  /** The line of each subject and intervention by name, by which a name in a cell links to its row; no names beyond the upload limits. */
+  name_lines: StudyNameLines;
 }
 
 /** A series of a figure with a WebPlotDigitizer project: the figure and the series name. */
@@ -930,6 +944,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "tables",
   "table_kinds",
   "targets",
+  "name_lines",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");

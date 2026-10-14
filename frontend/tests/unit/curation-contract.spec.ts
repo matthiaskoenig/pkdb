@@ -13,6 +13,7 @@ import type {
   SourceSummary,
   StudyRow,
   SourceView,
+  StudyDetail,
   Suggestion,
   TableEntry,
   TableKindEntry,
@@ -26,6 +27,7 @@ import { isSourceView, isTablePreview, isTablesResult, isTargetMatch } from "../
 import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
 import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
+import { cellParts, namedKind } from "../../src/curation-app/links";
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
 import { ApiError } from "../../src/curation-app/api/client";
@@ -51,6 +53,7 @@ import problemsFixture from "../fixtures/curation-contract/problems.json";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
+import nameLinesFixture from "../fixtures/curation-contract/name-lines.json";
 import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
@@ -436,5 +439,30 @@ describe("table content contract", () => {
   it("classes no column of a raw table", () => {
     expect(tables["Demo2020_Tab2.tsv"]!.kind).toBe("raw");
     expect(Object.values(classes("Demo2020_Tab2.tsv")).every((value) => value === null)).toBe(true);
+  });
+});
+
+describe("name lines contract", () => {
+  const names = contract<StudyDetail["name_lines"]>(nameLinesFixture.name_lines);
+  const table = contract<TableResponse>(nameLinesFixture.table);
+
+  it("links every subject and intervention that the cells of a table name to its row", () => {
+    const header = table.kind === "table" ? table.header : [];
+    const linked = header.flatMap((column, index) => {
+      const kind = namedKind(column);
+      return kind ? table.rows.flatMap((row) => cellParts(row.cells[index] ?? "", names[kind])) : [];
+    });
+    expect(linked.every((part) => part.link !== null)).toBe(true);
+    expect(new Set(linked.map((part) => `${part.text} ${part.link!.file}:${part.link!.line}`))).toEqual(
+      new Set(["all subjects.tsv:1", "D100 interventions.tsv:1", "D200 interventions.tsv:2"]),
+    );
+  });
+
+  it("names no lines beyond the upload limits", () => {
+    for (const detail of BEYOND_LIMITS)
+      expect(detail.name_lines).toEqual({
+        subjects: { file: "subjects.tsv", lines: {} },
+        interventions: { file: "interventions.tsv", lines: {} },
+      });
   });
 });
