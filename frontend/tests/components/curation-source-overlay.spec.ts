@@ -132,7 +132,7 @@ describe("SourceOverlay", () => {
     const host = wrapper.get('[role="img"]');
     expect(element).toBe(host.element);
     expect(host.attributes("aria-label")).toBe(
-      "Figure Fig1 with 1 digitized point and 1 mapped row of the series caf_plasma_D150",
+      "Figure Fig1 with 1 digitized point and 1 mapped row of the series \"caf_plasma_D150\"",
     );
     expect(traces).toEqual(expect.arrayContaining([expect.objectContaining({ meta: "mapped caf_plasma_D150" })]));
     expect(layout).toEqual(expect.objectContaining({ images: [expect.objectContaining({ sizex: 800, sizey: 600 })] }));
@@ -158,7 +158,7 @@ describe("SourceOverlay", () => {
     await flushPromises();
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
       "Figure Fig1 with 17 digitized points, 18 digitized error bar ends and 18 mapped rows " +
-        "of the series caf_plasma_100mg, caf_plasma_200mg",
+        "of the series \"caf_plasma_100mg\", \"caf_plasma_200mg\"",
     );
     expect(wrapper.get(".overlay-key").text()).toContain("Digitized error bar");
     const kinds = wrapper.findAll("details tbody tr").map((row) => row.findAll("td")[0]?.text());
@@ -298,6 +298,41 @@ describe("SourceOverlay", () => {
     expect(plot.text()).not.toContain("could not be loaded");
   });
 
+  it("lists 20 series in the legend and the name, counts the rest and quotes names with commas", async () => {
+    const names = Array.from({ length: 1307 }, (_, index) => `CAF,CHL,${index}`);
+    const many: SourceView = {
+      ...view,
+      mapped: [],
+      overlay: [],
+      unmatched: names,
+      series: names.map((name) => ({ name, color: "#123456", dark_color: "#654321", x_label: "time (h)", y_label: "y (mg)" })),
+      points: names.map((name, index) => ({
+        series: name,
+        kind: "outputs",
+        file: "outputs_Fig1.tsv",
+        line: index + 2,
+        x: 1,
+        y: 2,
+        error_low: null,
+        error_high: null,
+        x_text: "1",
+        y_text: "2",
+      })),
+    };
+    const wrapper = mount(SourceOverlay, { props: { view: many, mode: "plot" } });
+    await flushPromises();
+    const items = wrapper.findAll(".overlay-legend-item");
+    expect(items).toHaveLength(21);
+    expect(items[20]!.text()).toBe("and 1287 more series");
+    const label = wrapper.get('[role="img"]').attributes("aria-label")!;
+    expect(label.length).toBeLessThan(1000);
+    expect(label).toContain('of the series "CAF,CHL,0", "CAF,CHL,1"');
+    expect(label).toContain('"CAF,CHL,19" and 1287 more series');
+    expect(label).not.toContain("CAF,CHL,20");
+    // The table of the data keeps every row.
+    expect(wrapper.findAll("tbody tr")).toHaveLength(1307);
+  });
+
   it("plots the mapped rows of the series without a dataset in plot mode", async () => {
     const wrapper = mount(SourceOverlay, { props: { view, mode: "plot" } });
     await flushPromises();
@@ -305,7 +340,7 @@ describe("SourceOverlay", () => {
     expect(traces).toEqual([expect.objectContaining({ meta: "plot caf_plasma_D75", x: [0.5], y: [1.2] })]);
     expect(layout).not.toHaveProperty("images");
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
-      "Plot of 1 mapped row of Fig1 of the series caf_plasma_D75",
+      "Plot of 1 mapped row of Fig1 of the series \"caf_plasma_D75\"",
     );
     // The color of the source view; jsdom writes colors as rgb().
     expect(wrapper.get(".overlay-legend .overlay-swatch").attributes("style")).toContain(
@@ -385,7 +420,7 @@ describe("SourceOverlay", () => {
     // The key is hidden from screen readers, which read the rows with problems in the name of the plot.
     expect(wrapper.get(".overlay-key--problems").attributes("aria-hidden")).toBe("true");
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
-      "Plot of 1 mapped row of Fig1 of the series caf_plasma_D75, 1 row with problems",
+      "Plot of 1 mapped row of Fig1 of the series \"caf_plasma_D75\", 1 row with problems",
     );
     // The key draws the dashed ring of a warning.
     expect(wrapper.get(".overlay-key--problems circle").attributes("stroke-dasharray")).toBeTruthy();
@@ -457,7 +492,7 @@ describe("SourceOverlay", () => {
     expect(rings.map((entry) => [entry.meta, entry.x])).toEqual([["problem warning", [0.5]]]);
     expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with a warning");
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
-      "Plot of 2 mapped rows of Fig1 of the series caf_plasma_D150, caf_plasma_D75, with a log x axis, 1 row with problems",
+      "Plot of 2 mapped rows of Fig1 of the series \"caf_plasma_D150\", \"caf_plasma_D75\", with a log x axis, 1 row with problems",
     );
     // The data table lists every mapped row, also the one that the log axis leaves out, with its problems.
     expect(wrapper.findAll(".overlay-data tbody .overlay-problems").map((cell) => cell.text())).toEqual([
@@ -468,7 +503,7 @@ describe("SourceOverlay", () => {
     // On linear axes, both rows are drawn with their problems.
     await wrapper.setProps({ scales: { x: "linear", y: "linear" } });
     await flushPromises();
-    expect(wrapper.get('[role="img"]').attributes("aria-label")).toMatch(/caf_plasma_D75, 2 rows with problems$/);
+    expect(wrapper.get('[role="img"]').attributes("aria-label")).toMatch(/"caf_plasma_D75", 2 rows with problems$/);
     expect(wrapper.get(".overlay-key--problems").text()).toBe("Row with an error Row with a warning");
   });
 });

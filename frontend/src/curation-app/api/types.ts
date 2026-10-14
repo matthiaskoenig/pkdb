@@ -753,7 +753,7 @@ export interface SourcePoint {
   x: number;
   y: number;
   /**
-   * The low and the high end of the error bar of a timecourse row around `y`: the first statistic that
+   * The low and the high end of the error bar of a timecourse row or an outputs row with a time around `y`: the first statistic that
    * fits, the one that `error_type` names first (as reported or as the digitized `error_bar` gives it),
    * then around a `gmean` `gsd`, `sd`, `se`, and around a `mean` or `median` `sd`, `se`. A negative `sd`
    * or `se` or a `gsd` below 1 is skipped and the next statistic is tried; a row with no valid

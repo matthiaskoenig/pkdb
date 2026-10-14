@@ -7,6 +7,9 @@ import {
   digitizedScales,
   drawsOnImage,
   FADED,
+  axisTitle,
+  capped,
+  LEGEND_LIMIT,
   legendEntries,
   logAxes,
   logTicks,
@@ -314,7 +317,7 @@ describe("plotTraces", () => {
     expect(feces.marker?.color).toBe("#3c4d5e");
     // The axes of the first series, from the source view.
     expect(layout.xaxis).toEqual(expect.objectContaining({ title: { text: "time (h)", font: { size: 11 } }, fixedrange: true }));
-    expect(layout.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
+    expect(layout.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l) / amount (mg)", font: { size: 11 } }, fixedrange: true }));
   });
 
   it("plots only the series without a dataset of a digitized figure, with their labels", () => {
@@ -511,7 +514,7 @@ describe("the selected row", () => {
     expect(log.yaxis).toEqual(expect.objectContaining({ tickformat: "~g", exponentformat: "none" }));
     expect(log.xaxis.tickformat).toBeUndefined();
     // The titles and the compact axes stay.
-    expect(log.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)", font: { size: 11 } }, fixedrange: true }));
+    expect(log.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l) / amount (mg)", font: { size: 11 } }, fixedrange: true }));
   });
 
   it("leaves out the points at 0 or below of a log axis, with their error bars, hover texts and ring", () => {
@@ -998,5 +1001,40 @@ describe("loadNoncedPlotly", () => {
     expect(plotlyImport.attempt).toBe(1);
     await expect(loadNoncedPlotly()).rejects.toThrow("Failed to fetch");
     expect(plotlyImport.state).toBe("failed again");
+  });
+});
+
+describe("many series", () => {
+  const names = Array.from({ length: 45 }, (_, index) => `s${index}`);
+
+  it("caps a list at the limit and counts the rest", () => {
+    expect(LEGEND_LIMIT).toBe(20);
+    expect(capped(names)).toEqual({ shown: names.slice(0, 20), more: 25 });
+    expect(capped(names.slice(0, 20))).toEqual({ shown: names.slice(0, 20), more: 0 });
+    expect(capped(["a"], 3)).toEqual({ shown: ["a"], more: 0 });
+  });
+
+  it("titles an axis with the shared title, else the distinct ones, at most three", () => {
+    expect(axisTitle(["time (h)", "time (h)", null], "x")).toBe("time (h)");
+    expect(axisTitle(["a (kg)", "b (%)", "a (kg)"], "y")).toBe("a (kg) / b (%)");
+    expect(axisTitle(["a", "b", "c", "d", "e"], "y")).toBe("a / b / c and 2 more");
+    expect(axisTitle([null], "y")).toBe("y");
+    expect(axisTitle([], "x")).toBe("x");
+  });
+
+  it("titles the axes of a plot of series with different measurements by all of them", () => {
+    const view = {
+      ...figure(),
+      series: [
+        { name: "w", color: "#111111", dark_color: "#222222", x_label: "time (wk)", y_label: "weight change (kg)" },
+        { name: "h", color: "#333333", dark_color: "#444444", x_label: "time (wk)", y_label: "hba1c (percent)" },
+      ],
+      points: [mapped({ series: "w", line: 1, x: 1, y: 1 }), mapped({ series: "h", line: 2, x: 1, y: 2 })],
+      unmatched: ["w", "h"],
+      overlay: [],
+    } as SourceView;
+    const layout = plotTraces(view).layout;
+    expect(layout.xaxis.title).toEqual({ text: "time (wk)", font: { size: 11 } });
+    expect(layout.yaxis.title).toEqual({ text: "weight change (kg) / hba1c (percent)", font: { size: 11 } });
   });
 });

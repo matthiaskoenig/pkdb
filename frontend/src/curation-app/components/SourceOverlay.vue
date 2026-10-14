@@ -6,6 +6,7 @@ import type { SourceView, ValidationIssue } from "../api/types";
 import { plural } from "../overview";
 import {
   dataRows,
+  capped,
   drawsOnImage,
   legendEntries,
   LINEAR_SCALES,
@@ -127,8 +128,18 @@ const notDigitized = computed(
   () => shown.value === "overlay" && props.highlight != null && props.view.unmatched.includes(props.highlight),
 );
 
+/** The entries that the legend lists: the first ones, and the emphasized series even beyond them. */
+const listed = computed(() => {
+  const { shown, more } = capped(legend.value);
+  const extra = legend.value.find((entry) => entry.series === emphasized.value);
+  return { entries: extra && !shown.includes(extra) ? [...shown, extra] : shown, more: more - (extra && !shown.includes(extra) ? 1 : 0) };
+});
+
 const name = computed(() => {
-  const series = legend.value.map((entry) => entry.series).join(", ");
+  // Quoted, as names can contain commas; the names beyond the limit are only counted.
+  const names = capped(legend.value.map((entry) => `"${entry.series}"`));
+  const rest = names.more ? ` and ${names.more} more series` : "";
+  const series = names.shown.join(", ") + rest;
   const of = series ? ` of the series ${series}` : "";
   const emphasis = emphasized.value ? `, with ${emphasized.value} emphasized` : "";
   if (shown.value === "plot") {
@@ -326,7 +337,7 @@ onBeforeUnmount(() => {
 
       <ul v-if="legend.length" class="overlay-legend" aria-label="Series">
         <li
-          v-for="entry in legend"
+          v-for="entry in listed.entries"
           :key="entry.series"
           class="overlay-legend-item"
           :class="{
@@ -337,6 +348,7 @@ onBeforeUnmount(() => {
           <span class="overlay-swatch" :style="{ backgroundColor: entry.color }" aria-hidden="true"></span>
           {{ entry.series }}<span v-if="entry.series === emphasized" class="d-sr-only">, emphasized</span>
         </li>
+        <li v-if="listed.more" class="overlay-legend-item">and {{ listed.more }} more series</li>
       </ul>
       <p v-if="shown === 'overlay'" class="overlay-key" aria-hidden="true">
         <span class="overlay-key-item">

@@ -642,7 +642,8 @@ export interface PlotOptions {
 /**
  * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses and
  * outputs with a time as lines by time, with error bars from the low to the high end of each row
- * (`error_low`, `error_high`), scatters as points. With `highlight`, the other series fade. `scales` sets the type of each axis;
+ * (`error_low`, `error_high`), scatters as points. With `highlight`, the other series fade.
+ * `scales` sets the type of each axis;
  * a log axis leaves out the points at 0 or below, which `pointsOffScale` counts, and keeps their
  * series in the legend. Drawn points of rows with `rowProblems` (`plottedProblems`) get a ring in
  * the color of their worst problem, and their hover text lists the problems. A log axis keeps a
@@ -698,9 +699,9 @@ export function plotTraces(
       hoverlabel: { ...hoverLabel(theme, color), align: "left" },
     };
   });
-  // The axes of the first series, as `pkdb plot` labels them.
-  const first = styles.get(series[0] ?? "");
-  const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
+  // The axes of the series, as `pkdb plot` labels them.
+  const xTitle = axisTitle(series.map((name) => styles.get(name)?.x_label ?? null), "x");
+  const yTitle = axisTitle(series.map((name) => styles.get(name)?.y_label ?? null), "y");
   // The values that each axis draws: the points, and the ends of their error bars on the y axis.
   const drawn: Record<Axis, number[]> = {
     x: points.map((point) => point.x),
@@ -740,6 +741,28 @@ export function plotTraces(
       margin: { l: 48, r: 8, t: 8, b: 36, pad: 2 },
     },
   };
+}
+
+/** The most series that a legend or a name lists; the data table keeps every row. */
+export const LEGEND_LIMIT = 20;
+
+/** The first `limit` items and how many more there are. */
+export function capped<T>(items: readonly T[], limit = LEGEND_LIMIT): { shown: T[]; more: number } {
+  return { shown: items.slice(0, limit), more: Math.max(0, items.length - limit) };
+}
+
+/** The most distinct titles that an axis names. */
+const TITLE_LIMIT = 3;
+
+/**
+ * The title of an axis for the labels of its series: the one that all share, else the distinct
+ * ones (at most three, then "and N more"), joined with " / "; `fallback` without a label.
+ */
+export function axisTitle(labels: readonly (string | null)[], fallback: string): string {
+  const titles = unique(labels.filter((label): label is string => !!label));
+  const { shown, more } = capped(titles, TITLE_LIMIT);
+  if (!shown.length) return fallback;
+  return more ? `${shown.join(" / ")} and ${more} more` : shown.join(" / ");
 }
 
 /** The series of the legend with the colors of their marks. */

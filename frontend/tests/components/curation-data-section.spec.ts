@@ -633,7 +633,7 @@ describe("figure sources", () => {
     const overlays = wrapper.findAllComponents(OverlayStub);
     expect(overlays[0]?.props("view")).toEqual(digitized);
     expect(overlays[0]?.props("mode")).toBe("overlay");
-    expect(sourcePane().text()).toContain("Not digitized: caf_plasma_D75");
+    expect(sourcePane().text()).toContain("Not digitizedcaf_plasma_D75");
     // The rows without a dataset are drawn beside the figure.
     expect(overlays[1]?.props("mode")).toBe("plot");
     expect(overlays).toHaveLength(2);

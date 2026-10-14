@@ -37,9 +37,9 @@ function row(measurement: string, tissue: string, time: string, mean: string, un
 }
 
 /**
- * Fig2 as a time profile of a paper has it, curated as outputs, in the order of pkdb format: an
- * AUC without a time (line 1), the plasma series (lines 2 to 5, not in time order, the point at 2 h
- * with an sd) and the urine series (6 and 7).
+ * Fig2 as a time profile of a paper has it, curated as outputs, with the rows deliberately out of time
+ * order: an AUC without a time (line 1), the plasma series (lines 2 to 5, the point at 2 h with an sd)
+ * and the urine series (6 and 7).
  */
 const ROWS = [
   row("auc_inf", "plasma", "", "17", "mg/l*hr"),
@@ -102,7 +102,7 @@ test("the plot of a figure draws its outputs with a time as series by time, and 
   try {
     await app.open(FIG2);
     const pane = page.getByRole("region", { name: "Source Fig2" });
-    const plot = pane.getByRole("img", { name: new RegExp(`^Plot of 6 mapped rows of Fig2 of the series ${PLASMA}, ${URINE}`) });
+    const plot = pane.getByRole("img", { name: new RegExp(`^Plot of 6 mapped rows of Fig2 of the series "${PLASMA}", "${URINE}"`) });
     await expect(plot).toBeVisible();
     await expect(pane.getByRole("list", { name: "Series" })).toContainText(PLASMA);
     await expect
