@@ -37,6 +37,7 @@ import {
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { useStudyDraft } from "../composables/useStudyDraft";
 import { ALL_ROWS, type RowFilter } from "../../study-views/data";
+import { profileMap } from "../../study-views/study";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../acknowledging";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
@@ -63,6 +64,8 @@ export const useStudyStore = defineStore("curation-study", () => {
   // Aborts the table and source requests of the open study when it closes.
   let requests = new AbortController();
   let roster: Promise<Profile[]> | undefined;
+  /** The profiles of the roster by user name once `curators` loaded it (`profileMap`); empty before. */
+  const rosterProfiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
   /**
    * The warnings acknowledged in the app by study, until a report of a job queued after the
    * write arrives. They outlive the study page, so that the Problems section does not offer
@@ -167,7 +170,11 @@ export const useStudyStore = defineStore("curation-study", () => {
   /** The profiles of the bundled curator roster, loaded once. */
   function curators(): Promise<Profile[]> {
     roster ??= getJson("/local/curators", isCurators).then(
-      (result) => (result.status === 200 ? result.data.curators : []),
+      (result) => {
+        const list = result.status === 200 ? result.data.curators : [];
+        rosterProfiles.value = profileMap(list);
+        return list;
+      },
       (error: unknown) => {
         roster = undefined;
         throw error;
@@ -278,6 +285,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     table,
     source,
     curators,
+    profiles: computed(() => rosterProfiles.value),
     saveMetadata,
     reviewAction,
     tablesAction,

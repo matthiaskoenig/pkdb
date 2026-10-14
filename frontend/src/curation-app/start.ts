@@ -8,6 +8,7 @@ import { cspNonce } from "../study-views/csp";
 import { COMPACT_DEFAULTS } from "../study-views/density";
 import { makeRouter } from "./router";
 import { useOverviewStore } from "./stores/overview";
+import { studyViewsPlugin } from "./studyViews";
 import { CURATION_THEMES } from "./themes";
 import { makeVuetify } from "../plugins/vuetify";
 
@@ -46,6 +47,7 @@ export async function start(target: string | Element): Promise<VueApp> {
   const app = createApp(App)
     .use(pinia)
     .use(router)
+    .use(studyViewsPlugin)
     // The theme of the first paint; the state of the local server may change it later.
     .use(
       makeVuetify({ cspNonce: cspNonce(), defaultTheme: initialTheme(), defaults: COMPACT_DEFAULTS, themes: CURATION_THEMES }),
