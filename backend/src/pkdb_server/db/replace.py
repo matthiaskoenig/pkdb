@@ -13,12 +13,14 @@ from pkdb_server.db.models import studies as s
 from pkdb_server.db.models import subjects as g
 from pkdb_server.db.models.files import StudyAttachment
 from pkdb_server.db.models.users import User
+from pkdb_server.db.models.views import StudyView
 from pkdb_server.db.models.vocabulary import VocabularyNode
 
 
 def clear_children(session: Session, study_id: int) -> None:
     # Children with array memberships are removed before their referenced values.
     for model in (
+        StudyView,
         s.Note,
         s.StudyUser,
         StudyAttachment,

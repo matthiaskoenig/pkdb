@@ -40,6 +40,7 @@ from pkdb_server.services.authorization import (
     authorize,
     authorize_creation,
 )
+from pkdb_server.services.study_views import BuiltViews, build_views, store_views
 
 
 class PublicationConflict(ValueError):
@@ -499,10 +500,22 @@ class IngestionService:
             staged.append(file)
         timings["staging"] = time.monotonic() - started
         started = time.monotonic()
+        views = None
+        if isinstance(source, Path):
+            # The documents of the study page of the website, from the validated folder.
+            views = build_views(
+                source,
+                warnings=len(prepared.report.issues),
+                max_rows=self.settings.upload_max_rows,
+                max_files=self.settings.upload_max_files,
+            )
+        timings["views"] = time.monotonic() - started
+        started = time.monotonic()
         result = self._publish(
             prepared,
             principal,
             staged,
+            views=views,
             expected_vocabulary_hash=expected_vocabulary_hash,
             expected_processing_version=expected_processing_version,
         )
@@ -517,6 +530,7 @@ class IngestionService:
         *,
         expected_vocabulary_hash: str | None = None,
         expected_processing_version: str | None = None,
+        views: BuiltViews | None = None,
     ) -> ReplacementResult:
         for _ in range(LOCK_ATTEMPTS):
             try:
@@ -526,6 +540,7 @@ class IngestionService:
                     staged,
                     expected_vocabulary_hash=expected_vocabulary_hash,
                     expected_processing_version=expected_processing_version,
+                    views=views,
                 )
             except StudyChanged:
                 continue
@@ -539,6 +554,7 @@ class IngestionService:
         *,
         expected_vocabulary_hash: str | None = None,
         expected_processing_version: str | None = None,
+        views: BuiltViews | None = None,
     ) -> ReplacementResult:
         study = prepared.study
         try:
@@ -630,6 +646,8 @@ class IngestionService:
                 root.vocabulary_version = prepared.vocabulary_version
                 root.validation_report = prepared.report.model_dump(mode="json")
                 root.source_manifest = {"sections": list(study.section_notes)}
+                root.study_json = views.study_json if views else None
+                root.reference_json = views.reference_json if views else None
                 session.flush()
                 locked_files = []
                 for file in sorted(staged, key=lambda item: item.id):
@@ -649,6 +667,8 @@ class IngestionService:
                     locked_files.append(row)
                 replace.clear_children(session, root.id)
                 replace.insert_graph(session, root, study)
+                if views is not None:
+                    store_views(session, root.id, views)
                 if created:
                     # Source contributor metadata never grants access implicitly.
                     session.add(
