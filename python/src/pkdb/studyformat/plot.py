@@ -13,7 +13,7 @@ from typing import Literal
 
 from pkdb.studyformat.colors import POINT_RING
 from pkdb.studyformat.load import LoadedStudy
-from pkdb.studyformat.sources import SourceView, source_view
+from pkdb.studyformat.sources import OverlayPoint, SourcePoint, SourceView, source_view
 
 
 @dataclass(frozen=True)
@@ -118,6 +118,30 @@ def _legend_strip(figure, renderer, width: int, height: int, rows: list[list]) -
         top -= legend_height + STRIP_PAD
 
 
+def _error_segment(point: OverlayPoint) -> tuple[list[float], list[float]] | None:
+    """The x and the y pixels of the error bar of a mapped point, from its low to its high end.
+
+    An end without a pixel, off a log axis, is the point itself; None without an error bar.
+    """
+    if point.error_low_px is None and point.error_high_px is None:
+        return None
+    low = point.error_low_px or (point.px, point.py)
+    high = point.error_high_px or (point.px, point.py)
+    return [low[0], high[0]], [low[1], high[1]]
+
+
+def _error_ranges(rows: list[SourcePoint]) -> list[list[float]] | None:
+    """The distances from each point down to the low and up to the high end of its error bar,
+    as matplotlib takes them: 0 without an error bar, None when no point has one."""
+    if all(p.error_low is None and p.error_high is None for p in rows):
+        return None
+    below = [0.0 if p.error_low is None else max(0.0, p.y - p.error_low) for p in rows]
+    above = [
+        0.0 if p.error_high is None else max(0.0, p.error_high - p.y) for p in rows
+    ]
+    return [below, above]
+
+
 def _overlay(study, view, path: Path) -> PlotResult:
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     from matplotlib.figure import Figure
@@ -159,12 +183,8 @@ def _overlay(study, view, path: Path) -> PlotResult:
             linewidths=2,
             color=base[point.series],
         )
-        if point.error_px is not None:
-            axes.plot(
-                [point.px, point.error_px[0]],
-                [point.py, point.error_px[1]],
-                color=base[point.series],
-            )
+        if (segment := _error_segment(point)) is not None:
+            axes.plot(*segment, color=base[point.series])
     handles = [
         Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
         for name in series
@@ -196,13 +216,10 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
         left.imshow(imread(study.folder / view.image))
     left.axis("off")
     for name, rows in series.items():
-        error = [
-            abs(p.error_bar - p.y) if p.error_bar is not None else 0.0 for p in rows
-        ]
         right.errorbar(
             [p.x for p in rows],
             [p.y for p in rows],
-            yerr=error if any(error) else None,
+            yerr=_error_ranges(rows),
             marker="o",
             linestyle="-" if rows[0].kind == "timecourses" else "",
             color=styles[name].color,

@@ -98,10 +98,13 @@ def test_points_are_the_mapped_rows_in_the_units_of_their_table(
     view = source_view(
         load_study(with_error_bars(make_study, valid_files, tsv)), "Fig1"
     )
-    assert [(p.series, p.line, p.x, p.y, p.error_bar) for p in view.points] == [
-        ("drug_plasma", 1, 0.0, 0.0, None),
-        ("drug_plasma", 2, 1.0, 2.5, 3.0),
-        ("drug_urine", 4, 2.0, 4.0, None),
+    assert [
+        (p.series, p.line, p.x, p.y, p.error_low, p.error_high) for p in view.points
+    ] == [
+        ("drug_plasma", 1, 0.0, 0.0, None, None),
+        # The digitized end of an error bar of type sd, mirrored around the mean.
+        ("drug_plasma", 2, 1.0, 2.5, 2.0, 3.0),
+        ("drug_urine", 4, 2.0, 4.0, None, None),
     ]
     # The hover shows the cells as printed, after pkdb format.
     assert [(p.x_text, p.y_text) for p in view.points] == [
@@ -333,3 +336,68 @@ def test_the_scales_of_several_axes(make_study, valid_files, log_x, change, expe
     change(data)
     view = figure_view(make_study, valid_files, data)
     assert (view.log_x, view.log_y) == expected
+
+
+def test_points_carry_the_error_bars_of_their_statistics(make_study, valid_files, tsv):
+    rows = [
+        {**TIMECOURSE, "time": "0", "mean": "2", "sd": "0.5"},
+        {**TIMECOURSE, "time": "1", "mean": "2", "se": "0.25"},
+        {**TIMECOURSE, "label": "drug_gmean", "time": "1", "gmean": "4", "gsd": "2"},
+    ]
+    folder = make_study(
+        {**valid_files, "timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    )
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    assert [(p.series, p.y, p.error_low, p.error_high) for p in view.points] == [
+        ("drug_gmean", 4.0, 2.0, 8.0),
+        ("drug_plasma", 2.0, 1.5, 2.5),
+        ("drug_plasma", 2.0, 1.75, 2.25),
+    ]
+
+
+def test_mapped_overlay_points_carry_the_pixels_of_their_error_bar_ends(
+    make_study, valid_files, tsv
+):
+    folder = with_error_bars(
+        make_study,
+        valid_files,
+        tsv,
+        **{
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(project(GOOD)),
+        },
+    )
+    view = source_view(load_study(folder), "Fig1")
+    mapped = {p.line: p for p in view.overlay if p.role == "mapped"}
+    # 2.5 at 1 h is pixel (10, 75); its bar from 2 to 3 goes from pixel 80 up to pixel 70.
+    assert (mapped[2].px, mapped[2].py) == (10.0, 75.0)
+    assert (mapped[2].error_low_px, mapped[2].error_high_px) == (
+        (10.0, 80.0),
+        (10.0, 70.0),
+    )
+    assert (mapped[1].error_low_px, mapped[1].error_high_px) == (None, None)
+    assert all(
+        (p.error_low_px, p.error_high_px) == (None, None)
+        for p in view.overlay
+        if p.role == "raw"
+    )
+
+
+def test_an_error_bar_end_off_a_log_axis_has_no_pixel(make_study, valid_files, tsv):
+    # 2 ± 3 on a log y axis from 1 to 100: the low end -1 has no pixel.
+    rows = [{**TIMECOURSE, "time": "1", "mean": "2", "sd": "3"}]
+    folder = make_study(
+        {
+            **valid_files,
+            "timecourses_Fig1.tsv": tsv("timecourses", *rows),
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(scaled_project(log_y=True)),
+        }
+    )
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    assert [(p.error_low, p.error_high) for p in view.points] == [(-1.0, 5.0)]
+    [mapped] = [p for p in view.overlay if p.role == "mapped"]
+    assert mapped.error_low_px is None
+    assert mapped.error_high_px is not None and mapped.error_high_px[1] < mapped.py

@@ -276,6 +276,14 @@ def test_source_contract(workspace, engine_on):
     }
     # The project of Fig1 has linear axes.
     assert (view["log_x"], view["log_y"]) == (False, False)
+    # Every row of Fig1 has a digitized error bar end of type sd, mirrored around its mean.
+    for point in view["points"]:
+        assert point["error_high"] - point["y"] == pytest.approx(
+            point["y"] - point["error_low"]
+        )
+    mapped = [p for p in view["overlay"] if p["role"] == "mapped"]
+    assert mapped and all(p["error_low_px"] and p["error_high_px"] for p in mapped)
+    assert "error_bar" not in view["points"][0] and "error_px" not in mapped[0]
     check_contract("source-fig1", view)
 
 

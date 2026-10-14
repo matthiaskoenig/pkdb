@@ -10,8 +10,8 @@ from pkdb.studyformat.colors import SERIES_COLORS
 from pkdb.studyformat.digitize import png_size
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.load import load_study
-from pkdb.studyformat.plot import render_source
-from pkdb.studyformat.sources import source_view
+from pkdb.studyformat.plot import _error_ranges, _error_segment, render_source
+from pkdb.studyformat.sources import OverlayPoint, SourcePoint, source_view
 
 RED = (255, 0, 0)
 
@@ -280,3 +280,55 @@ def test_side_by_side_colors_only_the_series_it_draws(
     result = render_source(study, "Fig1", tmp_path / "Fig1.png")
     assert result.mode == "side_by_side"
     assert dict(result.colors) == {"drug_plasma": view.series[0].color}
+
+
+def source_point(y, low, high):
+    return SourcePoint(
+        "drug_plasma",
+        "timecourses",
+        "timecourses_Fig1.tsv",
+        1,
+        1.0,
+        y,
+        low,
+        high,
+        "1",
+        str(y),
+    )
+
+
+def test_side_by_side_draws_the_error_bars_of_the_source_view():
+    # Down to the low end and up to the high end; 0 at a point without an error bar.
+    rows = [source_point(4.0, 2.0, 8.0), source_point(5.0, None, None)]
+    assert _error_ranges(rows) == [[2.0, 0.0], [4.0, 0.0]]
+    assert _error_ranges([source_point(5.0, None, None)]) is None
+
+
+def overlay_point(low, high):
+    return OverlayPoint(
+        series="drug_plasma",
+        role="mapped",
+        px=10.0,
+        py=50.0,
+        x=1.0,
+        y=5.0,
+        file="timecourses_Fig1.tsv",
+        line=1,
+        error_low_px=low,
+        error_high_px=high,
+        x_text="1",
+        y_text="5",
+    )
+
+
+def test_overlay_draws_the_error_bar_of_a_mapped_row_from_its_low_to_its_high_end():
+    assert _error_segment(overlay_point((10.0, 60.0), (10.0, 40.0))) == (
+        [10.0, 10.0],
+        [60.0, 40.0],
+    )
+    # An end without a pixel, off a log axis, is the cross of the row.
+    assert _error_segment(overlay_point(None, (10.0, 40.0))) == (
+        [10.0, 10.0],
+        [50.0, 40.0],
+    )
+    assert _error_segment(overlay_point(None, None)) is None
