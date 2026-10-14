@@ -88,6 +88,15 @@ describe("data navigator", () => {
     expect(styles[3]).toContain("--info: var(--v-theme-info-data)");
     expect(styles[5]).toContain("--info: var(--v-theme-info-raw)");
     expect(wrapper.findAll(".nav-file .nav-bar").every((bar) => bar.attributes("aria-hidden") === "true")).toBe(true);
+    // The raw extraction has no tint: its bar is an outline.
+    expect(wrapper.findAll(".nav-file .nav-bar").map((bar) => bar.classes().includes("nav-bar--outlined"))).toEqual([
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+    ]);
   });
 
   it("shows a long table name without .tsv, cut at its end, and names it in full in its title and for screen readers", () => {

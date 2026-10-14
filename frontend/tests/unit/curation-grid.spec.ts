@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { SourceLocation, TableResponse, TargetMatch, ValidationIssue } from "../../src/curation-app/api/types";
+import type { ColumnClass, SourceLocation, TableResponse, TargetMatch, ValidationIssue } from "../../src/curation-app/api/types";
 import {
+  columnClass,
   columnName,
   HEADER_LINE,
   issueCells,
@@ -191,5 +192,21 @@ describe("rawTable", () => {
         { line: 2, cells: ["b", "c"] },
       ],
     });
+  });
+});
+
+describe("column classes", () => {
+  it("gives the class of a column of a table by its index, and none for a raw table or a table without classes", () => {
+    const classes: ColumnClass[] = ["meta", "meta", "data", "data", "data", "data"];
+    const classed: TableResponse = {
+      file: "outputs_Tab2.tsv",
+      kind: "table",
+      header: ["study", "source", "label", "mean", "sd", "comment"],
+      classes,
+      rows: [],
+    };
+    expect([0, 1, 2, 5, 6].map((index) => columnClass(classed, index))).toEqual(["meta", "meta", "data", "data", null]);
+    expect(columnClass(outputs, 0)).toBeNull();
+    expect(columnClass(raw, 0)).toBeNull();
   });
 });

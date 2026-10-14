@@ -2,7 +2,7 @@
  * The parts of a table grid: its columns, the rows that open review items target, the cells with
  * problems, and the raw extraction of a source as a table.
  */
-import type { ReviewItem, TableResponse, TargetMatch, ValidationIssue } from "./api/types";
+import type { ColumnClass, ReviewItem, TableResponse, TargetMatch, ValidationIssue } from "./api/types";
 import { columnLetters } from "./columns";
 
 // Columns
@@ -16,6 +16,11 @@ export function columnCount(table: TableResponse): number {
 /** The name of a column: its header in a table, its letter in the sheet of a raw table. */
 export function columnName(table: TableResponse, index: number): string {
   return (table.kind === "table" ? table.header[index] : undefined) ?? columnLetters(index);
+}
+
+/** The class of a column of a table as the local server classes it; null for a raw table and for a table without classes. */
+export function columnClass(table: TableResponse, index: number): ColumnClass | null {
+  return (table.kind === "table" ? table.classes?.[index] : undefined) ?? null;
 }
 
 /**

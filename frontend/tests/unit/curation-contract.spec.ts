@@ -13,10 +13,12 @@ import type {
   SourceSummary,
   StudyRow,
   SourceView,
+  StudyDetail,
   Suggestion,
   TableEntry,
   TableKindEntry,
   TablePreview,
+  TableResponse,
   TablesResult,
   TargetMatch,
   ValidationIssue,
@@ -24,7 +26,8 @@ import type {
 import { isSourceView, isTablePreview, isTablesResult, isTargetMatch } from "../../src/curation-app/api/types";
 import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
-import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
+import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
+import { cellParts, namedKind } from "../../src/curation-app/links";
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
 import { ApiError } from "../../src/curation-app/api/client";
@@ -50,9 +53,11 @@ import problemsFixture from "../fixtures/curation-contract/problems.json";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
 import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgements.json";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
+import nameLinesFixture from "../fixtures/curation-contract/name-lines.json";
 import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
+import tableContentFixture from "../fixtures/curation-contract/table-content.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 import targetsFixture from "../fixtures/curation-contract/targets.json";
@@ -395,5 +400,70 @@ describe("open tables contract", () => {
   it("opens a problem of the validation at the place that the local server takes", () => {
     const mismatch = contract<Problem[]>(problemsFixture.validated).find((issue) => issue.code === "digitized_mismatch");
     expect(openPlace(mismatch!)).toEqual({ file: openTablesFixture.request.file, cell: openTablesFixture.request.cell });
+  });
+});
+
+describe("table content contract", () => {
+  const tables = contract<Record<string, TableResponse>>(tableContentFixture);
+  /** The class of each column of `file` by its name. */
+  const classes = (file: string) => {
+    const table = tables[file]!;
+    return Object.fromEntries(
+      Array.from({ length: columnCount(table) }, (_, index) => [columnName(table, index), columnClass(table, index)]),
+    );
+  };
+
+  it("classes the columns of a table of the data by what they name", () => {
+    expect(classes("outputs_Tab2.tsv")).toMatchObject({
+      study: "meta",
+      source: "meta",
+      subjects: "subjects",
+      interventions: "interventions",
+      measurement: "data",
+      mean: "data",
+      comment: "data",
+    });
+  });
+
+  it("classes every column of the tables of the subjects and the interventions but study and source as the table", () => {
+    for (const [file, info] of [
+      ["subjects.tsv", "subjects"],
+      ["characteristica.tsv", "subjects"],
+      ["interventions.tsv", "interventions"],
+    ] as const) {
+      const { study, source, ...others } = classes(file);
+      expect([study, source]).toEqual(["meta", "meta"]);
+      expect(new Set(Object.values(others))).toEqual(new Set([info]));
+    }
+  });
+
+  it("classes no column of a raw table", () => {
+    expect(tables["Demo2020_Tab2.tsv"]!.kind).toBe("raw");
+    expect(Object.values(classes("Demo2020_Tab2.tsv")).every((value) => value === null)).toBe(true);
+  });
+});
+
+describe("name lines contract", () => {
+  const names = contract<StudyDetail["name_lines"]>(nameLinesFixture.name_lines);
+  const table = contract<TableResponse>(nameLinesFixture.table);
+
+  it("links every subject and intervention that the cells of a table name to its row", () => {
+    const header = table.kind === "table" ? table.header : [];
+    const linked = header.flatMap((column, index) => {
+      const kind = namedKind(column);
+      return kind ? table.rows.flatMap((row) => cellParts(row.cells[index] ?? "", names[kind])) : [];
+    });
+    expect(linked.every((part) => part.link !== null)).toBe(true);
+    expect(new Set(linked.map((part) => `${part.text} ${part.link!.file}:${part.link!.line}`))).toEqual(
+      new Set(["all subjects.tsv:1", "D100 interventions.tsv:1", "D200 interventions.tsv:2"]),
+    );
+  });
+
+  it("names no lines beyond the upload limits", () => {
+    for (const detail of BEYOND_LIMITS)
+      expect(detail.name_lines).toEqual({
+        subjects: { file: "subjects.tsv", lines: {} },
+        interventions: { file: "interventions.tsv", lines: {} },
+      });
   });
 });

@@ -21,7 +21,17 @@
       "sources": [],
       "files": [],
       "tables": [],
-      "targets": {}
+      "targets": {},
+      "name_lines": {
+        "subjects": {
+          "file": "subjects.tsv",
+          "lines": {}
+        },
+        "interventions": {
+          "file": "interventions.tsv",
+          "lines": {}
+        }
+      }
     },
     {
       "problems": [
@@ -44,7 +54,17 @@
       "sources": [],
       "files": [],
       "tables": [],
-      "targets": {}
+      "targets": {},
+      "name_lines": {
+        "subjects": {
+          "file": "subjects.tsv",
+          "lines": {}
+        },
+        "interventions": {
+          "file": "interventions.tsv",
+          "lines": {}
+        }
+      }
     }
   ]
 }

@@ -2376,3 +2376,35 @@ def test_a_change_of_on_save_keeps_first_validations_and_paused_jobs(
     engine.set_paused(False)
     settle(engine)
     assert [job["action"] for job in engine.queue.values()] == ["validate"]
+
+
+def test_the_study_page_has_the_line_of_each_subject_and_intervention(workspace):
+    engine, _ = workspace
+    detail = engine.study_detail(row(engine)["id"])
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1, "S1": 2, "S2": 3}},
+        "interventions": {"file": "interventions.tsv", "lines": {"D1": 1}},
+    }
+
+
+def test_a_name_of_two_rows_links_to_the_first_and_a_missing_table_has_no_names(
+    workspace, tsv
+):
+    engine, folder = workspace
+    (folder / "subjects.tsv").write_text(
+        tsv(
+            "subjects",
+            {"name": "all", "count": "2", "source": "Tab1"},
+            {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+            {"name": "", "parent": "all", "count": "1", "source": "TabA"},
+            {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+        ),
+        encoding="utf-8",
+        newline="",
+    )
+    (folder / "interventions.tsv").unlink()
+    detail = engine.study_detail(row(engine)["id"])
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1, "S1": 2}},
+        "interventions": {"file": "interventions.tsv", "lines": {}},
+    }

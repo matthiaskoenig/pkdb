@@ -109,13 +109,38 @@ describe("rows pane", () => {
     expect(wrapper.emitted("select-line")).toEqual([[1]]);
   });
 
-  it("shows the kind of the table in the color of its class, which tints its grid", () => {
-    const wrapper = mountPane();
-    expect(wrapper.get("section").attributes("style")).toContain("--info: var(--v-theme-info-subjects)");
+  it("shows the kind of the table in the color of its class and tints the columns of its grid by what they name", () => {
+    const table: TableResponse = {
+      file: "subjects.tsv",
+      kind: "table",
+      header: ["study", "source", "name", "count"],
+      classes: ["meta", "meta", "subjects", "subjects"],
+      rows: subjects.rows,
+    };
+    const wrapper = mountPane({ table });
+    // The grid tints each column itself: the pane sets no color.
+    expect(wrapper.get("section").attributes("style")).toBeUndefined();
     const chip = wrapper.get(".pane-head-kind");
     expect(chip.text()).toBe("Subjects");
-    expect(chip.classes()).toEqual(expect.arrayContaining(["text-info-subjects", "status-chip"]));
+    expect(chip.classes()).toEqual(expect.arrayContaining(["text-info-subjects", "status-chip", "v-chip--variant-tonal"]));
     expect(wrapper.get(".table-grid").classes()).toContain("table-grid--tinted");
+    const cells = wrapper.findAll("tbody tr[data-index]")[0]!.findAll("td");
+    expect(cells.map((cell) => cell.classes().find((name) => name.startsWith("grid-info--")))).toEqual([
+      "grid-info--meta",
+      "grid-info--meta",
+      "grid-info--subjects",
+      "grid-info--subjects",
+    ]);
+  });
+
+  it("shows a raw table without a tint, with its kind in an outlined chip", () => {
+    const raw = studyDetail({ tables: [tableEntry("Example_Tab2.tsv", "raw")] });
+    const table: TableResponse = { file: "Example_Tab2.tsv", kind: "raw", rows: [{ line: 1, cells: ["CL", "1.20 ± 0.3"] }] };
+    const wrapper = mountPane({ detail: raw, rowsDetail: raw, file: "Example_Tab2.tsv", table });
+    const chip = wrapper.get(".pane-head-kind");
+    expect(chip.text()).toBe("Raw table");
+    expect(chip.classes()).toEqual(expect.arrayContaining(["text-info-raw", "v-chip--variant-outlined"]));
+    expect(wrapper.find('[class*="grid-info--"]').exists()).toBe(false);
   });
 
   it("puts the content of the section below the head and the sentences about the rows right above the grid", () => {
@@ -124,5 +149,26 @@ describe("rows pane", () => {
     expect(wrapper.get(".rows-pane-notes").text()).toBe("1 empty column is hidden.");
     const order = [...wrapper.get("section").element.children].map((child) => child.classList[0]);
     expect(order).toEqual(["pane-head", "section-content", "rows-pane-notes", "table-grid"]);
+  });
+
+  it("links the names in its rows to their rows, and passes a followed link on with the line of its row", async () => {
+    const outputs = studyDetail({
+      tables: [tableEntry("outputs_Tab2.tsv", "outputs")],
+      name_lines: {
+        subjects: { file: "subjects.tsv", lines: { all: 1 } },
+        interventions: { file: "interventions.tsv", lines: { D1: 3 } },
+      },
+    });
+    const table: TableResponse = {
+      file: "outputs_Tab2.tsv",
+      kind: "table",
+      header: ["study", "source", "subjects", "interventions"],
+      rows: [{ line: 4, cells: ["Example", "Tab2", "all", "D1"] }],
+    };
+    const wrapper = mountPane({ detail: outputs, rowsDetail: outputs, file: "outputs_Tab2.tsv", table });
+    expect(wrapper.findAll(".grid-link").map((link) => link.text())).toEqual(["all", "D1"]);
+    await wrapper.findAll(".grid-link")[1]!.trigger("click");
+    expect(wrapper.emitted("follow")).toEqual([[{ file: "interventions.tsv", line: 3 }, 4]]);
+    expect(wrapper.emitted("select-line")).toBeUndefined();
   });
 });

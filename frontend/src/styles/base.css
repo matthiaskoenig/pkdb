@@ -1,6 +1,7 @@
 /* Shared by the website and the local curation app. */
 /* Inter is bundled, so that text has the same width on every system. */
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/inter/wght-italic.css";
 
 :root {
   /* Vuetify's typography classes, such as text-caption, read the font from

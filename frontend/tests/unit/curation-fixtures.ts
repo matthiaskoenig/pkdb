@@ -273,12 +273,17 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     ],
     table_kinds: TABLE_KIND_ENTRIES,
     targets: {},
+    // No names by default, so that no cell links; the tests of the links give them.
+    name_lines: {
+      subjects: { file: "subjects.tsv", lines: {} },
+      interventions: { file: "interventions.tsv", lines: {} },
+    },
     ...changes,
   };
 }
 
 /** The fields of a study page that the local server sends beyond the upload limits. */
-type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets">;
+type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets" | "name_lines">;
 
 /**
  * What the local server sends for a study beyond the upload limits, by limit: the limit as the

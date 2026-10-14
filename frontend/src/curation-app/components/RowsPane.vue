@@ -13,9 +13,10 @@ import {
   type RowFilter,
 } from "../data";
 import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
-import { infoColor, infoStyle } from "../info";
+import { infoColor, infoOutlined } from "../info";
 import { plural } from "../overview";
 import type { ActionFailure } from "../study";
+import type { NameLink } from "../links";
 import { kindLabel } from "../tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
@@ -28,9 +29,11 @@ import TableGrid from "./TableGrid.vue";
  * that a link to a row never lands on a hidden one. The default slot renders between the head
  * and the grid, where the section puts the notes of the table kind and its conflict panel.
  *
- * The pane tints its table and shows its kind in the color of its class of information. Its head
- * wraps rather than cut what it shows in a narrow pane, and the notes about the rows stand right
- * above the grid as sentences that wrap.
+ * The pane shows the kind of its table in the color of its class of information, outlined for a
+ * raw table, and its grid tints the columns by what they name. Its head wraps rather than
+ * cut what it shows in a narrow pane, and the notes about the rows stand right above the grid
+ * as sentences that wrap. A name of a subject or an intervention in a cell links to its row; the
+ * pane passes the link on to the section.
  */
 const props = defineProps<{
   detail: StudyDetail;
@@ -47,7 +50,12 @@ const props = defineProps<{
   filter: RowFilter;
   hideEmpty: boolean;
 }>();
-const emit = defineEmits<{ "select-line": [line: number]; retry: []; "update:filter": [filter: RowFilter] }>();
+const emit = defineEmits<{
+  "select-line": [line: number];
+  follow: [link: NameLink, line: number];
+  retry: [];
+  "update:filter": [filter: RowFilter];
+}>();
 defineSlots<{ default?: () => unknown }>();
 
 /** The table in the study page: its kind and class of information. */
@@ -148,15 +156,21 @@ const missingLine = computed(() => {
 
 <template>
   <!-- Named apart from its grid, the region "Rows of <file>", so that each landmark has its own name. -->
-  <section class="rows-pane" :aria-label="`Table ${file}`" :style="entry ? infoStyle(entry.info) : undefined">
+  <section class="rows-pane" :aria-label="`Table ${file}`">
     <!-- A narrow pane wraps the head rather than clip its parts; the file name keeps its icon beside it. -->
     <div class="pane-head">
       <div class="pane-head-title">
         <i :class="table?.kind === 'raw' ? 'fas fa-table-cells' : 'fas fa-table'" aria-hidden="true"></i>
         <h3 class="pane-head-name" :title="file">{{ file }}</h3>
       </div>
-      <!-- The kind in the color of the class of information of the table; its text stays in the text color. -->
-      <VChip v-if="entry" size="x-small" variant="tonal" :color="infoColor(entry.info)" class="status-chip pane-head-kind">
+      <!-- The kind in the color of the class of information of the table, outlined for a raw table, which has no tint; its text stays in the text color. -->
+      <VChip
+        v-if="entry"
+        size="x-small"
+        :variant="infoOutlined(entry.info) ? 'outlined' : 'tonal'"
+        :color="infoColor(entry.info)"
+        class="status-chip pane-head-kind"
+      >
         {{ kindLabel(detail, entry.kind) }}
       </VChip>
       <template v-if="table">
@@ -214,9 +228,11 @@ const missingLine = computed(() => {
         :visible-lines="visible"
         :tinted="entry !== undefined"
         selectable
+        :names="detail.name_lines"
         :label="table.kind === 'raw' ? `Raw table ${table.file}` : `Rows of ${table.file}`"
         class="rows-pane-grid"
         @select-line="emit('select-line', $event)"
+        @follow="(link, line) => emit('follow', link, line)"
       />
     </template>
   </section>

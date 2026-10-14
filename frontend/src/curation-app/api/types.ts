@@ -84,6 +84,24 @@ export type TableFileKind = TableKind | "raw";
 /** The class of information of a table, by which the Data section groups and colors it. */
 export type InfoClass = "subjects" | "interventions" | "data" | "raw";
 
+/** The tables whose rows the cells of other tables name: subjects.tsv and interventions.tsv. */
+export type NameKind = "subjects" | "interventions";
+
+/** The rows of the names of subjects.tsv or interventions.tsv: its file, and the line of each name (of its first row). */
+export interface NameLines {
+  file: string;
+  lines: Record<string, number>;
+}
+
+/** The lines of the names of subjects.tsv and interventions.tsv, by which a name in a cell links to its row. */
+export type StudyNameLines = Record<NameKind, NameLines>;
+
+/**
+ * What a column of a table names, by which the Data section tints it: the subjects, the
+ * interventions, the data, or `meta` for `study` and `source`, which say where a row comes from.
+ */
+export type ColumnClass = "subjects" | "interventions" | "data" | "meta";
+
 /**
  * A table file of the study; the study detail lists them in the order of the workbook sheets.
  * `source` is the source it belongs to, such as Tab2 of `outputs_Tab2.tsv` or of the raw table
@@ -676,6 +694,8 @@ export interface StudyDetail {
    * it; empty beyond the upload limits.
    */
   targets: Record<string, TargetMatch>;
+  /** The line of each subject and intervention by name, by which a name in a cell links to its row; no names beyond the upload limits. */
+  name_lines: StudyNameLines;
 }
 
 /** A series of a figure with a WebPlotDigitizer project: the figure and the series name. */
@@ -704,7 +724,17 @@ export interface TableRow {
 }
 
 export type TableResponse =
-  | { file: string; kind: "table"; header: string[]; rows: TableRow[] }
+  | {
+      file: string;
+      kind: "table";
+      header: string[];
+      /**
+       * The class of each column in header order, as the local server serves a table file; a table
+       * that the app builds, such as the versions of a conflict, has none.
+       */
+      classes?: ColumnClass[];
+      rows: TableRow[];
+    }
   | { file: string; kind: "raw"; rows: TableRow[] };
 
 export interface MappedTable {
@@ -914,6 +944,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "tables",
   "table_kinds",
   "targets",
+  "name_lines",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");

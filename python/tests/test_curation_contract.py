@@ -151,6 +151,35 @@ def test_table_preview_contract(workspace, engine_on):
     )
 
 
+TABLE_FILES = (
+    "subjects.tsv",
+    "characteristica.tsv",
+    "interventions.tsv",
+    "outputs_Tab2.tsv",
+    "Demo2020_Tab2.tsv",
+)
+
+
+def test_table_content_contract(workspace, engine_on):
+    """The rows of the tables of Demo2020 with the class of each column, and of its raw
+    table, which has none."""
+    engine = engine_on(workspace)
+    tables = {file: engine.study_table(DEMO, file) for file in TABLE_FILES}
+    outputs = tables["outputs_Tab2.tsv"]
+    classes = dict(zip(outputs["header"], outputs["classes"], strict=True))
+    names = ("study", "source", "subjects", "interventions", "measurement", "comment")
+    assert [classes[name] for name in names] == [
+        "meta",
+        "meta",
+        "subjects",
+        "interventions",
+        "data",
+        "data",
+    ]
+    assert "classes" not in tables["Demo2020_Tab2.tsv"]
+    check_contract("table-content", tables)
+
+
 TARGET_DRAFTS = [
     {
         "file": "timecourses_Fig1.tsv",
@@ -184,6 +213,27 @@ def test_targets_contract(workspace, engine_on):
     )
 
 
+def test_name_lines_contract(workspace, engine_on):
+    """The line of each subject and intervention of Demo2020 in its study page, with the rows
+    of a table whose cells name them."""
+    engine = engine_on(workspace)
+    detail = engine.study_detail(DEMO)
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1}},
+        "interventions": {
+            "file": "interventions.tsv",
+            "lines": {"D100": 1, "D200": 2, "D400": 3},
+        },
+    }
+    check_contract(
+        "name-lines",
+        {
+            "name_lines": detail["name_lines"],
+            "table": engine.study_table(DEMO, "outputs_Tab2.tsv"),
+        },
+    )
+
+
 def test_limits_contract(workspace, engine_on, monkeypatch):
     """The study page of Demo2020 beyond each upload limit: the limit first, and no tables or sources."""
     engine = engine_on(workspace)
@@ -195,13 +245,25 @@ def test_limits_contract(workspace, engine_on, monkeypatch):
         details.append(
             {
                 key: detail[key]
-                for key in ("problems", "sources", "files", "tables", "targets")
+                for key in (
+                    "problems",
+                    "sources",
+                    "files",
+                    "tables",
+                    "targets",
+                    "name_lines",
+                )
             }
         )
     assert [detail["problems"][0]["code"] for detail in details] == [
         "file_limit",
         "row_limit",
     ]
+    # Beyond the limits no table is read: no name links.
+    assert all(
+        all(not entry["lines"] for entry in detail["name_lines"].values())
+        for detail in details
+    )
     check_contract("limits", {"details": details})
 
 
