@@ -66,7 +66,12 @@ def study_folders(path: str | Path) -> list[Path]:
 
 def source_hashes(folder: Path) -> dict[str, str]:
     result = {}
-    for path in sorted(folder.rglob("*")):
+    # Sorted by the text of each part, as study_folders, so that the files have
+    # the same order on Windows, whose paths sort without regard to case.
+    for path in sorted(
+        folder.rglob("*"),
+        key=lambda path: path.relative_to(folder).as_posix().split("/"),
+    ):
         if ignored_source(path.relative_to(folder)):
             continue
         if path.is_symlink():

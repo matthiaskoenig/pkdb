@@ -82,6 +82,22 @@ def test_study_folders_are_ordered_part_by_part(tmp_path):
     assert found == ["caffeine/B", "caffeine-citrate/A"]
 
 
+def test_source_files_are_ordered_by_case_part_by_part(tmp_path):
+    from pkdb.preparation import source_hashes
+
+    # Windows paths sort without regard to case, which put Demo.pdf after
+    # characteristica.tsv on Windows only.
+    for name in ("characteristica.tsv", "Demo.pdf", "Fig1/a.png", "Fig1.png"):
+        (tmp_path / name).parent.mkdir(exist_ok=True)
+        (tmp_path / name).write_text("x", encoding="utf-8")
+    assert list(source_hashes(tmp_path)) == [
+        "Demo.pdf",
+        "Fig1/a.png",
+        "Fig1.png",
+        "characteristica.tsv",
+    ]
+
+
 def test_study_folders_skip_folders_below_hidden_folders(tmp_path):
     from pkdb.preparation import study_folders
 
