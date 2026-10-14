@@ -19,7 +19,7 @@ from pkdb.domain.statistics import (
     complete_statistics,
     inconsistent_statistics,
 )
-from pkdb.domain.units import ureg
+from pkdb.domain.units import quantity, ureg
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.study import (
@@ -468,9 +468,7 @@ def prepare_study(
                     value = getattr(record.statistics, field)
                     if (
                         value is not None
-                        and ureg.Quantity(value, record.unit)
-                        .to("dimensionless")
-                        .magnitude
+                        and quantity(value, record.unit).to("dimensionless").magnitude
                         > 2
                     ):
                         issue("recovery_range", "Recovery cannot exceed 200%", record)

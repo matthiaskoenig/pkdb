@@ -118,10 +118,15 @@ MEASUREMENT_NODES: list[InfoNode] = [
         "See also `amount` for amount of substance, "
         "`cumulative amount` for cumulative amount, and "
         "`concentration unbound` for "
-        "the unbound, i.e. free, concentration of the substance.",
+        "the unbound, i.e. free, concentration of the substance. "
+        "Tissue concentrations per tissue weight (e.g. ng/g or µg/g liver) use the g/kg unit; "
+        "because g/kg is dimensionless, use it only for a mass of substance per mass of tissue.",
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
-        units=CONCENTRATION_UNITS,
+        # g/kg: mass of substance per mass of tissue (dimensionless in pint); kept out of
+        # CONCENTRATION_UNITS so that Cmax, IC50 and the other concentration terms do not
+        # accept dimensionless values.
+        units=[*CONCENTRATION_UNITS, "g/kg"],
         annotations=[
             (BQB.IS, "NCIT:C41185"),
             (BQB.IS, "https://bioregistry.io/CHMO:0002820"),
@@ -276,6 +281,22 @@ MEASUREMENT_NODES: list[InfoNode] = [
         ],
     ),
     MeasurementType(
+        sid="cumulative-amount-ratio",
+        name="cumulative amount (ratio)",
+        description="Cumulative amount of substance excreted or collected in a given time period "
+        "as ratio to a reference value of the same subjects or group (baseline, pre-treatment, "
+        "pre-operative or control value), e.g. 1.0 (100%) for no difference. "
+        "It is required to provide the time period for the cumulative collection. "
+        "For the relative change from baseline (0 for no change) use the '(change relative)' terms. "
+        "See also 'cumulative amount' and 'cumulative amount (change)'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C25256"),  # quantity
+        ],
+    ),
+    MeasurementType(
         sid="excretion-rate",
         name="excretion rate",
         label="excretion rate",
@@ -289,6 +310,21 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=RATE_UNITS,
         annotations=[
             (BQB.IS, "NCIT:C85534"),
+        ],
+    ),
+    MeasurementType(
+        sid="excretion-rate-ratio",
+        name="excretion rate (ratio)",
+        description="Excretion rate of substance (e.g. the biliary excretion rate of 99mTc-mebrofenin) "
+        "as ratio to a reference value of the same subjects or group (baseline, pre-treatment, "
+        "pre-operative or control value), e.g. 1.0 (100%) for no difference. "
+        "For the relative change from baseline (0 for no change) use the '(change relative)' terms. "
+        "See also 'excretion rate'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C85534"),
         ],
     ),
     MeasurementType(
@@ -371,6 +407,17 @@ MEASUREMENT_NODES: list[InfoNode] = [
         annotations=[(BQB.IS_VERSION_OF, "NCIT:C62656")],
         synonyms=["INR change"],
     ),
+    MeasurementType(
+        sid="inr_change_relative",
+        name="inr (change relative)",
+        label="international normalized ratio (INR) (change relative)",
+        description="International normalized ratio (INR) relative change from baseline in percent. "
+        "A negative value is a decrease. See also 'inr' and, for the absolute change, 'inr (change)'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C62656")],
+    ),
     # PT
     MeasurementType(
         sid="prothrombin_time",
@@ -432,6 +479,20 @@ MEASUREMENT_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC,
         units=["percent"],
         synonyms=["Emax PT"],
+    ),
+    MeasurementType(
+        sid="quick_value",
+        name="quick value",
+        label="prothrombin time in percent of normal (Quick value)",
+        description="Prothrombin time expressed as percent of the normal prothrombin activity (Quick value), "
+        "read from a calibration curve of diluted normal plasma; 100% is normal and lower values mean "
+        "a prolonged clotting time. It is neither the ratio to the subject's own baseline "
+        "('prothrombin time (ratio)') nor the international normalized ratio ('inr').",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C62656")],
+        synonyms=["Quick value", "Quick's value", "Quick test", "prothrombin index"],
     ),
     # mPT
     MeasurementType(
@@ -574,11 +635,12 @@ MEASUREMENT_NODES: list[InfoNode] = [
         name="ETP",
         label="endogenous thrombin potential (ETP)",
         description="Endogenous thrombin potential (ETP). The determination of the total concentration of thrombin "
-        "generated in the presence of a substrate in a plasma or blood sample.",
+        "generated in the presence of a substrate in a plasma or blood sample. The ETP is the area under "
+        "the thrombin generation curve, i.e. a thrombin concentration times time (e.g. nmol/l*min).",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
-        units=[DIMENSIONLESS],
+        units=["mol/l*hr"],
         annotations=[
             (BQB.IS, "NCIT:C102266"),
         ],
@@ -587,11 +649,12 @@ MEASUREMENT_NODES: list[InfoNode] = [
         sid="etp_change_relative",
         name="ETP (change relative)",
         label="endogenous thrombin potential (ETP) (change relative)",
-        description="Endogenous thrombin potential (ETP) change relative.",
+        description="Endogenous thrombin potential (ETP) relative change to baseline in percent. "
+        "A negative value is a decrease. See also 'ETP'.",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
-        units=TIME_UNITS,
+        units=["percent"],
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C102266"),
         ],
@@ -613,11 +676,12 @@ MEASUREMENT_NODES: list[InfoNode] = [
         sid="tgp",
         name="TGP",
         label="thrombin generation peak (TGP)",
-        description="Thrombin generation peak (TGP).",
+        description="Thrombin generation peak (TGP). The peak thrombin concentration of the "
+        "thrombin generation curve (e.g. nmol/l), reported as PEAK by the calibrated automated thrombogram.",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
-        units=[DIMENSIONLESS],
+        units=["mol/l"],
     ),
     MeasurementType(
         sid="tgp_ratio",
@@ -630,10 +694,21 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=[DIMENSIONLESS],
     ),
     MeasurementType(
+        sid="tgp_change_relative",
+        name="TGP (change relative)",
+        label="thrombin generation peak (TGP) (change relative)",
+        description="Thrombin generation peak (TGP) relative change to baseline in percent. "
+        "A negative value is a decrease. See also 'TGP'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+    ),
+    MeasurementType(
         sid="tglt",
         name="TGLT",
         label="thrombin generation lag time (TGLT)",
-        description="Thrombin generation lag time (TGLP).",
+        description="Thrombin generation lag time (TGLT). The time until the start of thrombin generation, "
+        "reported as LAG by the calibrated automated thrombogram.",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
@@ -650,10 +725,21 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=[DIMENSIONLESS],
     ),
     MeasurementType(
+        sid="tglt_change_relative",
+        name="TGLT (change relative)",
+        label="thrombin generation lag time (TGLT) (change relative)",
+        description="Thrombin generation lag time (TGLT) relative change to baseline in percent. "
+        "A negative value is a decrease. See also 'TGLT'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+    ),
+    MeasurementType(
         sid="tptg",
         name="TPTG",
         label="time to peak thrombin generation (TPTG)",
-        description="Time to peak thrombin generation (TPTG).",
+        description="Time to peak thrombin generation (TPTG), reported as TTP (time to peak) by the "
+        "calibrated automated thrombogram.",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
@@ -668,6 +754,16 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
+    ),
+    MeasurementType(
+        sid="tptg_change_relative",
+        name="TPTG (change relative)",
+        label="time to peak thrombin generation (TPTG) (change relative)",
+        description="Time to peak thrombin generation (TPTG) relative change to baseline in percent. "
+        "A negative value is a decrease. See also 'TPTG'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
     ),
     # HepTest
     MeasurementType(
@@ -688,6 +784,17 @@ MEASUREMENT_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC,
         units=["percent"],
         synonyms=[],
+    ),
+    MeasurementType(
+        sid="heptest_ratio",
+        name="HepTest (ratio)",
+        label="HepTest (ratio)",
+        description="HepTest clotting time ratio to baseline (x-fold of the baseline value). "
+        "See also 'HepTest' and 'HepTest (change relative)'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        synonyms=["HepTest ratio"],
     ),
     MeasurementType(
         sid="plasma-thromboplastin-activity",
@@ -720,6 +827,50 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=["percent"],
         synonyms=[],
     ),
+    # --- Primary hemostasis ---
+    MeasurementType(
+        sid="platelet_aggregation",
+        name="platelet aggregation",
+        description="Platelet aggregation measured by light transmission aggregometry of platelet-rich plasma "
+        "after addition of an agonist, expressed as maximal aggregation in percent. Record the agonist and "
+        "its concentration (e.g. arachidonic acid 0.3 mg/ml, ADP or collagen) in the comment. For the "
+        "relative change from baseline use 'platelet aggregation (change relative)'.",
+        parents=["blood cell measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+        annotations=[(BQB.IS, "NCIT:C103427")],
+    ),
+    MeasurementType(
+        sid="platelet_aggregation_change_relative",
+        name="platelet aggregation (change relative)",
+        description="Platelet aggregation relative change from baseline in percent. "
+        "A negative value is a decrease. See also 'platelet aggregation'.",
+        parents=["blood cell measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C103427")],
+    ),
+    MeasurementType(
+        sid="bleeding_time",
+        name="bleeding time",
+        description="Bleeding time. The time from a standardized skin incision (e.g. template or Surgicutt "
+        "device, Ivy method) until the bleeding stops; a test of primary hemostasis and platelet function. "
+        "For the relative change from baseline use 'bleeding time (change relative)'.",
+        parents=["blood measurement"],
+        dtype=DType.NUMERIC,
+        units=TIME_UNITS,
+        annotations=[(BQB.IS, "NCIT:C89775")],
+    ),
+    MeasurementType(
+        sid="bleeding_time_change_relative",
+        name="bleeding time (change relative)",
+        description="Bleeding time relative change from baseline in percent. "
+        "A negative value is a decrease. See also 'bleeding time'.",
+        parents=["blood measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C89775")],
+    ),
     # ---
     MeasurementType(
         "blood-urea-nitrogen",
@@ -743,11 +894,12 @@ MEASUREMENT_NODES: list[InfoNode] = [
         sid="ace_activity",
         name="ACE activity",
         description="Angiotensin converting enzyme activity (measured in H-hippuric acid). "
+        "Activity reported in enzyme units per volume (e.g. U/l or IU/ml) is encoded with the IU/l unit. "
         "For relative ACE activity in percent see 'relative ACE activity'.",
         parents=["chemistry measurement"],
         synonyms=[],
         dtype=DType.NUMERIC,
-        units=["nmol/ml/min"],
+        units=["nmol/ml/min", "IU/l"],
     ),
     MeasurementType(
         sid="renin_activity",
@@ -1188,6 +1340,31 @@ MEASUREMENT_NODES.extend(
             dtype=DType.NUMERIC,
             units=AUC_UNITS,
         ),
+        MeasurementType(
+            sid="auc_incremental",
+            label="incremental area under curve (iAUC)",
+            description="Incremental area under the curve (iAUC). The area under the concentration-time "
+            "curve above the baseline (pre-stimulus) concentration over a given period, e.g. the "
+            "first-phase (0-10 min) or second-phase insulin response of an intravenous glucose "
+            "tolerance test. The time period is required; state its start in the comment if it does "
+            "not begin at the stimulus. See also 'auc_end'.",
+            parents=["auc measurement"],
+            dtype=DType.NUMERIC,
+            units=AUC_UNITS,
+            synonyms=["iAUC", "incremental AUC"],
+        ),
+        MeasurementType(
+            sid="auc_extrapolated",
+            label="area under curve (AUC) extrapolated fraction",
+            description="Fraction of the area under the curve extrapolated to infinity, "
+            "(AUC_inf - AUC_end)/AUC_inf, usually reported in percent as a quality criterion of the "
+            "non-compartmental analysis (residual area). See also 'auc_inf' and 'auc_end'.",
+            parents=["auc measurement"],
+            dtype=DType.NUMERIC,
+            units=RATIO_UNITS,
+            annotations=[(BQB.IS, "NCIT:C85764")],
+            synonyms=["AUC%extrap", "%AUC extrapolated", "residual area"],
+        ),
         # MeasurementType(
         #     "auc_tau",
         #     label="area under curve (AUC_tau)",
@@ -1382,6 +1559,33 @@ MEASUREMENT_NODES.extend(
             units=CLEARANCE_UNITS,
         ),
         MeasurementType(
+            sid="clearance_intercompartmental",
+            label="intercompartmental clearance",
+            description="Intercompartmental clearance (Q) between the central compartment and a peripheral "
+            "compartment of a mammillary compartment model. It describes the distribution of the substance "
+            "and not its elimination; for elimination use 'clearance'. If a model has several peripheral "
+            "compartments, each intercompartmental clearance is a separate output distinguished by its label. "
+            "See also 'clearance_distribution'.",
+            parents=["clearance measurement"],
+            dtype=DType.NUMERIC,
+            units=CLEARANCE_UNITS,
+            synonyms=["Q", "CL12", "intercompartmental clearance"],
+        ),
+        MeasurementType(
+            sid="clearance_distribution",
+            label="whole-body distribution clearance (CLD)",
+            description="Whole-body distribution clearance (CLD), a model-independent measure of the "
+            "distribution kinetics. It is the dose divided by the area between the concentration-time curve "
+            "and the equilibrium concentration in a hypothetical non-eliminating system (CLD = D/AUCD); in a "
+            "compartment model it follows from the compartment volumes and the intercompartmental clearances. "
+            "For the intercompartmental clearance of a single peripheral compartment use "
+            "'clearance_intercompartmental'.",
+            parents=["clearance measurement"],
+            dtype=DType.NUMERIC,
+            units=CLEARANCE_UNITS,
+            synonyms=["CLD", "whole-body distribution clearance"],
+        ),
+        MeasurementType(
             "enantiomeric_ratio",
             label="enantiomeric ratio",
             description="Ratio of the S enantiomer to the R enantiomer (S/R)",
@@ -1424,6 +1628,19 @@ MEASUREMENT_NODES.extend(
             synonyms=["Vc"],
         ),
         MeasurementType(
+            sid="vd_peripheral",
+            label="volume of distribution peripheral compartment",
+            description="Volume of a peripheral compartment of a mammillary compartment model (e.g. V2 of "
+            "a two-compartment model or V2 and V3 of a three-compartment model). The volume of the central "
+            "compartment is encoded with 'vd0', the steady-state volume of distribution (sum of all "
+            "compartment volumes) with 'vd_ss'. If a model has several peripheral compartments, each is a "
+            "separate output distinguished by its label.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=VD_UNITS,
+            synonyms=["Vp", "peripheral volume of distribution"],
+        ),
+        MeasurementType(
             "vd_unbound",
             label="volume of distribution unbound",
             description="Volume of distribution for unbound substance.",
@@ -1460,6 +1677,20 @@ MEASUREMENT_NODES.extend(
             dtype=DType.NUMERIC,
             units=TIME_UNITS,
             synonyms=[],
+        ),
+        MeasurementType(
+            sid="thalf_distribution",
+            label="distribution half-life",
+            description="Distribution half-life of the substance, i.e. the half-life of the initial "
+            "(alpha, lambda1) disposition phase of a multi-compartment concentration-time curve, which is "
+            "dominated by the distribution of the substance from the central into the peripheral "
+            "compartments. For the terminal elimination half-life use 'thalf'; for the rate constant of "
+            "the distribution phase use 'kdist'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=TIME_UNITS,
+            annotations=[(BQB.IS, "NCIT:C172583")],
+            synonyms=["alpha half-life", "t1/2alpha", "t1/2lambda1"],
         ),
         MeasurementType(
             "tmax",
@@ -1583,11 +1814,67 @@ MEASUREMENT_NODES.extend(
         MeasurementType(
             "kel",
             label="elimination rate (Kel)",
-            description="Elimination rate for given substance.",
+            description="Elimination rate for given substance. Rate constants normalized to an organ "
+            "weight (e.g. per g liver) use the unit 1/min/kg; state the organ in the comment.",
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
-            units=RATE_UNITS,
+            units=[*RATE_UNITS, "1/min/kg"],
             synonyms=["elimination rate constant"],
+        ),
+        MeasurementType(
+            sid="kel-ratio",
+            name="kel (ratio)",
+            label="elimination rate (Kel) (ratio)",
+            description="Elimination rate constant (kel) as ratio to a reference value of the same subjects "
+            "or group (baseline, pre-treatment, pre-operative or control value), e.g. 1.0 (100%) for no "
+            "difference. For the relative change from baseline (0 for no change) use the "
+            "'(change relative)' terms. See also 'kel'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=[DIMENSIONLESS],
+        ),
+        MeasurementType(
+            sid="kdist",
+            label="distribution rate constant (alpha)",
+            description="Rate constant of the initial (distribution) disposition phase (alpha, lambda1) of "
+            "a multi-compartment model of the concentration-time curve. For the rate constant of the "
+            "terminal disposition phase (beta, lambda_z) use 'kel'; for the half-life of the distribution "
+            "phase use 'thalf_distribution'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/min"],
+            synonyms=["alpha", "lambda1"],
+        ),
+        MeasurementType(
+            sid="k10",
+            label="central elimination rate constant (k10)",
+            description="Micro rate constant of the elimination from the central compartment of a "
+            "compartmental pharmacokinetic model (k10 = CL/V1). For the rate constant of the terminal "
+            "disposition phase (beta, lambda_z) use 'kel'; for the transfer between the compartments use "
+            "'k12' and 'k21'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/min"],
+        ),
+        MeasurementType(
+            sid="k12",
+            label="transfer rate constant central to peripheral (k12)",
+            description="Micro rate constant of the transfer of the substance from the central "
+            "compartment (1) to the peripheral compartment (2) of a two- or multi-compartment "
+            "pharmacokinetic model. See also 'k21' and 'k10'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/min"],
+        ),
+        MeasurementType(
+            sid="k21",
+            label="transfer rate constant peripheral to central (k21)",
+            description="Micro rate constant of the transfer of the substance from the peripheral "
+            "compartment (2) back to the central compartment (1) of a two- or multi-compartment "
+            "pharmacokinetic model. See also 'k12' and 'k10'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/min"],
         ),
         MeasurementType(
             sid="kabs",
@@ -1596,6 +1883,18 @@ MEASUREMENT_NODES.extend(
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
             units=RATE_UNITS,
+        ),
+        MeasurementType(
+            sid="hepatic-uptake-rate-ratio",
+            name="hepatic uptake rate (ratio)",
+            description="Hepatic uptake rate of a tracer (e.g. 99mTc-GSA or 99mTc-mebrofenin measured by "
+            "scintigraphy) as ratio to a reference value of the same subjects or group (baseline, "
+            "pre-treatment, pre-operative or control value), e.g. 1.0 (100%) for no difference. "
+            "For the relative change from baseline (0 for no change) use the '(change relative)' terms. "
+            "It is not an absorption rate ('kabs').",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=[DIMENSIONLESS],
         ),
         MeasurementType(
             sid="thalf_absorption",
@@ -2119,6 +2418,19 @@ MEASUREMENT_NODES.extend(
             ],
         ),
         MeasurementType(
+            sid="map-ratio",
+            name="MAP (ratio)",
+            label="Mean arterial pressure (MAP) (ratio)",
+            description="Mean arterial pressure (MAP) as ratio to a reference value of the same subjects "
+            "or group (baseline, pre-treatment, pre-operative or control value), e.g. 1.0 (100%) for no "
+            "difference. For the relative change from baseline (0 for no change) use "
+            "'MAP (change relative)'. See also 'MAP'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=[DIMENSIONLESS],
+            annotations=[(BQB.IS_VERSION_OF, "NCIT:C49679")],
+        ),
+        MeasurementType(
             sid="rpp",
             name="rate pressure product",
             label="rate pressure product (RPP)",
@@ -2150,7 +2462,7 @@ MEASUREMENT_NODES.extend(
             units=[
                 DIMENSIONLESS,
                 SVR_UNIT,
-            ],  # FIXME: units unclear - dynes/sec/(cm^-5)?
+            ],
             annotations=[
                 (BQB.IS, "NCIT:C119248"),
                 (BQB.IS, "https://bioregistry.io/CMO:0000220"),
@@ -2188,7 +2500,7 @@ MEASUREMENT_NODES.extend(
             "heart failure.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],
+            units=[SVR_UNIT],
             synonyms=["PVR"],
             annotations=[
                 (BQB.IS, "NCIT:C119247"),
@@ -2196,15 +2508,27 @@ MEASUREMENT_NODES.extend(
             ],
         ),
         MeasurementType(
+            sid="vascular-resistance",
+            name="vascular resistance",
+            description="Vascular resistance of a regional vascular bed, calculated as the pressure drop "
+            "(usually the mean arterial pressure) divided by the regional blood flow. The vessel is encoded "
+            "by the tissue (e.g. 'brachial artery'). For the whole systemic circulation use "
+            "'systemic vascular resistance'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=[SVR_UNIT],
+            synonyms=["regional vascular resistance"],
+        ),
+        MeasurementType(
             sid="cvr",
             # (BQB.IS, "NCIT:C119247"),
             # (BQB.IS, "SNOMEDCT:276901002"),
             name="carotid vascular resistance",
             label="carotid vascular resistance (CVR)",
-            description="The resistance offered by the carotid circulation.",
-            parents=["cardiovascular measurement"],
+            description="The resistance offered by the carotid circulation. See also 'vascular resistance'.",
+            parents=["vascular resistance"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],
+            units=[SVR_UNIT],
             synonyms=["CVR"],
         ),
         MeasurementType(
@@ -2216,7 +2540,7 @@ MEASUREMENT_NODES.extend(
             "It estimates the left atrial pressure.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],
+            units=PRESSURE_UNITS,
             annotations=[
                 (BQB.IS, "NCIT:C129955"),
             ],
@@ -2237,11 +2561,72 @@ MEASUREMENT_NODES.extend(
             "artery. See also 'Pulmonary capillary wedge pressure (PCWP)'.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],
+            units=PRESSURE_UNITS,
             annotations=[
                 (BQB.IS, "NCIT:C129958"),
             ],
             synonyms=["PAP"],
+        ),
+        MeasurementType(
+            sid="right-atrial-pressure",
+            name="right atrial pressure",
+            label="right atrial pressure (RAP)",
+            description="Right atrial pressure (RAP). Blood pressure in the right atrium of the heart, "
+            "usually measured with a right heart (Swan-Ganz) catheter; it approximates the central venous "
+            "pressure. See also 'pulmonary capillary wedge pressure'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=PRESSURE_UNITS,
+            annotations=[(BQB.IS, "NCIT:C190726")],
+            synonyms=["RAP"],
+        ),
+        MeasurementType(
+            sid="pressor-response-inhibition",
+            name="pressor response inhibition",
+            description="Inhibition by a drug of the blood pressure increase (pressor response) induced by "
+            "a vasoconstrictor challenge, e.g. an angiotensin I or angiotensin II bolus, in percent of the "
+            "response before the drug (0% no inhibition, 100% complete inhibition). State the challenge and "
+            "the blood pressure component in the comment. See also 'ACE inhibition'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=["percent"],
+            synonyms=[
+                "inhibition of pressor response",
+                "blood pressure response inhibition",
+            ],
+        ),
+        MeasurementType(
+            sid="artery-diameter",
+            name="artery diameter",
+            description="Inner diameter of an artery, usually measured by ultrasound or Doppler ultrasound. "
+            "The artery is encoded by the tissue (e.g. 'carotid artery' or 'brachial artery').",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=["cm"],
+            synonyms=["arterial diameter"],
+        ),
+        MeasurementType(
+            sid="artery-cross-sectional-area",
+            name="artery cross-sectional area",
+            description="Cross-sectional (lumen) area of an artery, usually calculated from the diameter "
+            "measured by ultrasound (A = pi*d^2/4). The artery is encoded by the tissue (e.g. "
+            "'carotid artery' or 'brachial artery'). For the value relative to baseline use "
+            "'artery cross-sectional area (ratio)'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=["cm^2"],
+            synonyms=["arterial area"],
+        ),
+        MeasurementType(
+            sid="artery-cross-sectional-area-ratio",
+            name="artery cross-sectional area (ratio)",
+            description="Cross-sectional area of an artery as ratio to a reference value of the same "
+            "subjects or group (baseline, pre-treatment, pre-operative or control value), e.g. 1.0 (100%) "
+            "for no difference. For the relative change from baseline (0 for no change) use the "
+            "'(change relative)' terms. See also 'artery cross-sectional area'.",
+            parents=["cardiovascular measurement"],
+            dtype=DType.NUMERIC,
+            units=[DIMENSIONLESS],
         ),
         MeasurementType(
             sid="blood flow",
@@ -2284,19 +2669,42 @@ MEASUREMENT_NODES.extend(
             synonyms=["HABF"],
         ),
         MeasurementType(
-            sid="carotid_artery_flow",
-            name="carotid artery flow",
-            description="Blood flow through the carotid artery.",
+            sid="artery-blood-flow",
+            name="artery blood flow",
+            description="Blood flow through an artery, usually calculated from the Doppler blood velocity "
+            "and the arterial diameter (Q = pi*d^2/4*v). The artery is encoded by the tissue (e.g. "
+            "'brachial artery'). See also the specific term 'carotid artery flow'.",
             parents=["blood flow"],
             dtype=DType.NUMERIC,
             units=["l/min"],
+            synonyms=["arterial blood flow"],
+        ),
+        MeasurementType(
+            sid="carotid_artery_flow",
+            name="carotid artery flow",
+            description="Blood flow through the carotid artery. See also 'artery blood flow'.",
+            parents=["artery blood flow"],
+            dtype=DType.NUMERIC,
+            units=["l/min"],
+        ),
+        MeasurementType(
+            sid="blood-velocity",
+            name="blood velocity",
+            description="Mean blood flow velocity in a vessel, usually measured by pulsed Doppler "
+            "ultrasound. The vessel is encoded by the tissue (e.g. 'brachial artery'). See also the "
+            "specific term 'carotid blood velocity'.",
+            parents=["blood flow"],
+            dtype=DType.NUMERIC,
+            units=["cm/s"],
+            annotations=[(BQB.IS, "NCIT:C127570")],
+            synonyms=["blood flow velocity"],
         ),
         MeasurementType(
             sid="carotid_blood_velocity",
             name="carotid blood velocity",
             description="Blood velocity through the carotid artery. Often measured "
-            "via Doppler ultrasound.",
-            parents=["blood flow"],
+            "via Doppler ultrasound. See also 'blood velocity'.",
+            parents=["blood velocity"],
             dtype=DType.NUMERIC,
             units=["cm/s"],
         ),
@@ -2632,10 +3040,34 @@ MEASUREMENT_NODES.extend(
             sid="heart_volume",
             name="heart volume",
             description="Measurement of the size of the three dimensional space occupied "
-            "by the heart.",
+            "by the heart. Heart volumes normalized to the body surface area use ml/m^2.",
             parents=["organ volume"],
             dtype=DType.NUMERIC,
-            units=["ml", "ml/kg"],
+            units=["ml", "ml/kg", "ml/m^2"],
+        ),
+        MeasurementType(
+            sid="proliferation-index",
+            name="proliferation index",
+            description="Fraction of the cell nuclei in a tissue section that are stained for a proliferation "
+            "marker (labeling index), e.g. by Ki-67 or proliferating cell nuclear antigen (PCNA) "
+            "immunostaining or by BrdU incorporation. State the marker in the label or comment; the tissue "
+            "is encoded by the tissue field.",
+            parents=["organ morphological measurement"],
+            dtype=DType.NUMERIC,
+            units=["percent"],
+            annotations=[(BQB.IS_VERSION_OF, "NCIT:C157250")],
+            synonyms=["labeling index", "Ki-67 labeling index", "PCNA labeling index"],
+        ),
+        MeasurementType(
+            sid="cell-density",
+            name="cell density",
+            description="Number of cells per area of a histological tissue section (e.g. hepatocytes per "
+            "mm^2 of liver). State the cell type in the comment; the tissue is encoded by the tissue field.",
+            parents=["organ morphological measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/mm^2"],
+            annotations=[(BQB.IS_VERSION_OF, "NCIT:C120538")],
+            synonyms=["hepatocyte density", "cells per area"],
         ),
     ]
 )

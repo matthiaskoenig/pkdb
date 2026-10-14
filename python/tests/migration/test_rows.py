@@ -447,8 +447,10 @@ ARRAY = {
         (False, [["S1", 0, 1], ["S1", 1, 2]], False),
         (True, [["S1", 0, 1], ["S2", 1, 2]], False),
         (True, [["S1", 1, 1], ["S1", 1, 2]], False),
+        # Format 2 timecourses need two times: one row is an output.
+        (True, [["S1", 648, 1]], False),
     ],
-    ids=["series", "no time", "two subjects", "time twice"],
+    ids=["series", "no time", "two subjects", "time twice", "one row"],
 )
 def test_labelled_array_outputs_are_timecourses_only_as_valid_series(
     tmp_path, timed, rows, series
@@ -461,12 +463,44 @@ def test_labelled_array_outputs_are_timecourses_only_as_valid_series(
     file = "timecourses_Tab3.tsv" if series else "outputs_Tab3.tsv"
     assert [table for table in tables if table.endswith("_Tab3.tsv")] == [file]
     assert [row.get("label") for row in tables[file]] == (
-        ["drug_individuals"] * 2 if series else [None] * 2
+        ["drug_individuals" if series else None] * len(rows)
     )
-    details = [f"2 array outputs in {file}"]
+    plural = "s" if len(rows) > 1 else ""
+    details = [f"{len(rows)} array output{plural} in {file}"]
     if not series:
-        details.append(f"2 output labels dropped in {file}")
+        details.append(f"{len(rows)} output label{plural} dropped in {file}")
     assert [d.detail for d in decisions] == details
+
+
+def test_labelled_array_outputs_with_one_row_per_label_are_outputs(tmp_path):
+    # One output per individual and label at one time, as in the figures of
+    # tirzepatide/Urva2021, while the rows of label S2 form a series.
+    array = {
+        **ARRAY,
+        "label": "col==label",
+        "time": "col==time",
+        "time_unit": "h",
+    }
+    study = {**STUDY, "outputset": {"outputs": [array]}}
+    sheet = [
+        ["subject", "label", "time", "mean"],
+        ["S1", "drug_S1", 648, 1],
+        ["S2", "drug_S2", 0, 2],
+        ["S2", "drug_S2", 648, 3],
+        ["S3", "drug_S3", 648, 4],
+    ]
+    folder = v1_study(tmp_path, study, {"Tab3": sheet}, (*IMAGES, "Tab3"))
+    tables, decisions = tables_of(folder)
+    assert [row["mean"] for row in tables["outputs_Tab3.tsv"]] == ["1", "4"]
+    assert [(row["label"], row["mean"]) for row in tables["timecourses_Tab3.tsv"]] == [
+        ("drug_S2", "2"),
+        ("drug_S2", "3"),
+    ]
+    assert [d.detail for d in decisions] == [
+        "2 array outputs in outputs_Tab3.tsv",
+        "2 array outputs in timecourses_Tab3.tsv",
+        "2 output labels dropped in outputs_Tab3.tsv",
+    ]
 
 
 def test_outputs_take_the_source_of_their_image(tmp_path):

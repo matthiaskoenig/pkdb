@@ -1,0 +1,90 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C127570",
+  "lang": "en",
+  "description": [
+    "The measurement of the average rate of blood flow across an area or tissue."
+  ],
+  "synonyms": [
+    "MBFVEL",
+    "Mean Blood Flow Velocity"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A measurement of the mean velocity of blood across an area or tissue."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "NCI_META_CUI": [
+      "CL509265"
+    ],
+    "Preferred_Name": [
+      "Mean Blood Flow Velocity"
+    ],
+    "Semantic_Type": [
+      "Finding"
+    ],
+    "code": [
+      "C127570"
+    ]
+  },
+  "label": "Mean Blood Flow Velocity",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C127570",
+  "obo_id": "NCIT:C127570",
+  "in_subset": [
+    "NCIT_C101846",
+    "NCIT_C101847",
+    "NCIT_C61410",
+    "NCIT_C66830"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "MBFVEL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Mean Blood Flow Velocity",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C127570/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

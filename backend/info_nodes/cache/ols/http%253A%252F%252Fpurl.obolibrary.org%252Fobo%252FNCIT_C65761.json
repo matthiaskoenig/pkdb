@@ -1,0 +1,102 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C65761",
+  "lang": "en",
+  "description": [
+    "A phosphinic acid-containing angiotensin-converting enzyme (ACE) inhibitor with antihypertensive activity. As an ester prodrug, fosinopril is hydrolysed by esterases to its active metabolite fosinoprilat. Fosinoprilat specifically and competitively inhibits angiotensin-converting enzyme thereby decreasing the formation of the potent vasoconstrictor angiotensin II, resulting in diminished vasopressor activity. In addition, angiotensin II-mediated aldosterone secretion by adrenal cortex is decreased, which results in a decrease of sodium retention and an increase in water outflow."
+  ],
+  "synonyms": [
+    "FOSINOPRIL",
+    "Fosinopril"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "98048-97-6"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:5163"
+    ],
+    "Chemical_Formula": [
+      "C30H46NO7P"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "R43D2573WO"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C47542"
+    ],
+    "Legacy Concept Name": [
+      "Fosinopril"
+    ],
+    "Preferred_Name": [
+      "Fosinopril"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0118168"
+    ],
+    "code": [
+      "C65761"
+    ]
+  },
+  "label": "Fosinopril",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C65761",
+  "obo_id": "NCIT:C65761",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "FOSINOPRIL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fosinopril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65761/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,66 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000012",
+  "lang": "en",
+  "description": [
+    "An electrochemical analysis in which the total Coulombs of electricity required to complete (fully oxidise or fully reduce the sample in) an electrochemical reaction is measured."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "id": [
+      "CHMO:0000012"
+    ]
+  },
+  "label": "coulometry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHMO_0000012",
+  "obo_id": "CHMO:0000012",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000012/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

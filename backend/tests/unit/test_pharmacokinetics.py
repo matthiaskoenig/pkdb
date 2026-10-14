@@ -45,6 +45,23 @@ def test_terminal_half_life_and_zero_tmax_are_preserved(exponential_course):
     assert outputs["auc_end"].derived_from == "curve"
 
 
+@pytest.mark.parametrize("unit", ["µg/g", "ng/mg", "percent"])
+def test_tissue_concentrations_per_mass_do_not_generate_pk(exponential_course, unit):
+    for point in exponential_course.points:
+        point.unit = unit
+    assert derive_pk(exponential_course) == []
+
+
+@pytest.mark.parametrize("unit", ["mg/l", "nmol/ml", "IU/l"])
+def test_concentrations_per_volume_generate_pk(exponential_course, unit):
+    for point in exponential_course.points:
+        point.unit = unit
+    assert {record.measurement_type for record in derive_pk(exponential_course)} >= {
+        "cmax",
+        "auc_end",
+    }
+
+
 @pytest.mark.parametrize(
     ("counts", "expected"),
     [
@@ -407,3 +424,23 @@ def test_terminal_regression_uses_all_post_peak_points(exponential_course):
     outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
     slope, _ = np.polyfit([1, 2, 3, 4, 6, 8], np.log(concentrations[1:]), 1)
     assert outputs["kel"].statistics.mean == pytest.approx(-slope)
+
+
+def test_dose_per_body_surface_area_preserves_dose_independent_pk(exponential_course):
+    # A numeric factor in the unit, as in mg/(1.73*m^2), is no pint unit; the
+    # dose has no PK dose dimension, so only the dose-independent outputs remain.
+    expected = derive_pk(exponential_course)
+    for unit in ("mg/(1.73m^2)", "mg/(1.73*m^2)"):
+        assert derive_pk(exponential_course, scalar_dose(unit=unit)) == expected
+
+
+def test_a_factor_of_the_dose_unit_scales_the_amount(exponential_course):
+    def clearance(**updates):
+        outputs = derive_pk(exponential_course, scalar_dose(**updates))
+        [record] = [p for p in outputs if p.measurement_type == "clearance"]
+        return record
+
+    expected = clearance()
+    actual = clearance(unit="10^3*mg", statistics=Statistics(mean=0.04))
+    assert actual.unit == expected.unit
+    assert actual.statistics.mean == pytest.approx(expected.statistics.mean)

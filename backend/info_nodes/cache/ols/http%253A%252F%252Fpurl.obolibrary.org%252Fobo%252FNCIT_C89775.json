@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C89775",
+  "lang": "en",
+  "description": [
+    "The amount of time it take for a cessation of bleeding. It is a measurement of the ability of capillaries and platelets to interact to form a blood clot."
+  ],
+  "synonyms": [
+    "BLEEDT",
+    "Bleeding Time",
+    "Clotting Time Homeostasis"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A measurement of the time from the start to cessation of an induced bleed."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Preferred_Name": [
+      "Bleeding Time"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0005729"
+    ],
+    "code": [
+      "C89775"
+    ]
+  },
+  "label": "Bleeding Time",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C89775",
+  "obo_id": "NCIT:C89775",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C65047",
+    "NCIT_C66830",
+    "NCIT_C67154",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BLEEDT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bleeding Time",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Clotting Time Homeostasis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C89775/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

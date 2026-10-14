@@ -94,6 +94,7 @@ DOSING_UNITS = [
     "IU/m^2/hr",
     "ml",
     "ml/hr",
+    "ml/kg",  # liquids dosed by volume per body weight, e.g. tetrachloromethane
     # FIXME: We proably need  different normalization strategy or we need an extra MeasurementType
     # Validation: All units need a unique dimension within 1 measurement type.
     # 'count', this has the same dimension as 'g/kg' (per bodyweight).
@@ -116,4 +117,6 @@ RESTRICTED_DOSING_UNITS = [
 PRESSURE_UNITS = ["mmHg"]
 PRESSURE_AUC_UNITS = ["mmHg*hr"]
 
-SVR_UNIT = "dynes/sec/(cm^-5)"
+# Vascular resistance: pressure divided by volume flow, [mass]/([length]^4*[time]).
+# Equivalent units such as mmHg*s/ml or Wood units (mmHg*min/l) convert to it.
+SVR_UNIT = "dyn*s/cm^5"

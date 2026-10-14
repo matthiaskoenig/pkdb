@@ -66,6 +66,31 @@ def test_an_exact_conversion_is_identical(tmp_path, sf_vocabulary):
     assert result.changes == []
 
 
+@pytest.mark.parametrize("unit", ["mg/(1.73m^2)", "mg/(1.73*m^2)"])
+def test_a_dose_per_body_surface_area_is_identical(tmp_path, sf_vocabulary, unit):
+    # A unit with a numeric factor, as in acetaminophen/Lowenthal1976: the PK
+    # of the timecourse of the dose is derived without it, in both formats.
+    [intervention] = STUDY["interventionset"]["interventions"]
+    study = {
+        **STUDY,
+        "interventionset": {"interventions": [{**intervention, "unit": unit}]},
+    }
+    vocabulary = sf_vocabulary.model_copy(
+        update={
+            "measurements": tuple(
+                rule.model_copy(update={"units": (*rule.units, "g/(1.73*m^2)")})
+                if rule.name == "dosing"
+                else rule
+                for rule in sf_vocabulary.measurements
+            )
+        }
+    )
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    v2 = converted(tmp_path, v1)
+    result = judge(v1, v2, vocabulary)
+    assert (result.outcome, result.differences) == ("identical", []), result.issues
+
+
 def test_a_conversion_from_hidden_tables_is_identical(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1", workbook=False)
     assert judge(v1, converted(tmp_path, v1), sf_vocabulary).outcome == "identical"
@@ -609,6 +634,39 @@ def test_labelled_array_outputs_that_form_no_series_are_intended_outputs(
     ]
 
 
+def test_labelled_array_outputs_with_one_row_per_label_are_intended_outputs(
+    tmp_path, sf_vocabulary
+):
+    # One timed row per individual and label, as in tirzepatide/Urva2021: no
+    # label forms a timecourse of two times, so the rows stay outputs.
+    array = {
+        **TIMECOURSE,
+        "source": "Tab3",
+        "image": "Tab3",
+        "output_type": "array",
+        "label": "col==label",
+        "group": None,
+        "individual": "col==subject",
+    }
+    array = {key: value for key, value in array.items() if value is not None}
+    study = with_outputs(OUTPUT, TIMECOURSE, array)
+    tab3 = [
+        ["subject", "label", "time", "mean"],
+        ["S1", "drug_S1", 648, 1],
+        ["S2", "drug_S2", 648, 2],
+    ]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab3": tab3}, (*IMAGES, "Tab3"))
+    v2 = converted(tmp_path, v1)
+    assert (v2 / "outputs_Tab3.tsv").exists()
+    assert not (v2 / "timecourses_Tab3.tsv").exists()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [
+        ("array_output", 2),
+        ("output_label", 2),
+    ]
+
+
 def test_array_points_of_a_scatter_are_an_intended_change(tmp_path, sf_vocabulary):
     study = with_outputs(
         OUTPUT,
@@ -862,7 +920,7 @@ def test_a_comment_with_a_line_break_is_identical(tmp_path, sf_vocabulary):
     scatters = (v2 / "scatters_Fig2.tsv").read_text(encoding="utf-8")
     assert "\tcurator: Age at screening / curator: Cmax\n" in scatters
     result = judge(v1, v2, sf_vocabulary)
-    assert (result.outcome, result.differences) == ("identical", [])
+    assert (result.outcome, result.differences) == ("identical", []), result.issues
 
 
 @pytest.mark.parametrize(
