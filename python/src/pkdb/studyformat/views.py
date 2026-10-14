@@ -12,6 +12,7 @@ import dataclasses
 import json
 from collections.abc import Callable
 from pathlib import Path
+from typing import Literal
 
 from pydantic import ValidationError
 
@@ -425,3 +426,100 @@ def row_view(view: dict, *, warnings: int) -> dict:
         "substances": view["substances"],
         "warnings": warnings,
     }
+
+
+Audience = Literal["public", "curator"]
+ViewKind = Literal["study", "row", "table", "source"]
+
+# The keys of a summary that only the curation view shows.
+_CURATION_SUMMARY = ("review_status", "open_items", "issue")
+
+
+def _public_summary(summary: dict) -> dict:
+    public = {
+        key: value for key, value in summary.items() if key not in _CURATION_SUMMARY
+    }
+    if "provenance" in summary:
+        public["provenance"] = {"kind": summary["provenance"].get("kind")}
+    return public
+
+
+def _public_metadata(metadata: dict) -> dict:
+    public = {key: value for key, value in metadata.items() if key != "issue"}
+    if "curators" in public:
+        public["curators"] = [
+            {"user": curator["user"]} for curator in public["curators"]
+        ]
+    if "provenance" in public:
+        public["provenance"] = {"kind": public["provenance"].get("kind")}
+    return public
+
+
+def _public_study(view: dict) -> dict:
+    raw = {entry["file"] for entry in view["tables"] if entry["kind"] == RAW_KIND}
+    return {
+        **view,
+        "summary": _public_summary(view["summary"]),
+        "metadata": _public_metadata(view["metadata"]),
+        "review": None,
+        "acknowledged": [],
+        "targets": {},
+        "files": [],
+        "papers": [],
+        "tables": [entry for entry in view["tables"] if entry["kind"] != RAW_KIND],
+        "sources": [
+            {
+                **source,
+                "image": None,
+                "raw": None,
+                "raw_kind": None,
+                "missing_image": None,
+                "missing_raw": None,
+                "tables": [name for name in source["tables"] if name not in raw],
+            }
+            for source in view["sources"]
+        ],
+    }
+
+
+def _public_row(row: dict) -> dict:
+    return {**row, "summary": _public_summary(row["summary"]), "warnings": 0}
+
+
+def _public_table(table: dict) -> dict | None:
+    return None if table["kind"] == RAW_KIND else table
+
+
+def _public_source(source: dict) -> dict:
+    return {
+        **source,
+        "image": None,
+        "image_size": None,
+        "raw_grid": None,
+        "digitization": None,
+        "overlay": [],
+        "unmatched": [],
+        "layout": "side_by_side",
+        "mapped": [table for table in source["mapped"] if table["kind"] != RAW_KIND],
+    }
+
+
+_PUBLIC: dict[str, Callable[[dict], dict | None]] = {
+    "study": _public_study,
+    "row": _public_row,
+    "table": _public_table,
+    "source": _public_source,
+}
+
+
+def for_audience(kind: ViewKind, document: dict, audience: Audience) -> dict | None:
+    """What `audience` sees of a document of kind `kind`; None for a raw table to the public.
+
+    Curators, who may write the study, see the document as it is. The public sees the same keys
+    with nothing of the curation in them: no review, review targets or acknowledged warnings,
+    no issue, no curator ratings, no provenance beyond its kind, no file names, no raw tables,
+    no images and PDFs, and the plot of a figure without the figure (#963).
+    """
+    if audience == "curator":
+        return document
+    return _PUBLIC[kind](document)
