@@ -2,8 +2,8 @@
 
 A digitized figure also gets overlay points in image pixels: the digitized points
 and the mapped rows drawn at their pixel, so a curator can see where they differ.
-The mapped rows of timecourse and scatter tables are also points in the units of
-their tables, for a plot beside the image. The series of a figure have one order
+The mapped rows of timecourse and scatter tables, and the outputs rows with a time, are
+also points in the units of their tables, for a plot beside the image. The series of a figure have one order
 and one color each, which `pkdb plot` and the curation app share.
 """
 
@@ -21,6 +21,7 @@ from pkdb.studyformat.digitize import (
     dataset_series,
     digitization_file,
     mapped_points,
+    outputs_series,
     png_size,
 )
 from pkdb.studyformat.load import LoadedStudy, LoadedTable
@@ -28,7 +29,14 @@ from pkdb.studyformat.raw import raw_file, raw_grid
 from pkdb.studyformat.tables import SOURCE_PATTERN, TEXT_SOURCE, image_file
 from pkdb.studyformat.text import format_number, natural_key
 
-_DIGITIZED_KINDS = ("timecourses", "scatters")
+# The kind of a plotted point: timecourse and outputs rows over time, scatter rows as points.
+PointKind = Literal["timecourses", "scatters", "outputs"]
+# The tables whose mapped rows a figure plots, by kind.
+_PLOTTED_KINDS: dict[str, PointKind] = {
+    "timecourses": "timecourses",
+    "scatters": "scatters",
+    "outputs": "outputs",
+}
 
 SourceKind = Literal["table", "figure", "text"]
 
@@ -103,7 +111,7 @@ class OverlayPoint:
 
 @dataclass(frozen=True)
 class SourcePoint:
-    """A mapped row of a timecourse or scatter table in the units of its table.
+    """A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table.
 
     `error_low` and `error_high` are the ends of the error bar of a timecourse row around `y`
     (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
@@ -115,7 +123,7 @@ class SourcePoint:
     """
 
     series: str
-    kind: Literal["timecourses", "scatters"]
+    kind: PointKind
     file: str
     line: int
     x: float
@@ -267,14 +275,29 @@ def _value_text(value: float) -> str:
 
 def _figure_points(
     study: LoadedStudy, source: str
-) -> list[tuple[Literal["timecourses", "scatters"], MappedPoint]]:
-    """The mapped rows of the timecourse and scatter tables of a figure as dataset points."""
-    return [
-        ("scatters" if table.kind == "scatters" else "timecourses", point)
-        for table in study.tables
-        if table.source == source and table.kind in _DIGITIZED_KINDS
-        for point in mapped_points(table)
-    ]
+) -> list[tuple[PointKind, MappedPoint]]:
+    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points.
+
+    The points of one outputs series are sorted by time across all outputs tables of the source,
+    so that a series split over two tables draws one line; the series keep the order of their
+    first row.
+    """
+    points: list[tuple[PointKind, MappedPoint]] = []
+    for table in study.tables:
+        kind = _PLOTTED_KINDS.get(table.kind)
+        if table.source == source and kind is not None:
+            points += [(kind, point) for point in mapped_points(table)]
+    slots = [i for i, (kind, _) in enumerate(points) if kind == "outputs"]
+    order = {
+        name: index
+        for index, name in enumerate(dict.fromkeys(points[i][1].dataset for i in slots))
+    }
+    by_time = sorted(
+        (points[i] for i in slots), key=lambda e: (order[e[1].dataset], e[1].x)
+    )
+    for i, entry in zip(slots, by_time):
+        points[i] = entry
+    return points
 
 
 def _overlay(
@@ -339,7 +362,7 @@ def _overlay(
 
 
 def _source_points(
-    figure_points: list[tuple[Literal["timecourses", "scatters"], MappedPoint]],
+    figure_points: list[tuple[PointKind, MappedPoint]],
 ) -> tuple[SourcePoint, ...]:
     """The mapped rows as points in table units, each with the ends of its error bar."""
     return tuple(
@@ -373,7 +396,7 @@ def _labels(
     """Per series of a figure the x and y axis labels from its first row."""
     labels: dict[str, tuple[str | None, str | None]] = {}
     for table in study.tables:
-        if table.source != source or table.kind not in _DIGITIZED_KINDS:
+        if table.source != source or table.kind not in _PLOTTED_KINDS:
             continue
         for row in table.rows:
             cells = row.cells
@@ -391,6 +414,14 @@ def _labels(
                     (
                         _label(cells.get("x_measurement", ""), cells.get("x_unit", "")),
                         _label(cells.get("y_measurement", ""), cells.get("y_unit", "")),
+                    ),
+                )
+            elif table.kind == "outputs" and (name := outputs_series(row)):
+                labels.setdefault(
+                    name,
+                    (
+                        _label("time", cells.get("time_unit", "")),
+                        _label(cells.get("measurement", ""), cells.get("unit", "")),
                     ),
                 )
     return labels

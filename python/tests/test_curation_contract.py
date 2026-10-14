@@ -555,3 +555,69 @@ def test_errors_contract(workspace, engine_on, monkeypatch):
         error={**entry["error"], "request_id": REQUEST_ID, "time": FAILED_AT},
     )
     check_contract("errors", {"open_failed": body, "activity": activity})
+
+
+DRAFT = "caffeine/Draft2021"
+PLASMA = "all · D150 · concentration · caffeine · plasma"
+URINE = "all · D150 · concentration · caffeine · urine"
+
+
+def _add_outputs_figure(workspace: Path) -> None:
+    """Fig2 of Draft2021: an outputs table whose rows have a time, as a time profile of a paper
+    has them, with one row without a time, and an image (a copy of Fig1 of Demo2020)."""
+    study = workspace / DRAFT
+    header = (study / "outputs_Tab1.tsv").read_text(encoding="utf-8").splitlines()[0]
+
+    def row(
+        measurement: str, tissue: str, time: str, mean: str, unit: str = "mg/l"
+    ) -> str:
+        cells = {
+            "study": "Draft2021",
+            "source": "Fig2",
+            "subjects": "all",
+            "interventions": "D150",
+            "measurement": measurement,
+            "substance": "caffeine",
+            "tissue": tissue,
+            "time": time,
+            "time_unit": "hr" if time else "",
+            "mean": mean,
+            "unit": unit,
+        }
+        return "\t".join(cells.get(name, "") for name in header.split("\t"))
+
+    rows = [
+        row("auc_inf", "plasma", "", "17", "mg/l*hr"),
+        row("concentration", "plasma", "0.5", "2.1"),
+        row("concentration", "plasma", "1", "3"),
+        row("concentration", "plasma", "2", "2.4"),
+        row("concentration", "plasma", "4", "1.2"),
+        row("concentration", "urine", "2", "12"),
+        row("concentration", "urine", "4", "20"),
+    ]
+    (study / "outputs_Fig2.tsv").write_text(
+        "\n".join([header, *rows]) + "\n", encoding="utf-8", newline=""
+    )
+    shutil.copyfile(
+        workspace / DEMO / "Demo2020_Fig1.png", study / "Draft2021_Fig2.png"
+    )
+
+
+def test_outputs_source_contract(workspace, engine_on):
+    """The source view of Fig2 of Draft2021, whose outputs rows with a time the plot of mapped
+    rows draws as two series by time, beside the image of a figure without a digitization."""
+    _add_outputs_figure(workspace)
+    formatted = format_folder(workspace / DRAFT, check=True)
+    assert formatted.ok and not formatted.changes
+    view = engine_on(workspace).study_source(DRAFT, "Fig2")
+    assert view["layout"] == "side_by_side"
+    assert [(p["series"], p["kind"], p["line"], p["x"]) for p in view["points"]] == [
+        (PLASMA, "outputs", 2, 0.5),
+        (PLASMA, "outputs", 3, 1.0),
+        (PLASMA, "outputs", 4, 2.0),
+        (PLASMA, "outputs", 5, 4.0),
+        (URINE, "outputs", 6, 2.0),
+        (URINE, "outputs", 7, 4.0),
+    ]
+    assert list(view["unmatched"]) == [PLASMA, URINE]
+    check_contract("source-outputs-fig2", view)

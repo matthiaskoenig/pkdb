@@ -401,3 +401,97 @@ def test_an_error_bar_end_off_a_log_axis_has_no_pixel(make_study, valid_files, t
     [mapped] = [p for p in view.overlay if p.role == "mapped"]
     assert mapped.error_low_px is None
     assert mapped.error_high_px is not None and mapped.error_high_px[1] < mapped.py
+
+
+OUTPUT = {
+    "subjects": "all",
+    "interventions": "D1",
+    "measurement": "concentration",
+    "substance": "drug",
+    "tissue": "plasma",
+    "time_unit": "h",
+    "unit": "mg/l",
+}
+OUTPUT_SERIES = "all · D1 · concentration · drug · plasma"
+
+
+def test_outputs_with_a_time_are_plotted_as_series_by_time(
+    make_study, valid_files, tsv
+):
+    rows = [
+        {**OUTPUT, "time": "2", "mean": "3"},
+        {**OUTPUT, "time": "1", "mean": "2"},
+        {**OUTPUT, "measurement": "cmax", "mean": "5"},
+    ]
+    folder = make_study({**valid_files, "outputs_Fig1.tsv": tsv("outputs", *rows)})
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    outputs = [p for p in view.points if p.kind == "outputs"]
+    assert [(p.series, p.file, p.line, p.x, p.y) for p in outputs] == [
+        (OUTPUT_SERIES, "outputs_Fig1.tsv", 2, 1.0, 2.0),
+        (OUTPUT_SERIES, "outputs_Fig1.tsv", 3, 2.0, 3.0),
+    ]
+    # Without a digitization, every series is plotted beside the image.
+    assert view.layout == "side_by_side"
+    assert set(view.unmatched) == {"drug_plasma", OUTPUT_SERIES}
+    series = {entry.name: entry for entry in view.series}
+    assert (series[OUTPUT_SERIES].x_label, series[OUTPUT_SERIES].y_label) == (
+        "time (h)",
+        "concentration (mg/l)",
+    )
+
+
+def test_an_outputs_series_split_over_two_tables_is_sorted_by_time(
+    make_study, valid_files, tsv
+):
+    first = tsv(
+        "outputs",
+        {**OUTPUT, "time": "1", "mean": "2"},
+        {**OUTPUT, "time": "4", "mean": "4"},
+    )
+    second = tsv(
+        "outputs",
+        {**OUTPUT, "time": "2", "mean": "3"},
+        {**OUTPUT, "time": "3", "mean": "3.5"},
+    )
+    folder = make_study(
+        {**valid_files, "outputs_Fig1.tsv": first, "outputs_Fig1_b.tsv": second}
+    )
+    study = load_study(folder)
+    for table in study.tables:
+        if table.file == "outputs_Fig1_b.tsv":
+            table.source = "Fig1"
+    view = source_view(study, "Fig1")
+    outputs = [p for p in view.points if p.kind == "outputs"]
+    assert [(p.file, p.x) for p in outputs] == [
+        ("outputs_Fig1.tsv", 1.0),
+        ("outputs_Fig1_b.tsv", 2.0),
+        ("outputs_Fig1_b.tsv", 3.0),
+        ("outputs_Fig1.tsv", 4.0),
+    ]
+
+
+def test_an_outputs_series_with_a_dataset_is_drawn_on_the_image(
+    make_study, valid_files, tsv
+):
+    data = project(GOOD)
+    data["datasetColl"].append(
+        {"name": OUTPUT_SERIES, "axesName": "XY", "data": [{"x": 10, "y": 80}]}
+    )
+    folder = make_study(
+        {
+            **valid_files,
+            "outputs_Fig1.tsv": tsv("outputs", {**OUTPUT, "time": "1", "mean": "2"}),
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(data),
+        }
+    )
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    assert view.layout == "overlay"
+    assert [
+        (p.px, p.py, p.file, p.line)
+        for p in view.overlay
+        if p.role == "mapped" and p.series == OUTPUT_SERIES
+    ] == [(10.0, 80.0, "outputs_Fig1.tsv", 1)]
+    assert OUTPUT_SERIES not in view.unmatched

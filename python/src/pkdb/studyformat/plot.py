@@ -208,6 +208,11 @@ def _overlay(study, view, path: Path) -> PlotResult:
     )
 
 
+def _linestyle(kind: str) -> str:
+    """Timecourse and outputs series as lines through their points by time, scatters as points."""
+    return "" if kind == "scatters" else "-"
+
+
 def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
     from matplotlib.figure import Figure
 
@@ -228,7 +233,7 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
             [p.y for p in rows],
             yerr=_error_ranges(rows),
             marker="o",
-            linestyle="-" if rows[0].kind == "timecourses" else "",
+            linestyle=_linestyle(rows[0].kind),
             color=styles[name].color,
             label=name,
         )

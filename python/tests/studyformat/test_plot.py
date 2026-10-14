@@ -10,7 +10,12 @@ from pkdb.studyformat.colors import SERIES_COLORS
 from pkdb.studyformat.digitize import png_size
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.load import load_study
-from pkdb.studyformat.plot import _error_ranges, _error_segment, render_source
+from pkdb.studyformat.plot import (
+    _error_ranges,
+    _error_segment,
+    _linestyle,
+    render_source,
+)
 from pkdb.studyformat.sources import OverlayPoint, SourcePoint, source_view
 
 RED = (255, 0, 0)
@@ -337,3 +342,47 @@ def test_overlay_draws_the_error_bar_of_a_mapped_row_from_its_low_to_its_high_en
         [60.0, 50.0],
     )
     assert _error_segment(overlay_point(None, None), 100) is None
+
+
+def test_side_by_side_draws_timecourses_and_outputs_as_lines_and_scatters_as_points():
+    assert [_linestyle(kind) for kind in ("timecourses", "outputs", "scatters")] == [
+        "-",
+        "-",
+        "",
+    ]
+
+
+def test_plot_default_sources_include_figures_whose_outputs_have_a_time(
+    make_study, valid_files, tsv, tmp_path, capsys
+):
+    output = {
+        "subjects": "all",
+        "interventions": "D1",
+        "measurement": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "time_unit": "h",
+        "unit": "mg/l",
+    }
+    folder = make_study(
+        {
+            **valid_files,
+            "outputs_Fig3.tsv": tsv("outputs", {**output, "time": "1", "mean": "2"}),
+            "Example_Fig3.png": png(100, 100),
+            # Outputs without a time: nothing to plot.
+            "outputs_Fig4.tsv": tsv(
+                "outputs", {**output, "measurement": "cmax", "mean": "2"}
+            ),
+            "Example_Fig4.png": png(100, 100),
+        }
+    )
+    assert format_folder(folder).ok
+    out = tmp_path / "plots"
+    assert main(["plot", str(folder), "--out", str(out), "--format", "human"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert (
+        f"caffeine/Example: Fig3 (side_by_side) {out / 'Example_Fig3.plot.png'}"
+        in lines
+    )
+    assert "  series without dataset: all · D1 · concentration · drug · plasma" in lines
+    assert not any("Fig4" in line for line in lines)
