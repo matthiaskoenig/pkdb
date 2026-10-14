@@ -113,7 +113,7 @@ class OverlayPoint:
 class SourcePoint:
     """A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table.
 
-    `error_low` and `error_high` are the ends of the error bar of a timecourse row around `y`
+    `error_low` and `error_high` are the ends of the error bar of a timecourse row or an outputs row around `y`
     (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
     first (as reported or as the digitized `error_bar` gives it), then around a `gmean` `gsd`,
     `sd`, `se`, and around a `mean` or `median` `sd`, `se`; a negative `sd` or `se` or a `gsd`

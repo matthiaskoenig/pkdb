@@ -442,6 +442,23 @@ def test_outputs_with_a_time_are_plotted_as_series_by_time(
     )
 
 
+def test_outputs_rows_of_one_series_at_the_same_time_are_ordered_by_line(
+    make_study, valid_files, tsv
+):
+    # The canonical order puts `calculation` before `time`, so the two rows at 1 h are not adjacent.
+    rows = [
+        {**OUTPUT, "calculation": "a", "time": "1", "mean": "4"},
+        {**OUTPUT, "calculation": "b", "time": "2", "mean": "5"},
+        {**OUTPUT, "calculation": "c", "time": "1", "mean": "3"},
+    ]
+    folder = make_study({**valid_files, "outputs_Fig1.tsv": tsv("outputs", *rows)})
+    format_folder(folder)
+    outputs = [
+        p for p in source_view(load_study(folder), "Fig1").points if p.kind == "outputs"
+    ]
+    assert [(p.x, p.line) for p in outputs] == [(1.0, 1), (1.0, 3), (2.0, 2)]
+
+
 def test_an_outputs_row_with_an_sd_has_an_error_bar(make_study, valid_files, tsv):
     folder = make_study(
         {
