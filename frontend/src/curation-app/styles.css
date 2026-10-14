@@ -361,6 +361,15 @@ a.brand {
     min-height: max(var(--v-input-control-height, 0px), calc(1lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px)));
   }
 }
+/* The line of a description or a comment stands in the middle of its field, where the text of a
+   text field stands: the 10.5 px that the 30 px of the field leave around a line of 19.5 px
+   (13 px text) are split evenly, 5.25 px above and below. A text area puts its text at the top, so
+   the paddings do it; Vuetify's auto-grow reads them as plain pixels, so they are written as such
+   (the top one is 4 px less, as --v-input-padding-top adds 4 px above). */
+.v-input--density-compact.grow-textarea--one-line .v-field.v-field--variant-outlined {
+  --v-field-padding-top: 1.25px;
+  --v-field-padding-bottom: 5.25px;
+}
 /* Messages of fields that wrap keep their lines apart. */
 .v-input .v-messages__message {
   line-height: 1.35;

@@ -13,42 +13,47 @@ const ON_DISK = "Added in an editor while the form was open.";
 
 test("saves the metadata form to study.json and keeps the edits through a conflict", async ({ app, page }) => {
   const path = join(app.server.workspace, "caffeine/Demo2020/study.json");
-  const onDisk = (): StudyJson => JSON.parse(readFileSync(path, "utf8")) as StudyJson;
-  await app.open("#/studies/caffeine/Demo2020/metadata");
-  const description = page.getByRole("textbox", { name: "Description 1" });
-  const save = page.getByRole("button", { name: "Save", exact: true });
-  await expect(page.getByRole("radio", { name: "Closed" })).toBeChecked();
+  const original = readFileSync(path, "utf8");
+  try {
+    const onDisk = (): StudyJson => JSON.parse(readFileSync(path, "utf8")) as StudyJson;
+    await app.open("#/studies/caffeine/Demo2020/metadata");
+    const description = page.getByRole("textbox", { name: "Description 1" });
+    const save = page.getByRole("button", { name: "Save", exact: true });
+    await expect(page.getByRole("radio", { name: "Closed" })).toBeChecked();
 
-  await page.getByRole("radio", { name: "Open" }).check();
-  await description.fill(EDITED);
-  await expect(page.locator(".unsaved-banner")).toContainText("Unsaved changes to study.json: Licence, Descriptions");
-  await save.click();
-  await expect(page.getByText("study.json saved.").first()).toBeVisible();
-  await expect.poll(onDisk).toMatchObject({ licence: "open", descriptions: [EDITED] });
+    await page.getByRole("radio", { name: "Open" }).check();
+    await description.fill(EDITED);
+    await expect(page.locator(".unsaved-banner")).toContainText("Unsaved changes to study.json: Licence, Descriptions");
+    await save.click();
+    await expect(page.getByText("study.json saved.").first()).toBeVisible();
+    await expect.poll(onDisk).toMatchObject({ licence: "open", descriptions: [EDITED] });
 
-  // Another edit, while an editor appends a description to study.json in canonical form.
-  await page.getByRole("radio", { name: "Closed" }).check();
-  const changed = onDisk();
-  changed.descriptions.push(ON_DISK);
-  writeFileSync(path, `${JSON.stringify(changed, null, 2)}\n`);
-  app.allowFailedRequest("/local/studies/metadata", 409);
-  await save.click();
-  await expect(page.getByText("study.json changed on disk after you started editing it.")).toHaveText(
-    "study.json changed on disk after you started editing it. Reload it to keep your edits on top of the new version.",
-  );
-  expect(onDisk()).toMatchObject({ licence: "open", descriptions: [EDITED, ON_DISK] });
+    // Another edit, while an editor appends a description to study.json in canonical form.
+    await page.getByRole("radio", { name: "Closed" }).check();
+    const changed = onDisk();
+    changed.descriptions.push(ON_DISK);
+    writeFileSync(path, `${JSON.stringify(changed, null, 2)}\n`);
+    app.allowFailedRequest("/local/studies/metadata", 409);
+    await save.click();
+    await expect(page.getByText("study.json changed on disk after you started editing it.")).toHaveText(
+      "study.json changed on disk after you started editing it. Reload it to keep your edits on top of the new version.",
+    );
+    expect(onDisk()).toMatchObject({ licence: "open", descriptions: [EDITED, ON_DISK] });
 
-  // The reloaded form keeps the edit and marks the field that changed on disk.
-  await page.getByRole("button", { name: "Reload", exact: true }).click();
-  await expect(page.getByText("Reloaded study.json from disk.")).toBeVisible();
-  await expect(page.getByRole("radio", { name: "Closed" })).toBeChecked();
-  await expect(description).toHaveValue(EDITED);
-  await expect(page.getByRole("textbox", { name: "Description 2" })).toHaveValue(ON_DISK);
-  await expect(page.getByText("Changed on disk", { exact: true })).toBeVisible();
-  await save.click();
-  await expect(page.getByText("study.json saved.").first()).toBeVisible();
-  await expect.poll(onDisk).toMatchObject({ licence: "closed", descriptions: [EDITED, ON_DISK] });
-  await expect(page.locator(".unsaved-banner")).not.toContainText("Unsaved changes");
+    // The reloaded form keeps the edit and marks the field that changed on disk.
+    await page.getByRole("button", { name: "Reload", exact: true }).click();
+    await expect(page.getByText("Reloaded study.json from disk.")).toBeVisible();
+    await expect(page.getByRole("radio", { name: "Closed" })).toBeChecked();
+    await expect(description).toHaveValue(EDITED);
+    await expect(page.getByRole("textbox", { name: "Description 2" })).toHaveValue(ON_DISK);
+    await expect(page.getByText("Changed on disk", { exact: true })).toBeVisible();
+    await save.click();
+    await expect(page.getByText("study.json saved.").first()).toBeVisible();
+    await expect.poll(onDisk).toMatchObject({ licence: "closed", descriptions: [EDITED, ON_DISK] });
+    await expect(page.locator(".unsaved-banner")).not.toContainText("Unsaved changes");
+  } finally {
+    writeFileSync(path, original);
+  }
 });
 
 test("the avatar of a person stays clear of the label on the outline of its field", async ({ app, page }) => {
@@ -97,6 +102,18 @@ function removeOffset(control: Locator): Promise<number> {
   });
 }
 
+/** The room above and below the first line of text of `control`, and the height of the middle of that line below the top of its outline. */
+function lineRoom(control: Locator): Promise<{ above: number; below: number; middle: number }> {
+  return control.evaluate((element) => {
+    const field = element.closest(".v-field")!.getBoundingClientRect();
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const line = element instanceof HTMLTextAreaElement ? parseFloat(style.lineHeight) : box.height;
+    const top = element instanceof HTMLTextAreaElement ? box.top + parseFloat(style.paddingTop) : box.top;
+    return { above: top - field.top, below: field.bottom - (top + line), middle: top + line / 2 - field.top };
+  });
+}
+
 test("a description and a comment of one line are as high as the other fields, with their remove buttons beside them", async ({
   app,
   page,
@@ -120,6 +137,13 @@ test("a description and a comment of one line are as high as the other fields, w
     const line = await outlineHeight(sourceKey);
     expect(Math.abs((await outlineHeight(description)) - line)).toBeLessThanOrEqual(1);
     expect(Math.abs((await outlineHeight(comment)) - line)).toBeLessThanOrEqual(1);
+    // The line of text stands in the middle of the field, at the height of the text of a text field.
+    const reference = await lineRoom(sourceKey);
+    for (const control of [description, comment]) {
+      const room = await lineRoom(control);
+      expect(Math.abs(room.above - room.below)).toBeLessThanOrEqual(1);
+      expect(Math.abs(room.middle - reference.middle)).toBeLessThanOrEqual(1);
+    }
     expect(Math.abs(await removeOffset(description))).toBeLessThanOrEqual(1);
     expect(Math.abs(await removeOffset(comment))).toBeLessThanOrEqual(1);
     for (const theme of ["light", "dark"] as const) {
