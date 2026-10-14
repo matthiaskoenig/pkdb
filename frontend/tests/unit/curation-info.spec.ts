@@ -31,6 +31,23 @@ function contrast(first: Rgb, second: Rgb): number {
   return (light! + 0.05) / (dark! + 0.05);
 }
 
+/** The color difference of two colors, the distance in CIELAB (CIE76); about 2.3 is the smallest difference that the eye sees. */
+function deltaE(first: Rgb, second: Rgb): number {
+  const lab = (color: Rgb) => {
+    const [red, green, blue] = color.map((value) => {
+      const channel = value / 255;
+      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    const f = (value: number) => (value > 0.008856 ? Math.cbrt(value) : 7.787 * value + 16 / 116);
+    const x = f((0.4124 * red! + 0.3576 * green! + 0.1805 * blue!) / 0.95047);
+    const y = f(0.2126 * red! + 0.7152 * green! + 0.0722 * blue!);
+    const z = f((0.0193 * red! + 0.1192 * green! + 0.9505 * blue!) / 1.08883);
+    return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+  };
+  const [a, b] = [lab(first), lab(second)];
+  return Math.hypot(a[0]! - b[0]!, a[1]! - b[1]!, a[2]! - b[2]!);
+}
+
 const percent = (value: string | number | undefined) => Number.parseFloat(String(value)) / 100;
 const themes = makeVuetify({ themes: INFO_THEMES }).theme.computedThemes.value;
 
@@ -58,7 +75,7 @@ describe("colors of the classes of information", () => {
         (variable) => themes[name]!.variables[variable],
       );
     expect(tints("light")).toEqual(["16%", "6%", "22%", "12%"]);
-    expect(tints("dark")).toEqual(["20%", "7%", "20%", "7%"]);
+    expect(tints("dark")).toEqual(["20%", "7%", "26%", "17%"]);
   });
 
   it.each(["light", "dark"] as const)("keeps 4.5:1 for the text on every tint of the %s theme", (name) => {
@@ -92,5 +109,17 @@ describe("colors of the classes of information", () => {
     const page = rgb(colors.background!);
     const cell = mix(rgb(colors["info-data"]!), percent(variables["info-data-cell-tint"]), surface);
     expect(contrast(cell, page)).toBeGreaterThan(contrast(surface, page));
+  });
+
+  it.each([
+    ["light", 4],
+    ["dark", 6],
+  ] as const)("keeps the data cells of the %s theme clearly apart from the subjects and interventions cells (dE of %d at least)", (name, minimum) => {
+    const { colors, variables } = themes[name]!;
+    const surface = rgb(colors.surface!);
+    const cell = (info: "subjects" | "interventions" | "data") =>
+      mix(rgb(colors[infoColor(info)]!), percent(variables[info === "data" ? "info-data-cell-tint" : "info-cell-tint"]), surface);
+    expect(deltaE(cell("data"), cell("subjects"))).toBeGreaterThanOrEqual(minimum);
+    expect(deltaE(cell("data"), cell("interventions"))).toBeGreaterThanOrEqual(minimum);
   });
 });

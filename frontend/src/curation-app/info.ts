@@ -58,7 +58,7 @@ const HEX: Record<ThemeName, Record<InfoClass, string>> = {
  */
 const TINTS: Record<ThemeName, Record<"head" | "cell" | "data-head" | "data-cell", string>> = {
   light: { head: "16%", cell: "6%", "data-head": "22%", "data-cell": "12%" },
-  dark: { head: "20%", cell: "7%", "data-head": "20%", "data-cell": "7%" },
+  dark: { head: "20%", cell: "7%", "data-head": "26%", "data-cell": "17%" },
 };
 
 function theme(name: ThemeName): ThemeExtension {
