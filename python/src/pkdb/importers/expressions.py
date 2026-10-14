@@ -61,6 +61,19 @@ def split_entry(entry: dict) -> list[dict]:
     return result
 
 
+def column_references(template) -> frozenset[str]:
+    """The headers that the `col==` expressions of a template name, nested ones included."""
+    if isinstance(template, dict):
+        return frozenset().union(*map(column_references, template.values()))
+    if isinstance(template, list):
+        return frozenset().union(*map(column_references, template))
+    if isinstance(template, str) and "==" in template:
+        parts = [part.strip() for part in template.split("==")]
+        if len(parts) == 2 and parts[0] == "col" and parts[1]:
+            return frozenset({parts[1]})
+    return frozenset()
+
+
 def bind_columns(template, row: dict, source: SourceLocation | None = None):
     if isinstance(template, dict):
         result = {

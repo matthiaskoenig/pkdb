@@ -95,7 +95,7 @@ Study format 1 folders are not listed. The line below the table counts them, and
 
 The header of a study is one line where its parts fit: its identity, its release, its issue and its provenance, the title of the publication with what the study is doing, such as **Validating** for a moment after a save, the PMID, the sync status, the problems, the review status select labelled **Review**, **Open tables**, **Validate**, **Upload**, and the **More actions** menu with **Open folder**, **Open PDF** (`<name>.pdf` in the study folder), **Add table** and **Copy path**. Where they do not fit, the title gets shorter first, and then the parts wrap onto more lines; a chip always shows its whole text. What the study is doing takes its room from the title, so the header keeps its height while a check runs. The header of the study and the tabs below it stand on a teal-tinted band, which sets them apart from the section below.
 
-Tabs under the header switch between the sections Metadata, Review, Problems, Data and Activity. The tabs of Review and Problems count the open review items and the problems. At the end of the tab line are two facts: **On save**, the action of a save, and **Last upload**, with a link to the study on PK-DB. A narrow window turns the tabs into a select, with the two facts below it. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
+Tabs under the header switch between the sections Metadata, Data, Problems, Review and Activity, in the order of the work on a study. The tabs of Problems and Review count the problems and the open review items. At the end of the tab line are two facts: **On save**, the action of a save, and **Last upload**, with a link to the study on PK-DB. A narrow window turns the tabs into a select, with the two facts below it. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
 
 The old addresses `#/studies/<substance>/<name>/sources` and `.../tables` open the Data section, with their query.
 
@@ -116,26 +116,6 @@ Edits stay in the form until you save them. The Metadata and Data sections edit 
 When `study.json` changes on disk while the form has unsaved edits, **Save** is refused and the banner offers **Reload**. Reload puts your edits on top of the new version and marks the fields that changed on disk. A field that changed on both sides keeps your edit, shows the value on disk, and offers **Use the disk version**. Without unsaved edits, the form follows the file on disk by itself.
 
 The Reference dialog writes `reference.json`. **Preview** shows the metadata and what changes, and **Save reference** writes the previewed version. For a study without a PMID or DOI, the dialog searches a citation and offers **Use DOI**, which puts the DOI into the form; save `study.json` to fetch its reference. See [Literature reference metadata](reference-metadata.md).
-
-### Review
-
-The Review section lists the items of `review.json`: questions, uncertainties and issues.
-
-[![The Review section with two open items, the selected uncertainty written by an AI agent, its thread and actions, and the two rows of outputs_Tab2.tsv that it targets.](images/curation/review.png)](images/curation/review.png)
-
-Filter the items by state (**Open**, **Resolved**, **Dismissed**, **All**) and by kind. A card shows the kind, the state, the target, the code of an acknowledged warning, a robot for an item of an AI agent, and the number of replies. Select a card to see the item with its thread. **Reply**, **Resolve**, **Dismiss** and **Reopen** change it. For an open item, Resolve and Dismiss also add the text of the reply field to the thread; for a resolved item, Dismiss and Reopen do. A dismissed item has no reply field and can only be reopened. **New item** adds an item about the whole study, a file, the rows with given column values, or a column.
-
-Below the item, the target shows the rows that it matches, with **Show in table**. When the target is a series of a digitized figure, the `label` of `timecourses_<Fig>.tsv` or the `name` of `scatters_<Fig>.tsv`, the figure is drawn too, with that series emphasized and the other series faded.
-
-The review status select in the header, labelled **Review**, sets Draft, In review or Approved. Approved needs zero open review items and zero validation errors. Otherwise the app refuses and says why, with a link to the open items or the problems. Approving records you as `approved_by`, adds you to the reviewers, and stores the time; any other status removes the approval. While a study is approved, items cannot be added or reopened: set the status to In review first.
-
-### Problems
-
-The Problems section lists the issues of the last validation by file. Each shows its severity, code and message, and where it is: the line and the column of the table and the address of the cell in the workbook, such as `line 5 · mean · workbook cell O6`. The header of a table is line 0 and its first entry line 1, so line 5 is row 6 of the sheet; a raw table starts at line 1. A problem of the workbook itself names the row and the cell of its sheet. Spelling suggestions follow **Did you mean:**.
-
-Filter by **All**, **Errors** or **Warnings**. **Show in table** opens the Data section at the cell of the issue. **Open in tables** opens the workbook at the sheet of the table of the issue, with the cell of the issue selected when it has one. **Show notes** opens the notes of a kind of table above its first table in the Data section, for a problem in those notes in `study.json`. **Open** opens another file of the study, such as `study.json`, in its default application, and **Open tables** opens the workbook.
-
-**Acknowledge** marks a warning as expected; errors cannot be acknowledged. Neither can the warnings of a sync that stopped before the validation, such as a workbook saved during the sync: they are about the workbook, not about the study files. It asks for a reason and writes a resolved review item that acknowledges exactly this warning: a warning at a row of a data table at its row and column, and a warning of a whole file by its key, such as the dataset of a WebPlotDigitizer project or the review item of `review.json`. Other warnings with the same code, also later ones, stay listed. The warning leaves the list after the next validation. The acknowledged warnings are listed below the problems with their reason and a link to their review item. An acknowledgement that names only a file, as the app wrote before acknowledgements were exact, covers every warning of its code in that file, also later ones, and the list says so. Dismissing the review item brings its warnings back.
 
 ### Data
 
@@ -178,6 +158,26 @@ The toolbar above the panes has, in this order: in a window narrower than 1100 p
 [![The Data section in a conflict: the workbook and the TSV file changed the mean of the same row, and the panel at the top of the rows pane shows the last sync, the workbook row and the table line (`Workbook row 7` and `Tables line 6`) with Keep workbook, Keep tables and Open workbook.](images/curation/data-conflict.png)](images/curation/data-conflict.png)
 
 When the workbook and the tables conflict, the panel **Conflicting rows** shows at the top of the rows pane, or above the panes when the study has no table yet, with the rows of each conflicting table in one grid: the rows of the last sync, the rows of the workbook and the lines of the TSV file. In a table with a header, a workbook row is the line of the table plus one, because the header of a table is line 0 and the first row of the sheet is the header; a raw table has the same numbers. The columns that differ come first and are marked. **Keep workbook** or **Keep tables** resolves all conflicts with one side. To combine both, edit the rows in the workbook, save it, and keep the workbook. **Open workbook** opens it at the sheet of the shown table. Validation and upload wait until the conflict is resolved.
+
+### Problems
+
+The Problems section lists the issues of the last validation by file. Each shows its severity, code and message, and where it is: the line and the column of the table and the address of the cell in the workbook, such as `line 5 · mean · workbook cell O6`. The header of a table is line 0 and its first entry line 1, so line 5 is row 6 of the sheet; a raw table starts at line 1. A problem of the workbook itself names the row and the cell of its sheet. Spelling suggestions follow **Did you mean:**.
+
+Filter by **All**, **Errors** or **Warnings**. **Show in table** opens the Data section at the cell of the issue. **Open in tables** opens the workbook at the sheet of the table of the issue, with the cell of the issue selected when it has one. **Show notes** opens the notes of a kind of table above its first table in the Data section, for a problem in those notes in `study.json`. **Open** opens another file of the study, such as `study.json`, in its default application, and **Open tables** opens the workbook.
+
+**Acknowledge** marks a warning as expected; errors cannot be acknowledged. Neither can the warnings of a sync that stopped before the validation, such as a workbook saved during the sync: they are about the workbook, not about the study files. It asks for a reason and writes a resolved review item that acknowledges exactly this warning: a warning at a row of a data table at its row and column, and a warning of a whole file by its key, such as the dataset of a WebPlotDigitizer project or the review item of `review.json`. Other warnings with the same code, also later ones, stay listed. The warning leaves the list after the next validation. The acknowledged warnings are listed below the problems with their reason and a link to their review item. An acknowledgement that names only a file, as the app wrote before acknowledgements were exact, covers every warning of its code in that file, also later ones, and the list says so. Dismissing the review item brings its warnings back.
+
+### Review
+
+The Review section lists the items of `review.json`: questions, uncertainties and issues.
+
+[![The Review section with two open items, the selected uncertainty written by an AI agent, its thread and actions, and the two rows of outputs_Tab2.tsv that it targets.](images/curation/review.png)](images/curation/review.png)
+
+Filter the items by state (**Open**, **Resolved**, **Dismissed**, **All**) and by kind. A card shows the kind, the state, the target, the code of an acknowledged warning, a robot for an item of an AI agent, and the number of replies. Select a card to see the item with its thread. **Reply**, **Resolve**, **Dismiss** and **Reopen** change it. For an open item, Resolve and Dismiss also add the text of the reply field to the thread; for a resolved item, Dismiss and Reopen do. A dismissed item has no reply field and can only be reopened. **New item** adds an item about the whole study, a file, the rows with given column values, or a column.
+
+Below the item, the target shows the rows that it matches, with **Show in table**. When the target is a series of a digitized figure, the `label` of `timecourses_<Fig>.tsv` or the `name` of `scatters_<Fig>.tsv`, the figure is drawn too, with that series emphasized and the other series faded.
+
+The review status select in the header, labelled **Review**, sets Draft, In review or Approved. Approved needs zero open review items and zero validation errors. Otherwise the app refuses and says why, with a link to the open items or the problems. Approving records you as `approved_by`, adds you to the reviewers, and stores the time; any other status removes the approval. While a study is approved, items cannot be added or reopened: set the status to In review first.
 
 ### Activity
 

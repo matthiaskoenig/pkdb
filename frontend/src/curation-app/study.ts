@@ -17,16 +17,19 @@ import type {
   ValidationIssue,
 } from "./api/types";
 
-/** The sections of the study page in the order of their tabs. */
-export const SECTIONS = ["metadata", "review", "problems", "data", "activity"] as const;
+/**
+ * The sections of the study page in the order of their tabs, the order of the work on a study:
+ * its metadata, its data, the problems of both, the review and the activity.
+ */
+export const SECTIONS = ["metadata", "data", "problems", "review", "activity"] as const;
 
 export type Section = (typeof SECTIONS)[number];
 
 export const SECTION_LABELS: Record<Section, string> = {
   metadata: "Metadata",
-  review: "Review",
-  problems: "Problems",
   data: "Data",
+  problems: "Problems",
+  review: "Review",
   activity: "Activity",
 };
 

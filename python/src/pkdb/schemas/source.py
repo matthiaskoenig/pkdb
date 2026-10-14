@@ -37,6 +37,9 @@ class SourceLocation(BaseModel):
     # table, whose header is line 0 and row 1 of its sheet; 0 for a row of a
     # sheet, as study format 1 reads them.
     _row_offset: int = PrivateAttr(default=0)
+    # Headers of the columns that the study.json template of a study format 1
+    # row maps with `col==`, those of nested characteristica included.
+    _mapped: frozenset[str] = PrivateAttr(default=frozenset())
 
     def __deepcopy__(self, memo=None):
         # Public coordinates contain only immutable scalars and a tuple of
@@ -83,6 +86,7 @@ class SourceLocation(BaseModel):
         location._columns = {}
         location._fields = {}
         location._headers = {}
+        location._mapped = frozenset()
         return location
 
     @model_serializer(mode="wrap")
