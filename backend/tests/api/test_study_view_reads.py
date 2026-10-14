@@ -288,6 +288,24 @@ def test_the_page_has_the_access_and_licence_of_the_database(
         assert (metadata["access"], metadata["licence"]) == ("public", "open")
 
 
+def test_the_page_counts_the_warnings_of_the_report(
+    client, creator_headers, uploaded, session_factory
+):
+    with session_factory.begin() as session:
+        study = session.scalar(select(Study).where(Study.sid == "caffeine/Example"))
+        issues = study.validation_report["issues"]
+        # A truncated report counts more warnings than it lists.
+        study.validation_report = {
+            **study.validation_report,
+            "warning_count": len(issues) + 5,
+        }
+    page = client.get(VIEW, headers=creator_headers).json()
+    assert page["counts"] == {"errors": 0, "warnings": len(issues) + 5}
+    assert len(page["problems"]) == len(issues)
+    set_access(session_factory, "public")
+    assert client.get(VIEW).json()["counts"] == {"errors": 0, "warnings": 0}
+
+
 def test_the_page_keeps_the_order_of_its_keys(client, creator_headers, uploaded):
     view = study_view(uploaded, load_study(uploaded))
     page = client.get(VIEW, headers=creator_headers).json()

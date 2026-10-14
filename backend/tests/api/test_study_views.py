@@ -48,8 +48,9 @@ def test_upload_stores_the_texts_and_the_views(
     page = stored[("study", "")].document
     assert page["review"]["status"] == "in_review"
     assert stored[("row", "")].document["summary"] == page["summary"]
-    assert stored[("row", "")].document["warnings"] == len(
-        study.validation_report["issues"]
+    assert (
+        stored[("row", "")].document["warnings"]
+        == study.validation_report["warning_count"]
     )
 
 
@@ -239,3 +240,49 @@ def test_review_json_is_only_for_who_may_write_the_study(
     response = client.get(review, headers=creator_headers)
     assert response.status_code == 200
     assert response.content == (folder / "review.json").read_bytes()
+
+
+def test_an_upload_whose_page_cannot_be_built_keeps_the_study(
+    client, creator_headers, folder, session_factory, monkeypatch, caplog
+):
+    from pkdb_server.commands.views import stale_view_count
+    from pkdb_server.services import study_views
+
+    def broken(*args, **kwargs):
+        raise KeyError("series")
+
+    monkeypatch.setattr(study_views, "build_views", broken)
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 201, response.text
+    study, stored = views(session_factory)
+    assert study.study_json == (folder / "study.json").read_text(encoding="utf-8")
+    assert study.reference_json == (folder / "reference.json").read_text(
+        encoding="utf-8"
+    )
+    assert stored == {}
+    with session_factory() as session:
+        assert stale_view_count(session) == 1
+    [record] = [r for r in caplog.records if "caffeine/Example" in r.getMessage()]
+    assert "KeyError" in record.getMessage() and record.exc_info
+
+
+def test_the_row_counts_the_warnings_of_the_report(
+    client, creator_headers, folder, session_factory, monkeypatch
+):
+    from pkdb_server.services.ingestion import IngestionService
+
+    validate = IngestionService.validate
+
+    def truncated(self, *args, **kwargs):
+        prepared = validate(self, *args, **kwargs)
+        # A truncated report counts more warnings than it lists.
+        prepared.report.warning_count = len(prepared.report.issues) + 5
+        return prepared
+
+    monkeypatch.setattr(IngestionService, "validate", truncated)
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 201, response.text
+    study, stored = views(session_factory)
+    count = study.validation_report["warning_count"]
+    assert count == len(study.validation_report["issues"]) + 5
+    assert stored[("row", "")].document["warnings"] == count

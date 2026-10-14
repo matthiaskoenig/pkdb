@@ -5,7 +5,9 @@ website shows a study as `pkdb curate` does.
 """
 
 import json
+import logging
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import quote
@@ -38,10 +40,12 @@ from pkdb_server.files.store import FileStore, study_access
 from pkdb_server.services.authorization import AuthorizationDenied, authorize, may_write
 from pkdb_server.services.profiles import FALLBACK_URL, public_profile
 
+log = logging.getLogger(__name__)
+
 
 @dataclass(frozen=True)
 class BuiltViews:
-    """The documents of a study folder and the texts of its two JSON files."""
+    """The texts of the two JSON files of a study folder and the documents of its page."""
 
     study_json: str
     reference_json: str
@@ -53,10 +57,16 @@ def _plain(document: dict) -> dict:
     return json.loads(json.dumps(document))
 
 
+def warning_count(report: dict | None) -> int:
+    """The warnings of a stored validation report: its own count, as a truncated report lists
+    fewer issues than it found."""
+    return (report or {}).get("warning_count", 0)
+
+
 def build_views(
     folder: Path, *, warnings: int, max_rows: int | None, max_files: int | None
-) -> BuiltViews:
-    """The documents of a validated study folder at `<substance>/<name>`."""
+) -> tuple[tuple[str, str, dict], ...]:
+    """The documents (kind, key, document) of a validated study folder at `<substance>/<name>`."""
     study = load_study(folder, max_rows=max_rows, max_files=max_files)
     view = study_view(folder, study)
     documents: list[tuple[str, str, dict]] = [
@@ -69,15 +79,41 @@ def build_views(
     for source in view["sources"]:
         if (document := source_document(study, source["source"])) is not None:
             documents.append(("source", source["source"], document))
-    return BuiltViews(
-        study_json=(folder / STUDY_JSON).read_text(encoding="utf-8"),
-        reference_json=(folder / REFERENCE_JSON).read_text(encoding="utf-8"),
-        documents=tuple((kind, key, _plain(doc)) for kind, key, doc in documents),
-    )
+    return tuple((kind, key, _plain(doc)) for kind, key, doc in documents)
 
 
-def store_views(session: Session, study_id: int, views: BuiltViews) -> None:
-    """Add the documents of `views`; the caller removed the old ones (`clear_children`)."""
+def upload_views(
+    folder: Path,
+    sid: str,
+    *,
+    warnings: int,
+    max_rows: int | None,
+    max_files: int | None,
+) -> BuiltViews:
+    """The texts of the JSON files and the documents of the page of an uploaded study folder.
+
+    A page that cannot be built does not fail the upload of a valid study: the error is logged
+    and the study keeps its texts without documents. It is then stale, which the server counts
+    at start, and `pkdb-server rebuild-views` builds it.
+    """
+    study_json = (folder / STUDY_JSON).read_text(encoding="utf-8")
+    reference_json = (folder / REFERENCE_JSON).read_text(encoding="utf-8")
+    try:
+        documents = build_views(
+            folder, warnings=warnings, max_rows=max_rows, max_files=max_files
+        )
+    except Exception as error:
+        log.exception(
+            "The study page of %s could not be built (%s)", sid, type(error).__name__
+        )
+        documents = ()
+    return BuiltViews(study_json, reference_json, documents)
+
+
+def store_views(
+    session: Session, study_id: int, documents: Iterable[tuple[str, str, dict]]
+) -> None:
+    """Add the documents; the caller removed the old ones (`clear_children`)."""
     session.add_all(
         StudyView(
             study_id=study_id,
@@ -86,7 +122,7 @@ def store_views(session: Session, study_id: int, views: BuiltViews) -> None:
             version=VIEW_VERSION,
             document=document,
         )
-        for kind, key, document in views.documents
+        for kind, key, document in documents
     )
 
 
@@ -212,7 +248,10 @@ class StudyViews:
                 ),
                 "issue": issue_state(root.issue) if curator else None,
                 "problems": problems,
-                "counts": {"errors": 0, "warnings": len(problems)},
+                "counts": {
+                    "errors": 0,
+                    "warnings": warning_count(root.validation_report) if curator else 0,
+                },
                 "papers": [
                     {
                         "file": name,
