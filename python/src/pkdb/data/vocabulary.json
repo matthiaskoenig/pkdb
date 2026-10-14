@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "4f0384246bd60dd92d0de939d4578ee2048192382e52af915db4ffc2a3db5430",
+    "version": "411d3c0f8f53222b2a6ad1e63f53bd43da3ab65c5c8b5ee8c61d3738549657bf",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -241,7 +241,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -1601,6 +1601,18 @@
         "units": [
           "mg/day",
           "beverages/day"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "csf/plasma ratio",
+        "sid": "csf-plasma-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -4656,7 +4668,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4967,6 +4979,19 @@
         "sid": "renal-measurement",
         "dtype": "abstract",
         "units": [],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "renal plasma flow",
+        "sid": "renal-plasma-flow",
+        "dtype": "numeric",
+        "units": [
+          "ml/min/(1.73*m^2)",
+          "ml/min"
+        ],
         "choices": [],
         "can_negative": false,
         "time_required": false,
@@ -5900,7 +5925,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5912,7 +5937,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       }
@@ -12286,5 +12311,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "1c1270d6b72131d1d1c4004c4a60764ec2176ffdadf29f7ea0fa81f4bd645baf"
+  "vocabulary_hash": "f8f0c441f4f9ef255b8186b1e10796911716f53c9c20973a5ec5a1e8d5c1ff6f"
 }

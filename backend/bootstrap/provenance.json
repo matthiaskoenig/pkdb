@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2218,
-  "version": "9e64f6afd3dec0b7e69e30f9d229b5a8b604afb061abebe239ff249f68c29678",
-  "inputs_sha256": "8a8e6198c4716fbc6cca5bfbda8a95e4a1021e0883589148cbae53d18bb36673",
+  "nodes": 2220,
+  "version": "f3f4049294169fcc5043ef4c9269e770f2c0815a9081d6d6e8c98f9a573ddf29",
+  "inputs_sha256": "93989f810a8012fa1308747787fadfdd7a73290af1093d5c36f74d435bd868a9",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -17,7 +17,7 @@
     "backend/info_nodes/definitions/genetics.py": "3ebd95704598e29b6a5d2b4a4f9dca8879d31a5f1b892aee9e54395ab26ceb7f",
     "backend/info_nodes/definitions/imaging.py": "1919fefb09229a3ca56c799b11e87343eaacf42acb03a11a9fe45d989897c6e7",
     "backend/info_nodes/definitions/lifestyle.py": "3b89e9ffd5d3e6275d01a83ded51fb68e7a027f1e8180df0f2a92d0ac1f30c83",
-    "backend/info_nodes/definitions/measurement.py": "22e3b14e8d223431ec7b165969010222f75183b1b24d389949d2d1864f6ed30a",
+    "backend/info_nodes/definitions/measurement.py": "9fd0850ce54af6a41e1421a7905f6bb833141f7f25117c3bd684fae7e418dac6",
     "backend/info_nodes/definitions/medical_procedure.py": "170f317917f1a858fcc6bc5ffc7fe5dea2251cf7b7f070741acc250e726f7242",
     "backend/info_nodes/definitions/method.py": "b20d6b341398ac13871669f08e77a886fcc1b9db520a75de07a6d1aa38ec6f90",
     "backend/info_nodes/definitions/specie.py": "72a4eb98c98cbcfd4671c01ded5f0b6dee249f1cfc6ae357559f5ee144720591",
@@ -27,7 +27,7 @@
     "backend/info_nodes/metadata_cache.py": "3d6851aff868656131f05f65dc3ff18c1f336891fb94098c0f852c5d04192f60",
     "backend/info_nodes/node.py": "2c2c7ad6f7cf98dab648fb09ddd76e39c64b5f9ca8e3dc4ea53ed45169617b5b",
     "backend/info_nodes/nodes.py": "7470ba80613b9a03d97a3ae32c312236a3db26bdca65bbb13ab679dc054a06dc",
-    "backend/info_nodes/policies.py": "9766b18c50b80514ecb1dcccfcd3b3bf87308bc3d6adb77cb5d568e9693302f6",
+    "backend/info_nodes/policies.py": "0d6f3aff0dc06c91747ba15b5988dffe700994523fdf89b998b21a0dd7af7711",
     "backend/info_nodes/units.py": "b676bdd44640b31b8a3a324e11b9c5dc0db927e8cfec6cfb721b5e37df0b09c9",
     "scripts/update_vocabulary.py": "aad9e387d073af99126624c85a3aa7887cbecf7c3d83ba561018cdc0bc8a22e8"
   },

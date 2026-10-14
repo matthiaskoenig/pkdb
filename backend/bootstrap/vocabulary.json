@@ -1,5 +1,5 @@
 {
-  "version": "9e64f6afd3dec0b7e69e30f9d229b5a8b604afb061abebe239ff249f68c29678",
+  "version": "f3f4049294169fcc5043ef4c9269e770f2c0815a9081d6d6e8c98f9a573ddf29",
   "nodes": [
     {
       "sid": "root",
@@ -2004,7 +2004,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -2042,7 +2042,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -3226,7 +3226,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -3544,6 +3544,49 @@
         ],
         "description": [
           "\"Glomular Filtration Rate (GFR). An estimation of the volume of fluid filtered from the kidney glomerular capillaries into the Bowman's capsule per specified unit of time based on serum creatinine level, weight and age of organism and other factors. GFR should be encoded as creatinine via 'measurement_type=clearance', 'substance=creatinine' and 'tissue=urine' if it is a creatinine clearance.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "renal-plasma-flow",
+      "name": "renal plasma flow",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "ml/min/(1.73*m^2)",
+          "ml/min"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "kidney-function-test"
+      ],
+      "terms": {
+        "synonyms": [
+          "ERPF",
+          "RPF",
+          "effective renal plasma flow"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Renal plasma flow (RPF)\""
+        ],
+        "description": [
+          "\"Renal plasma flow (RPF). The volume of plasma that flows through the kidneys per unit time, usually measured as the clearance of p-aminohippurate or hippuran (effective renal plasma flow, ERPF). Name the marker in the comment.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -7030,6 +7073,44 @@
       }
     },
     {
+      "sid": "csf-plasma-ratio",
+      "name": "csf/plasma ratio",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"CSF/plasma ratio\""
+        ],
+        "description": [
+          "\"The ratio of the cerebrospinal fluid concentration to the plasma or serum concentration of a given substance at the same time. Tissue should be coded as 'cerebrospinal fluid'; name plasma or serum in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "fraction-absorbed",
       "name": "fraction_absorbed",
       "kind": "measurement",
@@ -9383,7 +9464,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [

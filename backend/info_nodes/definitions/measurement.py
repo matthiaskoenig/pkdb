@@ -1058,6 +1058,18 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=["ml/min/(1.73*m^2)", "ml/min"],
     ),
     MeasurementType(
+        sid="renal-plasma-flow",
+        name="renal plasma flow",
+        label="Renal plasma flow (RPF)",
+        description="Renal plasma flow (RPF). The volume of plasma that flows through the "
+        "kidneys per unit time, usually measured as the clearance of p-aminohippurate or "
+        "hippuran (effective renal plasma flow, ERPF). Name the marker in the comment.",
+        parents=["kidney function test"],
+        dtype=DType.NUMERIC,
+        synonyms=["effective renal plasma flow", "ERPF", "RPF"],
+        units=["ml/min/(1.73*m^2)", "ml/min"],
+    ),
+    MeasurementType(
         sid="osmolarity",
         description="The osmoles of solute per liter of solution.",
         parents=["kidney function test"],
@@ -1929,6 +1941,17 @@ MEASUREMENT_NODES.extend(
             label="blood/plasma ratio (BP)",
             description="The ratio of blood concentration to plasma concentration of a "
             "given substance in the blood. Tissue should be coded as 'blood'",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=RATIO_UNITS,
+        ),
+        MeasurementType(
+            sid="csf-plasma-ratio",
+            name="csf/plasma ratio",
+            label="CSF/plasma ratio",
+            description="The ratio of the cerebrospinal fluid concentration to the plasma or "
+            "serum concentration of a given substance at the same time. Tissue should be "
+            "coded as 'cerebrospinal fluid'; name plasma or serum in the comment.",
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
             units=RATIO_UNITS,
