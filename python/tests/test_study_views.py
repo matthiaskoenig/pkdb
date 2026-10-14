@@ -9,7 +9,9 @@ import pytest
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.metadata import profile
 from pkdb.studyformat.load import load_study
+from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.views import (
+    DOCUMENT_KEYS,
     for_audience,
     people,
     row_view,
@@ -202,10 +204,103 @@ def test_the_public_row_has_no_review_and_no_warnings(documents):
 
 
 def test_the_public_keeps_only_the_listed_keys(documents):
-    _, view = documents
-    extra = {**view, "summary": {**view["summary"], "future_curation_field": 1}}
-    extra["metadata"] = {**view["metadata"], "future_curation_field": 1}
+    study, view = documents
+    new = {"future_curation_field": 1}
+    extra = {
+        **view,
+        **new,
+        "summary": {**view["summary"], **new},
+        "metadata": {**view["metadata"], **new},
+        "sources": [{**source, **new} for source in view["sources"]],
+    }
     page = for_audience("study", extra, "public")
     assert page is not None
+    assert "future_curation_field" not in page
     assert "future_curation_field" not in page["summary"]
     assert "future_curation_field" not in page["metadata"]
+    assert all("future_curation_field" not in s for s in page["sources"])
+    row = for_audience("row", {**row_view(view, warnings=1), **new}, "public")
+    assert row is not None and "future_curation_field" not in row
+    table = for_audience(
+        "table", {**plain(table_view(study, "subjects.tsv")), **new}, "public"
+    )
+    assert table is not None and "future_curation_field" not in table
+    source = for_audience(
+        "source", {**plain(source_document(study, "Fig1")), **new}, "public"
+    )
+    assert source is not None and "future_curation_field" not in source
+
+
+def emitted(study, view, name):
+    """The documents of the fixture study that the builders emit under `name`."""
+    return {
+        "study": [view],
+        "summary": [view["summary"]],
+        "metadata": [view["metadata"]],
+        "study_source": view["sources"],
+        "row": [row_view(view, warnings=1)],
+        "table": [plain(table_view(study, entry["file"])) for entry in view["tables"]],
+        "source": [
+            plain(source_document(study, source["source"]))
+            for source in view["sources"]
+        ],
+    }[name]
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["study", "summary", "metadata", "study_source", "row", "table", "source"],
+)
+def test_every_key_is_either_public_or_curation(documents, name):
+    """A new key of a builder fails here until it is classified for the public."""
+    study, view = documents
+    keys = DOCUMENT_KEYS[name]
+    found = {key for document in emitted(study, view, name) for key in document}
+    if name == "metadata":
+        # study.json leaves out what it does not state; the model names every key.
+        found |= set(StudyMetadata.model_fields)
+    assert not set(keys.public) & keys.curation
+    assert found == set(keys.public) | keys.curation
+
+
+@pytest.mark.parametrize("name", ["study", "study_source", "row", "source"])
+def test_the_public_documents_have_the_keys_of_the_stored_ones(documents, name):
+    study, view = documents
+    page = for_audience("study", view, "public")
+    assert page is not None
+    for document in emitted(study, view, name):
+        if name == "study_source":
+            public = next(
+                source
+                for source in page["sources"]
+                if source["source"] == document["source"]
+            )
+        else:
+            public = for_audience(name, document, "public")
+        assert public is not None
+        assert list(public) == list(document)
+        for key, neutral in DOCUMENT_KEYS[name].neutral.items():
+            assert public[key] == neutral, key
+
+
+def test_the_public_plot_has_only_the_plotted_series(documents):
+    study, _ = documents
+    document = plain(source_document(study, "Fig1"))
+    digitized = {
+        "name": "digitized_only",
+        "color": "#000000",
+        "dark_color": "#ffffff",
+        "x_label": None,
+        "y_label": None,
+    }
+    extra = {**document, "series": [*document["series"], digitized]}
+    public = for_audience("source", extra, "public")
+    assert public is not None
+    plotted = {point["series"] for point in document["points"]}
+    assert plotted
+    assert [series["name"] for series in public["series"]] == [
+        series["name"] for series in document["series"]
+    ]
+    assert {series["name"] for series in public["series"]} == plotted
+    # The curators see the digitized series too.
+    assert for_audience("source", extra, "curator") == extra

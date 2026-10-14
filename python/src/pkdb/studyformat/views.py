@@ -8,6 +8,7 @@ problems of the upload and the URLs of the files when it serves them, and `for_a
 what the public does not see.
 """
 
+import copy
 import dataclasses
 import json
 from collections.abc import Callable
@@ -431,34 +432,115 @@ def row_view(view: dict, *, warnings: int) -> dict:
 Audience = Literal["public", "curator"]
 ViewKind = Literal["study", "row", "table", "source"]
 
-# The keys of a summary and of study.json that the public sees; anything else, such as the
-# review status, the open items and the issue, belongs to the curation.
-_PUBLIC_SUMMARY = ("title", "curators", "creator", "release", "provenance", "ai")
-_PUBLIC_METADATA = (
-    "format",
-    "reference",
-    "creator",
-    "curators",
-    "collaborators",
-    "licence",
-    "access",
-    "provenance",
-    "release",
-    "descriptions",
-    "comments",
-    "notes",
-)
+
+@dataclasses.dataclass(frozen=True)
+class DocumentKeys:
+    """The keys of a kind of document by audience (#963).
+
+    The public document has the keys of the stored one in their order: the `public` keys with
+    their values, and the keys of the curation with the value of `neutral`, so that the app
+    finds them, or not at all (`left_out`, as study.json leaves out what it does not state). A
+    key of none of them is left out too, so a new key of a builder stays with the curators
+    until it is classified.
+    """
+
+    public: tuple[str, ...]
+    neutral: dict[str, object] = dataclasses.field(default_factory=dict)
+    left_out: tuple[str, ...] = ()
+
+    @property
+    def curation(self) -> frozenset[str]:
+        return frozenset(self.neutral) | frozenset(self.left_out)
+
+    def select(self, document: dict) -> dict:
+        """The public keys of `document` and the neutral values of its curation keys."""
+        return {
+            key: copy.copy(self.neutral[key]) if key in self.neutral else value
+            for key, value in document.items()
+            if key in self.public or key in self.neutral
+        }
+
+
+#: Every key of every document that the builders emit, as the public or the curation: the study
+#: page (`study_view`) with its summary, its study.json (`metadata`) and its sources
+#: (`study_source`), the row of the list of studies, a table and a source (`source_document`).
+DOCUMENT_KEYS = {
+    "study": DocumentKeys(
+        public=(
+            "summary",
+            "metadata",
+            "reference",
+            "reference_match",
+            "sources",
+            "tables",
+            "table_kinds",
+            "name_lines",
+            "substances",
+        ),
+        neutral={
+            "review": None,
+            "acknowledged": [],
+            "targets": {},
+            "files": [],
+            "papers": [],
+        },
+    ),
+    "summary": DocumentKeys(
+        public=("title", "curators", "creator", "release", "provenance", "ai"),
+        left_out=("review_status", "open_items", "issue"),
+    ),
+    "metadata": DocumentKeys(
+        public=(
+            "format",
+            "reference",
+            "creator",
+            "curators",
+            "collaborators",
+            "licence",
+            "access",
+            "provenance",
+            "release",
+            "descriptions",
+            "comments",
+            "notes",
+        ),
+        left_out=("issue",),
+    ),
+    "study_source": DocumentKeys(
+        public=("source", "kind", "tables"),
+        neutral={
+            "image": None,
+            "raw": None,
+            "raw_kind": None,
+            "missing_image": None,
+            "missing_raw": None,
+        },
+    ),
+    "row": DocumentKeys(public=("summary", "substances"), neutral={"warnings": 0}),
+    "table": DocumentKeys(public=("file", "kind", "header", "classes", "rows")),
+    "source": DocumentKeys(
+        public=("source", "mapped", "layout", "points", "series", "log_x", "log_y"),
+        neutral={
+            "image": None,
+            "image_size": None,
+            "raw_grid": None,
+            "digitization": None,
+            "overlay": [],
+            "unmatched": [],
+        },
+    ),
+}
 
 
 def _public_summary(summary: dict) -> dict:
-    public = {key: summary[key] for key in _PUBLIC_SUMMARY if key in summary}
+    public = DOCUMENT_KEYS["summary"].select(summary)
     if "provenance" in public:
         public["provenance"] = {"kind": public["provenance"].get("kind")}
     return public
 
 
 def _public_metadata(metadata: dict) -> dict:
-    public = {key: metadata[key] for key in _PUBLIC_METADATA if key in metadata}
+    public = DOCUMENT_KEYS["metadata"].select(metadata)
     if "curators" in public:
         public["curators"] = [
             {"user": curator["user"]} for curator in public["curators"]
@@ -471,23 +553,13 @@ def _public_metadata(metadata: dict) -> dict:
 def _public_study(view: dict) -> dict:
     raw = {entry["file"] for entry in view["tables"] if entry["kind"] == RAW_KIND}
     return {
-        **view,
+        **DOCUMENT_KEYS["study"].select(view),
         "summary": _public_summary(view["summary"]),
         "metadata": _public_metadata(view["metadata"]),
-        "review": None,
-        "acknowledged": [],
-        "targets": {},
-        "files": [],
-        "papers": [],
         "tables": [entry for entry in view["tables"] if entry["kind"] != RAW_KIND],
         "sources": [
             {
-                **source,
-                "image": None,
-                "raw": None,
-                "raw_kind": None,
-                "missing_image": None,
-                "missing_raw": None,
+                **DOCUMENT_KEYS["study_source"].select(source),
                 "tables": [name for name in source["tables"] if name not in raw],
             }
             for source in view["sources"]
@@ -496,24 +568,26 @@ def _public_study(view: dict) -> dict:
 
 
 def _public_row(row: dict) -> dict:
-    return {**row, "summary": _public_summary(row["summary"]), "warnings": 0}
+    return {
+        **DOCUMENT_KEYS["row"].select(row),
+        "summary": _public_summary(row["summary"]),
+    }
 
 
 def _public_table(table: dict) -> dict | None:
-    return None if table["kind"] == RAW_KIND else table
+    if table["kind"] == RAW_KIND:
+        return None
+    return DOCUMENT_KEYS["table"].select(table)
 
 
 def _public_source(source: dict) -> dict:
+    # Only the series that the plot draws: a digitized dataset without mapped rows is not one.
+    plotted = {point["series"] for point in source["points"]}
     return {
-        **source,
-        "image": None,
-        "image_size": None,
-        "raw_grid": None,
-        "digitization": None,
-        "overlay": [],
-        "unmatched": [],
+        **DOCUMENT_KEYS["source"].select(source),
         "layout": "side_by_side",
         "mapped": [table for table in source["mapped"] if table["kind"] != RAW_KIND],
+        "series": [series for series in source["series"] if series["name"] in plotted],
     }
 
 
@@ -528,10 +602,11 @@ _PUBLIC: dict[str, Callable[[dict], dict | None]] = {
 def for_audience(kind: ViewKind, document: dict, audience: Audience) -> dict | None:
     """What `audience` sees of a document of kind `kind`; None for a raw table to the public.
 
-    Curators, who may write the study, see the document as it is. The public sees the same keys
-    with nothing of the curation in them: no review, review targets or acknowledged warnings,
-    no issue, no curator ratings, no provenance beyond its kind, no list of the files of the
-    study, no raw tables, no images and PDFs, and the plot of a figure without the figure (#963).
+    Curators, who may write the study, see the document as it is. The public sees the keys that
+    `DOCUMENT_KEYS` names with nothing of the curation in them: no review, review targets or
+    acknowledged warnings, no issue, no curator ratings, no provenance beyond its kind, no list
+    of the files of the study, no raw tables, no images and PDFs, and the plot of a figure
+    without the figure and its digitized series without rows (#963).
     """
     if audience == "curator":
         return document
