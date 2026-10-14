@@ -1,9 +1,9 @@
-"""Numbers of format 1 rows in statistic columns that `study.json` does not map.
+"""Numbers of format 1 rows in columns that `study.json` does not map.
 
 Format 1 reads the statistics of a record only from the columns that its
 template in `study.json` maps. A row whose numbers sit in other columns, such
 as the median, min and max of a tmax row whose template maps only mean and sd,
-or a `value` column where the template maps `mean`, parses as a record
+a `geomean` column or a `value` column where the template maps `mean`, parses as a record
 without any value, which the converter drops (`rows.valueless`). The gate
 refuses such a drop, because it would lose the numbers (`unmapped_value`).
 """
@@ -17,26 +17,31 @@ from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy, DataRecord, Observation, Subject
 from pkdb.studyformat.text import format_number
 
-# The statistic columns of format 1 sheets, compared without case: the
-# statistics but the count, `value`, which format 1 reads as the mean, and
-# `mean_pm`, the end of an error bar. Other columns, such as `count`,
-# `comments` or `time`, hold no value of a row.
-COLUMNS = frozenset(
+# Every unmapped column with a number on a dropped row is a value of that row,
+# compared without case, except these columns: they count the subjects, place
+# the row in time or name it. A list of statistic names missed values under
+# names such as `geomean`, `geometric_mean`, `ci_low` or `q25`.
+NON_VALUE_COLUMNS = frozenset(
     {
-        "value",
-        "mean",
-        "median",
-        "min",
-        "max",
-        "sd",
-        "se",
-        "cv",
-        "gmean",
-        "gsd",
-        "gcv",
-        "mean_pm",
+        "count",
+        "group_count",
+        "groupcount",
+        "n",
+        "time",
+        "time_end",
+        "time_raw",
+        "timeraw",
+        "study",
+        "group",
+        "individual",
+        "subject",
+        "name",
+        "id",
+        "label",
     }
 )
+# Comment and note columns, such as `comments` or `notes`, hold no value.
+TEXT_COLUMNS = ("comment", "note")
 # The tables were read once by the format 1 parser, which applies the row limit.
 MAX_ROWS = 1_000_000
 Row = tuple[str, str | None, int]
@@ -51,6 +56,14 @@ def _number(cell: object) -> str | None:
     except ValueError:
         return None
     return format_number(number) if math.isfinite(number) else None
+
+
+def _value_column(column: str) -> bool:
+    """Whether a format 1 column can hold a value of its row."""
+    name = column.strip().lower()
+    return name not in NON_VALUE_COLUMNS and not any(
+        text in name for text in TEXT_COLUMNS
+    )
 
 
 def _locations(study: CanonicalStudy) -> Iterator[SourceLocation]:
@@ -80,8 +93,9 @@ def unmapped_values(
 
     `dropped` are the keys of the parsed records that the converter drops as
     rows without any value. For each that comes from a row of a format 1
-    sheet, the result lists the statistic columns (`COLUMNS`) of that row,
-    in the order of the sheet, that hold a number although no template of the
+    sheet, the result lists the columns of that row that can hold a value (all
+    but `NON_VALUE_COLUMNS` and comments), in the order of the sheet, that hold
+    a number although no template of the
     row maps them, with the number. A column that the template of another
     record of the same row maps holds that record's data. A row without such
     a number is left out: it carries no data.
@@ -114,7 +128,7 @@ def unmapped_values(
             numbers = [
                 (column, value)
                 for column, cell in cells.items()
-                if column.lower() in COLUMNS
+                if _value_column(column)
                 and column not in mapped[file, sheet, number]
                 and (value := _number(cell)) is not None
             ]
