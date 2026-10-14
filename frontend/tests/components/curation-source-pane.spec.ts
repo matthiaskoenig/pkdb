@@ -183,7 +183,7 @@ describe("problems of the source", () => {
         { file: "timecourses_Fig1.tsv", kind: "timecourses", header: ["label", "time", "mean"], rows: [[3, ["D75", "0.5", "1.2"]]], shared: false },
       ],
       points: [
-        { series: "D75", kind: "timecourses", file: "timecourses_Fig1.tsv", line: 3, x: 0.5, y: 1.2, error_bar: null, x_text: "0.5", y_text: "1.2" },
+        { series: "D75", kind: "timecourses", file: "timecourses_Fig1.tsv", line: 3, x: 0.5, y: 1.2, error_low: null, error_high: null, x_text: "0.5", y_text: "1.2" },
       ],
       series: [{ name: "D75", color: "#d65a24", dark_color: "#d95926", x_label: "time (h)", y_label: "c (mg/l)" }],
     };
@@ -257,7 +257,8 @@ describe("scales of the plot", () => {
     line,
     x,
     y,
-    error_bar: null,
+    error_low: null,
+    error_high: null,
     x_text: String(x),
     y_text: String(y),
   });

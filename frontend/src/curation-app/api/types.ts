@@ -727,7 +727,12 @@ export interface OverlayPoint {
   y: number;
   file: string;
   line: number | null;
-  error_px: [number, number] | null;
+  /**
+   * The pixels of the low and the high end of the error bar of a mapped row; null without that
+   * end, and for an end at or below 0 on a log axis of the digitization.
+   */
+  error_low_px: [number, number] | null;
+  error_high_px: [number, number] | null;
   /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
   x_text: string;
   y_text: string;
@@ -743,8 +748,12 @@ export interface SourcePoint {
   line: number;
   x: number;
   y: number;
-  /** The end of the error bar of a timecourse row. */
-  error_bar: number | null;
+  /**
+   * The low and the high end of the error bar of a timecourse row around `y`: the statistic that
+   * `error_type` names, else `sd`, else `se`, else the digitized `error_bar` mirrored; null without one.
+   */
+  error_low: number | null;
+  error_high: number | null;
   /** The cells as printed. */
   x_text: string;
   y_text: string;

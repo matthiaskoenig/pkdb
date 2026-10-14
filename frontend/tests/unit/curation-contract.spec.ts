@@ -257,6 +257,15 @@ describe("source view contract", () => {
   it("lists each series once in the legend", () => {
     expect(legendEntries(view, "overlay", false).map((entry) => entry.series)).toEqual(["caf_plasma_100mg", "caf_plasma_200mg"]);
   });
+
+  it("draws the error bar of every mapped row of Fig1 from its low to its high end, mirrored around its cross", () => {
+    const rows = view.overlay.filter((point) => point.role === "mapped" && point.series === "caf_plasma_100mg");
+    const bars = overlayTraces(view).traces.find((entry) => entry.meta === "error caf_plasma_100mg");
+    expect(bars?.y).toEqual(rows.flatMap((point) => [point.error_low_px?.[1], point.error_high_px?.[1], null]));
+    // The digitized error bar ends of Fig1 are of type sd: the bar reaches as far below the cross as above it.
+    for (const point of rows) expect(point.error_low_px![1] - point.py).toBeCloseTo(point.py - point.error_high_px![1], 2);
+    for (const point of view.points) expect(point.error_high! - point.y).toBeCloseTo(point.y - point.error_low!, 6);
+  });
 });
 
 describe("messages contract", () => {

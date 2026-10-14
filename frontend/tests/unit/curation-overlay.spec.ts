@@ -39,7 +39,8 @@ function point(changes: Partial<OverlayPoint> & Pick<OverlayPoint, "series" | "r
     y: 0,
     file: PROJECT,
     line: null,
-    error_px: null,
+    error_low_px: null,
+    error_high_px: null,
     x_text: String(changes.x ?? 0),
     y_text: String(changes.y ?? 0),
     error_bar_end: false,
@@ -51,7 +52,8 @@ function mapped(changes: Partial<SourcePoint> & Pick<SourcePoint, "series" | "li
   return {
     kind: "timecourses",
     file: TIMECOURSES,
-    error_bar: null,
+    error_low: null,
+    error_high: null,
     x_text: String(changes.x),
     y_text: String(changes.y),
     ...changes,
@@ -89,7 +91,8 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
         y: 5,
         file: TIMECOURSES,
         line: 2,
-        error_px: [20, 40],
+        error_low_px: [20, 60],
+        error_high_px: [20, 40],
         y_text: "5.00",
       }),
       point({ series: "drug_urine", role: "mapped", px: 60, py: 30, x: 2, y: 7, file: TIMECOURSES, line: 3 }),
@@ -97,10 +100,10 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
     unmatched: ["drug_feces"],
     layout: "overlay",
     points: [
-      mapped({ series: "drug_plasma", line: 2, x: 1, y: 5, error_bar: 6, y_text: "5.00" }),
+      mapped({ series: "drug_plasma", line: 2, x: 1, y: 5, error_low: 4, error_high: 6, y_text: "5.00" }),
       mapped({ series: "drug_urine", line: 3, x: 2, y: 7 }),
-      mapped({ series: "drug_feces", line: 4, x: 0, y: 1, error_bar: 1.5 }),
-      mapped({ series: "drug_feces", line: 6, x: 1, y: 3.25, error_bar: 2.5 }),
+      mapped({ series: "drug_feces", line: 4, x: 0, y: 1, error_low: 0.5, error_high: 1.5 }),
+      mapped({ series: "drug_feces", line: 6, x: 1, y: 3.25, error_low: 2.5, error_high: 4 }),
     ],
     series: SERIES,
     log_x: false,
@@ -195,12 +198,24 @@ describe("overlayTraces", () => {
     expect(half.marker?.line).toEqual({ width: 1.5, color: "#1a2b3c" });
   });
 
-  it("draws the error bars of mapped rows as segments that end at error_px", () => {
+  it("draws the error bars of mapped rows as segments from their low to their high end", () => {
     const { traces } = overlayTraces(figure());
     const bars = trace(traces, "error drug_plasma");
-    expect(bars).toEqual(expect.objectContaining({ mode: "lines", x: [20, 20, null], y: [50, 40, null] }));
+    expect(bars).toEqual(expect.objectContaining({ mode: "lines", x: [20, 20, null], y: [60, 40, null] }));
     expect(bars.hoverinfo).toBe("skip");
     expect(traces.map((entry) => entry.meta)).not.toContain("error drug_urine");
+  });
+
+  it("starts the error bar of a mapped row at its cross where an end has no pixel, off a log axis", () => {
+    const view = figure({
+      overlay: [
+        point({ series: "drug_plasma", role: "mapped", px: 20, py: 50, x: 1, y: 5, file: TIMECOURSES, line: 2, error_high_px: [20, 40] }),
+        point({ series: "drug_urine", role: "mapped", px: 60, py: 30, x: 2, y: 7, file: TIMECOURSES, line: 3, error_low_px: [60, 45] }),
+      ],
+    });
+    const { traces } = overlayTraces(view);
+    expect(trace(traces, "error drug_plasma")).toEqual(expect.objectContaining({ x: [20, 20, null], y: [50, 40, null] }));
+    expect(trace(traces, "error drug_urine")).toEqual(expect.objectContaining({ x: [60, 60, null], y: [45, 30, null] }));
   });
 
   it("colors a series and its error bars alike, in the colors of the source view", () => {
@@ -275,12 +290,14 @@ describe("plotTraces", () => {
     unmatched: ["drug_plasma", "drug_urine", "drug_feces"],
   });
 
-  it("plots the points of each series in table units, with error bars to the error bar end", () => {
+  it("plots the points of each series in table units, with error bars from the low to the high end", () => {
     const { traces, layout } = plotTraces(plain);
     expect(traces.map((entry) => entry.meta)).toEqual(["plot drug_plasma", "plot drug_urine", "plot drug_feces"]);
     const feces = trace(traces, "plot drug_feces");
     expect(feces).toEqual(expect.objectContaining({ mode: "lines+markers", x: [0, 1], y: [1, 3.25] }));
-    expect(feces.error_y).toEqual(expect.objectContaining({ type: "data", array: [0.5, 0.75], visible: true }));
+    expect(feces.error_y).toEqual(
+      expect.objectContaining({ type: "data", symmetric: false, array: [0.5, 0.75], arrayminus: [0.5, 0.75], visible: true }),
+    );
     expect(trace(traces, "plot drug_urine").error_y).toBeUndefined();
     expect(feces.customdata).toEqual([
       [TIMECOURSES, 4, "drug_feces", "0", "1", false, ""],
@@ -333,6 +350,49 @@ describe("plotTraces", () => {
     expect(trace(traces, "plot age_vs_cmax")).toEqual(expect.objectContaining({ mode: "markers", x: [30, 40], y: [2, 3] }));
     expect(layout.xaxis.title).toEqual({ text: "age (yr)", font: { size: 11 } });
     expect(layout.yaxis.title).toEqual({ text: "cmax (mg/l)", font: { size: 11 } });
+  });
+
+  it("draws asymmetric error bars, and none at a point without an error bar", () => {
+    const view = figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: [
+        // A gmean of 4 with a gsd of 2: from 2 to 8.
+        mapped({ series: "drug_plasma", line: 1, x: 1, y: 4, error_low: 2, error_high: 8 }),
+        mapped({ series: "drug_plasma", line: 2, x: 2, y: 5 }),
+        mapped({ series: "drug_urine", line: 3, x: 1, y: 7 }),
+      ],
+    });
+    const { traces } = plotTraces(view);
+    const bars = trace(traces, "plot drug_plasma").error_y;
+    expect(bars).toEqual(expect.objectContaining({ type: "data", symmetric: false, visible: true, thickness: 1.5, width: 4 }));
+    // Plotly reads null as 0 and draws a cap at the point; NaN draws nothing.
+    expect(bars?.array).toEqual([4, Number.NaN]);
+    expect(bars?.arrayminus).toEqual([2, Number.NaN]);
+    expect(trace(traces, "plot drug_urine").error_y).toBeUndefined();
+  });
+
+  it("passes an error bar that reaches 0 or below on to a log axis, which cuts it, and spans the decades of its ends above 0", () => {
+    const view = figure({
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [],
+      points: [
+        mapped({ series: "drug_plasma", line: 1, x: 1, y: 1, error_low: -0.5, error_high: 2.5 }),
+        mapped({ series: "drug_plasma", line: 2, x: 2, y: 2, error_low: 1, error_high: 20 }),
+      ],
+    });
+    const { traces, layout } = plotTraces(view, null, undefined, null, { scales: { x: "linear", y: "log" } });
+    const bars = trace(traces, "plot drug_plasma");
+    // The point at 1 stays; Plotly draws its bar down to the bottom of the plot and leaves out the cap there.
+    expect(bars.y).toEqual([1, 2]);
+    expect(bars.error_y?.arrayminus).toEqual([1.5, 1]);
+    expect(bars.error_y?.array).toEqual([1.5, 18]);
+    // 1 to 20 spans 1.3 decades with the ends of the bars; the points alone, 1 and 2, span 0.3.
+    expect(layout.yaxis.dtick).toBe("D2");
   });
 });
 
@@ -426,6 +486,7 @@ describe("the selected row", () => {
     expect(feces.x).toEqual([1]);
     expect(feces.y).toEqual([3.25]);
     expect(feces.error_y?.array).toEqual([0.75]);
+    expect(feces.error_y?.arrayminus).toEqual([0.75]);
     expect(feces.customdata).toEqual([[TIMECOURSES, 6, "drug_feces", "1", "3.25", false, ""]]);
     expect(traces.some((entry) => entry.meta === "selected")).toBe(false);
     expect(pointsOffScale(plain, scales)).toBe(1);
@@ -649,16 +710,17 @@ describe("problems in the plot", () => {
 });
 
 describe("the ticks of a log axis", () => {
-  /** A plot of drug_plasma at x 1, 2, 3 and so on, at the values `ys` with the error bar ends `bars`. */
-  function plotOf(ys: number[], bars: (number | null)[] = []): SourceView {
+  /** A plot of drug_plasma at x 1, 2, 3 and so on, at the values `ys` with the error bar ends `ends`. */
+  function plotOf(ys: number[], ends: ([number, number] | null)[] = []): SourceView {
     return figure({
       digitization: null,
       overlay: [],
       layout: "side_by_side",
       unmatched: [],
-      points: ys.map((y, index) =>
-        mapped({ series: "drug_plasma", line: index + 1, x: index + 1, y, error_bar: bars[index] ?? null }),
-      ),
+      points: ys.map((y, index) => {
+        const [low, high] = ends[index] ?? [null, null];
+        return mapped({ series: "drug_plasma", line: index + 1, x: index + 1, y, error_low: low, error_high: high });
+      }),
     });
   }
   const LOG: AxisScales = { x: "log", y: "log" };
@@ -704,7 +766,7 @@ describe("the ticks of a log axis", () => {
     // 1 to 5 spans 0.7 decades; the point at 0 is not drawn on the log axis.
     expect(plotTraces(plotOf([1, 5, 0]), null, undefined, null, { scales: LOG }).layout.yaxis.nticks).toBe(4);
     // The error bar of 5 to 20 also reaches down to -10, which a log axis does not draw: 1 to 20.
-    const { layout } = plotTraces(plotOf([1, 5, 0], [null, 20, 1000]), null, undefined, null, { scales: LOG });
+    const { layout } = plotTraces(plotOf([1, 5, 0], [null, [-10, 20], [-1000, 1000]]), null, undefined, null, { scales: LOG });
     expect(layout.yaxis.dtick).toBe("D2");
     // Without values above 0, a log axis has nothing to span.
     expect(plotTraces(plotOf([0, -1]), null, undefined, null, { scales: LOG }).layout.yaxis).toEqual(
@@ -739,11 +801,13 @@ describe("rowAt", () => {
     expect(rowAt(figure(), {})).toBeNull();
   });
 
-  it("selects the mapped row whose error bar ends at a clicked digitized error bar end", () => {
+  it("selects the mapped row whose error bar ends, at either end, at a clicked digitized error bar end", () => {
     const bar = trace(overlayTraces(figure()).traces, "raw-bar drug_plasma").customdata?.[0];
     expect(rowAt(figure(), { customdata: bar, x: 20, y: 40 })).toEqual({ file: TIMECOURSES, line: 2 });
     // Within the radius of a digitized point of the end of the error bar.
     expect(rowAt(figure(), { customdata: bar, x: 22, y: 41 })).toEqual({ file: TIMECOURSES, line: 2 });
+    // The low end counts too: a figure may digitize the lower ends of its error bars.
+    expect(rowAt(figure(), { customdata: bar, x: 20, y: 61 })).toEqual({ file: TIMECOURSES, line: 2 });
   });
 
   it("selects nothing for a digitized error bar end without a mapped error bar at it", () => {
