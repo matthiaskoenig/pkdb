@@ -516,6 +516,42 @@ test("the section tabs keep their places when another one becomes active and bol
   expect(await places()).toEqual(onData);
 });
 
+test("the section tabs follow the work on a study, also on the keyboard and in the select of a narrow window", async ({
+  app,
+  page,
+}) => {
+  const navigation = page.getByRole("navigation", { name: "Study sections" });
+  const order = [/^Metadata/, /^Data/, /^Problems/, /^Review/, /^Activity/];
+  // Demo2020 has two open review items: without a section, it still opens on Review (the default section rule is unchanged).
+  await app.open("#/studies/caffeine/Demo2020");
+  await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/review$/);
+  await expect(navigation.getByRole("link")).toHaveText(order);
+  await expect(navigation.getByRole("link", { name: /^Review\b/ })).toHaveAttribute("aria-current", "page");
+
+  // Tab moves through the tabs in the order that the screen shows.
+  const names = ["Metadata", "Data", "Problems", "Review", "Activity"];
+  await navigation.getByRole("link", { name: /^Metadata\b/ }).focus();
+  for (const name of names.slice(1)) {
+    await page.keyboard.press("Tab");
+    await expect(navigation.getByRole("link", { name: new RegExp(`^${name}\\b`) })).toBeFocused();
+  }
+
+  // Below 600 px the select of the sections lists them in the same order.
+  await page.setViewportSize({ width: 390, height: 844 });
+  const select = page.getByRole("combobox", { name: "Section" });
+  await expect(select).toBeVisible();
+  await select.focus();
+  await select.press("ArrowDown");
+  await expect(page.getByRole("listbox").getByRole("option")).toHaveText([
+    "Metadata",
+    "Data",
+    /^Problems \(\d+\)$/,
+    "Review (2)",
+    "Activity",
+  ]);
+  await page.keyboard.press("Escape");
+});
+
 test("old addresses of the Sources and Tables sections open the Data section", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/tables?file=timecourses_Fig1.tsv&line=5");
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data\?file=timecourses_Fig1\.tsv&line=5$/);

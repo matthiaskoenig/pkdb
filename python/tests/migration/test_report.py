@@ -80,6 +80,7 @@ def test_the_markdown_summary_and_sections():
     assert "| mismatch | 1 |" in text
     assert "| Skipped (format 2) | 1 |" in text
     assert "| caffeine/A1999 | measurements[x].sd | 0.5 | 0.6 |" in text
+    assert "\nIssue codes:\n\n| Study | Issue codes |\n" in text
     assert "| caffeine/A1999 | measurement_unit |" in text
     assert "| caffeine/C2001 | sheet_name: Sheet Fig1.2 is not a source name |" in text
     assert "| caffeine/D2002 | group_count_1 x 1 |" in text

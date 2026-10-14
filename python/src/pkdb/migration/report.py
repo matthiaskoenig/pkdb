@@ -107,7 +107,7 @@ def _classes(grouped: dict[str, list[StudyResult]]) -> list[str]:
             )
             issues = [[s.study, ", ".join(s.issues)] for s in studies if s.issues]
             if issues:
-                lines += ["", "Format 2 issue codes:", ""]
+                lines += ["", "Issue codes:", ""]
                 lines += _table(["Study", "Issue codes"], issues)
         elif name == "not_converted":
             lines += _table(
