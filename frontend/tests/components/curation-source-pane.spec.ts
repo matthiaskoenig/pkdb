@@ -183,7 +183,7 @@ describe("problems of the source", () => {
         { file: "timecourses_Fig1.tsv", kind: "timecourses", header: ["label", "time", "mean"], rows: [[3, ["D75", "0.5", "1.2"]]], shared: false },
       ],
       points: [
-        { series: "D75", kind: "timecourses", file: "timecourses_Fig1.tsv", line: 3, x: 0.5, y: 1.2, error_bar: null, x_text: "0.5", y_text: "1.2" },
+        { series: "D75", kind: "timecourses", file: "timecourses_Fig1.tsv", line: 3, x: 0.5, y: 1.2, error_low: null, error_high: null, x_text: "0.5", y_text: "1.2" },
       ],
       series: [{ name: "D75", color: "#d65a24", dark_color: "#d95926", x_label: "time (h)", y_label: "c (mg/l)" }],
     };
@@ -257,7 +257,8 @@ describe("scales of the plot", () => {
     line,
     x,
     y,
-    error_bar: null,
+    error_low: null,
+    error_high: null,
     x_text: String(x),
     y_text: String(y),
   });
@@ -390,5 +391,14 @@ describe("scales of the plot", () => {
     await wrapper.setProps({ summary, view });
     expect(wrapper.find('[role="group"][aria-label^="Scale of the"]').exists()).toBe(false);
     study.close();
+  });
+
+  it("says that a figure without rows with a time or scatter rows has nothing to plot", () => {
+    const wrapper = mountPane({
+      summary: sourceSummary({ source: "Fig3", kind: "figure", image: "Example_Fig3.png" }),
+      view: { ...view, source: "Fig3", image: "Example_Fig3.png", image_url: `${EXAMPLE}/files/Example_Fig3.png`, raw_grid: null },
+    });
+    expect(wrapper.text()).toContain("No rows with a time or scatter rows to plot.");
+    expect(wrapper.find(".plot-scales").exists()).toBe(false);
   });
 });

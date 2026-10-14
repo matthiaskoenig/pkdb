@@ -46,7 +46,7 @@ def register(commands) -> None:
         "--source",
         help=(
             "Source to render (default: every Fig source with a digitization, "
-            "timecourses or scatters)"
+            "timecourses, scatters or outputs with a time)"
         ),
     )
     plot.add_argument(
@@ -72,8 +72,9 @@ def _plot(args) -> int:
     import tempfile
 
     from pkdb.studyformat import study_label
+    from pkdb.studyformat.digitize import mapped_points
     from pkdb.studyformat.load import load_study
-    from pkdb.studyformat.plot import render_source
+    from pkdb.studyformat.plot import capped, render_source
     from pkdb.studyformat.sources import study_sources
 
     human = args.format == "human" or (args.format is None and sys.stdout.isatty())
@@ -96,13 +97,16 @@ def _plot(args) -> int:
                 and (
                     summary.raw_kind == "digitization"
                     or any(
-                        table.kind in ("timecourses", "scatters")
-                        and (
+                        (
                             table.source == summary.source
                             or any(
                                 row.cells.get("source") == summary.source
                                 for row in table.rows
                             )
+                        )
+                        and (
+                            table.kind in ("timecourses", "scatters")
+                            or (table.kind == "outputs" and bool(mapped_points(table)))
                         )
                         for table in study.tables
                     )
@@ -140,7 +144,10 @@ def _plot(args) -> int:
     for plot in plots:
         say(f"{label}: {plot['source']} ({plot['mode']}) {plot['file']}")
         if plot["unmatched"]:
-            say(f"  series without dataset: {', '.join(plot['unmatched'])}")
+            # Series names have no ";", but can have commas.
+            names, more = capped(plot["unmatched"])
+            rest = f"; and {more} more series" if more else ""
+            say(f"  series without dataset: {'; '.join(names)}{rest}")
     return 0
 
 

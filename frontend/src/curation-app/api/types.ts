@@ -748,7 +748,7 @@ export interface MappedTable {
 }
 
 export interface OverlayPoint {
-  /** The series of the point: the label of a timecourse row or the name of a scatter row. */
+  /** The series of the point: the label of a timecourse row, the name of a scatter row, or the series of an outputs row with a time. */
   series: string;
   role: "raw" | "mapped";
   px: number;
@@ -757,7 +757,12 @@ export interface OverlayPoint {
   y: number;
   file: string;
   line: number | null;
-  error_px: [number, number] | null;
+  /**
+   * The pixels of the low and the high end of the error bar of a mapped row; null without that
+   * end, and for an end at or below 0 on a log axis of the digitization.
+   */
+  error_low_px: [number, number] | null;
+  error_high_px: [number, number] | null;
   /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
   x_text: string;
   y_text: string;
@@ -765,16 +770,27 @@ export interface OverlayPoint {
   error_bar_end: boolean;
 }
 
-/** A mapped row of a timecourse or scatter table in the units of its table. */
+/** A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table. */
 export interface SourcePoint {
+  /**
+   * The series of the point: the `label` of a timecourse row, the `name` of a scatter row, or the
+   * subjects, interventions, measurement, substance and tissue of an outputs row joined with " · ".
+   */
   series: string;
-  kind: "timecourses" | "scatters";
+  kind: "timecourses" | "scatters" | "outputs";
   file: string;
   line: number;
   x: number;
   y: number;
-  /** The end of the error bar of a timecourse row. */
-  error_bar: number | null;
+  /**
+   * The low and the high end of the error bar of a timecourse row or an outputs row with a time around `y`: the first statistic that
+   * fits, the one that `error_type` names first (as reported or as the digitized `error_bar` gives it),
+   * then around a `gmean` `gsd`, `sd`, `se`, and around a `mean` or `median` `sd`, `se`. A negative `sd`
+   * or `se` or a `gsd` below 1 is skipped and the next statistic is tried; a row with no valid
+   * statistic has no bar, and an `error_bar` without `error_type` is mirrored. Null without a bar.
+   */
+  error_low: number | null;
+  error_high: number | null;
   /** The cells as printed. */
   x_text: string;
   y_text: string;

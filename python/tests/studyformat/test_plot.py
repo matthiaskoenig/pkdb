@@ -1,5 +1,6 @@
 import json
 import sys
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -10,8 +11,19 @@ from pkdb.studyformat.colors import SERIES_COLORS
 from pkdb.studyformat.digitize import png_size
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.load import load_study
-from pkdb.studyformat.plot import render_source
-from pkdb.studyformat.sources import source_view
+from pkdb.studyformat.plot import (
+    _error_ranges,
+    _error_segment,
+    _linestyle,
+    render_source,
+)
+from pkdb.studyformat.sources import (
+    OverlayPoint,
+    SourcePoint,
+    SourceSeries,
+    SourceView,
+    source_view,
+)
 
 RED = (255, 0, 0)
 
@@ -280,3 +292,223 @@ def test_side_by_side_colors_only_the_series_it_draws(
     result = render_source(study, "Fig1", tmp_path / "Fig1.png")
     assert result.mode == "side_by_side"
     assert dict(result.colors) == {"drug_plasma": view.series[0].color}
+
+
+def source_point(y, low, high):
+    return SourcePoint(
+        "drug_plasma",
+        "timecourses",
+        "timecourses_Fig1.tsv",
+        1,
+        1.0,
+        y,
+        low,
+        high,
+        "1",
+        str(y),
+    )
+
+
+def test_side_by_side_draws_the_error_bars_of_the_source_view():
+    # Down to the low end and up to the high end; 0 at a point without an error bar.
+    rows = [source_point(4.0, 2.0, 8.0), source_point(5.0, None, None)]
+    assert _error_ranges(rows) == [[2.0, 0.0], [4.0, 0.0]]
+    assert _error_ranges([source_point(5.0, None, None)]) is None
+
+
+def overlay_point(low, high):
+    return OverlayPoint(
+        series="drug_plasma",
+        role="mapped",
+        px=10.0,
+        py=50.0,
+        x=1.0,
+        y=5.0,
+        file="timecourses_Fig1.tsv",
+        line=1,
+        error_low_px=low,
+        error_high_px=high,
+        x_text="1",
+        y_text="5",
+    )
+
+
+def test_overlay_draws_the_error_bar_of_a_mapped_row_from_its_low_to_its_high_end():
+    assert _error_segment(overlay_point((10.0, 60.0), (10.0, 40.0)), 100) == (
+        [10.0, 10.0],
+        [60.0, 40.0],
+    )
+    # A low end without a pixel, off a log axis, reaches the bottom of the image (here 100).
+    assert _error_segment(overlay_point(None, (10.0, 40.0)), 100) == (
+        [10.0, 10.0],
+        [100.0, 40.0],
+    )
+    # A high end without a pixel is the cross of the row.
+    assert _error_segment(overlay_point((10.0, 60.0), None), 100) == (
+        [10.0, 10.0],
+        [60.0, 50.0],
+    )
+    assert _error_segment(overlay_point(None, None), 100) is None
+
+
+def test_side_by_side_draws_timecourses_and_outputs_as_lines_and_scatters_as_points():
+    assert [_linestyle(kind) for kind in ("timecourses", "outputs", "scatters")] == [
+        "-",
+        "-",
+        "",
+    ]
+
+
+def test_plot_default_sources_include_figures_whose_outputs_have_a_time(
+    make_study, valid_files, tsv, tmp_path, capsys
+):
+    output = {
+        "subjects": "all",
+        "interventions": "D1",
+        "measurement": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "time_unit": "h",
+        "unit": "mg/l",
+    }
+    folder = make_study(
+        {
+            **valid_files,
+            "outputs_Fig3.tsv": tsv("outputs", {**output, "time": "1", "mean": "2"}),
+            "Example_Fig3.png": png(100, 100),
+            # Outputs without a time: nothing to plot.
+            "outputs_Fig4.tsv": tsv(
+                "outputs", {**output, "measurement": "cmax", "mean": "2"}
+            ),
+            "Example_Fig4.png": png(100, 100),
+        }
+    )
+    assert format_folder(folder).ok
+    out = tmp_path / "plots"
+    assert main(["plot", str(folder), "--out", str(out), "--format", "human"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert (
+        f"caffeine/Example: Fig3 (side_by_side) {out / 'Example_Fig3.plot.png'}"
+        in lines
+    )
+    assert "  series without dataset: all · D1 · concentration · drug · plasma" in lines
+    assert not any("Fig4" in line for line in lines)
+
+
+TIMECOURSE = {
+    "subjects": "all",
+    "interventions": "D1",
+    "measurement": "concentration",
+    "substance": "drug",
+    "tissue": "plasma",
+    "time_unit": "h",
+    "unit": "mg/l",
+    "time": "1",
+    "mean": "2",
+}
+
+
+def many_series(make_study, valid_files, tsv, count):
+    """A figure Fig3 without a digitization, with `count` timecourse series of one point whose labels have commas."""
+    rows = [{**TIMECOURSE, "label": f"CAF,CHL,{index}"} for index in range(count)]
+    folder = make_study(
+        {
+            **valid_files,
+            "timecourses_Fig3.tsv": tsv("timecourses", *rows),
+            "Example_Fig3.png": png(100, 100),
+        }
+    )
+    assert format_folder(folder).ok
+    return folder
+
+
+def test_side_by_side_lists_at_most_twenty_series_in_the_legend(
+    make_study, valid_files, tsv, tmp_path
+):
+    study = load_study(many_series(make_study, valid_files, tsv, 45))
+    result = render_source(study, "Fig3", tmp_path / "Fig3.png")
+    assert result.mode == "side_by_side"
+    assert result.legend == tuple(f"CAF,CHL,{index}" for index in range(20))
+    # Every series is still drawn.
+    assert len(result.colors) == 45
+
+
+def test_plot_caps_the_series_without_dataset_and_keeps_the_names_apart(
+    make_study, valid_files, tsv, tmp_path, capsys
+):
+    folder = many_series(make_study, valid_files, tsv, 25)
+    out = tmp_path / "plots"
+    args = ["plot", str(folder), "--source", "Fig3", "--out", str(out)]
+    assert main([*args, "--format", "human"]) == 0
+    line = capsys.readouterr().out.splitlines()[1]
+    names = [f"CAF,CHL,{index}" for index in range(20)]
+    assert line == f"  series without dataset: {'; '.join(names)}; and 5 more series"
+    # JSON keeps the full list.
+    assert main([*args, "--format", "json"]) == 0
+    [plot] = json.loads(capsys.readouterr().out)["plots"]
+    assert len(plot["unmatched"]) == 25
+
+
+def test_the_axis_title_names_the_distinct_labels_of_its_series():
+    from pkdb.studyformat.plot import axis_title
+
+    assert axis_title(["time (h)", "time (h)", None]) == "time (h)"
+    assert axis_title(["a (kg)", "b (%)", "a (kg)"]) == "a (kg) / b (%)"
+    assert axis_title(list("abcde")) == "a / b / c and 2 more"
+    assert axis_title([None]) == ""
+
+
+def test_side_by_side_titles_the_y_axis_with_every_measurement_of_its_series(
+    make_study, valid_files, tsv, tmp_path, monkeypatch
+):
+    from matplotlib.axes import Axes
+
+    folder = make_study(valid_files)
+    study = load_study(folder)
+    view = source_view(study, "Fig1")
+    series = tuple(
+        SourceSeries(name, "#112233", "#445566", "time (wk)", label)
+        for name, label in (("a", "weight (kg)"), ("b", "hba1c (percent)"))
+    )
+    points = tuple(
+        SourcePoint(
+            name, "outputs", "outputs_Fig1.tsv", 1, 1.0, 2.0, None, None, "1", "2"
+        )
+        for name in ("a", "b")
+    )
+    view = replace(view, series=series, points=points, unmatched=("a", "b"))
+    titles = {}
+    monkeypatch.setattr(
+        Axes, "set_ylabel", lambda self, text, *a, **k: titles.update(y=text)
+    )
+    monkeypatch.setattr(
+        Axes, "set_xlabel", lambda self, text, *a, **k: titles.update(x=text)
+    )
+    from pkdb.studyformat.plot import _side_by_side
+
+    _side_by_side(study, view, tmp_path / "a.png")
+    assert titles == {"x": "time (wk)", "y": "weight (kg) / hba1c (percent)"}
+
+
+def test_a_figure_with_a_thousand_single_point_series_renders_fast(
+    valid_study, tmp_path
+):
+    import time
+
+    from pkdb.studyformat.plot import _side_by_side
+
+    names = [f"CAF,CHL,{index}" for index in range(1300)]
+    view = SourceView(
+        "Fig5", None, None, None, None, (), (), tuple(names), "side_by_side",
+        tuple(
+            SourcePoint(name, "outputs", "outputs_Fig5.tsv", index + 2, 1.0 + index % 7, 2.0 + index % 11, 1.0, 4.0, "1", "2")
+            for index, name in enumerate(names)
+        ),
+        tuple(SourceSeries(name, "#336699", "#99ccff", "time (h)", "y (mg)") for name in names),
+        False,
+        False,
+    )  # fmt: skip
+    started = time.perf_counter()
+    result = _side_by_side(load_study(valid_study), view, tmp_path / "a.png")
+    assert time.perf_counter() - started < 5
+    assert len(result.legend) == 20 and len(result.colors) == 1300

@@ -122,8 +122,8 @@ const timecourses = {
 function points(file: string): SourcePoint[] {
   const base = { kind: "timecourses", file, x: 0.5, x_text: "0.5" } as const;
   return [
-    { ...base, series: "caf_plasma_D150", line: 2, y: 2.419, y_text: "2.419", error_bar: 3.051 },
-    { ...base, series: "caf_plasma_D75", line: 3, y: 1.2, y_text: "1.2", error_bar: null },
+    { ...base, series: "caf_plasma_D150", line: 2, y: 2.419, y_text: "2.419", error_low: 1.787, error_high: 3.051 },
+    { ...base, series: "caf_plasma_D75", line: 3, y: 1.2, y_text: "1.2", error_low: null, error_high: null },
   ];
 }
 
@@ -150,7 +150,8 @@ const digitized: SourceView = {
       y: 2.42,
       file: "Example_Fig1.wpd.json",
       line: null,
-      error_px: null,
+      error_low_px: null,
+      error_high_px: null,
       x_text: "0.5",
       y_text: "2.42",
       error_bar_end: false,
@@ -164,7 +165,8 @@ const digitized: SourceView = {
       y: 2.419,
       file: "timecourses_Fig1.tsv",
       line: 2,
-      error_px: [120, 250],
+      error_low_px: [120, 352],
+      error_high_px: [120, 250],
       x_text: "0.5",
       y_text: "2.419",
       error_bar_end: false,
@@ -648,7 +650,7 @@ describe("figure sources", () => {
     const overlays = wrapper.findAllComponents(OverlayStub);
     expect(overlays[0]?.props("view")).toEqual(digitized);
     expect(overlays[0]?.props("mode")).toBe("overlay");
-    expect(sourcePane().text()).toContain("Not digitized: caf_plasma_D75");
+    expect(sourcePane().text()).toContain("Not digitizedcaf_plasma_D75");
     // The rows without a dataset are drawn beside the figure.
     expect(overlays[1]?.props("mode")).toBe("plot");
     expect(overlays).toHaveLength(2);

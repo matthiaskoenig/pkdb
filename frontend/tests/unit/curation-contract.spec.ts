@@ -29,7 +29,7 @@ import { jobText, messageParts } from "../../src/curation-app/activity";
 import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { cellParts, namedKind } from "../../src/curation-app/links";
 import { issueMessage } from "../../src/curation-app/metadata";
-import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
+import { legendEntries, overlayTraces, plotTraces } from "../../src/curation-app/overlay";
 import { ApiError } from "../../src/curation-app/api/client";
 import { detailsOfBody } from "../../src/curation-app/failures";
 import {
@@ -56,6 +56,7 @@ import messagesFixture from "../fixtures/curation-contract/messages.json";
 import nameLinesFixture from "../fixtures/curation-contract/name-lines.json";
 import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
+import outputsSourceFixture from "../fixtures/curation-contract/source-outputs-fig2.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
 import tableContentFixture from "../fixtures/curation-contract/table-content.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
@@ -262,6 +263,15 @@ describe("source view contract", () => {
   it("lists each series once in the legend", () => {
     expect(legendEntries(view, "overlay", false).map((entry) => entry.series)).toEqual(["caf_plasma_100mg", "caf_plasma_200mg"]);
   });
+
+  it("draws the error bar of every mapped row of Fig1 from its low to its high end, mirrored around its cross", () => {
+    const rows = view.overlay.filter((point) => point.role === "mapped" && point.series === "caf_plasma_100mg");
+    const bars = overlayTraces(view).traces.find((entry) => entry.meta === "error caf_plasma_100mg");
+    expect(bars?.y).toEqual(rows.flatMap((point) => [point.error_low_px?.[1], point.error_high_px?.[1], null]));
+    // The digitized error bar ends of Fig1 are of type sd: the bar reaches as far below the cross as above it.
+    for (const point of rows) expect(point.error_low_px![1] - point.py).toBeCloseTo(point.py - point.error_high_px![1], 2);
+    for (const point of view.points) expect(point.error_high! - point.y).toBeCloseTo(point.y - point.error_low!, 6);
+  });
 });
 
 describe("messages contract", () => {
@@ -465,5 +475,31 @@ describe("name lines contract", () => {
         subjects: { file: "subjects.tsv", lines: {} },
         interventions: { file: "interventions.tsv", lines: {} },
       });
+  });
+});
+
+describe("outputs source contract", () => {
+  const view = contract<SourceView>(outputsSourceFixture);
+  const PLASMA = "all · D150 · concentration · caffeine · plasma";
+  const URINE = "all · D150 · concentration · caffeine · urine";
+
+  it("accepts the answer", () => {
+    expect(isSourceView(outputsSourceFixture)).toBe(true);
+  });
+
+  it("plots each series of the outputs with a time as lines and markers by time, beside the image", () => {
+    const { traces, layout } = plotTraces(view);
+    expect(traces.map((entry) => entry.meta)).toEqual([`plot ${PLASMA}`, `plot ${URINE}`]);
+    const plasma = traces[0]!;
+    expect(plasma).toEqual(expect.objectContaining({ mode: "lines+markers", x: [0.5, 1, 2, 4], y: [2.1, 3, 2.4, 1.2] }));
+    expect(plasma.customdata?.map(([file, line]) => [file, line])).toEqual([
+      ["outputs_Fig2.tsv", 2],
+      ["outputs_Fig2.tsv", 3],
+      ["outputs_Fig2.tsv", 4],
+      ["outputs_Fig2.tsv", 5],
+    ]);
+    expect(layout.xaxis.title).toEqual({ text: "time (hr)", font: { size: 11 } });
+    expect(layout.yaxis.title).toEqual({ text: "concentration (mg/l)", font: { size: 11 } });
+    expect(legendEntries(view, "plot", false).map((entry) => entry.series)).toEqual([PLASMA, URINE]);
   });
 });

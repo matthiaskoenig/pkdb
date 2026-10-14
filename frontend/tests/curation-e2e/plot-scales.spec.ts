@@ -137,11 +137,11 @@ test("a log axis over 1.3 decades labels 1, 2 and 5 of each decade apart from ea
   const project = join(app.server.workspace, PROJECT);
   await page.route("**/local/studies/caffeine/Demo2020/sources/Fig1", async (route) => {
     const response = await route.fetch();
-    const view = (await response.json()) as { points: { y: number; y_text: string; error_bar: number | null }[] };
+    const view = (await response.json()) as { points: { y: number; y_text: string; error_low: number | null; error_high: number | null }[] };
     const last = view.points.length - 1;
     view.points = view.points.map((point, index) => {
       const y = Number((10 ** ((1.3 * index) / last)).toPrecision(3));
-      return { ...point, y, y_text: String(y), error_bar: null };
+      return { ...point, y, y_text: String(y), error_low: null, error_high: null };
     });
     await route.fulfill({ response, json: view });
   });

@@ -545,7 +545,7 @@ def test_tables_sources_and_images(api):
     assert source["overlay"] and source["layout"] == "overlay"
     # The points, the series with their colors, and the texts of the hover pass through.
     assert source["points"][0]["series"] == "drug_plasma"
-    assert {"x_text", "y_text", "error_bar"} <= set(source["points"][0])
+    assert {"x_text", "y_text", "error_low", "error_high"} <= set(source["points"][0])
     assert source["series"][0]["name"] == "drug_plasma"
     assert {"color", "dark_color", "x_label", "y_label"} <= set(source["series"][0])
     assert {"x_text", "y_text"} <= set(source["overlay"][0])

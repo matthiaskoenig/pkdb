@@ -2,9 +2,9 @@
 
 A digitized figure also gets overlay points in image pixels: the digitized points
 and the mapped rows drawn at their pixel, so a curator can see where they differ.
-The mapped rows of timecourse and scatter tables are also points in the units of
-their tables, for a plot beside the image. The series of a figure have one order
-and one color each, which `pkdb plot` and the curation app share.
+The mapped rows of timecourse and scatter tables, and the outputs rows with a time, are also
+points in the units of their tables, for a plot beside the image. The series of a figure have
+one order and one color each, which `pkdb plot` and the curation app share.
 """
 
 from dataclasses import dataclass
@@ -21,6 +21,7 @@ from pkdb.studyformat.digitize import (
     dataset_series,
     digitization_file,
     mapped_points,
+    outputs_series,
     png_size,
 )
 from pkdb.studyformat.load import LoadedStudy, LoadedTable
@@ -28,7 +29,14 @@ from pkdb.studyformat.raw import raw_file, raw_grid
 from pkdb.studyformat.tables import SOURCE_PATTERN, TEXT_SOURCE, image_file
 from pkdb.studyformat.text import format_number, natural_key
 
-_DIGITIZED_KINDS = ("timecourses", "scatters")
+# The kind of a plotted point: timecourse and outputs rows over time, scatter rows as points.
+PointKind = Literal["timecourses", "scatters", "outputs"]
+# The tables whose mapped rows a figure plots, by kind.
+_PLOTTED_KINDS: dict[str, PointKind] = {
+    "timecourses": "timecourses",
+    "scatters": "scatters",
+    "outputs": "outputs",
+}
 
 SourceKind = Literal["table", "figure", "text"]
 
@@ -79,9 +87,11 @@ class OverlayPoint:
     """A digitized (raw) or mapped point of a figure at an image pixel.
 
     `series` is the timecourse label or scatter name of the point; `error_bar_end` marks a
-    digitized end of an error bar, from the dataset `<series>;error_bar`. `x_text` and `y_text`
-    are the values as printed: the cells of a mapped row, and the six significant digits of the
-    canonical project for a digitized point.
+    digitized end of an error bar, from the dataset `<series>;error_bar`. `error_low_px` and
+    `error_high_px` are the pixels of the ends of the error bar of a mapped row; None without
+    that end, and for an end at or below 0 on a log axis. `x_text` and `y_text` are the values
+    as printed: the cells of a mapped row, and the six significant digits of the canonical
+    project for a digitized point.
     """
 
     series: str
@@ -92,7 +102,8 @@ class OverlayPoint:
     y: float
     file: str
     line: int | None
-    error_px: tuple[float, float] | None
+    error_low_px: tuple[float, float] | None
+    error_high_px: tuple[float, float] | None
     x_text: str
     y_text: str
     error_bar_end: bool = False
@@ -100,19 +111,25 @@ class OverlayPoint:
 
 @dataclass(frozen=True)
 class SourcePoint:
-    """A mapped row of a timecourse or scatter table in the units of its table.
+    """A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table.
 
-    `error_bar` is the end of the error bar of a timecourse row; `x_text` and `y_text` are the
-    cells as printed.
+    `error_low` and `error_high` are the ends of the error bar of a timecourse row or an outputs row around `y`
+    (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
+    first (as reported or as the digitized `error_bar` gives it), then around a `gmean` `gsd`,
+    `sd`, `se`, and around a `mean` or `median` `sd`, `se`; a negative `sd` or `se` or a `gsd`
+    below 1 is skipped and the next statistic is tried; a row with no valid statistic has no bar,
+    and an `error_bar` without `error_type` is mirrored. None without a bar. `x_text` and `y_text`
+    are the cells as printed.
     """
 
     series: str
-    kind: Literal["timecourses", "scatters"]
+    kind: PointKind
     file: str
     line: int
     x: float
     y: float
-    error_bar: float | None
+    error_low: float | None
+    error_high: float | None
     x_text: str
     y_text: str
 
@@ -246,6 +263,11 @@ def _pixel(axes: Axes, x: float, y: float) -> tuple[float, float] | None:
     return round(px, VALUE_DIGITS), round(py, VALUE_DIGITS)
 
 
+def _end_pixel(axes: Axes, x: float, end: float | None) -> tuple[float, float] | None:
+    """The pixel of an end of an error bar; None without the end and off a log axis."""
+    return None if end is None else _pixel(axes, x, end)
+
+
 def _value_text(value: float) -> str:
     """A digitized value with the significant digits of the canonical project."""
     return format_number(float(f"{value:.{VALUE_DIGITS}g}"))
@@ -253,23 +275,14 @@ def _value_text(value: float) -> str:
 
 def _figure_points(
     study: LoadedStudy, source: str
-) -> list[tuple[Literal["timecourses", "scatters"], MappedPoint]]:
-    """The mapped rows of the timecourse and scatter tables of a figure as dataset points."""
+) -> list[tuple[PointKind, MappedPoint]]:
+    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points."""
     return [
-        ("scatters" if table.kind == "scatters" else "timecourses", point)
+        (kind, point)
         for table in study.tables
-        if table.source == source and table.kind in _DIGITIZED_KINDS
+        if table.source == source and (kind := _PLOTTED_KINDS.get(table.kind))
         for point in mapped_points(table)
     ]
-
-
-def _error_bars(points: list[MappedPoint]) -> dict[tuple[str, int, str], MappedPoint]:
-    """The error bar ends of mapped rows by file, line and `<series>;error_bar`."""
-    return {
-        (p.file, p.line, p.dataset): p
-        for p in points
-        if p.dataset.endswith(ERROR_BAR_SUFFIX)
-    }
 
 
 def _overlay(
@@ -297,12 +310,12 @@ def _overlay(
                         digitization.file,
                         None,
                         None,
+                        None,
                         _value_text(x),
                         _value_text(y),
                         bar,
                     )
                 )
-    bars = _error_bars(points)
     for point in points:
         if point.dataset.endswith(ERROR_BAR_SUFFIX):
             continue
@@ -314,10 +327,6 @@ def _overlay(
         if (pixel := _pixel(axes, point.x, point.y)) is None:
             continue
         px, py = pixel
-        error_px = None
-        bar = bars.get((point.file, point.line, point.dataset + ERROR_BAR_SUFFIX))
-        if bar is not None:
-            error_px = _pixel(axes, bar.x, bar.y)
         overlay.append(
             OverlayPoint(
                 point.dataset,
@@ -328,7 +337,8 @@ def _overlay(
                 point.y,
                 point.file,
                 point.line,
-                error_px,
+                _end_pixel(axes, point.x, point.error_low),
+                _end_pixel(axes, point.x, point.error_high),
                 point.x_text,
                 point.y_text,
             )
@@ -337,29 +347,25 @@ def _overlay(
 
 
 def _source_points(
-    figure_points: list[tuple[Literal["timecourses", "scatters"], MappedPoint]],
+    figure_points: list[tuple[PointKind, MappedPoint]],
 ) -> tuple[SourcePoint, ...]:
-    """The mapped rows as points in table units, each with the end of its error bar."""
-    bars = _error_bars([point for _, point in figure_points])
-    result = []
-    for kind, point in figure_points:
-        if point.dataset.endswith(ERROR_BAR_SUFFIX):
-            continue
-        bar = bars.get((point.file, point.line, point.dataset + ERROR_BAR_SUFFIX))
-        result.append(
-            SourcePoint(
-                point.dataset,
-                kind,
-                point.file,
-                point.line,
-                point.x,
-                point.y,
-                bar.y if bar else None,
-                point.x_text,
-                point.y_text,
-            )
+    """The mapped rows as points in table units, each with the ends of its error bar."""
+    return tuple(
+        SourcePoint(
+            point.dataset,
+            kind,
+            point.file,
+            point.line,
+            point.x,
+            point.y,
+            point.error_low,
+            point.error_high,
+            point.x_text,
+            point.y_text,
         )
-    return tuple(result)
+        for kind, point in figure_points
+        if not point.dataset.endswith(ERROR_BAR_SUFFIX)
+    )
 
 
 def _label(name: str, unit: str) -> str | None:
@@ -375,7 +381,7 @@ def _labels(
     """Per series of a figure the x and y axis labels from its first row."""
     labels: dict[str, tuple[str | None, str | None]] = {}
     for table in study.tables:
-        if table.source != source or table.kind not in _DIGITIZED_KINDS:
+        if table.source != source or table.kind not in _PLOTTED_KINDS:
             continue
         for row in table.rows:
             cells = row.cells
@@ -393,6 +399,14 @@ def _labels(
                     (
                         _label(cells.get("x_measurement", ""), cells.get("x_unit", "")),
                         _label(cells.get("y_measurement", ""), cells.get("y_unit", "")),
+                    ),
+                )
+            elif table.kind == "outputs" and (name := outputs_series(row)):
+                labels.setdefault(
+                    name,
+                    (
+                        _label("time", cells.get("time_unit", "")),
+                        _label(cells.get("measurement", ""), cells.get("unit", "")),
                     ),
                 )
     return labels

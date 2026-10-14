@@ -650,7 +650,8 @@
       "y": 1.48402,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.253991",
       "y_text": "1.48402",
       "error_bar_end": false
@@ -664,7 +665,8 @@
       "y": 1.96451,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.508986",
       "y_text": "1.96451",
       "error_bar_end": false
@@ -678,7 +680,8 @@
       "y": 2.09476,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.998898",
       "y_text": "2.09476",
       "error_bar_end": false
@@ -692,7 +695,8 @@
       "y": 1.86854,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "2.00148",
       "y_text": "1.86854",
       "error_bar_end": false
@@ -706,7 +710,8 @@
       "y": 1.07317,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "5.99875",
       "y_text": "1.07317",
       "error_bar_end": false
@@ -720,7 +725,8 @@
       "y": 0.807927,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "7.99018",
       "y_text": "0.807927",
       "error_bar_end": false
@@ -734,7 +740,8 @@
       "y": 0.470366,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "12.0032",
       "y_text": "0.470366",
       "error_bar_end": false
@@ -748,7 +755,8 @@
       "y": 0.0879268,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "23.9866",
       "y_text": "0.0879268",
       "error_bar_end": false
@@ -762,7 +770,8 @@
       "y": 1.82549,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.249641",
       "y_text": "1.82549",
       "error_bar_end": true
@@ -776,7 +785,8 @@
       "y": 2.41024,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.50129",
       "y_text": "2.41024",
       "error_bar_end": true
@@ -790,7 +800,8 @@
       "y": 2.57549,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.984509",
       "y_text": "2.57549",
       "error_bar_end": true
@@ -804,7 +815,8 @@
       "y": 2.28488,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "2.01386",
       "y_text": "2.28488",
       "error_bar_end": true
@@ -818,7 +830,8 @@
       "y": 1.74585,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "3.99057",
       "y_text": "1.74585",
       "error_bar_end": true
@@ -832,7 +845,8 @@
       "y": 1.335,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "6.00644",
       "y_text": "1.335",
       "error_bar_end": true
@@ -846,7 +860,8 @@
       "y": 1.02293,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "8.01595",
       "y_text": "1.02293",
       "error_bar_end": true
@@ -860,7 +875,8 @@
       "y": 0.615732,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "12.0152",
       "y_text": "0.615732",
       "error_bar_end": true
@@ -874,7 +890,8 @@
       "y": 0.160488,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "24.0013",
       "y_text": "0.160488",
       "error_bar_end": true
@@ -888,7 +905,8 @@
       "y": 2.94829,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.243617",
       "y_text": "2.94829",
       "error_bar_end": false
@@ -902,7 +920,8 @@
       "y": 3.92976,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.498613",
       "y_text": "3.92976",
       "error_bar_end": false
@@ -916,7 +935,8 @@
       "y": 4.19976,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "1.00392",
       "y_text": "4.19976",
       "error_bar_end": false
@@ -930,7 +950,8 @@
       "y": 3.7372,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "2.00616",
       "y_text": "3.7372",
       "error_bar_end": false
@@ -944,7 +965,8 @@
       "y": 2.82537,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "4.00229",
       "y_text": "2.82537",
       "error_bar_end": false
@@ -958,7 +980,8 @@
       "y": 2.14585,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "6.0138",
       "y_text": "2.14585",
       "error_bar_end": false
@@ -972,7 +995,8 @@
       "y": 1.63098,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "8.00759",
       "y_text": "1.63098",
       "error_bar_end": false
@@ -986,7 +1010,8 @@
       "y": 0.926098,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "12.0038",
       "y_text": "0.926098",
       "error_bar_end": false
@@ -1000,7 +1025,8 @@
       "y": 0.177439,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "23.993",
       "y_text": "0.177439",
       "error_bar_end": false
@@ -1014,7 +1040,8 @@
       "y": 3.58841,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.261353",
       "y_text": "3.58841",
       "error_bar_end": true
@@ -1028,7 +1055,8 @@
       "y": 4.77329,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.486231",
       "y_text": "4.77329",
       "error_bar_end": true
@@ -1042,7 +1070,8 @@
       "y": 5.08427,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "0.991202",
       "y_text": "5.08427",
       "error_bar_end": true
@@ -1056,7 +1085,8 @@
       "y": 4.53512,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "2.01018",
       "y_text": "4.53512",
       "error_bar_end": true
@@ -1070,7 +1100,8 @@
       "y": 3.45488,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "3.98489",
       "y_text": "3.45488",
       "error_bar_end": true
@@ -1084,7 +1115,8 @@
       "y": 2.63183,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "5.98536",
       "y_text": "2.63183",
       "error_bar_end": true
@@ -1098,7 +1130,8 @@
       "y": 2.00415,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "8.0126",
       "y_text": "2.00415",
       "error_bar_end": true
@@ -1112,7 +1145,8 @@
       "y": 1.17488,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "12.0115",
       "y_text": "1.17488",
       "error_bar_end": true
@@ -1126,7 +1160,8 @@
       "y": 0.265488,
       "file": "Demo2020_Fig1.wpd.json",
       "line": null,
-      "error_px": null,
+      "error_low_px": null,
+      "error_high_px": null,
       "x_text": "24.0044",
       "y_text": "0.265488",
       "error_bar_end": true
@@ -1140,7 +1175,11 @@
       "y": 1.48,
       "file": "timecourses_Fig1.tsv",
       "line": 1,
-      "error_px": [
+      "error_low_px": [
+        124.401,
+        435.34
+      ],
+      "error_high_px": [
         124.401,
         377.94
       ],
@@ -1157,7 +1196,11 @@
       "y": 1.97,
       "file": "timecourses_Fig1.tsv",
       "line": 2,
-      "error_px": [
+      "error_low_px": [
+        131.871,
+        402.54
+      ],
+      "error_high_px": [
         131.871,
         330.38
       ],
@@ -1174,7 +1217,11 @@
       "y": 2.1,
       "file": "timecourses_Fig1.tsv",
       "line": 3,
-      "error_px": [
+      "error_low_px": [
+        146.813,
+        394.34
+      ],
+      "error_high_px": [
         146.813,
         317.26
       ],
@@ -1191,7 +1238,11 @@
       "y": 1.87,
       "file": "timecourses_Fig1.tsv",
       "line": 4,
-      "error_px": [
+      "error_low_px": [
+        176.696,
+        409.1
+      ],
+      "error_high_px": [
         176.696,
         340.22
       ],
@@ -1208,7 +1259,11 @@
       "y": 1.24,
       "file": "timecourses_Fig1.tsv",
       "line": 5,
-      "error_px": [
+      "error_low_px": [
+        236.462,
+        468.14
+      ],
+      "error_high_px": [
         236.462,
         384.5
       ],
@@ -1225,7 +1280,11 @@
       "y": 1.07,
       "file": "timecourses_Fig1.tsv",
       "line": 6,
-      "error_px": [
+      "error_low_px": [
+        296.228,
+        461.58
+      ],
+      "error_high_px": [
         296.228,
         418.94
       ],
@@ -1242,7 +1301,11 @@
       "y": 0.81,
       "file": "timecourses_Fig1.tsv",
       "line": 7,
-      "error_px": [
+      "error_low_px": [
+        355.993,
+        478.8
+      ],
+      "error_high_px": [
         355.993,
         444.36
       ],
@@ -1259,7 +1322,11 @@
       "y": 0.47,
       "file": "timecourses_Fig1.tsv",
       "line": 8,
-      "error_px": [
+      "error_low_px": [
+        475.525,
+        500.94
+      ],
+      "error_high_px": [
         475.525,
         477.98
       ],
@@ -1276,7 +1343,11 @@
       "y": 0.09,
       "file": "timecourses_Fig1.tsv",
       "line": 9,
-      "error_px": [
+      "error_low_px": [
+        834.12,
+        526.36
+      ],
+      "error_high_px": [
         834.12,
         514.88
       ],
@@ -1293,7 +1364,11 @@
       "y": 2.95,
       "file": "timecourses_Fig1.tsv",
       "line": 10,
-      "error_px": [
+      "error_low_px": [
+        124.401,
+        338.58
+      ],
+      "error_high_px": [
         124.401,
         233.62
       ],
@@ -1310,7 +1385,11 @@
       "y": 3.93,
       "file": "timecourses_Fig1.tsv",
       "line": 11,
-      "error_px": [
+      "error_low_px": [
+        131.871,
+        274.62
+      ],
+      "error_high_px": [
         131.871,
         136.86
       ],
@@ -1327,7 +1406,11 @@
       "y": 4.2,
       "file": "timecourses_Fig1.tsv",
       "line": 12,
-      "error_px": [
+      "error_low_px": [
+        146.813,
+        256.58
+      ],
+      "error_high_px": [
         146.813,
         110.62
       ],
@@ -1344,7 +1427,11 @@
       "y": 3.74,
       "file": "timecourses_Fig1.tsv",
       "line": 13,
-      "error_px": [
+      "error_low_px": [
+        176.696,
+        286.92
+      ],
+      "error_high_px": [
         176.696,
         155.72
       ],
@@ -1361,7 +1448,11 @@
       "y": 2.83,
       "file": "timecourses_Fig1.tsv",
       "line": 14,
-      "error_px": [
+      "error_low_px": [
+        236.462,
+        346.78
+      ],
+      "error_high_px": [
         236.462,
         245.1
       ],
@@ -1378,7 +1469,11 @@
       "y": 2.15,
       "file": "timecourses_Fig1.tsv",
       "line": 15,
-      "error_px": [
+      "error_low_px": [
+        296.228,
+        391.06
+      ],
+      "error_high_px": [
         296.228,
         312.34
       ],
@@ -1395,7 +1490,11 @@
       "y": 1.63,
       "file": "timecourses_Fig1.tsv",
       "line": 16,
-      "error_px": [
+      "error_low_px": [
+        355.993,
+        425.5
+      ],
+      "error_high_px": [
         355.993,
         363.18
       ],
@@ -1412,7 +1511,11 @@
       "y": 0.93,
       "file": "timecourses_Fig1.tsv",
       "line": 17,
-      "error_px": [
+      "error_low_px": [
+        475.525,
+        471.42
+      ],
+      "error_high_px": [
         475.525,
         432.06
       ],
@@ -1429,7 +1532,11 @@
       "y": 0.18,
       "file": "timecourses_Fig1.tsv",
       "line": 18,
-      "error_px": [
+      "error_low_px": [
+        834.12,
+        520.62
+      ],
+      "error_high_px": [
         834.12,
         505.86
       ],
@@ -1448,7 +1555,8 @@
       "line": 1,
       "x": 0.25,
       "y": 1.48,
-      "error_bar": 1.83,
+      "error_low": 1.13,
+      "error_high": 1.83,
       "x_text": "0.25",
       "y_text": "1.48"
     },
@@ -1459,7 +1567,8 @@
       "line": 2,
       "x": 0.5,
       "y": 1.97,
-      "error_bar": 2.41,
+      "error_low": 1.53,
+      "error_high": 2.41,
       "x_text": "0.5",
       "y_text": "1.97"
     },
@@ -1470,7 +1579,8 @@
       "line": 3,
       "x": 1.0,
       "y": 2.1,
-      "error_bar": 2.57,
+      "error_low": 1.63,
+      "error_high": 2.57,
       "x_text": "1",
       "y_text": "2.1"
     },
@@ -1481,7 +1591,8 @@
       "line": 4,
       "x": 2.0,
       "y": 1.87,
-      "error_bar": 2.29,
+      "error_low": 1.45,
+      "error_high": 2.29,
       "x_text": "2",
       "y_text": "1.87"
     },
@@ -1492,7 +1603,8 @@
       "line": 5,
       "x": 4.0,
       "y": 1.24,
-      "error_bar": 1.75,
+      "error_low": 0.73,
+      "error_high": 1.75,
       "x_text": "4",
       "y_text": "1.24"
     },
@@ -1503,7 +1615,8 @@
       "line": 6,
       "x": 6.0,
       "y": 1.07,
-      "error_bar": 1.33,
+      "error_low": 0.81,
+      "error_high": 1.33,
       "x_text": "6",
       "y_text": "1.07"
     },
@@ -1514,7 +1627,8 @@
       "line": 7,
       "x": 8.0,
       "y": 0.81,
-      "error_bar": 1.02,
+      "error_low": 0.6,
+      "error_high": 1.02,
       "x_text": "8",
       "y_text": "0.81"
     },
@@ -1525,7 +1639,8 @@
       "line": 8,
       "x": 12.0,
       "y": 0.47,
-      "error_bar": 0.61,
+      "error_low": 0.33,
+      "error_high": 0.61,
       "x_text": "12",
       "y_text": "0.47"
     },
@@ -1536,7 +1651,8 @@
       "line": 9,
       "x": 24.0,
       "y": 0.09,
-      "error_bar": 0.16,
+      "error_low": 0.02,
+      "error_high": 0.16,
       "x_text": "24",
       "y_text": "0.09"
     },
@@ -1547,7 +1663,8 @@
       "line": 10,
       "x": 0.25,
       "y": 2.95,
-      "error_bar": 3.59,
+      "error_low": 2.31,
+      "error_high": 3.59,
       "x_text": "0.25",
       "y_text": "2.95"
     },
@@ -1558,7 +1675,8 @@
       "line": 11,
       "x": 0.5,
       "y": 3.93,
-      "error_bar": 4.77,
+      "error_low": 3.09,
+      "error_high": 4.77,
       "x_text": "0.5",
       "y_text": "3.93"
     },
@@ -1569,7 +1687,8 @@
       "line": 12,
       "x": 1.0,
       "y": 4.2,
-      "error_bar": 5.09,
+      "error_low": 3.31,
+      "error_high": 5.09,
       "x_text": "1",
       "y_text": "4.2"
     },
@@ -1580,7 +1699,8 @@
       "line": 13,
       "x": 2.0,
       "y": 3.74,
-      "error_bar": 4.54,
+      "error_low": 2.94,
+      "error_high": 4.54,
       "x_text": "2",
       "y_text": "3.74"
     },
@@ -1591,7 +1711,8 @@
       "line": 14,
       "x": 4.0,
       "y": 2.83,
-      "error_bar": 3.45,
+      "error_low": 2.21,
+      "error_high": 3.45,
       "x_text": "4",
       "y_text": "2.83"
     },
@@ -1602,7 +1723,8 @@
       "line": 15,
       "x": 6.0,
       "y": 2.15,
-      "error_bar": 2.63,
+      "error_low": 1.67,
+      "error_high": 2.63,
       "x_text": "6",
       "y_text": "2.15"
     },
@@ -1613,7 +1735,8 @@
       "line": 16,
       "x": 8.0,
       "y": 1.63,
-      "error_bar": 2.01,
+      "error_low": 1.25,
+      "error_high": 2.01,
       "x_text": "8",
       "y_text": "1.63"
     },
@@ -1624,7 +1747,8 @@
       "line": 17,
       "x": 12.0,
       "y": 0.93,
-      "error_bar": 1.17,
+      "error_low": 0.69,
+      "error_high": 1.17,
       "x_text": "12",
       "y_text": "0.93"
     },
@@ -1635,7 +1759,8 @@
       "line": 18,
       "x": 24.0,
       "y": 0.18,
-      "error_bar": 0.27,
+      "error_low": 0.09,
+      "error_high": 0.27,
       "x_text": "24",
       "y_text": "0.18"
     }

@@ -7,13 +7,14 @@ safe in the threads of the curation server.
 """
 
 import math
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
 from pkdb.studyformat.colors import POINT_RING
 from pkdb.studyformat.load import LoadedStudy
-from pkdb.studyformat.sources import SourceView, source_view
+from pkdb.studyformat.sources import OverlayPoint, SourcePoint, SourceView, source_view
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,8 @@ def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
     return _side_by_side(study, view, path)
 
 
+# The most series that a legend lists; the figure still draws every series.
+LEGEND_LIMIT = 20
 DPI = 100
 # The space in pixels around and between the legends below the image of an overlay.
 STRIP_PAD = 8
@@ -118,6 +121,37 @@ def _legend_strip(figure, renderer, width: int, height: int, rows: list[list]) -
         top -= legend_height + STRIP_PAD
 
 
+def _error_segment(
+    point: OverlayPoint, height: float
+) -> tuple[list[float], list[float]] | None:
+    """The x and the y pixels of the error bar of a mapped point, from its low to its high end.
+
+    An end without a pixel is at or below 0 on a log axis of the digitization. A low end then
+    reaches the bottom of the image (`height`), as the data plot cuts the bar at its axis. A
+    high end, and so the whole bar, is the point itself; None without an error bar.
+    """
+    if point.error_low_px is None and point.error_high_px is None:
+        return None
+    cross = (point.px, point.py)
+    low = point.error_low_px or (
+        cross if point.error_high_px is None else (point.px, height)
+    )
+    high = point.error_high_px or cross
+    return [low[0], high[0]], [low[1], high[1]]
+
+
+def _error_ranges(rows: list[SourcePoint]) -> list[list[float]] | None:
+    """The distances from each point down to the low and up to the high end of its error bar,
+    as matplotlib takes them: 0 without an error bar, None when no point has one."""
+    if all(p.error_low is None and p.error_high is None for p in rows):
+        return None
+    below = [0.0 if p.error_low is None else max(0.0, p.y - p.error_low) for p in rows]
+    above = [
+        0.0 if p.error_high is None else max(0.0, p.error_high - p.y) for p in rows
+    ]
+    return [below, above]
+
+
 def _overlay(study, view, path: Path) -> PlotResult:
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     from matplotlib.figure import Figure
@@ -159,30 +193,54 @@ def _overlay(study, view, path: Path) -> PlotResult:
             linewidths=2,
             color=base[point.series],
         )
-        if point.error_px is not None:
-            axes.plot(
-                [point.px, point.error_px[0]],
-                [point.py, point.error_px[1]],
-                color=base[point.series],
-            )
+        if (segment := _error_segment(point, height)) is not None:
+            axes.plot(*segment, color=base[point.series])
+    names, more = capped(series)
     handles = [
         Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
-        for name in series
+        for name in names
     ]
+    if more:
+        handles.append(_more_series(more))
     _legend_strip(figure, canvas.get_renderer(), width, height, [handles, _key()])
     _save(figure, path)
     return PlotResult(
         path,
         "overlay",
         tuple(mapped),
-        tuple(series),
+        tuple(names),
         tuple(sorted((name, base[name]) for name in drawn)),
         view.unmatched,
     )
 
 
+def _linestyle(kind: str) -> Literal["-", ""]:
+    """Timecourse and outputs series as lines through their points by time, scatters as points."""
+    return "" if kind == "scatters" else "-"
+
+
+def capped[T](items: Sequence[T], limit: int = LEGEND_LIMIT) -> tuple[list[T], int]:
+    """The first `limit` items and how many more there are."""
+    return list(items[:limit]), max(0, len(items) - limit)
+
+
+def axis_title(labels: Iterable[str | None]) -> str:
+    """The title of an axis for the labels of its series: the one that all share, else the
+    distinct ones (at most three, then "and N more") joined with " / "; empty without a label."""
+    shown, more = capped(list(dict.fromkeys(label for label in labels if label)), 3)
+    return " / ".join(shown) + (f" and {more} more" if more else "")
+
+
+def _more_series(count: int):
+    """An empty legend entry that counts the series beyond the limit."""
+    from matplotlib.lines import Line2D
+
+    return Line2D([], [], linestyle="", label=f"and {count} more series")
+
+
 def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
     from matplotlib.figure import Figure
+    from matplotlib.lines import Line2D
 
     series: dict[str, list] = {}
     for point in view.points:
@@ -195,30 +253,57 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
 
         left.imshow(imread(study.folder / view.image))
     left.axis("off")
+    # A series of one point is no line: all of them are drawn by two calls, so that a figure with a
+    # series per individual stays fast.
+    singles = [rows[0] for rows in series.values() if len(rows) == 1]
     for name, rows in series.items():
-        error = [
-            abs(p.error_bar - p.y) if p.error_bar is not None else 0.0 for p in rows
-        ]
+        if len(rows) == 1:
+            continue
         right.errorbar(
             [p.x for p in rows],
             [p.y for p in rows],
-            yerr=error if any(error) else None,
+            yerr=_error_ranges(rows),
             marker="o",
-            linestyle="-" if rows[0].kind == "timecourses" else "",
+            linestyle=_linestyle(rows[0].kind),
             color=styles[name].color,
-            label=name,
+        )
+    if singles:
+        colors = [styles[p.series].color for p in singles]
+        right.scatter([p.x for p in singles], [p.y for p in singles], color=colors)
+        bars = [
+            p for p in singles if p.error_low is not None or p.error_high is not None
+        ]
+        right.vlines(
+            [p.x for p in bars],
+            [p.y if p.error_low is None else p.error_low for p in bars],
+            [p.y if p.error_high is None else p.error_high for p in bars],
+            colors=[styles[p.series].color for p in bars],
         )
     if series:
-        first = styles[next(iter(series))]
-        right.set_xlabel(first.x_label or "")
-        right.set_ylabel(first.y_label or "")
-        right.legend()
+        right.set_xlabel(axis_title(styles[name].x_label for name in series))
+        right.set_ylabel(axis_title(styles[name].y_label for name in series))
+        names, more = capped(list(series))
+        handles = [
+            Line2D(
+                [],
+                [],
+                marker="o",
+                color=styles[name].color,
+                linestyle=_linestyle(series[name][0].kind),
+                label=name,
+            )
+            for name in names
+        ]
+        if more:
+            handles.append(_more_series(more))
+        # The default "best" place weighs every point, which is slow for many.
+        right.legend(handles=handles, loc="best" if not more else "upper right")
     figure.tight_layout()
     _save(figure, path)
     return PlotResult(
         path,
         "side_by_side",
-        legend=tuple(series),
+        legend=tuple(capped(list(series))[0]),
         colors=tuple(sorted((name, styles[name].color) for name in series)),
         unmatched=view.unmatched,
     )
