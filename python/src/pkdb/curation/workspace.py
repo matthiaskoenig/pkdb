@@ -21,9 +21,7 @@ from pkdb import __version__
 from pkdb.cache import atomic_text
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
-from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState, JobRunning, state_row
-from pkdb.curation.studies import study_summary
 from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
@@ -32,6 +30,7 @@ from pkdb.studyformat.revision import folder_lock
 from pkdb.studyformat.substances import SUBSTANCE_COLUMNS, study_substances
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON, parse_table_file
+from pkdb.studyformat.views import reference_summary, study_summary
 from pkdb.studyformat.workbook.base import workbook_path
 
 RECENT_LIMIT = 10

@@ -2275,7 +2275,7 @@ def test_only_a_source_that_the_study_lacks_is_not_found(api, monkeypatch):
     def broken(study, source):
         raise KeyError("series")
 
-    monkeypatch.setattr(studies, "source_view", broken)
+    monkeypatch.setattr("pkdb.studyformat.views.source_view", broken)
     status, _, data = request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)
     body = json.loads(data)
     assert (status, body["code"]) == (500, "unexpected")
