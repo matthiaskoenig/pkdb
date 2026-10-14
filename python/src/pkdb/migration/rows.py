@@ -566,8 +566,8 @@ def _scatter_rows(
 def _is_series(rows: list[tuple[Measurement, dict[str, str]]]) -> bool:
     """Whether timecourse rows of one label and table file form a format 2 series.
 
-    Each row has a time, no time appears twice, and the series columns hold
-    the same value in every row.
+    Each row has a time, no time appears twice, there are at least two times,
+    and the series columns hold the same value in every row.
     """
     columns, times = set(), set()
     for record, row in rows:
@@ -582,7 +582,8 @@ def _is_series(rows: list[tuple[Measurement, dict[str, str]]]) -> bool:
                 for name in SERIES_COLUMNS
             )
         )
-    return len(columns) == 1 and len(times) == len(rows)
+    # A format 2 timecourse needs two distinct times (`timecourse_points`).
+    return len(columns) == 1 and len(times) == len(rows) >= 2
 
 
 def series_arrays(
@@ -596,9 +597,9 @@ def series_arrays(
     Format 2 makes the timecourse rows of one label in one table file a
     series. Labelled array outputs become timecourse points only where their
     rows, with the timecourse rows of their label, form a valid series.
-    Others, such as correlation data of many subjects without time, stay
-    outputs. Scatter points are neither. Rows without any value (`dropped`)
-    are not written, so they are no part of a series.
+    Others, such as correlation data of many subjects without time or a label
+    with a single row, stay outputs. Scatter points are neither. Rows without
+    any value (`dropped`) are not written, so they are no part of a series.
     """
     points = scatter_outputs(study)
     series: dict[tuple[str, str], list[tuple[Measurement, dict[str, str]]]]
