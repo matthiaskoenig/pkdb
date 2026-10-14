@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
-import type { Profile, StudyRow } from "../api/types";
+import type { Profile, StudyRow } from "../../study-views/types";
 import { useCellTip } from "../composables/useCellTip";
 import { useWindowPosition } from "../composables/useWindowPosition";
 import type { SortKey, StudySort } from "../overview";

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { VBtn, VChip, VProgressLinear } from "vuetify/components";
-import type { StudyDetail, TableResponse } from "../api/types";
+import type { StudyDetail, TableResponse } from "../../study-views/types";
 import {
   ALL_ROWS,
   filterChoices,

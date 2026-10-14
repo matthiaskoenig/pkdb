@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VAlert } from "vuetify/components";
-import { NO_SESSION, ServerStopped, SessionMissing } from "../api/client";
+import { NO_SESSION, ServerStopped, SessionMissing } from "../../study-views/errors";
 import { useOverviewStore } from "../stores/overview";
 import { failureOf } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";

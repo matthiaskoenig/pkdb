@@ -3,8 +3,7 @@
  * Data section shows above each table of the kind, and which validation issues name by fields
  * such as `notes.subjects.comments.0.user`.
  */
-import type { StudyDetail, TableKind } from "./api/types";
-import type { NotesForm } from "./metadata";
+import type { StudyDetail, TableKind } from "../study-views/types";
 import { plural } from "./overview";
 
 /**
@@ -28,13 +27,16 @@ export function kindsWithTable(detail: Pick<StudyDetail, "tables">, kinds: reado
   return kinds.filter((kind) => tabled.has(kind));
 }
 
+/** The lists of notes: of the form of study.json, or of study.json itself. */
+type NotesLists = { descriptions: readonly unknown[]; comments: readonly unknown[] };
+
 /** Whether notes have a description or a comment, also one that was just added and is empty. */
-export function hasNotes(notes: NotesForm | undefined): boolean {
+export function hasNotes(notes: NotesLists | undefined): boolean {
   return notes !== undefined && (notes.descriptions.length > 0 || notes.comments.length > 0);
 }
 
 /** What the notes of a kind hold, such as `2 descriptions · 1 comment`, or `No notes`. */
-export function notesSummary(notes: NotesForm): string {
+export function notesSummary(notes: NotesLists): string {
   const parts = [
     notes.descriptions.length ? plural(notes.descriptions.length, "description") : "",
     notes.comments.length ? plural(notes.comments.length, "comment") : "",

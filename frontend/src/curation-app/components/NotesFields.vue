@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VBtn, VTextarea } from "vuetify/components";
-import type { Comment, Profile } from "../api/types";
+import type { Comment, Profile } from "../../study-views/types";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { markMessage, messagesAt, type FieldMark } from "../metadata";
 import { profileOf as knownProfile } from "../study";

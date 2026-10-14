@@ -1,5 +1,5 @@
 import { computed, ref, toValue, type ComputedRef, type MaybeRefOrGetter } from "vue";
-import type { Axis, AxisScale, AxisScales, SourceView } from "../api/types";
+import type { Axis, AxisScale, AxisScales, SourceView } from "../../study-views/types";
 import { digitizedScales, LINEAR_SCALES } from "../overlay";
 import { useOverviewStore } from "../stores/overview";
 

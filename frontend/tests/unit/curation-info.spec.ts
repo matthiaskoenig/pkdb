@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { INFO_CLASSES, INFO_HEADINGS, INFO_THEMES, infoColor, infoOutlined, infoStyle } from "../../src/curation-app/info";
-import type { InfoClass } from "../../src/curation-app/api/types";
+import type { InfoClass } from "../../src/study-views/types";
 import { makeVuetify } from "../../src/plugins/vuetify";
 
 type Rgb = [number, number, number];

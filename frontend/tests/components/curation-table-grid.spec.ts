@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
-import type { ColumnClass, StudyNameLines, TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
+import type { ColumnClass, StudyNameLines, TableResponse, ValidationIssue } from "../../src/study-views/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
 import { VTooltip } from "vuetify/components";
 import { TIP_DELAY, TIP_LINGER } from "../../src/curation-app/composables/useCellTip";

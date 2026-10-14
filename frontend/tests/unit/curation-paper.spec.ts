@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { ApiError, NO_SESSION, SessionMissing } from "../../src/curation-app/api/client";
+import { ApiError, NO_SESSION, SessionMissing } from "../../src/study-views/errors";
 import {
   findText,
   formatBytes,

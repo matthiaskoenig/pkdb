@@ -10,7 +10,7 @@ import AppHeader from "../../src/curation-app/components/AppHeader.vue";
 import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
 import { initialTheme, servedTheme, useColorTheme } from "../../src/curation-app/composables/useColorTheme";
 import type { ConnectionStatus, Snapshot } from "../../src/curation-app/api/types";
-import { ApiError } from "../../src/curation-app/api/client";
+import { ApiError } from "../../src/study-views/errors";
 import { formatTime } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, snapshot, studyRow } from "../unit/curation-fixtures";

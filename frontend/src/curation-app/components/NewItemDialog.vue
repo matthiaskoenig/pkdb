@@ -17,12 +17,13 @@ import {
   VSpacer,
   VTextarea,
 } from "vuetify/components";
-import type { ReviewItem, ReviewTarget, TableResponse } from "../api/types";
+import type { ReviewItem, ReviewTarget, TableResponse } from "../../study-views/types";
 import { useLoaded } from "../composables/useLoaded";
 import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { KIND_LABELS, KINDS, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
+import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../review";
+import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
 import { tableFiles } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";

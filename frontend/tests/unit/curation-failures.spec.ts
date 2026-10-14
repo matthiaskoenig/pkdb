@@ -1,13 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { ApiError, ServerStopped } from "../../src/curation-app/api/client";
-import {
-  detailsOf,
-  detailsOfBody,
-  errorType,
-  failureFacts,
-  failureMarkdown,
-  type FailureDetails,
-} from "../../src/curation-app/failures";
+import { ApiError, ServerStopped } from "../../src/study-views/errors";
+import { detailsOfBody, errorType, failureFacts, failureMarkdown } from "../../src/curation-app/failures";
+import { detailsOf, type FailureDetails } from "../../src/curation-app/study";
 
 /** The error body as the activity keeps it, and as the server answers it with its entry. */
 const STORED = {

@@ -3,9 +3,7 @@
  * of its header, failed actions and the profiles of its people.
  */
 import type { RouteLocationRaw } from "vue-router";
-import type { ApiError } from "./api/client";
-import { detailsOf, type FailureDetails } from "./failures";
-import { webUrl } from "./overview";
+import { ApiError } from "../study-views/errors";
 import type {
   IssueState,
   People,
@@ -13,9 +11,8 @@ import type {
   Release,
   StudyDetail,
   StudySummary,
-  TablesResult,
   ValidationIssue,
-} from "./api/types";
+} from "../study-views/types";
 
 /**
  * The sections of the study page in the order of their tabs, the order of the work on a study:
@@ -120,25 +117,41 @@ export function provenanceLabel(summary: Pick<StudySummary, "provenance">): stri
   return null;
 }
 
-/** The requirements of approval, followed by the reason of the refusal from the server. */
-export function approvalRefusal(reason: string): string {
-  const sentence = reason.trim().replace(/\.?$/, ".");
-  return `Approved needs zero open review items and zero validation errors. ${sentence}`;
+// Failures of actions
+
+export interface FailureDetails {
+  /** The HTTP status; 0 when the local server could not be reached, null for an entry of the activity. */
+  status: number | null;
+  code: string | null;
+  detail: string | null;
+  action: string | null;
+  requestId: string | null;
+  time: string | null;
+  traceback: string | null;
+  activityId: string | null;
 }
 
-/** How long the header and the sections show the notice of an action that succeeded. */
-export const NOTICE_MS = 5000;
-
-// Failures of actions
+/**
+ * The details of a failed request; null for another error, and for an answer without the error
+ * body of the local server, which has no request id.
+ */
+export function detailsOf(caught: unknown): FailureDetails | null {
+  if (!(caught instanceof ApiError) || (caught.requestId === null && caught.status !== 0)) return null;
+  return {
+    status: caught.status,
+    code: caught.code,
+    detail: caught.detail,
+    action: caught.action,
+    requestId: caught.requestId,
+    time: caught.time,
+    traceback: caught.traceback,
+    activityId: caught.activityId,
+  };
+}
 
 /** The message of a failed action. */
 export function messageOf(caught: unknown): string {
   return caught instanceof Error ? caught.message : String(caught);
-}
-
-/** What to do about a write that was refused without a user (`isNoUser`). */
-export function userHint(error: ApiError): string {
-  return error.body.error === "no_user" ? "Set your PK-DB user in Connection settings." : error.message;
 }
 
 /** At most this many issues of a failed action are listed; the section of the link has all of them. */
@@ -187,17 +200,6 @@ export function failureOf(caught: unknown, lead = ""): ActionFailure {
   return actionFailure(text, [], null, details);
 }
 
-/** What the curator should know after Open tables: nothing for a clean sync. */
-export function tablesOutcome(result: TablesResult): ActionFailure | null {
-  const issues = result.issues.map((item) => item.message);
-  const unresolved = result.conflicts.filter((conflict) => conflict.kept === null).length;
-  const link: ActionFailure["link"] = unresolved ? { section: "data", label: "Show the conflicts" } : null;
-  if (unresolved === 1) issues.unshift("A sheet conflicts with its table.");
-  if (unresolved > 1) issues.unshift(`${unresolved} sheets conflict with their tables.`);
-  if (!result.opened) return actionFailure("The workbook could not be opened.", issues, link);
-  return issues.length ? actionFailure("The workbook opened, but the sync found problems.", issues, link) : null;
-}
-
 // People
 
 /**
@@ -234,32 +236,4 @@ export function profileOf(profiles: ReadonlyMap<string, Profile>, user: string):
   return (
     findProfile(profiles, user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null }
   );
-}
-
-// Paths
-
-/** The folder of a study, given relative to the workspace with `/`, joined with the separator of the workspace. */
-export function folderPath(workspace: string, relative: string): string {
-  const separator = workspace.includes("\\") && !workspace.includes("/") ? "\\" : "/";
-  const base = workspace.replace(/[\\/]+$/, "");
-  return [base, ...relative.split("/").filter(Boolean)].join(separator);
-}
-
-/** The folders of a duplicate identity, relative to the workspace, from the `paths` of the 409 answer. */
-export function duplicateFolders(body: Record<string, unknown>): string[] {
-  const paths = body.paths;
-  return Array.isArray(paths) ? paths.filter((path): path is string => typeof path === "string") : [];
-}
-
-const NUMBERS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-
-/** `This identity belongs to two folders`, for the number of folders that the server listed. */
-export function duplicateHeading(folders: number): string {
-  if (folders < 2) return "This identity belongs to more than one folder";
-  return `This identity belongs to ${NUMBERS[folders] ?? folders} folders`;
-}
-
-/** The page of the last upload of the study on PK-DB; null without an upload or when its URL is not a web page. */
-export function lastUploadUrl(detail: StudyDetail): string | null {
-  return webUrl(detail.last_upload?.url);
 }

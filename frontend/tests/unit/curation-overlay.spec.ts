@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
+import type { OverlayPoint, SourcePoint, SourceSeries, SourceView, ValidationIssue } from "../../src/study-views/types";
 import {
   dataRows,
   digitizedScales,

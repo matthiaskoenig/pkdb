@@ -14,7 +14,7 @@ import {
   VSelect,
   VTextField,
 } from "vuetify/components";
-import type { Profile } from "../api/types";
+import type { Profile } from "../../study-views/types";
 import DiskField from "../components/DiskField.vue";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";

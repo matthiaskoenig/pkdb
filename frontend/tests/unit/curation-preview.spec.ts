@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick, ref, watch, type Ref } from "vue";
-import { ApiError } from "../../src/curation-app/api/client";
+import { ApiError } from "../../src/study-views/errors";
 import { usePreview } from "../../src/curation-app/composables/usePreview";
 
 /** A request that the test answers when it wants. */

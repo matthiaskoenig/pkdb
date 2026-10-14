@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { effectScope, nextTick, shallowRef, type EffectScope } from "vue";
-import { ApiError } from "../../src/curation-app/api/client";
-import type { MetadataWrite, StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
+import { ApiError } from "../../src/study-views/errors";
+import type { MetadataWrite } from "../../src/curation-app/api/types";
+import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/study-views/types";
 import { useStudyDraft, type StudyDraft } from "../../src/curation-app/composables/useStudyDraft";
 import { changedFields, toForm } from "../../src/curation-app/metadata";
-import { NOTICE_MS } from "../../src/curation-app/study";
+import { NOTICE_MS } from "../../src/curation-app/local";
 import { fullStudyMetadata, NOTE_KINDS, studyDetail } from "./curation-fixtures";
 
 /** The detail of caffeine/Example with `metadata` as its study.json at `revision`; null for an invalid one. */

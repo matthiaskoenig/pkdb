@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VTooltip } from "vuetify/components";
-import type { StudyRow } from "../api/types";
+import type { StudyRow } from "../../study-views/types";
 import type { CellTip } from "../composables/useCellTip";
 import { otherSubstances } from "../overview";
 

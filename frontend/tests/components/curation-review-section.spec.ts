@@ -12,7 +12,7 @@ import type {
   StudyDetail,
   TableResponse,
   TargetMatch,
-} from "../../src/curation-app/api/types";
+} from "../../src/study-views/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";

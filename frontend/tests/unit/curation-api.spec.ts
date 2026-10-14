@@ -1,13 +1,8 @@
 import { beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 import {
-  ApiError,
-  ServerStopped,
-  SessionMissing,
-  UnexpectedResponse,
   checkFile,
   csrfToken,
   getJson,
-  isAbort,
   isNoUser,
   isRevisionConflict,
   isValidationError,
@@ -15,8 +10,9 @@ import {
   setCsrfToken,
   studyPath,
 } from "../../src/curation-app/api/client";
+import { ApiError, ServerStopped, SessionMissing, UnexpectedResponse, isAbort } from "../../src/study-views/errors";
 import { bootstrap, launchToken } from "../../src/curation-app/api/session";
-import { hasKeys, isRecord } from "../../src/curation-app/api/types";
+import { hasKeys, isRecord } from "../../src/study-views/types";
 
 function json(
   body: unknown,

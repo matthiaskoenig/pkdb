@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VTooltip } from "vuetify/components";
-import type { ValidationIssue } from "../api/types";
+import type { ValidationIssue } from "../../study-views/types";
 import type { CellTip } from "../composables/useCellTip";
 import { isLineTipKey } from "../grid";
 import ProblemTip from "./ProblemTip.vue";

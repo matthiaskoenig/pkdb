@@ -16,7 +16,8 @@ import {
   VTextarea,
   VTextField,
 } from "vuetify/components";
-import type { Json, ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
+import type { ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
+import type { Json } from "../../study-views/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { useOverviewStore } from "../stores/overview";

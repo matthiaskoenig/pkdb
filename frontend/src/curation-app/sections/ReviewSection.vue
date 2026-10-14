@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VChip, VChipGroup, VSelect } from "vuetify/components";
-import type { Profile, ReviewItem } from "../api/types";
+import type { Profile, ReviewItem } from "../../study-views/types";
 import NewItemDialog from "../components/NewItemDialog.vue";
 import ReviewItemCard from "../components/ReviewItemCard.vue";
 import ReviewItemDetail from "../components/ReviewItemDetail.vue";
@@ -15,14 +15,13 @@ import {
   emptyText,
   filterItems,
   KIND_FILTERS,
-  reviewFailure,
   STATE_CHIPS,
   stateCounts,
   type ItemAction,
   type KindFilter,
-  type ReviewFailure,
   type StateFilter,
 } from "../review";
+import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
 import { knownProfiles, profileOf } from "../study";
 

@@ -3,6 +3,7 @@
  * python/tests/test_curation_contract.py. Regenerate them there with PKDB_UPDATE_CONTRACT=1.
  */
 import { describe, expect, it } from "vitest";
+import type { TablePreview, TablesResult } from "../../src/curation-app/api/types";
 import type {
   AcknowledgedWarning,
   ConflictData,
@@ -17,32 +18,27 @@ import type {
   Suggestion,
   TableEntry,
   TableKindEntry,
-  TablePreview,
   TableResponse,
-  TablesResult,
   TargetMatch,
   ValidationIssue,
-} from "../../src/curation-app/api/types";
-import { isSourceView, isTablePreview, isTablesResult, isTargetMatch } from "../../src/curation-app/api/types";
+} from "../../src/study-views/types";
+import { isTablePreview, isTablesResult } from "../../src/curation-app/api/types";
+import { isSourceView, isTargetMatch } from "../../src/study-views/types";
 import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
 import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { cellParts, namedKind } from "../../src/curation-app/links";
 import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces, plotTraces } from "../../src/curation-app/overlay";
-import { ApiError } from "../../src/curation-app/api/client";
+import { ApiError } from "../../src/study-views/errors";
 import { detailsOfBody } from "../../src/curation-app/failures";
+import { acknowledgement, locationKey, openPlace, scopeText, suggestionView } from "../../src/curation-app/problems";
 import {
   acknowledgeFailure,
-  acknowledgement,
   AMBIGUOUS_WARNING,
-  locationKey,
   NO_EXACT_TARGET,
   NO_SUCH_WARNING,
-  openPlace,
-  scopeText,
-  suggestionView,
-} from "../../src/curation-app/problems";
+} from "../../src/curation-app/acknowledging";
 import { matchText, targetText } from "../../src/curation-app/review";
 import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
 import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";

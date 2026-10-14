@@ -3,7 +3,7 @@
  * pane of the Data section show. What a source is and which files it lacks come from the library,
  * in the summaries of the study detail.
  */
-import type { SourceSummary, SourceView, ValidationIssue } from "./api/types";
+import type { SourceSummary, SourceView, ValidationIssue } from "../study-views/types";
 
 /** The icon of each kind of source, beside its name and in place of a missing image. */
 export const SOURCE_ICONS: Readonly<Record<SourceSummary["kind"], string>> = {

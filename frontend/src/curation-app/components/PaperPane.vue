@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
-import type { PaperFile } from "../api/types";
+import type { PaperFile } from "../../study-views/types";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { formatBytes, paperRoute, shownPaper, type PaperPlace } from "../paper";

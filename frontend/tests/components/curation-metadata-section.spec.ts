@@ -4,12 +4,12 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type ComponentOptions, type ComponentPublicInstance } from "vue";
 import { RouterView, type Router } from "vue-router";
 import { VAutocomplete, VCombobox, VSelect, VTextarea } from "vuetify/components";
-import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
+import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/study-views/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
-import { NOTICE_MS } from "../../src/curation-app/study";
+import { NOTICE_MS } from "../../src/curation-app/local";
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import { fullStudyMetadata, json, roster, snapshot, studyDetail, studyMetadata } from "../unit/curation-fixtures";
 import {

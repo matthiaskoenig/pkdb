@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
-import type { Problem } from "../api/types";
+import type { Problem } from "../../study-views/types";
 import { acknowledgement, location, locationKey, SEVERITY_ICONS, SEVERITY_LABELS, suggestionView, tableQuery } from "../problems";
 import { sectionRoute } from "../study";
 

@@ -2,34 +2,25 @@
 import { computed, ref, useId } from "vue";
 import { VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
 import { isRevisionConflict, isValidationError } from "../api/client";
-import type { ReviewStatus, StudyDetail } from "../api/types";
+import type { ReviewStatus, StudyDetail } from "../../study-views/types";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import {
-  activityLabel,
-  issueUrl,
-  problemLabels,
-  REVIEW_LABELS,
-  SYNC_LABELS,
-  SYNC_TONES,
-  uploadBlocker,
-} from "../overview";
+import { activityLabel, issueUrl, problemLabels, REVIEW_LABELS, SYNC_LABELS, SYNC_TONES } from "../overview";
+import { uploadBlocker } from "../uploads";
 import { mainPaper, paperName } from "../paper";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
   actionFailure,
-  approvalRefusal,
-  folderPath,
   issueLabel,
   failureOf,
   openItems,
   provenanceLabel,
   releaseLabel,
   studyName,
-  tablesOutcome,
   type ActionFailure,
 } from "../study";
+import { approvalRefusal, folderPath, tablesOutcome } from "../local";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import AddTableDialog from "./AddTableDialog.vue";
 import UploadDialog from "./UploadDialog.vue";

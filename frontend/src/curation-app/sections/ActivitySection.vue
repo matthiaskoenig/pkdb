@@ -24,8 +24,8 @@ import {
   saveFile,
   uploadUrl,
 } from "../activity";
-import { ApiError } from "../api/client";
-import type { Job } from "../api/types";
+import { ApiError } from "../../study-views/errors";
+import type { Job } from "../../study-views/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import FailureDetails from "../components/FailureDetails.vue";
 import RetryDialog from "../components/RetryDialog.vue";

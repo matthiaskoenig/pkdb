@@ -4,6 +4,7 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
 import { VSelect } from "vuetify/components";
+import type { TablesResult } from "../../src/curation-app/api/types";
 import type {
   Problem,
   SourcePoint,
@@ -12,9 +13,8 @@ import type {
   StudyMetadata,
   SyncState,
   TableResponse,
-  TablesResult,
   ValidationIssue,
-} from "../../src/curation-app/api/types";
+} from "../../src/study-views/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";

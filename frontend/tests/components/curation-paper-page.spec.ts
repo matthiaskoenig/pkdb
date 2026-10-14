@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import type { StudyDetail } from "../../src/curation-app/api/types";
+import type { StudyDetail } from "../../src/study-views/types";
 import App from "../../src/curation-app/App.vue";
 import AppHeader from "../../src/curation-app/components/AppHeader.vue";
 import { makeRouter } from "../../src/curation-app/router";

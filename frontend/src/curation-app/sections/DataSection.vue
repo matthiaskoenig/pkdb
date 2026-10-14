@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VAlert, VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
-import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../api/types";
+import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../../study-views/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
 import ConflictPanel from "../components/ConflictPanel.vue";
@@ -38,7 +38,8 @@ import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
 import type { NameLink } from "../links";
 import { paperLine, type PaperPlace } from "../paper";
 import { useStudyStore } from "../stores/study";
-import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
+import { beyondLimits, sectionRoute, tableFiles } from "../study";
+import { tablesOutcome } from "../local";
 import { noteKinds } from "../tableKinds";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { TableKind, ValidationIssue } from "../../src/curation-app/api/types";
+import type { TableKind, ValidationIssue } from "../../src/study-views/types";
 import {
   changedFields,
   changedLabels,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VChip } from "vuetify/components";
-import type { ValidationIssue } from "../api/types";
+import type { ValidationIssue } from "../../study-views/types";
 import { hintOf, SEVERITY_ICONS, SEVERITY_LABELS, tipProblems } from "../problems";
 
 /**

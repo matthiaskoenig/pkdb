@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SourceSummary, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
+import type { SourceSummary, SourceView, ValidationIssue } from "../../src/study-views/types";
 import { columnLetters } from "../../src/curation-app/columns";
 import { sourceProblems } from "../../src/curation-app/sources";
 

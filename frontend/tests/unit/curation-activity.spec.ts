@@ -9,7 +9,7 @@ import {
   saveFile,
   uploadUrl,
 } from "../../src/curation-app/activity";
-import type { Job, JobMessagePart, ReviewItem } from "../../src/curation-app/api/types";
+import type { Job, JobMessagePart, ReviewItem } from "../../src/study-views/types";
 
 function job(changes: Partial<Job> = {}): Job {
   return {

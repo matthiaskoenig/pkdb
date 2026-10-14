@@ -1,5 +1,5 @@
 import { ref, shallowRef, watch, type Ref, type ShallowRef } from "vue";
-import { isAbort } from "../api/client";
+import { isAbort } from "../../study-views/errors";
 import { failureOf, type ActionFailure } from "../study";
 
 export interface Loaded<T, V> {

@@ -9,33 +9,35 @@ import {
   isReferenceRead,
   isReferenceSaved,
   isReviewWrite,
-  isSourceView,
-  isStudyDetail,
   isTablePreview,
-  isTableResponse,
   isTablesResult,
-  isTargetMatch,
-  type Guard,
   type MetadataWrite,
-  type Profile,
   type ReferenceAuthor,
   type ReferencePreview,
   type ReferenceRecord,
-  type ReviewTarget,
   type ReviewWrite,
+  type TablePreview,
+  type TablesResult,
+} from "../api/types";
+import {
+  isSourceView,
+  isStudyDetail,
+  isTableResponse,
+  isTargetMatch,
+  type Guard,
+  type Profile,
+  type ReviewTarget,
   type SourceView,
   type StudyDetail,
   type StudyMetadata,
   type TableFileKind,
-  type TablePreview,
   type TableResponse,
-  type TablesResult,
   type TargetMatch,
-} from "../api/types";
+} from "../../study-views/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { useStudyDraft } from "../composables/useStudyDraft";
 import { ALL_ROWS, type RowFilter } from "../data";
-import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
+import { lastWrite, reportAfter, type AcknowledgedMark } from "../acknowledging";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
 

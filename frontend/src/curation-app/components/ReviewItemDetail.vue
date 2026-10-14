@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { VBtn, VCard, VCardText, VChip, VTextarea } from "vuetify/components";
-import type { Profile, ReviewItem } from "../api/types";
+import type { Profile, ReviewItem } from "../../study-views/types";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { formatTime } from "../overview";
 import { KIND_ICONS, KIND_LABELS, STATE_LABELS, STATE_TONES, targetText, type ItemAction } from "../review";

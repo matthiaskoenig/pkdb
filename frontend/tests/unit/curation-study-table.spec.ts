@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Profile } from "../../src/curation-app/api/types";
+import type { Profile } from "../../src/study-views/types";
 import { REVIEW_LABELS, SYNC_LABELS } from "../../src/curation-app/overview";
 import {
   bodyParts,

@@ -18,7 +18,7 @@ import {
   type StudyReference,
   type TableKind,
   type ValidationIssue,
-} from "./api/types";
+} from "../study-views/types";
 import { notesKindOf } from "./notes";
 import type { Section } from "./study";
 import { noteKinds } from "./tableKinds";

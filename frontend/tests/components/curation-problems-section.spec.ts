@@ -3,16 +3,15 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type Component, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
+import type { Snapshot, TablesResult } from "../../src/curation-app/api/types";
 import type {
   AcknowledgedWarning,
   Job,
   Problem,
   ReviewTarget,
-  Snapshot,
   StudyDetail,
   Suggestion,
-  TablesResult,
-} from "../../src/curation-app/api/types";
+} from "../../src/study-views/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";

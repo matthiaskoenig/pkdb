@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
-import type { ConflictData } from "../api/types";
+import type { ConflictData } from "../../study-views/types";
 import { useMoreBelow } from "../composables/useMoreBelow";
 import { useStudyStore } from "../stores/study";
 import { conflictView, type Side } from "../tables";

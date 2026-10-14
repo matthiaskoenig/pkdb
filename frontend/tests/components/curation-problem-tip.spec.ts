@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
-import type { ValidationIssue } from "../../src/curation-app/api/types";
+import type { ValidationIssue } from "../../src/study-views/types";
 import ProblemTip from "../../src/curation-app/components/ProblemTip.vue";
 
 enableAutoUnmount(afterEach);

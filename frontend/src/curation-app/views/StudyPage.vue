@@ -13,7 +13,7 @@ import {
   VProgressLinear,
   VSpacer,
 } from "vuetify/components";
-import { ApiError, ServerStopped, SessionMissing } from "../api/client";
+import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import StudyHeader from "../components/StudyHeader.vue";
@@ -28,17 +28,8 @@ import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
 import { formatTime } from "../overview";
 import { useStudyStore } from "../stores/study";
-import {
-  defaultSection,
-  duplicateFolders,
-  duplicateHeading,
-  failureOf,
-  isSection,
-  lastUploadUrl,
-  SECTION_LABELS,
-  sectionCounts,
-  type Section,
-} from "../study";
+import { defaultSection, failureOf, isSection, SECTION_LABELS, sectionCounts, type Section } from "../study";
+import { duplicateFolders, duplicateHeading, lastUploadUrl } from "../local";
 
 /**
  * The component of each section. A section gets the open study from the study store; the

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ReviewStatus, StudyRow } from "../../src/curation-app/api/types";
+import type { ReviewStatus, StudyRow } from "../../src/study-views/types";
 import {
   activityLabel,
   COLLATOR,
@@ -15,10 +15,10 @@ import {
   sortStudies,
   substancesOf,
   SYNC_LABELS,
-  uploadBlocker,
   webUrl,
   type StatusChip,
 } from "../../src/curation-app/overview";
+import { uploadBlocker } from "../../src/curation-app/uploads";
 import { snapshot, studyRow } from "./curation-fixtures";
 
 /** A row of `<substance>/<name>` with the given summary changes. */

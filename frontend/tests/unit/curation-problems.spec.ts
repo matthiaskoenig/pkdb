@@ -1,32 +1,34 @@
 import { describe, expect, it } from "vitest";
-import { ApiError } from "../../src/curation-app/api/client";
-import type { AcknowledgedWarning, Job, Problem, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
+import { ApiError } from "../../src/study-views/errors";
+import type { AcknowledgedWarning, Job, Problem, SourceLocation, ValidationIssue } from "../../src/study-views/types";
 import {
-  acknowledgeFailure,
   acknowledgement,
-  AMBIGUOUS_WARNING,
-  NO_EXACT_TARGET,
   filterIssues,
   groupByFile,
   groupCounts,
   hintOf,
   location,
   locationKey,
-  lastWrite,
-  NO_SUCH_WARNING,
   noIssuesText,
   notesQuery,
   openPlace,
   problemsText,
-  reportAfter,
   scopeText,
   severityCounts,
   suggestionView,
   TIP_LIMIT,
   tableQuery,
   tipProblems,
-  validatesAfterWrite,
 } from "../../src/curation-app/problems";
+import {
+  acknowledgeFailure,
+  AMBIGUOUS_WARNING,
+  NO_EXACT_TARGET,
+  lastWrite,
+  NO_SUCH_WARNING,
+  reportAfter,
+  validatesAfterWrite,
+} from "../../src/curation-app/acknowledging";
 import { TABLE_KIND_ENTRIES, tableEntry } from "./curation-fixtures";
 
 /** A problem of the study page; the local server marks its warnings of the validation as acknowledgeable. */

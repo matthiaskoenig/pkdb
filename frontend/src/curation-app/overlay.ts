@@ -17,9 +17,9 @@ import type {
   SourceSeries,
   SourceView,
   ValidationIssue,
-} from "./api/types";
+} from "../study-views/types";
 import { SEVERITY_LABELS, tipProblems } from "./problems";
-import { CAUTION_COLORS } from "./themes";
+import { CAUTION_COLORS } from "../study-views/themes";
 import { plotColors, type PlotColors } from "../features/plots/theme";
 
 /**

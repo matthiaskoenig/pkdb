@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
-import type { SourceSummary, SourceView } from "../api/types";
+import type { SourceSummary, SourceView } from "../../study-views/types";
 import { useMoreBelow } from "../composables/useMoreBelow";
 import { usePlotScales } from "../composables/usePlotScales";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { rawTable } from "../grid";
 import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../overlay";
-import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
+import { groupByFile, groupCounts, locationKey } from "../problems";
+import { validatesAfterWrite } from "../acknowledging";
 import { SOURCE_ICONS, sourceProblems } from "../sources";
 import { tableFiles, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";

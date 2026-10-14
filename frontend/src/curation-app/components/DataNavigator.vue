@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import type { StudyDetail, TableEntry } from "../api/types";
+import type { StudyDetail, TableEntry } from "../../study-views/types";
 import { fileCounts, PAPER, sourceCounts, tablesByInfo } from "../data";
 import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
 import { plural } from "../overview";

@@ -1,20 +1,20 @@
 import { computed } from "vue";
 import { defineStore } from "pinia";
-import { getJson, postJson, UnexpectedResponse } from "../api/client";
+import { getJson, postJson } from "../api/client";
+import { UnexpectedResponse } from "../../study-views/errors";
 import {
   isDirectories,
   isGitHubAssignments,
   isJobReport,
-  isRecord,
   isSnapshot,
   type Directories,
   type GitHubAssignments,
-  type Guard,
   type JobReport,
   type SaveMode,
   type Snapshot,
   type ThemeChoice,
 } from "../api/types";
+import { isRecord, type Guard } from "../../study-views/types";
 import type { AxisScales } from "../overlay";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 

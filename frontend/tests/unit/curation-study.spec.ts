@@ -1,30 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { ApiError } from "../../src/curation-app/api/client";
-import type {
-  ConflictData,
-  Problem,
-  ReviewItem,
-  StudyDetail,
-  TableEntry,
-  TablesResult,
-} from "../../src/curation-app/api/types";
+import { ApiError } from "../../src/study-views/errors";
+import type { TablesResult } from "../../src/curation-app/api/types";
+import type { ConflictData, Problem, ReviewItem, StudyDetail, TableEntry } from "../../src/study-views/types";
 import {
   actionFailure,
-  approvalRefusal,
   beyondLimits,
   defaultSection,
-  duplicateFolders,
-  duplicateHeading,
   failureOf,
   findProfile,
-  folderPath,
   isLimitIssue,
   isRawTable,
   rawTableFiles,
   isSection,
   issueLabel,
   knownProfiles,
-  lastUploadUrl,
   messageOf,
   openItems,
   profileMap,
@@ -36,9 +25,16 @@ import {
   SECTION_LABELS,
   SECTIONS,
   tableFiles,
+} from "../../src/curation-app/study";
+import {
+  approvalRefusal,
+  duplicateFolders,
+  duplicateHeading,
+  folderPath,
+  lastUploadUrl,
   tablesOutcome,
   userHint,
-} from "../../src/curation-app/study";
+} from "../../src/curation-app/local";
 import { beyondLimitsDetail, profile, roster, studyDetail, tableEntry } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {

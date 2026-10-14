@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { ReviewItem } from "../api/types";
+import type { ReviewItem } from "../../study-views/types";
 import { formatTime, plural } from "../overview";
 import { KIND_ICONS, KIND_LABELS, STATE_LABELS, STATE_TONES, targetText } from "../review";
 

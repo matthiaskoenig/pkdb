@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NameLines } from "../../src/curation-app/api/types";
+import type { NameLines } from "../../src/study-views/types";
 import { cellParts, namedKind } from "../../src/curation-app/links";
 
 const DOSES: NameLines = { file: "interventions.tsv", lines: { D1: 1, D2: 2, "D 3": 3 } };

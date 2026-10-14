@@ -11,7 +11,7 @@ import {
   VDialog,
   VSpacer,
 } from "vuetify/components";
-import type { StudyRow } from "../api/types";
+import type { StudyRow } from "../../study-views/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";

@@ -1,15 +1,9 @@
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import {
-  ServerStopped,
-  SessionMissing,
-  UnexpectedResponse,
-  isAbort,
-  isRevisionConflict,
-  setCsrfToken,
-} from "../../src/curation-app/api/client";
-import type { StudyDetail } from "../../src/curation-app/api/types";
+import { isRevisionConflict, setCsrfToken } from "../../src/curation-app/api/client";
+import { ServerStopped, SessionMissing, UnexpectedResponse, isAbort } from "../../src/study-views/errors";
+import type { StudyDetail } from "../../src/study-views/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { json, snapshot, studyDetail, studyMetadata } from "./curation-fixtures";

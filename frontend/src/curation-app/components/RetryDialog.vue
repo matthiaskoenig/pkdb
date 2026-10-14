@@ -12,9 +12,10 @@ import {
   VDialog,
   VSpacer,
 } from "vuetify/components";
-import type { StudyRow } from "../api/types";
+import type { StudyRow } from "../../study-views/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { uploadBlocker, webUrl } from "../overview";
+import { webUrl } from "../overview";
+import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
 import { failureOf, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";

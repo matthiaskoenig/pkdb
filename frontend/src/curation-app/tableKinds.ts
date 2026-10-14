@@ -4,7 +4,7 @@
  * label, its class of information, whether its tables belong to one source and whether Add table
  * adds one. The app keeps no list of its own.
  */
-import type { StudyDetail, TableFileKind, TableKind } from "./api/types";
+import type { StudyDetail, TableFileKind, TableKind } from "../study-views/types";
 
 type Kinds = Pick<StudyDetail, "table_kinds">;
 

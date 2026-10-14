@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, ref, watch, watchEffect } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { VProgressLinear } from "vuetify/components";
-import { ApiError, ServerStopped, SessionMissing } from "../api/client";
+import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import PaperViewer from "../components/PaperViewer.vue";
 import { PAPER } from "../data";

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
-import type { TableKind } from "../api/types";
+import type { TableKind } from "../../study-views/types";
 import { sectionHeading } from "../composables/useReturnFocus";
 import { saveShortcut } from "../composables/useSaveShortcut";
 import { changedLabels, fieldLabel, shortList } from "../metadata";

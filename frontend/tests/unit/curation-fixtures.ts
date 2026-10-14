@@ -1,10 +1,10 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
+import type { Snapshot, TablesResult } from "../../src/curation-app/api/types";
 import type {
   ConflictData,
   PaperFile,
   Profile,
   ReviewItem,
-  Snapshot,
   SourceSummary,
   StudyDetail,
   StudyMetadata,
@@ -13,9 +13,8 @@ import type {
   TableFileKind,
   TableKind,
   TableKindEntry,
-  TablesResult,
   ValidationIssue,
-} from "../../src/curation-app/api/types";
+} from "../../src/study-views/types";
 import { noteKinds } from "../../src/curation-app/tableKinds";
 import limitsFixture from "../fixtures/curation-contract/limits.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";

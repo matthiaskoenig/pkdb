@@ -1,14 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { ConflictData, TablesResult, ValidationIssue } from "../../src/curation-app/api/types";
+import type { TablesResult } from "../../src/curation-app/api/types";
+import type { ConflictData, ValidationIssue } from "../../src/study-views/types";
 import { columnName } from "../../src/curation-app/grid";
-import {
-  conflictView,
-  listText,
-  syncAlert,
-  syncOutcome,
-  syncSummary,
-  withoutConflicts,
-} from "../../src/curation-app/tables";
+import { conflictView, syncAlert, syncOutcome, syncSummary, withoutConflicts } from "../../src/curation-app/tables";
+import { listText } from "../../src/curation-app/overview";
 import { actionFailure } from "../../src/curation-app/study";
 import {
   conflictAnswer,

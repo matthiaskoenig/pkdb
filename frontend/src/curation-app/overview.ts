@@ -2,7 +2,7 @@
  * Filtering, sorting and labels of the study rows of the overview. The study page uses the same
  * labels for the review status, the sync status and the problem counts.
  */
-import type { ReviewStatus, RowStatus, Snapshot, StudyRow, SyncStatus } from "./api/types";
+import type { ReviewStatus, RowStatus, StudyRow, SyncStatus } from "../study-views/types";
 
 /** The status chips above the table. */
 export type StatusChip = "all" | "attention" | "draft" | "in_review" | "approved";
@@ -267,6 +267,12 @@ export function plural(count: number, one: string, many = `${one}s`): string {
   return `${count.toLocaleString("en-US")} ${count === 1 ? one : many}`;
 }
 
+/** `a.tsv`, `a.tsv and b.tsv`, `a.tsv, b.tsv and c.tsv`. */
+export function listText(items: readonly string[]): string {
+  if (items.length < 2) return items.join("");
+  return `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
+}
+
 /** The problems of the last check: `2 errors`, `1 warning`, or `valid` for a passed check. */
 export function problemLabels(row: Pick<StudyRow, "counts" | "status">): { label: string; tone: Tone }[] {
   const labels: { label: string; tone: Tone }[] = [];
@@ -291,15 +297,6 @@ export function formatTime(iso: string): string {
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
     `${pad(date.getHours())}:${pad(date.getMinutes())}`
   );
-}
-
-/** Why uploads are not possible, or null when they are. */
-export function uploadBlocker(snapshot: Snapshot): string | null {
-  if (snapshot.can_upload) return null;
-  if (snapshot.offline) return "Work offline is on. Turn it off in the settings to upload.";
-  if (!snapshot.authenticated) return "Add your personal API key in the settings to upload.";
-  if (snapshot.connection !== "connected") return "The PK-DB server is not connected.";
-  return "Your PK-DB account cannot upload studies.";
 }
 
 /**

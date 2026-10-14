@@ -2,7 +2,7 @@
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
-import type { ReviewItem, SourceView, StudyDetail, TableResponse } from "../api/types";
+import type { ReviewItem, SourceView, StudyDetail, TableResponse } from "../../study-views/types";
 import { useLoaded } from "../composables/useLoaded";
 import { targetMatch } from "../grid";
 import { plural } from "../overview";

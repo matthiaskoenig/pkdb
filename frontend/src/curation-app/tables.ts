@@ -2,18 +2,13 @@
  * The sync parts of the Data section: what the sync status means and what a sync did, and the rows
  * of a sync conflict in one grid.
  */
-import type { ConflictData, SyncState, TableResponse, TableRow, TablesResult } from "./api/types";
+import type { TablesResult } from "./api/types";
+import type { ConflictData, SyncState, TableResponse, TableRow } from "../study-views/types";
 import { columnName } from "./grid";
-import { plural, SYNC_LABELS, SYNC_TONES, type Tone } from "./overview";
+import { listText, plural, SYNC_LABELS, SYNC_TONES, type Tone } from "./overview";
 import { actionFailure, type ActionFailure } from "./study";
 
 // Sync
-
-/** `a.tsv`, `a.tsv and b.tsv`, `a.tsv, b.tsv and c.tsv`. */
-export function listText(items: readonly string[]): string {
-  if (items.length < 2) return items.join("");
-  return `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
-}
 
 /** The files of the unresolved conflicts, each once. */
 function conflictFiles(conflicts: readonly ConflictData[]): string[] {

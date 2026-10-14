@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import type { ColumnClass, NameKind, StudyNameLines, TableResponse, TableRow, ValidationIssue } from "../api/types";
+import type {
+  ColumnClass,
+  NameKind,
+  StudyNameLines,
+  TableResponse,
+  TableRow,
+  ValidationIssue,
+} from "../../study-views/types";
 import { useCellTip } from "../composables/useCellTip";
 import {
   columnClass,

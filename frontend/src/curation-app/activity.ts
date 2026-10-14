@@ -2,7 +2,7 @@
  * The activity of a study: labels of its jobs (validations and uploads of the local server, and
  * writes of the app), the review items that their messages name, and saving a report.
  */
-import type { Job, JobAction, JobStatus, ReviewItem } from "./api/types";
+import type { Job, JobAction, JobStatus, ReviewItem } from "../study-views/types";
 import { webUrl, type Tone } from "./overview";
 import { itemText, type TextPart } from "./review";
 

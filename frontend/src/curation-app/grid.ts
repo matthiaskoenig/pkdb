@@ -2,7 +2,7 @@
  * The parts of a table grid: its columns, the rows that open review items target, the cells with
  * problems, and the raw extraction of a source as a table.
  */
-import type { ColumnClass, ReviewItem, TableResponse, TargetMatch, ValidationIssue } from "./api/types";
+import type { ColumnClass, ReviewItem, TableResponse, TargetMatch, ValidationIssue } from "../study-views/types";
 import { columnLetters } from "./columns";
 
 // Columns

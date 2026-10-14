@@ -5,9 +5,10 @@
  */
 import { reactive } from "vue";
 import type { RouteLocationRaw } from "vue-router";
-import { ApiError, checkFile, NO_SESSION, SessionMissing } from "./api/client";
-import type { PaperFile, StudyDetail } from "./api/types";
-import type { FailureDetails } from "./failures";
+import { checkFile } from "./api/client";
+import { ApiError, NO_SESSION, SessionMissing } from "../study-views/errors";
+import type { PaperFile, StudyDetail } from "../study-views/types";
+import type { FailureDetails } from "./study";
 import { actionFailure, studyName, type ActionFailure } from "./study";
 
 /** How the pages fit into the viewer: its width, a whole page, or their size in print. */

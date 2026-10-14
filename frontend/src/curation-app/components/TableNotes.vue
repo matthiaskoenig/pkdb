@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId, watch } from "vue";
-import type { Profile, TableKind } from "../api/types";
+import type { Profile, TableKind } from "../../study-views/types";
 import { useMoreBelow } from "../composables/useMoreBelow";
 import { issueMessage } from "../metadata";
 import { notesKindOf, notesSummary } from "../notes";

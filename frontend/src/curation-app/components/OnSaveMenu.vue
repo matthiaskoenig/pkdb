@@ -2,7 +2,7 @@
 import { computed, ref, useId, watch } from "vue";
 import { VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { SaveMode, Snapshot } from "../api/types";
-import { uploadBlocker } from "../overview";
+import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
 import { failureOf, type ActionFailure } from "../study";

@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from "vue";
 import { VBtn } from "vuetify/components";
-import {
-  failureFacts,
-  failureMarkdown,
-  type FailureDetails,
-} from "../failures";
+import { failureFacts, failureMarkdown } from "../failures";
+import { type FailureDetails } from "../study";
 import { useOverviewStore } from "../stores/overview";
 
 /**

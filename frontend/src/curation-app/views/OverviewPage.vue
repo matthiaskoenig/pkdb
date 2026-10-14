@@ -10,7 +10,7 @@ import {
   VTextField,
   VTooltip,
 } from "vuetify/components";
-import type { Profile, StudyRow } from "../api/types";
+import type { Profile, StudyRow } from "../../study-views/types";
 import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
@@ -24,8 +24,8 @@ import {
   sortStudies,
   STATUS_CHIPS,
   substancesOf,
-  uploadBlocker,
 } from "../overview";
+import { uploadBlocker } from "../uploads";
 import { useDebounced } from "../composables/useDebounced";
 import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";

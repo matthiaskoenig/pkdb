@@ -3,7 +3,7 @@
  * study, which rows a window of the page renders, and the rows that size the columns.
  */
 import type { RouteLocationRaw } from "vue-router";
-import type { Profile, StudyRow, StudySummary } from "./api/types";
+import type { Profile, StudyRow, StudySummary } from "../study-views/types";
 import {
   activityLabel,
   issueUrl,
