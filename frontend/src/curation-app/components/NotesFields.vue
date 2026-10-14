@@ -100,7 +100,7 @@ function addComment(): void {
           rows="1"
           :auto-grow="autoGrow"
           :max-rows="GROW_ROWS"
-          class="grow-textarea"
+          class="grow-textarea grow-textarea--one-line"
           :error-messages="errorsAt(`${descriptionsKey}.${index}`)"
           hide-details="auto"
           @update:model-value="setDescription(index, $event)"
@@ -149,7 +149,7 @@ function addComment(): void {
             rows="1"
             :auto-grow="autoGrow"
             :max-rows="GROW_ROWS"
-            class="grow-textarea"
+            class="grow-textarea grow-textarea--one-line"
             :error-messages="errorsAt(`${commentsKey}.${index}`)"
             hide-details="auto"
             @update:model-value="setComment(index, $event)"
@@ -194,9 +194,10 @@ function addComment(): void {
   align-items: start;
   gap: 8px;
 }
-/* The remove button centers on the first line of the text area. */
+/* The remove button (40 px) centers on the first line of its text area, which is as high as a
+   field of one line (30 px), and adds no height to the row. */
 .note-row > .row-remove {
-  margin-top: 6px;
+  margin-block: -5px;
 }
 .comment-body {
   display: flex;
@@ -211,7 +212,8 @@ function addComment(): void {
   font-size: 0.875rem;
   font-weight: 600;
 }
+/* Below the author line (20 px) and the gap of 6 px above the text area of a comment. */
 .note-row > .comment-remove {
-  margin-top: 32px;
+  margin-top: 21px;
 }
 </style>

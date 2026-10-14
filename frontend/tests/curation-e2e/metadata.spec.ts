@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { expect, test } from "./fixtures.ts";
+import type { Locator } from "@playwright/test";
+import { expect, expectAccessible, test } from "./fixtures.ts";
 
 interface StudyJson {
   licence: string;
@@ -80,4 +81,53 @@ test("the card of the descriptions and comments takes the whole last row and poi
   await expect(card.getByRole("button", { name: /^Notes of the/ })).toHaveCount(0);
   await card.getByRole("link", { name: "Data" }).click();
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/data/);
+});
+
+/** The height of the outline of the field of `control`. */
+function outlineHeight(control: Locator): Promise<number> {
+  return control.evaluate((element) => element.closest(".v-field")!.getBoundingClientRect().height);
+}
+
+/** How far the middle of the remove button of the row of the text area `control` lies below the middle of its outline. */
+function removeOffset(control: Locator): Promise<number> {
+  return control.evaluate((element) => {
+    const field = element.closest(".v-field")!.getBoundingClientRect();
+    const remove = element.closest(".note-row")!.querySelector(":scope > .row-remove")!.getBoundingClientRect();
+    return remove.top + remove.height / 2 - (field.top + field.height / 2);
+  });
+}
+
+test("a description and a comment of one line are as high as the other fields, with their remove buttons beside them", async ({
+  app,
+  page,
+}, testInfo) => {
+  await app.open("#/studies/caffeine/Demo2020/metadata");
+  const card = page.getByRole("region", { name: "Descriptions and comments" });
+  const description = card.getByRole("textbox", { name: "Description 1", exact: true });
+  await expect(description).toHaveValue(/^This is a synthetic test study/);
+  await card.getByRole("button", { name: "Add comment", exact: true }).click();
+  const comment = card.getByRole("textbox", { name: "Comment 1 by curator", exact: true });
+  await expect(comment).toHaveValue("");
+  // No label shows: the headings name the lists.
+  await expect(card.locator("label")).toHaveCount(0);
+  await expect(card.getByRole("heading", { name: "Descriptions", exact: true })).toBeVisible();
+  await expect(card.getByRole("heading", { name: "Comments", exact: true })).toBeVisible();
+  const sourceKey = page.getByRole("textbox", { name: "Source key", exact: true });
+
+  for (const width of [1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    // The description of the study fits one line, and the new comment is empty.
+    const line = await outlineHeight(sourceKey);
+    expect(Math.abs((await outlineHeight(description)) - line)).toBeLessThanOrEqual(1);
+    expect(Math.abs((await outlineHeight(comment)) - line)).toBeLessThanOrEqual(1);
+    expect(Math.abs(await removeOffset(description))).toBeLessThanOrEqual(1);
+    expect(Math.abs(await removeOffset(comment))).toBeLessThanOrEqual(1);
+    for (const theme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: theme });
+      await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
+      await expectAccessible(page);
+      const shot = await card.screenshot({ path: testInfo.outputPath(`descriptions-${theme}-${width}.png`) });
+      await testInfo.attach(`descriptions-${theme}-${width}.png`, { body: shot, contentType: "image/png" });
+    }
+  }
 });

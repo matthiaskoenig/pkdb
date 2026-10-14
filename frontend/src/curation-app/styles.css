@@ -355,6 +355,11 @@ a.brand {
     max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
     resize: none;
   }
+  /* Descriptions and comments start one line high, as high as a field of one line, as Vuetify's
+     auto-grow makes them where browsers do not size fields by content. */
+  .grow-textarea--one-line textarea {
+    min-height: max(var(--v-input-control-height, 0px), calc(1lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px)));
+  }
 }
 /* Messages of fields that wrap keep their lines apart. */
 .v-input .v-messages__message {
