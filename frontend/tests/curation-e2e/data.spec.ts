@@ -131,7 +131,7 @@ async function panesLayout(page: Page): Promise<{ bottom: number; height: number
 /**
  * The alert `alert` above the panes of the Data section in a 1600 × 1000 window keeps the height
  * of its text, and the panes, which were `panes` px high without it, give it just that room and
- * a gap: they still end at the padding of 8 px below the study page, which does not scroll.
+ * a gap of up to 10 px (8 px above the study band): they still end at the padding of 8 px below the study page, which does not scroll.
  */
 async function expectAlertAbovePanes(page: Page, alert: Locator, panes: number): Promise<void> {
   await expect(alert).toBeVisible();
@@ -139,7 +139,7 @@ async function expectAlertAbovePanes(page: Page, alert: Locator, panes: number):
   expect(height).toBeLessThan(80);
   const layout = await panesLayout(page);
   expect(layout).toMatchObject({ bottom: 992, scroll: 0 });
-  expect(layout.height).toBeGreaterThanOrEqual(panes - height - 6);
+  expect(layout.height).toBeGreaterThanOrEqual(panes - height - 10);
 }
 
 test.describe("sources", () => {

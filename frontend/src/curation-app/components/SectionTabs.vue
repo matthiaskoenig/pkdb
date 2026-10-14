@@ -98,20 +98,20 @@ function show(section: Section | null): void {
 </template>
 
 <style scoped>
-/* The tabs and the facts of the study share a line above a rule; the facts wrap below the tabs
-   in a narrow window, and stand below the select of the sections on a phone. */
+/* The tabs and the facts of the study share the last line of the study band (StudyPage.vue),
+   whose rule is below it; the facts wrap below the tabs in a narrow window, and stand below the
+   select of the sections on a phone, 8 px above the rule. */
 .section-tabs-line {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 16px;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .section-tabs-line--select {
   flex-direction: column;
   align-items: stretch;
   gap: 4px;
-  border-bottom: 0;
+  padding-bottom: 8px;
 }
 /* The label of the select stands above its field, clear of the header. */
 .section-tabs-select {

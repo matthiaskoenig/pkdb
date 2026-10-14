@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures.ts";
+import { expect, expectAccessible, test } from "./fixtures.ts";
+import { pixelStats } from "./pixels.ts";
 
 /**
  * Draft2021 of the fixture has no workbook. Released, with an issue and curated by an AI, its
@@ -16,7 +17,7 @@ const RELEASED = {
     method: "claude-opus-5-5",
     version: "1",
     run_id: "run-1",
-    assets: [],
+    assets: [{ url: "https://example.org/run-1.json", sha256: "0".repeat(64) }],
   },
 };
 
@@ -144,4 +145,73 @@ test("what the study does for a moment after a save moves nothing on the page, a
   } finally {
     writeFileSync(path, original);
   }
+});
+
+/** The study band and a white card of the section in each theme (themes.ts, plugins/vuetify.ts). */
+const BAND_COLORS = {
+  light: { band: [236, 243, 244], card: [255, 255, 255] },
+  dark: { band: [33, 57, 62], card: [25, 43, 49] },
+} as const;
+
+function expectColor(actual: readonly number[], expected: readonly number[], what: string): void {
+  for (const [index, value] of actual.entries())
+    expect(Math.abs(value - expected[index]!), `${what}: ${actual.join(",")} is near ${expected.join(",")}`).toBeLessThanOrEqual(2);
+}
+
+for (const theme of ["light", "dark"] as const) {
+  test(`the study band sets the header and the tabs apart from the white cards, with every chip readable, in the ${theme} theme at 1280 and 1440 px`, async ({
+    app,
+    page,
+  }, testInfo) => {
+    const path = join(app.server.workspace, "caffeine/Draft2021/study.json");
+    const original = readFileSync(path, "utf8");
+    try {
+      // Released, with an issue and curated by an AI: every chip of the header stands on the band.
+      writeFileSync(path, `${JSON.stringify({ ...JSON.parse(original), ...RELEASED }, null, 2)}\n`);
+      await page.emulateMedia({ colorScheme: theme });
+      await app.open("#/studies/caffeine/Draft2021/metadata");
+      await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
+      const band = page.locator(".study-band");
+      await expect(band.getByText("PKDB01211 · released 2019-10-14")).toBeVisible();
+      await expect(band.getByRole("navigation", { name: "Study sections" })).toBeVisible();
+      // One rule below the band; the line of the tabs has none of its own.
+      await expect(band).toHaveCSS("border-bottom-width", "1px");
+      await expect(band.locator(".section-tabs-line")).toHaveCSS("border-bottom-width", "0px");
+      const card = page.locator(".study-section .v-card").first();
+      for (const width of [1280, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await layoutSettled(page, width);
+        expectColor((await pixelStats(band)).dominant, BAND_COLORS[theme].band, `study band at ${width} px`);
+        expectColor((await pixelStats(card)).dominant, BAND_COLORS[theme].card, `card at ${width} px`);
+        // From edge to edge of the window, directly below the app bar.
+        const bar = (await page.locator(".app-header").boundingBox())!;
+        const placed = (await band.boundingBox())!;
+        expect(placed.x).toBe(0);
+        expect(placed.width).toBe(width);
+        expect(Math.abs(placed.y - (bar.y + bar.height))).toBeLessThanOrEqual(0.5);
+        await expectAccessible(page);
+        const name = `study-band-${theme}-${width}.png`;
+        await testInfo.attach(name, { body: await page.screenshot({ path: testInfo.outputPath(name) }), contentType: "image/png" });
+      }
+    } finally {
+      writeFileSync(path, original);
+    }
+  });
+}
+
+test("in a narrow window the select of the sections stands in the study band, 8 px above its rule", async ({ app, page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await app.open("#/studies/caffeine/Demo2020/metadata");
+  const band = page.locator(".study-band");
+  await expect(band.getByRole("combobox", { name: "Section" })).toBeVisible();
+  await expect(band).toHaveCSS("border-bottom-width", "1px");
+  const box = (await band.boundingBox())!;
+  const content = await band
+    .locator(".section-tabs-line > *")
+    .evaluateAll((parts) => Math.max(...parts.map((part) => part.getBoundingClientRect().bottom)));
+  // 8 px between the last line of the band and its rule of 1 px.
+  expect(box.y + box.height - 1 - content).toBeGreaterThanOrEqual(7.5);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth))
+    .toBe(0);
 });
