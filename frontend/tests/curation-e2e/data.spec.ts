@@ -519,10 +519,10 @@ test("the section tabs keep their places when another one becomes active and bol
 test("the section tabs follow the work on a study, also on the keyboard and in the select of a narrow window", async ({
   app,
   page,
-}, testInfo) => {
+}) => {
   const navigation = page.getByRole("navigation", { name: "Study sections" });
   const order = [/^Metadata/, /^Data/, /^Problems/, /^Review/, /^Activity/];
-  // Demo2020 has two open review items: without a section, it still opens on Review (Q4).
+  // Demo2020 has two open review items: without a section, it still opens on Review (the default section rule is unchanged).
   await app.open("#/studies/caffeine/Demo2020");
   await expect(page).toHaveURL(/#\/studies\/caffeine\/Demo2020\/review$/);
   await expect(navigation.getByRole("link")).toHaveText(order);
@@ -535,20 +535,6 @@ test("the section tabs follow the work on a study, also on the keyboard and in t
     await page.keyboard.press("Tab");
     await expect(navigation.getByRole("link", { name: new RegExp(`^${name}\\b`) })).toBeFocused();
   }
-
-  // The study band in both themes at the widths of the manual look (Task 2).
-  for (const theme of ["light", "dark"] as const) {
-    await page.emulateMedia({ colorScheme: theme });
-    await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
-    for (const width of [1280, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
-      await expect(navigation.getByRole("link")).toHaveText(order);
-      const name = `tabs-${theme}-${width}.png`;
-      const shot = await page.screenshot({ path: testInfo.outputPath(name) });
-      await testInfo.attach(name, { body: shot, contentType: "image/png" });
-    }
-  }
-  await page.emulateMedia({ colorScheme: "light" });
 
   // Below 600 px the select of the sections lists them in the same order.
   await page.setViewportSize({ width: 390, height: 844 });

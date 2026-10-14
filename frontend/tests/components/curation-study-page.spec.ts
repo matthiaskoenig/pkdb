@@ -315,7 +315,7 @@ describe("StudyPage", () => {
     await mountPage("/studies/caffeine/Harder1988/problems");
     const nav = page().get('nav[aria-label="Study sections"]');
     const links = nav.findAll("a");
-    // The order of the work on a study: the tables first, then their problems and the review.
+    // The order of the work on a study: the metadata and the tables first, then their problems and the review.
     expect(links.map((link) => link.get(".section-tab-label").element.firstChild?.textContent)).toEqual([
       "Metadata",
       "Data",
