@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ESLint } from "eslint";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { sourceFailures } from "../../scripts/check-source";
 
 // frontend/; Vite would rewrite a literal `new URL("../..", import.meta.url)` into a dev server address.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -27,4 +28,34 @@ describe("the boundary of the curation app", () => {
     expect(await refusals(STORE("./stores/study"), "src/curation-app/probe.ts")).toEqual([]);
     expect(await refusals('import { SECTIONS } from "../study-views/study";\nexport const all = SECTIONS;\n', "src/curation-app/probe.ts")).toEqual([]);
   }, 30_000);
+});
+
+describe("the boundary of the curation app in scripts/check-source.ts", () => {
+  // The ways of naming a module that the import rule of ESLint does not see.
+  const IMPORTS = [
+    'export const store = () => import("../curation-app/stores/study");\n',
+    'export type Store = import("../curation-app/stores/study").StudyStore;\n',
+    'import type { TablesAction } from "../curation-app/stores/study";\nexport type Action = TablesAction;\n',
+    'export { useStudyStore } from "../curation-app/stores/study";\n',
+    'export type { TablesAction } from "../curation-app/stores/study";\n',
+  ];
+
+  it.each(IMPORTS)("refuses %s outside the curation app", (code) => {
+    for (const file of [join("src", "study-views", "probe.ts"), join("src", "features", "probe", "probe.ts")])
+      expect(sourceFailures(file, code)).toEqual([
+        `${file}: imports ../curation-app/stores/study; only src/curation-app imports the curation app`,
+      ]);
+  });
+
+  it("refuses them in the script of a Vue component too", () => {
+    const file = join("src", "study-views", "Probe.vue");
+    const code = `<script setup lang="ts">\nconst store = () => import("../curation-app/stores/study");\n</script>\n`;
+    expect(sourceFailures(file, code)).toEqual([
+      `${file}: imports ../curation-app/stores/study; only src/curation-app imports the curation app`,
+    ]);
+  });
+
+  it.each(IMPORTS)("allows %s in the curation app", (code) => {
+    expect(sourceFailures(join("src", "curation-app", "probe.ts"), code)).toEqual([]);
+  });
 });
