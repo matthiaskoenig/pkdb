@@ -47,6 +47,9 @@ class RotateInput(CredentialInput):
 
 class BrowserSecurity(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
+        if "\x00" in request.url.path:
+            # PostgreSQL cannot store NUL; no route has such a path.
+            return JSONResponse({"detail": "Not found"}, status_code=404)
         state = request.app.state
         canonical = request.url.path.startswith(
             "/api/v1/auth/"

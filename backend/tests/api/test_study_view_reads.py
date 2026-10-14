@@ -1,10 +1,14 @@
 """The routes of the study pages of the website, per audience (#963)."""
 
-import pytest
-from sqlalchemy import select
+import json
 
+import pytest
+from sqlalchemy import delete, select
+
+from pkdb_server.api.study_views import matches
 from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.users import User
+from pkdb_server.db.models.views import StudyView
 from pkdb_server.services.authentication import issue_token
 from tests.fixtures.study_folders import multipart, write_study
 
@@ -173,3 +177,81 @@ def test_study_rows(client, creator_headers, uploaded, session_factory):
     assert row["curator"] is False and row["issue"] is None
     assert "review_status" not in row["summary"]
     assert row["counts"] == {"errors": 0, "warnings": 0}
+
+
+def test_etag_comparison():
+    etag = '"abc"'
+    assert matches('"abc"', etag) and matches('W/"abc"', etag)
+    assert matches('"x", W/"abc" , "y"', etag) and matches("*", etag)
+    assert not matches('"x", "y"', etag)
+    assert not matches(None, etag) and not matches("", etag)
+
+
+def test_a_nul_in_a_path_is_not_found(client, creator_headers, uploaded):
+    assert client.get("/api/v2/studies/caf%00feine/X/view").status_code == 404
+    assert client.get("/api/v2/studies/caf%00feine/X").status_code == 404
+    assert (
+        client.get(VIEW + "/files/Exa%00mple.pdf", headers=creator_headers).status_code
+        == 404
+    )
+
+
+def test_format_1_study_has_no_view(
+    client, creator_headers, valid_bundle, ingestion_context
+):
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    files = {
+        name: (None, json.dumps(getattr(valid_bundle, name)), "application/json")
+        for name in ("study", "reference")
+    }
+    assert client.put(url, headers=creator_headers, files=files).status_code == 201
+    assert client.get(url + "/view", headers=creator_headers).status_code == 404
+    assert (
+        client.get("/api/v2/study-rows", headers=creator_headers).json()["rows"] == []
+    )
+
+
+def test_a_study_without_stored_views_is_hidden(
+    client, creator_headers, uploaded, session_factory
+):
+    with session_factory.begin() as session:
+        session.execute(delete(StudyView))
+    assert client.get(VIEW, headers=creator_headers).status_code == 404
+    assert (
+        client.get("/api/v2/study-rows", headers=creator_headers).json()["rows"] == []
+    )
+
+
+def test_rows_by_the_audience_of_each_study(
+    client, creator_headers, uploaded, tmp_path, session_factory
+):
+    second = write_study(tmp_path / "second", "Second", pmid="124", issue=7)
+    assert (
+        client.put(
+            "/api/v2/studies/caffeine/Second",
+            headers=creator_headers,
+            **multipart(second),
+        ).status_code
+        == 201
+    )
+    set_access(session_factory, "private")
+    with session_factory.begin() as session:
+        session.scalar(
+            select(Study).where(Study.sid == "caffeine/Second")
+        ).access = "public"
+        user = User(username="reader", role="curator", active=True)
+        session.add(user)
+        session.flush()
+        example = session.scalar(select(Study).where(Study.sid == "caffeine/Example"))
+        session.add(StudyGrant(study_id=example.id, user_id=user.id, role="curator"))
+        headers = {"Authorization": f"Bearer {issue_token(user, session)}"}
+    rows = {
+        r["id"]: r
+        for r in client.get("/api/v2/study-rows", headers=headers).json()["rows"]
+    }
+    assert set(rows) == {"caffeine/Example", "caffeine/Second"}
+    assert rows["caffeine/Example"]["curator"] and rows["caffeine/Example"]["issue"]
+    assert "review_status" in rows["caffeine/Example"]["summary"]
+    assert not rows["caffeine/Second"]["curator"]
+    assert rows["caffeine/Second"]["issue"] is None
+    assert "review_status" not in rows["caffeine/Second"]["summary"]

@@ -4,11 +4,22 @@ import hashlib
 import json
 
 from fastapi import APIRouter, HTTPException, Request
-from starlette.responses import FileResponse, JSONResponse, Response
+from starlette.responses import FileResponse, Response
 
 router = APIRouter(prefix="/api/v2")
 
 HEADERS = {"Cache-Control": "private, no-cache", "Vary": "Cookie, Authorization"}
+
+
+def matches(header: str | None, etag: str) -> bool:
+    """RFC 9110 weak comparison of an `If-None-Match` list with the ETag."""
+    if not header:
+        return False
+    for entry in header.split(","):
+        entry = entry.strip().removeprefix("W/")
+        if entry == "*" or entry == etag:
+            return True
+    return False
 
 
 def answer(request: Request, body: dict) -> Response:
@@ -16,9 +27,9 @@ def answer(request: Request, body: dict) -> Response:
     data = json.dumps(body, sort_keys=True, separators=(",", ":")).encode()
     etag = '"' + hashlib.sha256(data).hexdigest()[:32] + '"'
     headers = {**HEADERS, "ETag": etag}
-    if request.headers.get("if-none-match") == etag:
+    if matches(request.headers.get("if-none-match"), etag):
         return Response(status_code=304, headers=headers)
-    return JSONResponse(body, headers=headers)
+    return Response(data, media_type="application/json", headers=headers)
 
 
 def _read(request: Request, read, *args):

@@ -177,14 +177,18 @@ class StudyViews:
                 if name
             }
             profiles = _profiles(session, names)
-            files = {
-                attachment.name: file
-                for attachment, file in session.execute(
-                    select(StudyAttachment, StoredFile)
-                    .join(StoredFile)
-                    .where(StudyAttachment.study_id == root.id)
-                )
-            }
+            files = (
+                {
+                    attachment.name: file
+                    for attachment, file in session.execute(
+                        select(StudyAttachment, StoredFile)
+                        .join(StoredFile)
+                        .where(StudyAttachment.study_id == root.id)
+                    )
+                }
+                if curator
+                else {}
+            )
             problems = (
                 [
                     {**issue, "acknowledgeable": False}
@@ -273,7 +277,15 @@ class StudyViews:
     def rows(self, principal: Principal) -> dict:
         with self.session_factory() as session:
             records = session.execute(
-                select(Study, StudyView.document)
+                select(
+                    Study.id,
+                    Study.sid,
+                    Study.access,
+                    Study.licence,
+                    Study.creator_id,
+                    Study.issue,
+                    StudyView.document,
+                )
                 .join(
                     StudyView,
                     (StudyView.study_id == Study.id) & (StudyView.kind == "row"),
@@ -284,14 +296,15 @@ class StudyViews:
             grants = defaultdict(set)
             for grant in session.scalars(
                 select(StudyGrant).where(
-                    StudyGrant.study_id.in_([study.id for study, _ in records]),
+                    StudyGrant.study_id.in_([record.id for record in records]),
                     StudyGrant.role == "curator",
                 )
             ):
                 grants[grant.study_id].add(grant.user_id)
-            folders = folder_index({study.sid.split("/")[0] for study, _ in records})
+            folders = folder_index({record.sid.split("/")[0] for record in records})
             rows, names = [], set()
-            for study, document in records:
+            for study in records:
+                document = study.document
                 access = StudyAccess(
                     sid=study.sid,
                     access=study.access,
