@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { VAlert } from "vuetify/components";
-import { sectionRoute, type ActionFailure } from "../../study-views/study";
-import FailureDetails from "./FailureDetails.vue";
+import { useStudyViews } from "../../study-views/context";
+import { type ActionFailure } from "../../study-views/study";
 
 /**
  * A failed action: what could not be done, in bold, and why below it; some of its issues with a
@@ -24,6 +24,7 @@ withDefaults(
   },
 );
 const emit = defineEmits<{ close: [] }>();
+const views = useStudyViews();
 </script>
 
 <template>
@@ -45,24 +46,27 @@ const emit = defineEmits<{ close: [] }>();
       <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
       <li v-if="failure.more">and {{ failure.more }} more</li>
     </ul>
-    <RouterLink v-if="failure.link && study" :to="sectionRoute(study, failure.link.section)" class="action-failure-link">
+    <RouterLink
+      v-if="failure.link && study"
+      :to="views.routes.section(study, failure.link.section)"
+      class="action-failure-link"
+    >
       {{ failure.link.label }}
     </RouterLink>
-    <FailureDetails
-      v-if="failure.details"
+    <component
+      :is="views.parts.failureDetails"
+      v-if="failure.details && views.parts.failureDetails"
       :text="failure.text"
       :details="failure.details"
     >
       <RouterLink
         v-if="study && failure.details.activityId"
-        :to="
-          sectionRoute(study, 'activity', { entry: failure.details.activityId })
-        "
+        :to="views.routes.section(study, 'activity', { entry: failure.details.activityId })"
         class="action-failure-activity"
       >
         Show in Activity
       </RouterLink>
-    </FailureDetails>
+    </component>
     <template v-if="$slots.append" #append>
       <slot name="append" />
     </template>

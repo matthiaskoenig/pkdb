@@ -27,6 +27,7 @@ import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
 import { formatTime } from "../../study-views/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
@@ -155,11 +156,7 @@ useSaveShortcut(() => void study.draft.save());
 watch(
   [detail, section],
   ([value, current]) => {
-    if (value && current === null)
-      void router.replace({
-        name: "Study",
-        params: { substance: substance.value, name: name.value, section: defaultSection(value) },
-      });
+    if (value && current === null) void router.replace(curationRoutes.section(identity.value, defaultSection(value)));
   },
   { immediate: true },
 );
@@ -179,7 +176,7 @@ watch(
           <li v-for="path in failure.paths" :key="path">{{ path }}</li>
         </ul>
       </template>
-      <RouterLink to="/" class="study-back">Back to the studies</RouterLink>
+      <RouterLink :to="curationRoutes.overview()" class="study-back">Back to the studies</RouterLink>
     </section>
 
     <template v-else>

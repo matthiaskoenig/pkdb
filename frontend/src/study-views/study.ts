@@ -2,7 +2,6 @@
  * The sections of the study page, the section it opens on, the counts of its sections, the labels
  * of its header, failed actions and the profiles of its people.
  */
-import type { RouteLocationRaw } from "vue-router";
 import { ApiError } from "./errors";
 import type {
   IssueState,
@@ -50,12 +49,6 @@ export function defaultSection(detail: StudyDetail): Section {
 /** The name of a study folder: the second part of its identity `<substance>/<name>`. */
 export function studyName(detail: Pick<StudyDetail, "id">): string {
   return detail.id.slice(detail.id.indexOf("/") + 1);
-}
-
-/** The route of a section of the study `id`, such as `#/studies/caffeine/Example/review?item=<id>`. */
-export function sectionRoute(id: string, section: Section, query: Record<string, string> = {}): RouteLocationRaw {
-  const params = { substance: id.slice(0, id.indexOf("/")), name: studyName({ id }), section };
-  return Object.keys(query).length ? { name: "Study", params, query } : { name: "Study", params };
 }
 
 /** The table files of a study, data tables and raw tables, in the order of the workbook sheets, as the server lists them. */

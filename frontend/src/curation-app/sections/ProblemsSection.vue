@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../../study-views/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
@@ -28,7 +29,7 @@ import { validatesAfterWrite } from "../acknowledging";
 import { targetParts } from "../../study-views/review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles } from "../../study-views/study";
+import { isLimitIssue, knownProfiles, profileOf, tableFiles } from "../../study-views/study";
 import { tablesOutcome } from "../local";
 
 /**
@@ -38,6 +39,7 @@ import { tablesOutcome } from "../local";
  */
 const study = useStudyStore();
 const overview = useOverviewStore();
+const views = useStudyViews();
 const { notice, announce } = useNotice();
 const id = useId();
 const section = ref<HTMLElement | null>(null);
@@ -407,7 +409,7 @@ function openFile(file: string): Promise<void> {
             <i class="fas fa-crosshairs problem-icon" aria-hidden="true"></i>
             <span>
               <template v-for="(part, index) in targetParts(entry.target, items)" :key="index">
-                <RouterLink v-if="part.item" :to="sectionRoute(identity, 'review', { item: part.item })">{{
+                <RouterLink v-if="part.item" :to="views.routes.section(identity, 'review', { item: part.item })">{{
                   part.text
                 }}</RouterLink>
                 <template v-else>{{ part.text }}</template>
@@ -426,7 +428,9 @@ function openFile(file: string): Promise<void> {
               <span class="acknowledged-time">{{ formatTime(entry.resolved) }}</span>.
             </span>
             <span v-else>Acknowledged by {{ authorName(entry) }}. The review item is open.</span>
-            <RouterLink :to="sectionRoute(identity, 'review', { item: entry.id })">Show the review item</RouterLink>
+            <RouterLink :to="views.routes.section(identity, 'review', { item: entry.id })"
+              >Show the review item</RouterLink
+            >
           </p>
         </li>
       </ul>

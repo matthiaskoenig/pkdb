@@ -4,7 +4,6 @@
  * the first paper as a chunk of its own, as Plotly does.
  */
 import { reactive } from "vue";
-import type { RouteLocationRaw } from "vue-router";
 import { checkFile } from "../curation-app/api/client";
 import { ApiError, NO_SESSION, SessionMissing } from "./errors";
 import type { PaperFile, StudyDetail } from "./types";
@@ -152,11 +151,6 @@ export function shownPaper(papers: PaperFile[], file: string | null): PaperFile 
 /** The line below Paper in the navigator: the PDF that the paper shows, or the PDF that the folder lacks. */
 export function paperLine(study: Pick<StudyDetail, "id" | "papers">, file: string | null = null): string {
   return shownPaper(study.papers, file)?.file ?? `No ${paperName(study)}`;
-}
-
-/** The route of a PDF of the study `id` in a tab of its own. */
-export function paperRoute(id: string, file: string): RouteLocationRaw {
-  return { name: "Paper", params: { substance: id.slice(0, id.indexOf("/")), name: studyName({ id }), file } };
 }
 
 /** A size as the pane head shows it: 840 B, 20 kB, 4.6 MB, 88 MB. */

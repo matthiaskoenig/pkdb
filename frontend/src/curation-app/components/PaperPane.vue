@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
+import { useStudyViews } from "../../study-views/context";
 import type { PaperFile } from "../../study-views/types";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import { formatBytes, paperRoute, shownPaper, type PaperPlace } from "../../study-views/paper";
+import { formatBytes, shownPaper, type PaperPlace } from "../../study-views/paper";
 import { useOverviewStore } from "../stores/overview";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import PaperViewer from "./PaperViewer.vue";
@@ -31,12 +32,17 @@ const place = defineModel<PaperPlace | null>("place", { default: null });
 /** The id of the select of the PDFs, which a browser expects of a form field. */
 const fileId = useId();
 const router = useRouter();
+const views = useStudyViews();
 const overview = useOverviewStore();
 const { notice, announce } = useNotice();
 const { busy, failure, run } = useAction<"open">(announce);
 
 const paper = computed(() => shownPaper(props.papers, props.file)!);
-const tab = computed(() => router.resolve(paperRoute(props.study, paper.value.file)).href);
+/** The address of the PDF in a tab of its own; null when the page has no such page. */
+const tab = computed(() => {
+  const target = views.routes.paper(props.study, paper.value.file);
+  return target === null ? null : router.resolve(target).href;
+});
 
 function choose(event: Event): void {
   emit("update:file", (event.target as HTMLSelectElement).value);
@@ -69,7 +75,15 @@ function openInProgram(): Promise<void> {
       <span v-else class="pane-head-part" :title="paper.file">{{ paper.file }}</span>
       <span class="pane-head-part pane-head-part--fixed">{{ formatBytes(paper.bytes) }}</span>
       <span class="paper-actions">
-        <a class="paper-action" :href="tab" target="_blank" rel="noopener" aria-label="New tab" title="New tab">
+        <a
+          v-if="tab"
+          class="paper-action"
+          :href="tab"
+          target="_blank"
+          rel="noopener"
+          aria-label="New tab"
+          title="New tab"
+        >
           <i class="fas fa-up-right-from-square" aria-hidden="true"></i>
           <span class="paper-action-label">New tab</span>
         </a>

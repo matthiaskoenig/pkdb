@@ -9,7 +9,6 @@ import {
   PaperImportFailed,
   paperLine,
   paperName,
-  paperRoute,
   shownPaper,
   zoomText,
 } from "../../src/study-views/paper";
@@ -65,13 +64,6 @@ describe("the paper of a study", () => {
     expect(shownPaper(papers, null)?.file).toBe("Example.pdf");
     expect(shownPaper(papers, "gone.pdf")?.file).toBe("Example.pdf");
     expect(shownPaper([], "a.pdf")).toBeNull();
-  });
-
-  it("routes a PDF to a tab of its own", () => {
-    expect(paperRoute("caffeine/Example", "Example Supp.pdf")).toEqual({
-      name: "Paper",
-      params: { substance: "caffeine", name: "Example", file: "Example Supp.pdf" },
-    });
   });
 
   it.each([

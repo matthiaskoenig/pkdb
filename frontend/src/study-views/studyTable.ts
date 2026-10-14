@@ -2,7 +2,6 @@
  * The rows of the study table of the overview: what each row shows besides the fields of its
  * study, which rows a window of the page renders, and the rows that size the columns.
  */
-import type { RouteLocationRaw } from "vue-router";
 import type { Profile, StudyRow, StudySummary } from "./types";
 import {
   activityLabel,
@@ -66,10 +65,6 @@ export function rowItem(row: StudyRow, profiles: ReadonlyMap<string, Profile>, r
     issue: number !== null && url !== null ? { number, url } : null,
     upload: webUrl(row.last_upload?.url),
   };
-}
-
-export function studyRoute(row: StudyRow): RouteLocationRaw {
-  return { name: "Study", params: { substance: row.substance, name: row.name } };
 }
 
 export function aiTitle(row: StudyRow): string {

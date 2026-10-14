@@ -36,8 +36,9 @@ import { useReturnFocus } from "../composables/useReturnFocus";
 import { detailsOfBody } from "../failures";
 import { formatTime, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, failureOf, sectionRoute } from "../../study-views/study";
+import { actionFailure, failureOf } from "../../study-views/study";
 
 /**
  * The jobs of the study in the current workspace, newest first: validations and uploads of the
@@ -250,7 +251,7 @@ async function retried(): Promise<void> {
               <template v-for="(part, index) in entry.parts" :key="index">
                 <RouterLink
                   v-if="part.item"
-                  :to="sectionRoute(identity, 'review', { item: part.item })"
+                  :to="curationRoutes.section(identity, 'review', { item: part.item })"
                   class="activity-item"
                 >
                   {{ part.text }}

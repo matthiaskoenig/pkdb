@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VSelect } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import { plural } from "../../study-views/overview";
 import { SECTION_LABELS, SECTIONS, type Section } from "../../study-views/study";
 
@@ -21,6 +22,8 @@ const props = defineProps<{
 const router = useRouter();
 // Below 600 px the tabs would not fit on one line: they become a select.
 const { xs } = useDisplay();
+const views = useStudyViews();
+const study = computed(() => `${props.substance}/${props.name}`);
 
 /** What a count means, for screen readers. */
 const COUNT_NOUNS: Partial<Record<Section, [string, string]>> = {
@@ -38,7 +41,7 @@ const items = computed(() =>
       count,
       meaning: count === undefined || !nouns ? null : plural(count, nouns[0], nouns[1]),
       unsaved: props.unsaved.includes(section),
-      to: { name: "Study", params: { substance: props.substance, name: props.name, section } },
+      to: views.routes.section(study.value, section),
     };
   }),
 );
@@ -51,7 +54,7 @@ const selectItems = computed(() =>
 );
 
 function show(section: Section | null): void {
-  if (section) void router.push({ name: "Study", params: { substance: props.substance, name: props.name, section } });
+  if (section) void router.push(views.routes.section(study.value, section));
 }
 </script>
 

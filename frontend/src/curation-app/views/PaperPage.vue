@@ -6,8 +6,9 @@ import { ApiError, ServerStopped, SessionMissing } from "../../study-views/error
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import PaperViewer from "../components/PaperViewer.vue";
 import { PAPER } from "../../study-views/data";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, failureOf, sectionRoute, type ActionFailure } from "../../study-views/study";
+import { actionFailure, failureOf, type ActionFailure } from "../../study-views/study";
 
 /**
  * A PDF of a study in a tab of its own, which New tab of the paper pane opens in the same
@@ -26,7 +27,7 @@ const name = computed(() => String(route.params.name));
 const identity = computed(() => `${substance.value}/${name.value}`);
 const file = computed(() => String(route.params.file));
 /** The paper of the study in the Data section, showing this PDF. */
-const back = computed(() => sectionRoute(identity.value, "data", { source: PAPER, pdf: file.value }));
+const back = computed(() => curationRoutes.section(identity.value, "data", { source: PAPER, pdf: file.value }));
 
 watch(identity, () => void study.open(substance.value, name.value), { immediate: true });
 onBeforeUnmount(() => study.close());

@@ -3,12 +3,13 @@ import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
 import type { ReviewItem, SourceView, StudyDetail, TableResponse } from "../../study-views/types";
+import { useStudyViews } from "../../study-views/context";
 import { useLoaded } from "../../study-views/composables/useLoaded";
 import { targetMatch } from "../../study-views/grid";
 import { plural } from "../../study-views/overview";
 import { matchText, rowsAt, shownColumns, targetText } from "../../study-views/review";
 import { useStudyStore } from "../stores/study";
-import { beyondLimits, sectionRoute, tableFiles } from "../../study-views/study";
+import { beyondLimits, tableFiles } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
@@ -25,6 +26,7 @@ const props = defineProps<{ item: ReviewItem }>();
 const study = useStudyStore();
 const router = useRouter();
 const headingId = useId();
+const views = useStudyViews();
 
 const target = computed(() => props.item.target);
 const file = computed(() => target.value?.file ?? null);
@@ -73,7 +75,8 @@ const {
 
 /** A clicked mapped point of the figure opens its row in the Data section. */
 function showRow(row: { file: string; line: number }): void {
-  if (study.detail) void router.push(sectionRoute(study.detail.id, "data", { file: row.file, line: String(row.line) }));
+  if (study.detail)
+    void router.push(views.routes.section(study.detail.id, "data", { file: row.file, line: String(row.line) }));
 }
 
 const rows = computed(() => {
@@ -99,7 +102,7 @@ const rows = computed(() => {
 /** The Data section at the target, or at its row `line`, with the column of the item. */
 function tableRoute(line?: number) {
   const column = rows.value?.column;
-  return sectionRoute(study.detail?.id ?? "", "data", {
+  return views.routes.section(study.detail?.id ?? "", "data", {
     file: tableFile.value ?? "",
     ...(line === undefined ? {} : { line: String(line) }),
     ...(column ? { column } : {}),
@@ -124,7 +127,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
 
       <p v-if="limited" class="field-note target-limits">
         This study is beyond the upload limits, so the app cannot show the rows of its tables. See
-        <RouterLink :to="sectionRoute(study.detail?.id ?? '', 'problems')">Problems</RouterLink>.
+        <RouterLink :to="views.routes.section(study.detail?.id ?? '', 'problems')">Problems</RouterLink>.
       </p>
 
       <div v-if="tableFile" class="target-block">

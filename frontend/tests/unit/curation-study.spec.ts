@@ -21,7 +21,6 @@ import {
   provenanceLabel,
   releaseLabel,
   sectionCounts,
-  sectionRoute,
   SECTION_LABELS,
   SECTIONS,
   tableFiles,
@@ -80,18 +79,6 @@ describe("sections", () => {
     expect(defaultSection(detail([item("resolved"), item("dismissed")], { errors: 2, warnings: 1 }))).toBe("problems");
     expect(defaultSection(detail([item("resolved")], { errors: 0, warnings: 3 }))).toBe("metadata");
     expect(defaultSection(studyDetail())).toBe("metadata");
-  });
-
-  it("routes to a section of a study, with a query when given", () => {
-    expect(sectionRoute("caffeine/Example", "problems")).toEqual({
-      name: "Study",
-      params: { substance: "caffeine", name: "Example", section: "problems" },
-    });
-    expect(sectionRoute("caffeine/Example", "review", { item: "01JA" })).toEqual({
-      name: "Study",
-      params: { substance: "caffeine", name: "Example", section: "review" },
-      query: { item: "01JA" },
-    });
   });
 
   it("counts open items from the summary when review.json is invalid", () => {

@@ -2,8 +2,9 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../../study-views/overview";
-import { aiTitle, studyRoute, type RowItem } from "../../study-views/studyTable";
+import { aiTitle, type RowItem } from "../../study-views/studyTable";
 
 /** One study of the study table of the overview. */
 const props = defineProps<{
@@ -24,6 +25,7 @@ const sizer = computed(() => props.rowIndex === null);
 const identity = computed(() => `${props.item.row.substance}/${props.item.row.name}`);
 
 const router = useRouter();
+const views = useStudyViews();
 
 /**
  * A click on a row opens its study, unless it hits a control of the row or the cell of its
@@ -33,7 +35,7 @@ function open(event: MouseEvent): void {
   if (props.item.row.duplicate) return;
   if (event.target instanceof Element && event.target.closest("a, button, input, label, .cell-select")) return;
   if (window.getSelection()?.toString()) return;
-  void router.push(studyRoute(props.item.row));
+  void router.push(views.routes.study(props.item.row.id));
 }
 </script>
 
@@ -65,7 +67,7 @@ function open(event: MouseEvent): void {
              its link and the one tooltip of the table (StudyTable.vue), which also names the other
              substance folders that the tables of the study name, keep it whole. -->
         <span v-if="item.row.duplicate" class="study-identity" :data-tip="item.row.path">{{ identity }}</span>
-        <RouterLink v-else :to="studyRoute(item.row)" class="study-identity" :data-tip="item.row.path">{{
+        <RouterLink v-else :to="views.routes.study(item.row.id)" class="study-identity" :data-tip="item.row.path">{{
           identity
         }}</RouterLink>
         <VChip

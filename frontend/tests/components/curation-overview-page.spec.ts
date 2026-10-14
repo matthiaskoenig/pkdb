@@ -7,12 +7,13 @@ import type { Snapshot } from "../../src/curation-app/api/types";
 import type { Job, Profile, SyncStatus } from "../../src/study-views/types";
 import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
+import { curationRoutes } from "../../src/curation-app/routes";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { SEARCH_DELAY_MS } from "../../src/study-views/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
 import StudyTable from "../../src/curation-app/components/StudyTable.vue";
-import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS, studyRoute } from "../../src/study-views/studyTable";
+import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS } from "../../src/study-views/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/local";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -20,8 +21,8 @@ import { button, click, field, focusDialog, page, serve, setViewport } from "./c
 
 vi.mock("../../src/study-views/studyTable", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../src/study-views/studyTable")>();
-  // Every render of a study row with a link calls studyRoute once.
-  return { ...actual, rowItem: vi.fn(actual.rowItem), studyRoute: vi.fn(actual.studyRoute) };
+  // Every render of a study row calls rowItem once.
+  return { ...actual, rowItem: vi.fn(actual.rowItem) };
 });
 
 const FAILED = { request_id: "3f9c2a71", time: "2026-10-12T14:03:11+02:00" };
@@ -816,11 +817,12 @@ describe("OverviewPage", () => {
 
   it("has one tooltip for the identities of 1,000 studies, and showing, moving or hiding it renders no study row", async () => {
     setViewport(1280, 400);
+    const studyLink = vi.spyOn(curationRoutes, "study");
     const wrapper = await mountPage(snapshot({ studies: manyStudies() }));
     expect(wrapper.findComponent(StudyTable).findAllComponents(VTooltip)).toHaveLength(1);
     // The rows rendered, each with its link.
-    expect(vi.mocked(studyRoute).mock.calls.length).toBeGreaterThanOrEqual(windowRows(400));
-    vi.mocked(studyRoute).mockClear();
+    expect(studyLink.mock.calls.length).toBeGreaterThanOrEqual(windowRows(400));
+    studyLink.mockClear();
     const [first, second] = rows().map((row) => row.get(".study-identity"));
     pointTo(first!);
     await vi.waitFor(() => expect(openTooltip().text()).toBe(first!.text()), TOOLTIP_WAIT);
@@ -831,7 +833,7 @@ describe("OverviewPage", () => {
     await vi.waitFor(() => expect(openTooltip().text()).toBe(second!.text()), TOOLTIP_WAIT);
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
-    expect(studyRoute).not.toHaveBeenCalled();
+    expect(studyLink).not.toHaveBeenCalled();
   });
 
   it("shows the tooltip of an identity that the keyboard focuses, not of one that a click focuses, and hides it on scroll only for the pointer", async () => {

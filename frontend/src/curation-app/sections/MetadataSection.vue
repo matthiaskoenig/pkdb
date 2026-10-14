@@ -34,8 +34,9 @@ import {
 import { hasNotes, kindsWithTable } from "../../study-views/notes";
 import { issueUrl, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, releaseLabel, sectionRoute } from "../../study-views/study";
+import { knownProfiles, releaseLabel } from "../../study-views/study";
 import { noteKinds } from "../../study-views/tableKinds";
 
 /**
@@ -68,7 +69,7 @@ const disk = computed(() => draft.disk);
 const referenceOpen = ref(false);
 
 /** The Data section, which shows the notes of each table above it. */
-const dataRoute = computed(() => sectionRoute(detail.value?.id ?? "", "data"));
+const dataRoute = computed(() => curationRoutes.section(detail.value?.id ?? "", "data"));
 /**
  * The kinds with notes in study.json but no table in the study, such as after a table was
  * removed or beyond the upload limits: the Data section cannot show them, so Metadata does.

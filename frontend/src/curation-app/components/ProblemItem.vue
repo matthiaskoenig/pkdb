@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import type { Problem } from "../../study-views/types";
 import {
   acknowledgement,
@@ -11,7 +12,6 @@ import {
   suggestionView,
   tableQuery,
 } from "../../study-views/problems";
-import { sectionRoute } from "../../study-views/study";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and
@@ -49,12 +49,15 @@ const props = withDefaults(
   { offersAcknowledge: true, notesQuery: null, opensTables: false, opening: false, openDisabled: false },
 );
 const emit = defineEmits<{ acknowledge: []; validate: []; "open-tables": [] }>();
+const views = useStudyViews();
 
 const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
 const acknowledgeable = computed(() => props.offersAcknowledge && acknowledgement(props.issue) !== null);
-const tableRoute = computed(() => sectionRoute(props.study, "data", tableQuery(props.issue) ?? {}));
-const notesRoute = computed(() => (props.notesQuery ? sectionRoute(props.study, "data", props.notesQuery) : null));
+const tableRoute = computed(() => views.routes.section(props.study, "data", tableQuery(props.issue) ?? {}));
+const notesRoute = computed(() =>
+  props.notesQuery ? views.routes.section(props.study, "data", props.notesQuery) : null,
+);
 /** The message and the location describe the actions. */
 const describedBy = computed(() =>
   where.value ? `${props.idBase}-message ${props.idBase}-location` : `${props.idBase}-message`,

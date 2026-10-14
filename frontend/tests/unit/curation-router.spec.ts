@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { RouteLocationNormalized, Router } from "vue-router";
-import { paperRoute } from "../../src/study-views/paper";
 import { makeRouter } from "../../src/curation-app/router";
+import { curationRoutes } from "../../src/curation-app/routes";
 
 /** The route of `path` as a navigation sees it; every route of the app has a name. */
 function route(router: Router, path: string): RouteLocationNormalized {
@@ -64,7 +64,7 @@ describe("the old addresses of the Sources and Tables sections", () => {
 
 describe("the route of a paper in a tab of its own", () => {
   it("names the study and the file, and shows no app bar", () => {
-    const route = makeRouter().resolve(paperRoute("caffeine/Demo2020", "Demo2020 Supp.pdf"));
+    const route = makeRouter().resolve(curationRoutes.paper("caffeine/Demo2020", "Demo2020 Supp.pdf")!);
     expect(route.href).toBe("#/studies/caffeine/Demo2020/paper/Demo2020%20Supp.pdf");
     expect(route.name).toBe("Paper");
     expect(route.params).toEqual({ substance: "caffeine", name: "Demo2020", file: "Demo2020 Supp.pdf" });

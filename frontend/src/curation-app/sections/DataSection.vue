@@ -3,6 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VAlert, VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../../study-views/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
@@ -38,7 +39,7 @@ import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
 import type { NameLink } from "../../study-views/links";
 import { paperLine, type PaperPlace } from "../../study-views/paper";
 import { useStudyStore } from "../stores/study";
-import { beyondLimits, sectionRoute, tableFiles } from "../../study-views/study";
+import { beyondLimits, tableFiles } from "../../study-views/study";
 import { tablesOutcome } from "../local";
 import { noteKinds } from "../../study-views/tableKinds";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
@@ -73,6 +74,7 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
 const study = useStudyStore();
 const route = useRoute();
 const router = useRouter();
+const views = useStudyViews();
 const { notice, announce } = useNotice();
 
 const detail = computed(() => study.detail);
@@ -124,8 +126,8 @@ watch(
   (named) => {
     const value = detail.value;
     if (!value || typeof named !== "string") return;
-    const { substance, name, section } = route.params;
-    if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
+    const current = views.routes.current(route);
+    if (current?.section !== "data" || current.id !== value.id) return;
     const kind = noteKinds(value).find((candidate) => candidate === named) ?? null;
     if (kind) {
       study.draft.setNotesOpen(kind, true);
@@ -252,7 +254,8 @@ const selectedRow = computed(() => (focus.value && file.value ? { file: file.val
 
 /** Show `selection`; while it shows the paper, the route names its PDF, the one of the pane by default. */
 function go(selection: Omit<Selection, "pdf">, pdf = paperFile.value): void {
-  void router.replace({ query: selectionQuery({ ...selection, pdf: selection.source === PAPER ? pdf : null }) });
+  const own = selectionQuery({ ...selection, pdf: selection.source === PAPER ? pdf : null });
+  void router.replace({ query: views.routes.query(route.query, own) });
 }
 
 /** Show the PDF chosen in the head of the pane of the paper, which shows. */
@@ -302,16 +305,18 @@ async function follow(link: NameLink, line: number): Promise<void> {
   const from = lineSelection(line);
   // A route that selects the row already keeps its column, which Back then returns to.
   const selected = query.value.line === line && query.value.file === from.file && query.value.source === from.source;
-  if (!selected) await router.replace({ query: selectionQuery({ ...from, pdf: from.source === PAPER ? pdf : null }) });
-  await router.push({
-    query: selectionQuery({
-      source: paperShown.value ? PAPER : null,
-      pdf,
-      file: link.file,
-      line: link.line,
-      column: null,
-    }),
+  if (!selected) {
+    const own = selectionQuery({ ...from, pdf: from.source === PAPER ? pdf : null });
+    await router.replace({ query: views.routes.query(route.query, own) });
+  }
+  const named = selectionQuery({
+    source: paperShown.value ? PAPER : null,
+    pdf,
+    file: link.file,
+    line: link.line,
+    column: null,
   });
+  await router.push({ query: views.routes.query(route.query, named) });
 }
 
 function selectRow(row: { file: string; line: number }): void {
@@ -325,8 +330,8 @@ watch(
   [detail, query],
   ([value, selection]) => {
     if (!value || selection.source !== null || selection.file !== null) return;
-    const { substance, name, section } = route.params;
-    if (section !== "data" || value.id !== `${String(substance)}/${String(name)}`) return;
+    const current = views.routes.current(route);
+    if (current?.section !== "data" || current.id !== value.id) return;
     const chosen = sourceName.value;
     if (chosen !== null || file.value !== null) go({ source: chosen, file: file.value, line: null, column: null });
   },
@@ -563,7 +568,7 @@ const conflictPanel = computed(() => {
 
       <p v-if="limited" class="data-empty">
         This study is beyond the upload limits, so the app cannot show its sources and tables. See
-        <RouterLink :to="sectionRoute(identity, 'problems')">Problems</RouterLink>.
+        <RouterLink :to="views.routes.section(identity, 'problems')">Problems</RouterLink>.
       </p>
       <div v-else class="data-panes">
         <DataNavigator

@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VChip, VChipGroup, VSelect } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import type { Profile, ReviewItem } from "../../study-views/types";
 import NewItemDialog from "../components/NewItemDialog.vue";
 import ReviewItemCard from "../components/ReviewItemCard.vue";
@@ -36,6 +37,7 @@ import { knownProfiles, profileOf } from "../../study-views/study";
 const study = useStudyStore();
 const route = useRoute();
 const router = useRouter();
+const views = useStudyViews();
 const { notice, announce } = useNotice();
 
 const review = computed(() => study.detail?.review ?? null);
@@ -91,10 +93,11 @@ function select(id: string | null, { show = false }: { show?: boolean } = {}): v
   chosen.value = id;
   if (id !== null && show) reveal(id);
   if (id === linked.value) return;
-  const query = { ...route.query };
-  if (id === null) delete query.item;
-  else query.item = id;
-  void router.replace({ query });
+  // The section keeps every key of the address and sets its own `item`.
+  const own = { ...route.query };
+  if (id === null) delete own.item;
+  else own.item = id;
+  void router.replace({ query: views.routes.query(route.query, own) });
 }
 
 // A link to an item, such as from the Problems section, selects it and shows it among the cards.
