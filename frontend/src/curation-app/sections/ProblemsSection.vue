@@ -161,9 +161,7 @@ function isPending(issue: ValidationIssue): boolean {
 }
 
 /** Whether the local server validates the study after the acknowledgement, or the curator does. */
-const automatic = computed(() =>
-  detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
-);
+const automatic = computed(() => validatesAfterWrite(overview.snapshot ?? null));
 
 const chosen = shallowRef<Problem | null>(null);
 const dialog = ref(false);

@@ -48,7 +48,7 @@ async function confirm(): Promise<void> {
   failure.value = null;
   try {
     if (props.action === "upload") await overview.enqueue(ids, "upload");
-    else await overview.setMode(ids, "upload");
+    else await overview.setMode("upload");
     open.value = false;
     emit("done", ids.length);
   } catch (caught) {

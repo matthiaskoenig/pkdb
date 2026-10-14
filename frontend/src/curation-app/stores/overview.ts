@@ -70,8 +70,9 @@ export const useOverviewStore = defineStore("curation-overview", () => {
     return act("/local/settings", { ...settings }, isSnapshot);
   }
 
-  function setMode(ids: string[], mode: SaveMode): Promise<Snapshot> {
-    return act("/local/mode", { ids, mode }, isSnapshot);
+  /** Set On save for every study of the workspace, the server and the account. */
+  function setMode(mode: SaveMode): Promise<Snapshot> {
+    return act("/local/mode", { mode }, isSnapshot);
   }
 
   async function enqueue(ids: string[], action: "validate" | "validate_remote" | "upload"): Promise<void> {

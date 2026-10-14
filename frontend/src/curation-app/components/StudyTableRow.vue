@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
-import { formatTime, MODE_LABELS, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
+import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
 import { aiTitle, studyRoute, type RowItem } from "../studyTable";
 
 /** One study of the study table of the overview. */
@@ -178,7 +178,6 @@ function open(event: MouseEvent): void {
       </div>
       <span v-else class="cell-empty">-</span>
     </td>
-    <td class="cell-mode">{{ MODE_LABELS[item.row.mode] }}</td>
     <td class="cell-upload">
       <a
         v-if="item.upload && item.row.last_upload"
@@ -285,7 +284,6 @@ a.study-identity:hover {
 }
 .cell-release,
 .cell-issue,
-.cell-mode,
 .cell-upload {
   line-height: 23px;
 }

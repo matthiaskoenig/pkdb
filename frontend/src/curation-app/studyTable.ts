@@ -7,7 +7,6 @@ import type { Profile, StudyRow, StudySummary } from "./api/types";
 import {
   activityLabel,
   issueUrl,
-  MODE_LABELS,
   problemLabels,
   REVIEW_LABELS,
   SYNC_LABELS,
@@ -193,7 +192,6 @@ const SIZED_COLUMNS: readonly SizedColumn[] = [
     },
     summary: ["curators"],
   },
-  { text: (row) => MODE_LABELS[row.mode], fields: ["mode"] },
   {
     // Every upload shows a date and time in tabular digits.
     text: (row) => (row.last_upload ? "upload" : "-"),

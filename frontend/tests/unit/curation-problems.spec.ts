@@ -256,17 +256,17 @@ describe("links and acknowledgements", () => {
   });
 
   it("knows when the local server validates after a write", () => {
-    const state = { paused: false, offline: false, account: "mkoenig", can_upload: true };
-    expect(validatesAfterWrite("validate", state)).toBe(true);
-    expect(validatesAfterWrite("upload", state)).toBe(true);
-    expect(validatesAfterWrite("off", state)).toBe(false);
-    expect(validatesAfterWrite("validate", { ...state, paused: true })).toBe(false);
-    expect(validatesAfterWrite("upload", { ...state, offline: true })).toBe(false);
-    expect(validatesAfterWrite("upload", { ...state, account: null })).toBe(false);
-    expect(validatesAfterWrite("upload", { ...state, can_upload: false })).toBe(false);
-    expect(validatesAfterWrite("validate", { ...state, offline: true, can_upload: false })).toBe(true);
-    expect(validatesAfterWrite("validate", null)).toBe(true);
-    expect(validatesAfterWrite("off", null)).toBe(false);
+    const state = { mode: "validate" as const, paused: false, offline: false, account: "mkoenig", can_upload: true };
+    expect(validatesAfterWrite(state)).toBe(true);
+    expect(validatesAfterWrite({ ...state, mode: "upload" })).toBe(true);
+    expect(validatesAfterWrite({ ...state, mode: "off" })).toBe(false);
+    expect(validatesAfterWrite({ ...state, paused: true })).toBe(false);
+    expect(validatesAfterWrite({ ...state, mode: "upload", offline: true })).toBe(false);
+    expect(validatesAfterWrite({ ...state, mode: "upload", account: null })).toBe(false);
+    expect(validatesAfterWrite({ ...state, mode: "upload", can_upload: false })).toBe(false);
+    expect(validatesAfterWrite({ ...state, offline: true, can_upload: false })).toBe(true);
+    // Without the state of the local server, it is assumed to.
+    expect(validatesAfterWrite(null)).toBe(true);
   });
 
   it("acknowledges no error, no warning without a file and none that the local server cannot acknowledge", () => {

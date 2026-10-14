@@ -362,7 +362,6 @@ export interface StudyRow {
    * of the study name, as the app last read them (`pkdb issues sync` labels its issue so).
    */
   substances: string[];
-  mode: SaveMode;
   status: RowStatus;
   stale: boolean;
   files: { id: string; path: string }[];
@@ -535,6 +534,8 @@ export interface Snapshot {
   update_required: boolean;
   offline: boolean;
   paused: boolean;
+  /** On save: what a save of a file starts, for every study of the workspace with this server and account. */
+  mode: SaveMode;
   /** Kept by the local server: the browser forgets it, as the port and so the origin change with every start. */
   theme: ThemeChoice;
   /**
@@ -639,7 +640,6 @@ export interface StudyDetail {
   id: string;
   path: string;
   status: RowStatus;
-  mode: SaveMode;
   sync: SyncState;
   counts: { errors: number; warnings: number };
   summary: StudySummary;
@@ -873,6 +873,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "update_required",
   "offline",
   "paused",
+  "mode",
   "theme",
   "plot_scales",
   "vocabulary",
@@ -890,7 +891,6 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "id",
   "path",
   "status",
-  "mode",
   "sync",
   "counts",
   "summary",

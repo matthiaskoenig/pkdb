@@ -70,7 +70,6 @@ const harder: StudyDetail = studyDetail({
   id: "caffeine/Harder1988",
   path: "caffeine/Harder1988",
   status: "invalid",
-  mode: "upload",
   sync: { status: "workbook_open", changes: 0, conflicts: 0 },
   counts: { errors: 2, warnings: 1 },
   summary: {
@@ -137,7 +136,6 @@ const harderRow = studyRow({
   id: "caffeine/Harder1988",
   name: "Harder1988",
   path: "caffeine/Harder1988",
-  mode: "upload",
   status: "invalid",
   summary: harder.summary,
   counts: harder.counts,
@@ -355,7 +353,8 @@ describe("StudyPage", () => {
       "Data",
       "Activity",
     ]);
-    expect(page().get(".section-tabs-facts").text()).toContain("On save");
+    // Without an upload the line has no facts: On save is in the top bar.
+    expect(page().find(".section-tabs-facts").exists()).toBe(false);
   });
 
   it("links the last upload fact to its page on PK-DB, only when that is a web page", async () => {
@@ -374,7 +373,7 @@ describe("StudyPage", () => {
     });
     expect(page().find('nav[aria-label="Study sections"] a').exists()).toBe(false);
     const facts = page().get(".section-tabs-facts");
-    expect(facts.text()).toContain("On save: Upload");
+    expect(facts.text()).toMatch(/^Last upload 2026-10-01 \d\d:\d\d$/);
     expect(facts.get("a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
     const order = page().get(".section-tabs-select").element.compareDocumentPosition(facts.element);
     expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -429,12 +428,11 @@ describe("StudyPage", () => {
     expect(line.find(".study-buttons").exists()).toBe(true);
   });
 
-  it("leaves On save and the last upload to the section tabs", async () => {
-    await mountPage("/studies/caffeine/Harder1988/review");
-    const header = page().get(".study-header");
-    expect(header.text()).not.toContain("On save");
-    expect(header.text()).not.toContain("Last upload");
-    expect(page().get(".section-tabs-facts").text()).toContain("On save: Upload");
+  it("shows the last upload in the section tabs, and On save nowhere on the study page", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", { [`GET ${HARDER}`]: { ...harder, last_upload: UPLOAD } });
+    expect(page().get(".study-header").text()).not.toContain("Last upload");
+    expect(page().get(".section-tabs-facts").text()).toMatch(/^Last upload /);
+    expect(page().text()).not.toContain("On save");
   });
 
   it("shows the last upload without a link unless it is a web page", async () => {

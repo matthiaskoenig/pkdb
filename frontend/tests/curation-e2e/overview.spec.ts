@@ -75,7 +75,6 @@ test("the labels of the column headers share one baseline", async ({ page }) => 
     "Release",
     "Issue",
     "Curators",
-    "On save",
     "Last upload",
   ]);
   const bottoms = labels.map((entry) => entry.bottom);

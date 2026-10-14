@@ -26,7 +26,7 @@ import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
-import { formatTime, MODE_LABELS } from "../overview";
+import { formatTime } from "../overview";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
@@ -96,16 +96,12 @@ const notesKind = computed(() =>
   section.value === "data" && detail.value ? selectedNotesKind(detail.value, selectionOf(route.query)) : null,
 );
 
-/** The facts of the study at the end of the line of tabs. */
-const facts = computed(() => {
+/** The facts of the study at the end of the line of tabs: the last upload, with its page on PK-DB. */
+const facts = computed<{ text: string; href?: string }[]>(() => {
   const value = detail.value;
-  if (!value) return [];
-  const list: { text: string; href?: string }[] = [{ text: `On save: ${MODE_LABELS[value.mode]}` }];
-  if (value.last_upload) {
-    const href = lastUploadUrl(value);
-    list.push({ text: `Last upload ${formatTime(value.last_upload.at)}`, ...(href ? { href } : {}) });
-  }
-  return list;
+  if (!value?.last_upload) return [];
+  const href = lastUploadUrl(value);
+  return [{ text: `Last upload ${formatTime(value.last_upload.at)}`, ...(href ? { href } : {}) }];
 });
 
 // Leaving the study

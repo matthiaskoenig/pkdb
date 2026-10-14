@@ -39,7 +39,6 @@ const harder = studyRow({
   id: "caffeine/Harder1988",
   name: "Harder1988",
   path: "studies/caffeine/Harder1988",
-  mode: "upload",
   status: "invalid",
   summary: {
     title: "Effect of smoking on caffeine",
@@ -259,7 +258,6 @@ describe("OverviewPage", () => {
     const issue = row.get(".cell-issue a");
     expect(issue.text()).toBe("#2158");
     expect(issue.attributes("href")).toBe(ISSUE_URL);
-    expect(row.get(".cell-mode").text()).toBe("Upload");
     const upload = row.get(".cell-upload a");
     expect(upload.text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
     expect(upload.attributes("href")).toBe(UPLOAD_URL);
@@ -271,7 +269,6 @@ describe("OverviewPage", () => {
     expect(draft.get(".cell-problems").text()).toBe("valid");
     expect(draft.get(".cell-release").text()).toBe("-");
     expect(draft.get(".cell-issue").text()).toBe("-");
-    expect(draft.get(".cell-mode").text()).toBe("Validate");
     expect(draft.get(".cell-upload").text()).toBe("-");
 
     const other = rowOf("codeine/Kirchheiner2007");
@@ -576,37 +573,14 @@ describe("OverviewPage", () => {
     );
   });
 
-  it("applies an On save action to the selected studies", async () => {
-    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot());
-    const wrapper = await mountPage(snapshot({ studies: [example, harder] }));
-    expect(button("Apply").attributes("disabled")).toBeDefined();
+  it("offers Validate and Upload of the selected studies, and On save neither in the toolbar nor as a column", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
     await check("Select caffeine/Harder1988");
-    await choose(wrapper, "On save", "off");
-    await click("Apply");
-    expect(setMode).toHaveBeenCalledWith(["caffeine/Harder1988"], "off");
-    expect(page().get('[role="status"]').text()).toBe("On save is Off for 1 study.");
-  });
-
-  it("asks before it turns on upload on save", async () => {
-    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot());
-    const wrapper = await mountPage(snapshot({ can_upload: true, endpoint: "https://beta.pk-db.com" }));
-    await check("Select caffeine/Example");
-    await choose(wrapper, "On save", "upload");
-    await click("Apply");
-    expect(setMode).not.toHaveBeenCalled();
-    expect(dialog().get("h2").text()).toBe("Turn on upload on save");
-    await click("Turn on upload on save");
-    expect(setMode).toHaveBeenCalledWith(["caffeine/Example"], "upload");
-  });
-
-  it("falls back to Validate on save when the upload permission ends", async () => {
-    const wrapper = await mountPage(snapshot({ can_upload: true }));
-    await choose(wrapper, "On save", "upload");
-    serve({ "/local/state": snapshot({ can_upload: false }), "/local/curators": { curators: profiles } });
-    await useOverviewStore().refresh();
-    await flushPromises();
-    const select = wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "On save");
-    expect(select?.props("modelValue")).toBe("validate");
+    const toolbar = page().get(".batch-toolbar");
+    expect(toolbar.findAll("button").map((item) => item.text())).toEqual(["Validate", "Upload"]);
+    expect(toolbar.text()).not.toContain("On save");
+    expect(page().findAll("thead th").map((cell) => cell.text())).not.toContain("On save");
+    expect(page().find(".cell-mode").exists()).toBe(false);
   });
 
   it("shows the refusal of a batch action", async () => {

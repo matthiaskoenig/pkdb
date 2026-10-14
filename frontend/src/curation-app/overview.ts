@@ -2,7 +2,7 @@
  * Filtering, sorting and labels of the study rows of the overview. The study page uses the same
  * labels for the review status, the sync status and the problem counts.
  */
-import type { ReviewStatus, RowStatus, SaveMode, Snapshot, StudyRow, SyncStatus } from "./api/types";
+import type { ReviewStatus, RowStatus, Snapshot, StudyRow, SyncStatus } from "./api/types";
 
 /** The status chips above the table. */
 export type StatusChip = "all" | "attention" | "draft" | "in_review" | "approved";
@@ -139,7 +139,7 @@ export function substancesOf(rows: StudyRow[]): string[] {
 
 // Sorting
 
-export type SortKey = "study" | "review" | "open_items" | "problems" | "sync" | "release" | "issue" | "mode" | "upload";
+export type SortKey = "study" | "review" | "open_items" | "problems" | "sync" | "release" | "issue" | "upload";
 
 export interface StudySort {
   key: SortKey;
@@ -160,8 +160,6 @@ const SYNC_ORDER: Record<SyncStatus, number> = {
   conflict: 7,
 };
 
-const MODE_ORDER: Record<SaveMode, number> = { off: 0, validate: 1, upload: 2 };
-
 function sortValue(row: StudyRow, key: SortKey): string | number | null {
   switch (key) {
     case "study":
@@ -181,8 +179,6 @@ function sortValue(row: StudyRow, key: SortKey): string | number | null {
       return row.summary.release?.pkdb_id ?? null;
     case "issue":
       return row.summary.issue ?? null;
-    case "mode":
-      return MODE_ORDER[row.mode];
     case "upload":
       return row.last_upload?.at ?? null;
   }
@@ -248,8 +244,6 @@ export const SYNC_TONES: Record<SyncStatus, Tone> = {
   unknown: undefined,
   not_checked: undefined,
 };
-
-export const MODE_LABELS: Record<SaveMode, string> = { validate: "Validate", upload: "Upload", off: "Off" };
 
 /** What a study does while its row status is not a finished check; null for a finished check. */
 const ACTIVITY_LABELS: Record<RowStatus, string | null> = {

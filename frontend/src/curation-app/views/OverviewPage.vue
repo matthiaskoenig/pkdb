@@ -10,7 +10,7 @@ import {
   VTextField,
   VTooltip,
 } from "vuetify/components";
-import type { Profile, SaveMode, StudyRow } from "../api/types";
+import type { Profile, StudyRow } from "../api/types";
 import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
@@ -19,7 +19,6 @@ import {
   COLLATOR,
   curatorsOf,
   filterStudies,
-  MODE_LABELS,
   plural,
   SEARCH_DELAY_MS,
   sortStudies,
@@ -126,8 +125,8 @@ function clearFilters(): void {
 
 // Selection and batch actions
 const selected = ref<string[]>([]);
-const mode = ref<SaveMode>("validate");
-const busy = ref<"validate" | "mode" | null>(null);
+/** Whether the validation of the selected studies is being queued. */
+const busy = ref(false);
 const failure = ref<ActionFailure | null>(null);
 /** The notice of the last action that succeeded; it disappears after a few seconds. */
 const { notice, announce } = useNotice();
@@ -141,22 +140,10 @@ const chosenIds = computed(() => chosen.value.map((row) => row.id));
 const selectionText = computed(() =>
   chosen.value.length ? `${plural(chosen.value.length, "study", "studies")} selected` : "No studies selected",
 );
-const canAct = computed(() => chosen.value.length > 0 && busy.value === null && !stale.value);
-const modeItems = computed(() =>
-  (Object.keys(MODE_LABELS) as SaveMode[]).map((value) => ({
-    title: MODE_LABELS[value],
-    value,
-    props: { disabled: value === "upload" && blocker.value !== null },
-  })),
-);
+const canAct = computed(() => chosen.value.length > 0 && !busy.value && !stale.value);
 
 // The notice of an action belongs to the selection that it acted on.
 watch(selected, () => announce(""));
-
-// Upload on save needs an upload permission; without it the choice falls back to Validate.
-watch(blocker, (value) => {
-  if (value !== null && mode.value === "upload") mode.value = "validate";
-});
 
 // A study that the filters hide, or that left the workspace, leaves the selection.
 watch(shown, (rows) => {
@@ -164,8 +151,8 @@ watch(shown, (rows) => {
   if (selected.value.some((id) => !visible.has(id))) selected.value = selected.value.filter((id) => visible.has(id));
 });
 
-async function run(kind: "validate" | "mode", action: () => Promise<string>): Promise<void> {
-  busy.value = kind;
+async function run(action: () => Promise<string>): Promise<void> {
+  busy.value = true;
   failure.value = null;
   announce("");
   // Every change of the selection makes a new list.
@@ -177,51 +164,29 @@ async function run(kind: "validate" | "mode", action: () => Promise<string>): Pr
   } catch (caught) {
     failure.value = failureOf(caught);
   } finally {
-    busy.value = null;
+    busy.value = false;
   }
 }
 
 function validate(): Promise<void> {
   const ids = chosenIds.value;
-  return run("validate", async () => {
+  return run(async () => {
     await overview.enqueue(ids, "validate");
     return `Validation queued for ${plural(ids.length, "study", "studies")}.`;
   });
 }
 
-function modeNotice(value: SaveMode, count: number): string {
-  return `On save is ${MODE_LABELS[value]} for ${plural(count, "study", "studies")}.`;
-}
+// An upload is reviewed in a dialog first. On save, which the top bar sets, applies to every study.
+const upload = ref<{ open: boolean; studies: StudyRow[] }>({ open: false, studies: [] });
 
-// Upload and upload on save are reviewed in a dialog first.
-const upload = ref<{ open: boolean; studies: StudyRow[]; action: "upload" | "enable" }>({
-  open: false,
-  studies: [],
-  action: "upload",
-});
-
-function review(action: "upload" | "enable"): void {
+function review(): void {
   failure.value = null;
   announce("");
-  upload.value = { open: true, studies: chosen.value, action };
-}
-
-function applyMode(): Promise<void> | void {
-  const value = mode.value;
-  if (value === "upload") return review("enable");
-  const ids = chosenIds.value;
-  return run("mode", async () => {
-    await overview.setMode(ids, value);
-    return modeNotice(value, ids.length);
-  });
+  upload.value = { open: true, studies: chosen.value };
 }
 
 function uploaded(count: number): void {
-  announce(
-    upload.value.action === "upload"
-      ? `Upload queued for ${plural(count, "study", "studies")}.`
-      : modeNotice("upload", count),
-  );
+  announce(`Upload queued for ${plural(count, "study", "studies")}.`);
 }
 
 // Uploads with an unknown outcome
@@ -322,7 +287,7 @@ const format1Notice = computed(() =>
                 color="primary"
                 prepend-icon="fas fa-circle-check"
                 :disabled="!canAct"
-                :loading="busy === 'validate'"
+                :loading="busy"
                 @click="validate"
               >
                 Validate
@@ -337,7 +302,7 @@ const format1Notice = computed(() =>
                       prepend-icon="fas fa-cloud-arrow-up"
                       :disabled="!canAct || blocker !== null"
                       :aria-describedby="blocker ? blockerId : undefined"
-                      @click="review('upload')"
+                      @click="review"
                     >
                       Upload
                     </VBtn>
@@ -345,12 +310,6 @@ const format1Notice = computed(() =>
                 </template>
               </VTooltip>
               <span v-if="blocker" :id="blockerId" class="d-sr-only">{{ blocker }}</span>
-            </div>
-            <div class="batch-mode">
-              <VSelect v-model="mode" :items="modeItems" label="On save" hide-details class="batch-mode-select" />
-              <VBtn variant="text" color="primary" :disabled="!canAct" :loading="busy === 'mode'" @click="applyMode">
-                Apply
-              </VBtn>
             </div>
             <span role="status" class="batch-status">{{ notice }}</span>
           </div>
@@ -388,7 +347,7 @@ const format1Notice = computed(() =>
     <UploadDialog
       v-model="upload.open"
       :studies="upload.studies"
-      :action="upload.action"
+      action="upload"
       :fallback-focus="selectAll"
       @done="uploaded"
     />
@@ -479,17 +438,13 @@ const format1Notice = computed(() =>
   min-width: 10.5rem;
   font-weight: 600;
 }
-.batch-actions,
-.batch-mode {
+.batch-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .upload-action {
   display: inline-flex;
-}
-.batch-mode-select {
-  width: 9.5rem;
 }
 /* A live region stays in the page while it is empty, so that screen readers announce its text. */
 .batch-status {

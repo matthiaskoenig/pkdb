@@ -99,9 +99,7 @@ const sourceIssues = computed(() =>
 const problemGroups = computed(() => groupByFile(sourceIssues.value));
 const problemCount = computed(() => problemGroups.value.reduce((sum, group) => sum + group.issues.length, 0));
 /** Whether the local server validates the study after a write, for the mark of an acknowledged warning. */
-const automatic = computed(() =>
-  detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
-);
+const automatic = computed(() => validatesAfterWrite(overview.snapshot ?? null));
 
 // More of the pane below its view: a fade at its bottom shows it, inside its scroll bar. The body
 // changes with the window and the separator, the content with a loaded view or image.

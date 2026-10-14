@@ -366,6 +366,7 @@ describe("rows contract", () => {
 
   it("has the counts of the problems of each study and no problem list, which the study page has", () => {
     expect(rows.every((row) => !("problems" in row))).toBe(true);
+    expect(rows.every((row) => !("mode" in row))).toBe(true);
     const demo = rows.find((row) => row.id === "caffeine/Demo2020")!;
     expect(problemLabels(demo)).toEqual([{ label: "2 warnings", tone: "warning" }]);
   });

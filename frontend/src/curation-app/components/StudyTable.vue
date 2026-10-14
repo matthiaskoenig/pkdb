@@ -38,7 +38,6 @@ const columns: { key: SortKey | null; label: string; cell: string }[] = [
   { key: "release", label: "Release", cell: "cell-release" },
   { key: "issue", label: "Issue", cell: "cell-issue" },
   { key: null, label: "Curators", cell: "cell-curators" },
-  { key: "mode", label: "On save", cell: "cell-mode" },
   { key: "upload", label: "Last upload", cell: "cell-upload" },
 ];
 
