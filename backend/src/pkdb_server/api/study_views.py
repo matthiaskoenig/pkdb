@@ -42,7 +42,7 @@ def answer(request: Request, body: dict) -> Response:
         return Response(status_code=304, headers=headers)
     accepted = request.headers.get("accept-encoding", "").lower()
     if len(data) > COMPRESS_FROM and "gzip" in accepted:
-        data = gzip.compress(data)
+        data = gzip.compress(data, compresslevel=6)
         headers["Content-Encoding"] = "gzip"
     return Response(data, media_type="application/json", headers=headers)
 

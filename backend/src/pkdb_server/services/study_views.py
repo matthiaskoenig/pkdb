@@ -159,7 +159,7 @@ def _profiles(session, usernames) -> dict[str, dict]:
             "affiliation": None,
             "avatar_url": FALLBACK_URL,
         }
-        for name in usernames
+        for name in sorted(usernames)
     }
 
 

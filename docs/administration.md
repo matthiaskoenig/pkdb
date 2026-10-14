@@ -91,7 +91,7 @@ Run `pkdb-server cleanup` regularly to remove unreferenced avatar files after th
 The server stores the study pages of the website with each study format 2 upload. When it starts, it logs the number of studies that have no study page of this version: their stored pages an older version built, or their page could not be built at upload. Build them again with:
 
 ```bash
-docker compose exec backend pkdb-server rebuild-views
+uv run --project backend pkdb-server rebuild-views
 ```
 
 `--all` builds them for every study uploaded with this version of PK-DB or a later one, also those whose pages are current. The command prints one JSON object with the studies it rebuilt and those that failed, and its progress on stderr every 100 studies; a study that fails does not stop the others, but a lost database connection ends the run. Studies uploaded with an earlier version of PK-DB have no stored pages and get them at their next upload.
