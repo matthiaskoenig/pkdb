@@ -15,8 +15,8 @@ import {
 } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import CurationStudyHeader from "../components/CurationStudyHeader.vue";
 import SectionTabs from "../components/SectionTabs.vue";
-import StudyHeader from "../components/StudyHeader.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
@@ -182,7 +182,7 @@ watch(
     <template v-else>
       <!-- The study band: the header of the study and its tabs, set apart from the section below. -->
       <div v-if="detail" class="study-band elevation-1">
-        <StudyHeader :detail="detail" :stale="study.error !== null" />
+        <CurationStudyHeader :detail="detail" :stale="study.error !== null" />
         <SectionTabs
           :substance="substance"
           :name="name"
