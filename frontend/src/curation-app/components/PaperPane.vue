@@ -3,17 +3,14 @@ import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
 import { useStudyViews } from "../../study-views/context";
 import type { PaperFile } from "../../study-views/types";
-import { useAction } from "../composables/useAction";
-import { useNotice } from "../composables/useNotice";
 import { formatBytes, shownPaper, type PaperPlace } from "../../study-views/paper";
-import { useOverviewStore } from "../stores/overview";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
 import PaperViewer from "./PaperViewer.vue";
 
 /**
  * The source pane of the paper in the Data section. Its head names the PDF, offers the other
- * PDFs of the folder in a select, shows the size, and opens the PDF in a tab of its own (New tab)
- * or in the PDF program of the system (Open in PDF program); below it the viewer. The section
+ * PDFs of the folder in a select, shows the size, opens the PDF in a tab of its own (New tab) and
+ * holds what the page puts after it (slot `actions`, the curation app: Open in PDF program); below
+ * it what the page says about those actions (slot `status`), then the viewer. The section
  * keeps the pane mounted while other sources show, so that the viewer keeps its page and zoom,
  * and keeps the place of the viewer for when the pane mounts again, as when the panes stack.
  */
@@ -28,14 +25,12 @@ const props = defineProps<{
 const emit = defineEmits<{ "update:file": [file: string] }>();
 /** Where the viewer stands in its PDF, which the section keeps with `v-model:place`. */
 const place = defineModel<PaperPlace | null>("place", { default: null });
+defineSlots<{ actions?: (props: { file: string }) => unknown; status?: () => unknown }>();
 
 /** The id of the select of the PDFs, which a browser expects of a form field. */
 const fileId = useId();
 const router = useRouter();
 const views = useStudyViews();
-const overview = useOverviewStore();
-const { notice, announce } = useNotice();
-const { busy, failure, run } = useAction<"open">(announce);
 
 const paper = computed(() => shownPaper(props.papers, props.file)!);
 /** The address of the PDF in a tab of its own; null when the page has no such page. */
@@ -46,14 +41,6 @@ const tab = computed(() => {
 
 function choose(event: Event): void {
   emit("update:file", (event.target as HTMLSelectElement).value);
-}
-
-function openInProgram(): Promise<void> {
-  const file = paper.value.file;
-  return run("open", async () => {
-    await overview.openFile(props.study, file);
-    return `${file} opened in the PDF program.`;
-  });
 }
 </script>
 
@@ -87,22 +74,10 @@ function openInProgram(): Promise<void> {
           <i class="fas fa-up-right-from-square" aria-hidden="true"></i>
           <span class="paper-action-label">New tab</span>
         </a>
-        <button
-          type="button"
-          class="paper-action"
-          aria-label="Open in PDF program"
-          title="Open in PDF program"
-          :disabled="busy !== null"
-          @click="openInProgram"
-        >
-          <i class="fas fa-file-export" aria-hidden="true"></i>
-          <span class="paper-action-label">Open in PDF program</span>
-        </button>
+        <slot name="actions" :file="paper.file" />
       </span>
     </div>
-    <ActionFailureAlert v-if="failure" :failure="failure" :study="study" class="paper-pane-failure" @close="failure = null" />
-    <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
-    <span role="status" aria-live="polite" class="d-sr-only">{{ notice }}</span>
+    <slot name="status" />
     <PaperViewer
       v-model:place="place"
       :url="paper.url"
@@ -134,7 +109,8 @@ function openInProgram(): Promise<void> {
   margin-inline-start: auto;
 }
 /* As high as the smallest target of the app, 24 px, inside the 26 px head with its line below. */
-.paper-action {
+.paper-action,
+:slotted(.paper-action) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -148,23 +124,28 @@ function openInProgram(): Promise<void> {
   font: inherit;
   text-decoration: none;
 }
-.paper-action:hover:not(:disabled) {
+.paper-action:hover:not(:disabled),
+:slotted(.paper-action:hover:not(:disabled)) {
   background: rgba(var(--v-theme-primary), 0.08);
 }
-.paper-action:disabled {
+.paper-action:disabled,
+:slotted(.paper-action:disabled) {
   opacity: var(--v-disabled-opacity);
 }
-.paper-action:focus-visible {
+.paper-action:focus-visible,
+:slotted(.paper-action:focus-visible) {
   outline: 2px solid rgb(var(--v-theme-primary));
   outline-offset: 1px;
 }
 /* In a narrow pane the actions show their icons; their names stay in their labels and titles. */
 @container (max-width: 440px) {
-  .paper-action-label {
+  .paper-action-label,
+  :slotted(.paper-action-label) {
     display: none;
   }
 }
-.paper-pane-failure {
+.paper-pane-failure,
+:slotted(.paper-pane-failure) {
   margin: 8px;
 }
 .paper-pane-viewer {

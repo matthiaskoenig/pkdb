@@ -2,23 +2,22 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
-import { VAlert, VBtn, VListItem, VSelect, VSwitch } from "vuetify/components";
+import { VListItem, VSelect, VSwitch } from "vuetify/components";
 import { useStudyViews } from "../../study-views/context";
-import type { SourceSummary, SourceView, StudyDetail, TableKind, TableResponse } from "../../study-views/types";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
-import AddTableDialog from "../components/AddTableDialog.vue";
-import ConflictPanel from "../components/ConflictPanel.vue";
+import type {
+  PaperFile,
+  SourceSummary,
+  SourceView,
+  StudyDetail,
+  TableKind,
+  TableResponse,
+} from "../../study-views/types";
 import DataNavigator from "../components/DataNavigator.vue";
 import PaperPane from "../components/PaperPane.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
-import TableNotes from "../components/TableNotes.vue";
-import UserHint from "../components/UserHint.vue";
-import { useAction } from "../composables/useAction";
 import { useLoaded } from "../../study-views/composables/useLoaded";
-import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
 import {
   ALL_ROWS,
   fileForSource,
@@ -38,22 +37,20 @@ import {
 import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
 import type { NameLink } from "../../study-views/links";
 import { paperLine, type PaperPlace } from "../../study-views/paper";
-import { useStudyStore } from "../stores/study";
 import { beyondLimits, tableFiles } from "../../study-views/study";
-import { tablesOutcome } from "../local";
 import { noteKinds } from "../../study-views/tableKinds";
-import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 
 /**
  * A source of the study beside the rows of a table, read only. The toolbar holds the switch of
- * the empty columns, Open sheet, Sync, Add table and what the sync status means; the head of a
- * shared table holds its Source filter. Below the toolbar are the navigator of the tables and
- * sources, the source pane and the rows pane, which a separator resizes. Tables are edited in the
- * workbook, which Open tables of the study header opens where it was left, and Open sheet at the
- * sheet of the shown table: Sync syncs it, and Add table adds a sheet. While the workbook and the
- * tables conflict, the conflict panel shows at the top of the rows pane.
- * Below it, the notes of the kind of the table in study.json open and close above the rows; they
- * edit the draft of the study store, whose banner under the section tabs shows its unsaved changes.
+ * the empty columns and what the page puts into it (the curation app: Open sheet, Sync, Add table
+ * and the sync status); the head of a shared table holds its Source filter. Below the toolbar are
+ * the navigator of the tables and sources, the source pane and the rows pane, which a separator
+ * resizes. Tables are edited in the workbook, which Open tables of the study header opens where it
+ * was left, and Open sheet at the sheet of the shown table: Sync syncs it, and Add table adds a
+ * sheet. While the workbook and the tables conflict, the conflict panel shows at the top of the
+ * rows pane. Below it, the notes of the kind of the table in study.json open and close above the
+ * rows; they edit the draft of the study store, whose banner under the section tabs shows its
+ * unsaved changes. The conflict panel and the notes editor come from the page.
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
  * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
@@ -71,11 +68,25 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * address. A route without a source and a file gets the default selection once: the first table with problems or open review items,
  * else the first table, beside its source. After that only the actions of the curator change it.
  */
-const study = useStudyStore();
 const route = useRoute();
 const router = useRouter();
 const views = useStudyViews();
-const { notice, announce } = useNotice();
+const emit = defineEmits<{ "open-notes": [kind: TableKind] }>();
+defineSlots<{
+  toolbar?: (props: { file: string | null }) => unknown;
+  status?: (props: { rows: boolean }) => unknown;
+  rows?: (props: { kind: TableKind | null; linked: boolean; unlink: () => void }) => unknown;
+  paper?: (props: {
+    shown: boolean;
+    study: string;
+    papers: PaperFile[];
+    file: string | null;
+    place: PaperPlace | null;
+    keep: (place: PaperPlace | null) => void;
+    choose: (file: string) => void;
+  }) => unknown;
+  dialogs?: () => unknown;
+}>();
 
 const detail = views.data.detail;
 const identity = computed(() => detail.value?.id ?? "");
@@ -130,7 +141,7 @@ watch(
     if (current?.section !== "data" || current.id !== value.id) return;
     const kind = noteKinds(value).find((candidate) => candidate === named) ?? null;
     if (kind) {
-      study.draft.setNotesOpen(kind, true);
+      emit("open-notes", kind);
       linkedNotes.value = kind;
     }
     go(query.value);
@@ -138,6 +149,11 @@ watch(
   { immediate: true },
 );
 watch(file, () => (linkedNotes.value = null));
+
+/** The notes that a link opened took the focus: they do not take it again. */
+function unlink(): void {
+  linkedNotes.value = null;
+}
 
 const {
   data: rows,
@@ -213,6 +229,11 @@ watch(identity, () => {
   keptPaper.value = null;
   paperPlace.value = null;
 });
+
+/** Keep where the viewer of the paper stands. */
+function keepPlace(place: PaperPlace | null): void {
+  paperPlace.value = place;
+}
 
 /** The items of the Source select below 1100 px: Paper first, disabled without a PDF, then the sources. */
 const sourceItems = computed(() => {
@@ -347,68 +368,6 @@ function setFilter(next: RowFilter): void {
   if (file.value) views.data.setRowFilter(file.value, next);
 }
 
-// Sync status and actions
-
-const alert = computed(() => (detail.value ? syncAlert(detail.value.sync, detail.value.conflicts) : null));
-/** What the last sync from the app did, while the workbook and the tables are in sync. */
-const summary = computed(() =>
-  detail.value?.sync.status === "in_sync" && study.lastSync?.ok ? syncSummary(study.lastSync) : null,
-);
-/** What the sync status means while it is not in sync, else what the last sync from the app did; the header shows the status. */
-const syncText = computed(() =>
-  detail.value?.sync.status !== "in_sync" ? (alert.value?.text ?? "") : (summary.value ?? ""),
-);
-/** Whether the workbook and the tables conflict; the panel offers to keep a side even without the rows. */
-const conflicted = computed(() => detail.value?.sync.status === "conflict");
-
-type Action = "open" | "sheet" | "sync" | Side;
-
-const { busy, working, failure, userText, run } = useAction<Action>(announce);
-const addTable = ref(false);
-/** What to do in the workbook after an open found it open already; it stays until it is closed or the next action. */
-const openNotice = ref<string | null>(null);
-// The notice names a sheet of the table that was shown, so it ends with the table and with the study.
-watch([file, identity], () => (openNotice.value = null));
-
-/**
- * Open the workbook at the sheet of the shown table: Open sheet of the toolbar (`sheet`), and Open
- * workbook of the conflict panel (`open`), which explains the conflicts.
- */
-function openWorkbook(action: "open" | "sheet" = "open"): Promise<void> {
-  return run(action, async () => {
-    openNotice.value = null;
-    const shown = file.value;
-    const result = await study.tablesAction("open", shown ? { file: shown } : {});
-    failure.value = tablesOutcome(withoutConflicts(result));
-    openNotice.value = result.notice ?? null;
-    // The notice says what to do when the workbook was open already, so the status stays silent then.
-    return result.opened && !result.notice ? "The workbook opened." : "";
-  });
-}
-
-function syncTables(): Promise<void> {
-  return run("sync", async () => {
-    openNotice.value = null;
-    const outcome = syncOutcome(await study.tablesAction("sync"), null);
-    failure.value = outcome.failure;
-    return outcome.notice;
-  });
-}
-
-function keep(side: Side): Promise<void> {
-  return run(side, async () => {
-    openNotice.value = null;
-    const outcome = syncOutcome(await study.tablesAction("resolve", { keep: side }), side);
-    failure.value = outcome.failure;
-    return outcome.notice;
-  });
-}
-
-function added(table: string): void {
-  failure.value = null;
-  announce(`Added the sheet ${table} to the workbook.`);
-}
-
 // The panes, side by side or stacked
 
 const display = useDisplay();
@@ -445,15 +404,8 @@ const rowsPane = computed(() =>
       }
     : null,
 );
-/** The props of the conflict panel; the progress of Sync shows on its own button. */
-const conflictPanel = computed(() => {
-  const running = busy.value;
-  return {
-    conflicts: detail.value?.conflicts ?? [],
-    busy: running === "sync" || running === "sheet" ? null : running,
-    disabled: working.value,
-  };
-});
+
+defineExpose({ file });
 </script>
 
 <template>
@@ -508,63 +460,10 @@ const conflictPanel = computed(() => {
           inset
           class="data-switch"
         />
-        <VBtn
-          v-if="file"
-          variant="tonal"
-          color="primary"
-          size="small"
-          prepend-icon="fas fa-table"
-          :disabled="working"
-          :loading="busy === 'sheet'"
-          class="data-open-sheet"
-          @click="openWorkbook('sheet')"
-        >
-          Open sheet
-        </VBtn>
-        <VBtn
-          variant="tonal"
-          color="primary"
-          size="small"
-          prepend-icon="fas fa-rotate"
-          :disabled="working"
-          :loading="busy === 'sync'"
-          @click="syncTables"
-        >
-          Sync
-        </VBtn>
-        <VBtn
-          variant="text"
-          color="primary"
-          size="small"
-          prepend-icon="fas fa-plus"
-          :disabled="working"
-          @click="addTable = true"
-        >
-          Add table
-        </VBtn>
-        <!-- A live region stays in the page while it is empty, so that screen readers announce a
-             status that changes outside the app, such as a saved workbook or a conflict. -->
-        <span role="status" aria-live="polite" class="data-sync-text">{{ syncText }}</span>
+        <slot name="toolbar" :file="file" />
       </div>
 
-      <ActionFailureAlert v-if="failure" :failure="failure" :study="identity" @close="failure = null" />
-      <UserHint v-else-if="userText" :text="userText" />
-      <VAlert
-        v-if="openNotice"
-        type="info"
-        variant="tonal"
-        density="compact"
-        closable
-        role="status"
-        class="status-alert data-open-notice"
-        @click:close="openNotice = null"
-      >
-        {{ openNotice }}
-      </VAlert>
-      <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
-      <span role="status" aria-live="polite" class="data-notice">{{ notice }}</span>
-      <!-- Without a table, also beyond the upload limits, the conflicts have no rows pane to show in. -->
-      <ConflictPanel v-if="conflicted && !rowsPane" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
+      <slot name="status" :rows="rowsPane !== null" />
 
       <p v-if="limited" class="data-empty">
         This study is beyond the upload limits, so the app cannot show its sources and tables. See
@@ -588,15 +487,26 @@ const conflictPanel = computed(() => {
           class="data-split"
         >
           <template #start>
-            <PaperPane
+            <slot
               v-if="paperKept && detail.papers.length"
-              v-show="paperShown"
-              :file="paperFile"
-              v-model:place="paperPlace"
-              @update:file="selectPaper"
+              name="paper"
+              :shown="paperShown"
               :study="identity"
               :papers="detail.papers"
-            />
+              :file="paperFile"
+              :place="paperPlace"
+              :keep="keepPlace"
+              :choose="selectPaper"
+            >
+              <PaperPane
+                v-show="paperShown"
+                :file="paperFile"
+                v-model:place="paperPlace"
+                @update:file="selectPaper"
+                :study="identity"
+                :papers="detail.papers"
+              />
+            </slot>
             <SourcePane v-if="!paperShown && sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
             <p v-else-if="!paperShown && !rowPending" class="data-empty data-pane-note">The study has no sources yet.</p>
           </template>
@@ -609,14 +519,7 @@ const conflictPanel = computed(() => {
               @retry="reloadRows"
               @update:filter="setFilter"
             >
-              <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
-              <TableNotes
-                v-if="notesKind"
-                :key="notesKind"
-                :kind="notesKind"
-                :focused="linkedNotes === notesKind"
-                @took-focus="linkedNotes = null"
-              />
+              <slot name="rows" :kind="notesKind" :linked="linkedNotes === notesKind" :unlink="unlink" />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet. Add table adds a sheet to the workbook.
@@ -624,15 +527,26 @@ const conflictPanel = computed(() => {
           </template>
         </SplitPane>
         <div v-else class="data-stack">
-          <PaperPane
+          <slot
             v-if="paperKept && detail.papers.length"
-            v-show="paperShown"
-            :file="paperFile"
-            v-model:place="paperPlace"
-            @update:file="selectPaper"
+            name="paper"
+            :shown="paperShown"
             :study="identity"
             :papers="detail.papers"
-          />
+            :file="paperFile"
+            :place="paperPlace"
+            :keep="keepPlace"
+            :choose="selectPaper"
+          >
+            <PaperPane
+              v-show="paperShown"
+              :file="paperFile"
+              v-model:place="paperPlace"
+              @update:file="selectPaper"
+              :study="identity"
+              :papers="detail.papers"
+            />
+          </slot>
           <SourcePane v-if="!paperShown && sourcePane" v-bind="sourcePane" @select-row="selectRow" @retry="reloadView" />
           <p v-else-if="!paperShown && !rowPending" class="data-empty data-pane-note">The study has no sources yet.</p>
           <RowsPane
@@ -643,14 +557,7 @@ const conflictPanel = computed(() => {
             @retry="reloadRows"
             @update:filter="setFilter"
           >
-            <ConflictPanel v-if="conflicted" v-bind="conflictPanel" @keep="keep" @open="openWorkbook()" />
-            <TableNotes
-              v-if="notesKind"
-              :key="notesKind"
-              :kind="notesKind"
-              :focused="linkedNotes === notesKind"
-              @took-focus="linkedNotes = null"
-            />
+            <slot name="rows" :kind="notesKind" :linked="linkedNotes === notesKind" :unlink="unlink" />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
             The study has no tables yet. Add table adds a sheet to the workbook.
@@ -658,7 +565,7 @@ const conflictPanel = computed(() => {
         </div>
       </div>
 
-      <AddTableDialog v-model="addTable" :fallback-focus="sectionHeading" @added="added" />
+      <slot name="dialogs" />
     </template>
   </div>
 </template>
@@ -739,20 +646,6 @@ const conflictPanel = computed(() => {
   flex: 0 0 auto;
   margin-inline-end: 6px;
 }
-.data-sync-text {
-  flex: 1 1 12rem;
-  min-width: 0;
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.data-notice {
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* Empty, it stays in the page for screen readers but takes no gap. */
-.data-notice:empty {
-  position: absolute;
-}
 .data-empty {
   margin: 0;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
@@ -797,7 +690,8 @@ const conflictPanel = computed(() => {
   max-height: 70vh;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
-.data-stack > .paper-pane {
+.data-stack > .paper-pane,
+.data-stack > :slotted(.paper-pane) {
   height: 70vh;
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }

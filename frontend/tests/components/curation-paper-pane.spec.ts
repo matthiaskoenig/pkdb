@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import PaperPane from "../../src/curation-app/components/PaperPane.vue";
+import CurationPaperPane from "../../src/curation-app/components/CurationPaperPane.vue";
 import type { PaperPlace } from "../../src/study-views/paper";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
@@ -17,7 +17,7 @@ async function mountPane(props: Record<string, unknown> = {}, routes: Record<str
   const pinia = createPinia();
   setActivePinia(pinia);
   await useOverviewStore().refresh();
-  const wrapper = mount(PaperPane, {
+  const wrapper = mount(CurationPaperPane, {
     props: { study: "caffeine/Example", papers: PAPERS, file: null, ...props },
     attachTo: document.body,
     global: { plugins: [pinia, makeRouter()], stubs: { PaperViewer: true } },
