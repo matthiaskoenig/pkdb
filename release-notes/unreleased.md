@@ -1,6 +1,7 @@
 # Unreleased
 
 - The Data section of the local curation app tints the columns of a table by what they name: the subjects blue, the interventions green and the other data gray, with `study` and `source` in muted italics without a tint. `subjects.tsv` and `characteristica.tsv` stay blue and `interventions.tsv` green, raw extractions are no longer tinted, and the navigator marks the tables of data with a gray bar instead of a violet one and the raw extractions with an outlined bar (#959).
+
 - The descriptions and comments of a study and of the notes of its tables in the local curation app no longer show a label such as Description 1 or Comment 1 by curator: each description and comment starts one line high, as high as the other fields, and grows with its text, and a comment shows its author once above its text, and screen readers still hear the name of each field (#954).
 
 - On Windows, `pkdb upload --report` and `--resume` no longer stop a batch when another program has the report open for a moment while it is rewritten, such as a reader of the report, a virus scanner or a search indexer: Windows refuses to replace an open file, so the report write now retries for up to 5 seconds before the batch stops with a report error.
