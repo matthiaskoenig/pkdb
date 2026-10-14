@@ -9,7 +9,7 @@ XYAxes (javascript/core/axes/xy.js, commit 3a3ecb1).
 import math
 import re
 import tarfile
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from copy import deepcopy
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -363,7 +363,12 @@ def dataset_series(name: str) -> tuple[str, bool]:
 
 @dataclass(frozen=True)
 class MappedPoint:
-    """A mapped row as a point of a dataset, in axis units, with its cells as printed."""
+    """A mapped row as a point of a dataset, in axis units, with its cells as printed.
+
+    `error_low` and `error_high` are the ends of the error bar of a timecourse row around `y`
+    (`error_ends`); None without an error bar, for the digitized end of an error bar and for a
+    scatter row.
+    """
 
     dataset: str
     file: str
@@ -373,6 +378,8 @@ class MappedPoint:
     y: float
     x_text: str
     y_text: str
+    error_low: float | None = None
+    error_high: float | None = None
 
 
 def central_column(row: Row) -> str | None:
@@ -380,6 +387,71 @@ def central_column(row: Row) -> str | None:
     return next(
         (name for name in CENTRAL if isinstance(row.values.get(name), float)), None
     )
+
+
+# The statistics that `error_type` can name, which a digitized `error_bar` completes.
+ERROR_TYPES = ("sd", "se", "gsd")
+
+
+def _ends(low: float, high: float) -> tuple[float, float] | None:
+    """Two ends of an error bar in order; None when one of them is not finite."""
+    low, high = sorted((low, high))
+    return (low, high) if math.isfinite(low) and math.isfinite(high) else None
+
+
+def _around(
+    value: float, column: str, name: str, statistic: float
+) -> tuple[float, float] | None:
+    """The error bar of a reported statistic: the value ± sd or se, or the value ÷ gsd to the
+    value × gsd around a gmean only."""
+    if name == "gsd":
+        if column != "gmean" or statistic <= 0:
+            return None
+        return _ends(value / statistic, value * statistic)
+    return _ends(value - statistic, value + statistic)
+
+
+def _digitized(
+    value: float, column: str, name: str, bar: float
+) -> tuple[float, float] | None:
+    """The error bar of the statistic `name` that the digitized end `bar` gives.
+
+    As `pkdb.domain.statistics` derives the statistic from it: sd and se from the distance of
+    the bar to the mean, so the bar is mirrored around the mean; gsd as the factor between the
+    bar and the gmean, so the other end is gmean² / bar.
+    """
+    if name == "gsd":
+        if column != "gmean" or value <= 0 or bar <= 0:
+            return None
+        return _ends(bar, value * value / bar)
+    return _ends(bar, 2 * value - bar) if column == "mean" else None
+
+
+def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float] | None:
+    """The low and the high end of the error bar of a row around its central value in `column`.
+
+    The statistic that `error_type` names, as reported or as its digitized `error_bar` gives
+    it, else `sd`, else `se`, else a reported `gsd`, else the digitized `error_bar` mirrored around the value. `sd`
+    and `se` give the value ± the statistic, `gsd` the value ÷ gsd to the value × gsd around a
+    `gmean` only; a statistic that does not fit the value, or whose ends are not finite, falls
+    through to the next one. None without an error bar.
+    """
+    value = values[column]
+    assert isinstance(value, float)
+    kind = values.get("error_type")
+    named = kind if isinstance(kind, str) and kind in ERROR_TYPES else None
+    bar = values.get("error_bar")
+    for name in dict.fromkeys(name for name in (named, "sd", "se", "gsd") if name):
+        statistic = values.get(name)
+        if isinstance(statistic, float):
+            ends = _around(value, column, name, statistic)
+        elif name == named and isinstance(bar, float):
+            ends = _digitized(value, column, name, bar)
+        else:
+            ends = None
+        if ends is not None:
+            return ends
+    return _ends(bar, 2 * value - bar) if isinstance(bar, float) else None
 
 
 # The column that names the series of a timecourse or scatter row, as its dataset is named.
@@ -400,6 +472,7 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
             value = values[column]
             assert isinstance(value, float)
             cells = row.cells
+            low, high = error_ends(values, column) or (None, None)
             points.append(
                 MappedPoint(
                     label,
@@ -410,6 +483,8 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                     value,
                     cells["time"],
                     cells[column],
+                    low,
+                    high,
                 )
             )
             if isinstance(bar := values.get("error_bar"), float):
