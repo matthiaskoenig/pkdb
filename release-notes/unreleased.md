@@ -1,3 +1,4 @@
 # Unreleased
 
+- The section tabs of a study in the local curation app follow the order of the work on a study: Metadata, Data, Problems, Review and Activity, also in the select of a narrow window. A study still opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise (#961).
 - The Data section of the local curation app tints the columns of a table by what they name: the subjects blue, the interventions green and the other data gray, with `study` and `source` in muted italics without a tint. `subjects.tsv` and `characteristica.tsv` stay blue and `interventions.tsv` green, raw extractions are no longer tinted, and the navigator marks the tables of data with a gray bar instead of a violet one and the raw extractions with an outlined bar (#959).

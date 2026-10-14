@@ -2,7 +2,7 @@
 
 import re
 from collections import Counter, defaultdict
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -184,7 +184,7 @@ def valueless(study: CanonicalStudy, vocabulary: Vocabulary) -> frozenset[str]:
     )
 
 
-def _dropped(
+def dropped_row(
     file: str, record: Observation, subject: str | None, label: str | None = None
 ) -> Decision:
     """The decision that lists a dropped row by its place in format 1.
@@ -323,7 +323,7 @@ def _characteristica(
     for subject in subjects:
         for record in subject.characteristica:
             if record.key in dropped:
-                decisions.append(_dropped(file, record, subject.name))
+                decisions.append(dropped_row(file, record, subject.name))
                 continue
             assert record.source is not None
             image = _characteristic_image(record, subject, name)
@@ -662,6 +662,30 @@ class _Labels:
         ]
 
 
+def is_timecourse(
+    record: Measurement,
+    arrays: Collection[str],
+    dropped: Collection[str],
+    series: Collection[str | None],
+) -> bool:
+    """Whether an output or timecourse point is a row of a timecourses table.
+
+    `arrays` are the array outputs that form timecourse series
+    (`series_arrays`), `dropped` the records without any value (`valueless`)
+    and `series` the labels of the arrays: a dropped array output is listed
+    in the timecourses of its label's series.
+    """
+    return bool(record.label) and (
+        record.output_type == "timecourse"
+        or record.key in arrays
+        or (
+            record.output_type == "array"
+            and record.key in dropped
+            and record.label in series
+        )
+    )
+
+
 def _plural(count: int, noun: str) -> str:
     return f"{count} {noun}" if count == 1 else f"{count} {noun}s"
 
@@ -711,19 +735,11 @@ def study_tables(
             file = used[record.key]
         else:
             source, row = _measurement(record, name, error_bars, images)
-            timecourse = bool(record.label) and (
-                record.output_type == "timecourse"
-                or record.key in arrays
-                or (
-                    record.output_type == "array"
-                    and record.key in dropped
-                    and record.label in series
-                )
-            )
+            timecourse = is_timecourse(record, arrays, dropped, series)
             file = table_file("timecourses" if timecourse else "outputs", source)
             if record.key in dropped:
                 subject = record.group or record.individual
-                decisions.append(_dropped(file, record, subject, record.label))
+                decisions.append(dropped_row(file, record, subject, record.label))
                 continue
             row = _geometric(record, row, decisions)
             if counts is not None and record.key in counts.written:
