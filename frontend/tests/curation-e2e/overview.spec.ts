@@ -30,6 +30,9 @@ test.beforeEach(async ({ app }) => {
 
 test("lists the format 2 studies of the workspace and counts the format 1 folder", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Studies", level: 1 })).toBeVisible();
+  // The tab and the app bar say Curation; the link home is named by the logo and the name.
+  await expect(page).toHaveTitle("Curation · PK-DB");
+  await expect(page.getByRole("banner").getByRole("link", { name: "PK-DB Curation", exact: true })).toHaveText("Curation");
   await expect(studyRows(page)).toHaveCount(2);
   await expect(studyRow(page, "caffeine/Demo2020")).toContainText(
     "Caffeine in plasma after two oral doses in a synthetic test study",
@@ -127,7 +130,7 @@ test("filters the studies by curator and keeps the filters when a study is opene
 
   await studyRow(page, "caffeine/Draft2021").getByRole("link", { name: "caffeine/Draft2021" }).click();
   await expect(page.getByRole("heading", { name: "caffeine/Draft2021", level: 1 })).toBeVisible();
-  await page.getByRole("link", { name: "PK-DB Local curation" }).click();
+  await page.getByRole("link", { name: "PK-DB Curation" }).click();
   await expect(page.getByRole("heading", { name: "Studies", level: 1 })).toBeVisible();
   await expect(studyRows(page)).toHaveCount(1);
   await expect(page.getByRole("textbox", { name: "Search studies" })).toHaveValue("draft2021");

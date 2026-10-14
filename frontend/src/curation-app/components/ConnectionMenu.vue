@@ -3,11 +3,20 @@ import { computed, ref } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { ConnectionStatus, Snapshot, VocabularyState } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
+import { stateChip } from "../stateChip";
 
 type Tone = "success" | "warning" | "error" | "info";
 type Anchor = "bottom end" | "bottom";
 
-const props = withDefaults(defineProps<{ snapshot: Snapshot; location?: Anchor }>(), { location: "bottom end" });
+const props = withDefaults(
+  defineProps<{
+    snapshot: Snapshot;
+    location?: Anchor;
+    /** On the teal app bar: the chip of the button takes the colors of the bar. */
+    bar?: boolean;
+  }>(),
+  { location: "bottom end", bar: false },
+);
 const emit = defineEmits<{ settings: [] }>();
 const open = ref(false);
 
@@ -36,6 +45,9 @@ const overview = useOverviewStore();
 const state = computed(() => STATES[props.snapshot.connection]);
 /** The local server does not answer: the menu shows the last known state. */
 const stale = computed(() => overview.error !== null);
+/** The chip of the state on the button, and in the heading of the menu, which stands on the surface. */
+const buttonChip = computed(() => stateChip(stale.value ? undefined : state.value.tone, props.bar));
+const headingChip = computed(() => stateChip(stale.value ? undefined : state.value.tone, false));
 const checked = computed(() =>
   props.snapshot.checked_at ? new Date(props.snapshot.checked_at).toLocaleTimeString() : null,
 );
@@ -62,7 +74,7 @@ function settings(): void {
         :aria-label="`Connection: ${state.label}`"
       >
         <span class="header-control-label">Connection</span>
-        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+        <VChip :color="buttonChip.color" :variant="buttonChip.variant" size="small" :class="buttonChip.class">
           {{ state.label }}
         </VChip>
       </VBtn>
@@ -70,7 +82,7 @@ function settings(): void {
     <VCard elevation="6" border class="header-menu connection-panel">
       <div class="panel-heading">
         <h2>Connection</h2>
-        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+        <VChip :color="headingChip.color" :variant="headingChip.variant" size="small" :class="headingChip.class">
           {{ state.label }}
         </VChip>
       </div>

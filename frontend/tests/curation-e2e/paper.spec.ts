@@ -93,7 +93,7 @@ test("a PDF opens in a tab of its own without the app bar", async ({ app, page }
     "href",
     "#/studies/caffeine/Demo2020/data?source=paper&pdf=Demo2020.pdf",
   );
-  await expect(page.getByRole("link", { name: "PK-DB Local curation" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "PK-DB Curation" })).toHaveCount(0);
   const viewer = page.locator(".paper-viewer");
   await expect(drawnPage(viewer)).toBeVisible();
   await expect(viewer.locator(".textLayer")).toContainText("Demo2020 is a synthetic test study of the PK-DB curation app.");

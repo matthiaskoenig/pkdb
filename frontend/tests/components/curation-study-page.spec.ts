@@ -350,6 +350,15 @@ describe("StudyPage", () => {
     expect(page().get(".study-section h2").text()).toBe("Data");
   });
 
+  it("puts the header of the study and its tabs into the study band, above the banner and the section", async () => {
+    await mountPage("/studies/caffeine/Example/metadata");
+    const band = page().get(".study-band");
+    expect([...band.element.children].map((part) => part.classList[0])).toEqual(["study-header", "section-tabs-line"]);
+    // Vuetify's lightest shadow below the band.
+    expect(band.classes()).toContain("elevation-1");
+    expect(page().find(".study-band + .unsaved-banner-notice + .unsaved-banner + .study-section").exists()).toBe(true);
+  });
+
   it("marks the tab of the section with unsaved changes at its place", async () => {
     await mountPage("/studies/caffeine/Example/review");
     useStudyStore().draft.form!.provenance.source_key = "pkdb.edited";
@@ -1265,8 +1274,8 @@ describe("the save shortcut", () => {
 describe("the unsaved banner", () => {
   const METADATA = "/local/studies/metadata";
   const written = () => json({ revision: "study-2", reference: null, reference_error: null });
-  /** The banner stands after the tabs and the live region of its notices, before the section. */
-  const placed = () => page().find(".section-tabs-line + .unsaved-banner-notice + .unsaved-banner + .study-section");
+  /** The banner stands after the study band and the live region of its notices, before the section. */
+  const placed = () => page().find(".study-band + .unsaved-banner-notice + .unsaved-banner + .study-section");
   const banner = () => page().get(".unsaved-banner");
   const text = () => page().get(".unsaved-banner-text").text();
 
