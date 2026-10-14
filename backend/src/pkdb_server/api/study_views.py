@@ -1,5 +1,6 @@
 """The study pages of the website (#963): JSON documents by audience and the files of curators."""
 
+import gzip
 import hashlib
 import json
 
@@ -9,12 +10,17 @@ from starlette.responses import FileResponse, Response
 router = APIRouter(prefix="/api/v2")
 
 HEADERS = {"Cache-Control": "private, no-cache", "Vary": "Cookie, Authorization"}
+# The JSON answers may be compressed; the files are not.
+JSON_HEADERS = {**HEADERS, "Vary": "Cookie, Authorization, Accept-Encoding"}
+#: The size from which a JSON answer is compressed for a client that accepts gzip.
+COMPRESS_FROM = 1024
 
 
 def matches(header: str | None, etag: str) -> bool:
     """RFC 9110 weak comparison of an `If-None-Match` list with the ETag."""
     if not header:
         return False
+    etag = etag.removeprefix("W/")
     for entry in header.split(","):
         entry = entry.strip().removeprefix("W/")
         if entry == "*" or entry == etag:
@@ -23,12 +29,21 @@ def matches(header: str | None, etag: str) -> bool:
 
 
 def answer(request: Request, body: dict) -> Response:
-    """The JSON body with an ETag of its content; 304 when the client has it."""
-    data = json.dumps(body, sort_keys=True, separators=(",", ":")).encode()
-    etag = '"' + hashlib.sha256(data).hexdigest()[:32] + '"'
-    headers = {**HEADERS, "ETag": etag}
+    """The JSON body with a weak ETag of its content, gzip-compressed for clients that
+    accept it; 304 when the client has it.
+
+    The keys keep their order, which the app shows. The ETag is weak because the compressed
+    and the plain answer share it.
+    """
+    data = json.dumps(body, separators=(",", ":")).encode()
+    etag = 'W/"' + hashlib.sha256(data).hexdigest()[:32] + '"'
+    headers = {**JSON_HEADERS, "ETag": etag}
     if matches(request.headers.get("if-none-match"), etag):
         return Response(status_code=304, headers=headers)
+    accepted = request.headers.get("accept-encoding", "").lower()
+    if len(data) > COMPRESS_FROM and "gzip" in accepted:
+        data = gzip.compress(data)
+        headers["Content-Encoding"] = "gzip"
     return Response(data, media_type="application/json", headers=headers)
 
 

@@ -1,7 +1,7 @@
 """The stored documents of the study page of the website (#963)."""
 
 from sqlalchemy import CheckConstraint, ForeignKey, String
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import Mapped, mapped_column
 
 from pkdb_server.db.models.base import Base
@@ -22,7 +22,8 @@ class StudyView(Base):
     kind: Mapped[str] = mapped_column(String(8), primary_key=True)
     key: Mapped[str] = mapped_column(String(255), primary_key=True)
     version: Mapped[int]
-    document: Mapped[dict] = mapped_column(JSONB)
+    # JSON, not JSONB, which would sort the keys: the app shows some in their order.
+    document: Mapped[dict] = mapped_column(JSON)
     __table_args__ = (
         CheckConstraint("kind IN ('study', 'row', 'table', 'source')", name="kind"),
     )

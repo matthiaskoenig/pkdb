@@ -1,10 +1,13 @@
 """The routes of the study pages of the website, per audience (#963)."""
 
+import gzip
 import json
 
 import pytest
 from sqlalchemy import delete, select
 
+from pkdb.studyformat.load import load_study
+from pkdb.studyformat.views import study_view
 from pkdb_server.api.study_views import matches
 from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.users import User
@@ -267,3 +270,119 @@ def test_ratings_stay_in_the_json_api_but_not_on_the_page(
     assert [curator["rating"] for curator in row["curators"]] == [3]
     page = client.get(VIEW).json()
     assert [curator["rating"] for curator in page["people"]["curators"]] == [None]
+
+
+def test_the_page_has_the_access_and_licence_of_the_database(
+    client, admin_headers, creator_headers, uploaded
+):
+    access = "/api/v1/admin/studies/caffeine/Example/access"
+    grants = client.get(access, headers=admin_headers).json()
+    response = client.put(
+        access,
+        headers=admin_headers,
+        json={**grants, "access": "public", "licence": "open"},
+    )
+    assert response.status_code == 200, response.text
+    for headers in ({}, creator_headers):
+        metadata = client.get(VIEW, headers=headers).json()["metadata"]
+        assert (metadata["access"], metadata["licence"]) == ("public", "open")
+
+
+def test_the_page_keeps_the_order_of_its_keys(client, creator_headers, uploaded):
+    view = study_view(uploaded, load_study(uploaded))
+    page = client.get(VIEW, headers=creator_headers).json()
+    assert [key for key in page if key in view] == list(view)
+    assert list(page["metadata"]) == list(view["metadata"])
+    assert list(page["name_lines"]) == ["subjects", "interventions"]
+    assert list(page["reference"]) == list(view["reference"])
+
+
+def varies(response):
+    return {name.strip() for name in response.headers["vary"].split(",")}
+
+
+def test_large_answers_are_compressed_with_a_weak_etag(
+    client, creator_headers, uploaded
+):
+    plain = client.get(VIEW, headers={**creator_headers, "Accept-Encoding": "identity"})
+    assert "content-encoding" not in plain.headers
+    assert len(plain.content) > 1024
+    with client.stream(
+        "GET", VIEW, headers={**creator_headers, "Accept-Encoding": "gzip"}
+    ) as response:
+        body = b"".join(response.iter_raw())
+    assert response.headers["content-encoding"] == "gzip"
+    assert varies(response) >= {"Cookie", "Authorization", "Accept-Encoding"}
+    assert json.loads(gzip.decompress(body)) == plain.json()
+    etag = response.headers["etag"]
+    assert etag.startswith('W/"') and etag == plain.headers["etag"]
+    for match in (etag, etag.removeprefix("W/")):
+        again = client.get(
+            VIEW,
+            headers={
+                **creator_headers,
+                "Accept-Encoding": "gzip",
+                "If-None-Match": match,
+            },
+        )
+        assert again.status_code == 304
+        assert "content-encoding" not in again.headers
+
+
+def test_study_rows_are_compressed(client, creator_headers, uploaded, tmp_path):
+    second = write_study(tmp_path / "second", "Second", pmid="124", issue=7)
+    response = client.put(
+        "/api/v2/studies/caffeine/Second", headers=creator_headers, **multipart(second)
+    )
+    assert response.status_code == 201, response.text
+    rows = "/api/v2/study-rows"
+    plain = client.get(rows, headers={**creator_headers, "Accept-Encoding": "identity"})
+    assert len(plain.content) > 1024
+    compressed = client.get(
+        rows, headers={**creator_headers, "Accept-Encoding": "gzip"}
+    )
+    assert compressed.headers["content-encoding"] == "gzip"
+    assert compressed.json() == plain.json()
+    assert compressed.headers["etag"] == plain.headers["etag"]
+    # A small answer is sent as it is.
+    empty = client.get(rows, headers={"Accept-Encoding": "gzip"})
+    assert empty.json() == {"rows": [], "profiles": {}}
+    assert "content-encoding" not in empty.headers
+    assert varies(empty) >= {"Cookie", "Authorization", "Accept-Encoding"}
+
+
+def test_files_are_not_compressed(client, creator_headers, uploaded):
+    response = client.get(
+        VIEW + "/files/Example.pdf",
+        headers={**creator_headers, "Accept-Encoding": "gzip"},
+    )
+    assert response.status_code == 200
+    assert "content-encoding" not in response.headers
+
+
+def test_raw_tables_only_for_curators(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", raw=True)
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 201, response.text
+    set_access(session_factory, "public")
+    raw = VIEW + "/tables/Example_Tab2.tsv"
+    assert client.get(raw).status_code == 404
+    table = client.get(raw, headers=creator_headers).json()
+    assert (table["kind"], table["file"]) == ("raw", "Example_Tab2.tsv")
+    assert table["rows"][0]["cells"] == ["Parameter", "1 h"]
+    curator = client.get(VIEW, headers=creator_headers).json()
+    assert "Example_Tab2.tsv" in {entry["file"] for entry in curator["tables"]}
+    [source] = [s for s in curator["sources"] if s["source"] == "Tab2"]
+    assert source["raw"] == "Example_Tab2.tsv"
+    page = client.get(VIEW).json()
+    assert all(entry["kind"] != "raw" for entry in page["tables"])
+    [source] = [s for s in page["sources"] if s["source"] == "Tab2"]
+    assert source["raw"] is None
+    assert "Example_Tab2.tsv" not in source["tables"]
+    assert client.get(VIEW + "/sources/Tab2").json()["mapped"]
+    assert all(
+        table["kind"] != "raw"
+        for table in client.get(VIEW + "/sources/Tab2").json()["mapped"]
+    )

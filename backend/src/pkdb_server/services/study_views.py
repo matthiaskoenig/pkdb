@@ -161,9 +161,15 @@ class StudyViews:
     def study(self, sid: str, principal: Principal) -> dict:
         with self.session_factory() as session:
             root, audience = self._open(session, sid, principal)
-            page = for_audience(
-                "study", self._document(session, root.id, "study", ""), audience
-            )
+            stored = self._document(session, root.id, "study", "")
+            # An administrator changes access and licence without an upload, which builds
+            # the page: the database has them.
+            metadata = {
+                **stored["metadata"],
+                "access": root.access,
+                "licence": root.licence,
+            }
+            page = for_audience("study", {**stored, "metadata": metadata}, audience)
             if page is None:
                 raise LookupError(sid)
             curator = audience == "curator"

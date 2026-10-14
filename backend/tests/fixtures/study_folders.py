@@ -18,9 +18,13 @@ def tsv(kind, *rows):
 
 
 def write_study(
-    root: Path, name="Example", *, pmid="123", release=None, issue=None
+    root: Path, name="Example", *, pmid="123", release=None, issue=None, raw=False
 ) -> Path:
-    """A formatted study format 2 folder at <root>/caffeine/<name>."""
+    """A formatted study format 2 folder at <root>/caffeine/<name>.
+
+    With `raw`, the folder has the raw table `<name>_Tab2.tsv` of the source Tab2: the paper
+    table as printed.
+    """
     folder = root / "caffeine" / name
     folder.mkdir(parents=True)
     study = {
@@ -102,6 +106,8 @@ def write_study(
             },
         ),
     }
+    if raw:
+        files[f"{name}_Tab2.tsv"] = "Parameter\t1 h\nconcentration (mg/l)\t2\n"
     for file, text in files.items():
         (folder / file).write_text(text, encoding="utf-8", newline="")
     (folder / f"{name}.pdf").write_bytes(b"%PDF-1.4 example")
