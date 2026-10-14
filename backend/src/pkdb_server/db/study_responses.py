@@ -24,6 +24,7 @@ from pkdb_server.db.serialize import reference_responses
 from pkdb_server.services.authorization import (
     AuthorizationDenied,
     authorize,
+    is_admin,
     may_write,
 )
 from pkdb_server.services.profiles import public_profile
@@ -189,7 +190,7 @@ def study_responses(session, rows, principal):
     writers = set()
     for row in rows:
         if row.creator_id is None:
-            if principal.role == "admin" and principal.user_id is not None:
+            if is_admin(principal):
                 writers.add(row.id)
             continue
         access = StudyAccess(

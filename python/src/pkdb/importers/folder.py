@@ -346,6 +346,10 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
             curators.append(value)
         else:
             fail("invalid_curator", "Expected a username or [username, rating]")
+        # The canonical rating may be None to serve studies without ratings (#963),
+        # a source must state it.
+        if curators[-1].get("rating", 0) is None:
+            fail("invalid_curator", "A curator rating must be a number, not null")
     metadata["curators"] = curators
     metadata["collaborators"] = list_value(
         metadata.get("collaborators"),

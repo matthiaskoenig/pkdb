@@ -92,7 +92,17 @@ def test_may_write_follows_the_write_rule_without_the_key_scope(private_study):
     def principal(user_id, role, scopes=frozenset()):
         return Principal(user_id=user_id, username="test", role=role, scopes=scopes)
 
-    assert may_write(principal(2, "curator", frozenset({"read"})), private_study)
+    keyed = Principal(
+        user_id=2,
+        username="test",
+        role="curator",
+        credential_kind="api_key",
+        scopes=frozenset({"read"}),
+    )
+    assert may_write(keyed, private_study)
+    with pytest.raises(AuthorizationDenied) as denied:
+        authorize(keyed, "write", private_study)
+    assert denied.value.code == "missing_scope"
     assert not may_write(principal(3, "curator"), private_study)
     assert not may_write(principal(2, "user"), private_study)
     assert may_write(principal(9, "admin"), private_study)

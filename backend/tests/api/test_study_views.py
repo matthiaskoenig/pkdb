@@ -153,20 +153,31 @@ def test_the_json_read_has_no_curation_for_readers_who_may_not_write(
 
 
 def test_the_study_lists_have_no_curation_for_readers_who_may_not_write(
-    client, creator_headers, tmp_path, session_factory
+    client, creator_headers, admin_headers, tmp_path, session_factory
 ):
     folder = write_study(tmp_path / "sources", issue=2158)
     publish(client, creator_headers, folder, session_factory)
-    [row] = client.get("/api/v2/studies").json()["items"]
-    assert (row["issue"], row["review_status"], row["open_review_items"]) == (
-        None,
-        None,
-        0,
-    )
-    assert [c["rating"] for c in row["curators"]] == [None]
-    [row] = client.get("/api/v2/studies", headers=creator_headers).json()["items"]
-    assert (row["issue"], row["review_status"]) == (2158, "in_review")
-    assert [c["rating"] for c in row["curators"]] == [3]
+    reader = headers_of(session_factory, "reader", "user")
+
+    def curation(headers):
+        [row] = client.get("/api/v2/studies", headers=headers).json()["items"]
+        return (
+            row["issue"],
+            row["review_status"],
+            row["open_review_items"],
+            [c["rating"] for c in row["curators"]],
+        )
+
+    for headers in ({}, reader):
+        assert curation(headers) == (None, None, 0, [None])
+    assert curation(creator_headers) == (2158, "in_review", 1, [3])
+    assert curation(admin_headers) == (2158, "in_review", 1, [3])
+    with session_factory.begin() as session:
+        session.scalar(
+            select(Study).where(Study.sid == "caffeine/Example")
+        ).creator_id = None
+    assert curation(admin_headers) == (2158, "in_review", 1, [3])
+    assert curation(reader) == (None, None, 0, [None])
     record = client.get("/api/v1/studies/caffeine%2FExample/").json()
     assert (record["issue"], record["review_status"], record["open_review_items"]) == (
         None,
@@ -174,3 +185,14 @@ def test_the_study_lists_have_no_curation_for_readers_who_may_not_write(
         0,
     )
     assert [c["rating"] for c in record["curators"]] == [None]
+
+
+def test_a_reviewer_reads_the_curation_of_a_public_study(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", issue=2158)
+    publish(client, creator_headers, folder, session_factory)
+    reviewer = headers_of(session_factory, "reviewer", "reviewer")
+    metadata = client.get(URL, headers=reviewer).json()["metadata"]
+    assert metadata["review"]["status"] == "in_review"
+    assert metadata["issue"] == 2158
