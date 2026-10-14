@@ -82,23 +82,31 @@ export function afterMenuClosed(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 60));
 }
 
-/** The control that a `<label for>` with the text `label` names, inside `within`. */
+/**
+ * The control that a `<label for>` with the text `label` names, inside `within`, else the input or
+ * text area with that `aria-label`, such as a description, which has no visible label.
+ */
 function labelled(label: string, within: Element): HTMLElement | null {
   // Vuetify renders a field label twice; one of them names the input.
   const element = [...within.querySelectorAll("label")].find(
     (candidate) => candidate.htmlFor && candidate.textContent?.trim() === label,
   );
-  return element?.htmlFor ? document.getElementById(element.htmlFor) : null;
+  if (element?.htmlFor) return document.getElementById(element.htmlFor);
+  return (
+    [...within.querySelectorAll<HTMLElement>("input, textarea")].find(
+      (control) => control.getAttribute("aria-label") === label,
+    ) ?? null
+  );
 }
 
-/** The text field with the label `label`, inside `within` (the page by default). */
+/** The text field with the label or the `aria-label` `label`, inside `within` (the page by default). */
 export function field(label: string, within: Element = document.body): DOMWrapper<HTMLInputElement> {
   const input = labelled(label, within);
   if (!(input instanceof HTMLInputElement)) throw new Error(`No field "${label}"`);
   return new DOMWrapper(input);
 }
 
-/** The text area with the label `label`, inside `within` (the page by default). */
+/** The text area with the label or the `aria-label` `label`, inside `within` (the page by default). */
 export function textArea(label: string, within: Element = document.body): DOMWrapper<HTMLTextAreaElement> {
   const input = labelled(label, within);
   if (!(input instanceof HTMLTextAreaElement)) throw new Error(`No text area "${label}"`);
