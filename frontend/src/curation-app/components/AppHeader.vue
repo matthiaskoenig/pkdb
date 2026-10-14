@@ -49,7 +49,7 @@ function fromPanel(open: () => void): void {
   <VAppBar elevation="0" :height="36" class="app-header">
     <RouterLink to="/" class="brand">
       <img class="brand-logo" :src="logo" alt="PK-DB" width="24" height="24" />
-      <span>Local curation</span>
+      <span>Curation</span>
     </RouterLink>
     <VSpacer />
     <div v-if="wide" class="header-controls">

@@ -73,7 +73,7 @@ async function render() {
     const capture = async (name, ready, options) => written.push(await screenshot(page, name, ready, options));
 
     await page.goto(launchUrl);
-    await page.getByRole("link", { name: "PK-DB Local curation" }).waitFor();
+    await page.getByRole("link", { name: "PK-DB Curation" }).waitFor();
     const workspace = (await page.getByRole("button", { name: /^Workspace: / }).getAttribute("aria-label")).slice(
       "Workspace: ".length,
     );

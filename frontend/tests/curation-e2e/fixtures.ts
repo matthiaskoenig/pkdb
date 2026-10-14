@@ -277,7 +277,7 @@ function isFailedRequest(message: ConsoleMessage, { path, status }: ExpectedErro
 }
 
 async function openApp(page: Page, context: BrowserContext, servers: ServerPool, server: CurationServer, hash: string) {
-  const header = page.getByRole("link", { name: "PK-DB Local curation" });
+  const header = page.getByRole("link", { name: "PK-DB Curation" });
   if (servers.cookies.length) {
     await context.addCookies(servers.cookies);
     await page.goto(`${server.origin}/${hash}`);

@@ -94,12 +94,13 @@ afterEach(() => {
 });
 
 describe("AppHeader", () => {
-  it("shows the logo, the app name and the workspace folder", async () => {
+  it("shows the logo, the app name Curation and the workspace folder", async () => {
     await loadSnapshot(snapshot());
     const wrapper = mountHeader();
     await flushPromises();
     expect(wrapper.get("img").attributes("alt")).toBe("PK-DB");
-    expect(wrapper.text()).toContain("Local curation");
+    // The link home is named by the logo and the app name: "PK-DB Curation".
+    expect(wrapper.get("a.brand").text()).toBe("Curation");
     // The header shows the folder name; the title, the accessible name and the menu the path.
     const workspace = button("Workspace: /work/pkdb_data");
     expect(workspace.text()).toBe("pkdb_data");

@@ -35,7 +35,7 @@ describe("start", () => {
     expect(JSON.parse(String(init?.body))).toEqual({ token: "launch-token" });
     expect(csrfToken()).toBe("csrf-from-session");
     expect(window.location.hash).toBe("#/");
-    expect(target.textContent).toContain("Local curation");
+    expect(target.querySelector(".brand")?.textContent?.trim()).toBe("Curation");
   });
 
   it.each(["#token=pasted", "#/token=pasted"])(
@@ -90,7 +90,7 @@ describe("start", () => {
     window.history.replaceState(null, "", "/#token=used");
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
     app = await start(target);
-    expect(target.textContent).toContain("Local curation");
+    expect(target.querySelector(".brand")?.textContent?.trim()).toBe("Curation");
     expect(window.location.hash).toBe("#/");
   });
 });
