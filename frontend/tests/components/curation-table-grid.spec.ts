@@ -851,6 +851,36 @@ describe("the keyboard in a selectable grid", () => {
     expect(wrapper.emitted("follow")).toBeUndefined();
   });
 
+  it("leaves Right to the browser where the focus has nowhere to move", async () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES }, attachTo: document.body });
+    const send = (element: Element, key: string): KeyboardEvent => {
+      const event = new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true });
+      element.dispatchEvent(event);
+      return event;
+    };
+    // Row 2 has the link D1, so a table without links of names is mounted for the row without links.
+    const plainWrapper = mount(TableGrid, {
+      props: { table: { ...named, rows: [{ line: 1, cells: ["Example", "Tab2", "S9", "D9", "cmax", ""] }] }, selectable: true, names: NAMES },
+      attachTo: document.body,
+    });
+    expect(send(lineButton(plainWrapper, 1).element, "ArrowRight").defaultPrevented).toBe(false);
+    expect(send(lineButton(plainWrapper, 1).element, "ArrowLeft").defaultPrevented).toBe(false);
+    const links = wrapper.findAll("tbody tr[data-index]")[0]!.findAll<HTMLElement>(".grid-link").map((entry) => entry.element);
+    expect(send(links[2]!, "ArrowRight").defaultPrevented).toBe(false);
+    // Where it moves, the keys are taken.
+    expect(send(links[1]!, "ArrowRight").defaultPrevented).toBe(true);
+    expect(send(lineButton(wrapper, 1).element, "ArrowRight").defaultPrevented).toBe(true);
+  });
+
+  it("ignores the second click of a double-click on a link", async () => {
+    const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES } });
+    const link = wrapper.get(".grid-link");
+    link.element.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 }));
+    link.element.dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 2 }));
+    await flushPromises();
+    expect(wrapper.emitted("follow")).toHaveLength(1);
+  });
+
   it("moves to the links from the line cell that the focus of the route focused", async () => {
     const wrapper = mount(TableGrid, {
       props: { table: named, selectable: true, names: NAMES, focus: { line: 1 } },

@@ -82,7 +82,10 @@ const props = withDefaults(
     visibleLines?: ReadonlySet<number> | null;
     /** Whether the columns show the class of information that the table gives each of them. */
     tinted?: boolean;
-    /** The lines of the names of subjects.tsv and interventions.tsv: a selectable grid links the names in its cells to their rows. */
+    /**
+     * The lines of the names of subjects.tsv and interventions.tsv: a selectable grid links the
+     * names in its cells to their rows.
+     */
     names?: StudyNameLines | null;
   }>(),
   {
@@ -586,13 +589,20 @@ async function onRowKey(event: KeyboardEvent, index: number): Promise<void> {
  * the link.
  */
 function moveAlong(event: KeyboardEvent, row: HTMLElement, from: HTMLElement): void {
-  event.preventDefault();
   const stops = [...row.querySelectorAll<HTMLElement>(".grid-line-button, .grid-link")];
-  const at = Math.max(0, stops.indexOf(from));
+  const at = Math.max(0, stops.indexOf(from)); // the line cell stands for its button, the first stop
   const next = stops[Math.min(stops.length - 1, Math.max(0, at + (event.key === "ArrowRight" ? 1 : -1)))];
-  if (!next || next === document.activeElement) return;
+  // Where the focus cannot move, the browser scrolls the table sideways.
+  if (!next || next === stops[at] || next === document.activeElement) return;
+  event.preventDefault();
   scrollToCell(next.closest<HTMLElement>("td, th") ?? next, true);
   next.focus({ preventScroll: true });
+}
+
+/** Follow a link; the repeated clicks of a double-click follow nothing more. */
+function onLinkClick(event: MouseEvent, link: NameLink, line: number): void {
+  if (event.detail > 1) return;
+  emit("follow", link, line);
 }
 
 /** Move the focus from the shown row `index` to the line button of another row. */
@@ -719,7 +729,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
                     :title="tipOf(row.line, column.index) ? undefined : `Line ${part.link.line} of ${part.link.file}`"
                     :aria-describedby="described(linkNoteId(part.link), notes.get(`${row.line}:${column.index}`)?.id)"
                     @focus="keyLine = row.line"
-                    @click.stop="emit('follow', part.link, row.line)"
+                    @click.stop="onLinkClick($event, part.link, row.line)"
                   >{{ part.text }}</button><template v-else>{{ part.text }}</template></template></template><template v-else>{{ row.cells[column.index] ?? "" }}</template></td>
           </tr>
           <tr v-if="after" aria-hidden="true" class="grid-spacer" :style="{ height: `${after}px` }">

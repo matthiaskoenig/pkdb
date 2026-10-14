@@ -65,8 +65,8 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  * and Review sections can link to a row (`data.ts` has its rules). A link may name `notes=<kind>`,
  * which opens those notes above the table and focuses them.
  * A link of a name in the rows opens its row in subjects.tsv or interventions.tsv as a step of its
- * own in the history, so that Back returns; every other change of the selection replaces the address. A route without a source and
- * a file gets the default selection once: the first table with problems or open review items,
+ * own in the history, so that Back returns; every other change of the selection replaces the
+ * address. A route without a source and a file gets the default selection once: the first table with problems or open review items,
  * else the first table, beside its source. After that only the actions of the curator change it.
  */
 const study = useStudyStore();
@@ -299,7 +299,9 @@ function selectLine(line: number): void {
 async function follow(link: NameLink, line: number): Promise<void> {
   const pdf = paperShown.value ? paperFile.value : null;
   const from = lineSelection(line);
-  await router.replace({ query: selectionQuery({ ...from, pdf: from.source === PAPER ? pdf : null }) });
+  // A route that selects the row already keeps its column, which Back then returns to.
+  const selected = query.value.line === line && query.value.file === from.file && query.value.source === from.source;
+  if (!selected) await router.replace({ query: selectionQuery({ ...from, pdf: from.source === PAPER ? pdf : null }) });
   await router.push({
     query: selectionQuery({
       source: paperShown.value ? PAPER : null,

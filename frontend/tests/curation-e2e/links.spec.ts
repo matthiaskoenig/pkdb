@@ -134,3 +134,17 @@ test("the links of the names read well in both themes at 1440 and 1280 pixels", 
     }
   }
 });
+
+test("Right scrolls a wide table sideways at the last name of a row, where the focus has nowhere to move", async ({ app, page }) => {
+  await app.open(`${OUTPUTS}&line=6`);
+  const row = rowAt(page, "outputs_Tab2.tsv", 6);
+  await expect(row.getByRole("rowheader")).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  await expect(row.getByRole("button", { name: "D200", exact: true })).toBeFocused();
+  const region = page.getByRole("region", { name: "Rows of outputs_Tab2.tsv" });
+  const before = await region.evaluate((element) => element.scrollLeft);
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(() => region.evaluate((element) => element.scrollLeft)).toBeGreaterThan(before);
+  await expect(row.getByRole("button", { name: "D200", exact: true })).toBeFocused();
+});

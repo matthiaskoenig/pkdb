@@ -981,6 +981,22 @@ describe("links of names", () => {
     expect(page().get(".nav-source[aria-current='true'] .nav-name").text()).toBe("Tab2");
   });
 
+  it("keeps the column of a route that already selects the row of the link, so that Back returns to the marked cell", async () => {
+    await mountSection(
+      detail({ name_lines: NAME_LINES }),
+      { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed },
+      `${SECTION}?source=Tab2&file=outputs_Tab2.tsv&line=2&column=subjects`,
+    );
+    const replace = vi.spyOn(router, "replace");
+    await rowsPane().findAll("tbody tr[data-index]")[1]!.findAll(".grid-link")[0]!.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" }));
+    expect(replace).not.toHaveBeenCalled();
+    router.back();
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({ source: "Tab2", file: "outputs_Tab2.tsv", line: "2", column: "subjects" }),
+    );
+  });
+
   it("keeps the paper and its PDF when it follows a name while the paper shows", async () => {
     const papers = [paperFile("Example.pdf"), paperFile("Example_Supp.pdf")];
     await mountSection(

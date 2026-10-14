@@ -6,9 +6,6 @@
  */
 import type { NameKind, NameLines } from "./api/types";
 
-/** The kinds of the tables whose names cells link to, in the order of the workbook sheets. */
-export const NAME_KINDS: readonly NameKind[] = ["subjects", "interventions"];
-
 /** Where the link of a name goes: the file of its table and the line of its row. */
 export interface NameLink {
   file: string;
