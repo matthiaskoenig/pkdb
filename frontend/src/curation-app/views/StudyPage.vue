@@ -18,7 +18,8 @@ import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import CurationStudyHeader from "../components/CurationStudyHeader.vue";
 import SectionTabs from "../components/SectionTabs.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
-import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
 import { selectedNotesKind, selectionOf } from "../../study-views/data";
 import ActivitySection from "../sections/ActivitySection.vue";
@@ -205,8 +206,8 @@ watch(
              these two sections, and the others show it once the draft has something to say. -->
         <UnsavedBanner :section="section" :kind="notesKind" />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
-          <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
-          <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>
+          <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone (sectionHeading of focus.ts finds it by its attribute). -->
+          <h2 :id="headingId" tabindex="-1" class="d-sr-only" data-study-section-heading>{{ SECTION_LABELS[section] }}</h2>
           <component :is="SECTION_VIEWS[section]" />
         </section>
       </template>

@@ -321,7 +321,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
   min-height: 0;
   height: 100%;
 }
-/* The zoom of the image (`switch-group` of styles.css) goes to the end of the head. */
+/* The zoom of the image (`switch-group` of src/study-views/styles.css) goes to the end of the head. */
 .zoom {
   margin-inline-start: auto;
 }

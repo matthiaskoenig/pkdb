@@ -7,8 +7,8 @@ import { AXES, logAxes, type Axis, type AxisScale, type AxisScales } from "../..
  * The scales of a plot of mapped rows, above it: `x: lin | log` and `y: lin | log`, and a note of
  * the points that a log axis leaves out, as it shows only values above 0. Each axis is a named
  * group of two native buttons, of which the scale of the axis is pressed, drawn as the zoom of the
- * image (`switch-group` of styles.css). The note is a polite live region that stays in the page,
- * so that a screen reader says it after a switch.
+ * image (`switch-group` of src/study-views/styles.css). The note is a polite live region that
+ * stays in the page, so that a screen reader says it after a switch.
  */
 const props = defineProps<{
   scales: AxisScales;

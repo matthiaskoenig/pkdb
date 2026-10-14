@@ -13,7 +13,8 @@ import {
   VTextarea,
 } from "vuetify/components";
 import type { Problem } from "../../study-views/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { acknowledgement, location, locationKey } from "../../study-views/problems";
 import { acknowledgeFailure } from "../acknowledging";

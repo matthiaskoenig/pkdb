@@ -17,7 +17,8 @@ import {
 import { isNoUser } from "../api/client";
 import type { TableFileKind } from "../../study-views/types";
 import { usePreview } from "../composables/usePreview";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { useStudyStore } from "../stores/study";
 import { failureOf, issuesFailure, type ActionFailure } from "../../study-views/study";
 import { userHint } from "../local";

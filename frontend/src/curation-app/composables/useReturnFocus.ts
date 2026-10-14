@@ -1,13 +1,5 @@
 import { nextTick, watch, type Ref } from "vue";
-
-/** An element to focus, found when it is needed; nothing when there is none. */
-export type FocusTarget = () => HTMLElement | null | undefined;
-
-/**
- * The heading of the section of the study page, which takes the focus after a dialog of a section
- * when the control that opened it is gone.
- */
-export const sectionHeading: FocusTarget = () => document.querySelector<HTMLElement>(".study-section > h2");
+import type { FocusTarget } from "../../study-views/focus";
 
 /**
  * The opener and, when it is an item of a menu, the controls that opened the menus around it: a

@@ -113,19 +113,6 @@ html {
   flex: 0 0 auto;
 }
 
-/* What went wrong in a failure, such as the stderr of a command, in an alert, the Activity and the
-   File watching menu: at most 6 lines; the rest scrolls, with the keyboard too (tabindex="0"), and
-   Copy details has all of it. */
-.failure-detail {
-  max-height: calc(6 * 1.45em);
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;
@@ -175,28 +162,6 @@ a.brand {
 .app-header :focus-visible {
   outline: 2px solid rgb(var(--v-theme-on-app-bar));
   outline-offset: 1px;
-}
-/* The status colors of the theme are too light for text on a light surface: tinted chips and
-   alerts keep the color for their tint and icon and show their text in the surface color. */
-.status-chip .v-chip__content,
-.status-alert .v-alert__content {
-  color: rgb(var(--v-theme-on-surface));
-}
-/* In the dark theme the light error color tints a chip at the default opacity almost like a
-   neutral chip: it gets a stronger tint, under which the text keeps more than 7:1. */
-.v-theme--dark .status-chip.text-error > .v-chip__underlay {
-  opacity: 0.24;
-}
-/* Filter chips with the count of what each one shows. The group adds its own margins around
-   the chips; the gap of the filters is enough. */
-.filter-chips .v-slide-group__content {
-  margin: 0;
-  padding: 0;
-}
-.chip-count {
-  margin-inline-start: 8px;
-  font-variant-numeric: tabular-nums;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 /* Header */
 .header-controls {
@@ -253,20 +218,6 @@ a.brand {
 .panel-note {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.panel-facts {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 6px 16px;
-  margin: 0;
-  font-size: 0.875rem;
-}
-.panel-facts dt {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.panel-facts dd {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
 /* In a dialog on a phone, each fact stands below its name, so that a server address keeps its
    line. */
 @media (max-width: 599.98px) {
@@ -319,16 +270,8 @@ a.brand {
 .field-block--conflict {
   border-inline-start-color: rgb(var(--v-theme-warning));
 }
-.field-heading {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
 .field-mark,
 .field-mark-inline,
-.field-note,
-.field-empty,
 .field-error {
   margin: 0;
   font-size: 0.8125rem;
@@ -358,10 +301,6 @@ a.brand {
   align-items: center;
   gap: 0 12px;
 }
-.field-note,
-.field-empty {
-  color: rgba(var(--v-theme-on-surface), 0.78);
-}
 .field-error {
   color: rgb(var(--v-theme-error));
 }
@@ -376,362 +315,13 @@ a.brand {
   opacity: 0.5;
   transition: opacity 0.15s ease 0.1s;
 }
-/* A text area grows with its text up to ten lines. Where browsers size fields by content, CSS
-   does it; elsewhere the components turn on Vuetify's auto-grow (see fieldSizing.ts). */
-@supports (field-sizing: content) {
-  .grow-textarea textarea {
-    field-sizing: content;
-    min-height: calc(2lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
-    max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
-    resize: none;
-  }
-  /* Descriptions and comments start one line high, as high as a field of one line, as Vuetify's
-     auto-grow makes them where browsers do not size fields by content. */
-  .grow-textarea--one-line textarea {
-    min-height: max(var(--v-input-control-height, 0px), calc(1lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px)));
-  }
-}
-/* The line of a description or a comment stands in the middle of its field, where the text of a
-   text field stands: the 10.5 px that the 30 px of the field leave around a line of 19.5 px
-   (13 px text) are split evenly, 5.25 px above and below. A text area puts its text at the top, so
-   the paddings do it; Vuetify's auto-grow reads them as plain pixels, so they are written as such
-   (the top one is 4 px less, as --v-input-padding-top adds 4 px above). */
-.v-input--density-compact.grow-textarea--one-line .v-field.v-field--variant-outlined {
-  --v-field-padding-top: 1.25px;
-  --v-field-padding-bottom: 5.25px;
-}
 /* Messages of fields that wrap keep their lines apart. */
 .v-input .v-messages__message {
   line-height: 1.35;
 }
 
-/* The source pane and the rows pane of the Data section: a head line of 26 px with the name of
-   the source or the table file and its facts, notes, and a dashed box for what is missing. The
-   name and the facts that end with `--fixed` keep their room; the other facts shorten first. */
-.pane-head {
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
-  gap: 8px;
-  height: 26px;
-  padding-inline: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-.pane-head-name {
-  flex: 0 0 auto;
-  max-width: 100%;
-  margin: 0;
-  overflow: hidden;
-  font-size: inherit;
-  font-weight: 700;
-  line-height: inherit;
-  text-overflow: ellipsis;
-}
-.pane-head-part {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.pane-head-part--fixed {
-  flex: 0 0 auto;
-}
-/* The native select in the head of a pane: the Source filter of the rows, the PDF of the paper. */
-.pane-head-select {
-  height: 22px;
-  max-width: 12rem;
-  padding-inline: 4px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.42);
-  border-radius: 4px;
-  background: rgb(var(--v-theme-surface));
-  color: rgb(var(--v-theme-on-surface));
-  font: inherit;
-  appearance: auto;
-}
-.pane-head-select:focus-visible {
-  outline: 2px solid rgb(var(--v-theme-primary));
-  /* The head clips its content, so the ring reaches 1 px outside the select, into the head's padding. */
-  outline-offset: -1px;
-}
-/* Buttons joined side by side in a named group, of which one is pressed (aria-pressed), filled
-   with the primary color: the size of the image of a source and the scales of a plot. As high as
-   the smallest target of the app, 24 px, which fits the 26 px head of a pane with its line below. */
-.switch-group {
-  display: flex;
-  flex: 0 0 auto;
-}
-/* The other buttons show the surface below them, not the gray of the browser, which differs
-   between browsers and is too close to the primary color of the dark theme. */
-.switch-group button {
-  height: 24px;
-  padding-inline: 8px;
-  font-size: 12px;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  background: transparent;
-  color: rgb(var(--v-theme-on-surface));
-}
-.switch-group button:hover {
-  background: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
-}
-.switch-group button:first-child {
-  border-radius: 4px 0 0 4px;
-}
-.switch-group button:last-child {
-  border-radius: 0 4px 4px 0;
-}
-.switch-group button + button {
-  margin-inline-start: -1px;
-}
-.switch-group button[aria-pressed="true"] {
-  background: rgb(var(--v-theme-primary));
-  border-color: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
-}
-/* The ring of the keyboard focus stays inside the button, where the head of a pane does not clip
-   it and the button beside it does not cover it; on the primary fill, in its text color. */
-.switch-group button:focus-visible {
-  outline: 2px solid rgb(var(--v-theme-primary));
-  outline-offset: -2px;
-}
-.switch-group button[aria-pressed="true"]:focus-visible {
-  outline-color: rgb(var(--v-theme-on-primary));
-  outline-offset: -3px;
-}
-.pane-note {
-  margin: 0;
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-/* The icon, then one text that wraps as a paragraph in a narrow pane; a long file name breaks only
-   when it does not fit into a line. */
-.pane-missing {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin: 0;
-  padding: 3px 8px;
-  font-size: 11.5px;
-  border: 1px dashed rgba(var(--v-theme-on-surface), 0.38);
-  border-radius: 6px;
-}
-.pane-missing-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow-wrap: break-word;
-}
-.pane-missing-hint {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-
-/* Problems: the parts of an issue and of an acknowledged warning. */
-.problem-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 10px;
-}
-.problem-code {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-.problem-message {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-/* The tooltip of the problems of a cell of a table grid: a card on the surface with the shadow of
-   a menu, so that its severity chips read as in the Problems section. Vuetify's tooltip is dark
-   and compact. */
-.v-tooltip > .v-overlay__content.problem-tooltip {
-  padding: 8px 12px;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 6px;
-  background: rgb(var(--v-theme-surface));
-  color: rgb(var(--v-theme-on-surface));
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  font-size: 0.9286rem;
-  line-height: 1.4;
-}
-/* A fact has an icon in a 1rem column and its text 8 px after it. */
-.problem-fact {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-.problem-icon {
-  width: 1rem;
-  flex: 0 0 auto;
-  text-align: center;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-
-/* The issues of a file, in the Problems and the Data sections. */
-/* A file is a card: its name in a bar, then its issues apart by a line. */
-.problem-group {
-  overflow: hidden;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  background-color: rgb(var(--v-theme-surface));
-}
-.problem-group-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 6px 12px;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  background-color: rgba(var(--v-theme-on-surface), 0.04);
-}
-/* The counts go below a long file name, and an action stays at the end of the bar. */
-.problem-group-title {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 12px;
-  min-width: 0;
-}
-.problem-file {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-.problem-group-counts {
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.problem-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* The frame of a figure, a plot or the image of a source: the line and the corners of the tables
-   beside them. It sits inside the box, so that frames and tables line up. */
-.figure-frame {
-  box-sizing: border-box;
-  overflow: hidden;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  background-color: rgb(var(--v-theme-surface));
-}
-/* An image of the paper keeps a white background in the dark theme. */
-.figure-frame--paper {
-  background-color: #fff;
-}
-
-/* Rows of a table in a region of their own, such as the rows of a review target or of a source.
-   At most about eighteen rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
-   the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
-   them at the start and the end. The shadows end at the last row: a region that is higher than
-   its rows, such as the rows of the Data section, sets their height as `--rows-content-height`. */
-.rows-scroll {
-  --cover: rgb(var(--v-theme-surface));
-  --cover-clear: rgba(var(--v-theme-surface), 0);
-  --shade: rgba(var(--v-theme-on-surface), 0.2);
-  --shade-height: min(100%, var(--rows-content-height, 100%));
-  max-height: var(--rows-max-height, 420px);
-  overflow: auto;
-  /* A region scrolled into view stays clear of the app bar, or of more with --rows-scroll-margin. */
-  scroll-margin-top: var(--rows-scroll-margin, 80px);
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  background:
-    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
-    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
-    linear-gradient(to right, var(--shade), var(--cover-clear)) left top / 14px var(--shade-height) no-repeat scroll,
-    linear-gradient(to left, var(--shade), var(--cover-clear)) right top / 14px var(--shade-height) no-repeat scroll,
-    var(--cover);
-}
 /* While the banner of unsaved changes sticks, the page keeps the room of the app bar and of the
    banner (UnsavedBanner): a region scrolls to 8 px below the banner, as the selected review item does. */
 html:has(.unsaved-banner--sticky) .rows-scroll {
   scroll-margin-top: var(--rows-scroll-margin, 0px);
-}
-.rows-table {
-  min-width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 12px;
-}
-.rows-table th,
-.rows-table td {
-  height: 22px;
-  padding: 0 8px;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  text-align: start;
-  white-space: nowrap;
-}
-.rows-table tbody tr:last-child > * {
-  border-bottom: 0;
-}
-.rows-table thead th {
-  font-weight: 600;
-}
-/* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
-   sides show in the rows below it. The cells have no background, so that the shadows show
-   through. A tall region has the sticky header from the start, a table grid once its rows have
-   scrolled below the header. */
-.rows-scroll--tall .rows-table thead th,
-.rows-scroll--stuck .rows-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: rgb(var(--v-theme-surface));
-}
-/* A table that spans its region with its columns as narrow as their cells: the last column takes
-   the rest of the width, so that a few columns stay together at the start. */
-.rows-table--packed {
-  width: 100%;
-}
-.rows-table--packed :is(th, td) {
-  width: 1px;
-}
-.rows-table--packed :is(th, td):last-child {
-  width: auto;
-}
-/* The line column stays in view while wide rows scroll. It covers the start of the region, so the
-   shadow and the cover of the start move to its right edge. */
-.rows-scroll--sticky-line {
-  --line-width: var(--rows-line-width, 4rem);
-  background:
-    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
-      local,
-    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
-    linear-gradient(to right, var(--shade), var(--cover-clear)) var(--line-width) top / 14px var(--shade-height)
-      no-repeat scroll,
-    linear-gradient(to left, var(--shade), var(--cover-clear)) right top / 14px var(--shade-height) no-repeat scroll,
-    var(--cover);
-}
-.rows-scroll--sticky-line .rows-table .rows-line {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-  box-sizing: border-box;
-  width: var(--line-width);
-  min-width: var(--line-width);
-  max-width: var(--line-width);
-  border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  background-color: rgb(var(--v-theme-surface));
-}
-.rows-scroll--sticky-line .rows-table thead .rows-line {
-  z-index: 2;
-}
-/* The line of a row in its file. */
-.rows-table .rows-line {
-  font-variant-numeric: tabular-nums;
-}
-.rows-table tbody .rows-line {
-  font-weight: 400;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }

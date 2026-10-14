@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { TableKind } from "../../study-views/types";
-import { sectionHeading } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { saveShortcut } from "../composables/useSaveShortcut";
 import { changedLabels, fieldLabel, shortList } from "../metadata";
 import { useStudyStore } from "../stores/study";

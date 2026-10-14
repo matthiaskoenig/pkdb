@@ -452,7 +452,7 @@ async function retried(): Promise<void> {
 .activity-entry-linked {
   background-color: rgba(var(--v-theme-primary), 0.08);
 }
-/* The lines of the detail are capped by .failure-detail in styles.css. */
+/* The lines of the detail are capped by .failure-detail in src/study-views/styles.css. */
 .activity-detail {
   margin: 0;
 }

@@ -10,7 +10,7 @@ import TableNotes from "../components/TableNotes.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { useStudyStore } from "../stores/study";
 import { tablesOutcome } from "../local";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
@@ -111,7 +111,7 @@ const conflictPanel = computed(() => {
 </script>
 
 <template>
-  <DataSection ref="section" @open-notes="openNotes">
+  <DataSection ref="section" fill @open-notes="openNotes">
     <template #toolbar="{ file: shown }">
       <VBtn
         v-if="shown"

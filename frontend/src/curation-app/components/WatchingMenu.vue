@@ -122,7 +122,7 @@ async function toggle(): Promise<void> {
 .watcher-error-log {
   margin: 0;
 }
-/* The lines of the detail are capped by .failure-detail in styles.css. */
+/* The lines of the detail are capped by .failure-detail in src/study-views/styles.css. */
 .watcher-error-detail {
   margin: 2px 0;
 }

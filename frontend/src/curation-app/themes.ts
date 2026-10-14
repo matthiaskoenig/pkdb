@@ -1,11 +1,9 @@
 /**
- * What the curation app adds to the light and the dark theme of the website: the colors of the
- * classes of information (`info.ts`), its amber `caution` color, the colors of its app bar and the
- * tint of the study band.
+ * What the curation app adds to the themes of the website: the colors of the study views
+ * (`STUDY_VIEW_THEMES`) and of its app bar.
  */
 import type { ThemeExtension } from "../plugins/vuetify";
-import { INFO_THEMES } from "../study-views/info";
-import { CAUTION_COLORS, STUDY_BAND_COLORS, type ThemeName } from "../study-views/themes";
+import { STUDY_VIEW_THEMES, type ThemeName } from "../study-views/themes";
 
 type AppBarColor =
   | "app-bar"
@@ -39,11 +37,8 @@ export const APP_BAR_COLORS: Record<ThemeName, Record<AppBarColor, string>> = {
 };
 
 function theme(name: ThemeName): ThemeExtension {
-  const info = INFO_THEMES[name];
-  return {
-    colors: { ...info.colors, ...CAUTION_COLORS[name], ...APP_BAR_COLORS[name], ...STUDY_BAND_COLORS[name] },
-    variables: info.variables,
-  };
+  const views = STUDY_VIEW_THEMES[name];
+  return { colors: { ...views.colors, ...APP_BAR_COLORS[name] }, variables: views.variables };
 }
 
 export const CURATION_THEMES: Record<ThemeName, ThemeExtension> = { light: theme("light"), dark: theme("dark") };

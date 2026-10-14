@@ -20,7 +20,8 @@ import {
 import type { ReviewItem, ReviewTarget, TableResponse } from "../../study-views/types";
 import { useLoaded } from "../../study-views/composables/useLoaded";
 import { usePreview } from "../composables/usePreview";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../../study-views/review";
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";

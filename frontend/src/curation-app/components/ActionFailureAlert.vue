@@ -81,7 +81,7 @@ const sections = computed(() => visibleSections(views.capabilities.value));
   margin: 0;
   font-weight: 600;
 }
-/* The lines of the detail are capped by .failure-detail in styles.css. */
+/* The lines of the detail are capped by .failure-detail in src/study-views/styles.css. */
 .action-failure-detail {
   margin: 2px 0 0;
 }

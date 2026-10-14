@@ -18,7 +18,8 @@ import {
 } from "vuetify/components";
 import type { ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
 import type { Json } from "../../study-views/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";

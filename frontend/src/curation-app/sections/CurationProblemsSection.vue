@@ -7,7 +7,7 @@ import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { locationKey, openPlace, openTablesKey } from "../../study-views/problems";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";

@@ -73,6 +73,16 @@ import { noteKinds } from "../../study-views/tableKinds";
 const route = useRoute();
 const router = useRouter();
 const views = useStudyViews();
+const props = withDefaults(
+  defineProps<{
+    /**
+     * Whether the page lets the section fill the window while its panes stand side by side, with
+     * no scroll of the page (the curation app); otherwise the section scrolls with its page.
+     */
+    fill?: boolean;
+  }>(),
+  { fill: false },
+);
 const emit = defineEmits<{ "open-notes": [kind: TableKind] }>();
 defineSlots<{
   toolbar?: (props: { file: string | null }) => unknown;
@@ -420,7 +430,7 @@ defineExpose({ file });
 </script>
 
 <template>
-  <div class="data-section" :class="{ 'data-section--fill': !stacked && !limited }">
+  <div class="data-section" :class="{ 'data-section--fill': props.fill && !stacked && !limited }">
     <template v-if="detail">
       <!-- No toolbar role: its controls are reached with Tab, not with the arrow keys that a toolbar promises. -->
       <div class="data-toolbar">
@@ -625,7 +635,8 @@ defineExpose({ file });
    from the app down to the section, which takes what the app bar, a status banner, the study
    header and the section tabs leave of the window, and its panes scroll on their own. Other
    sections scroll with the page, as do stacked panes, each at most 70 % of the window, and the
-   note beyond the upload limits. */
+   note beyond the upload limits. Only a page that sets `fill` gets these rules: they assume its
+   app, `.study-page` and `.study-section`. */
 :global(.v-application__wrap:has(.data-section--fill)) {
   height: 100dvh;
 }

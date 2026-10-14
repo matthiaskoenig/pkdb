@@ -5,7 +5,7 @@
  * a translucent white chip (tonal, without a color) in the white text of the bar: the colors of
  * the states have too little contrast on teal, and the label says the state. Elsewhere, as in the
  * menus and the collapsed header, a chip is tonal in the color of its state, with the text of the
- * surface (status-chip, styles.css).
+ * surface (status-chip, src/study-views/styles.css).
  */
 import type { Tone } from "../study-views/overview";
 

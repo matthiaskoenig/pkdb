@@ -13,7 +13,8 @@ import {
   VSwitch,
   VTextField,
 } from "vuetify/components";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { useOverviewStore, type Settings } from "../stores/overview";
 import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";

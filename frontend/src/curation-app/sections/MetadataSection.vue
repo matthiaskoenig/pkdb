@@ -21,7 +21,7 @@ import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import TableNotes from "../components/TableNotes.vue";
-import { sectionHeading } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { markMessages, messagesAt, NO_MESSAGES, startForm, withKind } from "../metadata";
 import { PROVENANCE_LABELS, referenceMatch, referenceView, type ProvenanceKind } from "../../study-views/metadataView";
 import { hasNotes, kindsWithTable } from "../../study-views/notes";

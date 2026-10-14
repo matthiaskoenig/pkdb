@@ -7,7 +7,7 @@ import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import NewItemDialog from "../components/NewItemDialog.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
-import { sectionHeading } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
 import ReviewSection from "./ReviewSection.vue";

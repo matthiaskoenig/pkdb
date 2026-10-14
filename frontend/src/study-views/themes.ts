@@ -1,7 +1,10 @@
 /**
  * The colors that the study views add to the light and the dark theme of a page: the amber caution
- * color and the tint of the study band. `info.ts` has the colors of the classes of information.
+ * color and the tint of the study band. `info.ts` has the colors of the classes of information;
+ * `STUDY_VIEW_THEMES` has them all.
  */
+import type { ThemeExtension } from "../plugins/vuetify";
+import { INFO_THEMES } from "./info";
 
 export type ThemeName = "light" | "dark";
 
@@ -25,3 +28,18 @@ export const STUDY_BAND_COLORS: Record<ThemeName, Record<"study-band", string>> 
   light: { "study-band": "#ecf3f4" },
   dark: { "study-band": "#21393e" },
 };
+
+function theme(name: ThemeName): ThemeExtension {
+  const info = INFO_THEMES[name];
+  return {
+    colors: { ...info.colors, ...CAUTION_COLORS[name], ...STUDY_BAND_COLORS[name] },
+    variables: info.variables,
+  };
+}
+
+/**
+ * What the study views add to the light and the dark theme of a page: the colors of the classes
+ * of information with their tints, the amber caution color and the study band. Named colors and
+ * variables that change nothing else of the page.
+ */
+export const STUDY_VIEW_THEMES: Record<ThemeName, ThemeExtension> = { light: theme("light"), dark: theme("dark") };

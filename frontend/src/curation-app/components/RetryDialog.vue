@@ -13,7 +13,8 @@ import {
   VSpacer,
 } from "vuetify/components";
 import type { StudyRow } from "../../study-views/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { webUrl } from "../../study-views/overview";
 import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
