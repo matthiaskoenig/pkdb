@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
-import type { Profile, StudyRow } from "../../study-views/types";
+import { useStudyViews } from "../../study-views/context";
+import type { StudyRow } from "../../study-views/types";
 import { useCellTip } from "../../study-views/composables/useCellTip";
 import { useWindowPosition } from "../../study-views/composables/useWindowPosition";
 import type { SortKey, StudySort } from "../../study-views/overview";
@@ -18,16 +19,19 @@ import {
 import StudyTableRow from "./StudyTableRow.vue";
 import StudyTooltip from "./StudyTooltip.vue";
 
-const props = defineProps<{
-  rows: StudyRow[];
-  /** The profiles of the curator roster by lowercase username. */
-  profiles: ReadonlyMap<string, Profile>;
-  /** The GitHub repository of the issues, `<owner>/<name>`. */
-  repository: string;
-}>();
-const selected = defineModel<string[]>("selected", { required: true });
+const props = withDefaults(
+  defineProps<{
+    rows: StudyRow[];
+    /** The name of the table for screen readers. */
+    caption?: string;
+  }>(),
+  { caption: "Studies of the workspace" },
+);
+const selected = defineModel<string[]>("selected", { default: () => [] });
 const sort = defineModel<StudySort>("sort", { required: true });
 const emit = defineEmits<{ retry: [row: StudyRow] }>();
+/** The profiles of the curators and the repository of the issues come from the page. */
+const views = useStudyViews();
 
 /**
  * The columns after the checkbox, in their order. The cells of StudyTableRow.vue and the sized
@@ -96,8 +100,8 @@ function activeHalf(key: SortKey): string | null {
  * objects through filters and sorting) and again when the profiles or the repository change.
  */
 const cache = computed(() => ({
-  profiles: props.profiles,
-  repository: props.repository,
+  profiles: views.data.profiles.value,
+  repository: views.data.repository.value,
   items: new WeakMap<StudyRow, RowItem>(),
 }));
 
@@ -195,7 +199,7 @@ function focusOut(event: FocusEvent): void {
       <div class="v-table__wrapper">
         <table :aria-rowcount="rows.length + 1">
           <caption class="d-sr-only">
-            Studies of the workspace
+            {{ caption }}
           </caption>
           <thead>
             <tr aria-rowindex="1">

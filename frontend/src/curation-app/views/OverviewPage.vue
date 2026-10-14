@@ -1,38 +1,20 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, useId, watch } from "vue";
-import {
-  VBtn,
-  VChip,
-  VChipGroup,
-  VContainer,
-  VProgressLinear,
-  VSelect,
-  VTextField,
-  VTooltip,
-} from "vuetify/components";
-import type { Profile, StudyRow } from "../../study-views/types";
+import { computed, ref, shallowRef, useId, useTemplateRef, watch } from "vue";
+import { VBtn, VContainer, VProgressLinear, VTooltip } from "vuetify/components";
+import type { StudyRow } from "../../study-views/types";
+import StudyFilters from "../../study-views/components/StudyFilters.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
 import { storeToRefs } from "pinia";
-import {
-  COLLATOR,
-  curatorsOf,
-  filterStudies,
-  plural,
-  SEARCH_DELAY_MS,
-  sortStudies,
-  STATUS_CHIPS,
-  substancesOf,
-} from "../../study-views/overview";
+import { filterStudies, plural, sortStudies } from "../../study-views/overview";
 import { uploadBlocker } from "../uploads";
-import { useDebounced } from "../../study-views/composables/useDebounced";
 import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useOverviewFilters } from "../stores/overviewFilters";
 import { useStudyStore } from "../stores/study";
-import { failureOf, findProfile, profileMap, type ActionFailure } from "../../study-views/study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 
 const overview = useOverviewStore();
@@ -45,10 +27,10 @@ const studies = computed(() => snapshot.value?.studies ?? []);
 const stale = computed(() => overview.error !== null);
 const blocker = computed(() => (snapshot.value ? uploadBlocker(snapshot.value) : null));
 
-// Curator profiles for the avatars and the Curator filter; without them the avatars show initials
-// and the filter shows user names. They load with the state of the local server until they loaded:
-// a launch URL pasted into the open overview creates the session without mounting the page again.
-const profiles = shallowRef<ReadonlyMap<string, Profile>>(new Map());
+// The profiles of the curators for the avatars and the Curator filter, which the study store
+// keeps; without them the avatars show initials and the filter shows user names. They load with
+// the state of the local server until they loaded: a launch URL pasted into the open overview
+// creates the session without mounting the page again.
 let profilesLoaded = false;
 watch(
   snapshot,
@@ -57,10 +39,7 @@ watch(
     useStudyStore()
       .curators()
       .then(
-        (list) => {
-          profiles.value = profileMap(list);
-          profilesLoaded = true;
-        },
+        () => (profilesLoaded = true),
         () => undefined,
       );
   },
@@ -70,8 +49,8 @@ watch(
 // Filters
 const filters = useOverviewFilters();
 const { search, substance, curator, chip, sort } = storeToRefs(filters);
-/** The text of the search field; the filter follows it 150 ms after the last keystroke. */
-const { text: searchText, flush: flushSearch } = useDebounced(search, SEARCH_DELAY_MS);
+/** The filter line, whose search field writes the search 150 ms after the last keystroke. */
+const filterLine = useTemplateRef<InstanceType<typeof StudyFilters>>("filterLine");
 watch(
   () => snapshot.value?.workspace,
   (path) => {
@@ -80,26 +59,6 @@ watch(
   { immediate: true },
 );
 
-const substanceItems = computed(() => [
-  { title: "All substances", value: "" },
-  ...substancesOf(studies.value).map((name) => ({ title: name, value: name })),
-]);
-/** Every curator with the number of their studies; the user of the app comes first, as Me. */
-const curatorItems = computed(() => {
-  const name = (user: string) => findProfile(profiles.value, user)?.display_name ?? user;
-  const me = snapshot.value?.author.user ?? null;
-  const curators = curatorsOf(studies.value);
-  const mine = me ? curators.find(({ user }) => user.toLowerCase() === me.toLowerCase()) : undefined;
-  const others = curators
-    .filter((entry) => entry !== mine)
-    .map(({ user, studies: count }) => ({ title: `${name(user)} (${count.toLocaleString("en-US")})`, value: user }))
-    .sort((a, b) => COLLATOR.compare(a.title, b.title));
-  return [
-    { title: "All curators", value: "" },
-    ...(me ? [{ title: `Me: ${name(me)} (${(mine?.studies ?? 0).toLocaleString("en-US")})`, value: me }] : []),
-    ...others,
-  ];
-});
 /** The rows of the filters and the counts of the chips, from one pass over the studies. */
 const filtered = computed(() =>
   filterStudies(studies.value, {
@@ -112,21 +71,9 @@ const filtered = computed(() =>
 /** The rows behind each chip, within the search, the substance and the curator. */
 const counts = computed(() => filtered.value.counts);
 const shown = computed(() => sortStudies(filtered.value.shown, sort.value));
-/** The digits of the number of studies: no chip count has more, and each keeps room for them. */
-const countDigits = computed(() => String(studies.value.length).length);
-const countText = computed(() => {
-  const total = plural(studies.value.length, "study", "studies");
-  if (shown.value.length === studies.value.length) return total;
-  return `${shown.value.length.toLocaleString("en-US")} of ${total}`;
-});
-
-/** The longest text of the count, "N of N studies": its hidden copy keeps the width of the count. */
-const countSizer = computed(
-  () => `${studies.value.length.toLocaleString("en-US")} of ${plural(studies.value.length, "study", "studies")}`,
-);
 
 function clearFilters(): void {
-  flushSearch("");
+  filterLine.value?.flushSearch("");
   filters.clear();
 }
 
@@ -228,65 +175,16 @@ const format1Notice = computed(() =>
 
 <template>
   <VContainer fluid class="overview">
-    <!-- The heading, the count and, with studies, the search, the selects and the status chips
-         share one line where they fit; the chips come last, so they move to the next line first. -->
-    <div class="overview-header">
-      <div class="overview-heading">
-        <h1>Studies</h1>
-        <span v-if="studies.length" class="overview-count-box">
-          <span class="overview-count">{{ countText }}</span>
-          <span class="overview-count-sizer" aria-hidden="true">{{ countSizer }}</span>
-        </span>
-      </div>
-      <template v-if="studies.length">
-        <VTextField
-          v-model="searchText"
-          label="Search studies"
-          placeholder="Identity or title"
-          prepend-inner-icon="fas fa-magnifying-glass"
-          clearable
-          hide-details
-          class="overview-search"
-          @click:clear="flushSearch('')"
-        />
-        <VSelect
-          v-model="substance"
-          :items="substanceItems"
-          label="Substance"
-          hide-details
-          class="overview-substance"
-        />
-        <VSelect
-          v-model="curator"
-          :items="curatorItems"
-          label="Curator"
-          hide-details
-          class="overview-curator"
-        />
-        <VChipGroup
-          v-model="chip"
-          mandatory
-          column
-          color="primary"
-          role="group"
-          aria-label="Filter by status"
-          class="filter-chips overview-chips"
-          :style="{ '--count-digits': countDigits }"
-        >
-          <VChip
-            v-for="item in STATUS_CHIPS"
-            :key="item.value"
-            :value="item.value"
-            tag="button"
-            type="button"
-            filter
-            :aria-pressed="chip === item.value ? 'true' : 'false'"
-          >
-            {{ item.label }}<span class="chip-count">{{ counts[item.value] }}</span>
-          </VChip>
-        </VChipGroup>
-      </template>
-    </div>
+    <StudyFilters
+      ref="filterLine"
+      v-model:search="search"
+      v-model:substance="substance"
+      v-model:curator="curator"
+      v-model:chip="chip"
+      :counts="counts"
+      :shown="shown.length"
+      :me="snapshot?.author.user ?? null"
+    />
 
     <template v-if="snapshot">
       <template v-if="studies.length">
@@ -334,8 +232,6 @@ const format1Notice = computed(() =>
             v-model:selected="selected"
             v-model:sort="sort"
             :rows="shown"
-            :profiles="profiles"
-            :repository="snapshot.github.repository"
             @retry="reviewRetry"
           />
           <div v-else class="overview-empty">
@@ -381,85 +277,6 @@ const format1Notice = computed(() =>
   flex-direction: column;
   gap: 16px;
   padding: 24px 16px;
-}
-/*
- * The heading, the count, the search, the two selects and the status chips share one line where
- * they fit. The chips come last, so a narrower window moves them to the next line first, then the
- * selects. The counts of the chips change with the filters, and the chips may wrap. So that they
- * never move the fields, the fields do not grow and keep to the top of the line. Their 6px margin
- * puts them on the center line of the first row of chips: a field is 30px high, and a chip of
- * 26px stands 8px below the top of its group. The line of the heading is 28px high (1.6rem at a
- * line height of 1.25): 7px above it put it on the same center line.
- */
-.overview-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 4px 12px;
-}
-.overview-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 12px;
-  margin-block: 7px;
-}
-.overview-heading h1 {
-  margin: 0;
-}
-/* The count keeps the width of its longest text, "N of N studies": a hidden copy of it in the same
-   grid cell sets the width, so that the fields after it stay in place while a search changes the
-   number of shown studies. Tabular digits make no shown count wider than that copy. */
-.overview-count-box {
-  display: inline-grid;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.overview-count,
-.overview-count-sizer {
-  grid-area: 1 / 1;
-}
-.overview-count-sizer {
-  visibility: hidden;
-}
-.overview-search,
-.overview-substance,
-.overview-curator {
-  margin-block: 6px;
-}
-/* 14rem (196px) and the 12px gap of the header let the header of pkdb_data's 1,503 studies, with
-   its four-digit counts, fit one line in a 1440px window with a scrollbar. */
-.overview-search {
-  flex: 0 1 14rem;
-}
-.overview-substance {
-  flex: 0 1 12rem;
-  min-width: 10rem;
-}
-.overview-curator {
-  flex: 0 1 16rem;
-  min-width: 12rem;
-}
-.overview-chips {
-  flex: 1 1 auto;
-}
-/* Each chip count keeps the room of the digits of the total, so that the chips keep their width
-   (and do not jump between lines) while a search or a filter lowers the counts. */
-.overview-chips .chip-count {
-  display: inline-block;
-  min-width: calc(var(--count-digits) * 1ch);
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
-/* On a phone the search, the substance and the curator take the whole width, one above the other. */
-@media (max-width: 599.98px) {
-  .overview-search,
-  .overview-substance,
-  .overview-curator {
-    flex: 1 1 100%;
-    max-width: none;
-  }
 }
 .study-panel {
   overflow: hidden;
