@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "3bc6b7f56b83dbd71a739a00ca5b9e40444cdc7e1af2cdb046ea4b3e3fd3dbe6",
+    "version": "508fc640008aaf3a3b32e81daca73849ac70865d445ae8bcd6b2086b3b5995f2",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -31,6 +31,8 @@
           "TTT",
           "CGC",
           "Non-TTT",
+          "CGC/CGC",
+          "TTT/TTT",
           "NR"
         ],
         "can_negative": false,
@@ -211,7 +213,8 @@
         "sid": "ace-activity",
         "dtype": "numeric",
         "units": [
-          "nmol/ml/min"
+          "nmol/ml/min",
+          "IU/l"
         ],
         "choices": [],
         "can_negative": false,
@@ -442,6 +445,54 @@
         "deprecated": false
       },
       {
+        "name": "artery blood flow",
+        "sid": "artery-blood-flow",
+        "dtype": "numeric",
+        "units": [
+          "l/min"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "artery cross-sectional area",
+        "sid": "artery-cross-sectional-area",
+        "dtype": "numeric",
+        "units": [
+          "cm^2"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "artery cross-sectional area (ratio)",
+        "sid": "artery-cross-sectional-area-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "artery diameter",
+        "sid": "artery-diameter",
+        "dtype": "numeric",
+        "units": [
+          "cm"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "attenuation",
         "sid": "attenuation",
         "dtype": "numeric",
@@ -456,6 +507,33 @@
       {
         "name": "auc_end",
         "sid": "auc-end",
+        "dtype": "numeric",
+        "units": [
+          "g/l*hr",
+          "g/l/kg*hr",
+          "mol/l*hr",
+          "IU/l*hr"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": true,
+        "deprecated": false
+      },
+      {
+        "name": "auc_extrapolated",
+        "sid": "auc-extrapolated",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "auc_incremental",
+        "sid": "auc-incremental",
         "dtype": "numeric",
         "units": [
           "g/l*hr",
@@ -625,6 +703,30 @@
         "units": [],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "bleeding time",
+        "sid": "bleeding-time",
+        "dtype": "numeric",
+        "units": [
+          "hr"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "bleeding time (change relative)",
+        "sid": "bleeding-time-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -812,6 +914,18 @@
         "dtype": "numeric",
         "units": [
           "mg/dl"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "blood velocity",
+        "sid": "blood-velocity",
+        "dtype": "numeric",
+        "units": [
+          "cm/s"
         ],
         "choices": [],
         "can_negative": false,
@@ -1036,6 +1150,18 @@
         "deprecated": false
       },
       {
+        "name": "cell density",
+        "sid": "cell-density",
+        "dtype": "numeric",
+        "units": [
+          "1/mm^2"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "chemistry measurement",
         "sid": "chemistry-measurement",
         "dtype": "abstract",
@@ -1113,8 +1239,46 @@
         "deprecated": false
       },
       {
+        "name": "clearance_distribution",
+        "sid": "clearance-distribution",
+        "dtype": "numeric",
+        "units": [
+          "l/hr",
+          "l/hr/kg",
+          "µmol/l/hr",
+          "ml/min/(1.73*m^2)",
+          "ml*g/IU/hr",
+          "ml*µg/µmol/hr",
+          "ml/µmol/hr",
+          "ml*g/IU/hr/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "clearance_hepatic",
         "sid": "clearance-hepatic",
+        "dtype": "numeric",
+        "units": [
+          "l/hr",
+          "l/hr/kg",
+          "µmol/l/hr",
+          "ml/min/(1.73*m^2)",
+          "ml*g/IU/hr",
+          "ml*µg/µmol/hr",
+          "ml/µmol/hr",
+          "ml*g/IU/hr/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "clearance_intercompartmental",
+        "sid": "clearance-intercompartmental",
         "dtype": "numeric",
         "units": [
           "l/hr",
@@ -1340,7 +1504,8 @@
         "units": [
           "g/l",
           "mol/l",
-          "IU/l"
+          "IU/l",
+          "g/kg"
         ],
         "choices": [],
         "can_negative": false,
@@ -1493,6 +1658,18 @@
         "deprecated": false
       },
       {
+        "name": "cumulative amount (ratio)",
+        "sid": "cumulative-amount-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": true,
+        "deprecated": false
+      },
+      {
         "name": "cumulative metabolic ratio",
         "sid": "cumulative-metabolic-ratio",
         "dtype": "numeric",
@@ -1509,7 +1686,7 @@
         "sid": "cvr",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "dyn*s/cm^5"
         ],
         "choices": [],
         "can_negative": false,
@@ -2115,6 +2292,7 @@
           "IU/m^2/hr",
           "ml",
           "ml/hr",
+          "ml/kg",
           "Ci",
           "Ci/hr",
           "Bq",
@@ -2339,7 +2517,7 @@
         "sid": "etp",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "mol/l*hr"
         ],
         "choices": [],
         "can_negative": false,
@@ -2351,7 +2529,7 @@
         "sid": "etp-change-relative",
         "dtype": "numeric",
         "units": [
-          "hr"
+          "percent"
         ],
         "choices": [],
         "can_negative": true,
@@ -2382,6 +2560,18 @@
           "µmol/min",
           "µIU/min",
           "µIU/min/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "excretion rate (ratio)",
+        "sid": "excretion-rate-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -2886,7 +3076,8 @@
         "dtype": "numeric",
         "units": [
           "ml",
-          "ml/kg"
+          "ml/kg",
+          "ml/m^2"
         ],
         "choices": [],
         "can_negative": false,
@@ -2918,6 +3109,18 @@
         "deprecated": false
       },
       {
+        "name": "hepatic uptake rate (ratio)",
+        "sid": "hepatic-uptake-rate-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "HepTest",
         "sid": "heptest",
         "dtype": "numeric",
@@ -2938,6 +3141,18 @@
         ],
         "choices": [],
         "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "HepTest (ratio)",
+        "sid": "heptest-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
         "time_required": false,
         "deprecated": false
       },
@@ -3101,11 +3316,59 @@
         "deprecated": false
       },
       {
+        "name": "inr (change relative)",
+        "sid": "inr-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "Insulinogenic index",
         "sid": "insulinogenic-index",
         "dtype": "numeric",
         "units": [
           "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "k10",
+        "sid": "k10",
+        "dtype": "numeric",
+        "units": [
+          "1/min"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "k12",
+        "sid": "k12",
+        "dtype": "numeric",
+        "units": [
+          "1/min"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "k21",
+        "sid": "k21",
+        "dtype": "numeric",
+        "units": [
+          "1/min"
         ],
         "choices": [],
         "can_negative": false,
@@ -3131,6 +3394,18 @@
         "deprecated": false
       },
       {
+        "name": "kdist",
+        "sid": "kdist",
+        "dtype": "numeric",
+        "units": [
+          "1/min"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "kel",
         "sid": "kel",
         "dtype": "numeric",
@@ -3141,7 +3416,20 @@
           "µmol/min/kg",
           "µmol/min",
           "µIU/min",
-          "µIU/min/kg"
+          "µIU/min/kg",
+          "1/min/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "kel (ratio)",
+        "sid": "kel-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -3420,6 +3708,18 @@
         ],
         "choices": [],
         "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "MAP (ratio)",
+        "sid": "map-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
         "time_required": false,
         "deprecated": false
       },
@@ -3828,6 +4128,18 @@
         "deprecated": false
       },
       {
+        "name": "mRNA expression (relative)",
+        "sid": "mrna-expression-relative",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "mrt",
         "sid": "mrt",
         "dtype": "numeric",
@@ -4088,7 +4400,7 @@
         "sid": "pap",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "mmHg"
         ],
         "choices": [],
         "can_negative": false,
@@ -4113,7 +4425,7 @@
         "sid": "pcwp",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "mmHg"
         ],
         "choices": [],
         "can_negative": false,
@@ -4233,6 +4545,30 @@
         "deprecated": false
       },
       {
+        "name": "platelet aggregation",
+        "sid": "platelet-aggregation",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "platelet aggregation (change relative)",
+        "sid": "platelet-aggregation-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "portal vein invasion",
         "sid": "portal-vein-invasion",
         "dtype": "boolean",
@@ -4296,6 +4632,30 @@
           "postpartum",
           "NR"
         ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "pressor response inhibition",
+        "sid": "pressor-response-inhibition",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "proliferation index",
+        "sid": "proliferation-index",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -4389,7 +4749,7 @@
         "sid": "pvr",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "dyn*s/cm^5"
         ],
         "choices": [],
         "can_negative": false,
@@ -4418,11 +4778,24 @@
           "IU/m^2/hr",
           "ml",
           "ml/hr",
+          "ml/kg",
           "Ci",
           "Ci/hr",
           "Bq",
           "Bq/hr",
           "NO_UNIT"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "quick value",
+        "sid": "quick-value",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -4690,6 +5063,18 @@
         "deprecated": false
       },
       {
+        "name": "right atrial pressure",
+        "sid": "right-atrial-pressure",
+        "dtype": "numeric",
+        "units": [
+          "mmHg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "rate pressure product",
         "sid": "rpp",
         "dtype": "numeric",
@@ -4812,6 +5197,25 @@
           "g.-282GG",
           "g.-282GA",
           "g.-282AA",
+          "NR"
+        ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "SLCO1B3 genotype",
+        "sid": "slco1b3-genotype",
+        "dtype": "categorical",
+        "units": [],
+        "choices": [
+          "c.334 T/T",
+          "c.334 T/G",
+          "c.334 G/G",
+          "c.699 G/G",
+          "c.699 G/A",
+          "c.699 A/A",
+          "*4/*4",
           "NR"
         ],
         "can_negative": false,
@@ -4945,7 +5349,7 @@
         "dtype": "numeric",
         "units": [
           "dimensionless",
-          "dynes/sec/(cm^-5)"
+          "dyn*s/cm^5"
         ],
         "choices": [],
         "can_negative": false,
@@ -5001,6 +5405,18 @@
         "deprecated": false
       },
       {
+        "name": "TGLT (change relative)",
+        "sid": "tglt-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "TGLT (ratio)",
         "sid": "tglt-ratio",
         "dtype": "numeric",
@@ -5017,10 +5433,22 @@
         "sid": "tgp",
         "dtype": "numeric",
         "units": [
-          "dimensionless"
+          "mol/l"
         ],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "TGP (change relative)",
+        "sid": "tgp-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5051,6 +5479,18 @@
       {
         "name": "thalf_absorption",
         "sid": "thalf-absorption",
+        "dtype": "numeric",
+        "units": [
+          "hr"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "thalf_distribution",
+        "sid": "thalf-distribution",
         "dtype": "numeric",
         "units": [
           "hr"
@@ -5121,6 +5561,18 @@
         "deprecated": false
       },
       {
+        "name": "TPTG (change relative)",
+        "sid": "tptg-change-relative",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "TPTG (ratio)",
         "sid": "tptg-ratio",
         "dtype": "numeric",
@@ -5187,8 +5639,38 @@
         "deprecated": false
       },
       {
+        "name": "vascular resistance",
+        "sid": "vascular-resistance",
+        "dtype": "numeric",
+        "units": [
+          "dyn*s/cm^5"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "vd",
         "sid": "vd",
+        "dtype": "numeric",
+        "units": [
+          "l",
+          "l/kg",
+          "l/(1.73*m^2)",
+          "l*mg/µIU",
+          "l*mg/mmol",
+          "l/mmol",
+          "l/IU"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "vd_peripheral",
+        "sid": "vd-peripheral",
         "dtype": "numeric",
         "units": [
           "l",
@@ -7541,8 +8023,8 @@
       {
         "name": "diethyldithiocarbamic acid",
         "sid": "diethyldithiocarbamic-acid",
-        "mass": 198.295,
-        "formula": "C8H14N4S",
+        "mass": 149.284,
+        "formula": "C5H11NS2",
         "charge": 0
       },
       {
@@ -7661,6 +8143,13 @@
         "name": "dextromethorphan hydrobromide",
         "sid": "dmthbr",
         "mass": 352.3,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "DNA",
+        "sid": "dna",
+        "mass": null,
         "formula": null,
         "charge": null
       },
@@ -7903,6 +8392,13 @@
         "charge": 0
       },
       {
+        "name": "erlotinib",
+        "sid": "erlotinib",
+        "mass": 393.443,
+        "formula": "C22H23N3O4",
+        "charge": 0
+      },
+      {
         "name": "erythromycin",
         "sid": "erythromycin",
         "mass": null,
@@ -8104,6 +8600,13 @@
         "mass": null,
         "formula": null,
         "charge": null
+      },
+      {
+        "name": "fosinopril",
+        "sid": "fosinopril",
+        "mass": 563.672,
+        "formula": "C30H46NO7P",
+        "charge": 0
       },
       {
         "name": "fructosamine",
@@ -8596,6 +9099,13 @@
         "charge": null
       },
       {
+        "name": "insulin icodec",
+        "sid": "insulin-icodec",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "ins/glc",
         "sid": "insulin-over-glucose",
         "mass": null,
@@ -8988,6 +9498,13 @@
         "charge": 0
       },
       {
+        "name": "levothyroxine",
+        "sid": "levothyroxine",
+        "mass": 776.872,
+        "formula": "C15H11I4NO4",
+        "charge": 0
+      },
+      {
         "name": "lidocaine",
         "sid": "lidocaine",
         "mass": 234.343,
@@ -9121,6 +9638,13 @@
         "charge": 0
       },
       {
+        "name": "m3g/mor",
+        "sid": "m3g-over-mor",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "m3g+m6g",
         "sid": "m3g-plus-m6g",
         "mass": null,
@@ -9163,6 +9687,13 @@
         "charge": 0
       },
       {
+        "name": "m6g/mor",
+        "sid": "m6g-over-mor",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "M7",
         "sid": "m7",
         "mass": 620.6,
@@ -9177,6 +9708,13 @@
         "charge": null
       },
       {
+        "name": "magnesium",
+        "sid": "magnesium",
+        "mass": 24.305,
+        "formula": "Mg",
+        "charge": 0
+      },
+      {
         "name": "maraviroc",
         "sid": "maraviroc",
         "mass": 513.677,
@@ -9188,6 +9726,13 @@
         "sid": "mdma",
         "mass": 193.246,
         "formula": "C11H15NO2",
+        "charge": 0
+      },
+      {
+        "name": "mebrofenin",
+        "sid": "mebrofenin",
+        "mass": 387.23,
+        "formula": "C15H19BrN2O5",
         "charge": 0
       },
       {
@@ -9744,6 +10289,13 @@
         "charge": 0
       },
       {
+        "name": "OSI-420",
+        "sid": "osi-420",
+        "mass": 379.41,
+        "formula": "C21H21N3O4",
+        "charge": 0
+      },
+      {
         "name": "osilodostrat",
         "sid": "osilodostrat",
         "mass": null,
@@ -10171,8 +10723,22 @@
         "charge": 0
       },
       {
+        "name": "protein",
+        "sid": "protein",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "protein bound captopril",
         "sid": "protein-bound-captopril",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "prothrombin complex concentrate",
+        "sid": "prothrombin-complex-concentrate",
         "mass": null,
         "formula": null,
         "charge": null
@@ -10647,6 +11213,13 @@
         "charge": 0
       },
       {
+        "name": "semaglutide+metabolites",
+        "sid": "semaglutide-plus-metabolites",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "setipiprant",
         "sid": "setipiprant",
         "mass": 402.4,
@@ -10757,6 +11330,20 @@
         "mass": 464.831,
         "formula": "C21H16ClF3N4O3",
         "charge": 0
+      },
+      {
+        "name": "sorafenib-glucuronide",
+        "sid": "sorafenib-glucuronide",
+        "mass": 640.955,
+        "formula": "C27H24ClF3N4O9",
+        "charge": 0
+      },
+      {
+        "name": "sorafenib-glucuronide/sorafenib",
+        "sid": "sorafenib-glucuronide-over-sorafenib",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "sorafenib-M2",
@@ -11006,6 +11593,13 @@
       {
         "name": "tb/caf",
         "sid": "tb-over-caf",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "99mTc-GSA",
+        "sid": "tc99m-gsa",
         "mass": null,
         "formula": null,
         "charge": null
@@ -11389,6 +11983,13 @@
         "charge": 0
       },
       {
+        "name": "vinorelbine",
+        "sid": "vinorelbine",
+        "mass": 778.947,
+        "formula": "C45H54N4O8",
+        "charge": 0
+      },
+      {
         "name": "vitamin K",
         "sid": "vitamin-k",
         "mass": 171.175,
@@ -11509,6 +12110,7 @@
       "bile duct",
       "bile",
       "blood",
+      "brachial artery",
       "breath",
       "carotid artery",
       "cecum",
@@ -11551,7 +12153,9 @@
       "coagulation assay",
       "colorimetric assay",
       "competition dialysis",
+      "coulometry",
       "Doppler ultrasound",
+      "ECLIA",
       "electrocardiography",
       "ELISA",
       "EMIT",
@@ -11577,10 +12181,12 @@
       "HPLC/UV",
       "ICP-AES",
       "immunofluorescence",
+      "IRMA",
       "LC ESI MS",
       "LC/MS",
       "LC MS/MS",
       "LC/UV",
+      "LOCI",
       "MRI",
       "MRI-GRE",
       "MRI-SE",
@@ -11668,5 +12274,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "8fdea7deaed5b28e90e1beba27164ad973c5b08f445663bc8da7888461f1e803"
+  "vocabulary_hash": "d2bfc8dd011f879d6a1cdc0ae31b7e3fee80e9558cd60e28229230ccb1ae03ff"
 }

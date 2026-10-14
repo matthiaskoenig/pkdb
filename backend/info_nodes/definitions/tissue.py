@@ -80,6 +80,18 @@ TISSUE_NODES: list[InfoNode] = [
         ],
     ),
     Tissue(
+        sid="brachial-artery",
+        name="brachial artery",
+        description="The main artery of the upper arm, continuing from the axillary artery to the elbow, "
+        "where it divides into the radial and ulnar arteries. Used for measurements of the forearm blood "
+        "flow and of the arterial diameter by ultrasound.",
+        parents=["tissue"],
+        annotations=[
+            (BQB.IS, "UBERON:0001398"),
+            (BQB.IS, "NCIT:C12681"),
+        ],
+    ),
+    Tissue(
         sid="carotid-artery",
         name="carotid artery",
         description="A key artery located in the front of the neck that carries blood "

@@ -1,0 +1,96 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C111236",
+  "lang": "en",
+  "description": [
+    "A type of antibody-excess, non-competition radioimmunometric assay in which ligand is sandwiched between an immobilized antibody on a solid phase and a radiolabeled antibody raised against a different epitope of the ligand."
+  ],
+  "synonyms": [
+    "IMMUNORADIOMETRIC ASSAY",
+    "IRMA",
+    "Immunoradiometric Assay"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "An antibody-excess, non-competition radioimmunometric assay in which ligand is sandwiched between an immobilized antibody on a solid phase and a radiolabeled antibody raised against a different epitope of the ligand."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Preferred_Name": [
+      "Immunoradiometric Assay"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0021073"
+    ],
+    "code": [
+      "C111236"
+    ]
+  },
+  "label": "Immunoradiometric Assay",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C111236",
+  "obo_id": "NCIT:C111236",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "IMMUNORADIOMETRIC ASSAY",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IRMA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Immunoradiometric Assay",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111236/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

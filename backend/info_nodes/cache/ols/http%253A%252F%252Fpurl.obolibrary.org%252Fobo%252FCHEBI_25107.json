@@ -1,0 +1,243 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_25107",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "12Mg",
+    "Magnesium",
+    "Mg",
+    "magnesio",
+    "magnesium",
+    "magnesium"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:7439-95-4",
+      "drugbank:DB01378",
+      "gmelin:16207",
+      "kegg.compound:C00305",
+      "webelements:Mg"
+    ],
+    "generalized_empirical_formula": [
+      "Mg"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:25107"
+    ],
+    "inchi_key_string": [
+      "FYYHWMGAXLPEAU-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/Mg"
+    ],
+    "mass": [
+      "24.305"
+    ],
+    "monoisotopic_mass": [
+      "23.98504"
+    ],
+    "smiles_string": [
+      "[Mg]"
+    ]
+  },
+  "label": "magnesium atom",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_25107",
+  "obo_id": "CHEBI:25107",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "7439-95-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=7439-95-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01378",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01378"
+    },
+    {
+      "database": "gmelin",
+      "id": "16207",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00305",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "webelements",
+      "id": "Mg",
+      "description": "webelements",
+      "url": "https://www.webelements.com/Mg"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "magnesium",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "12Mg",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Magnesium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mg",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mg",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "magnesio",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "magnesium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "magnesium",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25107/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

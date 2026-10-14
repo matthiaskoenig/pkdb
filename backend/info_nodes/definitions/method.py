@@ -183,6 +183,37 @@ METHOD_NODES: list[InfoNode] = [
         ],
     ),
     Method(
+        sid="irma",
+        name="IRMA",
+        label="immunoradiometric assay (IRMA)",
+        description="Immunoradiometric assay (IRMA), a non-competitive two-site (sandwich) immunoassay "
+        "with a radiolabeled antibody. See also 'RIA' for the competitive radioimmunoassay.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C111236")],
+        synonyms=["immunoradiometric assay"],
+    ),
+    Method(
+        sid="eclia",
+        name="ECLIA",
+        label="electrochemiluminescence immunoassay (ECLIA)",
+        description="Electrochemiluminescence immunoassay (ECLIA), an immunoassay in which the label "
+        "emits light after an electrochemical reaction at an electrode (e.g. Roche Elecsys and cobas "
+        "immunoassays).",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C111194")],
+        synonyms=["ELIT", "electrochemiluminescence immunoassay", "ECL immunoassay"],
+    ),
+    Method(
+        sid="loci",
+        name="LOCI",
+        label="luminescent oxygen channeling immunoassay (LOCI)",
+        description="Luminescent oxygen channeling immunoassay (LOCI), a homogeneous bead-based sandwich "
+        "immunoassay in which singlet oxygen from a photosensitizer bead triggers the chemiluminescence "
+        "of an acceptor bead bound in proximity (AlphaLISA type).",
+        parents=["assay"],
+        synonyms=["LOCI assay", "luminescent oxygen channeling immunoassay"],
+    ),
+    Method(
         sid="radiochromatography-MS-MS",
         name="radiochromatography/MS/MS",
         description="Radiochromatography/MS/MS technique, combining LC MS/MS with radiodetection.",
@@ -612,6 +643,15 @@ METHOD_NODES: list[InfoNode] = [
         synonyms=[
             "direct potentiometry",
         ],
+    ),
+    Method(
+        sid="coulometry",
+        description="An electroanalytical technique that determines the amount of a substance from the "
+        "electric charge consumed in its electrochemical conversion, e.g. the coulometric titration of "
+        "chloride with silver ions (chloridometer).",
+        parents=["assay"],
+        annotations=[(BQB.IS, "https://bioregistry.io/CHMO:0000012")],
+        synonyms=["coulometric titration", "chloridometer"],
     ),
     Method(
         sid="photoplethysmography",
