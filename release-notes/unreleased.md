@@ -1,6 +1,7 @@
 # Unreleased
 
 - The Data section of the local curation app tints the columns of a table by what they name: the subjects blue, the interventions green and the other data gray, with `study` and `source` in muted italics without a tint. `subjects.tsv` and `characteristica.tsv` stay blue and `interventions.tsv` green, raw extractions are no longer tinted, and the navigator marks the tables of data with a gray bar instead of a violet one and the raw extractions with an outlined bar (#959).
+
 - A name of a subject or an intervention in a table of the Data section of the local curation app opens its row in `subjects.tsv` or `interventions.tsv`, selected and scrolled into view, and browser Back returns to the row it came from (#960). The names of the `subjects`, `parent` and `interventions` columns and of the columns that end in `_subjects` or `_interventions` are links, each name of a cell of several names its own; the Right and Left arrow keys reach them from the line number of the row, and Enter follows one.
 
 - The descriptions and comments of a study and of the notes of its tables in the local curation app no longer show a label such as Description 1 or Comment 1 by curator: each description and comment starts one line high, as high as the other fields, and grows with its text, and a comment shows its author once above its text, and screen readers still hear the name of each field (#954).
