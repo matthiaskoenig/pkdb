@@ -1,8 +1,8 @@
 """Serialized scientific jobs of the curation engine.
 
-Reads and writes engine attributes: lock, jobs, queue, active, studies, modes, paused, stop,
+Reads and writes engine attributes: lock, jobs, queue, active, studies, save_modes, paused, stop,
 wakeup, api_key, account, can_upload, offline, endpoint, cache, vocabulary, root. Uses engine
-methods _save, snapshot, _context, _connection_status, connect, scan, _sync_state and _wait.
+methods _save, snapshot, _context, _save_mode, _connection_status, connect, scan, _sync_state and _wait.
 """
 
 import hashlib
@@ -23,7 +23,7 @@ from pkdb.cache import (
 from pkdb.client import Client
 from pkdb.curation.errors import describe as describe_error
 from pkdb.curation.errors import new_request_id, redact, without_traceback
-from pkdb.curation.state import EngineState
+from pkdb.curation.state import SAVE_MODES, EngineState
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
@@ -321,8 +321,15 @@ class JobsMixin(EngineState):
             (row for row in self.studies.values() if row["id"] == identifier), None
         )
 
-    def set_mode(self, ids, mode):
-        if mode not in {"validate", "upload", "off"}:
+    def set_mode(self, mode):
+        """Set On save, what a save starts, for every study of the workspace, the server and
+        the account.
+
+        A change of On save is not a save: the saves that wait for their job no longer start
+        one, so that Off to Upload never uploads a backlog. The first validation of a study
+        stays due, and the queued jobs and the jobs that a pause canceled keep their action.
+        """
+        if mode not in SAVE_MODES:
             raise ValueError("Unknown save action")
         with self.lock:
             if mode == "upload" and (
@@ -331,12 +338,12 @@ class JobsMixin(EngineState):
                 raise ValueError(
                     "Connect an authorized PK-DB account before enabling uploads on save"
                 )
-            for row in self._selected(ids):
-                row["mode"] = mode
-                row["_pending"] = False  # Mode changes are not saves.
-                row["_resume_action"] = None
-                self.modes.setdefault(self._context(), {})[row["id"]] = mode
-            self._save()
+            if mode != self._save_mode():
+                self.save_modes[self._context()] = mode
+                for row in self.studies.values():
+                    if not row.get("_initial") and row["_resume_action"] is None:
+                        row["_pending"] = False
+                self._save()
         return self.snapshot()
 
     def _cancel_pending(self, message):

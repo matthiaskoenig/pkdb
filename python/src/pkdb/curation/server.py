@@ -810,7 +810,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Unknown setting")
             return engine.configure(**body)
         if path == "/local/mode":
-            return engine.set_mode(required(body, "ids"), required(body, "mode"))
+            # On save is one action for every study: a request names no studies.
+            if set(body) - {"mode"}:
+                raise ValueError("On save applies to every study: send only mode")
+            return engine.set_mode(required(body, "mode"))
         if path == "/local/jobs/cancel":
             return engine.cancel_jobs(required(body, "ids"))
         if path == "/local/history/clear":

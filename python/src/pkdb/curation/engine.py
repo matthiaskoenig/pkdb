@@ -26,7 +26,13 @@ from pkdb.curation.jobs import (
     now,
 )
 from pkdb.curation.plot_scales import saved_plot_scales
-from pkdb.curation.state import THEMES, StateLock, StateVersion, state_row
+from pkdb.curation.state import (
+    THEMES,
+    StateLock,
+    StateVersion,
+    saved_save_modes,
+    state_row,
+)
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
@@ -162,7 +168,10 @@ class CurationEngine(
                 # a failure names none, whatever its message says.
                 if found := SAVED_ITEM.search(job.get("message", "")):
                     job["item"] = found.group(1)
-        self.modes = saved.get("modes", {})
+        # The On save action of each workspace, server and account. pkdb 0.12 kept one per
+        # study under `modes`: this version leaves them to it, and every context starts at
+        # validate.
+        self.save_modes = saved_save_modes(saved.get("save_modes"))
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
         ][:RECENT_LIMIT]
@@ -201,7 +210,7 @@ class CurationEngine(
             "theme": self.theme,
             "plot_scales": self.plot_scales,
             "github": self.github.data,
-            "modes": self.modes,
+            "save_modes": self.save_modes,
             "recent_workspaces": self.recent_workspaces,
             "jobs": self.jobs,
         }
@@ -261,6 +270,8 @@ class CurationEngine(
                         "update_required": newer(self.server_version),
                         "offline": self.offline,
                         "paused": self.paused,
+                        # What a save of any study starts.
+                        "mode": self._save_mode(),
                         "theme": self.theme,
                         "plot_scales": {
                             figure: dict(scales)

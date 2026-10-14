@@ -598,7 +598,6 @@ class StudiesMixin(EngineState):
             key = {
                 "fingerprint": row["_fingerprint"],
                 "status": row["status"],
-                "mode": row["mode"],
                 "report_id": row["report_id"],
                 "sync": row["sync"],
                 "issue": self._issue_for(row["summary"].get("issue")),
@@ -624,7 +623,6 @@ class StudiesMixin(EngineState):
                         "id": row["id"],
                         "path": row["path"],
                         "status": row["status"],
-                        "mode": row["mode"],
                         "sync": row["sync"],
                         "counts": row["counts"],
                         "summary": row["summary"],

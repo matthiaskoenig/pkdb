@@ -1887,7 +1887,6 @@ def test_write_routes_refuse_an_ambiguous_identity(api, valid_files, path, body)
     assert len(refused["paths"]) == 2
     for route, existing in [
         ("/local/jobs", {"ids": ["caffeine/Example"], "action": "validate"}),
-        ("/local/mode", {"ids": ["caffeine/Example"], "mode": "off"}),
         ("/local/files/open", {"study_id": "caffeine/Example"}),
     ]:
         assert request(server, "POST", route, existing, headers)[0] == 409, route
@@ -2610,3 +2609,27 @@ def test_the_state_names_the_substance_folders_of_each_study(
     assert status == 200
     rows = {row["id"]: row["substances"] for row in json.loads(data)["studies"]}
     assert rows == {"caffeine/Example": ["caffeine", "drug"], "drug/Other": ["drug"]}
+
+
+def test_on_save_is_set_for_the_workspace_without_naming_studies(api):
+    server, engine, _ = api
+    headers = authenticate(server)
+    status, _, data = request(server, "POST", "/local/mode", {"mode": "off"}, headers)
+    assert status == 200 and json.loads(data)["mode"] == "off"
+    for body, detail in [
+        (
+            {"ids": ["caffeine/Example"], "mode": "validate"},
+            "ValueError: On save applies to every study: send only mode",
+        ),
+        (
+            {"mode": "upload"},
+            "ValueError: Connect an authorized PK-DB account before enabling uploads"
+            " on save",
+        ),
+        ({"mode": "sometimes"}, "ValueError: Unknown save action"),
+    ]:
+        status, _, data = request(server, "POST", "/local/mode", body, headers)
+        assert status == 400 and error_body(data)["detail"] == detail, body
+    status, _, data = request(server, "POST", "/local/mode", {}, headers)
+    assert status == 400 and json.loads(data)["code"] == "missing_field"
+    assert engine.snapshot()["mode"] == "off"

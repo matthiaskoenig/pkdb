@@ -1,7 +1,7 @@
 """Server connection state and checks for the curation engine.
 
 Reads and writes engine attributes: lock, endpoint, api_key, user, account, can_upload,
-connection_error, connection_problem, user_mismatch, connecting, checked_at, server_version, vocabulary, cache,
+connection_error, connection_problem, user_mismatch, save_modes, connecting, checked_at, server_version, vocabulary, cache,
 offline, github, github_user, repository, stop, wakeup, _connection_generation. Uses engine
 methods _save, snapshot and scan.
 """
@@ -68,6 +68,11 @@ class ConnectionMixin(EngineState):
 
     def _context(self):
         return f"{self.root}|{self.endpoint}|{self.account or ''}"
+
+    def _save_mode(self):
+        """The On save action of the workspace, the server and the account; validate by
+        default. Called with the engine lock held."""
+        return self.save_modes.get(self._context(), "validate")
 
     def author(self, agent: str | None = None) -> Author:
         """Who writes study files from the app (spec 7.4), resolved as the CLI resolves it.
@@ -179,7 +184,7 @@ class ConnectionMixin(EngineState):
             self.repository = github.repository
             if changed:
                 for row in self.studies.values():
-                    row.update(mode="validate", stale=True)
+                    row["stale"] = True
                     row["_pending"] = False
             self._save()
         if changed:
@@ -236,10 +241,6 @@ class ConnectionMixin(EngineState):
             self.connection_problem, self.connection_error = problem or (None, None)
             self.user_mismatch = mismatch
             self.checked_at = now()
-            for row in self.studies.values():
-                row["mode"] = self.modes.get(self._context(), {}).get(
-                    row["id"], "validate"
-                )
 
     def _vocabulary(self, client, *, generation=None):
         capabilities = client.capabilities()

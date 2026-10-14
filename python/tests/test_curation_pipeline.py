@@ -506,7 +506,7 @@ def test_closing_the_workbook_keeps_a_queued_upload(workspace, sf_vocabulary):
     engine.api_key = "private-api-key"
     engine.account = "curator"
     engine.can_upload = True
-    engine.set_mode(["caffeine/Example"], "upload")
+    engine.set_mode("upload")
     lock = folder / f".~lock.{folder.name}.xlsx#"
     lock.write_text("open", encoding="utf-8", newline="")
     set_mean(folder, "timecourses_Fig1.tsv", "6")
@@ -564,7 +564,7 @@ def test_a_workbook_closed_during_an_upload_keeps_the_upload_pending(
     engine.api_key = "private-api-key"
     engine.account = "curator"
     engine.can_upload = True
-    engine.set_mode(["caffeine/Example"], "upload")
+    engine.set_mode("upload")
     monkeypatch.setattr(engine, "_vocabulary", lambda client, **kwargs: sf_vocabulary)
     lock = folder / f".~lock.{folder.name}.xlsx#"
     lock.write_text("open", encoding="utf-8", newline="")
@@ -727,7 +727,7 @@ def test_rows_that_no_job_checks_are_planned_a_few_per_tick(
         engine._check_workbooks()
         assert held == [] and len(engine.queue) == 7
         engine.cancel_jobs([job["id"] for job in engine.queue.values()])
-        engine.set_mode([f"caffeine/Example{index}" for index in range(6)], "off")
+        engine.set_mode("off")
         engine.enqueue(["caffeine/Example6"], "validate")
         engine._check_workbooks()
         assert len(held) == 5 and not any(owned for _, owned in held)
@@ -748,7 +748,7 @@ def test_a_plan_of_a_row_that_a_job_checked_meanwhile_is_dropped(
     workspace, sf_vocabulary, monkeypatch
 ):
     engine, folder = workspace
-    engine.set_mode(["caffeine/Example"], "off")
+    engine.set_mode("off")
     real_state = engine._sync_state
 
     def sync_state(path):

@@ -5,7 +5,6 @@
     "path": "caffeine/Demo2020",
     "duplicate": false,
     "substance": "caffeine",
-    "mode": "validate",
     "status": "valid",
     "stale": false,
     "files": [
@@ -116,7 +115,6 @@
     "path": "caffeine/Draft2021",
     "duplicate": false,
     "substance": "caffeine",
-    "mode": "validate",
     "status": "discovered",
     "stale": true,
     "files": [

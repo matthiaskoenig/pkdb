@@ -212,6 +212,9 @@ def test_rows_contract(workspace, engine_on):
     rows = engine.snapshot()["studies"]
     demo = next(row for row in rows if row["id"] == DEMO)
     assert all("problems" not in row for row in rows)
+    # On save is one action of the state, not one per study.
+    assert all("mode" not in row for row in rows)
+    assert engine.snapshot()["mode"] == "validate"
     assert demo["counts"] == {"errors": 0, "warnings": 2}
     assert len(detail["problems"]) == 2
     # The id of a report is random.

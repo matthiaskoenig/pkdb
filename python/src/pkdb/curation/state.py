@@ -22,6 +22,9 @@ THEMES = ("light", "dark", "system")
 #: the problems of all studies.
 DETAIL_ONLY = frozenset({"problems"})
 
+#: What a save of a study file starts, for every study of a workspace, server and account.
+SAVE_MODES = ("validate", "upload", "off")
+
 
 def state_row(row: dict) -> dict:
     """The fields of a study row in the state of the app: those without a leading
@@ -30,6 +33,21 @@ def state_row(row: dict) -> dict:
         key: value
         for key, value in row.items()
         if not key.startswith("_") and key not in DETAIL_ONLY
+    }
+
+
+def saved_save_modes(value: object) -> dict[str, str]:
+    """The On save actions of state.json by context `<workspace>|<endpoint>|<account>`.
+
+    An entry that is no action is left out, so that its context starts at validate. pkdb 0.12
+    kept an action per study under `modes`, which this version neither reads nor writes.
+    """
+    if not isinstance(value, dict):
+        return {}
+    return {
+        context: mode
+        for context, mode in value.items()
+        if isinstance(context, str) and isinstance(mode, str) and mode in SAVE_MODES
     }
 
 
@@ -153,7 +171,8 @@ class EngineState:
     _saved_substances: dict | None
     reference_previews: dict
     jobs: list
-    modes: dict
+    # The On save action by context `<workspace>|<endpoint>|<account>` (`_context`).
+    save_modes: dict[str, str]
     recent_workspaces: list
     paused: bool
     active: Any
@@ -175,6 +194,7 @@ class EngineState:
         def scan(self, initial: bool = False) -> Any: ...
         def connect(self) -> Any: ...
         def _context(self) -> str: ...
+        def _save_mode(self) -> str: ...
         def _connection_status(self) -> str: ...
         def _vocabulary(self, client: Any, *, generation: Any = None) -> Any: ...
         def _selected(self, ids: Any) -> Any: ...
