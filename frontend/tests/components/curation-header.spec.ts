@@ -9,7 +9,7 @@ import App from "../../src/curation-app/App.vue";
 import AppHeader from "../../src/curation-app/components/AppHeader.vue";
 import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
 import { initialTheme, servedTheme, useColorTheme } from "../../src/curation-app/composables/useColorTheme";
-import type { ConnectionStatus } from "../../src/curation-app/api/types";
+import type { ConnectionStatus, Snapshot } from "../../src/curation-app/api/types";
 import { ApiError } from "../../src/curation-app/api/client";
 import { formatTime } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
@@ -253,6 +253,7 @@ describe("AppHeader", () => {
     mountHeader();
     await flushPromises();
     await click("File watching: Active");
+    expect(page().get(".watching-panel").text()).toContain("Saving a file starts the On save action.");
     await click("Pause automatic actions");
     expect(pause).toHaveBeenCalledWith(true);
   });
@@ -360,6 +361,7 @@ describe("AppHeader", () => {
     const menu = page().get(".header-panel");
     expect(menu.text()).toContain("pkdb_data");
     expect(menu.text()).toContain("Active");
+    expect(buttons("On save: Validate")).toHaveLength(1);
     expect(menu.text()).toContain("Connected");
     expect(menu.text()).toContain("curator");
     setViewport(960);
@@ -524,6 +526,166 @@ describe("AppHeader", () => {
     expect(alert.get(".action-failure-detail").text()).toBe("PermissionError: [Errno 13] Permission denied: '/work/other'");
     // It goes with the next attempt and when the menu opens again: no close button, which would drop the focus.
     expect(alert.find(".v-alert__close").exists()).toBe(false);
+  });
+});
+
+describe("OnSaveMenu", () => {
+  /** The account `curator` may upload to beta.pk-db.com. */
+  const ONLINE: Partial<Snapshot> = {
+    offline: false,
+    endpoint: "https://beta.pk-db.com",
+    authenticated: true,
+    account: "curator",
+    can_upload: true,
+    connection: "connected",
+  };
+
+  function dialog() {
+    return page().get('.v-overlay--active[role="dialog"]');
+  }
+
+  it("shows On save after File watching, with the icon and the label of the action", async () => {
+    await loadSnapshot(snapshot({ mode: "off" }));
+    mountHeader();
+    await flushPromises();
+    const onSave = button("On save: Off");
+    expect(onSave.find("i.fa-pause").exists()).toBe(true);
+    expect(onSave.get(".header-control-label").text()).toBe("On save");
+    expect(onSave.get(".v-chip").text()).toBe("Off");
+    expect(onSave.get(".v-chip").classes()).toContain("text-warning");
+    const names = page()
+      .findAll(".header-controls button")
+      .map((item) => item.attributes("aria-label"));
+    expect(names.indexOf("On save: Off")).toBe(names.indexOf("File watching: Active") + 1);
+  });
+
+  it("lists the three actions, each with what a save does, and marks the one that is set", async () => {
+    await loadSnapshot(snapshot());
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    const panel = page().get(".on-save-panel");
+    expect(panel.get('[role="group"]').attributes("aria-label")).toBe("On save action");
+    expect(["Validate", "Upload", "Off"].map((name) => button(name).attributes("aria-pressed"))).toEqual([
+      "true",
+      "false",
+      "false",
+    ]);
+    expect(panel.text()).toContain("It applies to every study of this workspace, with this server and PK-DB account.");
+    const line = (name: string) => document.getElementById(button(name).attributes("aria-describedby") ?? "")?.textContent?.trim();
+    expect(line("Validate")).toBe("A save syncs, formats and validates the study.");
+    expect(line("Off")).toBe("A save marks the study as changed. Validate or upload it yourself.");
+  });
+
+  it("sets Off for every study at once, and the action that is set sends nothing", async () => {
+    await loadSnapshot(snapshot());
+    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot({ mode: "off" }));
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    await click("Off");
+    expect(setMode).toHaveBeenCalledWith("off");
+    await click("Validate");
+    expect(setMode).toHaveBeenCalledTimes(1);
+  });
+
+  it("offers no upload on save offline and says why", async () => {
+    await loadSnapshot(snapshot());
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    const upload = button("Upload");
+    expect(upload.attributes("disabled")).toBeDefined();
+    expect(document.getElementById(upload.attributes("aria-describedby") ?? "")?.textContent).toContain(
+      "Work offline is on. Turn it off in the settings to upload.",
+    );
+  });
+
+  it("asks before it turns on upload on save for every study of the workspace", async () => {
+    await loadSnapshot(snapshot(ONLINE));
+    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot({ ...ONLINE, mode: "upload" }));
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    await click("Upload");
+    expect(setMode).not.toHaveBeenCalled();
+    expect(dialog().get("h2").text()).toBe("Turn on upload on save");
+    expect(dialog().text()).toContain("https://beta.pk-db.com");
+    expect(dialog().text()).toContain("/work/pkdb_data");
+    expect(dialog().text()).toContain("saving a file of any study in this workspace");
+    expect(dialog().find(".upload-studies").exists()).toBe(false);
+    await click("Turn on upload on save");
+    expect(setMode).toHaveBeenCalledWith("upload");
+    expect(page().find('.v-overlay--active[role="dialog"]').exists()).toBe(false);
+  });
+
+  it("keeps the dialog open with the refusal of the server", async () => {
+    await loadSnapshot(snapshot(ONLINE));
+    vi.spyOn(useOverviewStore(), "setMode").mockRejectedValue(
+      new ApiError(400, {
+        error: "Could not set the On save action.",
+        detail: "ValueError: Connect an authorized PK-DB account before enabling uploads on save",
+      }),
+    );
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    await click("Upload");
+    await click("Turn on upload on save");
+    expect(dialog().get(".v-alert").text()).toContain("Could not set the On save action.");
+  });
+
+  it("returns the focus to On save after the dialog that its Upload opened", async () => {
+    await loadSnapshot(snapshot(ONLINE));
+    mountHeader();
+    await flushPromises();
+    await focusAndClick("On save: Validate");
+    await focusAndClick("Upload");
+    focusDialog();
+    await click("Cancel");
+    expect(document.activeElement).toBe(button("On save: Validate").element);
+  });
+
+  it("is one more entry of the collapsed header, whose Upload opens the dialog of the header", async () => {
+    await loadSnapshot(snapshot(ONLINE));
+    setViewport(800);
+    mountHeader();
+    await flushPromises();
+    await click("Header menu");
+    await click("On save: Validate");
+    await click("Upload");
+    expect(button("Header menu").attributes("aria-expanded")).toBe("false");
+    expect(dialog().get("h2").text()).toBe("Turn on upload on save");
+  });
+
+  it("shows why setting On save failed, until the menu opens again", async () => {
+    await loadSnapshot(snapshot());
+    vi.spyOn(useOverviewStore(), "setMode").mockRejectedValue(
+      new ApiError(400, { error: "Could not set the On save action." }),
+    );
+    mountHeader();
+    await flushPromises();
+    await click("On save: Validate");
+    await click("Off");
+    expect(page().get(".on-save-panel .v-alert").text()).toContain("Could not set the On save action.");
+    await click("On save: Validate");
+    await afterMenuClosed();
+    await click("On save: Validate");
+    expect(button("On save: Validate").attributes("aria-expanded")).toBe("true");
+    expect(page().find(".on-save-panel .v-alert").exists()).toBe(false);
+  });
+
+  it("shows the last known On save and offers no change while the server is stopped", async () => {
+    await loadSnapshot(snapshot({ mode: "off" }));
+    mountHeader();
+    await flushPromises();
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(button("On save: Off").get(".v-chip").classes().some((value) => value.startsWith("text-"))).toBe(false);
+    await click("On save: Off");
+    expect(page().get(".on-save-panel").text()).toContain("This is the last known state.");
+    for (const name of ["Validate", "Upload", "Off"]) expect(button(name).attributes("disabled")).toBeDefined();
   });
 });
 

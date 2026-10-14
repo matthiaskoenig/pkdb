@@ -20,9 +20,10 @@ import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
-  studies: StudyRow[];
-  /** `upload` uploads the studies now; `enable` makes Upload their On save action. */
+  /** `upload` validates and uploads `studies` now; `enable` makes Upload the On save action of every study of the workspace. */
   action: "upload" | "enable";
+  /** The studies that `upload` uploads; `enable` names none, as On save applies to every study. */
+  studies?: StudyRow[];
   /** Takes the focus when the dialog closes and the control that opened it is gone. */
   fallbackFocus?: FocusTarget;
 }>();
@@ -34,16 +35,17 @@ useReturnFocus(open, () => props.fallbackFocus?.());
 const busy = ref(false);
 const failure = ref<ActionFailure | null>(null);
 
+const listed = computed(() => props.studies ?? []);
 const title = computed(() => (props.action === "upload" ? "Review upload" : "Turn on upload on save"));
 const confirmLabel = computed(() => (props.action === "upload" ? "Validate and upload" : "Turn on upload on save"));
-const withErrors = computed(() => props.studies.some((study) => study.counts.errors > 0));
+const withErrors = computed(() => listed.value.some((study) => study.counts.errors > 0));
 
 watch(open, (value) => {
   if (value) failure.value = null;
 });
 
 async function confirm(): Promise<void> {
-  const ids = props.studies.map((study) => study.id);
+  const ids = listed.value.map((study) => study.id);
   busy.value = true;
   failure.value = null;
   try {
@@ -71,11 +73,15 @@ async function confirm(): Promise<void> {
           <dd>{{ overview.snapshot?.endpoint || "Not configured" }}</dd>
           <dt>PK-DB account</dt>
           <dd>{{ overview.snapshot?.account ?? "Not verified" }}</dd>
+          <template v-if="action === 'enable'">
+            <dt>Workspace</dt>
+            <dd>{{ overview.snapshot?.workspace }}</dd>
+          </template>
         </dl>
-        <section>
-          <h3 class="upload-heading">{{ plural(studies.length, "study", "studies") }}</h3>
+        <section v-if="action === 'upload'">
+          <h3 class="upload-heading">{{ plural(listed.length, "study", "studies") }}</h3>
           <ul class="upload-studies">
-            <li v-for="study in studies" :key="study.path" class="upload-study">
+            <li v-for="study in listed" :key="study.path" class="upload-study">
               <span class="upload-study-text">
                 <span class="upload-study-identity">{{ study.id }}</span>
                 <span v-if="study.summary.title" class="upload-study-title">{{ study.summary.title }}</span>
@@ -90,8 +96,8 @@ async function confirm(): Promise<void> {
           Every upload validates the study first. An upload can replace the study on the server.
         </p>
         <p v-else class="upload-note">
-          From now on, saving a file of these studies validates the study and uploads it to this server. An upload can
-          replace the study on the server.
+          From now on, saving a file of any study in this workspace validates the study and uploads it to this server
+          when it has no errors. An upload can replace the study on the server.
         </p>
         <p v-if="withErrors" class="upload-note">Studies with errors fail the validation and are not uploaded.</p>
         <ActionFailureAlert v-if="failure" :failure="failure" :closable="false" />

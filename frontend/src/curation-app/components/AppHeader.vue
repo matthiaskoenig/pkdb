@@ -8,7 +8,9 @@ import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import AuthorStatus from "./AuthorStatus.vue";
 import ConnectionMenu from "./ConnectionMenu.vue";
+import OnSaveMenu from "./OnSaveMenu.vue";
 import SettingsDialog from "./SettingsDialog.vue";
+import UploadDialog from "./UploadDialog.vue";
 import WatchingMenu from "./WatchingMenu.vue";
 import WorkspaceDialog from "./WorkspaceDialog.vue";
 import WorkspaceMenu from "./WorkspaceMenu.vue";
@@ -56,6 +58,7 @@ function fromPanel(open: () => void): void {
       <template v-if="snapshot">
         <WorkspaceMenu :snapshot="snapshot" @choose="dialogs.openWorkspace" />
         <WatchingMenu :snapshot="snapshot" />
+        <OnSaveMenu :snapshot="snapshot" @upload="dialogs.openUploadOnSave" />
         <ConnectionMenu :snapshot="snapshot" @settings="dialogs.openSettings" />
         <AuthorStatus :author="snapshot.author" @settings="dialogs.openSettings" />
       </template>
@@ -76,6 +79,7 @@ function fromPanel(open: () => void): void {
         <template v-if="snapshot">
           <WorkspaceMenu :snapshot="snapshot" location="bottom" @choose="fromPanel(dialogs.openWorkspace)" />
           <WatchingMenu :snapshot="snapshot" location="bottom" />
+          <OnSaveMenu :snapshot="snapshot" location="bottom" @upload="fromPanel(dialogs.openUploadOnSave)" />
           <ConnectionMenu :snapshot="snapshot" location="bottom" @settings="fromPanel(dialogs.openSettings)" />
           <AuthorStatus :author="snapshot.author" @settings="fromPanel(dialogs.openSettings)" />
           <VDivider />
@@ -91,4 +95,9 @@ function fromPanel(open: () => void): void {
   </VAppBar>
   <WorkspaceDialog v-model="dialogs.workspace" :fallback-focus="() => headerControl('.header-workspace')" />
   <SettingsDialog v-model="dialogs.settings" :fallback-focus="() => headerControl('.header-settings')" />
+  <UploadDialog
+    v-model="dialogs.uploadOnSave"
+    action="enable"
+    :fallback-focus="() => headerControl('.header-on-save')"
+  />
 </template>
