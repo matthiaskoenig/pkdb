@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2217,
-  "version": "45568ea5638fa66bfe00e04b647c3d84e2e2b4d7a6cc355c4c0f2202e9fa89ee",
-  "inputs_sha256": "9e6c2b0ee687ee04aae5c5c64576098a3563748e9dc8bb7d1c48ef2bc0acb6dc",
+  "nodes": 2218,
+  "version": "9e64f6afd3dec0b7e69e30f9d229b5a8b604afb061abebe239ff249f68c29678",
+  "inputs_sha256": "8a8e6198c4716fbc6cca5bfbda8a95e4a1021e0883589148cbae53d18bb36673",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -11,7 +11,7 @@
     "backend/info_nodes/definitions/anthropometry.py": "6761bc9c457061dc1489164f98fb01bcdebcd164ccc8eb753521f7328df5ec20",
     "backend/info_nodes/definitions/calculation_type.py": "247d9c5b44ed9da7273f7c283bd8254a2222b836a276436f2952c85614d2f9bb",
     "backend/info_nodes/definitions/demographics.py": "bd8e712397617a6f067ca118d352088f5088d6d1a521d04b390745229c99800b",
-    "backend/info_nodes/definitions/disease.py": "2576b37f3494c5ee6a139b6f008c9a2d5dd587180ac6945d3f89fc94b030e899",
+    "backend/info_nodes/definitions/disease.py": "bbe283fbf98132d6548fc84d533815d065e125aa7f85ec17cd8aa51d563ba7f8",
     "backend/info_nodes/definitions/dosing.py": "c69beed28d121558fa1623454aec8e65c85dcfee86d44636535cdc16ea129e04",
     "backend/info_nodes/definitions/ethnicity.py": "471f915d15f0229f814ff985ba55f528956753d065fc7a26262259b67655d282",
     "backend/info_nodes/definitions/genetics.py": "3ebd95704598e29b6a5d2b4a4f9dca8879d31a5f1b892aee9e54395ab26ceb7f",
