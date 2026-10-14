@@ -218,7 +218,7 @@ def test_outputs_with_a_time_add_no_digitization_issue(
     assert not {"digitized_mismatch", "unknown_dataset"} & set(found)
 
 
-def test_a_dataset_named_like_an_outputs_series_is_not_compared_with_its_rows(
+def test_a_dataset_named_like_an_outputs_series_is_known_and_not_compared_with_its_rows(
     make_study, valid_files, tsv, sf_vocabulary
 ):
     data = project(GOOD)
@@ -237,4 +237,4 @@ def test_a_dataset_named_like_an_outputs_series_is_not_compared_with_its_rows(
         for issue in validate_folder(folder, sf_vocabulary).issues
         if issue.code in {"unknown_dataset", "digitized_mismatch"}
     ]
-    assert found == [("unknown_dataset", "Example_Fig1.wpd.json", OUTPUT_SERIES)]
+    assert found == []

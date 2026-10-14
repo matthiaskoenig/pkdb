@@ -620,8 +620,16 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
         tables = {table.file: table for table in study.tables}
         datasets = {dataset.name: dataset for dataset in digitization.datasets}
         mapped = {point.dataset for point in points}
+        # A dataset named like an outputs series is drawn on the image, so it is known,
+        # but the rows of outputs are not compared with it.
+        known = mapped | {
+            point.dataset
+            for table in study.tables
+            if table.source == digitization.source and table.kind == "outputs"
+            for point in mapped_points(table)
+        }
         for dataset in digitization.datasets:
-            if dataset.name not in mapped:
+            if dataset.name not in known:
                 yield make_issue(
                     "unknown_dataset",
                     f"The dataset {dataset.name!r} matches no mapped row of source {digitization.source}",
