@@ -17,6 +17,7 @@ import PaperPane from "../components/PaperPane.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
+import NotesView from "../../study-views/components/NotesView.vue";
 import { useLoaded } from "../../study-views/composables/useLoaded";
 import {
   ALL_ROWS,
@@ -51,6 +52,7 @@ import { noteKinds } from "../../study-views/tableKinds";
  * rows pane. Below it, the notes of the kind of the table in study.json open and close above the
  * rows; they edit the draft of the study store, whose banner under the section tabs shows its
  * unsaved changes. The conflict panel and the notes editor come from the page.
+ * Without `edit`, the notes of the kind show read only above the rows (NotesView).
  * Below 1100 px the navigator becomes two selects, Table and Source, at the start of the
  * toolbar, and below 960 px the panes stack.
  * Beyond the upload limits a note says, in place of the navigator and the panes, that the app
@@ -538,6 +540,13 @@ defineExpose({ file });
                 :linked="linkedNotes === notesKind"
                 :unlink="unlink"
               />
+              <NotesView
+                v-else-if="notesKind"
+                :key="notesKind"
+                :kind="notesKind"
+                :focused="linkedNotes === notesKind"
+                @took-focus="unlink"
+              />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
               The study has no tables yet.<template v-if="views.capabilities.value.edit">
@@ -583,6 +592,13 @@ defineExpose({ file });
               :kind="notesKind"
               :linked="linkedNotes === notesKind"
               :unlink="unlink"
+            />
+            <NotesView
+              v-else-if="notesKind"
+              :key="notesKind"
+              :kind="notesKind"
+              :focused="linkedNotes === notesKind"
+              @took-focus="unlink"
             />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">

@@ -22,15 +22,8 @@ import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import TableNotes from "../components/TableNotes.vue";
 import { sectionHeading } from "../composables/useReturnFocus";
-import {
-  markMessages,
-  messagesAt,
-  NO_MESSAGES,
-  PROVENANCE_LABELS,
-  startForm,
-  withKind,
-  type ProvenanceKind,
-} from "../metadata";
+import { markMessages, messagesAt, NO_MESSAGES, startForm, withKind } from "../metadata";
+import { PROVENANCE_LABELS, referenceMatch, referenceView, type ProvenanceKind } from "../../study-views/metadataView";
 import { hasNotes, kindsWithTable } from "../../study-views/notes";
 import { issueUrl, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
@@ -104,27 +97,8 @@ const identifiersChanged = computed(
     (form.value.reference.pmid.trim() !== (savedIdentifiers.value.pmid ?? "") ||
       form.value.reference.doi.trim() !== (savedIdentifiers.value.doi ?? "")),
 );
-const match = computed(() => {
-  const value = detail.value?.reference_match ?? null;
-  if (value === true) return { label: "reference.json matches", tone: "success" };
-  if (value === false) return { label: "reference.json does not match study.json", tone: "warning" };
-  return { label: "No identifiers", tone: undefined };
-});
-const reference = computed(() => {
-  const value = detail.value?.reference ?? null;
-  if (value === null) return { kind: "none" as const };
-  if ("error" in value) return { kind: "error" as const, text: value.error };
-  const authors = value.authors;
-  return {
-    kind: "reference" as const,
-    title: value.title,
-    authors:
-      authors.length > 6
-        ? `${authors.slice(0, 6).join(", ")}, et al. (${authors.length} authors)`
-        : authors.join(", "),
-    source: [value.journal, value.publication_date].filter(Boolean).join(" · "),
-  };
-});
+const match = computed(() => referenceMatch(detail.value?.reference_match ?? null));
+const reference = computed(() => referenceView(detail.value?.reference ?? null));
 
 function useDoi(doi: string): void {
   if (!form.value) return;

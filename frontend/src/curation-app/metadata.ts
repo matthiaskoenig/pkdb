@@ -22,14 +22,7 @@ import {
 import { notesKindOf } from "../study-views/notes";
 import type { Section } from "../study-views/study";
 import { noteKinds } from "../study-views/tableKinds";
-
-export type ProvenanceKind = Provenance["kind"];
-
-export const PROVENANCE_LABELS: Record<ProvenanceKind, string> = {
-  manual_curation: "Manual curation",
-  automatic_curation: "Automatic curation",
-  data_import: "Data import",
-};
+import { PROVENANCE_LABELS, type ProvenanceKind } from "../study-views/metadataView";
 
 /** The source key of a manual curation that `study.json` leaves out. */
 export const MANUAL_SOURCE_KEY = "pkdb.manual";
