@@ -199,3 +199,13 @@ def test_the_public_row_has_no_review_and_no_warnings(documents):
     assert row["warnings"] == 0
     assert set(row["summary"]) & {"review_status", "open_items", "issue"} == set()
     assert row["substances"] == view["substances"]
+
+
+def test_the_public_keeps_only_the_listed_keys(documents):
+    _, view = documents
+    extra = {**view, "summary": {**view["summary"], "future_curation_field": 1}}
+    extra["metadata"] = {**view["metadata"], "future_curation_field": 1}
+    page = for_audience("study", extra, "public")
+    assert page is not None
+    assert "future_curation_field" not in page["summary"]
+    assert "future_curation_field" not in page["metadata"]

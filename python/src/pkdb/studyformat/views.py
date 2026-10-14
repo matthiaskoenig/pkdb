@@ -431,21 +431,34 @@ def row_view(view: dict, *, warnings: int) -> dict:
 Audience = Literal["public", "curator"]
 ViewKind = Literal["study", "row", "table", "source"]
 
-# The keys of a summary that only the curation view shows.
-_CURATION_SUMMARY = ("review_status", "open_items", "issue")
+# The keys of a summary and of study.json that the public sees; anything else, such as the
+# review status, the open items and the issue, belongs to the curation.
+_PUBLIC_SUMMARY = ("title", "curators", "creator", "release", "provenance", "ai")
+_PUBLIC_METADATA = (
+    "format",
+    "reference",
+    "creator",
+    "curators",
+    "collaborators",
+    "licence",
+    "access",
+    "provenance",
+    "release",
+    "descriptions",
+    "comments",
+    "notes",
+)
 
 
 def _public_summary(summary: dict) -> dict:
-    public = {
-        key: value for key, value in summary.items() if key not in _CURATION_SUMMARY
-    }
-    if "provenance" in summary:
-        public["provenance"] = {"kind": summary["provenance"].get("kind")}
+    public = {key: summary[key] for key in _PUBLIC_SUMMARY if key in summary}
+    if "provenance" in public:
+        public["provenance"] = {"kind": public["provenance"].get("kind")}
     return public
 
 
 def _public_metadata(metadata: dict) -> dict:
-    public = {key: value for key, value in metadata.items() if key != "issue"}
+    public = {key: metadata[key] for key in _PUBLIC_METADATA if key in metadata}
     if "curators" in public:
         public["curators"] = [
             {"user": curator["user"]} for curator in public["curators"]
@@ -517,7 +530,8 @@ def for_audience(kind: ViewKind, document: dict, audience: Audience) -> dict | N
 
     Curators, who may write the study, see the document as it is. The public sees the same keys
     with nothing of the curation in them: no review, review targets or acknowledged warnings,
-    no issue, no curator ratings, no provenance beyond its kind, no file names, no raw tables,
+    no issue, no curator ratings, no provenance beyond its kind, no list of the files of the study,
+    no raw tables,
     no images and PDFs, and the plot of a figure without the figure (#963).
     """
     if audience == "curator":
