@@ -88,6 +88,44 @@ function open(event: MouseEvent): void {
         <span v-else class="study-row-title study-row-title--missing">No reference title yet</span>
       </div>
     </td>
+    <td class="cell-release">
+      <span v-if="item.row.summary.release" :title="`Released on ${item.row.summary.release.date}`">
+        {{ item.row.summary.release.pkdb_id }}
+      </span>
+      <span v-else class="cell-empty">-</span>
+    </td>
+    <td class="cell-issue">
+      <a
+        v-if="item.issue"
+        :href="item.issue.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        :aria-label="`GitHub issue #${item.issue.number}`"
+      >
+        #{{ item.issue.number }}
+      </a>
+      <span v-else class="cell-empty">-</span>
+    </td>
+    <td class="cell-curators">
+      <div v-if="item.curators.length" class="curators">
+        <VAvatar
+          v-for="(person, index) in item.curators"
+          :key="index"
+          size="22"
+          color="primary"
+          variant="tonal"
+          class="curator"
+          :title="person.name"
+        >
+          <img v-if="person.avatar" :src="person.avatar" :alt="person.name" class="curator-photo" />
+          <span v-else role="img" :aria-label="person.name" class="curator-initials">{{ person.initials }}</span>
+        </VAvatar>
+        <span v-if="item.hidden" role="img" class="curator-more" :aria-label="`And ${item.others}`" :title="item.others">
+          +{{ item.hidden }}
+        </span>
+      </div>
+      <span v-else class="cell-empty">-</span>
+    </td>
     <td class="cell-review">
       <div class="cell-chips">
         <VChip
@@ -139,44 +177,6 @@ function open(event: MouseEvent): void {
       <VChip size="small" variant="tonal" :color="SYNC_TONES[item.row.sync.status]" class="status-chip">
         {{ SYNC_LABELS[item.row.sync.status] }}
       </VChip>
-    </td>
-    <td class="cell-release">
-      <span v-if="item.row.summary.release" :title="`Released on ${item.row.summary.release.date}`">
-        {{ item.row.summary.release.pkdb_id }}
-      </span>
-      <span v-else class="cell-empty">-</span>
-    </td>
-    <td class="cell-issue">
-      <a
-        v-if="item.issue"
-        :href="item.issue.url"
-        target="_blank"
-        rel="noopener noreferrer"
-        :aria-label="`GitHub issue #${item.issue.number}`"
-      >
-        #{{ item.issue.number }}
-      </a>
-      <span v-else class="cell-empty">-</span>
-    </td>
-    <td class="cell-curators">
-      <div v-if="item.curators.length" class="curators">
-        <VAvatar
-          v-for="(person, index) in item.curators"
-          :key="index"
-          size="22"
-          color="primary"
-          variant="tonal"
-          class="curator"
-          :title="person.name"
-        >
-          <img v-if="person.avatar" :src="person.avatar" :alt="person.name" class="curator-photo" />
-          <span v-else role="img" :aria-label="person.name" class="curator-initials">{{ person.initials }}</span>
-        </VAvatar>
-        <span v-if="item.hidden" role="img" class="curator-more" :aria-label="`And ${item.others}`" :title="item.others">
-          +{{ item.hidden }}
-        </span>
-      </div>
-      <span v-else class="cell-empty">-</span>
     </td>
     <td class="cell-upload">
       <a

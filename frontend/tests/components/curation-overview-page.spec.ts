@@ -11,7 +11,7 @@ import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
 import StudyTable from "../../src/curation-app/components/StudyTable.vue";
-import { OVERSCAN, ROW_HEIGHT, rowItem, studyRoute } from "../../src/curation-app/studyTable";
+import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS, studyRoute } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -274,6 +274,48 @@ describe("OverviewPage", () => {
     const other = rowOf("codeine/Kirchheiner2007");
     expect(other.get(".cell-review").text()).toBe("Approved");
     expect(other.get(".cell-problems").text()).toBe("1 warning");
+  });
+
+  it("lists the columns in one order in the header, in the rows and in the sizer rows", async () => {
+    await mountPage(snapshot({ studies: [harder, approved, example] }));
+    const order = [
+      "cell-select",
+      "cell-study",
+      "cell-release",
+      "cell-issue",
+      "cell-curators",
+      "cell-review",
+      "cell-open",
+      "cell-problems",
+      "cell-sync",
+      "cell-upload",
+    ];
+    /** The column class of each cell of a row of the table. */
+    const cells = (row: Pick<DOMWrapper<Element>, "findAll">) =>
+      row.findAll("th, td").map((cell) => cell.classes().find((name) => name.startsWith("cell-")));
+    const header = page().get(".study-table thead tr");
+    expect(header.findAll("th").map((cell) => cell.text().trim())).toEqual([
+      "",
+      "Study",
+      "Release",
+      "Issue",
+      "Curators",
+      "Review",
+      "Open items",
+      "Problems",
+      "Sync",
+      "Last upload",
+    ]);
+    expect(cells(header)).toEqual(order);
+    // The hidden sizer rows give the columns their widths while only some rows render (#953).
+    const sizers = page().findAll(".study-table tbody tr.study-sizer");
+    expect(sizers.length).toBeGreaterThan(0);
+    for (const row of [...rows(), ...sizers]) expect(cells(row)).toEqual(order);
+    expect(["cell-select", "cell-study", ...SIZED_CELLS]).toEqual(order);
+    // The Study cell keeps the identity and the title after it (Q3).
+    const study = rowOf("caffeine/Harder1988").get(".cell-study");
+    expect(study.get(".study-identity").text()).toBe("caffeine/Harder1988");
+    expect(study.get(".study-row-title").text()).toBe("Effect of smoking on caffeine");
   });
 
   it("links the last upload only to a web page", async () => {
@@ -1114,6 +1156,35 @@ describe("OverviewPage", () => {
     expect(page().findAll("th").find((cell) => cell.text().startsWith("Study"))!.attributes("aria-sort")).toBe(
       "ascending",
     );
+  });
+
+  it("sorts by Release and Issue from their headers at their new places", async () => {
+    const issued = studyRow({
+      id: "caffeine/Issued2020",
+      name: "Issued2020",
+      path: "studies/caffeine/Issued2020",
+      summary: { ...example.summary, issue: 12 },
+    });
+    await mountPage(snapshot({ studies: [example, harder, issued] }));
+    const header = (cell: string) => page().get(`.study-table thead th.${cell}`);
+
+    await click("Release");
+    expect(header("cell-release").attributes("aria-sort")).toBe("ascending");
+    expect(header("cell-study").attributes("aria-sort")).toBeUndefined();
+    // Rows without a value come last, by identity.
+    expect(identities()).toEqual(["caffeine/Harder1988", "caffeine/Example", "caffeine/Issued2020"]);
+
+    await click("Issue");
+    expect(header("cell-issue").attributes("aria-sort")).toBe("ascending");
+    expect(header("cell-release").attributes("aria-sort")).toBeUndefined();
+    expect(identities()).toEqual(["caffeine/Issued2020", "caffeine/Harder1988", "caffeine/Example"]);
+    await click("Issue");
+    expect(header("cell-issue").attributes("aria-sort")).toBe("descending");
+    expect(identities()).toEqual(["caffeine/Harder1988", "caffeine/Issued2020", "caffeine/Example"]);
+
+    // Curators is a label without sorting.
+    expect(header("cell-curators").find("button").exists()).toBe(false);
+    expect(header("cell-curators").text()).toBe("Curators");
   });
 
   it("sorts by a column header", async () => {

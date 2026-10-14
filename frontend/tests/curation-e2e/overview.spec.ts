@@ -68,13 +68,13 @@ test("the labels of the column headers share one baseline", async ({ page }) => 
     );
   expect(labels.map((entry) => entry.label)).toEqual([
     "Study",
+    "Release",
+    "Issue",
+    "Curators",
     "Review",
     "Open items",
     "Problems",
     "Sync",
-    "Release",
-    "Issue",
-    "Curators",
     "Last upload",
   ]);
   const bottoms = labels.map((entry) => entry.bottom);

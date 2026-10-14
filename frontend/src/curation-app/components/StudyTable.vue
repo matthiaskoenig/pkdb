@@ -29,15 +29,19 @@ const selected = defineModel<string[]>("selected", { required: true });
 const sort = defineModel<StudySort>("sort", { required: true });
 const emit = defineEmits<{ retry: [row: StudyRow] }>();
 
+/**
+ * The columns after the checkbox, in their order. The cells of StudyTableRow.vue and the sized
+ * columns of studyTable.ts (SIZED_CELLS) follow the same order.
+ */
 const columns: { key: SortKey | null; label: string; cell: string }[] = [
   { key: "study", label: "Study", cell: "cell-study" },
+  { key: "release", label: "Release", cell: "cell-release" },
+  { key: "issue", label: "Issue", cell: "cell-issue" },
+  { key: null, label: "Curators", cell: "cell-curators" },
   { key: "review", label: "Review", cell: "cell-review" },
   { key: "open_items", label: "Open items", cell: "cell-open" },
   { key: "problems", label: "Problems", cell: "cell-problems" },
   { key: "sync", label: "Sync", cell: "cell-sync" },
-  { key: "release", label: "Release", cell: "cell-release" },
-  { key: "issue", label: "Issue", cell: "cell-issue" },
-  { key: null, label: "Curators", cell: "cell-curators" },
   { key: "upload", label: "Last upload", cell: "cell-upload" },
 ];
 
