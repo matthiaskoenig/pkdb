@@ -7,6 +7,7 @@ from sqlalchemy import delete, select, update
 from pkdb.studyformat.views import VIEW_VERSION
 from pkdb_server.cli import main
 from pkdb_server.commands.views import rebuild_views, stale_view_count
+from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.views import StudyView
 from tests.fixtures.study_folders import multipart, write_study
@@ -105,3 +106,48 @@ def test_rebuild_views_command(
     assert documents(session_factory) == before
     assert main(["rebuild-views", "--all"]) == 0
     assert json.loads(capsys.readouterr().out)["rebuilt"] == ["caffeine/Example"]
+
+
+def test_a_failing_study_does_not_stop_the_others(
+    client, creator_headers, tmp_path, session_factory, ingestion_context
+):
+    for name, pmid in (("Example", "123"), ("Second", "124")):
+        folder = write_study(tmp_path / name, name, pmid=pmid)
+        response = client.put(
+            f"/api/v2/studies/caffeine/{name}",
+            headers=creator_headers,
+            **multipart(folder),
+        )
+        assert response.status_code == 201
+    ingestion, _ = ingestion_context
+    with session_factory() as session:
+        keys = list(
+            session.scalars(
+                select(StoredFile.storage_key)
+                .join(StudyAttachment)
+                .join(Study, Study.id == StudyAttachment.study_id)
+                .where(Study.sid == "caffeine/Example")
+            )
+        )
+    assert keys
+    for key in keys:
+        ingestion.file_store.path(key).unlink()
+    with session_factory.begin() as session:
+        session.execute(update(StudyView).values(version=VIEW_VERSION - 1))
+    result = rebuild_views(session_factory, ingestion.file_store, ingestion.settings)
+    assert result["rebuilt"] == ["caffeine/Second"]
+    assert [item["sid"] for item in result["failed"]] == ["caffeine/Example"]
+    assert result["failed"][0]["error"]
+    with session_factory() as session:
+        versions = {
+            sid: version
+            for sid, version in session.execute(
+                select(Study.sid, StudyView.version)
+                .join(StudyView, StudyView.study_id == Study.id)
+                .where(StudyView.kind == "study")
+            )
+        }
+    assert versions == {
+        "caffeine/Example": VIEW_VERSION - 1,
+        "caffeine/Second": VIEW_VERSION,
+    }

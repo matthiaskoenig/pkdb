@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 
 from sqlalchemy import delete, exists, func, select
+from sqlalchemy.exc import SQLAlchemyError
 
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.views import VIEW_VERSION
@@ -46,7 +47,13 @@ def rebuild_views(session_factory, file_store, settings, *, everything=False) ->
     for sid in sids:
         try:
             with session_factory.begin() as session:
-                study = session.scalar(select(Study).where(Study.sid == sid))
+                # Lock the row like an upload does: a concurrent upload waits for this
+                # rebuild or is read committed, so texts, files and pages share one state.
+                study = session.scalar(
+                    select(Study).where(Study.sid == sid).with_for_update()
+                )
+                if study is None:
+                    continue  # deleted or renamed since the list was read
                 with tempfile.TemporaryDirectory() as directory:
                     folder = Path(directory).joinpath(*sid.split("/"))
                     folder.mkdir(parents=True)
@@ -71,6 +78,6 @@ def rebuild_views(session_factory, file_store, settings, *, everything=False) ->
                 session.execute(delete(StudyView).where(StudyView.study_id == study.id))
                 store_views(session, study.id, views)
             rebuilt.append(sid)
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError, LookupError, SQLAlchemyError) as error:
             failed.append({"sid": sid, "error": f"{type(error).__name__}: {error}"})
     return {"rebuilt": rebuilt, "failed": failed}
