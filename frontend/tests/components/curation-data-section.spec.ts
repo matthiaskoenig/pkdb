@@ -969,8 +969,8 @@ describe("links of names", () => {
     const push = vi.spyOn(router, "push");
     const row = rowsPane().findAll("tbody tr[data-index]")[1]!;
     await row.findAll(".grid-link")[0]!.trigger("click");
-    await vi.waitFor(() => expect(push).toHaveBeenCalled());
-    await flushPromises();
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" }));
+    await vi.waitFor(() => expect(rowsPane().get("tr.grid-row--focus th").text()).toBe("1"), { timeout: 5000 });
     // Back returns to line 2 of outputs_Tab2.tsv, selected as a click on it selects it.
     expect(replace).toHaveBeenCalledWith({ query: { source: "Tab2", file: "outputs_Tab2.tsv", line: "2" } });
     expect(push).toHaveBeenCalledWith({ query: { file: "subjects.tsv", line: "1" } });
@@ -990,8 +990,14 @@ describe("links of names", () => {
     );
     const push = vi.spyOn(router, "push");
     await rowsPane().findAll("tbody tr[data-index]")[0]!.findAll(".grid-link")[1]!.trigger("click");
-    await vi.waitFor(() => expect(push).toHaveBeenCalled());
-    await flushPromises();
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({
+        source: "paper",
+        pdf: "Example_Supp.pdf",
+        file: "interventions.tsv",
+        line: "1",
+      }),
+    );
     expect(push).toHaveBeenCalledWith({
       query: { source: "paper", pdf: "Example_Supp.pdf", file: "interventions.tsv", line: "1" },
     });
