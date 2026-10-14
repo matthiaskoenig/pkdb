@@ -230,7 +230,12 @@ def main(argv=None, *, client=None) -> int:
     if args.command == "upload":
         if args.jobs < 1:
             parser.error("--jobs must be positive")
-    from pkdb.cache import VocabularyCache, atomic_json, select_vocabulary
+    from pkdb.cache import (
+        REPORT_WAIT,
+        VocabularyCache,
+        atomic_json,
+        select_vocabulary,
+    )
     from pkdb.client import Client
     from pkdb.errors import ClientError, CompatibilityError
     from pkdb.preparation import prepare, study_folders
@@ -552,7 +557,7 @@ def main(argv=None, *, client=None) -> int:
         batch["unattempted"] = [str(folder) for folder in folders[len(results) :]]
         if args.report:
             try:
-                atomic_json(args.report, _redact(batch, token))
+                atomic_json(args.report, _redact(batch, token), wait=REPORT_WAIT)
             except OSError as error:
                 failed = True
                 stop = True

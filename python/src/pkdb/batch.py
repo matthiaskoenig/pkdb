@@ -13,7 +13,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TypedDict
 
-from pkdb.cache import atomic_json, endpoint_root
+from pkdb.cache import REPORT_WAIT, atomic_json, endpoint_root
 from pkdb.client import Client
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
@@ -518,7 +518,7 @@ def upload_many(
         }
         batch["unattempted"] = [r["path"] for r in rows if r["status"] == "queued"]
         if target:
-            atomic_json(target, redact(batch, api_key))
+            atomic_json(target, redact(batch, api_key), wait=REPORT_WAIT)
 
     checkpoint()
     if on_result:

@@ -2,6 +2,7 @@
 
 import json
 import os
+from pathlib import Path
 
 import pytest
 
@@ -140,6 +141,67 @@ def test_atomic_bytes_keeps_the_old_content_when_the_replace_fails(
         atomic_bytes(target, b"new")
     assert target.read_bytes() == b"old"
     assert [path.name for path in tmp_path.iterdir()] == ["book.xlsx"]
+
+
+def locked_replace(monkeypatch, attempts):
+    """Make the first attempts to replace a file fail like a file open on Windows."""
+    replace = Path.replace
+    calls = []
+
+    def locked(self, destination):
+        calls.append(destination)
+        if len(calls) <= attempts:
+            raise PermissionError(13, "Permission denied", str(destination))
+        return replace(self, destination)
+
+    monkeypatch.setattr("pkdb.cache.Path.replace", locked)
+    return calls
+
+
+def test_atomic_json_waits_while_windows_locks_the_target(tmp_path, monkeypatch):
+    from pkdb.cache import atomic_json
+
+    target = tmp_path / "report.json"
+    target.write_text("{}")
+    monkeypatch.setattr("pkdb.cache._LOCKS_OPEN_FILES", True)
+    calls = locked_replace(monkeypatch, 3)
+    atomic_json(target, {"status": "submitting"}, wait=5)
+    assert len(calls) == 4
+    assert json.loads(target.read_text()) == {"status": "submitting"}
+    assert [path.name for path in tmp_path.iterdir()] == ["report.json"]
+
+
+@pytest.mark.parametrize("windows, wait", [(True, 0), (False, 5)])
+def test_atomic_bytes_fails_at_once_without_a_wait_for_locks(
+    tmp_path, monkeypatch, windows, wait
+):
+    from pkdb.cache import atomic_bytes
+
+    # A workbook stays locked while it is open in Excel, and elsewhere a refused
+    # replace is a permission of the folder that no wait changes.
+    target = tmp_path / "book.xlsx"
+    target.write_bytes(b"old")
+    monkeypatch.setattr("pkdb.cache._LOCKS_OPEN_FILES", windows)
+    calls = locked_replace(monkeypatch, 1)
+    with pytest.raises(PermissionError):
+        atomic_bytes(target, b"new", wait=wait)
+    assert len(calls) == 1
+    assert target.read_bytes() == b"old"
+    assert [path.name for path in tmp_path.iterdir()] == ["book.xlsx"]
+
+
+def test_atomic_bytes_gives_up_when_the_lock_outlasts_the_wait(tmp_path, monkeypatch):
+    from pkdb.cache import atomic_bytes
+
+    target = tmp_path / "report.json"
+    target.write_bytes(b"old")
+    monkeypatch.setattr("pkdb.cache._LOCKS_OPEN_FILES", True)
+    calls = locked_replace(monkeypatch, 1000)
+    with pytest.raises(PermissionError):
+        atomic_bytes(target, b"new", wait=0.2)
+    assert 1 < len(calls) < 1000
+    assert target.read_bytes() == b"old"
+    assert [path.name for path in tmp_path.iterdir()] == ["report.json"]
 
 
 def test_atomic_text_encodes_utf8_with_lf_newlines(tmp_path):

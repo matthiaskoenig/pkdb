@@ -6,6 +6,7 @@ import os
 import secrets
 import stat
 import sys
+import time
 from importlib.resources import files
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
@@ -67,13 +68,42 @@ def _create_temporary(folder: Path) -> tuple[int, Path]:
     raise FileExistsError(f"Cannot create a temporary file in {folder}")
 
 
-def atomic_bytes(path: Path, data: bytes) -> None:
+# Windows refuses to replace a file that another program has open, such as a
+# reader of a report, a virus scanner or a search indexer.
+_LOCKS_OPEN_FILES = os.name == "nt"
+
+# Seconds a batch report write waits on Windows for a program that has the
+# report open before the batch stops.
+REPORT_WAIT = 5.0
+
+
+def _replace(temporary: Path, path: Path, wait: float) -> None:
+    """Replace path by temporary; retry for wait seconds while path is locked."""
+    deadline = time.monotonic() + (wait if _LOCKS_OPEN_FILES else 0.0)
+    delay = 0.005
+    while True:
+        try:
+            temporary.replace(path)
+            return
+        except PermissionError:
+            if time.monotonic() >= deadline:
+                raise
+            time.sleep(delay)
+            delay = min(2 * delay, 0.1)
+
+
+def atomic_bytes(path: Path, data: bytes, *, wait: float = 0.0) -> None:
     """Replace a file atomically; the primitive of all atomic writes.
 
     The data is written and fsynced to a temporary file next to the target, which
     takes the permissions of the file it replaces and then replaces it. The
     directory is fsynced on POSIX. On failure the target keeps its old content
     and the temporary file is removed.
+
+    On Windows the replace fails while another program has the target open. wait
+    is how many seconds the replace is retried, for files that others only read
+    for a moment, like a report; the default fails at once, as for a workbook
+    that stays locked while it is open in Excel. Elsewhere it never waits.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
@@ -86,7 +116,7 @@ def atomic_bytes(path: Path, data: bytes) -> None:
         if path.exists():
             # Keep the permissions of the file that is replaced.
             temporary.chmod(stat.S_IMODE(path.stat().st_mode))
-        temporary.replace(path)
+        _replace(temporary, path, wait)
         if os.name == "posix":
             directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
             try:
@@ -98,14 +128,16 @@ def atomic_bytes(path: Path, data: bytes) -> None:
             temporary.unlink(missing_ok=True)
 
 
-def atomic_text(path: Path, text: str) -> None:
+def atomic_text(path: Path, text: str, *, wait: float = 0.0) -> None:
     """Replace a file atomically with UTF-8 text; newlines are written as given, never translated."""
-    atomic_bytes(path, text.encode("utf-8"))
+    atomic_bytes(path, text.encode("utf-8"), wait=wait)
 
 
-def atomic_json(path: Path, value: dict) -> None:
+def atomic_json(path: Path, value: dict, *, wait: float = 0.0) -> None:
     atomic_text(
-        path, json.dumps(value, ensure_ascii=False, allow_nan=False, indent=2) + "\n"
+        path,
+        json.dumps(value, ensure_ascii=False, allow_nan=False, indent=2) + "\n",
+        wait=wait,
     )
 
 
