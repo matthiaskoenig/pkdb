@@ -8,7 +8,7 @@ and then compared with the reported records of the converted study (B).
 
 import math
 from collections import Counter, defaultdict
-from collections.abc import Callable, Collection, Iterable, Mapping
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -20,18 +20,22 @@ from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Change, Difference, StudyResult
 from pkdb.migration.rows import (
     comment,
+    dropped_row,
+    is_timecourse,
     label_name,
     scatter_comment,
     series_arrays,
     timed_measurements,
     valueless,
 )
-from pkdb.migration.sources import image_sources
+from pkdb.migration.sources import image_sources, observation_source
+from pkdb.migration.unmapped import unmapped_values
 from pkdb.preparation import PreparedBundle, prepare
+from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import format_folder
-from pkdb.studyformat.tables import has_header
+from pkdb.studyformat.tables import has_header, table_file
 from pkdb.studyformat.text import format_number
 
 TOLERANCE = 1e-9
@@ -450,17 +454,23 @@ class _Conversion(NamedTuple):
 
     `arrays` are the array outputs that became timecourse points, `dropped`
     the parsed format 1 records that it dropped as rows without any value, by
-    key, `timed` the measurements whose characteristica got time NR, and
-    `counts` the counts of the format 1 tables that it wrote, by key.
+    key, `timed` the measurements whose characteristica got time NR,
+    `counts` the counts of the format 1 tables that it wrote, by key, and
+    `unmapped` the dropped rows whose format 1 row holds numbers in columns
+    that study.json does not map (`unmapped_value`).
     """
 
     arrays: Collection[str] = frozenset()
     dropped: Mapping[str, Observation] = {}
     timed: Collection[str] = frozenset()
     counts: Mapping[str, int] = {}
+    unmapped: Sequence[Difference] = ()
 
 
 DROPPED_WITH_DATA = "dropped record with data"
+# The issue code of a dropped row whose format 1 row holds numbers in columns
+# that study.json does not map.
+UNMAPPED = "unmapped_value"
 
 
 def _data(record: Observation) -> str | None:
@@ -886,12 +896,88 @@ def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
     for subject in [*parsed.groups, *parsed.individuals]:
         records += subject.characteristica
     dropped = {record.key: record for record in records if record.key in keys}
+    images = image_sources(v1, v1.name)
     arrays: frozenset[str] = frozenset()
     if any(r.output_type == "array" and r.label for r in parsed.measurements):
-        images = image_sources(v1, v1.name)
         arrays = series_arrays(parsed, v1.name, images, keys)
     counts = table_counts(bundle, parsed).written
-    return _Conversion(arrays, dropped, timed_measurements(vocabulary), counts)
+    unmapped = _unmapped(bundle, parsed, keys, images, arrays)
+    return _Conversion(
+        arrays, dropped, timed_measurements(vocabulary), counts, unmapped
+    )
+
+
+def _unmapped(
+    bundle: SourceBundle,
+    parsed: CanonicalStudy,
+    dropped: frozenset[str],
+    images: frozenset[str],
+    arrays: frozenset[str],
+) -> list[Difference]:
+    """The dropped rows whose format 1 row holds numbers that study.json does not map.
+
+    Each names the table that the row would be in, its format 1 place and
+    the columns with their numbers, like the dropped rows of migration.md.
+    """
+    numbers = unmapped_values(bundle, parsed, dropped)
+    if not numbers:
+        return []
+    name = parsed.metadata.name
+    places: list[tuple[str, str]] = []
+    for subject in [*parsed.groups, *parsed.individuals]:
+        for record in subject.characteristica:
+            if record.key in numbers:
+                row = dropped_row("characteristica.tsv", record, subject.name)
+                places.append((record.key, row.detail))
+    series = {r.label for r in parsed.measurements if r.key in arrays}
+    for record in parsed.measurements:
+        if record.key in numbers:
+            assert record.source is not None
+            source = observation_source(record.source, record.image, name, images)
+            timecourse = is_timecourse(record, arrays, dropped, series)
+            table = table_file("timecourses" if timecourse else "outputs", source)
+            subject = record.group or record.individual
+            row = dropped_row(table, record, subject, record.label)
+            places.append((record.key, row.detail))
+    return [
+        Difference(
+            path=f"{UNMAPPED} {place}",
+            a=", ".join(f"{column} {value}" for column, value in numbers[key]),
+            b=_unmapped_message([column for column, _ in numbers[key]]),
+        )
+        for key, place in places
+    ]
+
+
+def _unmapped_message(columns: list[str]) -> str:
+    named = ", ".join(columns)
+    if len(columns) == 1:
+        return (
+            f"The format 1 row holds a number in column {named}, which study.json "
+            "does not map, so the row has no value and would be dropped. Map the "
+            "column in study.json, or remove the number if it is no value of the row."
+        )
+    return (
+        f"The format 1 row holds numbers in columns {named}, which study.json "
+        "does not map, so the row has no value and would be dropped. Map the "
+        "columns in study.json, or remove the numbers if they are no values of "
+        "the row."
+    )
+
+
+def _refuse_unmapped(
+    result: StudyResult, unmapped: Sequence[Difference]
+) -> StudyResult:
+    """A mismatch when dropped rows would lose numbers that study.json does not map."""
+    if not unmapped:
+        return result
+    return result.model_copy(
+        update={
+            "outcome": "mismatch",
+            "issues": sorted({*result.issues, UNMAPPED}),
+            "differences": [*unmapped, *result.differences][:MAX_DIFFERENCES],
+        }
+    )
 
 
 def _errors(bundle: PreparedBundle) -> list[str]:
@@ -980,6 +1066,19 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return StudyResult(study=study, outcome="invalid_v1", issues=issues)
     if errors := _errors(a):
         return StudyResult(study=study, outcome="invalid_v1", issues=errors)
+    conversion = _conversion(v1, vocabulary)
+    result = _judge_conversion(study, a, converted, vocabulary, conversion)
+    return _refuse_unmapped(result, conversion.unmapped)
+
+
+def _judge_conversion(
+    study: str,
+    a: PreparedBundle,
+    converted: Path,
+    vocabulary: Vocabulary,
+    conversion: _Conversion,
+) -> StudyResult:
+    """Classify the conversion of a valid format 1 study (A)."""
     formatted = format_folder(converted, check=True)
     if not formatted.ok:
         return _invalid(study, "format", formatted.issues, converted)
@@ -997,7 +1096,6 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return _invalid(study, "validation", error.report.issues, converted)
     if _errors(b):
         return _invalid(study, "validation", b.report.issues, converted)
-    conversion = _conversion(v1, vocabulary)
     changes, differences = compare(
         a.study,
         b.study,

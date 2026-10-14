@@ -163,6 +163,20 @@ class ResumeRefused(ValueError):
 
 class JobsMixin(EngineState):
     def _enqueue_one(self, row, action, automatic=False):
+        """Queue a job of the row, save the state and wake the worker; the job."""
+        job = self._queue_job(row, action, automatic)
+        self._save()
+        self.wakeup.set()
+        return job
+
+    def _queue_job(self, row, action, automatic=False):
+        """Queue a job of the row without saving the state or waking the worker; the job.
+
+        A caller that queues many jobs saves and wakes the worker once after them: a save
+        writes the whole history, so a save per job would hold the engine lock, and so
+        every request, for seconds while the initial validations of a large workspace are
+        queued.
+        """
         if row["_blocked"]:
             raise ValueError("Reconcile the unknown upload before starting another job")
         if row["duplicate"] and action == "upload":
@@ -200,8 +214,6 @@ class JobsMixin(EngineState):
         row["_initial"] = False
         row["_resume_action"] = None
         row["status"] = "queued"
-        self._save()
-        self.wakeup.set()
         return job
 
     def _partition_history(self):
@@ -298,7 +310,9 @@ class JobsMixin(EngineState):
                 raise ValueError(
                     "Remote actions require a connected endpoint and API key"
                 )
-            result = [self._enqueue_one(row, action) for row in rows]
+            result = [self._queue_job(row, action) for row in rows]
+            self._save()
+        self.wakeup.set()
         return result
 
     def _selected(self, ids):
