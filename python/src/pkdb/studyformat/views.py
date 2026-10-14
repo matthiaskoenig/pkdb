@@ -530,9 +530,8 @@ def for_audience(kind: ViewKind, document: dict, audience: Audience) -> dict | N
 
     Curators, who may write the study, see the document as it is. The public sees the same keys
     with nothing of the curation in them: no review, review targets or acknowledged warnings,
-    no issue, no curator ratings, no provenance beyond its kind, no list of the files of the study,
-    no raw tables,
-    no images and PDFs, and the plot of a figure without the figure (#963).
+    no issue, no curator ratings, no provenance beyond its kind, no list of the files of the
+    study, no raw tables, no images and PDFs, and the plot of a figure without the figure (#963).
     """
     if audience == "curator":
         return document
