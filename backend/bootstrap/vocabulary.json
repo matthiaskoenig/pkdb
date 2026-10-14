@@ -1,5 +1,5 @@
 {
-  "version": "45568ea5638fa66bfe00e04b647c3d84e2e2b4d7a6cc355c4c0f2202e9fa89ee",
+  "version": "9e64f6afd3dec0b7e69e30f9d229b5a8b604afb061abebe239ff249f68c29678",
   "nodes": [
     {
       "sid": "root",
@@ -18310,10 +18310,48 @@
           "\"disease\""
         ],
         "description": [
-          "\"A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism. Disease of individual or subjects with disease encoded by 'choice' field. Disease duration of individual or subjects (duration should be provided via the min/mean numerical fields in combination with unit). To encode the family history for disease use 'family history disease'.\""
+          "\"A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism. Disease of individual or subjects with disease encoded by 'choice' field. A choice row holds no numbers: encode the duration of the disease with 'disease duration'. To encode the family history for disease use 'family history disease'.\""
         ],
         "dtype": [
           "\"numeric_categorical\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "disease-duration",
+      "name": "disease duration",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "year"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "health-status"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"disease duration\""
+        ],
+        "description": [
+          "\"Time since the diagnosis or the onset of the disease of the subjects, such as the duration of diabetes mellitus. The disease is encoded by a 'disease' characteristic of the same subjects.\""
+        ],
+        "dtype": [
+          "\"numeric\""
         ],
         "ntype": [
           "\"measurement_type\""
