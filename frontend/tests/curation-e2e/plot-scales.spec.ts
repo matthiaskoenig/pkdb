@@ -137,7 +137,12 @@ test("a log axis over 1.3 decades labels 1, 2 and 5 of each decade apart from ea
   const project = join(app.server.workspace, PROJECT);
   await page.route("**/local/studies/caffeine/Demo2020/sources/Fig1", async (route) => {
     const response = await route.fetch();
-    const view = (await response.json()) as { points: { y: number; y_text: string; error_low: number | null; error_high: number | null }[] };
+    // A read that the page aborts, as a newer read of the study replaces it, and an answer 304 of
+    // the server to a revalidation have no body to change.
+    const view = (await response.json().catch(() => null)) as {
+      points: { y: number; y_text: string; error_low: number | null; error_high: number | null }[];
+    } | null;
+    if (!view) return route.fulfill({ response }).catch(() => undefined);
     const last = view.points.length - 1;
     view.points = view.points.map((point, index) => {
       const y = Number((10 ** ((1.3 * index) / last)).toPrecision(3));
