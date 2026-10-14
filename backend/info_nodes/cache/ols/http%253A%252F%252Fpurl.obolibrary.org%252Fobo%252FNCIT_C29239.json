@@ -1,0 +1,91 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29239",
+  "lang": "en",
+  "description": [
+    "An alkaline earth metal, Magnesium is important for many biochemical functions and reactions; for bone and muscle function, protein and fatty acid formation, activation of B vitamins, blood clotting, insulin secretion, and ATP formation. More than 300 enzymes require magnesium for catalytic action. The adult daily requirement is about 300 mg/day. Magnesium is found in many green plants, vegetables, and seeds; chlorophyll is a magnesium-centered porphyrin compound. Magnesium salts are used for magnesium deficiency supplementation. (NCI04)"
+  ],
+  "synonyms": [
+    "Magnesium",
+    "magnesium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "In medicine, a mineral used by the body to help maintain muscles, nerves, and bones. It is also used in energy metabolism and protein synthesis."
+    ],
+    "CAS_Registry": [
+      "7439-95-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:25107"
+    ],
+    "Legacy Concept Name": [
+      "Magnesium"
+    ],
+    "Preferred_Name": [
+      "Magnesium"
+    ],
+    "Semantic_Type": [
+      "Element, Ion, or Isotope"
+    ],
+    "UMLS_CUI": [
+      "C0024467"
+    ],
+    "code": [
+      "C29239"
+    ]
+  },
+  "label": "Magnesium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29239",
+  "obo_id": "NCIT:C29239",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Magnesium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "magnesium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29239/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

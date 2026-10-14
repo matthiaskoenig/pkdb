@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C85764",
+  "lang": "en",
+  "description": [
+    "The percentage of the area under the curve (AUC) extrapolated to infinity observed from Tlast to infinity."
+  ],
+  "synonyms": [
+    "AUC %Extrapolation Obs",
+    "AUCPEO",
+    "Observed Area Under the Curve Percent Extrapolation"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The area under the curve (AUC) from the last observed non-zero concentration value to infinity as a percentage of the area under the curve extrapolated to infinity."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Preferred_Name": [
+      "Observed Area Under the Curve Percent Extrapolation"
+    ],
+    "Semantic_Type": [
+      "Quantitative Concept"
+    ],
+    "UMLS_CUI": [
+      "C2827915"
+    ],
+    "code": [
+      "C85764"
+    ]
+  },
+  "label": "Observed Area Under the Curve Percent Extrapolation",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C85764",
+  "obo_id": "NCIT:C85764",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C85493",
+    "NCIT_C85839"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AUC %Extrapolation Obs",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AUCPEO",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Observed Area Under the Curve Percent Extrapolation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C85764/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

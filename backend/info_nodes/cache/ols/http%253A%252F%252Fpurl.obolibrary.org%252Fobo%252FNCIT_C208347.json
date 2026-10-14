@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C208347",
+  "lang": "en",
+  "description": [
+    "A pathogen-reduced, lyophilized concentrate derived from pooled human plasma and composed of at least the four vitamin K-dependent coagulation factors, factor II (FII), factor VII (FVII), factor IX (FIX), and factor X (FX), and protein C and protein S, with hemostatic activity. Upon administration of the four-factor prothrombin complex concentrate, the four coagulation factors work together to induce coagulation and stop the bleeding."
+  ],
+  "synonyms": [
+    "4-Factor Prothrombin Complex",
+    "4F-PCC",
+    "Four-factor Prothrombin Complex Concentrate",
+    "Kcentra"
+  ],
+  "annotation": {
+    "NCI_META_CUI": [
+      "CL1935103"
+    ],
+    "Preferred_Name": [
+      "Four-factor Prothrombin Complex Concentrate"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "code": [
+      "C208347"
+    ]
+  },
+  "label": "Four-factor Prothrombin Complex Concentrate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C208347",
+  "obo_id": "NCIT:C208347",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "4-Factor Prothrombin Complex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "4F-PCC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Four-factor Prothrombin Complex Concentrate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kcentra",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C208347/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

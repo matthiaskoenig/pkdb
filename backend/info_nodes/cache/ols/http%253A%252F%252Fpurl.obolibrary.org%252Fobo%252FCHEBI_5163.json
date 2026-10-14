@@ -1,0 +1,301 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5163",
+  "lang": "en",
+  "description": [
+    "A phosphinate ester-containing N-acyl derivative of (4<i>S</i>)-cyclohexyl-<small>L</small>-proline. It is used for the treatment of hypertension and heart failure. A pro-drug, it is hydrolysed <em>in vivo</em> to the corresponding phosphininc acid, fosinoprilat, which is the active metabolite."
+  ],
+  "synonyms": [
+    "(2S,4S)-4-cyclohexyl-1-[2-[(2-methyl-1-propanoyloxypropoxy)-(4-phenylbutyl)phosphoryl]acetyl]pyrrolidine-2-carboxylic acid",
+    "(2S,4S)-4-cyclohexyl-1-{2-[(2-methyl-1-propionyloxy-propoxy)-(4-phenyl-butyl)-phosphinoyl]-acetyl}-pyrrolidine-2-carboxylic acid",
+    "(4S)-4-cyclohexyl-1-({[2-methyl-1-(propanoyloxy)propoxy](4-phenylbutyl)phosphoryl}acetyl)-L-proline",
+    "(4S)-4-cyclohexyl-1-({[2-methyl-1-(propanoyloxy)propoxy](4-phenylbutyl)phosphoryl}acetyl)-L-proline",
+    "(S)-4-Cyclohexyl-1-{2-[(2-methyl-1-propionyloxy-propoxy)-(4-phenyl-butyl)-phosphinoyl]-acetyl}-pyrrolidine-2-carboxylic acid",
+    "Fosinopril",
+    "fosinopril"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:8176492",
+      "cas:98048-97-6",
+      "drugbank:DB00492",
+      "kegg.compound:C07016",
+      "kegg.drug:D07992",
+      "lincs.smallmolecule:LSM-6485",
+      "patent:CN101367839",
+      "patent:EP2264039",
+      "patent:US2010297711",
+      "patent:US4337201",
+      "pubmed:11937741",
+      "pubmed:18209565",
+      "pubmed:22729889",
+      "pubmed:8285178",
+      "pubmed:9195116"
+    ],
+    "generalized_empirical_formula": [
+      "C30H46NO7P"
+    ],
+    "has_alternative_id": [
+      "CHEBI:159901",
+      "CHEBI:288733"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5163"
+    ],
+    "inchi_key_string": [
+      "BIDNLKIUORFRQP-FKDWWROVSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C30H46NO7P/c1-4-28(33)37-30(22(2)3)38-39(36,18-12-11-15-23-13-7-5-8-14-23)21-27(32)31-20-25(19-26(31)29(34)35)24-16-9-6-10-17-24/h5,7-8,13-14,22,24-26,30H,4,6,9-12,15-21H2,1-3H3,(H,34,35)/t25-,26+,30?,39?/m1/s1"
+    ],
+    "mass": [
+      "563.672"
+    ],
+    "monoisotopic_mass": [
+      "563.30119"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(C2CCCCC2)C[C@@H](C(=O)O)N(C(=O)CP(=O)(CCCCc2ccccc2)OC(OC(=O)CC)C(C)C)C1"
+    ]
+  },
+  "label": "fosinopril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5163",
+  "obo_id": "CHEBI:5163",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "8176492",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "98048-97-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=98048-97-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00492",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00492"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07016",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07992",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-6485",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN101367839",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN101367839"
+    },
+    {
+      "database": "patent",
+      "id": "EP2264039",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP2264039"
+    },
+    {
+      "database": "patent",
+      "id": "US2010297711",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2010297711"
+    },
+    {
+      "database": "patent",
+      "id": "US4337201",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4337201"
+    },
+    {
+      "database": "pubmed",
+      "id": "11937741",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11937741/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18209565",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18209565/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22729889",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22729889/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8285178",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8285178/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9195116",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9195116/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(4S)-4-cyclohexyl-1-({[2-methyl-1-(propanoyloxy)propoxy](4-phenylbutyl)phosphoryl}acetyl)-L-proline",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,4S)-4-cyclohexyl-1-[2-[(2-methyl-1-propanoyloxypropoxy)-(4-phenylbutyl)phosphoryl]acetyl]pyrrolidine-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,4S)-4-cyclohexyl-1-{2-[(2-methyl-1-propionyloxy-propoxy)-(4-phenyl-butyl)-phosphinoyl]-acetyl}-pyrrolidine-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4S)-4-cyclohexyl-1-({[2-methyl-1-(propanoyloxy)propoxy](4-phenylbutyl)phosphoryl}acetyl)-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-4-Cyclohexyl-1-{2-[(2-methyl-1-propionyloxy-propoxy)-(4-phenyl-butyl)-phosphinoyl]-acetyl}-pyrrolidine-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fosinopril",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fosinopril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5163/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
