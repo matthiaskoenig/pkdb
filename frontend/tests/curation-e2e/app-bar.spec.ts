@@ -1,16 +1,11 @@
 import type { Page } from "@playwright/test";
 import { expect, expectAccessible, setAutomaticActions, test } from "./fixtures.ts";
-import { pixelStats } from "./pixels.ts";
+import { expectColor, pixelStats } from "./pixels.ts";
 
 type Theme = "light" | "dark";
 
 /** The teal of the app bar in each theme, the theme color app-bar of themes.ts. */
 const BAR: Record<Theme, readonly [number, number, number]> = { light: [23, 107, 112], dark: [19, 87, 91] };
-
-function expectColor(actual: readonly number[], expected: readonly number[], what: string): void {
-  for (const [index, value] of actual.entries())
-    expect(Math.abs(value - expected[index]!), `${what}: ${actual.join(",")} is near ${expected.join(",")}`).toBeLessThanOrEqual(2);
-}
 
 /** Follow the theme of the system, as the app does until the curator chooses one, and wait until it shows. */
 async function showTheme(page: Page, theme: Theme): Promise<void> {
@@ -33,6 +28,7 @@ for (const theme of ["light", "dark"] as const) {
     const logo = brand.getByRole("img", { name: "PK-DB" });
     await expect(logo).toHaveCSS("background-color", "rgb(255, 255, 255)");
     await expect(logo).toHaveCSS("border-radius", "6px");
+    await expect(logo).toHaveCSS("padding", "3px");
     expect(await logo.boundingBox()).toMatchObject({ width: 24, height: 24 });
     // A state without a warning or an error: white text on translucent white.
     await expect(bar.getByRole("button", { name: "Connection: Offline" }).locator(".bar-chip")).toHaveCSS(
@@ -91,8 +87,13 @@ test("a control of the app bar shows a white focus ring inside the bar, and dark
   expect(box.y - 3).toBeGreaterThanOrEqual(bar.y);
   expect(box.y + box.height + 3).toBeLessThanOrEqual(bar.y + bar.height);
   // Hovered, the button darkens under its label, which stays white above the layer.
+  // A button that is not focused shows the hover layer alone: black at 0.08, twice the 0.04 of Vuetify, where it is 0 at rest.
+  const workspace = page.getByRole("button", { name: /^Workspace: / });
+  await expect(workspace.locator(".v-btn__overlay")).toHaveCSS("opacity", "0");
+  await workspace.hover();
+  await expect(workspace.locator(".v-btn__overlay")).toHaveCSS("background-color", "rgb(0, 0, 0)");
+  await expect(workspace.locator(".v-btn__overlay")).toHaveCSS("opacity", "0.08");
   await watching.hover();
-  await expect(watching.locator(".v-btn__overlay")).toHaveCSS("background-color", "rgb(0, 0, 0)");
   await expect(watching.locator(".v-btn__content")).toHaveCSS("position", "relative");
   await expect(watching.locator(".header-control-label")).toHaveCSS("color", "rgb(255, 255, 255)");
 });
