@@ -2,8 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useTheme } from "vuetify";
 import { VAlert, VBtn, VProgressLinear } from "vuetify/components";
-import type { SourceView, ValidationIssue } from "../../study-views/types";
-import { plural, listText } from "../../study-views/overview";
+import type { SourceView, ValidationIssue } from "../types";
+import { plural, listText } from "../overview";
 import {
   dataRows,
   capped,
@@ -25,9 +25,9 @@ import {
   type EventPoint,
   type OverlayMode,
   type SelectedRow,
-} from "../../study-views/overlay";
-import { loadNoncedPlotly, plotlyImport, retryPlotly } from "../../study-views/plotly";
-import { messageOf } from "../../study-views/study";
+} from "../overlay";
+import { loadNoncedPlotly, plotlyImport, retryPlotly } from "../plotly";
+import { messageOf } from "../study";
 import { plotColors } from "../../features/plots/theme";
 
 /**

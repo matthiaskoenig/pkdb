@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
 import { h } from "vue";
 import type { ColumnClass, StudyNameLines, TableResponse, ValidationIssue } from "../../src/study-views/types";
-import TableGrid from "../../src/curation-app/components/TableGrid.vue";
+import TableGrid from "../../src/study-views/components/TableGrid.vue";
 import { VTooltip } from "vuetify/components";
 import { TIP_DELAY, TIP_LINGER } from "../../src/study-views/composables/useCellTip";
 import { HEADER_LINE, issueCells, ROW, type CellIssues, type IssueCells } from "../../src/study-views/grid";
@@ -111,7 +111,7 @@ function region(wrapper: VueWrapper): HTMLElement {
  */
 function gridRules(): CSSStyleRule[] {
   // In a variable: Vite turns `new URL` of a literal into the URL of an asset.
-  const source = "../../src/curation-app/components/TableGrid.vue";
+  const source = "../../src/study-views/components/TableGrid.vue";
   const path = fileURLToPath(new URL(source, import.meta.url).href);
   const style = document.createElement("style");
   style.textContent = /<style scoped>([\s\S]*)<\/style>/.exec(readFileSync(path, "utf8"))![1]!;

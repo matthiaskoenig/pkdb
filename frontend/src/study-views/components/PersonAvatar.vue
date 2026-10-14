@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VAvatar } from "vuetify/components";
-import type { Profile } from "../../study-views/types";
+import type { Profile } from "../types";
 
 /** The avatar of a curator, or the initials of the name; decorative beside the name. */
 const props = withDefaults(defineProps<{ profile: Profile; size?: number }>(), { size: 28 });

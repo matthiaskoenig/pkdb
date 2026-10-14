@@ -5,8 +5,8 @@ import type { ConflictData } from "../../study-views/types";
 import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
 import { useStudyStore } from "../stores/study";
 import { conflictView, type Side } from "../tables";
-import MoreBelow from "./MoreBelow.vue";
-import TableGrid from "./TableGrid.vue";
+import MoreBelow from "../../study-views/components/MoreBelow.vue";
+import TableGrid from "../../study-views/components/TableGrid.vue";
 
 /**
  * The rows that the workbook and the tables changed differently since the last sync, per

@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import ProblemsSection from "../../src/curation-app/sections/ProblemsSection.vue";
-import ReviewSection from "../../src/curation-app/sections/ReviewSection.vue";
+import ProblemsSection from "../../src/study-views/sections/ProblemsSection.vue";
+import ReviewSection from "../../src/study-views/sections/ReviewSection.vue";
 import { locationKey } from "../../src/study-views/problems";
 import type { Problem } from "../../src/study-views/types";
 import { reviewItem, studyDetail } from "../unit/curation-fixtures";

@@ -5,7 +5,7 @@ import type { Profile } from "../../study-views/types";
 import { markMessages, messagesAt, NO_MESSAGES, type CuratorRow, type FieldMark } from "../metadata";
 import { profileOf as knownProfile } from "../../study-views/study";
 import DiskVersion from "./DiskVersion.vue";
-import PersonAvatar from "./PersonAvatar.vue";
+import PersonAvatar from "../../study-views/components/PersonAvatar.vue";
 import RatingStars from "./RatingStars.vue";
 
 /** The creator, the curators with their ratings and the collaborators of study.json. */

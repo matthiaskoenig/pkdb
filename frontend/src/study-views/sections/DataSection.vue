@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VListItem, VSelect, VSwitch } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
+import { useStudyViews } from "../context";
 import type {
   PaperFile,
   SourceSummary,
@@ -11,14 +11,14 @@ import type {
   StudyDetail,
   TableKind,
   TableResponse,
-} from "../../study-views/types";
+} from "../types";
 import DataNavigator from "../components/DataNavigator.vue";
 import PaperPane from "../components/PaperPane.vue";
 import RowsPane from "../components/RowsPane.vue";
 import SourcePane from "../components/SourcePane.vue";
 import SplitPane from "../components/SplitPane.vue";
-import NotesView from "../../study-views/components/NotesView.vue";
-import { useLoaded } from "../../study-views/composables/useLoaded";
+import NotesView from "../components/NotesView.vue";
+import { useLoaded } from "../composables/useLoaded";
 import {
   ALL_ROWS,
   fileForSource,
@@ -34,12 +34,12 @@ import {
   tablesByInfo,
   type RowFilter,
   type Selection,
-} from "../../study-views/data";
-import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
-import type { NameLink } from "../../study-views/links";
-import { paperLine, type PaperPlace } from "../../study-views/paper";
-import { beyondLimits, tableFiles, withoutFiles } from "../../study-views/study";
-import { noteKinds } from "../../study-views/tableKinds";
+} from "../data";
+import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
+import type { NameLink } from "../links";
+import { paperLine, type PaperPlace } from "../paper";
+import { beyondLimits, tableFiles, withoutFiles } from "../study";
+import { noteKinds } from "../tableKinds";
 
 /**
  * A source of the study beside the rows of a table, read only. The toolbar holds the switch of

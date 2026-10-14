@@ -20,7 +20,7 @@ import { acknowledgement, location, locationKey } from "../../study-views/proble
 import { acknowledgeFailure } from "../acknowledging";
 import type { ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**

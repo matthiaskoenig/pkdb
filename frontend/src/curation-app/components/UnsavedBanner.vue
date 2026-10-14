@@ -8,7 +8,7 @@ import { changedLabels, fieldLabel, shortList } from "../metadata";
 import { useStudyStore } from "../stores/study";
 import type { Section } from "../../study-views/study";
 import { kindLabel } from "../../study-views/tableKinds";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**

@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { VAlert } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import { visibleSections, type ActionFailure } from "../../study-views/study";
+import { useStudyViews } from "../context";
+import { visibleSections, type ActionFailure } from "../study";
 
 /**
  * A failed action: what could not be done, in bold, and why below it; some of its issues with a

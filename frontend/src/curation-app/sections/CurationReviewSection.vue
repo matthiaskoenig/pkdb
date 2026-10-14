@@ -3,14 +3,14 @@ import { computed, ref, useTemplateRef, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { ReviewItem } from "../../study-views/types";
 import type { ItemAction } from "../../study-views/review";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import NewItemDialog from "../components/NewItemDialog.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../../study-views/focus";
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import ReviewSection from "./ReviewSection.vue";
+import ReviewSection from "../../study-views/sections/ReviewSection.vue";
 
 /**
  * The Review section of the curation app: the shared section (ReviewSection.vue) with New item,

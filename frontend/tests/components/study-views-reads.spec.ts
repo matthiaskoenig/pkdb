@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import PaperViewer from "../../src/curation-app/components/PaperViewer.vue";
-import SourcePane from "../../src/curation-app/components/SourcePane.vue";
-import TargetView from "../../src/curation-app/components/TargetView.vue";
+import PaperViewer from "../../src/study-views/components/PaperViewer.vue";
+import SourcePane from "../../src/study-views/components/SourcePane.vue";
+import TargetView from "../../src/study-views/components/TargetView.vue";
 import { ApiError } from "../../src/study-views/errors";
 import type { Problem, SourceView, TableResponse } from "../../src/study-views/types";
 import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixtures";

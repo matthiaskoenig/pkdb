@@ -2,9 +2,9 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../../study-views/overview";
-import { aiTitle, type RowItem } from "../../study-views/studyTable";
+import { useStudyViews } from "../context";
+import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
+import { aiTitle, type RowItem } from "../studyTable";
 
 /** One study of the study table of the overview. */
 const props = defineProps<{

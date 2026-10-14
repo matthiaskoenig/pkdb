@@ -17,7 +17,7 @@ import type { FocusTarget } from "../../study-views/focus";
 import { plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { failureOf, type ActionFailure } from "../../study-views/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{

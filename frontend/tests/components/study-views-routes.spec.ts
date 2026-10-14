@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { createPinia } from "pinia";
-import ActionFailureAlert from "../../src/curation-app/components/ActionFailureAlert.vue";
-import PaperPane from "../../src/curation-app/components/PaperPane.vue";
-import ProblemItem from "../../src/curation-app/components/ProblemItem.vue";
-import SectionTabs from "../../src/curation-app/components/SectionTabs.vue";
-import StudyTableRow from "../../src/curation-app/components/StudyTableRow.vue";
+import ActionFailureAlert from "../../src/study-views/components/ActionFailureAlert.vue";
+import PaperPane from "../../src/study-views/components/PaperPane.vue";
+import ProblemItem from "../../src/study-views/components/ProblemItem.vue";
+import SectionTabs from "../../src/study-views/components/SectionTabs.vue";
+import StudyTableRow from "../../src/study-views/components/StudyTableRow.vue";
 import { actionFailure } from "../../src/study-views/study";
 import { rowItem } from "../../src/study-views/studyTable";
 import type { Problem } from "../../src/study-views/types";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { plural } from "../../study-views/overview";
+import { plural } from "../overview";
 
 /**
  * The problems and the open review items of an entry of the navigator of the Data section, each

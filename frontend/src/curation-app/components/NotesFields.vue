@@ -6,7 +6,7 @@ import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { markMessage, messagesAt, type FieldMark } from "../metadata";
 import { profileOf as knownProfile } from "../../study-views/study";
 import DiskVersion from "./DiskVersion.vue";
-import PersonAvatar from "./PersonAvatar.vue";
+import PersonAvatar from "../../study-views/components/PersonAvatar.vue";
 
 /**
  * Descriptions and comments: of the study, or of one table kind in its notes. The text areas show

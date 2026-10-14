@@ -14,9 +14,9 @@ import {
   VSpacer,
 } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import CurationStudyHeader from "../components/CurationStudyHeader.vue";
-import SectionTabs from "../components/SectionTabs.vue";
+import SectionTabs from "../../study-views/components/SectionTabs.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { useReturnFocus } from "../composables/useReturnFocus";
 import { sectionHeading } from "../../study-views/focus";

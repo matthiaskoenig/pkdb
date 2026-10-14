@@ -26,7 +26,7 @@ import {
 } from "../activity";
 import { ApiError } from "../../study-views/errors";
 import type { Job } from "../../study-views/types";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import FailureDetails from "../components/FailureDetails.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import UserHint from "../components/UserHint.vue";

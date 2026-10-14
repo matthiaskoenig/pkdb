@@ -4,7 +4,7 @@ import { VBtn, VContainer, VProgressLinear, VTooltip } from "vuetify/components"
 import type { StudyRow } from "../../study-views/types";
 import StudyFilters from "../../study-views/components/StudyFilters.vue";
 import RetryDialog from "../components/RetryDialog.vue";
-import StudyTable from "../components/StudyTable.vue";
+import StudyTable from "../../study-views/components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
 import { storeToRefs } from "pinia";
 import { filterStudies, plural, sortStudies } from "../../study-views/overview";
@@ -15,7 +15,7 @@ import { useOverviewStore } from "../stores/overview";
 import { useOverviewFilters } from "../stores/overviewFilters";
 import { useStudyStore } from "../stores/study";
 import { failureOf, type ActionFailure } from "../../study-views/study";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 const overview = useOverviewStore();
 const dialogs = useDialogStore();

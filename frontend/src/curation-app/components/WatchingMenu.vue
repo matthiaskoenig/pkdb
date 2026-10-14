@@ -6,7 +6,7 @@ import { formatTime } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
 import { failureOf, type ActionFailure } from "../../study-views/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";
 

@@ -24,7 +24,7 @@ import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { failureOf, type ActionFailure } from "../../study-views/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 /**
  * Corrections of `reference.json` of the open study: the title, the authors, the journal and the

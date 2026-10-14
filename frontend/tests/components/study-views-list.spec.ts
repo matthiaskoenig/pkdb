@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VSelect } from "vuetify/components";
-import StudyTable from "../../src/curation-app/components/StudyTable.vue";
+import StudyTable from "../../src/study-views/components/StudyTable.vue";
 import StudyFilters from "../../src/study-views/components/StudyFilters.vue";
 import { roster, studyRow } from "../unit/curation-fixtures";
 import { memoryData, mountViews, viewsContext, websiteRouter } from "./study-views";

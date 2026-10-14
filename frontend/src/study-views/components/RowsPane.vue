@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { VBtn, VChip, VProgressLinear } from "vuetify/components";
-import type { StudyDetail, TableResponse } from "../../study-views/types";
-import { useStudyViews } from "../../study-views/context";
+import type { StudyDetail, TableResponse } from "../types";
+import { useStudyViews } from "../context";
 import {
   ALL_ROWS,
   filterChoices,
@@ -12,7 +12,7 @@ import {
   findTable,
   isShared,
   type RowFilter,
-} from "../../study-views/data";
+} from "../data";
 import {
   columnCount,
   issueCells,
@@ -21,12 +21,12 @@ import {
   targetLines,
   visibleColumns,
   type IssueCells,
-} from "../../study-views/grid";
-import { infoColor, infoOutlined } from "../../study-views/info";
-import { plural } from "../../study-views/overview";
-import type { ActionFailure } from "../../study-views/study";
-import type { NameLink } from "../../study-views/links";
-import { kindLabel } from "../../study-views/tableKinds";
+} from "../grid";
+import { infoColor, infoOutlined } from "../info";
+import { plural } from "../overview";
+import type { ActionFailure } from "../study";
+import type { NameLink } from "../links";
+import { kindLabel } from "../tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { PaperPlace } from "../../study-views/paper";
 import type { PaperFile } from "../../study-views/types";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
-import PaperPane from "./PaperPane.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
+import PaperPane from "../../study-views/components/PaperPane.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { useOverviewStore } from "../stores/overview";

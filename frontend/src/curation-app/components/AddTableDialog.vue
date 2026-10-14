@@ -23,7 +23,7 @@ import { useStudyStore } from "../stores/study";
 import { failureOf, issuesFailure, type ActionFailure } from "../../study-views/study";
 import { userHint } from "../local";
 import { addableKinds } from "../../study-views/tableKinds";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 const open = defineModel<boolean>({ default: false });

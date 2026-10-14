@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import type { Problem } from "../../study-views/types";
+import { useStudyViews } from "../context";
+import type { Problem } from "../types";
 import {
   acknowledgement,
   location,
@@ -11,7 +11,7 @@ import {
   SEVERITY_LABELS,
   suggestionView,
   tableQuery,
-} from "../../study-views/problems";
+} from "../problems";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and

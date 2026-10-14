@@ -27,7 +27,7 @@ import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../../study-views/
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
 import { tableFiles } from "../../study-views/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /** At most this many values of a column are offered for a row filter. */

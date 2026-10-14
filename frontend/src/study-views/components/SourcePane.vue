@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
-import type { SourceSummary, SourceView } from "../../study-views/types";
-import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
-import { useStudyViews } from "../../study-views/context";
-import { rawTable } from "../../study-views/grid";
-import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../../study-views/overlay";
-import { groupByFile, groupCounts, locationKey } from "../../study-views/problems";
-import { SOURCE_ICONS, sourceProblems } from "../../study-views/sources";
-import { tableFiles, viewWithoutFiles, withoutFiles, type ActionFailure } from "../../study-views/study";
+import type { SourceSummary, SourceView } from "../types";
+import { useMoreBelow } from "../composables/useMoreBelow";
+import { useStudyViews } from "../context";
+import { rawTable } from "../grid";
+import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../overlay";
+import { groupByFile, groupCounts, locationKey } from "../problems";
+import { SOURCE_ICONS, sourceProblems } from "../sources";
+import { tableFiles, viewWithoutFiles, withoutFiles, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import MoreBelow from "./MoreBelow.vue";
 import PlotScales from "./PlotScales.vue";

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import type { StudyRow } from "../../study-views/types";
-import { useCellTip } from "../../study-views/composables/useCellTip";
-import { useWindowPosition } from "../../study-views/composables/useWindowPosition";
-import type { SortKey, StudySort } from "../../study-views/overview";
+import { useStudyViews } from "../context";
+import type { StudyRow } from "../types";
+import { useCellTip } from "../composables/useCellTip";
+import { useWindowPosition } from "../composables/useWindowPosition";
+import type { SortKey, StudySort } from "../overview";
 import {
   bodyParts,
   keepSizerRows,
@@ -15,7 +15,7 @@ import {
   sizerRows,
   type BodyPart,
   type RowItem,
-} from "../../study-views/studyTable";
+} from "../studyTable";
 import StudyTableRow from "./StudyTableRow.vue";
 import StudyTooltip from "./StudyTooltip.vue";
 

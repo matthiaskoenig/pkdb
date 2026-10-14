@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vite
 import { enableAutoUnmount, flushPromises, mount, type DOMWrapper, type VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { defineComponent, h, ref } from "vue";
-import PaperViewer from "../../src/curation-app/components/PaperViewer.vue";
+import PaperViewer from "../../src/study-views/components/PaperViewer.vue";
 import {
   PaperImportFailed,
   type PaperEvents,

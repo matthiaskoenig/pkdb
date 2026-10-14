@@ -17,9 +17,9 @@ import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { actionFailure, failureOf, openItems, type ActionFailure } from "../../study-views/study";
 import { approvalRefusal, folderPath, tablesOutcome } from "../local";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import AddTableDialog from "./AddTableDialog.vue";
-import StudyHeader from "./StudyHeader.vue";
+import StudyHeader from "../../study-views/components/StudyHeader.vue";
 import UploadDialog from "./UploadDialog.vue";
 import UserHint from "./UserHint.vue";
 

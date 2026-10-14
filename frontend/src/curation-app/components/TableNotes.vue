@@ -9,7 +9,7 @@ import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
 import { knownProfiles } from "../../study-views/study";
 import { kindLabel, noteKinds } from "../../study-views/tableKinds";
-import MoreBelow from "./MoreBelow.vue";
+import MoreBelow from "../../study-views/components/MoreBelow.vue";
 import NotesFields from "./NotesFields.vue";
 
 /**

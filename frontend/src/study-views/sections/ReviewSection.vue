@@ -2,8 +2,8 @@
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VChip, VChipGroup, VSelect } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import type { Profile, ReviewItem } from "../../study-views/types";
+import { useStudyViews } from "../context";
+import type { Profile, ReviewItem } from "../types";
 import ReviewItemCard from "../components/ReviewItemCard.vue";
 import ReviewItemDetail from "../components/ReviewItemDetail.vue";
 import TargetView from "../components/TargetView.vue";
@@ -16,8 +16,8 @@ import {
   type ItemAction,
   type KindFilter,
   type StateFilter,
-} from "../../study-views/review";
-import { knownProfiles, profileOf } from "../../study-views/study";
+} from "../review";
+import { knownProfiles, profileOf } from "../study";
 
 /**
  * The review items of review.json: state and kind filters, the cards of the items, and the

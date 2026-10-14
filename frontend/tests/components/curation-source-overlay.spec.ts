@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi, afterEach } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import type { SourceView, ValidationIssue } from "../../src/study-views/types";
-import type SourceOverlayComponent from "../../src/curation-app/components/SourceOverlay.vue";
+import type SourceOverlayComponent from "../../src/study-views/components/SourceOverlay.vue";
 import type { OverlayTrace } from "../../src/study-views/overlay";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 
@@ -112,7 +112,7 @@ const view: SourceView = {
 beforeEach(async () => {
   // The import state of Plotly is shared by the plots of the page; each test starts with a new page.
   vi.resetModules();
-  ({ default: SourceOverlay } = await import("../../src/curation-app/components/SourceOverlay.vue"));
+  ({ default: SourceOverlay } = await import("../../src/study-views/components/SourceOverlay.vue"));
   handlers.clear();
   engine.react.mockReset().mockImplementation(async (element: HTMLElement) =>
     Object.assign(element, { on: (event: string, handler: Click) => handlers.set(event, handler) }),

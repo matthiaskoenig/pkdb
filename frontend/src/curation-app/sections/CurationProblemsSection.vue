@@ -3,7 +3,7 @@ import { computed, ref, shallowRef, useTemplateRef, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { Problem, ValidationIssue } from "../../study-views/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
@@ -13,7 +13,7 @@ import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { tableFiles } from "../../study-views/study";
 import { tablesOutcome } from "../local";
-import ProblemsSection from "./ProblemsSection.vue";
+import ProblemsSection from "../../study-views/sections/ProblemsSection.vue";
 
 /**
  * The Problems section of the curation app: the shared section (ProblemsSection.vue) with Open

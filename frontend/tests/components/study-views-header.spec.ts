@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { h } from "vue";
-import StudyHeader from "../../src/curation-app/components/StudyHeader.vue";
+import StudyHeader from "../../src/study-views/components/StudyHeader.vue";
 import { studyDetail } from "../unit/curation-fixtures";
 import { memoryData, mountViews, viewsContext } from "./study-views";
 

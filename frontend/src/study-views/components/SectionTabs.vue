@@ -3,9 +3,9 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VSelect } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import { plural } from "../../study-views/overview";
-import { SECTION_LABELS, visibleSections, type Section } from "../../study-views/study";
+import { useStudyViews } from "../context";
+import { plural } from "../overview";
+import { SECTION_LABELS, visibleSections, type Section } from "../study";
 
 const props = defineProps<{
   substance: string;

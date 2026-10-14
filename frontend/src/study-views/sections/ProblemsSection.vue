@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VChip, VChipGroup } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
-import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../../study-views/types";
+import { useStudyViews } from "../context";
+import type { AcknowledgedWarning, Problem, Profile, ValidationIssue } from "../types";
 import ProblemItem from "../components/ProblemItem.vue";
-import { formatTime, plural } from "../../study-views/overview";
+import { formatTime, plural } from "../overview";
 import {
   acknowledgement,
   filterIssues,
@@ -18,9 +18,9 @@ import {
   SEVERITY_CHIPS,
   severityCounts,
   type SeverityFilter,
-} from "../../study-views/problems";
-import { targetParts } from "../../study-views/review";
-import { isLimitIssue, knownProfiles, profileOf, tableFiles } from "../../study-views/study";
+} from "../problems";
+import { targetParts } from "../review";
+import { isLimitIssue, knownProfiles, profileOf, tableFiles } from "../study";
 
 /**
  * The issues of the last validation by file, with a severity filter, links to the cells of the

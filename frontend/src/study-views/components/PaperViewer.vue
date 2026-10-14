@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
-import { useStudyViews } from "../../study-views/context";
+import { useStudyViews } from "../context";
 import {
   FIT_LABELS,
   FITS,
@@ -20,8 +20,8 @@ import {
   type PaperPlace,
   type PaperSession,
   type PaperStart,
-} from "../../study-views/paper";
-import type { ActionFailure } from "../../study-views/study";
+} from "../paper";
+import type { ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 /**

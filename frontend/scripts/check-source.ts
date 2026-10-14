@@ -1,8 +1,24 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 import { parse } from "@vue/compiler-sfc";
 import ts from "typescript";
 const failures: string[] = [];
+/** Only `src/curation-app/` imports the curation app; the study views and the website never do (#963). */
+const CURATION_APP = /(^|\/)curation-app(\/|$)/;
+
+/** The module that `node` imports: an import or export declaration, `import()` or an import type. */
+function moduleSpecifier(node: ts.Node): string | null {
+  if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier))
+    return node.moduleSpecifier.text;
+  if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+    const [argument] = node.arguments;
+    return argument && ts.isStringLiteral(argument) ? argument.text : null;
+  }
+  if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && ts.isStringLiteral(node.argument.literal))
+    return node.argument.literal.text;
+  return null;
+}
+
 function inspect(path: string) {
   for (const entry of readdirSync(path, { withFileTypes: true })) {
     const file = join(path, entry.name);
@@ -33,6 +49,7 @@ function inspect(path: string) {
           failures.push(`${file}: script must use lang="ts"`);
       code = scripts.map((script) => script.content).join("\n");
     }
+    const outside = file.startsWith(`src${sep}`) && !file.startsWith(join("src", "curation-app") + sep);
     const ast = ts.createSourceFile(
       file,
       code,
@@ -43,6 +60,9 @@ function inspect(path: string) {
     function visit(node: ts.Node) {
       if (node.kind === ts.SyntaxKind.AnyKeyword)
         failures.push(`${file}: explicit any`);
+      const specifier = outside ? moduleSpecifier(node) : null;
+      if (specifier !== null && CURATION_APP.test(specifier))
+        failures.push(`${file}: imports ${specifier}; only src/curation-app imports the curation app`);
       ts.forEachChild(node, visit);
     }
     visit(ast);
@@ -55,5 +75,5 @@ if (failures.length) {
   process.exitCode = 1;
 } else
   console.log(
-    "All application and test sources are TypeScript; Vue scripts and explicit-any checks passed.",
+    "All application and test sources are TypeScript; Vue scripts and explicit-any checks passed; nothing outside src/curation-app imports it.",
   );

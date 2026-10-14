@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { VBtn, VCard, VCardText, VChip, VTextarea } from "vuetify/components";
-import type { Profile, ReviewItem } from "../../study-views/types";
-import { useStudyViews } from "../../study-views/context";
-import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
-import { formatTime } from "../../study-views/overview";
+import type { Profile, ReviewItem } from "../types";
+import { useStudyViews } from "../context";
+import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
+import { formatTime } from "../overview";
 import {
   KIND_ICONS,
   KIND_LABELS,
@@ -12,8 +12,8 @@ import {
   STATE_TONES,
   targetText,
   type ItemAction,
-} from "../../study-views/review";
-import { profileOf } from "../../study-views/study";
+} from "../review";
+import { profileOf } from "../study";
 import PersonAvatar from "./PersonAvatar.vue";
 
 /**

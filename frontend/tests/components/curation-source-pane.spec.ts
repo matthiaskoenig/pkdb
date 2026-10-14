@@ -3,7 +3,7 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
 import type { Problem, SourceView } from "../../src/study-views/types";
-import SourcePane from "../../src/curation-app/components/SourcePane.vue";
+import SourcePane from "../../src/study-views/components/SourcePane.vue";
 import type { AxisScales } from "../../src/study-views/overlay";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";

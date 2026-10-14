@@ -8,7 +8,7 @@ import type { Profile, TableKind } from "../types";
 
 /**
  * The notes of a table kind in study.json above the rows of its tables, read only: a panel that
- * opens and closes, with the header of the notes that the curation app edits there (TableNotes),
+ * opens and closes, with the header of the notes that the curation app edits there,
  * and the descriptions and the comments with their authors. Nothing shows for a kind without
  * notes. A link that names the notes (`focused`) opens them and moves the focus to their toggle,
  * once, which `took-focus` tells; for a kind without notes it tells it at once, as there is

@@ -33,4 +33,23 @@ export default ts.config(
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
+  {
+    // The study views (src/study-views) and the website never import the curation app (#963);
+    // the curation app imports both. scripts/check-source.ts also refuses import() and import types.
+    files: ["src/**/*.ts", "src/**/*.vue"],
+    ignores: ["src/curation-app/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "(^|/)curation-app(/|$)",
+              message: "Only src/curation-app imports the curation app: the study views and the website get what they need through useStudyViews() (#963).",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

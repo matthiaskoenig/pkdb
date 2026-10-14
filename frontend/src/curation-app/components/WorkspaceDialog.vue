@@ -18,7 +18,7 @@ import { useReturnFocus } from "../composables/useReturnFocus";
 import type { FocusTarget } from "../../study-views/focus";
 import { useOverviewStore } from "../stores/overview";
 import { failureOf, type ActionFailure } from "../../study-views/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 

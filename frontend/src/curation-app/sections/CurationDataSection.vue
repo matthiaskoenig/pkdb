@@ -2,7 +2,7 @@
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import type { TableKind } from "../../study-views/types";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
 import ConflictPanel from "../components/ConflictPanel.vue";
 import CurationPaperPane from "../components/CurationPaperPane.vue";
@@ -14,7 +14,7 @@ import { sectionHeading } from "../../study-views/focus";
 import { useStudyStore } from "../stores/study";
 import { tablesOutcome } from "../local";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
-import DataSection from "./DataSection.vue";
+import DataSection from "../../study-views/sections/DataSection.vue";
 
 /**
  * The Data section of the curation app: the shared section (DataSection.vue) with Open sheet,

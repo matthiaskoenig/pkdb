@@ -10,7 +10,7 @@ import {
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { ApiError, ServerStopped } from "../../src/study-views/errors";
-import ActionFailureAlert from "../../src/curation-app/components/ActionFailureAlert.vue";
+import ActionFailureAlert from "../../src/study-views/components/ActionFailureAlert.vue";
 import { makeRouter } from "../../src/curation-app/router";
 import {
   actionFailure,

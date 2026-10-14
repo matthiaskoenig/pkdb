@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import NotesView from "../../src/study-views/components/NotesView.vue";
-import DataSection from "../../src/curation-app/sections/DataSection.vue";
+import DataSection from "../../src/study-views/sections/DataSection.vue";
 import type { TableResponse } from "../../src/study-views/types";
 import { fullStudyMetadata, profile, studyDetail } from "../unit/curation-fixtures";
 import { setViewport } from "./curation-dom";

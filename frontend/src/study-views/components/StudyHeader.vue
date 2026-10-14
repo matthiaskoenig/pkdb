@@ -9,8 +9,8 @@
  */
 import { computed } from "vue";
 import { VChip } from "vuetify/components";
-import type { StudyDetail } from "../../study-views/types";
-import { useStudyViews } from "../../study-views/context";
+import type { StudyDetail } from "../types";
+import { useStudyViews } from "../context";
 import {
   activityLabel,
   issueUrl,
@@ -19,8 +19,8 @@ import {
   REVIEW_TONES,
   SYNC_LABELS,
   SYNC_TONES,
-} from "../../study-views/overview";
-import { issueLabel, provenanceLabel, releaseLabel, studyName } from "../../study-views/study";
+} from "../overview";
+import { issueLabel, provenanceLabel, releaseLabel, studyName } from "../study";
 
 const props = defineProps<{
   detail: StudyDetail;

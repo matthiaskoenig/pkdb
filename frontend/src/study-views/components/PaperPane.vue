@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
 import { useRouter } from "vue-router";
-import { useStudyViews } from "../../study-views/context";
-import type { PaperFile } from "../../study-views/types";
-import { formatBytes, shownPaper, type PaperPlace } from "../../study-views/paper";
+import { useStudyViews } from "../context";
+import type { PaperFile } from "../types";
+import { formatBytes, shownPaper, type PaperPlace } from "../paper";
 import PaperViewer from "./PaperViewer.vue";
 
 /**

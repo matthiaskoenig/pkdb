@@ -12,7 +12,7 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { SEARCH_DELAY_MS } from "../../src/study-views/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
-import StudyTable from "../../src/curation-app/components/StudyTable.vue";
+import StudyTable from "../../src/study-views/components/StudyTable.vue";
 import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS } from "../../src/study-views/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/local";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
