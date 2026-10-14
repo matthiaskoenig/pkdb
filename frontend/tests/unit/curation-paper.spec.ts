@@ -12,7 +12,7 @@ import {
   paperRoute,
   shownPaper,
   zoomText,
-} from "../../src/curation-app/paper";
+} from "../../src/study-views/paper";
 import { paperFile, studyDetail } from "./curation-fixtures";
 
 const URL_A = "/local/studies/caffeine/Example/files/Example.pdf";

@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { VAlert } from "vuetify/components";
 import { NO_SESSION, ServerStopped, SessionMissing } from "../../study-views/errors";
 import { useOverviewStore } from "../stores/overview";
-import { failureOf } from "../study";
+import { failureOf } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const overview = useOverviewStore();

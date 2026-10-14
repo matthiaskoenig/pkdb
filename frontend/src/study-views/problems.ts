@@ -9,7 +9,7 @@ import type {
   StudyDetail,
   Suggestion,
   ValidationIssue,
-} from "../study-views/types";
+} from "./types";
 import { notesKindOf } from "./notes";
 import { plural } from "./overview";
 import { noteKinds } from "./tableKinds";

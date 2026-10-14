@@ -8,7 +8,7 @@ import type {
   TableRow,
   ValidationIssue,
 } from "../../study-views/types";
-import { useCellTip } from "../composables/useCellTip";
+import { useCellTip } from "../../study-views/composables/useCellTip";
 import {
   columnClass,
   columnName,
@@ -20,9 +20,9 @@ import {
   visibleColumns,
   type CellIssues,
   type IssueCells,
-} from "../grid";
-import { cellParts, namedKind, type CellPart, type NameLink } from "../links";
-import { problemsText } from "../problems";
+} from "../../study-views/grid";
+import { cellParts, namedKind, type CellPart, type NameLink } from "../../study-views/links";
+import { problemsText } from "../../study-views/problems";
 import ProblemTooltip from "./ProblemTooltip.vue";
 
 /** Above this many rows, only the rows near the view render; the others are spacers. */

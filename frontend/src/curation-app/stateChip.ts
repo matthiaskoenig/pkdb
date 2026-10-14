@@ -7,7 +7,7 @@
  * menus and the collapsed header, a chip is tonal in the color of its state, with the text of the
  * surface (status-chip, styles.css).
  */
-import type { Tone } from "./overview";
+import type { Tone } from "../study-views/overview";
 
 export interface StateChip {
   /** A theme color for the `color` of a VChip; none for a neutral chip. */

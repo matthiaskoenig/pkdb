@@ -11,7 +11,7 @@ import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
 import { initialTheme, servedTheme, useColorTheme } from "../../src/curation-app/composables/useColorTheme";
 import type { ConnectionStatus, Snapshot } from "../../src/curation-app/api/types";
 import { ApiError } from "../../src/study-views/errors";
-import { formatTime } from "../../src/curation-app/overview";
+import { formatTime } from "../../src/study-views/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, snapshot, studyRow } from "../unit/curation-fixtures";
 import { afterMenuClosed, button, buttons, click, focusDialog, loadSnapshot, page, setViewport } from "./curation-dom";

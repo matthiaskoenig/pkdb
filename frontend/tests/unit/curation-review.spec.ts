@@ -9,7 +9,7 @@ import {
   stateCounts,
   targetParts,
   targetText,
-} from "../../src/curation-app/review";
+} from "../../src/study-views/review";
 import { reviewItem } from "./curation-fixtures";
 
 function item(id: string, kind: ReviewItem["kind"], state: ReviewItem["state"]): ReviewItem {

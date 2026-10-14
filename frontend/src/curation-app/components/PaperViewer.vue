@@ -19,8 +19,8 @@ import {
   type PaperPlace,
   type PaperSession,
   type PaperStart,
-} from "../paper";
-import type { ActionFailure } from "../study";
+} from "../../study-views/paper";
+import type { ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 /**

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Profile } from "../../src/study-views/types";
-import { REVIEW_LABELS, SYNC_LABELS } from "../../src/curation-app/overview";
+import { REVIEW_LABELS, SYNC_LABELS } from "../../src/study-views/overview";
 import {
   bodyParts,
   keepSizerRows,
@@ -9,7 +9,7 @@ import {
   rowItem,
   sameParts,
   sizerRows,
-} from "../../src/curation-app/studyTable";
+} from "../../src/study-views/studyTable";
 import { studyRow } from "./curation-fixtures";
 
 const profiles = new Map<string, Profile>([

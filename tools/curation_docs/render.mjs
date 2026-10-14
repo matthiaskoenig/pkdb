@@ -9,7 +9,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "../../frontend/node_modules/playwright/index.mjs";
 // Node strips the types of this module, which imports nothing.
-import { columnLetters } from "../../frontend/src/curation-app/columns.ts";
+import { columnLetters } from "../../frontend/src/study-views/columns.ts";
 
 const repository = fileURLToPath(new URL("../../", import.meta.url));
 const launchUrl = process.env.PKDB_CURATION_URL;

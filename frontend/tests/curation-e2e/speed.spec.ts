@@ -1,6 +1,6 @@
 import type { Page, Response } from "@playwright/test";
-import { SEARCH_DELAY_MS } from "../../src/curation-app/overview.ts";
-import { OVERSCAN, ROW_HEIGHT } from "../../src/curation-app/studyTable.ts";
+import { SEARCH_DELAY_MS } from "../../src/study-views/overview.ts";
+import { OVERSCAN, ROW_HEIGHT } from "../../src/study-views/studyTable.ts";
 import { expect, expectAccessible, test } from "./fixtures.ts";
 
 /** The studies of the generated workspace (tools/curation_testing/large_workspace.py). */

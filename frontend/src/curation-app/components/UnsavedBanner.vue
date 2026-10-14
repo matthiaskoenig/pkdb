@@ -6,8 +6,8 @@ import { sectionHeading } from "../composables/useReturnFocus";
 import { saveShortcut } from "../composables/useSaveShortcut";
 import { changedLabels, fieldLabel, shortList } from "../metadata";
 import { useStudyStore } from "../stores/study";
-import type { Section } from "../study";
-import { kindLabel } from "../tableKinds";
+import type { Section } from "../../study-views/study";
+import { kindLabel } from "../../study-views/tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 

@@ -3,7 +3,7 @@
  * of its header, failed actions and the profiles of its people.
  */
 import type { RouteLocationRaw } from "vue-router";
-import { ApiError } from "../study-views/errors";
+import { ApiError } from "./errors";
 import type {
   IssueState,
   People,
@@ -12,7 +12,7 @@ import type {
   StudyDetail,
   StudySummary,
   ValidationIssue,
-} from "../study-views/types";
+} from "./types";
 
 /**
  * The sections of the study page in the order of their tabs, the order of the work on a study:

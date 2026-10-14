@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as pdfjs from "pdfjs-dist";
-import type { PaperEvents, PaperStart } from "../../src/curation-app/paper";
-import { openPaper } from "../../src/curation-app/paperEngine";
+import type { PaperEvents, PaperStart } from "../../src/study-views/paper";
+import { openPaper } from "../../src/study-views/paperEngine";
 
 /** A fake PDF.js: it records what the engine creates, asks and dispatches. */
 const fake = vi.hoisted(() => {

@@ -2,7 +2,7 @@
  * What the local server said about a failure: the details that the alert of a failed action
  * discloses and that Copy details puts into a GitHub issue.
  */
-import type { FailureDetails } from "./study";
+import type { FailureDetails } from "../study-views/study";
 import type { ErrorBody } from "../study-views/types";
 
 /** The details of a failure that the activity of a study lists. */

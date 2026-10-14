@@ -4,7 +4,7 @@ import { VBtn, VCard, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 import { splitPath } from "../paths";
 import { useOverviewStore } from "../stores/overview";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";

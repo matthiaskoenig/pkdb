@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { INFO_CLASSES, INFO_HEADINGS, INFO_THEMES, infoColor, infoOutlined, infoStyle } from "../../src/curation-app/info";
+import {
+  INFO_CLASSES,
+  INFO_HEADINGS,
+  INFO_THEMES,
+  infoColor,
+  infoOutlined,
+  infoStyle,
+} from "../../src/study-views/info";
 import type { InfoClass } from "../../src/study-views/types";
 import { makeVuetify } from "../../src/plugins/vuetify";
 

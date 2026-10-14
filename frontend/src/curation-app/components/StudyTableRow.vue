@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { VAvatar, VBtn, VCheckboxBtn, VChip } from "vuetify/components";
-import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../overview";
-import { aiTitle, studyRoute, type RowItem } from "../studyTable";
+import { formatTime, REVIEW_LABELS, REVIEW_TONES, SYNC_LABELS, SYNC_TONES } from "../../study-views/overview";
+import { aiTitle, studyRoute, type RowItem } from "../../study-views/studyTable";
 
 /** One study of the study table of the overview. */
 const props = defineProps<{

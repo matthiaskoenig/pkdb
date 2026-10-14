@@ -1,5 +1,5 @@
 import { ref, shallowRef, watch, type Ref, type ShallowRef } from "vue";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 
 /** The preview of the local server for the current input of a dialog. */
 export interface Preview<O> {

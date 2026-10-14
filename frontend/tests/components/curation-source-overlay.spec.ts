@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi, afterEach } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import type { SourceView, ValidationIssue } from "../../src/study-views/types";
 import type SourceOverlayComponent from "../../src/curation-app/components/SourceOverlay.vue";
-import type { OverlayTrace } from "../../src/curation-app/overlay";
+import type { OverlayTrace } from "../../src/study-views/overlay";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 
 enableAutoUnmount(afterEach);

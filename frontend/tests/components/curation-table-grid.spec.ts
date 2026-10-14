@@ -6,8 +6,8 @@ import { h } from "vue";
 import type { ColumnClass, StudyNameLines, TableResponse, ValidationIssue } from "../../src/study-views/types";
 import TableGrid from "../../src/curation-app/components/TableGrid.vue";
 import { VTooltip } from "vuetify/components";
-import { TIP_DELAY, TIP_LINGER } from "../../src/curation-app/composables/useCellTip";
-import { HEADER_LINE, issueCells, ROW, type CellIssues, type IssueCells } from "../../src/curation-app/grid";
+import { TIP_DELAY, TIP_LINGER } from "../../src/study-views/composables/useCellTip";
+import { HEADER_LINE, issueCells, ROW, type CellIssues, type IssueCells } from "../../src/study-views/grid";
 import { setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);

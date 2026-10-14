@@ -2,10 +2,10 @@
 import { computed, ref, watch } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
-import { formatTime } from "../overview";
+import { formatTime } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";

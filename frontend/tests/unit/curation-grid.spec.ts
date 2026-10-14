@@ -18,7 +18,7 @@ import {
   targetLines,
   targetMatch,
   visibleColumns,
-} from "../../src/curation-app/grid";
+} from "../../src/study-views/grid";
 import { reviewItem } from "./curation-fixtures";
 
 const outputs: TableResponse = {

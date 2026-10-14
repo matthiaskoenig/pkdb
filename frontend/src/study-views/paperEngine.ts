@@ -28,7 +28,7 @@ import {
 } from "pdfjs-dist/web/pdf_viewer.mjs";
 import "pdfjs-dist/web/pdf_viewer.css";
 import "./paper.css";
-import { isAbort } from "../study-views/errors";
+import { isAbort } from "./errors";
 import { FITS, type Fit, type FindResult, type OpenPaper, type PaperSession } from "./paper";
 
 /** The URL of a file of PDF.js in `pdfjs/` beside index.html. */

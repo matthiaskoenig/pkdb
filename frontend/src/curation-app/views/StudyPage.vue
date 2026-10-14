@@ -20,15 +20,22 @@ import StudyHeader from "../components/StudyHeader.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
 import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
-import { selectedNotesKind, selectionOf } from "../data";
+import { selectedNotesKind, selectionOf } from "../../study-views/data";
 import ActivitySection from "../sections/ActivitySection.vue";
 import DataSection from "../sections/DataSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
-import { formatTime } from "../overview";
+import { formatTime } from "../../study-views/overview";
 import { useStudyStore } from "../stores/study";
-import { defaultSection, failureOf, isSection, SECTION_LABELS, sectionCounts, type Section } from "../study";
+import {
+  defaultSection,
+  failureOf,
+  isSection,
+  SECTION_LABELS,
+  sectionCounts,
+  type Section,
+} from "../../study-views/study";
 import { duplicateFolders, duplicateHeading, lastUploadUrl } from "../local";
 
 /**

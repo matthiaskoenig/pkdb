@@ -34,10 +34,10 @@ import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { useReturnFocus } from "../composables/useReturnFocus";
 import { detailsOfBody } from "../failures";
-import { formatTime, plural } from "../overview";
+import { formatTime, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, failureOf, sectionRoute } from "../study";
+import { actionFailure, failureOf, sectionRoute } from "../../study-views/study";
 
 /**
  * The jobs of the study in the current workspace, newest first: validations and uploads of the

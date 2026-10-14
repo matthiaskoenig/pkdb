@@ -4,7 +4,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { ref } from "vue";
 import type { SourceView } from "../../src/study-views/types";
 import { plotFigure, usePlotScales } from "../../src/curation-app/composables/usePlotScales";
-import type { AxisScales } from "../../src/curation-app/overlay";
+import type { AxisScales } from "../../src/study-views/overlay";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, snapshot } from "../unit/curation-fixtures";
 import { serveApi } from "./curation-dom";

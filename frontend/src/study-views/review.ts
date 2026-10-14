@@ -1,7 +1,7 @@
 /**
  * Filters, labels and targets of the review items of the study page.
  */
-import type { ReviewItem, ReviewTarget, TableRow } from "../study-views/types";
+import type { ReviewItem, ReviewTarget, TableRow } from "./types";
 import { plural, type Tone } from "./overview";
 
 export type ItemKind = ReviewItem["kind"];

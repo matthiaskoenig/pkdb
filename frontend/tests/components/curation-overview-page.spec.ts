@@ -8,18 +8,18 @@ import type { Job, Profile, SyncStatus } from "../../src/study-views/types";
 import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
-import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
+import { SEARCH_DELAY_MS } from "../../src/study-views/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
 import StudyTable from "../../src/curation-app/components/StudyTable.vue";
-import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS, studyRoute } from "../../src/curation-app/studyTable";
+import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS, studyRoute } from "../../src/study-views/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/local";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
 import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
 
-vi.mock("../../src/curation-app/studyTable", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../../src/curation-app/studyTable")>();
+vi.mock("../../src/study-views/studyTable", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../src/study-views/studyTable")>();
   // Every render of a study row with a link calls studyRoute once.
   return { ...actual, rowItem: vi.fn(actual.rowItem), studyRoute: vi.fn(actual.studyRoute) };
 });

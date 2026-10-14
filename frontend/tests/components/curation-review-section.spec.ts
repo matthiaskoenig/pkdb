@@ -13,7 +13,7 @@ import type {
   TableResponse,
   TargetMatch,
 } from "../../src/study-views/types";
-import { formatTime } from "../../src/curation-app/overview";
+import { formatTime } from "../../src/study-views/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";

@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { VChip } from "vuetify/components";
 import type { ValidationIssue } from "../../study-views/types";
-import { hintOf, SEVERITY_ICONS, SEVERITY_LABELS, tipProblems } from "../problems";
+import { hintOf, SEVERITY_ICONS, SEVERITY_LABELS, tipProblems } from "../../study-views/problems";
 
 /**
  * The problems of one place of a table, as its tooltip lists them: the severity chip, the code,

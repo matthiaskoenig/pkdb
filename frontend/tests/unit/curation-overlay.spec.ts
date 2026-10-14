@@ -25,7 +25,7 @@ import {
   wrapText,
   type AxisScales,
   type OverlayTrace,
-} from "../../src/curation-app/overlay";
+} from "../../src/study-views/overlay";
 
 const loader = vi.hoisted(() => ({ load: vi.fn() }));
 vi.mock("../../src/features/plots/plotly", () => ({ loadPlotly: loader.load }));
@@ -937,7 +937,7 @@ describe("loadNoncedPlotly", () => {
       styleAtImport = document.getElementById("plotly.js-style-global");
       return engine;
     });
-    const { loadNoncedPlotly } = await import("../../src/curation-app/plotly");
+    const { loadNoncedPlotly } = await import("../../src/study-views/plotly");
     await expect(loadNoncedPlotly()).resolves.toBe(engine);
     await loadNoncedPlotly();
     const styles = document.head.querySelectorAll("style#plotly\\.js-style-global");
@@ -949,7 +949,7 @@ describe("loadNoncedPlotly", () => {
   it("creates the style element of the map library, which Plotly would create without the nonce", async () => {
     withNonce("n0nce");
     loader.load.mockResolvedValue({});
-    const { loadNoncedPlotly } = await import("../../src/curation-app/plotly");
+    const { loadNoncedPlotly } = await import("../../src/study-views/plotly");
     await loadNoncedPlotly();
     await loadNoncedPlotly();
     expect(document.head.querySelectorAll(`style[id="${MAP_STYLE}"]`)).toHaveLength(1);
@@ -961,7 +961,7 @@ describe("loadNoncedPlotly", () => {
     existing.id = "plotly.js-style-global";
     document.head.append(existing);
     loader.load.mockResolvedValue({});
-    const { loadNoncedPlotly } = await import("../../src/curation-app/plotly");
+    const { loadNoncedPlotly } = await import("../../src/study-views/plotly");
     await loadNoncedPlotly();
     expect(document.head.querySelectorAll("style#plotly\\.js-style-global")).toHaveLength(1);
     expect(document.getElementById("plotly.js-style-global")).toBe(existing);
@@ -976,13 +976,13 @@ describe("loadNoncedPlotly", () => {
     // flipped axes of heatmap and image traces.
     expect(bundle.match(/\.attr\("style"/g)).toHaveLength(5);
     expect(bundle).toContain('"plotly.js-style-"+');
-    const { PLOTLY_STYLES } = await import("../../src/curation-app/plotly");
+    const { PLOTLY_STYLES } = await import("../../src/study-views/plotly");
     for (const id of PLOTLY_STYLES.slice(1)) expect(bundle).toContain(`document.getElementById("${id}")`);
   });
 
   it("imports again after a failed import", async () => {
     loader.load.mockRejectedValueOnce(new TypeError("Failed to fetch dynamically imported module")).mockResolvedValue({});
-    const { loadNoncedPlotly, plotlyImport } = await import("../../src/curation-app/plotly");
+    const { loadNoncedPlotly, plotlyImport } = await import("../../src/study-views/plotly");
     await expect(loadNoncedPlotly()).rejects.toThrow("Failed to fetch");
     expect(plotlyImport.state).toBe("failed");
     await expect(loadNoncedPlotly()).resolves.toEqual({});
@@ -992,7 +992,7 @@ describe("loadNoncedPlotly", () => {
 
   it("knows an import that failed again after a retry, which a browser keeps until a reload", async () => {
     loader.load.mockRejectedValue(new TypeError("Failed to fetch dynamically imported module"));
-    const { loadNoncedPlotly, plotlyImport, retryPlotly } = await import("../../src/curation-app/plotly");
+    const { loadNoncedPlotly, plotlyImport, retryPlotly } = await import("../../src/study-views/plotly");
     // Two plots that import at once fail once.
     await Promise.allSettled([loadNoncedPlotly(), loadNoncedPlotly()]);
     expect(plotlyImport.state).toBe("failed");

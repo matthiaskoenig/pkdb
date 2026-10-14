@@ -24,15 +24,15 @@ import {
   sortStudies,
   STATUS_CHIPS,
   substancesOf,
-} from "../overview";
+} from "../../study-views/overview";
 import { uploadBlocker } from "../uploads";
-import { useDebounced } from "../composables/useDebounced";
+import { useDebounced } from "../../study-views/composables/useDebounced";
 import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useOverviewFilters } from "../stores/overviewFilters";
 import { useStudyStore } from "../stores/study";
-import { failureOf, findProfile, profileMap, type ActionFailure } from "../study";
+import { failureOf, findProfile, profileMap, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 
 const overview = useOverviewStore();

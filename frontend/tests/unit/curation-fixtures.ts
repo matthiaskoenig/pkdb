@@ -15,7 +15,7 @@ import type {
   TableKindEntry,
   ValidationIssue,
 } from "../../src/study-views/types";
-import { noteKinds } from "../../src/curation-app/tableKinds";
+import { noteKinds } from "../../src/study-views/tableKinds";
 import limitsFixture from "../fixtures/curation-contract/limits.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 

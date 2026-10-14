@@ -18,14 +18,14 @@ import {
   VTextarea,
 } from "vuetify/components";
 import type { ReviewItem, ReviewTarget, TableResponse } from "../../study-views/types";
-import { useLoaded } from "../composables/useLoaded";
+import { useLoaded } from "../../study-views/composables/useLoaded";
 import { usePreview } from "../composables/usePreview";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../review";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
+import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../../study-views/review";
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import { tableFiles } from "../study";
+import { tableFiles } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 

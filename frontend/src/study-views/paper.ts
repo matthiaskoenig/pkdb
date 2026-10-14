@@ -5,11 +5,10 @@
  */
 import { reactive } from "vue";
 import type { RouteLocationRaw } from "vue-router";
-import { checkFile } from "./api/client";
-import { ApiError, NO_SESSION, SessionMissing } from "../study-views/errors";
-import type { PaperFile, StudyDetail } from "../study-views/types";
-import type { FailureDetails } from "./study";
-import { actionFailure, studyName, type ActionFailure } from "./study";
+import { checkFile } from "../curation-app/api/client";
+import { ApiError, NO_SESSION, SessionMissing } from "./errors";
+import type { PaperFile, StudyDetail } from "./types";
+import { actionFailure, studyName, type ActionFailure, type FailureDetails } from "./study";
 
 /** How the pages fit into the viewer: its width, a whole page, or their size in print. */
 export type Fit = "page-width" | "page-fit" | "1";

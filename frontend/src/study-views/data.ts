@@ -10,7 +10,7 @@
  * table shows beside it when the study has a PDF.
  */
 import type { LocationQuery } from "vue-router";
-import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableKind, TableResponse } from "../study-views/types";
+import type { InfoClass, SourceSummary, StudyDetail, TableEntry, TableKind, TableResponse } from "./types";
 import { INFO_CLASSES } from "./info";
 import { tableFiles } from "./study";
 import { noteKinds } from "./tableKinds";

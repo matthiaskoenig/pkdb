@@ -15,7 +15,7 @@ import {
   type ThemeChoice,
 } from "../api/types";
 import { isRecord, type Guard } from "../../study-views/types";
-import type { AxisScales } from "../overlay";
+import type { AxisScales } from "../../study-views/overlay";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 
 /** The settings that `POST /local/settings` accepts; the API key is write-only. */

@@ -4,7 +4,7 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView } from "vue-router";
 import type { JobReport, Snapshot } from "../../src/curation-app/api/types";
 import type { Job, ReviewItem, StudyDetail, Upload } from "../../src/study-views/types";
-import { formatTime } from "../../src/curation-app/overview";
+import { formatTime } from "../../src/study-views/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import messagesFixture from "../fixtures/curation-contract/messages.json";

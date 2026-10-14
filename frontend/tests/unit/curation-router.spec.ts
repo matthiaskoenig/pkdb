@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { RouteLocationNormalized, Router } from "vue-router";
-import { paperRoute } from "../../src/curation-app/paper";
+import { paperRoute } from "../../src/study-views/paper";
 import { makeRouter } from "../../src/curation-app/router";
 
 /** The route of `path` as a navigation sees it; every route of the app has a name. */

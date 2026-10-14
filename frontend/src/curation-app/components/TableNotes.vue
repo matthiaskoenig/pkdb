@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId, watch } from "vue";
 import type { Profile, TableKind } from "../../study-views/types";
-import { useMoreBelow } from "../composables/useMoreBelow";
+import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
 import { issueMessage } from "../metadata";
-import { notesKindOf, notesSummary } from "../notes";
+import { notesKindOf, notesSummary } from "../../study-views/notes";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, sectionRoute } from "../study";
-import { kindLabel, noteKinds } from "../tableKinds";
+import { knownProfiles, sectionRoute } from "../../study-views/study";
+import { kindLabel, noteKinds } from "../../study-views/tableKinds";
 import MoreBelow from "./MoreBelow.vue";
 import NotesFields from "./NotesFields.vue";
 

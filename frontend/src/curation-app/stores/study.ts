@@ -36,7 +36,7 @@ import {
 } from "../../study-views/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { useStudyDraft } from "../composables/useStudyDraft";
-import { ALL_ROWS, type RowFilter } from "../data";
+import { ALL_ROWS, type RowFilter } from "../../study-views/data";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../acknowledging";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";

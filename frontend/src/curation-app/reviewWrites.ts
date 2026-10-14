@@ -4,7 +4,7 @@
  */
 import { isNoUser, isRevisionConflict, isValidationError } from "./api/client";
 import { userHint } from "./local";
-import { failureOf, issuesFailure, type ActionFailure } from "./study";
+import { failureOf, issuesFailure, type ActionFailure } from "../study-views/study";
 
 /** What a write over a stale revision of review.json says; the store has reloaded the items. */
 export const REVIEW_CONFLICT = "review.json changed on disk; the items were reloaded. Repeat your action.";

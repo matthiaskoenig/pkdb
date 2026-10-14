@@ -5,9 +5,16 @@ import { isRevisionConflict, isValidationError } from "../api/client";
 import type { ReviewStatus, StudyDetail } from "../../study-views/types";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
-import { activityLabel, issueUrl, problemLabels, REVIEW_LABELS, SYNC_LABELS, SYNC_TONES } from "../overview";
+import {
+  activityLabel,
+  issueUrl,
+  problemLabels,
+  REVIEW_LABELS,
+  SYNC_LABELS,
+  SYNC_TONES,
+} from "../../study-views/overview";
 import { uploadBlocker } from "../uploads";
-import { mainPaper, paperName } from "../paper";
+import { mainPaper, paperName } from "../../study-views/paper";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
@@ -19,7 +26,7 @@ import {
   releaseLabel,
   studyName,
   type ActionFailure,
-} from "../study";
+} from "../../study-views/study";
 import { approvalRefusal, folderPath, tablesOutcome } from "../local";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import AddTableDialog from "./AddTableDialog.vue";

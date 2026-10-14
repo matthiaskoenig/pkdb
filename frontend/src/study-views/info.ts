@@ -6,7 +6,7 @@
  * (TableGrid), the navigator marks its tables with them, and `infoOutlined` says which class is
  * marked by an outline because its tables have no tint.
  */
-import type { InfoClass } from "../study-views/types";
+import type { InfoClass } from "./types";
 import type { ThemeExtension } from "../plugins/vuetify";
 
 /** The classes in the order of the navigator. */

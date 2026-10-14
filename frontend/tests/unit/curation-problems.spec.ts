@@ -19,7 +19,7 @@ import {
   TIP_LIMIT,
   tableQuery,
   tipProblems,
-} from "../../src/curation-app/problems";
+} from "../../src/study-views/problems";
 import {
   acknowledgeFailure,
   AMBIGUOUS_WARNING,

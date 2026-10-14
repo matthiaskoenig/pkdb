@@ -17,7 +17,7 @@ import {
   SYNC_LABELS,
   webUrl,
   type StatusChip,
-} from "../../src/curation-app/overview";
+} from "../../src/study-views/overview";
 import { uploadBlocker } from "../../src/curation-app/uploads";
 import { snapshot, studyRow } from "./curation-fixtures";
 

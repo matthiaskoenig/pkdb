@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasNotes, kindsWithTable, notesKindOf, notesKindsOf, notesSummary } from "../../src/curation-app/notes";
+import { hasNotes, kindsWithTable, notesKindOf, notesKindsOf, notesSummary } from "../../src/study-views/notes";
 import { NOTE_KINDS, tableEntry } from "./curation-fixtures";
 
 describe("notesKindOf", () => {

@@ -4,7 +4,7 @@
  * interventions.tsv, by the name of the column. The study page has the line of each name
  * (`name_lines`), so that the grid links them without loading those tables.
  */
-import type { NameKind, NameLines } from "../study-views/types";
+import type { NameKind, NameLines } from "./types";
 
 /** Where the link of a name goes: the file of its table and the line of its row. */
 export interface NameLink {

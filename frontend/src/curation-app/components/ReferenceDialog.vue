@@ -19,10 +19,10 @@ import {
 import type { ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
 import type { Json } from "../../study-views/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 /**

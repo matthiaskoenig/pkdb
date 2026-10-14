@@ -9,11 +9,11 @@ import {
   type PaperPlace,
   type PaperSession,
   type PaperStart,
-} from "../../src/curation-app/paper";
+} from "../../src/study-views/paper";
 
 // PDF.js does not run in jsdom: the viewer gets a fake engine, which records what it opened.
 const engine = vi.hoisted(() => ({ openPaper: vi.fn() }));
-vi.mock("../../src/curation-app/paperEngine", () => engine);
+vi.mock("../../src/study-views/paperEngine", () => engine);
 
 enableAutoUnmount(afterEach);
 

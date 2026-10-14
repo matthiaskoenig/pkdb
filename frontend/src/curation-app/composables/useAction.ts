@@ -1,6 +1,6 @@
 import { computed, ref, type ComputedRef, type Ref } from "vue";
 import { isNoUser } from "../api/client";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import { userHint } from "../local";
 
 export interface Action<A extends string> {

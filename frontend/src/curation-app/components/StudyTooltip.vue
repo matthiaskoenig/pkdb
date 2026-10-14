@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { VTooltip } from "vuetify/components";
 import type { StudyRow } from "../../study-views/types";
-import type { CellTip } from "../composables/useCellTip";
-import { otherSubstances } from "../overview";
+import type { CellTip } from "../../study-views/composables/useCellTip";
+import { otherSubstances } from "../../study-views/overview";
 
 /**
  * The one tooltip of the study identities of the study table, at the identity of `tip`: the whole

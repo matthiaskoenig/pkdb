@@ -5,9 +5,9 @@ import { VProgressLinear } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import PaperViewer from "../components/PaperViewer.vue";
-import { PAPER } from "../data";
+import { PAPER } from "../../study-views/data";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, failureOf, sectionRoute, type ActionFailure } from "../study";
+import { actionFailure, failureOf, sectionRoute, type ActionFailure } from "../../study-views/study";
 
 /**
  * A PDF of a study in a tab of its own, which New tab of the paper pane opens in the same

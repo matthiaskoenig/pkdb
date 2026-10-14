@@ -13,9 +13,9 @@ import {
 } from "vuetify/components";
 import type { StudyRow } from "../../study-views/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { plural } from "../overview";
+import { plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });

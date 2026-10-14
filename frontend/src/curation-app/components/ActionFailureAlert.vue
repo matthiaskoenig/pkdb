@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { VAlert } from "vuetify/components";
-import { sectionRoute, type ActionFailure } from "../study";
+import { sectionRoute, type ActionFailure } from "../../study-views/study";
 import FailureDetails from "./FailureDetails.vue";
 
 /**

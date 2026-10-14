@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import PaperPane from "../../src/curation-app/components/PaperPane.vue";
-import type { PaperPlace } from "../../src/curation-app/paper";
+import type { PaperPlace } from "../../src/study-views/paper";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json, paperFile, snapshot } from "../unit/curation-fixtures";

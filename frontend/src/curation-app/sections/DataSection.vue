@@ -15,7 +15,7 @@ import SplitPane from "../components/SplitPane.vue";
 import TableNotes from "../components/TableNotes.vue";
 import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
-import { useLoaded } from "../composables/useLoaded";
+import { useLoaded } from "../../study-views/composables/useLoaded";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
 import {
@@ -33,14 +33,14 @@ import {
   tablesByInfo,
   type RowFilter,
   type Selection,
-} from "../data";
-import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
-import type { NameLink } from "../links";
-import { paperLine, type PaperPlace } from "../paper";
+} from "../../study-views/data";
+import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
+import type { NameLink } from "../../study-views/links";
+import { paperLine, type PaperPlace } from "../../study-views/paper";
 import { useStudyStore } from "../stores/study";
-import { beyondLimits, sectionRoute, tableFiles } from "../study";
+import { beyondLimits, sectionRoute, tableFiles } from "../../study-views/study";
 import { tablesOutcome } from "../local";
-import { noteKinds } from "../tableKinds";
+import { noteKinds } from "../../study-views/tableKinds";
 import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from "../tables";
 
 /**

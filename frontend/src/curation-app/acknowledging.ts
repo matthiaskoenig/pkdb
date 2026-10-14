@@ -7,7 +7,7 @@ import { isValidationError } from "./api/client";
 import type { Snapshot } from "./api/types";
 import type { Job, StudyDetail } from "../study-views/types";
 import { reviewFailure, type ReviewFailure } from "./reviewWrites";
-import { issuesFailure } from "./study";
+import { issuesFailure } from "../study-views/study";
 
 /** What the dialog says when the warning is no longer in the files that the server validated. */
 export const NO_SUCH_WARNING = "This warning is not in the current files. Validate the study and try again.";

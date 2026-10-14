@@ -3,8 +3,8 @@
  * writes of the app), the review items that their messages name, and saving a report.
  */
 import type { Job, JobAction, JobStatus, ReviewItem } from "../study-views/types";
-import { webUrl, type Tone } from "./overview";
-import { itemText, type TextPart } from "./review";
+import { webUrl, type Tone } from "../study-views/overview";
+import { itemText, type TextPart } from "../study-views/review";
 
 export const ACTION_LABELS: Record<JobAction, string> = {
   validate: "Validation",

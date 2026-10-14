@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { plural } from "../overview";
-import { AXES, logAxes, type Axis, type AxisScale, type AxisScales } from "../overlay";
+import { plural } from "../../study-views/overview";
+import { AXES, logAxes, type Axis, type AxisScale, type AxisScales } from "../../study-views/overlay";
 
 /**
  * The scales of a plot of mapped rows, above it: `x: lin | log` and `y: lin | log`, and a note of

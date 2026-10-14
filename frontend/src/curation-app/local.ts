@@ -6,8 +6,8 @@
 import type { ApiError } from "../study-views/errors";
 import type { StudyDetail } from "../study-views/types";
 import type { TablesResult } from "./api/types";
-import { webUrl } from "./overview";
-import { actionFailure, type ActionFailure } from "./study";
+import { webUrl } from "../study-views/overview";
+import { actionFailure, type ActionFailure } from "../study-views/study";
 
 /** The requirements of approval, followed by the reason of the refusal from the server. */
 export function approvalRefusal(reason: string): string {

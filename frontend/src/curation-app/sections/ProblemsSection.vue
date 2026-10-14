@@ -9,7 +9,7 @@ import UserHint from "../components/UserHint.vue";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
-import { formatTime, plural } from "../overview";
+import { formatTime, plural } from "../../study-views/overview";
 import {
   acknowledgement,
   filterIssues,
@@ -23,12 +23,12 @@ import {
   SEVERITY_CHIPS,
   severityCounts,
   type SeverityFilter,
-} from "../problems";
+} from "../../study-views/problems";
 import { validatesAfterWrite } from "../acknowledging";
-import { targetParts } from "../review";
+import { targetParts } from "../../study-views/review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles } from "../study";
+import { isLimitIssue, knownProfiles, profileOf, sectionRoute, tableFiles } from "../../study-views/study";
 import { tablesOutcome } from "../local";
 
 /**

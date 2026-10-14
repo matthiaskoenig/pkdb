@@ -3,8 +3,8 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VSelect } from "vuetify/components";
-import { plural } from "../overview";
-import { SECTION_LABELS, SECTIONS, type Section } from "../study";
+import { plural } from "../../study-views/overview";
+import { SECTION_LABELS, SECTIONS, type Section } from "../../study-views/study";
 
 const props = defineProps<{
   substance: string;

@@ -22,7 +22,7 @@ import {
   sourceOfFile,
   tableNotesKind,
   tablesByInfo,
-} from "../../src/curation-app/data";
+} from "../../src/study-views/data";
 import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
 const fig1 = sourceSummary({

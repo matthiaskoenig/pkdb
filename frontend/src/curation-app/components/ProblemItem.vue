@@ -2,8 +2,16 @@
 import { computed } from "vue";
 import { VBtn, VChip } from "vuetify/components";
 import type { Problem } from "../../study-views/types";
-import { acknowledgement, location, locationKey, SEVERITY_ICONS, SEVERITY_LABELS, suggestionView, tableQuery } from "../problems";
-import { sectionRoute } from "../study";
+import {
+  acknowledgement,
+  location,
+  locationKey,
+  SEVERITY_ICONS,
+  SEVERITY_LABELS,
+  suggestionView,
+  tableQuery,
+} from "../../study-views/problems";
+import { sectionRoute } from "../../study-views/study";
 
 /**
  * One issue of the Problems and the Data sections: severity, code, message, location and

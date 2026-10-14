@@ -2,10 +2,17 @@
 import { computed, useId } from "vue";
 import { VBtn, VCard, VCardText, VChip, VTextarea } from "vuetify/components";
 import type { Profile, ReviewItem } from "../../study-views/types";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { formatTime } from "../overview";
-import { KIND_ICONS, KIND_LABELS, STATE_LABELS, STATE_TONES, targetText, type ItemAction } from "../review";
-import { profileOf } from "../study";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
+import { formatTime } from "../../study-views/overview";
+import {
+  KIND_ICONS,
+  KIND_LABELS,
+  STATE_LABELS,
+  STATE_TONES,
+  targetText,
+  type ItemAction,
+} from "../../study-views/review";
+import { profileOf } from "../../study-views/study";
 import PersonAvatar from "./PersonAvatar.vue";
 
 /**

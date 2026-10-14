@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { TablesResult } from "../../src/curation-app/api/types";
 import type { ConflictData, ValidationIssue } from "../../src/study-views/types";
-import { columnName } from "../../src/curation-app/grid";
+import { columnName } from "../../src/study-views/grid";
 import { conflictView, syncAlert, syncOutcome, syncSummary, withoutConflicts } from "../../src/curation-app/tables";
-import { listText } from "../../src/curation-app/overview";
-import { actionFailure } from "../../src/curation-app/study";
+import { listText } from "../../src/study-views/overview";
+import { actionFailure } from "../../src/study-views/study";
 import {
   conflictAnswer,
   FILE_DELETED_CONFLICT,

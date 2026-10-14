@@ -2,9 +2,9 @@
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, watchPostEffect } from "vue";
 import { VCheckboxBtn, VIcon, VTable } from "vuetify/components";
 import type { Profile, StudyRow } from "../../study-views/types";
-import { useCellTip } from "../composables/useCellTip";
-import { useWindowPosition } from "../composables/useWindowPosition";
-import type { SortKey, StudySort } from "../overview";
+import { useCellTip } from "../../study-views/composables/useCellTip";
+import { useWindowPosition } from "../../study-views/composables/useWindowPosition";
+import type { SortKey, StudySort } from "../../study-views/overview";
 import {
   bodyParts,
   keepSizerRows,
@@ -14,7 +14,7 @@ import {
   sizerRows,
   type BodyPart,
   type RowItem,
-} from "../studyTable";
+} from "../../study-views/studyTable";
 import StudyTableRow from "./StudyTableRow.vue";
 import StudyTooltip from "./StudyTooltip.vue";
 

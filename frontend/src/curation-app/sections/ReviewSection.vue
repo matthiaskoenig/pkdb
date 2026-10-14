@@ -20,10 +20,10 @@ import {
   type ItemAction,
   type KindFilter,
   type StateFilter,
-} from "../review";
+} from "../../study-views/review";
 import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, profileOf } from "../study";
+import { knownProfiles, profileOf } from "../../study-views/study";
 
 /**
  * The review items of review.json: state and kind filters, the cards of the items, and the

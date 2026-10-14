@@ -4,9 +4,9 @@
  */
 import type { TablesResult } from "./api/types";
 import type { ConflictData, SyncState, TableResponse, TableRow } from "../study-views/types";
-import { columnName } from "./grid";
-import { listText, plural, SYNC_LABELS, SYNC_TONES, type Tone } from "./overview";
-import { actionFailure, type ActionFailure } from "./study";
+import { columnName } from "../study-views/grid";
+import { listText, plural, SYNC_LABELS, SYNC_TONES, type Tone } from "../study-views/overview";
+import { actionFailure, type ActionFailure } from "../study-views/study";
 
 // Sync
 

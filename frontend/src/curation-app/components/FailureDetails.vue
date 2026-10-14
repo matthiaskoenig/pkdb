@@ -2,7 +2,7 @@
 import { computed, nextTick, ref } from "vue";
 import { VBtn } from "vuetify/components";
 import { failureFacts, failureMarkdown } from "../failures";
-import { type FailureDetails } from "../study";
+import { type FailureDetails } from "../../study-views/study";
 import { useOverviewStore } from "../stores/overview";
 
 /**

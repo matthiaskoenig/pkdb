@@ -16,7 +16,7 @@ import {
   actionFailure,
   failureOf,
   type ActionFailure,
-} from "../../src/curation-app/study";
+} from "../../src/study-views/study";
 import { snapshot } from "../unit/curation-fixtures";
 import { button, click, loadSnapshot, page } from "./curation-dom";
 

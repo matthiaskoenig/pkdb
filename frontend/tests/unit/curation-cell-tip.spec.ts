@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { effectScope, type EffectScope } from "vue";
-import { TIP_DELAY, TIP_LINGER, useCellTip, type CellTip } from "../../src/curation-app/composables/useCellTip";
+import { TIP_DELAY, TIP_LINGER, useCellTip, type CellTip } from "../../src/study-views/composables/useCellTip";
 
 /** The `matches` of jsdom, which guesses `:focus-visible` from the events before a focus. */
 const MATCHES = Element.prototype.matches;

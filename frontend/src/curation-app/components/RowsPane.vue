@@ -11,13 +11,20 @@ import {
   findTable,
   isShared,
   type RowFilter,
-} from "../data";
-import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
-import { infoColor, infoOutlined } from "../info";
-import { plural } from "../overview";
-import type { ActionFailure } from "../study";
-import type { NameLink } from "../links";
-import { kindLabel } from "../tableKinds";
+} from "../../study-views/data";
+import {
+  columnCount,
+  issueCells,
+  itemsWithoutRows,
+  keptColumns,
+  targetLines,
+  visibleColumns,
+} from "../../study-views/grid";
+import { infoColor, infoOutlined } from "../../study-views/info";
+import { plural } from "../../study-views/overview";
+import type { ActionFailure } from "../../study-views/study";
+import type { NameLink } from "../../study-views/links";
+import { kindLabel } from "../../study-views/tableKinds";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import TableGrid from "./TableGrid.vue";
 

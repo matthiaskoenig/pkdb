@@ -3,7 +3,7 @@
  * Data section shows above each table of the kind, and which validation issues name by fields
  * such as `notes.subjects.comments.0.user`.
  */
-import type { StudyDetail, TableKind } from "../study-views/types";
+import type { StudyDetail, TableKind } from "./types";
 import { plural } from "./overview";
 
 /**

@@ -2,7 +2,7 @@
  * Filtering, sorting and labels of the study rows of the overview. The study page uses the same
  * labels for the review status, the sync status and the problem counts.
  */
-import type { ReviewStatus, RowStatus, StudyRow, SyncStatus } from "../study-views/types";
+import type { ReviewStatus, RowStatus, StudyRow, SyncStatus } from "./types";
 
 /** The status chips above the table. */
 export type StatusChip = "all" | "attention" | "draft" | "in_review" | "approved";

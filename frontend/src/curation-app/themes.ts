@@ -4,7 +4,7 @@
  * tint of the study band.
  */
 import type { ThemeExtension } from "../plugins/vuetify";
-import { INFO_THEMES } from "./info";
+import { INFO_THEMES } from "../study-views/info";
 import { CAUTION_COLORS, STUDY_BAND_COLORS, type ThemeName } from "../study-views/themes";
 
 type AppBarColor =

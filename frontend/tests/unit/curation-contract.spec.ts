@@ -24,26 +24,33 @@ import type {
 } from "../../src/study-views/types";
 import { isTablePreview, isTablesResult } from "../../src/curation-app/api/types";
 import { isSourceView, isTargetMatch } from "../../src/study-views/types";
-import { filterStudies, problemLabels } from "../../src/curation-app/overview";
+import { filterStudies, problemLabels } from "../../src/study-views/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
-import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
-import { cellParts, namedKind } from "../../src/curation-app/links";
+import {
+  columnClass,
+  columnCount,
+  columnName,
+  itemsWithoutRows,
+  targetLines,
+  targetMatch,
+} from "../../src/study-views/grid";
+import { cellParts, namedKind } from "../../src/study-views/links";
 import { issueMessage } from "../../src/curation-app/metadata";
-import { legendEntries, overlayTraces, plotTraces } from "../../src/curation-app/overlay";
+import { legendEntries, overlayTraces, plotTraces } from "../../src/study-views/overlay";
 import { ApiError } from "../../src/study-views/errors";
 import { detailsOfBody } from "../../src/curation-app/failures";
-import { acknowledgement, locationKey, openPlace, scopeText, suggestionView } from "../../src/curation-app/problems";
+import { acknowledgement, locationKey, openPlace, scopeText, suggestionView } from "../../src/study-views/problems";
 import {
   acknowledgeFailure,
   AMBIGUOUS_WARNING,
   NO_EXACT_TARGET,
   NO_SUCH_WARNING,
 } from "../../src/curation-app/acknowledging";
-import { matchText, targetText } from "../../src/curation-app/review";
-import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
-import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
+import { matchText, targetText } from "../../src/study-views/review";
+import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/study-views/study";
+import { addableKinds, kindLabel, noteKinds } from "../../src/study-views/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
-import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app/data";
+import { defaultFile, fileForSource, sourceOfFile } from "../../src/study-views/data";
 import openTablesFixture from "../fixtures/curation-contract/open-tables.json";
 import problemsFixture from "../fixtures/curation-contract/problems.json";
 import errorsFixture from "../fixtures/curation-contract/errors.json";

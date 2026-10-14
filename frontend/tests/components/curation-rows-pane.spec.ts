@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
 import type { TableResponse } from "../../src/study-views/types";
 import RowsPane from "../../src/curation-app/components/RowsPane.vue";
-import type { RowFilter } from "../../src/curation-app/data";
+import type { RowFilter } from "../../src/study-views/data";
 import { sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);

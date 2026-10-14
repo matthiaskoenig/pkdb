@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import type { StatusChip, StudySort } from "../overview";
+import type { StatusChip, StudySort } from "../../study-views/overview";
 
 const DEFAULT_SORT: StudySort = { key: "study", descending: false };
 

@@ -25,7 +25,7 @@ import {
   SECTION_LABELS,
   SECTIONS,
   tableFiles,
-} from "../../src/curation-app/study";
+} from "../../src/study-views/study";
 import {
   approvalRefusal,
   duplicateFolders,

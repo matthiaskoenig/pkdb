@@ -27,10 +27,10 @@ import {
   type FieldMark,
   type MetadataForm,
 } from "../metadata";
-import { kindsWithTable, notesKindOf, notesKindsOf } from "../notes";
-import { failureOf, issuesFailure, type ActionFailure, type Section } from "../study";
+import { kindsWithTable, notesKindOf, notesKindsOf } from "../../study-views/notes";
+import { failureOf, issuesFailure, type ActionFailure, type Section } from "../../study-views/study";
 import { NOTICE_MS, userHint } from "../local";
-import { noteKinds } from "../tableKinds";
+import { noteKinds } from "../../study-views/tableKinds";
 import { useChangedFields } from "./useChangedFields";
 import { createNotice } from "./useNotice";
 

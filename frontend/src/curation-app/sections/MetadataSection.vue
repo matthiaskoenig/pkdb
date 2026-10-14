@@ -31,12 +31,12 @@ import {
   withKind,
   type ProvenanceKind,
 } from "../metadata";
-import { hasNotes, kindsWithTable } from "../notes";
-import { issueUrl, plural } from "../overview";
+import { hasNotes, kindsWithTable } from "../../study-views/notes";
+import { issueUrl, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, releaseLabel, sectionRoute } from "../study";
-import { noteKinds } from "../tableKinds";
+import { knownProfiles, releaseLabel, sectionRoute } from "../../study-views/study";
+import { noteKinds } from "../../study-views/tableKinds";
 
 /**
  * The form of study.json. It edits the draft of the study store, which the Data section edits

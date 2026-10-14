@@ -2,7 +2,7 @@
 import { computed, ref, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { ConflictData } from "../../study-views/types";
-import { useMoreBelow } from "../composables/useMoreBelow";
+import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
 import { useStudyStore } from "../stores/study";
 import { conflictView, type Side } from "../tables";
 import MoreBelow from "./MoreBelow.vue";

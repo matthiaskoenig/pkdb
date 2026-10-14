@@ -26,7 +26,7 @@ import {
   unsavedSections,
   withKind,
 } from "../../src/curation-app/metadata";
-import { kindLabel } from "../../src/curation-app/tableKinds";
+import { kindLabel } from "../../src/study-views/tableKinds";
 import { NOTE_KINDS, TABLE_KIND_ENTRIES, fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
 
 /** The form of a study.json value with the notes of every table kind of the study page. */

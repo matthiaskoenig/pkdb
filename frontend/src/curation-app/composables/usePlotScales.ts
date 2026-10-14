@@ -1,6 +1,6 @@
 import { computed, ref, toValue, type ComputedRef, type MaybeRefOrGetter } from "vue";
 import type { Axis, AxisScale, AxisScales, SourceView } from "../../study-views/types";
-import { digitizedScales, LINEAR_SCALES } from "../overlay";
+import { digitizedScales, LINEAR_SCALES } from "../../study-views/overlay";
 import { useOverviewStore } from "../stores/overview";
 
 /** The figure of the plot scales of the local server: `caffeine/Demo2020/Fig1`. */

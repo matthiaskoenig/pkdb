@@ -5,7 +5,7 @@ import type { SaveMode, Snapshot } from "../api/types";
 import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
-import { failureOf, type ActionFailure } from "../study";
+import { failureOf, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";

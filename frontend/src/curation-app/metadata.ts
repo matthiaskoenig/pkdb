@@ -19,9 +19,9 @@ import {
   type TableKind,
   type ValidationIssue,
 } from "../study-views/types";
-import { notesKindOf } from "./notes";
-import type { Section } from "./study";
-import { noteKinds } from "./tableKinds";
+import { notesKindOf } from "../study-views/notes";
+import type { Section } from "../study-views/study";
+import { noteKinds } from "../study-views/tableKinds";
 
 export type ProvenanceKind = Provenance["kind"];
 
