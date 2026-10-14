@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect, expectAccessible, test } from "./fixtures.ts";
-import { pixelStats } from "./pixels.ts";
+import { expectColor, pixelStats } from "./pixels.ts";
 
 /**
  * Draft2021 of the fixture has no workbook. Released, with an issue and curated by an AI, its
@@ -153,11 +153,6 @@ const BAND_COLORS = {
   dark: { band: [33, 57, 62], card: [25, 43, 49] },
 } as const;
 
-function expectColor(actual: readonly number[], expected: readonly number[], what: string): void {
-  for (const [index, value] of actual.entries())
-    expect(Math.abs(value - expected[index]!), `${what}: ${actual.join(",")} is near ${expected.join(",")}`).toBeLessThanOrEqual(2);
-}
-
 for (const theme of ["light", "dark"] as const) {
   test(`the study band sets the header and the tabs apart from the white cards, with every chip readable, in the ${theme} theme at 1280 and 1440 px`, async ({
     app,
@@ -189,6 +184,32 @@ for (const theme of ["light", "dark"] as const) {
         expect(placed.x).toBe(0);
         expect(placed.width).toBe(width);
         expect(Math.abs(placed.y - (bar.y + bar.height))).toBeLessThanOrEqual(0.5);
+        // The first line of the header stands at least 6 px below the bar, wrapped or not.
+        const tops = await band
+          .locator(".study-header-line > *")
+          .evaluateAll((parts) => Math.min(...parts.map((part) => part.getBoundingClientRect().top)));
+        expect(tops - (bar.y + bar.height), `first header line below the bar at ${width} px`).toBeGreaterThanOrEqual(6);
+        // The 3 px ring of the issue chip, 3 px away from it, is not hidden under the bar.
+        const issue = band.locator("a.issue-chip");
+        await page.keyboard.press("Shift");
+        await issue.focus();
+        await expect(issue).toBeFocused();
+        await expect(issue).toHaveCSS("outline-width", "3px");
+        await expect(issue).toHaveCSS("outline-offset", "3px");
+        expect((await issue.boundingBox())!.y - 6).toBeGreaterThanOrEqual(bar.y + bar.height);
+        // One gutter for the bar and the band: the brand, the identity and the tabs start at the same x, the controls end at the same x.
+        const left = async (locator: Locator) => Math.round((await locator.boundingBox())!.x);
+        const logo = await left(page.locator(".app-header .brand-logo"));
+        expect(await left(band.locator(".study-identity"))).toBe(logo);
+        expect(await left(band.getByRole("navigation", { name: "Study sections" }))).toBe(logo);
+        const controls = (await page.locator(".app-header .header-controls").boundingBox())!;
+        const ends = await page.evaluate(() => {
+          const right = (selector: string) => Math.max(...[...document.querySelectorAll(selector)].map((icon) => icon.getBoundingClientRect().right));
+          return { bar: right(".app-header .header-controls .v-icon"), band: right(".study-band .study-actions .v-icon") };
+        });
+        // The icons of the last buttons end 18 and 20 px from the edge (the buttons differ in size), where the actions share the line with the identity.
+        expect(controls.x + controls.width).toBe(width - 8);
+        if (width >= 1440) expect(Math.abs(ends.bar - ends.band)).toBeLessThanOrEqual(2.5);
         await expectAccessible(page);
         const name = `study-band-${theme}-${width}.png`;
         await testInfo.attach(name, { body: await page.screenshot({ path: testInfo.outputPath(name) }), contentType: "image/png" });
