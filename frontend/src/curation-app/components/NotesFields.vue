@@ -8,7 +8,11 @@ import { profileOf as knownProfile } from "../study";
 import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
 
-/** Descriptions and comments: of the study, or of one table kind in its notes. */
+/**
+ * Descriptions and comments: of the study, or of one table kind in its notes. The text areas show
+ * no label: the headings name the lists, and `aria-label` names each text area for screen readers.
+ * A comment shows its author once, above its text.
+ */
 const descriptions = defineModel<string[]>("descriptions", { required: true });
 const comments = defineModel<Comment[]>("comments", { required: true });
 const props = withDefaults(
@@ -85,12 +89,15 @@ function addComment(): void {
         />
       </div>
       <div v-for="(entry, index) in descriptions" :key="index" class="note-row">
+        <!-- Vuetify points aria-labelledby at the label of a field, which a field without a label
+             does not have; the aria-label names the text area instead. -->
         <VTextarea
           :model-value="entry"
-          :label="`Description ${index + 1}`"
+          :aria-label="`Description ${index + 1}`"
+          :aria-labelledby="undefined"
           variant="outlined"
           density="compact"
-          rows="2"
+          rows="1"
           :auto-grow="autoGrow"
           :max-rows="GROW_ROWS"
           class="grow-textarea"
@@ -135,10 +142,11 @@ function addComment(): void {
           </span>
           <VTextarea
             :model-value="entry.text"
-            :label="`Comment ${index + 1} by ${entry.user}`"
+            :aria-label="`Comment ${index + 1} by ${entry.user}`"
+            :aria-labelledby="undefined"
             variant="outlined"
             density="compact"
-            rows="2"
+            rows="1"
             :auto-grow="autoGrow"
             :max-rows="GROW_ROWS"
             class="grow-textarea"
