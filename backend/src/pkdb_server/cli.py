@@ -173,7 +173,10 @@ def local_command(args):
 
             store = FileStore(settings.file_root, factory, settings.upload_max_bytes)
             report = rebuild_views(factory, store, settings, everything=args.everything)
-            result = {"ok": not report["failed"], **report}
+            result = {
+                "ok": not report["failed"] and report["error"] is None,
+                **report,
+            }
         else:
             store = FileStore(settings.file_root, factory, settings.upload_max_bytes)
             result = {"ok": True, **cleanup(factory, store)}

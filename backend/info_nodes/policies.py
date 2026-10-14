@@ -59,4 +59,10 @@ CAN_NEGATIVE = [
     "platelet aggregation (change relative)",
     "bleeding time (change relative)",
     "urinary volume (change)",
+    # An inhibition is measured against the activity before the drug; assay noise
+    # and digitized curves at the baseline give small values below zero.
+    "ACE inhibition",
+    "factor Xa inhibition",
+    "factor Xa inhibition maximum",
+    "pressor response inhibition",
 ]

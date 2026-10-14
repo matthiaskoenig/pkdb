@@ -40,7 +40,7 @@ from pkdb_server.services.authorization import (
     authorize,
     authorize_creation,
 )
-from pkdb_server.services.study_views import BuiltViews, build_views, store_views
+from pkdb_server.services.study_views import BuiltViews, store_views, upload_views
 
 
 class PublicationConflict(ValueError):
@@ -485,9 +485,10 @@ class IngestionService:
         views = None
         if isinstance(source, Path):
             # The documents of the study page of the website, from the validated folder.
-            views = build_views(
+            views = upload_views(
                 source,
-                warnings=len(prepared.report.issues),
+                prepared.study.sid,
+                warnings=prepared.report.warning_count,
                 max_rows=self.settings.upload_max_rows,
                 max_files=self.settings.upload_max_files,
             )
@@ -668,7 +669,7 @@ class IngestionService:
                 replace.clear_children(session, root.id)
                 replace.insert_graph(session, root, study)
                 if views is not None:
-                    store_views(session, root.id, views)
+                    store_views(session, root.id, views.documents)
                 if created:
                     # Source contributor metadata never grants access implicitly.
                     session.add(

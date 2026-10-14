@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_2986",
+  "lang": "en",
+  "description": [
+    "OMIM mapping confirmed by DO. [SN].",
+    "A glomerulonephritis characterized by build up of IgA antibody in the glomerulus."
+  ],
+  "synonyms": [
+    "Berger's IgA or IgG nephropathy",
+    "Focal Glomerulonephritis",
+    "IgA nephropathy",
+    "primary IgA nephropathy",
+    "segmental glomerulonephritis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0004194",
+      "GARD:863",
+      "MESH:D005922",
+      "MIM:161950",
+      "NCI:C34643",
+      "SNOMEDCT_US_2025_09_01:236407003",
+      "UMLS_CUI:C0017661"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:2986"
+    ]
+  },
+  "label": "IgA glomerulonephritis",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_2986",
+  "obo_id": "DOID:2986",
+  "in_subset": [
+    "DO_rare_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A glomerulonephritis characterized by build up of IgA antibody in the glomerulus.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004194",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004194"
+    },
+    {
+      "database": "GARD",
+      "id": "863",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=863"
+    },
+    {
+      "database": "MESH",
+      "id": "D005922",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D005922"
+    },
+    {
+      "database": "MIM",
+      "id": "161950",
+      "description": null,
+      "url": "https://omim.org/MIM:161950"
+    },
+    {
+      "database": "NCI",
+      "id": "C34643",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34643"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "236407003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/236407003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0017661",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0017661"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/graph"
+    },
+    "has_major_susceptibility_factor": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_2986/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004005"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

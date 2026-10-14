@@ -25,7 +25,8 @@ def upgrade():
         sa.Column("kind", sa.String(8), nullable=False),
         sa.Column("key", sa.String(255), nullable=False),
         sa.Column("version", sa.Integer(), nullable=False),
-        sa.Column("document", postgresql.JSONB(), nullable=False),
+        # JSON keeps the order of the keys, which JSONB does not.
+        sa.Column("document", postgresql.JSON(), nullable=False),
         sa.CheckConstraint(
             "kind IN ('study', 'row', 'table', 'source')",
             name="ck_study_views_kind",

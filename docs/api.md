@@ -46,21 +46,21 @@ A study substance search matches studies containing relevant data; it does not m
 
 ## Study pages of the website
 
-The website shows a study with the same views as the local curation app (`pkdb curate`). The documents are built when a study is uploaded and stored with it. Studies uploaded before this feature, format 1 studies and unknown studies answer 404, as does a study the reader may not read.
+The website shows a study with the same views as the local curation app (`pkdb curate`). The documents are built when a study is uploaded and stored with it. Studies uploaded before this feature, format 1 studies and unknown studies answer 404, as does a study the reader may not read and a study whose page could not be built at upload until [`pkdb-server rebuild-views`](administration.md#maintenance) builds it.
 
 | Route | Answer |
 | --- | --- |
-| `GET /api/v2/study-rows` | `{"rows": [...], "profiles": {...}}`, one row per readable study ordered by `id`, with `id`, `name`, `substance`, `substances`, `summary`, `counts`, `issue` and `curator`, and the public profiles of the people named in the rows |
+| `GET /api/v2/study-rows` | `{"rows": [...], "profiles": {...}}`, one row per readable study with a stored page, ordered by `id`, with `id`, `name`, `substance`, `substances`, `summary`, `counts`, `issue` and `curator`, and the public profiles of the people named in the rows |
 | `GET /api/v2/studies/{substance}/{name}/view` | The study page: metadata, tables, sources, `people`, `issue`, `problems`, `counts`, `papers` and `audience` |
 | `GET /api/v2/studies/{substance}/{name}/view/tables/{file}` | One table of the study |
 | `GET /api/v2/studies/{substance}/{name}/view/sources/{source}` | One source (figure or table) with its `image_url` |
 | `GET /api/v2/studies/{substance}/{name}/view/files/{file}` | A stored image or PDF of the study, inline, for curators only |
 
-There are two audiences. The curator view goes to whoever may write the study: its assigned curators (also reviewers assigned to it), reviewers for a public study, and administrators; a read-only API key of such a user also gets it, because no key scope is needed. Everybody else who may read the study gets the public view. The public view leaves out the review, the GitHub issue, the curator ratings, the problems, the paper files and the source images (`null` or empty). The files route answers 404 for the public view and serves only the images and PDFs that the study stores.
+There are two audiences. The curator view goes to whoever may write the study: its assigned curators (also reviewers assigned to it), reviewers for a public study, and administrators; a read-only API key of such a user also gets it, because no key scope is needed. Everybody else who may read the study gets the public view. The public view leaves out the review, the acknowledged warnings, the review targets, the list of files, the papers, the raw tables, the images and the figure of a source (its image, digitization and overlay; the plot keeps the series with rows), the problems, the GitHub issue, the curator ratings and the provenance details beyond its kind (`null` or empty). The files route answers 404 for the public view and serves only the images and PDFs that the study stores. The `access` and `licence` of the page are those of the database, which an administrator changes without an upload.
 
-JSON answers carry an `ETag` of the body (which includes the audience) and `Vary: Cookie, Authorization`. Anonymous answers have `Cache-Control: private, no-cache` and may be cached privately and revalidated by ETag. Authenticated answers (session cookie or Authorization header) are never stored (`Cache-Control: no-store`) but still answer 304 to a matching `If-None-Match`. Files support `Range` requests.
+JSON answers carry a weak `ETag` of the body (which includes the audience), such as `W/"…"`, and `Vary: Cookie, Authorization, Accept-Encoding`. An answer larger than 1 KiB is compressed with gzip (`Content-Encoding: gzip`) when the request accepts it; the compressed and the plain answer have the same ETag. Anonymous answers have `Cache-Control: private, no-cache` and may be cached privately and revalidated by ETag. Authenticated answers (session cookie or Authorization header) are never stored (`Cache-Control: no-store`) but still answer 304 to a matching `If-None-Match`. Files are not compressed and support `Range` requests.
 
-`GET /api/v2/studies/{substance}/{name}`, `GET /api/v2/studies` and the v1 study reads leave out the review, the issue and the curator ratings (`null`) for readers who may not write the study.
+`GET /api/v2/studies/{substance}/{name}`, `GET /api/v2/studies` and the v1 study reads leave out `review`, `issue` and `review_status` (`null`), `open_review_items` (`0`) and the file `review.json` (from `files` and `attachments`; `/media` refuses it) for readers who may not write the study. They keep the curator ratings, which released `pkdb` clients require; only the website pages leave them out.
 
 ## Study identifiers and redirects
 

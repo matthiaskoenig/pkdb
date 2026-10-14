@@ -1,5 +1,5 @@
 {
-  "version": "9e64f6afd3dec0b7e69e30f9d229b5a8b604afb061abebe239ff249f68c29678",
+  "version": "e3f65f06ad800dbb4d8e1582c4c6df95a56bfbddc5a15ecbfcbcc9665bbac93b",
   "nodes": [
     {
       "sid": "root",
@@ -2004,7 +2004,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -2042,7 +2042,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -3226,7 +3226,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -3544,6 +3544,49 @@
         ],
         "description": [
           "\"Glomular Filtration Rate (GFR). An estimation of the volume of fluid filtered from the kidney glomerular capillaries into the Bowman's capsule per specified unit of time based on serum creatinine level, weight and age of organism and other factors. GFR should be encoded as creatinine via 'measurement_type=clearance', 'substance=creatinine' and 'tissue=urine' if it is a creatinine clearance.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "renal-plasma-flow",
+      "name": "renal plasma flow",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "ml/min/(1.73*m^2)",
+          "ml/min"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "kidney-function-test"
+      ],
+      "terms": {
+        "synonyms": [
+          "ERPF",
+          "RPF",
+          "effective renal plasma flow"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Renal plasma flow (RPF)\""
+        ],
+        "description": [
+          "\"Renal plasma flow (RPF). The volume of plasma that flows through the kidneys per unit time, usually measured as the clearance of p-aminohippurate or hippuran (effective renal plasma flow, ERPF). Name the marker in the comment.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -7030,6 +7073,44 @@
       }
     },
     {
+      "sid": "csf-plasma-ratio",
+      "name": "csf/plasma ratio",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"CSF/plasma ratio\""
+        ],
+        "description": [
+          "\"The ratio of the cerebrospinal fluid concentration to the plasma or serum concentration of a given substance at the same time. Tissue should be coded as 'cerebrospinal fluid'; name plasma or serum in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "fraction-absorbed",
       "name": "fraction_absorbed",
       "kind": "measurement",
@@ -9383,7 +9464,7 @@
         ],
         "choices": [],
         "time_required": false,
-        "can_negative": false,
+        "can_negative": true,
         "deprecated": false
       },
       "parents": [
@@ -18238,6 +18319,7 @@
           "polycystic kidney disease",
           "cystic kidney disease",
           "glomerulosclerosis",
+          "IgA nephropathy",
           "chronic glomerulonephritis",
           "acute glomerulonephritis",
           "focal glomerulonephritis",
@@ -21547,6 +21629,47 @@
         ],
         "description": [
           "\"A hardening of the kidney glomerulus caused by scarring of the blood vessels.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "iga-nephropathy",
+      "name": "IgA nephropathy",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "glomerulonephritis"
+      ],
+      "terms": {
+        "synonyms": [
+          "Berger disease",
+          "IgA glomerulonephritis"
+        ],
+        "annotations": [
+          "{\"collection\": \"doid\", \"description\": \"OMIM mapping confirmed by DO. [SN].\", \"label\": \"IgA glomerulonephritis\", \"relation\": \"BQB_IS\", \"term\": \"DOID:2986\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/doid/terms?obo_id=DOID:2986\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"0004194\", \"name\": \"EFO\", \"url\": \"http://www.ebi.ac.uk/efo/EFO_0004194\"}",
+          "{\"accession\": \"863\", \"name\": \"GARD\", \"url\": \"https://rarediseases.info.nih.gov/?gard_id=863\"}",
+          "{\"accession\": \"D005922\", \"name\": \"MESH\", \"url\": \"http://id.nlm.nih.gov/mesh/D005922\"}",
+          "{\"accession\": \"C34643\", \"name\": \"NCI\", \"url\": \"http://purl.obolibrary.org/obo/NCIT_C34643\"}",
+          "{\"accession\": \"236407003\", \"name\": \"SNOMEDCT_US_2025_09_01\", \"url\": \"http://purl.bioontology.org/ontology/SNOMEDCT/236407003\"}",
+          "{\"accession\": \"C0017661\", \"name\": \"UMLS_CUI\", \"url\": \"https://uts.nlm.nih.gov/uts/umls/concept/C0017661\"}"
+        ],
+        "label": [
+          "\"IgA nephropathy\""
+        ],
+        "description": [
+          "\"A glomerulonephritis with deposits of immunoglobulin A in the glomerular mesangium (Berger disease).\""
         ],
         "dtype": [
           "\"undefined\""
@@ -74290,6 +74413,79 @@
         ],
         "description": [
           "\"r-salbutamol/s-salbutamol.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "salbutamol-4-o-sulphate",
+      "name": "salbutamol 4-O-sulphate",
+      "kind": "substance",
+      "definition": {
+        "mass": 319.379,
+        "charge": 0,
+        "formula": "C13H21NO6S"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "Salbutamol 4-O-sulfate",
+          "[4-[2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenyl] hydrogen sulate",
+          "albuterol 4-O-sulfate",
+          "salbutamol 4-O-sulfate"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"Salbutamol 4-O-sulfate\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:186295\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:186295\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"63908-03-2\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=63908-03-2\"}",
+          "{\"accession\": \"22568547\", \"name\": \"chemspider\", \"url\": \"http://www.chemspider.com/Chemical-Structure.22568547.html\"}",
+          "{\"accession\": \"HMDB0060604\", \"name\": \"hmdb\", \"url\": \"http://www.hmdb.ca/metabolites/HMDB0060604\"}"
+        ],
+        "label": [
+          "\"salbutamol 4-O-sulphate\""
+        ],
+        "description": [
+          "\"Salbutamol 4-O-sulphate, the sulphate conjugate of 'salbutamol' and its main metabolite, formed in the intestine and the liver. Not the salt 'salbutamol sulphate'.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "salbutamol-metabolites",
+      "name": "salbutamol-metabolites",
+      "kind": "substance",
+      "definition": {
+        "mass": null,
+        "charge": null,
+        "formula": null
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"salbutamol-metabolites\""
+        ],
+        "description": [
+          "\"salbutamol and salbutamol 4-O-sulphate (total salbutamol). Used for measurements of the sum of the drug and its sulphate conjugate.\""
         ],
         "dtype": [
           "\"undefined\""
@@ -131243,6 +131439,402 @@
         ],
         "description": [
           "\"Nifedipine, sold under the brand name Adalat among others, is a calcium channel blocker medication used to manage angina, high blood pressure, Raynaud's phenomenon, and premature labor.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "nitrendipine",
+      "name": "nitrendipine",
+      "kind": "substance",
+      "definition": {
+        "mass": 360.366,
+        "charge": 0,
+        "formula": "C18H20N2O6"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "1,4-dihydro-2,6-dimethyl-4-(3-nitrophenyl)-3,5-pyridinedicarboxylic acid ethyl methyl ester",
+          "BAY e 5009",
+          "Bayotensin",
+          "Baypress",
+          "Bylotensin",
+          "Deiten",
+          "Nidrel",
+          "ethyl methyl 2,6-dimethyl-4-(3-nitrophenyl)-1,4-dihydropyridine-3,5-dicarboxylate",
+          "nitrendipine",
+          "nitrendipino",
+          "nitrendipinum"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": \"A  dihydropyridine that is 1,4-dihydropyridine substituted by methyl groups at positions 2 and 6, a 3-nitrophenyl group at position 4, a ethoxycarbonyl group at position 3 and a methoxycarbonyl group at position 5. It is a calcium-channel blocker used in the treatment of hypertension.\", \"label\": \"nitrendipine\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:7582\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:7582\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"39562-70-4\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=39562-70-4\"}",
+          "{\"accession\": \"DB01054\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB01054\"}",
+          "{\"accession\": \"1947\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/1947\"}",
+          "{\"accession\": \"HMDB0015187\", \"name\": \"hmdb\", \"url\": \"http://www.hmdb.ca/metabolites/HMDB0015187\"}",
+          "{\"accession\": \"CN101416954\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/CN101416954\"}",
+          "{\"accession\": \"DE2117571\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/DE2117571\"}",
+          "{\"accession\": \"US3799934\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/US3799934\"}",
+          "{\"accession\": \"1725797\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/1725797/\"}",
+          "{\"accession\": \"1790544\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/1790544/\"}",
+          "{\"accession\": \"20398559\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20398559/\"}",
+          "{\"accession\": \"21811924\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/21811924/\"}",
+          "{\"accession\": \"23648675\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/23648675/\"}",
+          "{\"accession\": \"24134630\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/24134630/\"}",
+          "{\"accession\": \"6085389\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/6085389/\"}"
+        ],
+        "label": [
+          "\"nitrendipine\""
+        ],
+        "description": [
+          "\"Nitrendipine is a dihydropyridine calcium channel blocker used to treat hypertension.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "dihydralazine",
+      "name": "dihydralazine",
+      "kind": "substance",
+      "definition": {
+        "mass": 190.21,
+        "charge": 0,
+        "formula": "C8H10N6"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "Dihydralazine",
+          "NSC-526654",
+          "dihidralazina",
+          "dihydralazin",
+          "dihydralazine",
+          "dihydralazine sulfate",
+          "dihydrallazine",
+          "dihydrazinophthalazine",
+          "hypopresol",
+          "nepresol",
+          "nepresolin",
+          "nepressol",
+          "ophthazin",
+          "tonolysin"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"dihydralazine\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:134841\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:134841\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"484-23-1\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=484-23-1\"}",
+          "{\"accession\": \"884\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/884\"}",
+          "{\"accession\": \"15646539\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/15646539/\"}",
+          "{\"accession\": \"16248836\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/16248836/\"}",
+          "{\"accession\": \"20014752\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20014752/\"}",
+          "{\"accession\": \"20020916\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20020916/\"}",
+          "{\"accession\": \"21965623\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/21965623/\"}",
+          "{\"accession\": \"22961681\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/22961681/\"}",
+          "{\"accession\": \"2795599\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/2795599/\"}",
+          "{\"accession\": \"35597097\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/35597097/\"}",
+          "{\"accession\": \"35820623\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/35820623/\"}",
+          "{\"accession\": \"37468498\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/37468498/\"}",
+          "{\"accession\": \"3783580\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/3783580/\"}",
+          "{\"accession\": \"6492077\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/6492077/\"}",
+          "{\"accession\": \"6854582\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/6854582/\"}",
+          "{\"accession\": \"7205877\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/7205877/\"}"
+        ],
+        "label": [
+          "\"dihydralazine\""
+        ],
+        "description": [
+          "\"Dihydralazine is a hydrazinophthalazine vasodilator used to treat hypertension, usually given as dihydralazine sulfate.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "clonidine",
+      "name": "clonidine",
+      "kind": "substance",
+      "definition": {
+        "mass": 230.094,
+        "charge": 0,
+        "formula": "C9H9Cl2N3"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "Catapres-TTS",
+          "Catarpres-TTS",
+          "Clonidin",
+          "clonidina",
+          "clonidine",
+          "clonidinum"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"clonidine\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:46631\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:46631\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"4205-90-7\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=4205-90-7\"}",
+          "{\"accession\": \"DB00575\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB00575\"}",
+          "{\"accession\": \"US3202660\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/US3202660\"}",
+          "{\"accession\": \"11682401\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/11682401/\"}",
+          "{\"accession\": \"15883756\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/15883756/\"}",
+          "{\"accession\": \"16863391\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/16863391/\"}",
+          "{\"accession\": \"18986614\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/18986614/\"}",
+          "{\"accession\": \"19328116\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/19328116/\"}",
+          "{\"accession\": \"21399902\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/21399902/\"}",
+          "{\"accession\": \"21525113\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/21525113/\"}"
+        ],
+        "label": [
+          "\"clonidine\""
+        ],
+        "description": [
+          "\"Clonidine is a centrally acting alpha-2 adrenergic agonist used to treat hypertension, usually given as clonidine hydrochloride.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "prazosin",
+      "name": "prazosin",
+      "kind": "substance",
+      "definition": {
+        "mass": 383.408,
+        "charge": 0,
+        "formula": "C19H21N5O4"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "1-(4-Amino-6,7-dimethoxy-2-quinazolinyl)-4-(2-furanylcarbonyl)piperazine",
+          "2-(4-(2-Furoyl)piperazin-1-yl)-4-amino-6,7-dimethoxyquinazoline",
+          "2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine",
+          "prazosin",
+          "prazosina",
+          "prazosine",
+          "prazosinum"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": \"A member of the class of  piperazines that is piperazine substituted by a furan-2-ylcarbonyl group and a 4-amino-6,7-dimethoxyquinazolin-2-yl group at positions 1 and 4 respectively.\", \"label\": \"prazosin\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:8364\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:8364\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"19216-56-9\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=19216-56-9\"}",
+          "{\"accession\": \"DB00457\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB00457\"}",
+          "{\"accession\": \"4209\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/4209\"}",
+          "{\"accession\": \"HMDB0014600\", \"name\": \"hmdb\", \"url\": \"http://www.hmdb.ca/metabolites/HMDB0014600\"}",
+          "{\"accession\": \"GB1156973\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/GB1156973\"}",
+          "{\"accession\": \"NL7206067\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/NL7206067\"}",
+          "{\"accession\": \"US3511836\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/US3511836\"}",
+          "{\"accession\": \"20825390\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20825390/\"}"
+        ],
+        "label": [
+          "\"prazosin\""
+        ],
+        "description": [
+          "\"Prazosin is an alpha-1 adrenergic receptor antagonist used to treat hypertension, usually given as prazosin hydrochloride.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "methyldopa",
+      "name": "methyldopa",
+      "kind": "substance",
+      "definition": {
+        "mass": 211.217,
+        "charge": 0,
+        "formula": "C10H13NO4"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "(2S)-2-amino-3-(3,4-dihydroxyphenyl)-2-methylpropanoic acid",
+          "(S)-(-)-alpha-Methyldopa",
+          "3-Hydroxy-alpha-methyl-L-tyrosine",
+          "3-hydroxy-alpha-methyl-L-tyrosine",
+          "AMD",
+          "Alpha medopa",
+          "Alphamethyldopa",
+          "L(-)-beta-(3,4-Dihydroxyphenyl)-alpha-methylalanine",
+          "L-(-)-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+          "L-(-)-alpha-Methyl-beta-(3,4-dihydroxyphenyl)alanine",
+          "L-(alpha-Md)",
+          "L-2-Amino-2-methyl-3-(3,4-dihydroxyphenyl)propionic acid",
+          "L-Methyl Dopa",
+          "L-alpha-Methyl-3,4-dihydroxyphenylalanine",
+          "L-alpha-Methyldopa",
+          "Methyl-L-dopa",
+          "Methyldopa",
+          "Methyldopa anhydrous",
+          "alpha-Methyl dopa",
+          "alpha-Methyl-L-3,4-dihydroxyphenylalanine",
+          "alpha-Methyl-beta-(3,4-dihydroxyphenyl)-L-alanine",
+          "alpha-Methyldihydroxyphenylalanine",
+          "alpha-Methyldopa",
+          "alpha-methyl-L-dopa",
+          "l-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+          "levo-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+          "methyldopa",
+          "methyldopum",
+          "metildopa"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": \"A derivative of <small>L</small>-tyrosine having a methyl group at the \\u03b1-position and an additional hydroxy group at the 3-position on the phenyl ring.\", \"label\": \"alpha-methyl-L-dopa\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:61058\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:61058\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"555-30-6\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=555-30-6\"}",
+          "{\"accession\": \"DB00968\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB00968\"}",
+          "{\"accession\": \"1762\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/1762\"}",
+          "{\"accession\": \"HMDB0011754\", \"name\": \"hmdb\", \"url\": \"http://www.hmdb.ca/metabolites/HMDB0011754\"}",
+          "{\"accession\": \"10576686\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/10576686/\"}",
+          "{\"accession\": \"11901210\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/11901210/\"}",
+          "{\"accession\": \"29438107\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/29438107/\"}",
+          "{\"accession\": \"8301021\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/8301021/\"}"
+        ],
+        "label": [
+          "\"methyldopa\""
+        ],
+        "description": [
+          "\"Methyldopa (alpha-methyl-L-dopa) is a centrally acting antihypertensive, an alpha-2 adrenergic agonist after its conversion to alpha-methylnorepinephrine.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "mycophenolic-acid",
+      "name": "mycophenolic acid",
+      "kind": "substance",
+      "definition": {
+        "mass": 320.341,
+        "charge": 0,
+        "formula": "C17H20O6"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "(4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoic acid",
+          "(E)-6-(4-Hydroxy-6-methoxy-7-methyl-3-oxo-5-phthalanyl)-4-methyl-4-hexenoic acid",
+          "MPA",
+          "Micofenolico acido",
+          "Mycophenolate",
+          "Mycophenolsaeure",
+          "acide mycophenolique",
+          "acido micofenolico",
+          "acidum mycophenolicum",
+          "mycophenolic acid"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": \"A member of the class of 2-benzofurans that is 2-benzofuran-1(3<em>H</em>)-one which is substituted at positions 4, 5, 6, and 7 by methyl, methoxy, (2<i>E</i>)-5-carboxy-3-methylpent-2-en-1-yl, and hydroxy groups, respectively. It is an antibiotic produced by <em>Penicillium brevi-compactum, P. stoloniferum, P. echinulatum</em> and related species. An immunosuppressant, it is widely used (partiularly as its sodium salt and as the 2-(morpholin-4-yl)ethyl ester prodrug, mycophenolate mofetil) to prevent tissue rejection following organ transplants and for the treatment of certain autoimmune diseases.\", \"label\": \"mycophenolic acid\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:168396\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:168396\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"24280-93-1\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=24280-93-1\"}",
+          "{\"accession\": \"DB01024\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB01024\"}",
+          "{\"accession\": \"1860\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/1860\"}",
+          "{\"accession\": \"US4753935\", \"name\": \"patent\", \"url\": \"https://www.google.com/patents/US4753935\"}",
+          "{\"accession\": \"11272311\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/11272311/\"}",
+          "{\"accession\": \"15470161\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/15470161/\"}",
+          "{\"accession\": \"16629948\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/16629948/\"}",
+          "{\"accession\": \"16640327\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/16640327/\"}",
+          "{\"accession\": \"17482154\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/17482154/\"}",
+          "{\"accession\": \"17498396\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/17498396/\"}",
+          "{\"accession\": \"18194117\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/18194117/\"}",
+          "{\"accession\": \"18611107\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/18611107/\"}",
+          "{\"accession\": \"18996104\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/18996104/\"}",
+          "{\"accession\": \"19689217\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/19689217/\"}"
+        ],
+        "label": [
+          "\"mycophenolic acid\""
+        ],
+        "description": [
+          "\"Mycophenolic acid (MPA) is an immunosuppressant, an inhibitor of inosine monophosphate dehydrogenase, given as mycophenolate mofetil or mycophenolate sodium. Its main metabolite is 'mycophenolic acid glucuronide'.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "mycophenolic-acid-glucuronide",
+      "name": "mycophenolic acid glucuronide",
+      "kind": "substance",
+      "definition": {
+        "mass": 496.465,
+        "charge": 0,
+        "formula": "C23H28O12"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "6-({5-[(2Z)-5-carboxy-3-methylpent-2-en-1-yl]-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-4-yl}oxy)-3,4,5-trihydroxyoxane-2-carboxylic acid",
+          "MPAG",
+          "mycophenolic acid glucuronide"
+        ],
+        "annotations": [
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"mycophenolic acid glucuronide\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:232439\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:232439\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"HMDB0060634\", \"name\": \"hmdb\", \"url\": \"http://www.hmdb.ca/metabolites/HMDB0060634\"}"
+        ],
+        "label": [
+          "\"mycophenolic acid glucuronide\""
+        ],
+        "description": [
+          "\"Mycophenolic acid glucuronide (MPAG), the inactive phenolic glucuronide of 'mycophenolic acid' and its main metabolite.\""
         ],
         "dtype": [
           "\"undefined\""

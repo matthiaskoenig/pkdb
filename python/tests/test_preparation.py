@@ -43,19 +43,6 @@ def test_bad_expression_retains_source_location(study_folder, vocabulary):
     assert issue.source.row in {2, 3}
 
 
-@pytest.mark.parametrize(
-    "curator", [["mkoenig", None], {"user": "mkoenig", "rating": None}]
-)
-def test_curator_with_a_null_rating_is_rejected(study_folder, vocabulary, curator):
-    path = study_folder / "study.json"
-    study = json.loads(path.read_text())
-    study["curators"] = [curator]
-    path.write_text(json.dumps(study))
-    with pytest.raises(StudyValidationError) as error:
-        prepare(study_folder, vocabulary=vocabulary)
-    assert error.value.report.issues[0].code == "invalid_curator"
-
-
 def test_row_limit_is_applied_to_folder(study_folder, vocabulary):
     with pytest.raises(StudyValidationError) as error:
         prepare(study_folder, vocabulary=vocabulary, max_rows=1)

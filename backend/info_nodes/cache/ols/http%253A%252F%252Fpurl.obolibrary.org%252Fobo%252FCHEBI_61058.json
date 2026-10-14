@@ -1,0 +1,585 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_61058",
+  "lang": "en",
+  "description": [
+    "A derivative of <small>L</small>-tyrosine having a methyl group at the \u03b1-position and an additional hydroxy group at the 3-position on the phenyl ring."
+  ],
+  "synonyms": [
+    "(2S)-2-amino-3-(3,4-dihydroxyphenyl)-2-methylpropanoic acid",
+    "(S)-(-)-alpha-Methyldopa",
+    "3-Hydroxy-alpha-methyl-L-tyrosine",
+    "3-hydroxy-alpha-methyl-L-tyrosine",
+    "3-hydroxy-alpha-methyl-L-tyrosine",
+    "AMD",
+    "Alpha medopa",
+    "Alphamethyldopa",
+    "L(-)-beta-(3,4-Dihydroxyphenyl)-alpha-methylalanine",
+    "L-(-)-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+    "L-(-)-alpha-Methyl-beta-(3,4-dihydroxyphenyl)alanine",
+    "L-(alpha-Md)",
+    "L-2-Amino-2-methyl-3-(3,4-dihydroxyphenyl)propionic acid",
+    "L-Methyl Dopa",
+    "L-alpha-Methyl-3,4-dihydroxyphenylalanine",
+    "L-alpha-Methyldopa",
+    "Methyl-L-dopa",
+    "Methyldopa anhydrous",
+    "Methyldopa",
+    "alpha-Methyl dopa",
+    "alpha-Methyl-L-3,4-dihydroxyphenylalanine",
+    "alpha-Methyl-beta-(3,4-dihydroxyphenyl)-L-alanine",
+    "alpha-Methyldihydroxyphenylalanine",
+    "alpha-Methyldopa",
+    "l-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+    "levo-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+    "methyldopa",
+    "methyldopum",
+    "metildopa"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:555-30-6",
+      "drugbank:DB00968",
+      "drugcentral:1762",
+      "hmdb:HMDB0011754",
+      "kegg.compound:C07194",
+      "kegg.drug:D08205",
+      "lincs.smallmolecule:LSM-5596",
+      "pubmed:10576686",
+      "pubmed:11901210",
+      "pubmed:29438107",
+      "pubmed:8301021",
+      "reaxys:2807721",
+      "wikipedia.en:Methyldopa"
+    ],
+    "generalized_empirical_formula": [
+      "C10H13NO4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:61058"
+    ],
+    "inchi_key_string": [
+      "CJCSPKMFHVPWAR-JTQLQIEISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H13NO4/c1-10(11,9(14)15)5-6-2-3-7(12)8(13)4-6/h2-4,12-13H,5,11H2,1H3,(H,14,15)/t10-/m0/s1"
+    ],
+    "mass": [
+      "211.217"
+    ],
+    "monoisotopic_mass": [
+      "211.08446"
+    ],
+    "smiles_string": [
+      "C[C@](N)(Cc1ccc(O)c(O)c1)C(=O)O"
+    ]
+  },
+  "label": "alpha-methyl-L-dopa",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_61058",
+  "obo_id": "CHEBI:61058",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "555-30-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=555-30-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00968",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00968"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1762",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1762"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0011754",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0011754"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07194",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08205",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5596",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10576686",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10576686/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11901210",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11901210/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29438107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29438107/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8301021",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8301021/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2807721",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Methyldopa",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-hydroxy-alpha-methyl-L-tyrosine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-2-amino-3-(3,4-dihydroxyphenyl)-2-methylpropanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-alpha-Methyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Hydroxy-alpha-methyl-L-tyrosine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-hydroxy-alpha-methyl-L-tyrosine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AMD",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alpha medopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alphamethyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L(-)-beta-(3,4-Dihydroxyphenyl)-alpha-methylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-(-)-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-(-)-alpha-Methyl-beta-(3,4-dihydroxyphenyl)alanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-(alpha-Md)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-2-Amino-2-methyl-3-(3,4-dihydroxyphenyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Methyl Dopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-alpha-Methyl-3,4-dihydroxyphenylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-alpha-Methyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methyl-L-dopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methyldopa anhydrous",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methyl dopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methyl-L-3,4-dihydroxyphenylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methyl-beta-(3,4-dihydroxyphenyl)-L-alanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methyldihydroxyphenylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levo-3-(3,4-Dihydroxyphenyl)-2-methylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyldopa",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyldopum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metildopa",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_61058/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
