@@ -16,7 +16,7 @@ from pkpdutils import (
 )
 from pkpdutils import Timecourse as PKTimecourse
 
-from pkdb.domain.units import ureg
+from pkdb.domain.units import quantity, ureg
 from pkdb.schemas.study import Intervention, Measurement, Statistics, Timecourse
 from pkdb.schemas.validation import fail
 
@@ -83,10 +83,14 @@ def _pk_dose(
         or not dose.unit
         or amount is None
         or amount <= 0
-        or not any(
-            ureg.Unit(dose.unit).dimensionality == ureg.Unit(unit).dimensionality
-            for unit in dose_units
-        )
+    ):
+        return None
+    # The unit can hold a factor, such as `mg/(1.73*m^2)`, so the amount
+    # takes the factor and the dose the unit without it.
+    scaled = quantity(amount, dose.unit)
+    if not any(
+        scaled.dimensionality == ureg.parse_expression(unit).dimensionality
+        for unit in dose_units
     ):
         return None
     # Processing version 8 kept schedules (time lists, interval and doses) as text
@@ -120,8 +124,8 @@ def _pk_dose(
     else:
         return None
     return Dose(
-        amount=amount,
-        unit=str(ureg.Unit(dose.unit)),
+        amount=float(scaled.magnitude),
+        unit=str(scaled.units),
         route=route,
         time=time,
         duration=duration,
