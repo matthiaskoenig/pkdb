@@ -76,6 +76,8 @@ Configure SMTP in `.env` and recreate the backend with `docker compose --profile
 
 The initial database contains vocabulary and any users you imported, but no studies. Follow the [minimal local upload setup](local-upload-testing.md#minimal-local-setup) for the complete sequence: start Docker, create the administrator, import users, prepare attribution accounts, and validate and upload with the `pkdb` Python package. This uses the same running stack and does not require another backend installation.
 
+`pkdb-server rebuild-views` builds the study pages of the website again for the studies whose stored pages an older version built (the server logs their number at start); `--all` builds them for every study uploaded with this version or later. Studies uploaded before 0.12.9 have no stored pages and get them at their next upload.
+
 ## Daily development
 
 Start the live frontend at **http://localhost:8080** with:

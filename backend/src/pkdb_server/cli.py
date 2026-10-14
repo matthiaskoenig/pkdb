@@ -23,6 +23,9 @@ def main(argv=None, *, client=None):
     commands.add_parser("bootstrap").add_argument("path", type=Path)
     commands.add_parser("bootstrap-study").add_argument("path", type=Path)
     commands.add_parser("cleanup")
+    commands.add_parser("rebuild-views").add_argument(
+        "--all", action="store_true", dest="everything"
+    )
     admin = commands.add_parser("create-admin")
     admin.add_argument("username")
     admin.add_argument("--email", required=True)
@@ -46,6 +49,7 @@ def main(argv=None, *, client=None):
         "bootstrap",
         "bootstrap-study",
         "cleanup",
+        "rebuild-views",
         "create-admin",
         "import-users",
         "create-user",
@@ -164,6 +168,12 @@ def local_command(args):
             operation = bootstrap if args.command == "bootstrap" else bootstrap_study
             report = operation(args.path, factory)
             result = {"ok": not report.errors, **report.model_dump(mode="json")}
+        elif args.command == "rebuild-views":
+            from pkdb_server.commands.views import rebuild_views
+
+            store = FileStore(settings.file_root, factory, settings.upload_max_bytes)
+            report = rebuild_views(factory, store, settings, everything=args.everything)
+            result = {"ok": not report["failed"], **report}
         else:
             store = FileStore(settings.file_root, factory, settings.upload_max_bytes)
             result = {"ok": True, **cleanup(factory, store)}

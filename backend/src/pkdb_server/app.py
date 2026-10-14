@@ -50,6 +50,7 @@ from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.limits import UploadLimits
 from pkdb_server.api.quotas import RequestQuotas
 from pkdb_server.api.upload_reports import UploadReports
+from pkdb_server.commands.views import stale_view_count
 from pkdb_server.config import Settings
 from pkdb_server.db.bootstrap import load_vocabulary
 from pkdb_server.db.read import publication_state, read_study
@@ -116,6 +117,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app):
+        try:
+            with session_factory() as session:
+                stale = stale_view_count(session)
+        except Exception:
+            stale = 0
+        if stale:
+            log.warning(
+                "%d studies have study pages of an older version; run "
+                "pkdb-server rebuild-views",
+                stale,
+            )
         try:
             async with mcp_app.lifespan(app):
                 yield
