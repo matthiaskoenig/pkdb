@@ -76,6 +76,7 @@ from pkdb.studyformat.tables import (
     TABLES,
     column_classes,
     parse_table_file,
+    table_file,
 )
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
@@ -557,6 +558,29 @@ def _files_now(root: Path, folder: Path) -> tuple:
     return (tree.files(folder), tree.workbook_open(folder))
 
 
+# The tables whose rows the cells of other tables name, by which the app links a name to its row.
+NAMED_KINDS = ("subjects", "interventions")
+
+
+def _name_lines(study: LoadedStudy | None) -> dict[str, dict]:
+    """The file of subjects.tsv and interventions.tsv and the line of each name in it.
+
+    The app links a name in a cell to the row of the name with it, without reading these
+    tables. A name of two rows, which validation reports, has the line of the first. A table
+    that is missing or could not be read, and a study beyond the upload limits, have no names.
+    """
+    found: dict[str, dict] = {}
+    for kind in NAMED_KINDS:
+        lines: dict[str, int] = {}
+        if study is not None:
+            for _, row in study.rows(kind):
+                name = row.cells.get("name", "")
+                if name and name not in lines:
+                    lines[name] = row.line
+        found[kind] = {"file": table_file(kind), "lines": lines}
+    return found
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -703,6 +727,9 @@ class StudiesMixin(EngineState):
             "table_kinds": [dict(kind) for kind in TABLE_KINDS],
             # The items of `review` with their targets, matched in the tables of this answer.
             "targets": _targets(study, review_document),
+            # The line of each subject and intervention, by which a name in a cell links to
+            # its row; none beyond the upload limits.
+            "name_lines": _name_lines(study),
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:
