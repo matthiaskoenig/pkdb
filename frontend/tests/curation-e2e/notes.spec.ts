@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
-import { expect, test } from "./fixtures.ts";
+import { expect, expectAccessible, test } from "./fixtures.ts";
 
 const STUDY = "#/studies/caffeine/Demo2020";
 /** The first description and the comment of the notes of the subjects in study.json of the fixture. */
@@ -52,6 +52,15 @@ function rowsPane(page: Page, file: string) {
 }
 
 /**
+ * Wait until the viewer of the paper beside a shared table has drawn page 1: axe checks the page
+ * as the curator sees it, not while PDF.js still draws.
+ */
+async function paperDrawn(page: Page): Promise<void> {
+  await expect(page.locator('.page[data-page-number="1"][data-loaded="true"]')).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "Find in the paper" })).toBeEnabled();
+}
+
+/**
  * The height of an element once it stopped changing from one frame to the next. Open notes first
  * take the height of their content, and a resize observer limits them to the room that the rows
  * leave in the next frame.
@@ -79,6 +88,48 @@ test("the notes of the subjects show above subjects.tsv in the Data section", as
   await toggle.click();
   await expect(pane.getByRole("textbox", { name: "Description 1" })).toHaveValue(DESCRIPTION);
   await expect(pane.getByRole("textbox", { name: "Comment 1 by curator" })).toHaveValue(COMMENT);
+});
+
+test("the notes show their descriptions and comments without labels, and the author of a comment once", async ({
+  app,
+  page,
+}, testInfo) => {
+  await app.open(`${STUDY}/data?file=subjects.tsv`);
+  const pane = rowsPane(page, "subjects.tsv");
+  await pane.getByRole("button", { name: /^Notes of the subjects/ }).click();
+  const notes = pane.getByRole("region", { name: /^Notes of the subjects/ });
+  await expect(notes.getByRole("textbox", { name: "Description 2", exact: true })).toHaveValue(
+    "Age and body weight are the mean and the standard deviation of the group.",
+  );
+  // Screen readers name every text area; no label shows.
+  await expect(notes.getByRole("textbox")).toHaveCount(3);
+  await expect(notes.locator("label")).toHaveCount(0);
+  await expect(notes.getByText(/^(Description \d+|Comment \d+ by )/)).toHaveCount(0);
+  // The author of the comment shows once, above the text of the comment.
+  const comment = notes.locator(".comment-row");
+  const author = comment.locator(".comment-author");
+  await expect(author).toHaveCount(1);
+  await expect(author).toContainText("curator");
+  const text = comment.getByRole("textbox", { name: "Comment 1 by curator", exact: true });
+  await expect(text).toHaveValue(COMMENT);
+  const [line, field] = await Promise.all([author.boundingBox(), text.boundingBox()]);
+  expect(line!.y + line!.height).toBeLessThanOrEqual(field!.y);
+  // Every text area shows its whole text.
+  for (const area of await notes.getByRole("textbox").all()) {
+    expect(await area.evaluate((element) => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(1);
+  }
+
+  for (const width of [1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const theme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: theme });
+      await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
+      await paperDrawn(page);
+      await expectAccessible(page);
+      const shot = await notes.screenshot({ path: testInfo.outputPath(`notes-${theme}-${width}.png`) });
+      await testInfo.attach(`notes-${theme}-${width}.png`, { body: shot, contentType: "image/png" });
+    }
+  }
 });
 
 test("edits a description of the subjects in Data and saves it from Metadata", async ({ app, page }) => {
@@ -281,13 +332,15 @@ test("the long notes of a kind without a table show whole in Metadata, which scr
     const notes = JSON.parse(original) as StudyJson;
     notes.notes = { ...notes.notes, scatters: { descriptions: LONG_DESCRIPTIONS, comments: [] } };
     writeFileSync(path, `${JSON.stringify(notes, null, 2)}\n`);
+    // The descriptions are one line shorter each than with labels: a lower window keeps them above 40 %.
+    await page.setViewportSize({ width: 1366, height: 800 });
     await app.open(`${STUDY}/metadata`);
     const panel = page.getByRole("region", { name: /^Notes of the scatters/ });
     await panel.getByRole("button", { name: /^Notes of the scatters 3 descriptions/ }).click();
     await expect(panel.getByRole("textbox", { name: "Description 3" })).toHaveValue(LONG_DESCRIPTIONS[2]!);
     // Longer than 40 % of the window, the body still has no scroll of its own and no fade.
     const body = panel.locator(".table-notes-body");
-    expect(await body.evaluate((element) => element.scrollHeight)).toBeGreaterThan(0.4 * 900);
+    expect(await body.evaluate((element) => element.scrollHeight)).toBeGreaterThan(0.4 * 800);
     expect(await body.evaluate((element) => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(1);
     await expect(panel.locator(".pane-more")).toHaveCount(0);
   } finally {
