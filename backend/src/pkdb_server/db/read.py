@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from pkdb.schemas.security import Principal
 from pkdb.schemas.study import CanonicalStudy
+from pkdb.studyformat.tables import REVIEW_JSON
 from pkdb_server.db.models import interventions as i
 from pkdb_server.db.models import measurements as m
 from pkdb_server.db.models import studies as s
@@ -47,19 +48,20 @@ def released_study(
 
 
 def without_curation(study: CanonicalStudy) -> CanonicalStudy:
-    """The study without its review, issue and curator ratings, for readers who may not
-    write it: they are curation information (#963)."""
-    metadata = study.metadata.model_copy(
+    """The study without its review, issue and `review.json`, for readers who may not write
+    it: they are curation information (#963). The curator ratings stay, which released
+    clients require; only the website pages leave them out."""
+    metadata = study.metadata.model_copy(update={"review": None, "issue": None})
+    return study.model_copy(
         update={
-            "review": None,
-            "issue": None,
-            "curators": [
-                curator.model_copy(update={"rating": None})
-                for curator in study.metadata.curators
+            "metadata": metadata,
+            "attachments": [
+                attachment
+                for attachment in study.attachments
+                if attachment.name != REVIEW_JSON
             ],
         }
     )
-    return study.model_copy(update={"metadata": metadata})
 
 
 def read_study(

@@ -8,6 +8,7 @@ from sqlalchemy import select, union
 
 from pkdb.schemas.responses import StudyResponse
 from pkdb.schemas.security import StudyAccess
+from pkdb.studyformat.tables import REVIEW_JSON
 from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.interventions import Intervention
@@ -217,6 +218,8 @@ def study_responses(session, rows, principal):
             .where(StudyAttachment.study_id.in_(allowed_files))
             .order_by(StudyAttachment.name.collate("C"))
         ):
+            if association.name == REVIEW_JSON and association.study_id not in writers:
+                continue  # curation information (#963)
             attachments[association.study_id].append(
                 {
                     "pk": str(file.id),
@@ -249,10 +252,7 @@ def study_responses(session, rows, principal):
             else 0,
             "creator": users.get(row.creator_id),
             "curators": [
-                {
-                    **users[member.user_id],
-                    "rating": (member.rating or 0) if writer else None,
-                }
+                {**users[member.user_id], "rating": member.rating or 0}
                 for member in member_rows
                 if member.role == "curator"
             ],

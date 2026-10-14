@@ -145,7 +145,8 @@ def test_the_json_read_has_no_curation_for_readers_who_may_not_write(
         metadata = client.get(URL, headers=headers).json()["metadata"]
         assert metadata.get("review") is None
         assert metadata.get("issue") is None
-        assert [c.get("rating") for c in metadata["curators"]] == [None]
+        # Released clients need the ratings (#963): only the website pages hide them.
+        assert [c["rating"] for c in metadata["curators"]] == [3]
     metadata = client.get(URL, headers=creator_headers).json()["metadata"]
     assert metadata["review"]["status"] == "in_review"
     assert metadata["issue"] == 2158
@@ -169,7 +170,7 @@ def test_the_study_lists_have_no_curation_for_readers_who_may_not_write(
         )
 
     for headers in ({}, reader):
-        assert curation(headers) == (None, None, 0, [None])
+        assert curation(headers) == (None, None, 0, [3])
     assert curation(creator_headers) == (2158, "in_review", 1, [3])
     assert curation(admin_headers) == (2158, "in_review", 1, [3])
     with session_factory.begin() as session:
@@ -177,14 +178,14 @@ def test_the_study_lists_have_no_curation_for_readers_who_may_not_write(
             select(Study).where(Study.sid == "caffeine/Example")
         ).creator_id = None
     assert curation(admin_headers) == (2158, "in_review", 1, [3])
-    assert curation(reader) == (None, None, 0, [None])
+    assert curation(reader) == (None, None, 0, [3])
     record = client.get("/api/v1/studies/caffeine%2FExample/").json()
     assert (record["issue"], record["review_status"], record["open_review_items"]) == (
         None,
         None,
         0,
     )
-    assert [c["rating"] for c in record["curators"]] == [None]
+    assert [c["rating"] for c in record["curators"]] == [3]
 
 
 def test_a_reviewer_reads_the_curation_of_a_public_study(
@@ -196,3 +197,45 @@ def test_a_reviewer_reads_the_curation_of_a_public_study(
     metadata = client.get(URL, headers=reviewer).json()["metadata"]
     assert metadata["review"]["status"] == "in_review"
     assert metadata["issue"] == 2158
+
+
+def test_review_json_is_only_for_who_may_write_the_study(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", issue=2158)
+    publish(client, creator_headers, folder, session_factory)
+    with session_factory.begin() as session:
+        session.scalar(
+            select(Study).where(Study.sid == "caffeine/Example")
+        ).licence = "open"
+    reader = headers_of(session_factory, "reader", "user")
+
+    def files(headers):
+        [row] = client.get("/api/v2/studies", headers=headers).json()["items"]
+        return {file["name"]: file["file"] for file in row["files"]}
+
+    def record(headers):
+        response = client.get("/api/v1/studies/caffeine%2FExample/", headers=headers)
+        return {file["name"] for file in response.json()["files"]}
+
+    def attachments(headers):
+        return {
+            a["name"] for a in client.get(URL, headers=headers).json()["attachments"]
+        }
+
+    written = files(creator_headers)
+    review, paper = written["data/review.json"], written["data/Example.pdf"]
+    assert "data/review.json" in record(creator_headers)
+    assert "review.json" in attachments(creator_headers)
+    for headers in ({}, reader):
+        assert set(files(headers)) == set(written) - {"data/review.json"}
+        assert "data/review.json" not in record(headers)
+        assert "data/Example.pdf" in record(headers)
+        assert attachments(headers) == attachments(creator_headers) - {"review.json"}
+    # As for any file that the account may not read: 401 without and 403 with an account.
+    assert client.get(review).status_code == 401
+    assert client.get(review, headers=reader).status_code == 403
+    assert client.get(paper, headers=reader).status_code == 200
+    response = client.get(review, headers=creator_headers)
+    assert response.status_code == 200
+    assert response.content == (folder / "review.json").read_bytes()

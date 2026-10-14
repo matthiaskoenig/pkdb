@@ -255,3 +255,15 @@ def test_rows_by_the_audience_of_each_study(
     assert not rows["caffeine/Second"]["curator"]
     assert rows["caffeine/Second"]["issue"] is None
     assert "review_status" not in rows["caffeine/Second"]["summary"]
+
+
+def test_ratings_stay_in_the_json_api_but_not_on_the_page(
+    client, uploaded, session_factory
+):
+    set_access(session_factory, "public")
+    metadata = client.get(URL).json()["metadata"]
+    assert [curator["rating"] for curator in metadata["curators"]] == [3]
+    [row] = client.get("/api/v2/studies").json()["items"]
+    assert [curator["rating"] for curator in row["curators"]] == [3]
+    page = client.get(VIEW).json()
+    assert [curator["rating"] for curator in page["people"]["curators"]] == [None]

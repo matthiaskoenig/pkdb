@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from pkdb.schemas.security import Principal, StudyAccess
+from pkdb.studyformat.tables import REVIEW_JSON
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.users import User
@@ -20,6 +21,7 @@ from pkdb_server.services.authentication import revalidate_principal
 from pkdb_server.services.authorization import (
     AuthorizationDenied,
     authorize,
+    may_write,
     require_scope,
 )
 
@@ -182,21 +184,22 @@ class FileStore:
             )
             if row is None or not row.ready:
                 raise FileNotFoundError("Attachment unavailable")
-            studies = list(
-                session.scalars(
-                    select(Study)
-                    .join(StudyAttachment)
-                    .where(StudyAttachment.file_id == row.id)
-                )
-            )
+            studies = session.execute(
+                select(Study, StudyAttachment.name)
+                .join(StudyAttachment)
+                .where(StudyAttachment.file_id == row.id)
+            ).all()
             allowed = False
-            for study in studies:
+            for study, name in studies:
                 try:
-                    authorize(principal, "read_file", study_access(study, session))
+                    access = study_access(study, session)
+                    authorize(principal, "read_file", access)
+                except AuthorizationDenied:
+                    continue
+                # review.json is curation information, for who may write the study (#963).
+                if name != REVIEW_JSON or may_write(principal, access):
                     allowed = True
                     break
-                except AuthorizationDenied:
-                    pass
             if not studies and principal.user_id == row.owner_id:
                 user = session.get(User, principal.user_id)
                 allowed = user is not None and user.active
