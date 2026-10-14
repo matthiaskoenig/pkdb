@@ -112,6 +112,8 @@ const filtered = computed(() =>
 /** The rows behind each chip, within the search, the substance and the curator. */
 const counts = computed(() => filtered.value.counts);
 const shown = computed(() => sortStudies(filtered.value.shown, sort.value));
+/** The digits of the number of studies: no chip count has more, and each keeps room for them. */
+const countDigits = computed(() => String(studies.value.length).length);
 const countText = computed(() => {
   const total = plural(studies.value.length, "study", "studies");
   if (shown.value.length === studies.value.length) return total;
@@ -269,6 +271,7 @@ const format1Notice = computed(() =>
           role="group"
           aria-label="Filter by status"
           class="filter-chips overview-chips"
+          :style="{ '--count-digits': countDigits }"
         >
           <VChip
             v-for="item in STATUS_CHIPS"
@@ -440,6 +443,14 @@ const format1Notice = computed(() =>
 }
 .overview-chips {
   flex: 1 1 auto;
+}
+/* Each chip count keeps the room of the digits of the total, so that the chips keep their width
+   (and do not jump between lines) while a search or a filter lowers the counts. */
+.overview-chips .chip-count {
+  display: inline-block;
+  min-width: calc(var(--count-digits) * 1ch);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
 }
 /* On a phone the search, the substance and the curator take the whole width, one above the other. */
 @media (max-width: 599.98px) {

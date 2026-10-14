@@ -1222,6 +1222,29 @@ describe("OverviewPage", () => {
     expect(header("cell-curators").text()).toBe("Curators");
   });
 
+  it("draws the sort glyph of the active column in two layers and the others as the base glyph", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
+    const icon = (cell: string) => page().get(`.study-table thead th.${cell} .sort-icon`);
+    expect(icon("cell-study").findAll("i")).toHaveLength(2);
+    expect(icon("cell-study").get(".sort-base").classes()).toContain("fa-sort");
+    expect(icon("cell-study").get(".sort-active").classes()).toContain("fa-sort-up");
+    expect(icon("cell-release").findAll("i")).toHaveLength(1);
+    expect(icon("cell-release").get("i").classes()).toContain("fa-sort");
+    await click("Study");
+    expect(icon("cell-study").get(".sort-active").classes()).toContain("fa-sort-down");
+  });
+
+  it("gives every chip count the digits of the number of studies", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
+    const chips = () => page().get(".overview-chips");
+    expect(chips().attributes("style")).toContain("--count-digits: 1");
+    const studies = Array.from({ length: 120 }, (_, index) =>
+      studyRow({ id: `caffeine/S${index}`, name: `S${index}`, path: `studies/caffeine/S${index}` }),
+    );
+    await mountPage(snapshot({ studies }));
+    expect(chips().attributes("style")).toContain("--count-digits: 3");
+  });
+
   it("sorts by a column header", async () => {
     await mountPage(snapshot({ studies: [example, harder, approved] }));
     const header = () => page().findAll("th").find((cell) => cell.text().startsWith("Open items"))!;

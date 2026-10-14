@@ -82,8 +82,12 @@ function ariaSort(key: SortKey | null): "ascending" | "descending" | undefined {
   return sort.value.descending ? "descending" : "ascending";
 }
 
-function sortIcon(key: SortKey): string {
-  if (sort.value.key !== key) return "fas fa-sort";
+/**
+ * The half of the sort glyph that marks the sort order of the active column, drawn over the full
+ * glyph: in Font Awesome 7 the up and down arrows are the top and the bottom half of the same box.
+ */
+function activeHalf(key: SortKey): string | null {
+  if (sort.value.key !== key) return null;
   return sort.value.descending ? "fas fa-sort-down" : "fas fa-sort-up";
 }
 
@@ -213,7 +217,13 @@ function focusOut(event: FocusEvent): void {
                 :aria-sort="ariaSort(column.key)"
               >
                 <button v-if="column.key" type="button" class="sort-button" @click="sortBy(column.key)">
-                  {{ column.label }}<VIcon :icon="sortIcon(column.key)" size="12" class="sort-icon" />
+                  {{ column.label }}<span class="sort-icon" aria-hidden="true"
+                    ><VIcon icon="fas fa-sort" size="12" class="sort-base" /><VIcon
+                      v-if="activeHalf(column.key)"
+                      :icon="activeHalf(column.key)!"
+                      size="12"
+                      class="sort-active"
+                  /></span>
                 </button>
                 <template v-else>{{ column.label }}</template>
               </th>
@@ -277,13 +287,23 @@ function focusOut(event: FocusEvent): void {
   font: inherit;
   cursor: pointer;
 }
+/* One box for the base glyph and the active half, so that the arrow never moves or changes width. */
 .sort-icon {
+  display: inline-grid;
+}
+.sort-icon > .v-icon {
+  grid-area: 1 / 1;
+}
+.sort-base {
   opacity: 0.6;
 }
 th[aria-sort] .sort-button {
   color: rgb(var(--v-theme-on-surface));
 }
-th[aria-sort] .sort-icon {
+th[aria-sort] .sort-base {
+  opacity: 0.3;
+}
+.sort-active {
   opacity: 1;
 }
 .study-table th.cell-open .sort-button {
