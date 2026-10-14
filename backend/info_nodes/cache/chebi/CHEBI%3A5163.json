@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:5163",
+  "name": "fosinopril",
+  "definition": "A phosphinate ester-containing N-acyl derivative of (4<i>S</i>)-cyclohexyl-<small>L</small>-proline. It is used for the treatment of hypertension and heart failure. A pro-drug, it is hydrolysed <em>in vivo</em> to the corresponding phosphininc acid, fosinoprilat, which is the active metabolite.",
+  "formula": "C30H46NO7P",
+  "charge": 0,
+  "mass": "563.672",
+  "inchikey": "BIDNLKIUORFRQP-FKDWWROVSA-N"
+}

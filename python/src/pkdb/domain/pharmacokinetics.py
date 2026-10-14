@@ -182,6 +182,10 @@ def derive_pk(
     first = points[0]
     if not first.time_unit or not first.unit:
         fail("pk_units", "PK requires concentration and time units", first.source)
+    # PK parameters need a concentration per volume; tissue concentrations per
+    # tissue mass (g/kg) have no units for AUC, clearance or volume of distribution.
+    if ureg.Unit(first.unit).dimensionality.get("[length]", 0) != -3:
+        return []
     times: list[float] = []
     for point in points:
         if point.time is None:
