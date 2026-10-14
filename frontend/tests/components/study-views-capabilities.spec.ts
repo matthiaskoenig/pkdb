@@ -202,20 +202,21 @@ describe("the study header", () => {
     expect(reachable(wrapper)).toEqual(["3678553"]);
   });
 
-  it("shows a curator of the website the issue, the review status, the sync and the problems, without actions", () => {
+  it("shows a curator of the website the issue, the review status and the problems, without the sync or actions", () => {
     const wrapper = mountViews(StudyHeader, { context: context(CURATOR), props: { detail: DETAIL }, slots: PAGE_SLOTS });
     expect(wrapper.get(".issue-chip").text()).toBe("#2158");
     expect(wrapper.get(".fact-review").text()).toBe("In review");
-    expect(wrapper.get(".fact-sync").text()).toBe("In sync");
     expect(wrapper.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["1 error", "1 warning"]);
+    expect(wrapper.find(".fact-sync").exists()).toBe(false);
     expect(wrapper.find(".fact-activity").exists()).toBe(false);
     expect(wrapper.find(".page-after").exists()).toBe(false);
     expect(reachable(wrapper).filter((name) => EDIT_ACTIONS.includes(name))).toEqual([]);
   });
 
-  it("shows the curation app what the study is doing and its actions instead of the status chip", () => {
+  it("shows the curation app what the study is doing, its sync and its actions instead of the status chip", () => {
     const wrapper = mountViews(StudyHeader, { context: context(EVERYTHING), props: { detail: DETAIL }, slots: PAGE_SLOTS });
     expect(wrapper.get(".fact-activity").text()).toBe("Validating");
+    expect(wrapper.get(".fact-sync").text()).toBe("In sync");
     expect(wrapper.find(".fact-review").exists()).toBe(false);
     expect(wrapper.find(".page-after").exists()).toBe(true);
     expect(reachable(wrapper)).toContain("Validate");
@@ -487,7 +488,7 @@ describe("the study list", () => {
 
   for (const [capabilities, columns, select] of [
     [PUBLIC, ["Study", "Release", "Curators"], false],
-    [CURATOR, ["Study", "Release", "Issue", "Curators", "Review", "Open items", "Problems", "Sync"], false],
+    [CURATOR, ["Study", "Release", "Issue", "Curators", "Review", "Open items", "Problems"], false],
     [EVERYTHING, ["", "Study", "Release", "Issue", "Curators", "Review", "Open items", "Problems", "Sync", "Last upload"], true],
   ] as const) {
     it(`has the columns ${columns.join(", ")} for ${JSON.stringify(capabilities)}`, async () => {
@@ -502,6 +503,36 @@ describe("the study list", () => {
       expect(wrapper.get("tr.study-row").findAll("td")).toHaveLength(columns.length);
     });
   }
+
+  it("fills the curation of the rows that a curator of the website may write and shows - for the others", async () => {
+    const written = studyRow({
+      id: "caffeine/Written",
+      name: "Written",
+      path: "studies/caffeine/Written",
+      curator: true,
+      counts: { errors: 1, warnings: 0 },
+      summary: { ...studyRow().summary, review_status: "in_review", open_items: 2, issue: 2158 },
+    });
+    // A row of the website that the reader may not write: its curation is left out, and so is the
+    // sync state of a local server.
+    const other = studyRow({ id: "caffeine/Other", name: "Other", path: "studies/caffeine/Other", curator: false });
+    delete other.summary.review_status;
+    delete other.summary.open_items;
+    delete other.summary.issue;
+    delete other.sync;
+    const wrapper = mountViews(StudyTable, {
+      context: context(CURATOR),
+      props: { rows: [written, other], sort: { key: "study", descending: false } },
+      plugins: [await routerAt("/studies")],
+    });
+    await flushPromises();
+    const cells = (id: string) =>
+      [".cell-issue", ".cell-review", ".cell-open", ".cell-problems"].map((cell) =>
+        wrapper.get(`tr[data-study="${id}"] ${cell}`).text(),
+      );
+    expect(cells("caffeine/Written")).toEqual(["#2158", "In review", "2", "1 error"]);
+    expect(cells("caffeine/Other")).toEqual(["-", "-", "-", "-"]);
+  });
 
   it("has status chips only with the curation", () => {
     const props = { counts: { all: 1, attention: 0, draft: 1, in_review: 0, approved: 0 }, shown: 1, me: null, search: "", substance: "", curator: "", chip: "all" };

@@ -30,11 +30,11 @@ import type { Profile, SourceView, StudyDetail, StudyRow, TableResponse } from "
 export interface StudyCapabilities {
   /** Writes and local actions: forms, save, sync, Open in the workbook, the folder or the PDF program, Validate, Upload, the actions of review items, Add table, the notes editor, kept plot scales. */
   edit: boolean;
-  /** The curation of the study: Review, Problems, issue links, the review status and open items, the sync state, problem outlines and counts. */
+  /** The curation of the study: Review, Problems, issue links, the review status and open items, problem outlines and counts. */
   curation: boolean;
   /** The files of the study: its PDFs, the images of its sources and its raw tables. */
   files: boolean;
-  /** The jobs of a local server: Activity, what a study is doing, the last upload. */
+  /** The jobs of a local server: Activity, what a study is doing, the sync state of its workbook, the last upload. */
   jobs: boolean;
 }
 
@@ -72,9 +72,13 @@ export interface StudyViewData {
   detail: Readonly<Ref<StudyDetail | null>>;
   /** Why the last load of the study failed; null while it loads well. */
   error: Readonly<Ref<unknown>>;
-  /** The rows of a table, or the grid of a raw table, of the study. */
+  /**
+   * The rows of a table, or the grid of a raw table, of the study. The views abort `signal` when
+   * they no longer want the answer, as after a newer read or when they unmount; the read then
+   * rejects with an AbortError (`isAbort`), which no view shows, or answers anyway.
+   */
   table(file: string, signal?: AbortSignal): Promise<TableResponse>;
-  /** The view of a source of the study: its image, raw extraction, mapped rows and plot. */
+  /** The view of a source of the study: its image, raw extraction, mapped rows and plot; `signal` as of `table`. */
   source(name: string, signal?: AbortSignal): Promise<SourceView>;
   /**
    * The profiles of the curators that the page knows, such as the roster of the curation app.
@@ -99,7 +103,11 @@ export interface StudyViewData {
   repository: Readonly<Ref<string>>;
   /** The URL of the folder of the files of PDF.js, ending with `/`. */
   pdfjsAssets(): string;
-  /** Resolves when the server serves the file at `url`; rejects with its `ApiError` or `SessionMissing` otherwise. */
+  /**
+   * Resolves when the server serves the file at `url`; rejects with its `ApiError` otherwise, or
+   * with `SessionMissing` when the page has no session, which the views explain with the words of
+   * the curation app only with `edit` (`paperFailure`).
+   */
   checkFile(url: string): Promise<void>;
 }
 

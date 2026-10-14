@@ -2,6 +2,7 @@
  * Filtering, sorting and labels of the study rows of the overview. The study page uses the same
  * labels for the review status, the sync status and the problem counts.
  */
+import type { StudyCapabilities } from "./context";
 import type { ReviewStatus, RowStatus, StudyRow, SyncStatus } from "./types";
 
 /** The status chips above the table. */
@@ -38,11 +39,14 @@ export const STATUS_CHIPS: readonly { value: StatusChip; label: string }[] = [
   { value: "approved", label: "Approved" },
 ];
 
-/** Errors, a sync conflict, or open review items while the study is in review. */
-export function needsAttention(row: StudyRow): boolean {
+/**
+ * Errors, a sync conflict, or open review items while the study is in review. The sync state
+ * counts only with the jobs of a local server, which the reader sees it with.
+ */
+export function needsAttention(row: StudyRow, { jobs }: Pick<StudyCapabilities, "jobs">): boolean {
   return (
     row.counts.errors > 0 ||
-    row.sync.status === "conflict" ||
+    (jobs && row.sync?.status === "conflict") ||
     ((row.summary.open_items ?? 0) > 0 && row.summary.review_status === "in_review")
   );
 }
@@ -88,10 +92,14 @@ export interface FilteredStudies {
   counts: Record<StatusChip, number>;
 }
 
-/** The rows of `filter` and the counts of the status chips, in one pass over `rows`. */
+/**
+ * The rows of `filter` and the counts of the status chips, in one pass over `rows`; `capabilities`
+ * decide what needs attention (`needsAttention`).
+ */
 export function filterStudies(
   rows: readonly StudyRow[],
   { search, substance, curator, chip }: StudyFilter,
+  capabilities: Pick<StudyCapabilities, "jobs">,
 ): FilteredStudies {
   const needle = search.trim().toLowerCase();
   const user = curator.toLowerCase();
@@ -103,7 +111,7 @@ export function filterStudies(
     if (user && !keys.curators.includes(user)) continue;
     if (needle && !keys.id.includes(needle) && !keys.title.includes(needle)) continue;
     counts.all += 1;
-    const attention = needsAttention(row);
+    const attention = needsAttention(row, capabilities);
     if (attention) counts.attention += 1;
     const status = row.summary.review_status;
     if (status) counts[status] += 1;
@@ -174,7 +182,7 @@ function sortValue(row: StudyRow, key: SortKey): string | number | null {
       // Errors weigh more than any number of warnings.
       return row.counts.errors * 1_000_000 + row.counts.warnings;
     case "sync":
-      return SYNC_ORDER[row.sync.status];
+      return row.sync ? SYNC_ORDER[row.sync.status] : null;
     case "release":
       return row.summary.release?.pkdb_id ?? null;
     case "issue":

@@ -352,9 +352,17 @@ export interface StudyRow {
   report_id: string | null;
   summary: StudySummary;
   reference: ReferenceSummary | null;
-  sync: SyncState;
+  /** The state of the workbook, which the views show only with the jobs; a row of the website has none. */
+  sync?: SyncState;
   counts: { errors: number; warnings: number };
   issue: IssueState | null;
+  /**
+   * Whether the reader may write the study, as `curator` of each row of `GET /api/v2/study-rows`
+   * on the website: false for a row without its curation (no review status, open items, issue or
+   * problems), whose columns of the curation show "-". The curation app leaves it out, as its
+   * reader writes every study.
+   */
+  curator?: boolean;
   message?: string;
   report_complete?: boolean;
   report_truncated?: boolean;

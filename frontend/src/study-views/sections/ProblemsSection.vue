@@ -23,10 +23,11 @@ import { targetParts } from "../review";
 import { isLimitIssue, knownProfiles, profileOf, tableFiles } from "../study";
 
 /**
- * The issues of the last validation by file, with a severity filter, links to the cells of the
- * tables, Open in tables, Open tables, and Acknowledge for warnings; below them the warnings that review items
- * acknowledge. A study beyond the upload limits names the limit first. The actions on the issues
- * come from the page through the events and slots.
+ * The issues of the last validation by file, with a severity filter and links to the cells of the
+ * tables; below them the warnings that review items acknowledge. A study beyond the upload limits
+ * names the limit first. Only with `edit` come the actions on the issues, which the page handles:
+ * Open in tables and Acknowledge of an issue and Validate through the events, and what it puts
+ * into the slots, such as Open tables in the toolbar and Open of the file of a group.
  */
 const props = withDefaults(defineProps<{ busy?: string | null; working?: boolean }>(), { busy: null, working: false });
 const emit = defineEmits<{

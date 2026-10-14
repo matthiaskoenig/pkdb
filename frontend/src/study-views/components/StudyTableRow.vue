@@ -25,6 +25,8 @@ const emit = defineEmits<{ toggle: []; retry: [] }>();
 const sizer = computed(() => props.rowIndex === null);
 
 const identity = computed(() => `${props.item.row.substance}/${props.item.row.name}`);
+/** A study that the reader may not write: its cells of the curation show "-" (`StudyRow.curator`). */
+const uncurated = computed(() => props.item.row.curator === false);
 
 const router = useRouter();
 const views = useStudyViews();
@@ -106,7 +108,7 @@ function open(event: MouseEvent): void {
     </td>
     <td v-if="shows('cell-issue')" class="cell-issue">
       <a
-        v-if="item.issue"
+        v-if="item.issue && !uncurated"
         :href="item.issue.url"
         target="_blank"
         rel="noopener noreferrer"
@@ -139,7 +141,7 @@ function open(event: MouseEvent): void {
     <td v-if="shows('cell-review')" class="cell-review">
       <div class="cell-chips">
         <VChip
-          v-if="item.row.summary.review_status"
+          v-if="item.row.summary.review_status && !uncurated"
           size="small"
           variant="tonal"
           :color="REVIEW_TONES[item.row.summary.review_status]"
@@ -153,9 +155,11 @@ function open(event: MouseEvent): void {
         </VChip>
       </div>
     </td>
-    <td v-if="shows('cell-open')" class="cell-open">{{ item.row.summary.open_items ?? 0 }}</td>
+    <td v-if="shows('cell-open')" class="cell-open">
+      <span v-if="uncurated" class="cell-empty">-</span><template v-else>{{ item.row.summary.open_items ?? 0 }}</template>
+    </td>
     <template v-if="shows('cell-problems')">
-      <td v-if="item.row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
+      <td v-if="item.row.duplicate || uncurated" class="cell-problems"><span class="cell-empty">-</span></td>
       <td v-else class="cell-problems">
         <div class="cell-chips">
           <VChip
@@ -190,9 +194,10 @@ function open(event: MouseEvent): void {
       </td>
     </template>
     <td v-if="shows('cell-sync')" class="cell-sync">
-      <VChip size="small" variant="tonal" :color="SYNC_TONES[item.row.sync.status]" class="status-chip">
+      <VChip v-if="item.row.sync" size="small" variant="tonal" :color="SYNC_TONES[item.row.sync.status]" class="status-chip">
         {{ SYNC_LABELS[item.row.sync.status] }}
       </VChip>
+      <span v-else class="cell-empty">-</span>
     </td>
     <td v-if="shows('cell-upload')" class="cell-upload">
       <a

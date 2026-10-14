@@ -21,6 +21,9 @@ import {
 import { uploadBlocker } from "../../src/curation-app/uploads";
 import { snapshot, studyRow } from "./curation-fixtures";
 
+/** The capabilities of the curation app, which sees the sync state with the jobs. */
+const LOCAL = { jobs: true };
+
 /** A row of `<substance>/<name>` with the given summary changes. */
 function row(id: string, changes: Partial<StudyRow> = {}, summary: Partial<StudyRow["summary"]> = {}): StudyRow {
   const [substance = "", name = ""] = id.split("/");
@@ -58,40 +61,40 @@ describe("filterStudies", () => {
   const all = { search: "", substance: "", curator: "", chip: "all" as StatusChip };
 
   it("keeps every row without filters", () => {
-    expect(ids(filterStudies(rows, all).shown)).toEqual(ids(rows));
+    expect(ids(filterStudies(rows, all, LOCAL).shown)).toEqual(ids(rows));
   });
 
   it("matches the identity and the title ignoring case", () => {
-    expect(ids(filterStudies(rows, { ...all, search: "HARDER" }).shown)).toEqual(["caffeine/Harder1988"]);
-    expect(ids(filterStudies(rows, { ...all, search: "caffeine/ex" }).shown)).toEqual(["caffeine/Example"]);
-    expect(ids(filterStudies(rows, { ...all, search: "cyp2d6" }).shown)).toEqual(["codeine/Kirchheiner2007"]);
-    expect(ids(filterStudies(rows, { ...all, search: "  smoking " }).shown)).toEqual(["caffeine/Harder1988"]);
-    expect(filterStudies(rows, { ...all, search: "no such study" }).shown).toEqual([]);
+    expect(ids(filterStudies(rows, { ...all, search: "HARDER" }, LOCAL).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(ids(filterStudies(rows, { ...all, search: "caffeine/ex" }, LOCAL).shown)).toEqual(["caffeine/Example"]);
+    expect(ids(filterStudies(rows, { ...all, search: "cyp2d6" }, LOCAL).shown)).toEqual(["codeine/Kirchheiner2007"]);
+    expect(ids(filterStudies(rows, { ...all, search: "  smoking " }, LOCAL).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(filterStudies(rows, { ...all, search: "no such study" }, LOCAL).shown).toEqual([]);
   });
 
   it("matches a row without a title by its identity", () => {
     const untitled = row("caffeine/Untitled", {}, { title: null });
-    expect(ids(filterStudies([untitled], { ...all, search: "untitled" }).shown)).toEqual(["caffeine/Untitled"]);
-    expect(filterStudies([untitled], { ...all, search: "pharmacokinetics" }).shown).toEqual([]);
+    expect(ids(filterStudies([untitled], { ...all, search: "untitled" }, LOCAL).shown)).toEqual(["caffeine/Untitled"]);
+    expect(filterStudies([untitled], { ...all, search: "pharmacokinetics" }, LOCAL).shown).toEqual([]);
   });
 
   it("keeps the rows of one substance", () => {
-    expect(ids(filterStudies(rows, { ...all, substance: "codeine" }).shown)).toEqual(["codeine/Kirchheiner2007"]);
+    expect(ids(filterStudies(rows, { ...all, substance: "codeine" }, LOCAL).shown)).toEqual(["codeine/Kirchheiner2007"]);
   });
 
   it("keeps the rows whose tables name the substance", () => {
     const named = row("caffeine/Nussberger2002", { substances: ["caffeine", "midazolam"] });
-    expect(ids(filterStudies([...rows, named], { ...all, substance: "midazolam" }).shown)).toEqual([
+    expect(ids(filterStudies([...rows, named], { ...all, substance: "midazolam" }, LOCAL).shown)).toEqual([
       "midazolam/Conflict2001",
       "caffeine/Nussberger2002",
     ]);
-    expect(ids(filterStudies([...rows, named], { ...all, substance: "caffeine" }).shown)).toContain("caffeine/Nussberger2002");
+    expect(ids(filterStudies([...rows, named], { ...all, substance: "caffeine" }, LOCAL).shown)).toContain("caffeine/Nussberger2002");
   });
 
   it("keeps the rows of one curator, ignoring the case of the user name", () => {
-    expect(ids(filterStudies(rows, { ...all, curator: "mkoenig" }).shown)).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
-    expect(ids(filterStudies(rows, { ...all, curator: "JANEKG" }).shown)).toEqual(["caffeine/Harder1988"]);
-    expect(filterStudies(rows, { ...all, curator: "nobody" }).shown).toEqual([]);
+    expect(ids(filterStudies(rows, { ...all, curator: "mkoenig" }, LOCAL).shown)).toEqual(["caffeine/Example", "caffeine/Harder1988"]);
+    expect(ids(filterStudies(rows, { ...all, curator: "JANEKG" }, LOCAL).shown)).toEqual(["caffeine/Harder1988"]);
+    expect(filterStudies(rows, { ...all, curator: "nobody" }, LOCAL).shown).toEqual([]);
   });
 
   it.each<[StatusChip, string[]]>([
@@ -101,21 +104,21 @@ describe("filterStudies", () => {
     ["in_review", ["caffeine/Harder1988"]],
     ["approved", ["codeine/Kirchheiner2007"]],
   ])("keeps the rows of the chip %s", (chip, expected) => {
-    expect(ids(filterStudies(rows, { ...all, chip }).shown)).toEqual(expected);
+    expect(ids(filterStudies(rows, { ...all, chip }, LOCAL).shown)).toEqual(expected);
   });
 
   it("combines the search, the substance, the curator and the chip", () => {
-    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "", chip: "draft" }).shown)).toEqual(
+    expect(ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "", chip: "draft" }, LOCAL).shown)).toEqual(
       ["caffeine/Example", "caffeine/Broken1999"],
     );
     expect(
-      ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "mkoenig", chip: "draft" }).shown),
+      ids(filterStudies(rows, { search: "caffeine", substance: "caffeine", curator: "mkoenig", chip: "draft" }, LOCAL).shown),
     ).toEqual(["caffeine/Example"]);
   });
 
   it("counts the rows of every chip within the search, the substance and the curator, whatever the chip", () => {
-    expect(filterStudies(rows, all).counts).toEqual({ all: 5, attention: 3, draft: 3, in_review: 1, approved: 1 });
-    const caffeine = filterStudies(rows, { ...all, substance: "caffeine", chip: "approved" });
+    expect(filterStudies(rows, all, LOCAL).counts).toEqual({ all: 5, attention: 3, draft: 3, in_review: 1, approved: 1 });
+    const caffeine = filterStudies(rows, { ...all, substance: "caffeine", chip: "approved" }, LOCAL);
     expect(caffeine.counts).toEqual({ all: 3, attention: 2, draft: 2, in_review: 1, approved: 0 });
     expect(caffeine.shown).toEqual([]);
   });
@@ -128,7 +131,7 @@ describe("filterStudies", () => {
         return example.id;
       },
     });
-    for (const search of ["caffeine", "example", "x"]) filterStudies([counted], { ...all, search });
+    for (const search of ["caffeine", "example", "x"]) filterStudies([counted], { ...all, search }, LOCAL);
     expect(reads).toBe(1);
   });
 });
@@ -152,23 +155,39 @@ describe("curatorsOf", () => {
 
 describe("needsAttention", () => {
   it("is true for errors", () => {
-    expect(needsAttention(row("a/b", { counts: { errors: 1, warnings: 0 } }))).toBe(true);
+    expect(needsAttention(row("a/b", { counts: { errors: 1, warnings: 0 } }), LOCAL)).toBe(true);
   });
 
   it("is true for a sync conflict", () => {
-    expect(needsAttention(row("a/b", { sync: { status: "conflict", changes: 0, conflicts: 1 } }))).toBe(true);
+    expect(needsAttention(row("a/b", { sync: { status: "conflict", changes: 0, conflicts: 1 } }), LOCAL)).toBe(true);
   });
 
   it("is true for open items while in review", () => {
-    expect(needsAttention(row("a/b", {}, { review_status: "in_review", open_items: 1 }))).toBe(true);
+    expect(needsAttention(row("a/b", {}, { review_status: "in_review", open_items: 1 }), LOCAL)).toBe(true);
   });
 
   it("is false otherwise", () => {
-    expect(needsAttention(row("a/b"))).toBe(false);
-    expect(needsAttention(row("a/b", { counts: { errors: 0, warnings: 4 } }))).toBe(false);
-    expect(needsAttention(row("a/b", {}, { review_status: "draft", open_items: 3 }))).toBe(false);
-    expect(needsAttention(row("a/b", {}, { review_status: "in_review", open_items: 0 }))).toBe(false);
-    expect(needsAttention(row("a/b", { sync: { status: "changed", changes: 2, conflicts: 0 } }))).toBe(false);
+    expect(needsAttention(row("a/b"), LOCAL)).toBe(false);
+    expect(needsAttention(row("a/b", { counts: { errors: 0, warnings: 4 } }), LOCAL)).toBe(false);
+    expect(needsAttention(row("a/b", {}, { review_status: "draft", open_items: 3 }), LOCAL)).toBe(false);
+    expect(needsAttention(row("a/b", {}, { review_status: "in_review", open_items: 0 }), LOCAL)).toBe(false);
+    expect(needsAttention(row("a/b", { sync: { status: "changed", changes: 2, conflicts: 0 } }), LOCAL)).toBe(false);
+  });
+  it("leaves the sync state out without the jobs, which show it, and for a row of the website without one", () => {
+    const conflicted = row("a/c", { sync: { status: "conflict", changes: 0, conflicts: 1 } });
+    expect(needsAttention(conflicted, { jobs: false })).toBe(false);
+    const website = row("a/w");
+    delete website.sync;
+    expect(needsAttention(website, LOCAL)).toBe(false);
+    expect(needsAttention(website, { jobs: false })).toBe(false);
+    const filter = { search: "", substance: "", curator: "", chip: "attention" as StatusChip };
+    expect(filterStudies([conflicted, website], filter, { jobs: false })).toEqual({
+      shown: [],
+      counts: { all: 2, attention: 0, draft: 2, in_review: 0, approved: 0 },
+    });
+    expect(filterStudies([conflicted, website], filter, LOCAL).shown).toEqual([conflicted]);
+    // Without a sync state a row sorts last, as other rows without a value.
+    expect(ids(sortStudies([website, conflicted], { key: "sync", descending: false }))).toEqual(["a/c", "a/w"]);
   });
 });
 

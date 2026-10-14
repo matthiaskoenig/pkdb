@@ -208,7 +208,7 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     id: row.id,
     path: row.path,
     status: row.status,
-    sync: row.sync,
+    sync: row.sync!,
     counts: row.counts,
     summary: row.summary,
     issue: row.issue,

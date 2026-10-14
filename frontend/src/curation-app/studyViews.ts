@@ -27,8 +27,8 @@ export function curationStudyData(): StudyViewData {
   return {
     detail: computed(() => useStudyStore().detail),
     error: computed(() => useStudyStore().error),
-    table: (file) => useStudyStore().table(file),
-    source: (name) => useStudyStore().source(name),
+    table: (file, signal) => useStudyStore().table(file, signal),
+    source: (name, signal) => useStudyStore().source(name, signal),
     curators: () => useStudyStore().curators(),
     acknowledgedKeys: computed(() => useStudyStore().acknowledgedKeys),
     rowFilter: (file) => useStudyStore().rowFilter(file),

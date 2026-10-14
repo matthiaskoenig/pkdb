@@ -4,7 +4,7 @@ import { setActivePinia } from "pinia";
 import MetadataView from "../../src/study-views/components/MetadataView.vue";
 import type { Curator, Profile, Provenance, StudyDetail, StudyMetadata } from "../../src/study-views/types";
 import { fullStudyMetadata, profile, studyDetail } from "../unit/curation-fixtures";
-import { CURATOR, memoryData, mountViews, PUBLIC, viewsContext } from "./study-views";
+import { CURATOR, EVERYTHING, memoryData, mountViews, PUBLIC, viewsContext } from "./study-views";
 
 enableAutoUnmount(afterEach);
 beforeEach(() => setActivePinia(undefined));
@@ -173,8 +173,19 @@ describe("the metadata of a study as text", () => {
     expect(wrapper.find('a[aria-label^="PubMed "]').exists()).toBe(false);
   });
 
-  it("says when study.json is not valid", () => {
-    const wrapper = view(detail([null, null], { metadata: { revision: null, value: null, issues: [] } }));
-    expect(wrapper.text()).toBe("study.json is not valid, so its metadata cannot show.");
+  it("says when study.json is not valid, naming the file only to a reader who may edit it", () => {
+    const invalid = detail([null, null], { metadata: { revision: null, value: null, issues: [] } });
+    expect(view(invalid, EVERYTHING).text()).toBe("study.json is not valid, so its metadata cannot show.");
+    for (const capabilities of [PUBLIC, CURATOR])
+      expect(view(invalid, capabilities).text()).toBe("The metadata of this study cannot show.");
+  });
+
+  it("says when reference.json has no title or is not valid, naming the file only to a reader who may edit it", () => {
+    const untitled = detail([null, null], { reference: { ...REFERENCE, title: null } });
+    expect(view(untitled, EVERYTHING).get(".reference-title").text()).toBe("No title in reference.json");
+    expect(view(untitled, CURATOR).get(".reference-title").text()).toBe("No title");
+    const broken = detail([null, null], { reference: { error: "reference.json is not valid JSON" } });
+    expect(view(broken, EVERYTHING).get(".reference-line").text()).toBe("reference.json is not valid JSON");
+    expect(view(broken, PUBLIC).get(".reference-line").text()).toBe("The reference cannot show.");
   });
 });

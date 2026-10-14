@@ -98,8 +98,8 @@ describe("sizerRows", () => {
       new Set(["Draft", "In review", "Approved"]),
     );
     expect(sizers.some((row) => row.summary.ai)).toBe(true);
-    expect(new Set(sizers.map((row) => SYNC_LABELS[row.sync.status]))).toEqual(
-      new Set([SYNC_LABELS[draft.sync.status], "Not checked yet"]),
+    expect(new Set(sizers.map((row) => SYNC_LABELS[row.sync!.status]))).toEqual(
+      new Set([SYNC_LABELS[draft.sync!.status], "Not checked yet"]),
     );
     expect(sizers.some((row) => row.summary.curators?.length === 5)).toBe(true);
     expect(sizers.every((row) => row.id === "" && !row.duplicate)).toBe(true);
@@ -118,6 +118,16 @@ describe("sizerRows", () => {
     expect(after).not.toBe(before);
     expect(after.filter((row) => row.message === message.message)).toHaveLength(1);
     expect(after.filter((row) => before.includes(row)).length).toBe(before.length - 1);
+  });
+
+  it("sizes the cells of the curation of the rows that the reader may write, also after a row of the website without it", () => {
+    const other = studyRow({ id: "a/o", path: "a/o", curator: false });
+    delete other.summary.issue;
+    delete other.sync;
+    const written = studyRow({ id: "a/w", path: "a/w", curator: true, summary: { ...draft.summary, issue: 2158 } });
+    const sizers = sizerRows([other, written]);
+    expect(sizers.every((row) => !("curator" in row))).toBe(true);
+    expect(sizers.some((row) => row.summary.issue === 2158)).toBe(true);
   });
 
   it("takes the longest cells first beyond the limit", () => {

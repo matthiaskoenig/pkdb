@@ -178,7 +178,7 @@ const {
   reload: reloadRows,
 } = useLoaded<TableResponse, StudyDetail | null>(
   () => file.value,
-  (name) => views.data.table(name),
+  (name, signal) => views.data.table(name, signal),
   () => detail.value,
   (name) => `${name} could not be loaded.`,
 );
@@ -275,7 +275,7 @@ const {
   reload: reloadView,
 } = useLoaded<SourceView>(
   () => source.value?.source ?? null,
-  (name) => views.data.source(name),
+  (name, signal) => views.data.source(name, signal),
   () => detail.value,
   (name) => `${name} could not be loaded.`,
 );

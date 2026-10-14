@@ -45,7 +45,7 @@ const {
   loading: tableLoading,
 } = useLoaded<TableResponse, StudyDetail | null>(
   () => tableFile.value,
-  (name) => views.data.table(name),
+  (name, signal) => views.data.table(name, signal),
   () => detail.value,
   (name) => `The rows of ${name} could not be loaded.`,
 );
@@ -70,7 +70,7 @@ const {
   loading: figureLoading,
 } = useLoaded<SourceView>(
   () => series.value?.source ?? null,
-  (name) => views.data.source(name),
+  (name, signal) => views.data.source(name, signal),
   () => detail.value,
   (name) => `Figure ${name} could not be loaded.`,
 );

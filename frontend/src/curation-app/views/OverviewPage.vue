@@ -7,6 +7,7 @@ import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../../study-views/components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
 import { storeToRefs } from "pinia";
+import { useStudyViews } from "../../study-views/context";
 import { filterStudies, plural, sortStudies } from "../../study-views/overview";
 import { uploadBlocker } from "../uploads";
 import { useNotice } from "../composables/useNotice";
@@ -19,6 +20,7 @@ import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.
 
 const overview = useOverviewStore();
 const dialogs = useDialogStore();
+const views = useStudyViews();
 const blockerId = useId();
 
 const snapshot = computed(() => overview.snapshot);
@@ -61,12 +63,16 @@ watch(
 
 /** The rows of the filters and the counts of the chips, from one pass over the studies. */
 const filtered = computed(() =>
-  filterStudies(studies.value, {
-    search: search.value,
-    substance: substance.value,
-    curator: curator.value,
-    chip: chip.value,
-  }),
+  filterStudies(
+    studies.value,
+    {
+      search: search.value,
+      substance: substance.value,
+      curator: curator.value,
+      chip: chip.value,
+    },
+    views.capabilities.value,
+  ),
 );
 /** The rows behind each chip, within the search, the substance and the curator. */
 const counts = computed(() => filtered.value.counts);

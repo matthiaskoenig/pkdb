@@ -175,8 +175,11 @@ export function findText(result: FindResult | null, query: string): string {
   return result.current > 0 ? `${result.current} of ${result.total}` : `${result.total} matches`;
 }
 
-/** What the local server answered to a PDF that it did not serve: its error, or that the page has no session. */
+/** What the server answered to a PDF that it did not serve: its error, or that the page has no session. */
 export type PaperAnswer = ApiError | SessionMissing;
+
+/** What a reader who may not edit the study does about a lost session, without the commands of the curation app. */
+export const SESSION_ENDED = "The session has ended. Sign in again to show the PDF.";
 
 /**
  * Why the server did not serve the PDF at `url`, which PDF.js reports by the status alone: the
@@ -239,8 +242,9 @@ function failureWords(
  * The failure of a PDF that the viewer could not show, for the alert of a failed action: what
  * went wrong in words, and in its details the error of PDF.js with the request, or the answer
  * of the local server (`paperAnswer`) with its status, its code, its reason and its request id.
- * A lost session says what the status banner of the app says, without details. `local` is false
- * for a reader who may not edit the study, whose words name no study folder and no PDF program.
+ * A lost session says, without details, what the status banner of the curation app says, or to
+ * sign in again. `local` is false for a reader who may not edit the study, whose words name no
+ * study folder, no PDF program and no command of the curation app.
  */
 export function paperFailure(
   caught: unknown,
@@ -249,7 +253,7 @@ export function paperFailure(
   answer: PaperAnswer | null = null,
   local = true,
 ): ActionFailure {
-  if (answer instanceof SessionMissing) return actionFailure(NO_SESSION);
+  if (answer instanceof SessionMissing) return actionFailure(local ? NO_SESSION : SESSION_ENDED);
   const error = caught instanceof Error ? caught : new Error(String(caught));
   const status = answer?.status ?? ("status" in error && typeof error.status === "number" ? error.status : null);
   const [text, code] = failureWords(error, status, answer?.code ?? null, file, local);

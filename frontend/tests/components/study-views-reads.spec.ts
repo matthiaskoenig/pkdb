@@ -4,7 +4,7 @@ import { setActivePinia } from "pinia";
 import PaperViewer from "../../src/study-views/components/PaperViewer.vue";
 import SourcePane from "../../src/study-views/components/SourcePane.vue";
 import TargetView from "../../src/study-views/components/TargetView.vue";
-import { ApiError } from "../../src/study-views/errors";
+import { ApiError, NO_SESSION, SessionMissing } from "../../src/study-views/errors";
 import type { Problem, SourceView, TableResponse } from "../../src/study-views/types";
 import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import { CURATOR, memoryData, mountViews, viewsContext, websiteRouter } from "./study-views";
@@ -88,6 +88,35 @@ describe("the shared views read through their context, never through a store", (
     expect(wrapper.get(".review-target").text()).toContain("caf_cl");
   });
 
+  it("aborts the read of a table that a newer read replaces or whose view unmounts, without a failure", async () => {
+    const signals: AbortSignal[] = [];
+    // A read that answers only by its abort, as a fetch does.
+    const table = vi.fn(
+      (_file: string, signal?: AbortSignal) =>
+        new Promise<TableResponse>((_resolve, reject) => {
+          signals.push(signal!);
+          signal!.addEventListener("abort", () => reject(signal!.reason));
+        }),
+    );
+    const outputs = reviewItem({ id: "01A", target: { file: "outputs_Tab2.tsv", rows: { label: "caf_cl" } } });
+    const subjects = reviewItem({ id: "01B", target: { file: "subjects.tsv" } });
+    const wrapper = mountViews(TargetView, {
+      context: viewsContext({ data: { ...memoryData({ detail: studyDetail() }), table } }),
+      props: { item: outputs },
+      plugins: [await router()],
+    });
+    await flushPromises();
+    expect(table.mock.calls.map(([file]) => file)).toEqual(["outputs_Tab2.tsv"]);
+    expect(signals[0]!.aborted).toBe(false);
+    await wrapper.setProps({ item: subjects });
+    await flushPromises();
+    expect(table.mock.calls.map(([file]) => file)).toEqual(["outputs_Tab2.tsv", "subjects.tsv"]);
+    expect(signals.map((signal) => signal.aborted)).toEqual([true, false]);
+    expect(wrapper.find(".action-failure-text").exists()).toBe(false);
+    wrapper.unmount();
+    expect(signals[1]!.aborted).toBe(true);
+  });
+
   it("opens a PDF with the PDF.js files of the page", async () => {
     engine.openPaper.mockResolvedValue({
       goTo: vi.fn(),
@@ -134,5 +163,24 @@ describe("the shared views read through their context, never through a store", (
     });
     await flushPromises();
     expect(wrapper.get(".action-failure-text").text()).toBe("Could not load Example.pdf: the server answered 404.");
+  });
+
+  it("tells only the curation app how to get a session, and a reader who may not edit to sign in again", async () => {
+    engine.openPaper.mockRejectedValue(
+      Object.assign(new Error("Unexpected server response (401)."), { name: "ResponseException", status: 401 }),
+    );
+    const checkFile = vi.fn(() => Promise.reject(new SessionMissing("No session")));
+    const texts: string[] = [];
+    for (const capabilities of [undefined, CURATOR]) {
+      const wrapper = mountViews(PaperViewer, {
+        context: viewsContext({ ...(capabilities ? { capabilities } : {}), data: { ...memoryData(), checkFile } }),
+        props: { url: "/files/Example.pdf", file: "Example.pdf", version: "v1" },
+        attachTo: document.body,
+      });
+      await flushPromises();
+      texts.push(wrapper.get(".action-failure-text").text());
+      wrapper.unmount();
+    }
+    expect(texts).toEqual([NO_SESSION, "The session has ended. Sign in again to show the PDF."]);
   });
 });

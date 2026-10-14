@@ -46,7 +46,7 @@ const columns: { key: SortKey | null; label: string; cell: string; needs: "curat
   { key: "review", label: "Review", cell: "cell-review", needs: "curation" },
   { key: "open_items", label: "Open items", cell: "cell-open", needs: "curation" },
   { key: "problems", label: "Problems", cell: "cell-problems", needs: "curation" },
-  { key: "sync", label: "Sync", cell: "cell-sync", needs: "curation" },
+  { key: "sync", label: "Sync", cell: "cell-sync", needs: "jobs" },
   { key: "upload", label: "Last upload", cell: "cell-upload", needs: "jobs" },
 ];
 const capabilities = views.capabilities;

@@ -98,7 +98,7 @@ const {
     const detail = study.detail;
     return file.value !== null && detail !== null && tableFiles(detail).includes(file.value) ? file.value : null;
   },
-  (name) => study.table(name),
+  (name, signal) => study.table(name, signal),
   () => version.value,
   (name) => `The columns of ${name} could not be loaded.`,
 );

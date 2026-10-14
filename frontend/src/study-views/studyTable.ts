@@ -202,7 +202,7 @@ const SIZED_COLUMNS: readonly SizedColumn[] = [
       ].join(" "),
     fields: ["status", "counts", "message"],
   },
-  { cell: "cell-sync", text: (row) => SYNC_LABELS[row.sync.status], fields: ["sync"] },
+  { cell: "cell-sync", text: (row) => (row.sync ? SYNC_LABELS[row.sync.status] : "-"), fields: ["sync"] },
   {
     cell: "cell-upload",
     // Every upload shows a date and time in tabular digits.
@@ -250,15 +250,15 @@ export function sizerRows(rows: readonly StudyRow[], limit = SIZER_LIMIT): Study
       .map(([, row]) => row);
   });
   const count = Math.max(...choices.map((options) => options.length));
-  return Array.from({ length: count }, (_, place) =>
-    SIZED_COLUMNS.reduce<StudyRow>(
-      (target, column, at) => {
-        const options = choices[at]!;
-        return withCell(target, options[Math.min(place, options.length - 1)]!, column);
-      },
-      { ...first, id: "", name: "", path: `sizer-${place}`, duplicate: false },
-    ),
-  );
+  return Array.from({ length: count }, (_, place) => {
+    const base: StudyRow = { ...first, id: "", name: "", path: `sizer-${place}`, duplicate: false };
+    // As a row that the reader may write, it shows the cells of the curation of every row it takes them from.
+    delete base.curator;
+    return SIZED_COLUMNS.reduce<StudyRow>((target, column, at) => {
+      const options = choices[at]!;
+      return withCell(target, options[Math.min(place, options.length - 1)]!, column);
+    }, base);
+  });
 }
 
 /** The cells that a sizer row shows: the fields of the row and of its summary that the columns show. */

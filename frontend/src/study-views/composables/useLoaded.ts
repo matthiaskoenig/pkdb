@@ -1,4 +1,4 @@
-import { ref, shallowRef, watch, type Ref, type ShallowRef } from "vue";
+import { onScopeDispose, ref, shallowRef, watch, type Ref, type ShallowRef } from "vue";
 import { isAbort } from "../errors";
 import { failureOf, type ActionFailure } from "../study";
 
@@ -17,15 +17,16 @@ export interface Loaded<T, V> {
 }
 
 /**
- * Loads `read(key)` when `key` changes and when `changed` does, such as the detail of the open
- * study, whose ETag-revalidated resources may have changed with it. Answers that arrive after a
- * newer load started are dropped, and so are loads aborted because the study closed. A failure
- * starts with `lead(key)`, such as `outputs_Tab2.tsv could not be loaded.`, unless the message of
- * the local server says what could not be read.
+ * Loads `read(key, signal)` when `key` changes and when `changed` does, such as the detail of the
+ * open study, whose ETag-revalidated resources may have changed with it. `signal` aborts when a
+ * newer load starts and when the component unmounts: the answers of such a load are dropped, and
+ * so are loads aborted because the study closed, without a failure. A failure starts with
+ * `lead(key)`, such as `outputs_Tab2.tsv could not be loaded.`, unless the message of the server
+ * says what could not be read.
  */
 export function useLoaded<T, V = unknown>(
   key: () => string | null,
-  read: (key: string) => Promise<T>,
+  read: (key: string, signal: AbortSignal) => Promise<T>,
   changed: () => V,
   lead: (key: string) => string,
 ): Loaded<T, V> {
@@ -34,9 +35,13 @@ export function useLoaded<T, V = unknown>(
   const error = ref<ActionFailure | null>(null);
   const loading = ref(false);
   let request = 0;
+  /** Aborts the read of the last load. */
+  let controller: AbortController | null = null;
 
   async function load(name: string | null, version: V): Promise<void> {
     const current = ++request;
+    controller?.abort();
+    controller = null;
     error.value = null;
     if (data.value?.key !== name) data.value = null;
     if (name === null) {
@@ -44,16 +49,18 @@ export function useLoaded<T, V = unknown>(
       return;
     }
     loading.value = data.value === null;
+    const { signal } = (controller = new AbortController());
     try {
-      const content = await read(name);
-      if (current === request) data.value = { key: name, content, version };
+      const content = await read(name, signal);
+      if (current === request && !signal.aborted) data.value = { key: name, content, version };
     } catch (caught) {
-      if (current === request && !isAbort(caught)) error.value = failureOf(caught, lead(name));
+      if (current === request && !signal.aborted && !isAbort(caught)) error.value = failureOf(caught, lead(name));
     } finally {
       if (current === request) loading.value = false;
     }
   }
 
   watch([key, changed], ([name, version]) => void load(name, version), { immediate: true });
+  onScopeDispose(() => controller?.abort());
   return { data, error, loading, reload: () => load(key(), changed()) };
 }

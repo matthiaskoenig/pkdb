@@ -20,8 +20,9 @@ import type { Profile } from "../types";
  * (MetadataSection.vue): the reference with its identifiers, the people (the ratings of the
  * curators when the page has them), the licence, access and provenance, the issue and the
  * release, and the descriptions and comments. The issue and the match of reference.json show
- * with the curation; without it the card of the issue and the release is titled Release. Every
- * link opens in a new tab and its name says what it opens.
+ * with the curation; without it the card of the issue and the release is titled Release. What
+ * cannot show names the files of the study only with `edit`. Every link opens in a new tab and
+ * its name says what it opens.
  */
 const views = useStudyViews();
 const detail = views.data.detail;
@@ -43,6 +44,13 @@ const profiles = computed(() => knownProfiles(roster.value, detail.value?.people
 const nameOf = (user: string) => profileOf(profiles.value, user).display_name;
 
 const reference = computed(() => referenceView(detail.value?.reference ?? null));
+const invalidText = computed(() =>
+  capabilities.value.edit ? "study.json is not valid, so its metadata cannot show." : "The metadata of this study cannot show.",
+);
+const untitled = computed(() => (capabilities.value.edit ? "No title in reference.json" : "No title"));
+const referenceError = computed(() =>
+  reference.value.kind === "error" && capabilities.value.edit ? reference.value.text : "The reference cannot show.",
+);
 const match = computed(() => referenceMatch(detail.value?.reference_match ?? null));
 const identifiers = computed(() => identifierFacts(metadata.value?.reference));
 
@@ -103,7 +111,7 @@ const cards = computed(() => [
 
 <template>
   <div class="metadata-view">
-    <p v-if="!metadata" class="metadata-view-invalid">study.json is not valid, so its metadata cannot show.</p>
+    <p v-if="!metadata" class="metadata-view-invalid">{{ invalidText }}</p>
     <div v-else class="metadata-view-cards">
       <VCard tag="section" border class="metadata-view-card" :aria-labelledby="ids.reference">
         <VCardItem class="metadata-view-head">
@@ -115,12 +123,12 @@ const cards = computed(() => [
           </VChip>
           <template v-if="reference.kind === 'reference'">
             <p class="reference-title" :class="{ 'reference-title--missing': !reference.title }">
-              {{ reference.title || "No title in reference.json" }}
+              {{ reference.title || untitled }}
             </p>
             <p v-if="reference.authors" class="reference-line">{{ reference.authors }}</p>
             <p v-if="reference.source" class="reference-line reference-source">{{ reference.source }}</p>
           </template>
-          <p v-else-if="reference.kind === 'error'" class="reference-line">{{ reference.text }}</p>
+          <p v-else-if="reference.kind === 'error'" class="reference-line">{{ referenceError }}</p>
           <p v-else class="reference-line reference-source">No reference yet.</p>
           <dl v-if="identifiers.length" class="panel-facts">
             <template v-for="fact in identifiers" :key="fact.name">
