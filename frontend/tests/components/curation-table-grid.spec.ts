@@ -732,8 +732,8 @@ describe("links of names", () => {
   it("describes where a link goes", () => {
     const wrapper = mount(TableGrid, { props: { table: named, selectable: true, names: NAMES }, attachTo: document.body });
     const [subject, dose] = wrapper.findAll(".grid-link");
-    expect(description(subject!.element)).toBe("Goes to its row in subjects.tsv.");
-    expect(description(dose!.element)).toBe("Goes to its row in interventions.tsv.");
+    expect(description(subject!.element)).toBe("Goes to line 1 of subjects.tsv.");
+    expect(description(dose!.element)).toBe("Goes to line 1 of interventions.tsv.");
   });
 
   it("emits the link of a clicked name with the line of its row, and selects no row", async () => {
@@ -1205,7 +1205,7 @@ describe("the tooltip of the problems", () => {
     expect(link.textContent).toBe("all");
     // The tooltip of the cell shows its problems: the link has no title of its own.
     expect(link.title).toBe("");
-    expect(description(link)).toContain("Goes to its row in subjects.tsv.");
+    expect(description(link)).toContain("Goes to line 1 of subjects.tsv.");
     expect(description(link)).toContain("subjects.tsv has no row named 'S9'");
     const button = wrapper.get<HTMLButtonElement>(".grid-line-button").element;
     button.focus();

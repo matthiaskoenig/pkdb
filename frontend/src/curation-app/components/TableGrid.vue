@@ -14,7 +14,7 @@ import {
   type CellIssues,
   type IssueCells,
 } from "../grid";
-import { cellParts, NAME_KINDS, namedKind, type CellPart, type NameLink } from "../links";
+import { cellParts, namedKind, type CellPart, type NameLink } from "../links";
 import { problemsText } from "../problems";
 import ProblemTooltip from "./ProblemTooltip.vue";
 
@@ -146,9 +146,9 @@ function partsOf(row: TableRow, column: { index: number; links: NameKind | null 
   return column.links && props.names ? cellParts(text, props.names[column.links]) : [{ text, link: null }];
 }
 
-/** The id of the hidden text that says where the links of a kind go. */
-function linkNoteId(kind: NameKind): string {
-  return `${id}-to-${kind}`;
+/** The id of the hidden text that says where a link goes: the line of its table. */
+function linkNoteId(link: NameLink): string {
+  return `${id}-to-${link.file}-${link.line}`;
 }
 
 /** The class of a cell of a column of the class `info`, which gives it its tint or its italics. */
@@ -217,6 +217,18 @@ const to = computed(() => (virtual.value ? windowEnd(from.value) : shownRows.val
 const rendered = computed(() =>
   shownRows.value.slice(from.value, to.value).map((row, offset) => ({ row, index: from.value + offset })),
 );
+
+/** The targets of the links that show, each once, for the hidden texts that describe them. */
+const linkTargets = computed<NameLink[]>(() => {
+  const targets = new Map<string, NameLink>();
+  for (const { row } of rendered.value) {
+    for (const column of headers.value) {
+      if (!column.links) continue;
+      for (const part of partsOf(row, column)) if (part.link) targets.set(linkNoteId(part.link), part.link);
+    }
+  }
+  return [...targets.values()];
+});
 const before = computed(() => from.value * rowHeight.value);
 const after = computed(() => (shownRows.value.length - to.value) * rowHeight.value);
 
@@ -705,7 +717,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
                     :class="`grid-link--${column.links}`"
                     tabindex="-1"
                     :title="tipOf(row.line, column.index) ? undefined : `Line ${part.link.line} of ${part.link.file}`"
-                    :aria-describedby="described(linkNoteId(column.links), notes.get(`${row.line}:${column.index}`)?.id)"
+                    :aria-describedby="described(linkNoteId(part.link), notes.get(`${row.line}:${column.index}`)?.id)"
                     @focus="keyLine = row.line"
                     @click.stop="emit('follow', part.link, row.line)"
                   >{{ part.text }}</button><template v-else>{{ part.text }}</template></template></template><template v-else>{{ row.cells[column.index] ?? "" }}</template></td>
@@ -720,9 +732,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
     <!-- What the marks mean, for screen readers; descriptions may name hidden elements. -->
     <div hidden>
       <span :id="targetNote">Targeted by an open review item.</span>
-      <template v-if="linking && names">
-        <span v-for="kind in NAME_KINDS" :id="linkNoteId(kind)" :key="kind">Goes to its row in {{ names[kind].file }}.</span>
-      </template>
+      <span v-for="link in linkTargets" :id="linkNoteId(link)" :key="linkNoteId(link)">Goes to line {{ link.line }} of {{ link.file }}.</span>
       <span v-for="note in notes.values()" :id="note.id" :key="note.id">{{ note.text }}</span>
       <span v-for="[line, issues] in lineProblems" :id="lineNoteId(line)" :key="lineNoteId(line)">{{
         problemsText(issues)
