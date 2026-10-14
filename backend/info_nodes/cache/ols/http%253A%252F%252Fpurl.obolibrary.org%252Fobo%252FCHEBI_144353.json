@@ -1,0 +1,217 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_144353",
+  "lang": "en",
+  "description": [
+    "A member of the class of dithiocarbamic acids that is diethylcarbamic acid in which both of the oxygens are replaced by sulfur."
+  ],
+  "synonyms": [
+    "Ditiocarb",
+    "N,N-diethylcarbamodithioic acid",
+    "N,N-diethyldithiocarbamic acid",
+    "diethylcarbamodithioic acid",
+    "diethylcarbamodithioic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:147-84-2",
+      "drugbank:DB02520",
+      "kegg.compound:C19150",
+      "pubmed:1848982",
+      "pubmed:1851986",
+      "pubmed:2902461",
+      "pubmed:31465063",
+      "reaxys:1747741"
+    ],
+    "generalized_empirical_formula": [
+      "C5H11NS2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:144353"
+    ],
+    "inchi_key_string": [
+      "LMBWSYZSUOEYSN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C5H11NS2/c1-3-6(4-2)5(7)8/h3-4H2,1-2H3,(H,7,8)"
+    ],
+    "mass": [
+      "149.284"
+    ],
+    "monoisotopic_mass": [
+      "149.03329"
+    ],
+    "smiles_string": [
+      "CCN(CC)C(=S)S"
+    ]
+  },
+  "label": "diethyldithiocarbamic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_144353",
+  "obo_id": "CHEBI:144353",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "147-84-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=147-84-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB02520",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB02520"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C19150",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "1848982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1848982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1851986",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1851986/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2902461",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2902461/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31465063",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31465063/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1747741",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "diethylcarbamodithioic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ditiocarb",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-diethylcarbamodithioic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-diethyldithiocarbamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diethylcarbamodithioic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_144353/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

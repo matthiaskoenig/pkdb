@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_169915",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(2S,3S,4S,5R,6R)-6-[4-chloro-N-[[4-[2-(methylcarbamoyl)pyridin-4-yl]oxyphenyl]carbamoyl]-3-(triluoromethyl)anilino]-3,4,5-trihydroxyoxane-2-carboxylic acid",
+    "(2S,3S,4S,5R,6R)-6-[4-chloro-N-[[4-[2-(methylcarbamoyl)pyridin-4-yl]oxyphenyl]carbamoyl]-3-(triluoromethyl)anilino]-3,4,5-trihydroxyoxane-2-carboxylic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "chemspider:30778599",
+      "hmdb:HMDB0060872"
+    ],
+    "generalized_empirical_formula": [
+      "C27H24ClF3N4O9"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:169915"
+    ],
+    "inchi_key_string": [
+      "HALZWBPBJOJUOZ-QMDPOKHVSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C27H24ClF3N4O9/c1-32-23(39)18-11-15(8-9-33-18)43-14-5-2-12(3-6-14)34-26(42)35(13-4-7-17(28)16(10-13)27(29,30)31)24-21(38)19(36)20(37)22(44-24)25(40)41/h2-11,19-22,24,36-38H,1H3,(H,32,39)(H,34,42)(H,40,41)/t19-,20-,21+,22-,24+/m0/s1"
+    ],
+    "mass": [
+      "640.955"
+    ],
+    "monoisotopic_mass": [
+      "640.11839"
+    ],
+    "smiles_string": [
+      "CNC(=O)c1cc(Oc2ccc(NC(=O)N(c3ccc(Cl)c(C(F)(F)F)c3)[C@@H]3O[C@H](C(=O)O)[C@@H](O)[C@H](O)[C@H]3O)cc2)ccn1"
+    ]
+  },
+  "label": "Sorafenib beta-D-Glucuronide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_169915",
+  "obo_id": "CHEBI:169915",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "chemspider",
+      "id": "30778599",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.30778599.html"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060872",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060872"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3S,4S,5R,6R)-6-[4-chloro-N-[[4-[2-(methylcarbamoyl)pyridin-4-yl]oxyphenyl]carbamoyl]-3-(triluoromethyl)anilino]-3,4,5-trihydroxyoxane-2-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3S,4S,5R,6R)-6-[4-chloro-N-[[4-[2-(methylcarbamoyl)pyridin-4-yl]oxyphenyl]carbamoyl]-3-(triluoromethyl)anilino]-3,4,5-trihydroxyoxane-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169915/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

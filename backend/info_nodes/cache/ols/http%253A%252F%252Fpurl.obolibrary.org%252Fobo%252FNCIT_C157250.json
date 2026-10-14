@@ -1,0 +1,138 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C157250",
+  "lang": "en",
+  "description": [
+    "The percentage of cells in a sample that are dividing that is determined by immunohistochemical staining techniques using MIB-1 antibody (anti-Ki-67 protein antibody)."
+  ],
+  "synonyms": [
+    "Anti-KI67 Labeling Index",
+    "Anti-Ki-67 Labeling Index",
+    "Anti-MKI67 Labeling Index",
+    "Ki-67 Labeling Index",
+    "Ki-67 MIB1 Labeling Index",
+    "MIB-1 Antibody Labeling Index",
+    "MIB-1 Labeling Index",
+    "MIB1 Antibody Labeling Index",
+    "MIB1 Labeling Index"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC"
+    ],
+    "NCI_META_CUI": [
+      "CL936877"
+    ],
+    "Preferred_Name": [
+      "Ki-67 Labeling Index"
+    ],
+    "Related_To_Genetic_Biomarker": [
+      "http://purl.obolibrary.org/obo/NCIT_C28636"
+    ],
+    "Semantic_Type": [
+      "Quantitative Concept"
+    ],
+    "code": [
+      "C157250"
+    ]
+  },
+  "label": "Ki-67 Labeling Index",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C157250",
+  "obo_id": "NCIT:C157250",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157531"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Anti-KI67 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Anti-Ki-67 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Anti-MKI67 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ki-67 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ki-67 MIB1 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MIB-1 Antibody Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MIB-1 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MIB1 Antibody Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MIB1 Labeling Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C157250/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
