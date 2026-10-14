@@ -103,7 +103,7 @@ const describedBy = computed(() =>
     <p v-if="pending" class="problem-fact problem-acknowledged">
       <i class="fas fa-check problem-icon" aria-hidden="true"></i>
       <span>{{
-        automatic
+        automatic || !capabilities.edit
           ? "Acknowledged. It leaves this list after the next validation."
           : "Acknowledged. Validate the study to update this list."
       }}</span>

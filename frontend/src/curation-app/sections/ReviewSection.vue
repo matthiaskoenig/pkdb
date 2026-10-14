@@ -46,6 +46,14 @@ const capabilities = views.capabilities;
 const detail = views.data.detail;
 
 const review = computed(() => detail.value?.review ?? null);
+/**
+ * Why the items do not show: review.json cannot be written from the app, which only a reader who
+ * may edit hears of, or it is not valid.
+ */
+const invalidText = computed(() => {
+  if (review.value?.revision !== null) return "review.json is not valid, so the items cannot be shown.";
+  return capabilities.value.edit ? "review.json cannot be written from the app." : "The review items cannot be shown.";
+});
 const items = computed<ReviewItem[]>(() => review.value?.value?.items ?? []);
 const approved = computed(() => review.value?.value?.status === "approved");
 const writable = computed(() => review.value?.revision != null && review.value.value !== null);
@@ -183,13 +191,7 @@ defineExpose({ selected, select, clearDraft });
   <div class="review">
     <section v-if="!review?.value" class="review-invalid">
       <VAlert type="error" variant="tonal" density="compact" class="status-alert">
-        <p class="review-alert-text">
-          {{
-            review?.revision === null
-              ? "review.json cannot be written from the app."
-              : "review.json is not valid, so the items cannot be shown."
-          }}
-        </p>
+        <p class="review-alert-text">{{ invalidText }}</p>
         <ul v-if="review?.issues.length" class="review-alert-issues">
           <li v-for="(problem, index) in review.issues" :key="index">{{ problem.message }}</li>
         </ul>

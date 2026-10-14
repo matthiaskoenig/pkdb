@@ -159,7 +159,7 @@ async function open(): Promise<void> {
     const answer = await paperAnswer(caught, props.url, views.data.checkFile);
     if (signal.aborted) return;
     importFailed.value = caught instanceof PaperImportFailed;
-    failure.value = paperFailure(caught, props.file, props.url, answer);
+    failure.value = paperFailure(caught, props.file, props.url, answer, views.capabilities.value.edit);
   } finally {
     if (!signal.aborted) loading.value = false;
   }

@@ -8,7 +8,7 @@ import { rawTable } from "../../study-views/grid";
 import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../../study-views/overlay";
 import { groupByFile, groupCounts, locationKey } from "../../study-views/problems";
 import { SOURCE_ICONS, sourceProblems } from "../../study-views/sources";
-import { tableFiles, viewWithoutFiles, type ActionFailure } from "../../study-views/study";
+import { tableFiles, viewWithoutFiles, withoutFiles, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import MoreBelow from "./MoreBelow.vue";
 import PlotScales from "./PlotScales.vue";
@@ -102,7 +102,12 @@ const unmatchedNote = computed(() => {
 const unmatched = computed(() => capped(sourceView.value?.unmatched ?? []));
 const alt = computed(() => `${props.summary.source} of ${identity.value}`);
 
-const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
+/** The tables that the reader can open in the Data section: no raw table without the files. */
+const tables = computed(() => {
+  const value = detail.value;
+  if (!value) return new Set<string>();
+  return new Set(tableFiles(capabilities.value.files ? value : withoutFiles(value)));
+});
 /** The problems of the files of the source, in the order of the Problems section; the plot rings their rows. */
 const sourceIssues = computed(() =>
   sourceView.value && detail.value && capabilities.value.curation
@@ -129,7 +134,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
       <h3 class="pane-head-name">{{ summary.source }}</h3>
       <!-- The source and its kind keep their room in a narrow pane; the image file name shortens first. -->
       <span class="pane-head-part pane-head-part--fixed">{{ summary.kind }}</span>
-      <span v-if="summary.image" class="pane-head-part">{{ summary.image }}</span>
+      <span v-if="capabilities.files && summary.image" class="pane-head-part">{{ summary.image }}</span>
       <div
         v-if="capabilities.files && showsImage && sourceView?.image_url"
         class="zoom switch-group"

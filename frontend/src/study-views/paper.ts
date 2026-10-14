@@ -202,9 +202,16 @@ export async function paperAnswer(
 /**
  * The words and the code of a failure to show the PDF `file`, by the error of PDF.js and the
  * code of the answer of the local server, which tells a PDF that is gone (`not_found`) from one
- * that it cannot read: both may be a 404 to PDF.js.
+ * that it cannot read: both may be a 404 to PDF.js. Without `local`, for a reader who works on no
+ * copy of the study, they say what happened without the study folder and the PDF program.
  */
-function failureWords(error: Error, status: number | null, answerCode: string | null, file: string): [string, string] {
+function failureWords(
+  error: Error,
+  status: number | null,
+  answerCode: string | null,
+  file: string,
+  local: boolean,
+): [string, string] {
   if (error instanceof PaperImportFailed)
     return [
       paperImport.state === "failed again"
@@ -214,10 +221,12 @@ function failureWords(error: Error, status: number | null, answerCode: string | 
     ];
   switch (error.name) {
     case "PasswordException":
-      return [`${file} is protected by a password. Open it in the PDF program.`, "pdf_password"];
+      return [`${file} is protected by a password.${local ? " Open it in the PDF program." : ""}`, "pdf_password"];
     case "InvalidPDFException":
       return [`${file} is damaged or not a PDF.`, "pdf_damaged"];
     case "ResponseException":
+      if (!local)
+        return [`Could not load ${file}: the server answered ${status ?? "nothing"}.`, answerCode ?? "pdf_unreadable"];
       return answerCode === "not_found"
         ? [`${file} is no longer in the study folder.`, "not_found"]
         : [`Could not read ${file}: the local server answered ${status ?? "nothing"}.`, answerCode ?? "pdf_unreadable"];
@@ -230,18 +239,20 @@ function failureWords(error: Error, status: number | null, answerCode: string | 
  * The failure of a PDF that the viewer could not show, for the alert of a failed action: what
  * went wrong in words, and in its details the error of PDF.js with the request, or the answer
  * of the local server (`paperAnswer`) with its status, its code, its reason and its request id.
- * A lost session says what the status banner of the app says, without details.
+ * A lost session says what the status banner of the app says, without details. `local` is false
+ * for a reader who may not edit the study, whose words name no study folder and no PDF program.
  */
 export function paperFailure(
   caught: unknown,
   file: string,
   url: string,
   answer: PaperAnswer | null = null,
+  local = true,
 ): ActionFailure {
   if (answer instanceof SessionMissing) return actionFailure(NO_SESSION);
   const error = caught instanceof Error ? caught : new Error(String(caught));
   const status = answer?.status ?? ("status" in error && typeof error.status === "number" ? error.status : null);
-  const [text, code] = failureWords(error, status, answer?.code ?? null, file);
+  const [text, code] = failureWords(error, status, answer?.code ?? null, file, local);
   const details: FailureDetails = {
     status,
     code,

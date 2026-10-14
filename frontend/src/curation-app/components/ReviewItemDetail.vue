@@ -61,9 +61,10 @@ const closed = computed(() => {
 const acknowledgement = computed(() => {
   const code = props.item.acknowledges;
   if (!code) return null;
-  return props.item.state === "dismissed"
-    ? `Dismissed, so it no longer acknowledges the warning ${code}. Reopen it to acknowledge the warning again.`
-    : `Acknowledges the warning ${code}. Dismissing the item brings the warning back.`;
+  if (props.item.state !== "dismissed")
+    return `Acknowledges the warning ${code}. Dismissing the item brings the warning back.`;
+  const dismissed = `Dismissed, so it no longer acknowledges the warning ${code}.`;
+  return capabilities.value.edit ? `${dismissed} Reopen it to acknowledge the warning again.` : dismissed;
 });
 </script>
 

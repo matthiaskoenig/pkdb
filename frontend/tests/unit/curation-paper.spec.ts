@@ -152,6 +152,15 @@ describe("the paper of a study", () => {
     });
   });
 
+  it("explains a failure without the instructions of the local app to a reader who may not edit the study", () => {
+    const password = Object.assign(new Error("No password given"), { name: "PasswordException", code: 1 });
+    expect(paperFailure(password, "Example.pdf", URL_A, null, false).text).toBe("Example.pdf is protected by a password.");
+    const gone = paperFailure(responseError(404), "Example.pdf", URL_A, answer(404, "not_found", null), false);
+    expect([gone.text, gone.details?.code]).toEqual(["Could not load Example.pdf: the server answered 404.", "not_found"]);
+    const failed = paperFailure(responseError(500), "Example.pdf", URL_A, null, false);
+    expect([failed.text, failed.details?.code]).toEqual(["Could not load Example.pdf: the server answered 500.", "pdf_unreadable"]);
+  });
+
   it("explains a lost session as the app does, without the status", () => {
     const failure = paperFailure(
       responseError(401),

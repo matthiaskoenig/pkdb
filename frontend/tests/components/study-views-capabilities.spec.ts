@@ -32,6 +32,8 @@ import {
   studyDetail,
   studyRow,
 } from "../unit/curation-fixtures";
+import { VSelect } from "vuetify/components";
+import { PAPER } from "../../src/study-views/data";
 import { setViewport } from "./curation-dom";
 import { CURATOR, EVERYTHING, memoryData, mountViews, PUBLIC, viewsContext, websiteRouter } from "./study-views";
 
@@ -283,6 +285,7 @@ describe("the source pane", () => {
     for (const part of ["img.source-image", ".zoom", ".source-raw", ".source-problems"])
       expect(wrapper.find(part).exists(), part).toBe(false);
     expect(wrapper.get(".source-files-note").text()).toBe("The image and the raw extraction of this table are not public.");
+    expect(wrapper.get(".pane-head").text()).not.toContain("Example_Tab2.png");
   });
 
   it("shows a curator the image, the raw extraction and the problems, and a missing image without the hints of the curation app", async () => {
@@ -291,6 +294,7 @@ describe("the source pane", () => {
     await flushPromises();
     for (const part of ["img.source-image", ".source-raw", ".source-problems"])
       expect(wrapper.find(part).exists(), part).toBe(true);
+    expect(wrapper.get(".pane-head").text()).toContain("Example_Tab2.png");
     const missing = mountViews(SourcePane, {
       context: context(CURATOR),
       props: { ...props, summary: { ...props.summary, image: null, image_url: null, missing_image: "Example_Tab2.png" }, view: { ...TAB2, image: null, image_url: null } },
@@ -298,6 +302,26 @@ describe("the source pane", () => {
     });
     await flushPromises();
     expect(missing.get(".pane-missing-text").text()).toBe("No image.");
+  });
+});
+
+describe("a problem of a raw table in the source pane", () => {
+  it("links to its table only with the files", async () => {
+    const raw: Problem = { ...WARNING, source: { file: "Example_Tab2.tsv", row: 1 } };
+    const detail = { ...DETAIL, problems: [raw] };
+    const summary = sourceSummary({ source: "Tab2", image: "Example_Tab2.png", raw: "Example_Tab2.tsv", raw_kind: "table", tables: ["outputs_Tab2.tsv"] });
+    const links = async (capabilities: StudyCapabilities) => {
+      const wrapper = mountViews(SourcePane, {
+        context: viewsContext({ capabilities, data: memoryData({ detail }) }),
+        props: { summary, view: TAB2, loading: false, error: null, selected: null },
+        plugins: [await routerAt("/data/caffeine/Example/data")],
+      });
+      await flushPromises();
+      expect(wrapper.get(".source-problems").text()).toContain("The mean is high.");
+      return reachable(wrapper).filter((name) => name === "Show in table");
+    };
+    expect(await links(CURATOR)).toEqual(["Show in table"]);
+    expect(await links(CURATION_ONLY)).toEqual([]);
   });
 });
 
@@ -380,6 +404,39 @@ describe("the actions on a problem and on a review item", () => {
       plugins: [await routerAt("/data/caffeine/Example/problems")],
     });
     expect(reachable(wrapper)).toEqual(["Show in table"]);
+  });
+
+  it("say how to acknowledge a warning again, and offer Reopen, only with edit", () => {
+    const dismissed = reviewItem({ id: "01D", state: "dismissed", acknowledges: "value_range" });
+    const props = { item: dismissed, profiles: new Map(), busy: null, writable: true, blocked: false, canReopen: true, draft: "" };
+    for (const [capabilities, shown] of [
+      [CURATOR, false],
+      [EVERYTHING, true],
+    ] as const) {
+      const wrapper = mountViews(ReviewItemDetail, { context: context(capabilities), props });
+      expect(wrapper.text()).toContain("Dismissed, so it no longer acknowledges the warning value_range.");
+      expect(wrapper.text().includes("Reopen it to acknowledge the warning again."), JSON.stringify(capabilities)).toBe(shown);
+      expect(wrapper.findAll("button").some((button) => button.text() === "Reopen")).toBe(shown);
+    }
+  });
+
+  it("say that an acknowledged warning waits for a validation without asking a reader who may not edit to run it", async () => {
+    const props = {
+      issue: WARNING,
+      study: "caffeine/Example",
+      idBase: "problem",
+      showable: true,
+      pending: true,
+      automatic: false,
+      disabled: false,
+      validating: false,
+    };
+    const text = async (capabilities: StudyCapabilities) =>
+      mountViews(ProblemItem, { context: context(capabilities), props, plugins: [await routerAt("/data/caffeine/Example/problems")] })
+        .get(".problem-acknowledged")
+        .text();
+    expect(await text(EVERYTHING)).toBe("Acknowledged. Validate the study to update this list.");
+    expect(await text(CURATOR)).toBe("Acknowledged. It leaves this list after the next validation.");
   });
 
   it("show the thread of an item without the reply and its actions for a curator of the website", () => {
@@ -485,6 +542,66 @@ describe("the Data section without the files", () => {
   });
 });
 
+describe("a review.json that cannot be read", () => {
+  async function invalid(review: StudyDetail["review"], capabilities: StudyCapabilities) {
+    const wrapper = mountViews(ReviewSection, {
+      context: viewsContext({ capabilities, data: memoryData({ detail: studyDetail({ review }) }) }),
+      plugins: [await routerAt("/data/caffeine/Example/review")],
+      slots: PAGE_SLOTS,
+      stubs: { SourceOverlay: true },
+    });
+    await flushPromises();
+    return wrapper.get(".review-invalid").text();
+  }
+
+  it("says that the app cannot write it only with edit", async () => {
+    const unwritable = { revision: null, value: null, issues: [] };
+    expect(await invalid(unwritable, EVERYTHING)).toContain("review.json cannot be written from the app.");
+    const shown = await invalid(unwritable, CURATOR);
+    expect(shown).toContain("The review items cannot be shown.");
+    expect(shown).not.toContain("from the app");
+    expect(shown).not.toContain("Fix review.json");
+  });
+
+  it("says that it is not valid to every reader, and how to fix it only with edit", async () => {
+    const broken = { revision: "review-1", value: null, issues: [] };
+    expect(await invalid(broken, EVERYTHING)).toContain("Fix review.json in your editor.");
+    const shown = await invalid(broken, CURATOR);
+    expect(shown).toContain("review.json is not valid, so the items cannot be shown.");
+    expect(shown).not.toContain("Fix review.json");
+  });
+});
+
+describe("the selects of the Data section in a narrow window", () => {
+  it("offer the public no paper and no raw table", async () => {
+    setViewport(1000);
+    const wrapper = mountViews(DataSection, {
+      context: context(PUBLIC),
+      plugins: [await routerAt("/data/caffeine/Example/data?file=outputs_Tab2.tsv")],
+      slots: PAGE_SLOTS,
+      stubs: { SourceOverlay: true, PaperViewer: true },
+    });
+    await flushPromises();
+    const items = (label: string) =>
+      wrapper
+        .findAllComponents(VSelect)
+        .find((select) => select.props("label") === label)!
+        .props("items") as { title: string; value?: string }[];
+    expect(items("Table").map((item) => item.value ?? item.title)).toEqual([
+      "Subjects",
+      "subjects.tsv",
+      "characteristica.tsv",
+      "Interventions",
+      "interventions.tsv",
+      "Data",
+      "outputs_Tab2.tsv",
+      "timecourses_Fig1.tsv",
+    ]);
+    expect(items("Source").map((item) => item.value)).toEqual(["Fig1", "Tab2"]);
+    expect(items("Source").map((item) => item.value)).not.toContain(PAPER);
+  });
+});
+
 describe("the notes of the Data section", () => {
   async function note(detail: StudyDetail, capabilities: StudyCapabilities) {
     const wrapper = mountViews(DataSection, {
@@ -526,6 +643,7 @@ describe("a curator of the website (Review Focus 3)", () => {
       await flushPromises();
       expect(reachable(wrapper).filter((name) => EDIT_ACTIONS.includes(name))).toEqual([]);
       expect(reachable(wrapper).length).toBeGreaterThan(0);
+      if (section === "review") expect(wrapper.find(".review-reply").exists()).toBe(false);
     });
   }
 });

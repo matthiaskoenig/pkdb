@@ -7,7 +7,7 @@ import TargetView from "../../src/curation-app/components/TargetView.vue";
 import { ApiError } from "../../src/study-views/errors";
 import type { Problem, SourceView, TableResponse } from "../../src/study-views/types";
 import { reviewItem, sourceSummary, studyDetail } from "../unit/curation-fixtures";
-import { memoryData, mountViews, viewsContext, websiteRouter } from "./study-views";
+import { CURATOR, memoryData, mountViews, viewsContext, websiteRouter } from "./study-views";
 
 // PDF.js does not run in jsdom: the viewer gets a fake engine.
 const engine = vi.hoisted(() => ({ openPaper: vi.fn() }));
@@ -120,5 +120,19 @@ describe("the shared views read through their context, never through a store", (
     await flushPromises();
     expect(checkFile).toHaveBeenCalledWith("/files/Example.pdf");
     expect(wrapper.get(".action-failure-text").text()).toBe("Example.pdf is no longer in the study folder.");
+  });
+
+  it("tells a reader who may not edit the study what the server answered, without the study folder", async () => {
+    engine.openPaper.mockRejectedValue(
+      Object.assign(new Error("Unexpected server response (404)."), { name: "ResponseException", status: 404 }),
+    );
+    const checkFile = vi.fn(() => Promise.reject(new ApiError(404, { error: "Not found.", code: "not_found" }, "GET /files/Example.pdf")));
+    const wrapper = mountViews(PaperViewer, {
+      context: viewsContext({ capabilities: CURATOR, data: { ...memoryData(), checkFile } }),
+      props: { url: "/files/Example.pdf", file: "Example.pdf", version: "v1" },
+      attachTo: document.body,
+    });
+    await flushPromises();
+    expect(wrapper.get(".action-failure-text").text()).toBe("Could not load Example.pdf: the server answered 404.");
   });
 });
