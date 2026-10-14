@@ -118,6 +118,11 @@ const countText = computed(() => {
   return `${shown.value.length.toLocaleString("en-US")} of ${total}`;
 });
 
+/** The longest text of the count, "N of N studies": its hidden copy keeps the width of the count. */
+const countSizer = computed(
+  () => `${studies.value.length.toLocaleString("en-US")} of ${plural(studies.value.length, "study", "studies")}`,
+);
+
 function clearFilters(): void {
   flushSearch("");
   filters.clear();
@@ -221,60 +226,67 @@ const format1Notice = computed(() =>
 
 <template>
   <VContainer fluid class="overview">
-    <div class="overview-heading">
-      <h1>Studies</h1>
-      <span v-if="snapshot && studies.length" class="overview-count">{{ countText }}</span>
+    <!-- The heading, the count and, with studies, the search, the selects and the status chips
+         share one line where they fit; the chips come last, so they move to the next line first. -->
+    <div class="overview-header">
+      <div class="overview-heading">
+        <h1>Studies</h1>
+        <span v-if="studies.length" class="overview-count-box">
+          <span class="overview-count">{{ countText }}</span>
+          <span class="overview-count-sizer" aria-hidden="true">{{ countSizer }}</span>
+        </span>
+      </div>
+      <template v-if="studies.length">
+        <VTextField
+          v-model="searchText"
+          label="Search studies"
+          placeholder="Identity or title"
+          prepend-inner-icon="fas fa-magnifying-glass"
+          clearable
+          hide-details
+          class="overview-search"
+          @click:clear="flushSearch('')"
+        />
+        <VSelect
+          v-model="substance"
+          :items="substanceItems"
+          label="Substance"
+          hide-details
+          class="overview-substance"
+        />
+        <VSelect
+          v-model="curator"
+          :items="curatorItems"
+          label="Curator"
+          hide-details
+          class="overview-curator"
+        />
+        <VChipGroup
+          v-model="chip"
+          mandatory
+          column
+          color="primary"
+          role="group"
+          aria-label="Filter by status"
+          class="filter-chips overview-chips"
+        >
+          <VChip
+            v-for="item in STATUS_CHIPS"
+            :key="item.value"
+            :value="item.value"
+            tag="button"
+            type="button"
+            filter
+            :aria-pressed="chip === item.value ? 'true' : 'false'"
+          >
+            {{ item.label }}<span class="chip-count">{{ counts[item.value] }}</span>
+          </VChip>
+        </VChipGroup>
+      </template>
     </div>
 
     <template v-if="snapshot">
       <template v-if="studies.length">
-        <div class="overview-filters">
-          <VTextField
-            v-model="searchText"
-            label="Search studies"
-            placeholder="Identity or title"
-            prepend-inner-icon="fas fa-magnifying-glass"
-            clearable
-            hide-details
-            class="overview-search"
-            @click:clear="flushSearch('')"
-          />
-          <VSelect
-            v-model="substance"
-            :items="substanceItems"
-            label="Substance"
-            hide-details
-            class="overview-substance"
-          />
-          <VSelect
-            v-model="curator"
-            :items="curatorItems"
-            label="Curator"
-            hide-details
-            class="overview-curator"
-          />
-          <VChipGroup
-            v-model="chip"
-            mandatory
-            column
-            color="primary"
-            role="group"
-            aria-label="Filter by status"
-            class="filter-chips overview-chips"
-          >
-            <VChip
-              v-for="item in STATUS_CHIPS"
-              :key="item.value"
-              :value="item.value"
-              tag="button"
-              type="button"
-              filter
-              :aria-pressed="chip === item.value ? 'true' : 'false'"
-            >
-              {{ item.label }}<span class="chip-count">{{ counts[item.value] }}</span>
-            </VChip>
-          </VChipGroup>
-        </div>
 
         <ActionFailureAlert v-if="failure" :failure="failure" class="overview-error" @close="failure = null" />
 
@@ -367,37 +379,56 @@ const format1Notice = computed(() =>
   gap: 16px;
   padding: 24px 16px;
 }
+/*
+ * The heading, the count, the search, the two selects and the status chips share one line where
+ * they fit. The chips come last, so a narrower window moves them to the next line first, then the
+ * selects. The counts of the chips change with the filters, and the chips may wrap. So that they
+ * never move the fields, the fields do not grow and keep to the top of the line. Their 6px margin
+ * puts them on the center line of the first row of chips: a field is 30px high, and a chip of
+ * 26px stands 8px below the top of its group. The line of the heading is 28px high (1.6rem at a
+ * line height of 1.25): 7px above it put it on the same center line.
+ */
+.overview-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 12px;
+}
 .overview-heading {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 12px;
+  margin-block: 7px;
 }
 .overview-heading h1 {
   margin: 0;
 }
-.overview-count {
+/* The count keeps the width of its longest text, "N of N studies": a hidden copy of it in the same
+   grid cell sets the width, so that the fields after it stay in place while a search changes the
+   number of shown studies. Tabular digits make no shown count wider than that copy. */
+.overview-count-box {
+  display: inline-grid;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/*
- * The counts of the chips change with the filters, and the chips may wrap. So that they never
- * move the fields, the fields do not grow and keep to the top of the row. Their 6px margin puts
- * them on the center line of the first row of chips: a field is 30px high, and a chip of 26px
- * stands 8px below the top of its group.
- */
-.overview-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 4px 16px;
+.overview-count,
+.overview-count-sizer {
+  grid-area: 1 / 1;
+}
+.overview-count-sizer {
+  visibility: hidden;
 }
 .overview-search,
 .overview-substance,
 .overview-curator {
   margin-block: 6px;
 }
+/* 14rem (196px) and the 12px gap of the header let the header of pkdb_data's 1,503 studies, with
+   its four-digit counts, fit one line in a 1440px window with a scrollbar. */
 .overview-search {
-  flex: 0 1 20rem;
+  flex: 0 1 14rem;
 }
 .overview-substance {
   flex: 0 1 12rem;

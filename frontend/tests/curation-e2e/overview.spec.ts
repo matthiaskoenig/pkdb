@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect, setAutomaticActions, test } from "./fixtures.ts";
 
 function studies(page: Page) {
@@ -22,6 +22,50 @@ function chip(page: Page, label: string) {
 async function validated(page: Page): Promise<void> {
   await expect(studyRow(page, "caffeine/Demo2020").getByRole("cell", { name: "2 warnings" })).toBeVisible();
   await expect(studyRow(page, "caffeine/Draft2021").getByRole("cell", { name: "1 error" })).toBeVisible();
+}
+
+/** Wait until the page has laid out at `width`: the viewport resizes asynchronously. */
+async function layoutSettled(page: Page, width: number): Promise<void> {
+  await expect
+    .poll(() => page.evaluate(() => new Promise<number>((done) => requestAnimationFrame(() => done(document.documentElement.clientWidth)))))
+    .toBe(width);
+}
+
+interface Box {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const FIELDS = ["search", "substance", "curator"] as const;
+type HeaderPart = "heading" | "count" | (typeof FIELDS)[number] | "chips" | "lastChip";
+
+/** The boxes of the parts of the header of the overview: the outlines of the fields, the first and the last status chip. */
+async function headerBoxes(page: Page): Promise<Record<HeaderPart, Box>> {
+  const chips = page.getByRole("group", { name: "Filter by status" }).getByRole("button");
+  const parts: Record<HeaderPart, Locator> = {
+    heading: page.getByRole("heading", { name: "Studies", level: 1 }),
+    count: page.locator(".overview-count"),
+    search: page.locator(".overview-search .v-field"),
+    substance: page.locator(".overview-substance .v-field"),
+    curator: page.locator(".overview-curator .v-field"),
+    chips: chips.first(),
+    lastChip: chips.last(),
+  };
+  const boxes = await Promise.all(
+    Object.entries(parts).map(async ([name, locator]) => [name, (await locator.boundingBox())!] as const),
+  );
+  return Object.fromEntries(boxes) as Record<HeaderPart, Box>;
+}
+
+function middle(box: Box): number {
+  return box.y + box.height / 2;
+}
+
+/** How far the page scrolls sideways. */
+function sideScroll(page: Page): Promise<number> {
+  return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 }
 
 test.beforeEach(async ({ app }) => {
@@ -134,20 +178,136 @@ test("filters the studies by curator and keeps the filters when a study is opene
   await expect(page.getByText("1 of 2 studies")).toBeVisible();
 });
 
-test("the filter fields keep their place when the counts of the status chips change", async ({ page }) => {
-  // Wide enough for the fields and the chips in one row.
+test("the heading, the count, the search, the selects and the status chips share one line at 1440 px", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await layoutSettled(page, 1440);
+  await validated(page);
+  const boxes = await headerBoxes(page);
+  const line = middle(boxes.heading);
+  for (const name of [...FIELDS, "chips", "lastChip"] as const) {
+    expect(Math.abs(middle(boxes[name]) - line), `middle of ${name}`).toBeLessThanOrEqual(2);
+  }
+  // The count stands on the baseline of the heading, inside its line.
+  expect(middle(boxes.count)).toBeGreaterThan(boxes.heading.y);
+  expect(middle(boxes.count)).toBeLessThan(boxes.heading.y + boxes.heading.height);
+  // From left to right in this order, none over another.
+  const order = (["heading", "count", ...FIELDS, "chips"] as const).map((name) => boxes[name]);
+  for (let index = 1; index < order.length; index++) {
+    expect(order[index]!.x).toBeGreaterThanOrEqual(order[index - 1]!.x + order[index - 1]!.width);
+  }
+
+  // The header and the table in both themes, for the manual look at 1280 and 1440 px.
+  for (const theme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: theme });
+    await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
+    for (const width of [1280, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await layoutSettled(page, width);
+      const name = `overview-${theme}-${width}.png`;
+      const shot = await page.screenshot({ path: testInfo.outputPath(name) });
+      await testInfo.attach(name, { body: shot, contentType: "image/png" });
+    }
+  }
+  await page.emulateMedia({ colorScheme: "light" });
+});
+
+test("the header of a workspace of 1,503 studies stays one line in a 1440 px window with a scrollbar", async ({
+  page,
+}) => {
+  // 1440 px less a scrollbar of 15 px. pkdb_data has about 1,500 studies: the counts have four digits.
+  await page.setViewportSize({ width: 1425, height: 900 });
+  await layoutSettled(page, 1425);
+  await validated(page);
+  const middles = await page.evaluate(() => {
+    document.querySelector(".overview-count")!.textContent = "1,503 studies";
+    document.querySelector(".overview-count-sizer")!.textContent = "1,503 of 1,503 studies";
+    const counts = ["1,503", "312", "1,380", "73", "50"];
+    document.querySelectorAll(".overview-chips .chip-count").forEach((count, index) => {
+      count.textContent = counts[index]!;
+    });
+    const chips = [...document.querySelectorAll(".overview-chips .v-chip")];
+    const parts = [
+      document.querySelector(".overview-heading h1")!,
+      document.querySelector(".overview-search .v-field")!,
+      document.querySelector(".overview-substance .v-field")!,
+      document.querySelector(".overview-curator .v-field")!,
+      chips[0]!,
+      chips.at(-1)!,
+    ];
+    return parts.map((part) => {
+      const box = part.getBoundingClientRect();
+      return box.top + box.height / 2;
+    });
+  });
+  for (const value of middles) expect(Math.abs(value - middles[0]!), JSON.stringify(middles)).toBeLessThanOrEqual(2);
+});
+
+test("in a narrower window the status chips move below the fields first, and on a phone each field takes the whole width", async ({
+  page,
+}) => {
+  await validated(page);
+  for (const width of [1280, 960]) {
+    await page.setViewportSize({ width, height: 900 });
+    await layoutSettled(page, width);
+    const boxes = await headerBoxes(page);
+    const line = middle(boxes.heading);
+    for (const name of FIELDS) {
+      expect(Math.abs(middle(boxes[name]) - line), `middle of ${name} at ${width} px`).toBeLessThanOrEqual(2);
+    }
+    // The chips share the line, or stand below the fields: never above them or between them.
+    const below = Math.max(...FIELDS.map((name) => boxes[name].y + boxes[name].height));
+    const onLine = Math.abs(middle(boxes.chips) - line) <= 2 && Math.abs(middle(boxes.lastChip) - line) <= 2;
+    expect(onLine || boxes.chips.y >= below, `chips at ${width} px`).toBe(true);
+    if (width === 960) expect(boxes.chips.y).toBeGreaterThanOrEqual(below);
+    expect(await sideScroll(page)).toBe(0);
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await layoutSettled(page, 390);
+  const content = await page.locator(".overview").evaluate((element) => {
+    const style = getComputedStyle(element);
+    const box = element.getBoundingClientRect();
+    return { left: box.left + parseFloat(style.paddingLeft), right: box.right - parseFloat(style.paddingRight) };
+  });
+  const boxes = await headerBoxes(page);
+  let top = boxes.heading.y + boxes.heading.height;
+  for (const name of FIELDS) {
+    const box = boxes[name];
+    expect(Math.abs(box.x - content.left), `left of ${name}`).toBeLessThanOrEqual(1);
+    expect(Math.abs(box.x + box.width - content.right), `right of ${name}`).toBeLessThanOrEqual(1);
+    expect(box.y, `${name} below the part above it`).toBeGreaterThanOrEqual(top);
+    top = box.y + box.height;
+  }
+  expect(boxes.chips.y).toBeGreaterThanOrEqual(top);
+  expect(await sideScroll(page)).toBe(0);
+});
+
+test("the filter fields keep their place when the number of shown studies or the counts of the status chips change", async ({
+  page,
+}) => {
+  // Wide enough for the header in one line.
   await page.setViewportSize({ width: 1440, height: 900 });
   await validated(page);
-  const fields = [
-    page.getByRole("textbox", { name: "Search studies" }),
-    page.getByRole("combobox", { name: "Substance" }),
-    page.getByRole("combobox", { name: "Curator" }),
-  ];
+  const fields = FIELDS.map((name) => page.locator(`.overview-${name} .v-field`));
   const boxes = () => Promise.all(fields.map((field) => field.boundingBox()));
   const before = await boxes();
+  // A search changes the count beside the heading, which stands before the fields.
+  const count = page.locator(".overview-count");
+  const search = page.getByRole("textbox", { name: "Search studies" });
+  await expect(count).toHaveText("2 studies");
+  await search.fill("draft2021");
+  await expect(count).toHaveText("1 of 2 studies");
+  expect(await boxes()).toEqual(before);
+  await search.fill("no such study");
+  await expect(count).toHaveText("0 of 2 studies");
+  expect(await boxes()).toEqual(before);
+  await search.fill("");
+  await expect(count).toHaveText("2 studies");
   // Counts of more digits, as in a workspace of hundreds of studies, make the chips wider.
   await page.locator(".overview-chips .chip-count").evaluateAll((counts) => {
-    for (const count of counts) count.textContent = "1234";
+    for (const chipCount of counts) chipCount.textContent = "1234";
   });
   expect(await boxes()).toEqual(before);
 });

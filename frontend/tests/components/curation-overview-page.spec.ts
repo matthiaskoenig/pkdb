@@ -1051,6 +1051,41 @@ describe("OverviewPage", () => {
     expect(field("Search studies").element.value).toBe("");
   });
 
+  it("puts the heading, the count, the search, the selects and the status chips into one header", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    const header = page().get(".overview-header");
+    const parts = ["overview-heading", "overview-search", "overview-substance", "overview-curator", "overview-chips"];
+    expect(
+      [...header.element.children].map((child) => parts.find((name) => child.classList.contains(name)) ?? child.className),
+    ).toEqual(parts);
+    expect(header.get(".overview-heading h1").text()).toBe("Studies");
+    expect(header.get(".overview-count").text()).toBe("3 studies");
+    expect(page().find(".overview-filters").exists()).toBe(false);
+    // A hidden copy of the longest count keeps its width, so that the fields stay in place.
+    const sizer = header.get(".overview-count-sizer");
+    expect(sizer.text()).toBe("3 of 3 studies");
+    expect(sizer.attributes("aria-hidden")).toBe("true");
+
+    await search("smoking");
+    expect(header.get(".overview-count").text()).toBe("1 of 3 studies");
+    expect(header.get(".overview-count-sizer").text()).toBe("3 of 3 studies");
+  });
+
+  it("names one study in the count and its longest text", async () => {
+    await mountPage(snapshot({ studies: [example] }));
+    expect(page().get(".overview-count").text()).toBe("1 study");
+    expect(page().get(".overview-count-sizer").text()).toBe("1 of 1 study");
+  });
+
+  it("shows the heading alone without studies", async () => {
+    await mountPage(snapshot({ studies: [] }));
+    const header = page().get(".overview-header");
+    expect(header.get("h1").text()).toBe("Studies");
+    for (const part of [".overview-count-box", ".overview-search", ".overview-substance", ".overview-curator", ".overview-chips"]) {
+      expect(header.find(part).exists(), part).toBe(false);
+    }
+  });
+
   it("finds a study under every substance folder that its tables name and names them at its identity", async () => {
     const pair = studyRow({
       id: "codeine/Pair2002",
