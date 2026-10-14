@@ -1990,6 +1990,35 @@ def test_a_suspended_upload_on_save_keeps_the_revision_of_an_idle_engine(workspa
     assert engine.lock.revision == revision + 1
 
 
+def test_queueing_many_jobs_saves_the_state_once(
+    workspace, make_study, valid_files, monkeypatch
+):
+    # A save writes the whole history: one per job held the engine lock, and so every
+    # request, for seconds while the initial validations of a large workspace were queued.
+    engine, _ = workspace
+    make_study(valid_files, name="Other", substance="drug")
+    make_study(valid_files, name="Third", substance="codeine")
+    engine.scan()
+    saves = []
+    save = engine._save
+    monkeypatch.setattr(engine, "_save", lambda: saves.append(save()))
+    engine.wakeup.clear()
+    settle(engine)
+    assert len(engine.queue) == 3
+    assert len(saves) == 1
+    assert engine.wakeup.is_set()
+    saved = json.loads((engine.state_dir / "state.json").read_text(encoding="utf-8"))
+    assert {job["study_id"] for job in saved["jobs"]} == set(engine.queue)
+    saves.clear()
+    engine.enqueue(list(engine.queue), "validate")
+    assert len(saves) == 1
+    # Nothing pending: scheduling neither saves nor wakes the worker.
+    engine.wakeup.clear()
+    engine.schedule_changes()
+    assert len(saves) == 1
+    assert not engine.wakeup.is_set()
+
+
 def _connected(engine, folder, monkeypatch):
     connection_engine(engine, monkeypatch)
     return engine.connect

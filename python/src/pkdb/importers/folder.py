@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from pkdb.importers.expressions import (
     bind_columns,
     clean,
+    column_references,
     external_aliases,
     split_entry,
 )
@@ -478,6 +479,10 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                     ]
                 )
                 grouped = {}
+                # The location of each characteristic of a subject by its
+                # name: the row it comes from, as a subject spans many rows.
+                characteristica_rows: dict[object, list[SourceLocation]] = {}
+                mapped = column_references(template)
                 for row, location in rows:
                     if subset:
                         keep = True
@@ -500,6 +505,8 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                         if not keep:
                             continue
                     location = location.model_copy(deep=True)
+                    if source:
+                        location._mapped = mapped
                     definition = SourceLocation(
                         file="study.json", path=(section, entity, template_index)
                     )
@@ -523,10 +530,14 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                             )
                         if entity in {"groups", "individuals"}:
                             name = entry.get("name")
+                            located = [location] * len(
+                                entry.get("characteristica") or []
+                            )
                             if name in grouped and source:
                                 grouped[name][0].setdefault(
                                     "characteristica", []
                                 ).extend(entry.get("characteristica", []))
+                                characteristica_rows[name] += located
                             else:
                                 if name in grouped:
                                     fail(
@@ -535,6 +546,7 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                                         location,
                                     )
                                 grouped[name] = (entry, location)
+                                characteristica_rows[name] = located
                         elif entity == "data" and source:
                             name = entry.get("name")
                             if name in grouped:
@@ -562,7 +574,7 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                             grouped[len(grouped)] = (entry, location)
                 if subset and not grouped:
                     fail("empty_subset", f"Subset matches no records: {subset}")
-                for entry, location in grouped.values():
+                for name, (entry, location) in grouped.items():
                     key = f"{entity}:{len(records[destination])}"
                     entry = _notes(entry)
                     if entity in {"groups", "individuals"}:
@@ -574,13 +586,17 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                             _scientific(
                                 c,
                                 f"{key}:characteristic:{i}",
-                                location,
+                                row_location,
                                 group=entity == "groups",
                             )
-                            for i, c in enumerate(
+                            for i, (c, row_location) in enumerate(
                                 [
-                                    part
-                                    for original in (entry.get("characteristica") or [])
+                                    (part, row_location)
+                                    for original, row_location in zip(
+                                        entry.get("characteristica") or [],
+                                        characteristica_rows[name],
+                                        strict=True,
+                                    )
                                     for part in split_entry(original)
                                 ]
                             )
