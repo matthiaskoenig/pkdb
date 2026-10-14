@@ -1,1 +1,3 @@
 # Unreleased
+
+- On save of the local curation app is one setting for the workspace, the server and the PK-DB account, in a menu of the top bar beside File watching, instead of an action per study (#966). The menu lists Validate, Upload and Off with what a save then does; Upload asks to confirm first, and offline or without an account that may upload it is disabled and says why. The overview loses the On save column and the On save select of its batch toolbar, and the tab line of a study loses On save. `GET /local/state` has `mode` once instead of in every study row, and `POST /local/mode` takes only `mode`. The actions per study that pkdb 0.12 saved are not taken over: On save starts at Validate, and pkdb 0.12 keeps reading its own.

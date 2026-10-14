@@ -75,7 +75,7 @@ Unknown dates stay null. `publication_date` preserves year, month, or day precis
 
 In the [local curation app](local-curation.md), the Reference card of the Metadata section shows whether `reference.json` matches the PMID and DOI of `study.json`. **Correct title, authors, journal...** opens the Reference dialog. For a study with a PMID or DOI, correct the title, the authors, the organizations, the journal or the publication date. **Fetch the metadata again** retrieves the metadata anew, and **Use the fetched metadata instead of saved corrections** drops the saved corrections. For a study without a PMID or DOI, **Search** finds candidates for a citation, and **Use DOI** puts the DOI of a candidate into the form of `study.json`; save `study.json` to fetch its reference. You can also enter a manual reference with a title and at least one author. **Preview** shows the metadata and the changed fields, and **Save reference** writes only the previewed version. Editing a field invalidates the preview.
 
-The source files are checked again before saving. If another editor changed `study.json` or `reference.json`, preview again. Saving `reference.json` is a change of the study like any other, so the study's On save action follows. Offline mode restricts retrieval to cached responses and manual input.
+The source files are checked again before saving. If another editor changed `study.json` or `reference.json`, preview again. Saving `reference.json` is a change of the study like any other, so On save follows. Offline mode restricts retrieval to cached responses and manual input.
 
 ## Corrections, storage, and refresh
 
