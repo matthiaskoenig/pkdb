@@ -85,7 +85,12 @@ class BrowserSecurity(BaseHTTPMiddleware):
             or request.headers.get("authorization")
             or request.url.path.startswith("/api/v1/admin")
         ):
-            response.headers["Cache-Control"] = "no-store"
+            # The study pages (#963) revalidate by ETag per audience; everything else is no-store.
+            if (
+                canonical
+                or response.headers.get("Cache-Control") != "private, no-cache"
+            ):
+                response.headers["Cache-Control"] = "no-store"
             response.headers["Referrer-Policy"] = "no-referrer"
         return response
 

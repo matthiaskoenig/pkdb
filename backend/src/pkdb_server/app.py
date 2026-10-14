@@ -41,6 +41,9 @@ from pkdb_server.api import (
     profiles,
     reads,
 )
+from pkdb_server.api import (
+    study_views as study_view_routes,
+)
 from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
 from pkdb_server.api.identity import MOVED, study_redirect
@@ -66,6 +69,7 @@ from pkdb_server.services.mailer import SMTPMailer
 from pkdb_server.services.profiles import ProfileService
 from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
+from pkdb_server.services.study_views import StudyViews
 
 log = logging.getLogger(__name__)
 SCHEMA_REVISION = "p008studyviews"
@@ -136,6 +140,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(management.account_router)
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
+    app.state.study_views = StudyViews(session_factory, file_store)
     app.state.ingestion = ingestion
     app.state.queries = queries
     app.state.analysis = AnalysisService(session_factory)
@@ -580,6 +585,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.state.principal = principal
     app.include_router(data.router)
+    app.include_router(study_view_routes.router)
     app.include_router(curation.router)
     app.include_router(curators.router)
     app.include_router(accounts.email_router, prefix="/api/v1/me")

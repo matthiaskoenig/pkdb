@@ -44,6 +44,24 @@ Replace `STUDY_SID` with a study identifier returned by the study list, such as 
 
 A study substance search matches studies containing relevant data; it does not mean every measurement in each study concerns that substance. Combine substance and measurement-type filters on `/api/v2/measurements` to match both on the same observation. Study-level selections can include broader context than a measurement-level match. See [search scopes](web-interface.md#choose-the-scope-of-your-search) and the API reference before combining filters.
 
+## Study pages of the website
+
+The website shows a study with the same views as the local curation app (`pkdb curate`). The documents are built when a study is uploaded and stored with it. Studies uploaded before this feature, format 1 studies and unknown studies answer 404, as does a study the reader may not read.
+
+| Route | Answer |
+| --- | --- |
+| `GET /api/v2/study-rows` | `{"rows": [...], "profiles": {...}}`, one row per readable study ordered by `id`, with `id`, `name`, `substance`, `substances`, `summary`, `counts`, `issue` and `curator`, and the public profiles of the people named in the rows |
+| `GET /api/v2/studies/{substance}/{name}/view` | The study page: metadata, tables, sources, `people`, `issue`, `problems`, `counts`, `papers` and `audience` |
+| `GET /api/v2/studies/{substance}/{name}/view/tables/{file}` | One table of the study |
+| `GET /api/v2/studies/{substance}/{name}/view/sources/{source}` | One source (figure or table) with its `image_url` |
+| `GET /api/v2/studies/{substance}/{name}/view/files/{file}` | A stored image or PDF of the study, inline, for curators only |
+
+There are two audiences. The curator view goes to administrators, to reviewers for every public study and to curators assigned to the study, by the rule of the write permission; a read-only API key of such a user also gets it, because no key scope is needed. Everybody else who may read the study gets the public view. The public view leaves out the review, the GitHub issue, the curator ratings, the problems, the paper files and the source images (`null` or empty). The files route answers 404 for the public view and serves only the images and PDFs that the study stores.
+
+JSON answers carry an `ETag` of the body, which includes the audience, `Cache-Control: private, no-cache` and `Vary: Cookie, Authorization`. A request with a matching `If-None-Match` gets 304. Files support `Range` requests.
+
+`GET /api/v2/studies/{substance}/{name}`, `GET /api/v2/studies` and the v1 study reads leave out the review, the issue and the curator ratings (`null`) for readers who may not write the study.
+
 ## Study identifiers and redirects
 
 A study in study format 2 is identified by `<substance>/<name>`, the location of its folder, for example `caffeine/Harder1988`. Names repeat across substances, so the identifier takes two path segments in every study route: `/api/v2/studies/caffeine/Harder1988` (and `/publication` below it), `/api/v1/studies/caffeine/Harder1988/`, `/api/v1/pkdata/studies/caffeine/Harder1988/`, and the administrator's `/api/v1/admin/studies/caffeine/Harder1988/access`. Study folders cannot be named `publication` or `validate`, because they would collide with route segments, nor `outputs`, `timecourses` or `scatters`, because their table files would also be raw tables of the study. A study in study format 1 keeps its single identifier, such as `PKDB01110`, and the single-segment routes until it is migrated.
