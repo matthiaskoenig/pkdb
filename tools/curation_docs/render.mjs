@@ -30,7 +30,7 @@ const HEIGHT = 900;
 /** The height that shows the review item with all its target rows below the study header. */
 const REVIEW_HEIGHT = 1010;
 /** The height that shows the whole form of Metadata below the banner of its unsaved change. */
-const METADATA_HEIGHT = 1090;
+const METADATA_HEIGHT = 1073;
 /** The folder of the copy of the fixture workspace, whose name the header of every image shows. */
 const WORKSPACE = "demo_studies";
 /** The study of the fixture that the screenshots show, and its table of the digitized figure. */
