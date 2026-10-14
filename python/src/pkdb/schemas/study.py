@@ -44,7 +44,8 @@ class Notes(Record):
 
 class Curator(Record):
     user: Identifier
-    rating: Annotated[float, Field(ge=0, le=5)] = 0
+    # None where the reader may not see ratings: they are curation information (#963).
+    rating: Annotated[float, Field(ge=0, le=5)] | None = 0
 
 
 class Metadata(Notes):

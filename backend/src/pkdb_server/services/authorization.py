@@ -67,6 +67,32 @@ def authorize_creation(principal: Principal) -> None:
         )
 
 
+def _writes(principal: Principal, study: StudyAccess, authenticated: bool) -> bool:
+    assigned_curator = authenticated and principal.user_id in study.curator_ids
+    return authenticated and (
+        principal.role in {"curator", "reviewer"}
+        and (
+            assigned_curator
+            or principal.role == "reviewer"
+            and study.access == "public"
+        )
+    )
+
+
+def may_write(principal: Principal, study: StudyAccess) -> bool:
+    """Whether the principal may write the study by role and assignment.
+
+    The rule of `authorize(..., "write", ...)` without the key scope `studies:write`: a read
+    with a read-only key of an assigned curator still gets the curation view (#963).
+    """
+    if principal.role not in {"admin", "curator", "reviewer", "user", "anonymous"}:
+        return False
+    authenticated = principal.user_id is not None and principal.role != "anonymous"
+    if authenticated and principal.role == "admin":
+        return True
+    return _writes(principal, study, authenticated)
+
+
 def authorize(principal: Principal, action: Action, study: StudyAccess) -> None:
     if principal.role not in {"admin", "curator", "reviewer", "user", "anonymous"}:
         raise AuthorizationDenied("Unknown role")
@@ -90,14 +116,7 @@ def authorize(principal: Principal, action: Action, study: StudyAccess) -> None:
             assigned_curator or study.access == "public" and study.licence == "open"
         )
     elif action == "write":
-        allowed = authenticated and (
-            principal.role in {"curator", "reviewer"}
-            and (
-                assigned_curator
-                or principal.role == "reviewer"
-                and study.access == "public"
-            )
-        )
+        allowed = _writes(principal, study, authenticated)
     if not allowed:
         raise AuthorizationDenied(
             "Action is not permitted for this study",

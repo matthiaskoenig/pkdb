@@ -8,7 +8,9 @@ from sqlalchemy import select
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.views import VIEW_VERSION
 from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.users import User
 from pkdb_server.db.models.views import StudyView
+from pkdb_server.services.authentication import issue_token
 from tests.fixtures.study_folders import multipart, write_study
 
 URL = "/api/v2/studies/caffeine/Example"
@@ -113,3 +115,62 @@ def test_format_1_upload_keeps_no_texts_and_no_views(
     assert study.study_json is None
     assert study.reference_json is None
     assert stored == {}
+
+
+def headers_of(session_factory, username, role):
+    with session_factory.begin() as session:
+        user = User(username=username, role=role, active=True)
+        session.add(user)
+        session.flush()
+        return {"Authorization": f"Token {issue_token(user, session)}"}
+
+
+def publish(client, creator_headers, folder, session_factory):
+    """Upload the study and make it public, so that every account may read it."""
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 201, response.text
+    with session_factory.begin() as session:
+        session.scalar(
+            select(Study).where(Study.sid == "caffeine/Example")
+        ).access = "public"
+
+
+def test_the_json_read_has_no_curation_for_readers_who_may_not_write(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", issue=2158)
+    publish(client, creator_headers, folder, session_factory)
+    reader = headers_of(session_factory, "reader", "user")
+    for headers in ({}, reader):
+        metadata = client.get(URL, headers=headers).json()["metadata"]
+        assert metadata.get("review") is None
+        assert metadata.get("issue") is None
+        assert [c.get("rating") for c in metadata["curators"]] == [None]
+    metadata = client.get(URL, headers=creator_headers).json()["metadata"]
+    assert metadata["review"]["status"] == "in_review"
+    assert metadata["issue"] == 2158
+    assert [c["rating"] for c in metadata["curators"]] == [3]
+
+
+def test_the_study_lists_have_no_curation_for_readers_who_may_not_write(
+    client, creator_headers, tmp_path, session_factory
+):
+    folder = write_study(tmp_path / "sources", issue=2158)
+    publish(client, creator_headers, folder, session_factory)
+    [row] = client.get("/api/v2/studies").json()["items"]
+    assert (row["issue"], row["review_status"], row["open_review_items"]) == (
+        None,
+        None,
+        0,
+    )
+    assert [c["rating"] for c in row["curators"]] == [None]
+    [row] = client.get("/api/v2/studies", headers=creator_headers).json()["items"]
+    assert (row["issue"], row["review_status"]) == (2158, "in_review")
+    assert [c["rating"] for c in row["curators"]] == [3]
+    record = client.get("/api/v1/studies/caffeine%2FExample/").json()
+    assert (record["issue"], record["review_status"], record["open_review_items"]) == (
+        None,
+        None,
+        0,
+    )
+    assert [c["rating"] for c in record["curators"]] == [None]

@@ -205,7 +205,7 @@ class UserResponse(ResponseModel):
 
 
 class CuratorResponse(UserResponse):
-    rating: float
+    rating: float | None
 
 
 class GroupSetResponse(NotesResponse):

@@ -21,7 +21,11 @@ from pkdb_server.db.models.vocabulary import (
     VocabularyTerm,
 )
 from pkdb_server.db.serialize import reference_responses
-from pkdb_server.services.authorization import AuthorizationDenied, authorize
+from pkdb_server.services.authorization import (
+    AuthorizationDenied,
+    authorize,
+    may_write,
+)
 from pkdb_server.services.profiles import public_profile
 
 
@@ -182,8 +186,11 @@ def study_responses(session, rows, principal):
     ):
         grants[grant.study_id].append(grant)
     allowed_files = []
+    writers = set()
     for row in rows:
         if row.creator_id is None:
+            if principal.role == "admin" and principal.user_id is not None:
+                writers.add(row.id)
             continue
         access = StudyAccess(
             sid=row.sid,
@@ -194,6 +201,8 @@ def study_responses(session, rows, principal):
                 member.user_id for member in grants[row.id] if member.role == "curator"
             ),
         )
+        if may_write(principal, access):
+            writers.add(row.id)
         try:
             authorize(principal, "read_file", access)
             allowed_files.append(row.id)
@@ -218,6 +227,7 @@ def study_responses(session, rows, principal):
     for row in rows:
         reference = references.get(row.reference_id)
         member_rows = members[row.id]
+        writer = row.id in writers
         data = {
             "pk": str(row.id),
             "sid": row.sid,
@@ -229,14 +239,19 @@ def study_responses(session, rows, principal):
             "date": row.date.isoformat() if row.date else None,
             "pkdb_id": row.pkdb_id,
             "release_date": row.release_date.isoformat() if row.release_date else None,
-            "issue": row.issue,
-            "review_status": row.review_status,
+            "issue": row.issue if writer else None,
+            "review_status": row.review_status if writer else None,
             "open_review_items": sum(
                 item["state"] == "open" for item in (row.review or {}).get("items", [])
-            ),
+            )
+            if writer
+            else 0,
             "creator": users.get(row.creator_id),
             "curators": [
-                {**users[member.user_id], "rating": member.rating or 0}
+                {
+                    **users[member.user_id],
+                    "rating": (member.rating or 0) if writer else None,
+                }
                 for member in member_rows
                 if member.role == "curator"
             ],
