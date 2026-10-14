@@ -109,9 +109,9 @@ class SourcePoint:
     (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
     first (as reported or as the digitized `error_bar` gives it), then around a `gmean` `gsd`,
     `sd`, `se`, and around a `mean` or `median` `sd`, `se`; a negative `sd` or `se` or a `gsd`
-    below 1 gives no bar, and an `error_bar` without `error_type` is mirrored. None without
-    a bar. `x_text` and `y_text` are the cells
-    as printed.
+    below 1 is skipped and the next statistic is tried; a row with no valid statistic has no bar,
+    and an `error_bar` without `error_type` is mirrored. None without a bar. `x_text` and `y_text`
+    are the cells as printed.
     """
 
     series: str

@@ -640,13 +640,13 @@ export interface PlotOptions {
 }
 
 /**
- * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
- * as lines with error bars from the low to the high end of each row (`error_low`, `error_high`),
- * scatters as points. With `highlight`, the other series fade. `scales` sets the type of each axis; a log axis leaves out the points at 0 or
- * below, which `pointsOffScale` counts, and keeps their series in the legend. Drawn points of rows
- * with `rowProblems` (`plottedProblems`) get a ring in the color of their worst problem, and their
- * hover text lists the problems. A log axis keeps a point whose error bar reaches 0 or below;
- * Plotly cuts that bar at the axis.
+ * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses as
+ * lines with error bars from the low to the high end of each row (`error_low`, `error_high`),
+ * scatters as points. With `highlight`, the other series fade. `scales` sets the type of each axis;
+ * a log axis leaves out the points at 0 or below, which `pointsOffScale` counts, and keeps their
+ * series in the legend. Drawn points of rows with `rowProblems` (`plottedProblems`) get a ring in
+ * the color of their worst problem, and their hover text lists the problems. A log axis keeps a
+ * point whose error bar reaches 0 or below; Plotly cuts that bar at the axis.
  */
 export function plotTraces(
   view: SourceView,
