@@ -45,6 +45,23 @@ def test_terminal_half_life_and_zero_tmax_are_preserved(exponential_course):
     assert outputs["auc_end"].derived_from == "curve"
 
 
+@pytest.mark.parametrize("unit", ["µg/g", "ng/mg", "percent"])
+def test_tissue_concentrations_per_mass_do_not_generate_pk(exponential_course, unit):
+    for point in exponential_course.points:
+        point.unit = unit
+    assert derive_pk(exponential_course) == []
+
+
+@pytest.mark.parametrize("unit", ["mg/l", "nmol/ml", "IU/l"])
+def test_concentrations_per_volume_generate_pk(exponential_course, unit):
+    for point in exponential_course.points:
+        point.unit = unit
+    assert {record.measurement_type for record in derive_pk(exponential_course)} >= {
+        "cmax",
+        "auc_end",
+    }
+
+
 @pytest.mark.parametrize(
     ("counts", "expected"),
     [
