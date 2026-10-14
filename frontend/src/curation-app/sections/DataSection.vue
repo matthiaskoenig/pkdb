@@ -34,7 +34,7 @@ import {
   type RowFilter,
   type Selection,
 } from "../data";
-import { INFO_HEADINGS, infoStyle } from "../info";
+import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
 import { paperLine, type PaperPlace } from "../paper";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
@@ -439,7 +439,12 @@ const conflictPanel = computed(() => {
             <template #item="{ props: itemProps, item }">
               <VListItem v-bind="itemProps">
                 <template #prepend>
-                  <span class="data-option-dot" :style="infoStyle(item.info)" aria-hidden="true"></span>
+                  <span
+                    class="data-option-dot"
+                    :class="{ 'data-option-dot--outlined': infoOutlined(item.info) }"
+                    :style="infoStyle(item.info)"
+                    aria-hidden="true"
+                  ></span>
                 </template>
               </VListItem>
             </template>
@@ -683,6 +688,12 @@ const conflictPanel = computed(() => {
   margin-inline-end: 8px;
   border-radius: 50%;
   background: rgb(var(--info));
+}
+/* A raw extraction: an outline in its color, as its bar in the navigator. */
+.data-option-dot--outlined {
+  box-sizing: border-box;
+  border: 1px solid rgb(var(--info));
+  background: none;
 }
 /* The switch keeps its label apart from the button after it. */
 .data-switch {

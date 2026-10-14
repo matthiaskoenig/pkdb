@@ -1028,6 +1028,15 @@ describe("narrow windows", () => {
       "info-data",
       "info-raw",
     ]);
+    expect(dots.map((dot) => dot.classes().includes("data-option-dot--outlined"))).toEqual([
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+    ]);
     expect(dots.every((dot) => dot.attributes("aria-hidden") === "true")).toBe(true);
   });
 

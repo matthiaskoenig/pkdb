@@ -2,7 +2,7 @@
 import { computed, useId } from "vue";
 import type { StudyDetail, TableEntry } from "../api/types";
 import { fileCounts, PAPER, sourceCounts, tablesByInfo } from "../data";
-import { INFO_HEADINGS, infoStyle } from "../info";
+import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
 import { plural } from "../overview";
 import { paperLine } from "../paper";
 import { SOURCE_ICONS } from "../sources";
@@ -11,7 +11,7 @@ import NavigatorCounts from "./NavigatorCounts.vue";
 /**
  * The tables of a study first, under the headings of their class of information (Subjects,
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
- * the color of its class, its problems, its open review items and its rows; then the sources of
+ * the color of its class (an outline for a raw extraction, whose table has no tint), its problems, its open review items and its rows; then the sources of
  * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
  * the folder, the one that the paper shows by name with a count of the others, or a disabled entry
  * that names `<name>.pdf` when the folder has none.
@@ -90,7 +90,7 @@ const paper = computed(() => {
             :aria-current="entry.file === file ? 'true' : undefined"
             @click="emit('select-file', entry.file)"
           >
-            <span class="nav-bar" aria-hidden="true"></span>
+            <span class="nav-bar" :class="{ 'nav-bar--outlined': infoOutlined(group.info) }" aria-hidden="true"></span>
             <!-- The name without .tsv, cut at its end; screen readers read the file name in full. -->
             <span class="nav-name" :title="entry.file" aria-hidden="true">{{ entry.name }}</span>
             <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
@@ -234,6 +234,12 @@ const paper = computed(() => {
   margin-block: 4px;
   border-radius: 2px;
   background: rgb(var(--info));
+}
+/* A raw extraction has no tint: its bar is an outline of 1 px in its color, without a fill. */
+.nav-bar--outlined {
+  box-sizing: border-box;
+  border: 1px solid rgb(var(--info));
+  background: none;
 }
 .nav-thumb {
   width: 48px;
