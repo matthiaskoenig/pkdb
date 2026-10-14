@@ -185,15 +185,8 @@ watch(
     </section>
 
     <template v-else>
-      <!-- It goes once the study loads again: no close button. -->
-      <ActionFailureAlert
-        v-if="loadError"
-        :failure="loadError"
-        :study="identity"
-        :closable="false"
-        class="study-load-failure"
-      />
-      <template v-if="detail">
+      <!-- The study band: the header of the study and its tabs, set apart from the section below. -->
+      <div v-if="detail" class="study-band elevation-1">
         <StudyHeader :detail="detail" :stale="study.error !== null" />
         <SectionTabs
           :substance="substance"
@@ -203,6 +196,16 @@ watch(
           :unsaved="study.draft.unsaved"
           :facts="facts"
         />
+      </div>
+      <!-- It goes once the study loads again: no close button. It stands below the band, which hangs from the app bar. -->
+      <ActionFailureAlert
+        v-if="loadError"
+        :failure="loadError"
+        :study="identity"
+        :closable="false"
+        class="study-load-failure"
+      />
+      <template v-if="detail">
         <!-- The draft of study.json, which Metadata and the notes in Data edit: its row stays in
              these two sections, and the others show it once the draft has something to say. -->
         <UnsavedBanner :section="section" :kind="notesKind" />
@@ -240,10 +243,26 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 2px 12px 8px;
+  padding: 2px 16px 8px;
+}
+/* The study band: the header of the study and its tabs, from edge to edge of the window right
+   below the app bar (it takes back the padding of the page), on the primary color at 8 % of the
+   surface (the theme color study-band), with a rule and the lightest shadow of Vuetify
+   (elevation-1) below it, so that it reads as the header of the section, whose cards are white on
+   the grey page. */
+.study-band {
+  flex: none;
+  margin: -2px -16px 0;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background: rgb(var(--v-theme-study-band));
 }
 /* A stacking context of its own: nothing that a section raises, such as the sticky header of a
    table, rises above the banner of unsaved changes, which the section scrolls under. */
+/* The alert of a study that cannot be loaded again keeps a gap below the band. */
+.study-load-failure {
+  margin-top: 8px;
+}
 .study-section {
   display: flex;
   flex-direction: column;

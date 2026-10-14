@@ -4,6 +4,7 @@ import { VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { SaveMode, Snapshot } from "../api/types";
 import { uploadBlocker } from "../overview";
 import { useOverviewStore } from "../stores/overview";
+import { stateChip } from "../stateChip";
 import { failureOf, type ActionFailure } from "../study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 
@@ -40,7 +41,15 @@ const OPTIONS: readonly {
   },
 ];
 
-const props = withDefaults(defineProps<{ snapshot: Snapshot; location?: Anchor }>(), { location: "bottom end" });
+const props = withDefaults(
+  defineProps<{
+    snapshot: Snapshot;
+    location?: Anchor;
+    /** On the teal app bar: the chip of the button takes the colors of the bar. */
+    bar?: boolean;
+  }>(),
+  { location: "bottom end", bar: false },
+);
 /** The curator chose Upload, which the header confirms in a dialog first. */
 const emit = defineEmits<{ upload: [] }>();
 
@@ -59,6 +68,7 @@ watch(open, (value) => {
 const current = computed(() => OPTIONS.find((option) => option.value === props.snapshot.mode) ?? OPTIONS[0]!);
 /** The local server does not answer: the menu shows the last known state and offers no change. */
 const stale = computed(() => overview.error !== null);
+const buttonChip = computed(() => stateChip(stale.value ? undefined : current.value.tone, props.bar));
 /** Why Upload cannot be chosen, or null. */
 const blocker = computed(() => uploadBlocker(props.snapshot));
 
@@ -97,7 +107,7 @@ async function choose(value: SaveMode): Promise<void> {
         :aria-label="`On save: ${current.label}`"
       >
         <span class="header-control-label">On save</span>
-        <VChip :color="stale ? undefined : current.tone" variant="tonal" size="small" class="status-chip">
+        <VChip :color="buttonChip.color" :variant="buttonChip.variant" size="small" :class="buttonChip.class">
           {{ current.label }}
         </VChip>
       </VBtn>

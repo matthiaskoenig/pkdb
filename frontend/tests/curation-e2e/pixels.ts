@@ -1,4 +1,4 @@
-import type { Locator } from "@playwright/test";
+import { expect, type Locator } from "@playwright/test";
 
 /** What a screenshot of an element shows. */
 export interface PixelStats {
@@ -90,4 +90,10 @@ async function areaShot(locator: Locator, area: Area): Promise<Buffer> {
   const box = await locator.boundingBox();
   if (!box) throw new Error("The element of the area is not visible");
   return locator.page().screenshot({ clip: { ...area, x: box.x + area.x, y: box.y + area.y } });
+}
+
+/** A color near `expected` (each channel within 2) for the dominant color of a screenshot. */
+export function expectColor(actual: readonly number[], expected: readonly number[], what: string): void {
+  for (const [index, value] of actual.entries())
+    expect(Math.abs(value - expected[index]!), `${what}: ${actual.join(",")} is near ${expected.join(",")}`).toBeLessThanOrEqual(2);
 }

@@ -62,7 +62,7 @@ def local_server(tmp_path, monkeypatch):
     assets.mkdir()
     (assets / "index.html").write_text(
         '<meta name="pkdb-theme" content="__PKDB_THEME__">'
-        '<h1>Local curation</h1><style nonce="__PKDB_NONCE__"></style>'
+        '<h1>Curation</h1><style nonce="__PKDB_NONCE__"></style>'
     )
     (assets / "app.js").write_text("console.log('loaded')")
     monkeypatch.setattr(transport, "ASSETS", assets)
@@ -738,7 +738,7 @@ def test_curate_cli_explains_missing_workspace(tmp_path, capsys, monkeypatch):
     # `npm run build:curation` has run in this checkout.
     assets = tmp_path / "static"
     assets.mkdir()
-    (assets / "index.html").write_text("<h1>Local curation</h1>")
+    (assets / "index.html").write_text("<h1>Curation</h1>")
     monkeypatch.setattr(transport, "ASSETS", assets)
     missing = tmp_path / "missing"
     assert (

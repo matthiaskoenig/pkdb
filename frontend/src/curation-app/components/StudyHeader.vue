@@ -432,8 +432,12 @@ function added(table: string): void {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 10px;
+  gap: 4px 10px;
   min-height: 38px;
+  /* 6 px above the first line, so that it stands as far below the app bar when the header wraps
+     as when it is one line, and the focus ring of a chip (3 px at 3 px) is not hidden under the
+     bar. */
+  padding: 6px 0 4px;
 }
 .study-header-line > .v-chip {
   flex: none;

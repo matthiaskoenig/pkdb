@@ -132,6 +132,11 @@ h1 {
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
 }
+/* The app bar: teal (the theme color app-bar) with white text and icons (on-app-bar), without the
+   rule below it of the website's header (base.css): the study band or the page sets it apart. */
+.app-header.v-app-bar {
+  border-bottom: 0;
+}
 /* Aligned with the 16px padding of the page content. */
 .brand {
   display: flex;
@@ -144,7 +149,32 @@ h1 {
   white-space: nowrap;
 }
 a.brand {
-  color: rgb(var(--v-theme-on-surface));
+  color: rgb(var(--v-theme-on-app-bar));
+}
+/* The logo stands on a white rounded tile of 24 px in both themes. */
+.app-header .brand-logo {
+  padding: 3px;
+  border-radius: 6px;
+  background: rgb(var(--v-theme-on-app-bar));
+}
+/* Hovered, focused or open, a button of the bar darkens (the theme color app-bar-state, at twice
+   the opacities of a light surface in both themes, as Vuetify does on dark colors), and its label,
+   icon and chip stand above that layer: its white text keeps at least the contrast it has at
+   rest. Vuetify would lay a layer in the white of the text over the label, which lowers it. */
+.app-header {
+  --v-theme-overlay-multiplier: 2;
+}
+.app-header .v-btn__overlay {
+  background-color: rgb(var(--v-theme-app-bar-state));
+}
+.app-header :is(.v-btn__prepend, .v-btn__content, .v-btn__append) {
+  position: relative;
+}
+/* The focus ring is white on the bar, 2 px wide at 1 px from the control, so that the 36 px bar
+   does not cut it off; the ring in the primary color would not show on the bar. */
+.app-header :focus-visible {
+  outline: 2px solid rgb(var(--v-theme-on-app-bar));
+  outline-offset: 1px;
 }
 /* The status colors of the theme are too light for text on a light surface: tinted chips and
    alerts keep the color for their tint and icon and show their text in the surface color. */

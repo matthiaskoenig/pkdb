@@ -94,12 +94,13 @@ afterEach(() => {
 });
 
 describe("AppHeader", () => {
-  it("shows the logo, the app name and the workspace folder", async () => {
+  it("shows the logo, the app name Curation and the workspace folder", async () => {
     await loadSnapshot(snapshot());
     const wrapper = mountHeader();
     await flushPromises();
     expect(wrapper.get("img").attributes("alt")).toBe("PK-DB");
-    expect(wrapper.text()).toContain("Local curation");
+    // The link home is named by the logo and the app name: "PK-DB Curation".
+    expect(wrapper.get("a.brand").text()).toBe("Curation");
     // The header shows the folder name; the title, the accessible name and the menu the path.
     const workspace = button("Workspace: /work/pkdb_data");
     expect(workspace.text()).toBe("pkdb_data");
@@ -121,6 +122,67 @@ describe("AppHeader", () => {
     mountHeader();
     await flushPromises();
     expect(button(`Connection: ${label}`).text()).toContain(label);
+  });
+
+  it("colors the app bar teal, with the white text of the bar", async () => {
+    await loadSnapshot(snapshot());
+    const wrapper = mountHeader();
+    await flushPromises();
+    expect(wrapper.get(".app-header").classes()).toContain("bg-app-bar");
+  });
+
+  it("shows a warning or an error on the bar in the light amber or red of the bar, and in the colors of the surface in its menu", async () => {
+    await loadSnapshot(snapshot({ paused: true, connection: "unauthorized" }));
+    mountHeader();
+    await flushPromises();
+    const paused = button("File watching: Paused").get(".v-chip");
+    expect(paused.classes()).toEqual(expect.arrayContaining(["bar-chip", "v-chip--variant-flat", "bg-app-bar-warning"]));
+    expect(paused.classes()).not.toContain("status-chip");
+    expect(button("Connection: Rejected API key").get(".v-chip").classes()).toEqual(
+      expect.arrayContaining(["bar-chip", "v-chip--variant-flat", "bg-app-bar-error"]),
+    );
+    await click("File watching: Paused");
+    expect(page().get(".watching-panel .panel-heading .v-chip").classes()).toEqual(
+      expect.arrayContaining(["status-chip", "v-chip--variant-tonal", "text-warning"]),
+    );
+  });
+
+  it("shows every other state on the bar as a translucent white chip in the white text of the bar", async () => {
+    await loadSnapshot(snapshot({ connection: "connected" }));
+    mountHeader();
+    await flushPromises();
+    for (const name of ["File watching: Active", "Connection: Connected"]) {
+      const classes = button(name).get(".v-chip").classes();
+      expect(classes).toEqual(expect.arrayContaining(["bar-chip", "v-chip--variant-tonal"]));
+      expect(classes.filter((value) => value.startsWith("text-") || value.startsWith("bg-"))).toEqual([]);
+    }
+  });
+
+  it("keeps the colors of the surface for the states in the collapsed menu", async () => {
+    await loadSnapshot(snapshot({ paused: true, connection: "connected" }));
+    setViewport(800);
+    mountHeader();
+    await flushPromises();
+    await click("Header menu");
+    expect(button("File watching: Paused").get(".v-chip").classes()).toEqual(
+      expect.arrayContaining(["status-chip", "text-warning"]),
+    );
+    expect(button("Connection: Connected").get(".v-chip").classes()).toEqual(
+      expect.arrayContaining(["status-chip", "text-success"]),
+    );
+  });
+
+  it("shows the warning without a user and Set user in the colors of the bar, and of the surface in the collapsed menu", async () => {
+    await loadSnapshot(snapshot({ user: "", author: { user: null, reason: "Set a user" } }));
+    const wrapper = mountHeader();
+    await flushPromises();
+    expect(wrapper.get(".author-warning .v-icon").classes()).toContain("text-app-bar-warning");
+    expect(button("Set user").classes().filter((value) => value.startsWith("text-"))).toEqual([]);
+    setViewport(800);
+    await flushPromises();
+    await click("Header menu");
+    expect(page().get(".header-panel .author-warning .v-icon").classes()).toContain("text-warning");
+    expect(button("Set user").classes()).toContain("text-primary");
   });
 
   it("shows the connection details with the pkdb update hint", async () => {
@@ -384,15 +446,16 @@ describe("AppHeader", () => {
   });
 
   it("shows the last known state and offers no actions while the server is stopped", async () => {
-    await loadSnapshot(snapshot({ recent_workspaces: [{ path: "/work/other", exists: true }] }));
+    await loadSnapshot(snapshot({ connection: "unauthorized", recent_workspaces: [{ path: "/work/other", exists: true }] }));
     mountHeader();
     await flushPromises();
+    expect(button("Connection: Rejected API key").get(".v-chip").classes()).toContain("bg-app-bar-error");
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
     await useOverviewStore().refresh();
     await flushPromises();
-    // The chips lose their status color.
-    for (const name of ["File watching: Active", "Connection: Offline"])
-      expect(button(name).get(".v-chip").classes().some((value) => value.startsWith("text-"))).toBe(false);
+    // The chips lose their status color: on the bar they are translucent white.
+    for (const name of ["File watching: Active", "Connection: Rejected API key"])
+      expect(button(name).get(".v-chip").classes().some((value) => value.startsWith("text-") || value.startsWith("bg-"))).toBe(false);
     await click("File watching: Active");
     expect(page().get(".watching-panel").text()).toContain("This is the last known state.");
     expect(button("Pause automatic actions").attributes("disabled")).toBeDefined();
@@ -401,11 +464,11 @@ describe("AppHeader", () => {
     expect(button("Open other in /work").attributes("disabled")).toBeDefined();
     expect(button("Remove /work/other from recent workspaces").attributes("disabled")).toBeDefined();
     // The next good poll brings the actions back.
-    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(snapshot()));
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(snapshot({ connection: "unauthorized" })));
     await useOverviewStore().refresh();
     await flushPromises();
     expect(button("Choose workspace").attributes("disabled")).toBeUndefined();
-    expect(button("File watching: Active").get(".v-chip").classes()).toContain("text-success");
+    expect(button("Connection: Rejected API key").get(".v-chip").classes()).toContain("bg-app-bar-error");
   });
 
   it("switches the theme and keeps the choice", async () => {
@@ -478,9 +541,10 @@ describe("AppHeader", () => {
     await loadSnapshot(snapshot({ watcher_error: { time, detail: "OSError: [Errno 5] Input/output error", recovered: false } }));
     mountHeader();
     await flushPromises();
-    expect(button("File watching: Error").get(".v-chip").classes()).toContain("text-error");
+    expect(button("File watching: Error").get(".v-chip").classes()).toContain("bg-app-bar-error");
     await click("File watching: Error");
     const panel = page().get(".watching-panel");
+    expect(panel.get(".panel-heading .v-chip").classes()).toContain("text-error");
     expect(panel.get(".watcher-error-text").text()).toBe(`File watching failed at ${formatTime(time)}. It tries again every second.`);
     expect(panel.get(".watcher-error-detail").text()).toBe("OSError: [Errno 5] Input/output error");
     // At most 6 lines, as in the alert of an action; the rest scrolls, with the keyboard too.
@@ -552,7 +616,10 @@ describe("OnSaveMenu", () => {
     expect(onSave.find("i.fa-pause").exists()).toBe(true);
     expect(onSave.get(".header-control-label").text()).toBe("On save");
     expect(onSave.get(".v-chip").text()).toBe("Off");
-    expect(onSave.get(".v-chip").classes()).toContain("text-warning");
+    // On the teal bar, a warning chip takes the warning color of the bar, as the other badges do.
+    expect(onSave.get(".v-chip").classes()).toEqual(
+      expect.arrayContaining(["bar-chip", "v-chip--variant-flat", "bg-app-bar-warning"]),
+    );
     const names = page()
       .findAll(".header-controls button")
       .map((item) => item.attributes("aria-label"));

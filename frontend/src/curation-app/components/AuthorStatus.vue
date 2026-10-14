@@ -2,7 +2,17 @@
 import { VBtn, VIcon } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 
-defineProps<{ author: Snapshot["author"] }>();
+withDefaults(
+  defineProps<{
+    author: Snapshot["author"];
+    /**
+     * On the teal app bar: the warning takes the amber of the bar, and Set user the white of the
+     * bar, since the warning color and a primary button have too little contrast on teal.
+     */
+    bar?: boolean;
+  }>(),
+  { bar: false },
+);
 const emit = defineEmits<{ settings: [] }>();
 </script>
 
@@ -13,9 +23,9 @@ const emit = defineEmits<{ settings: [] }>();
     <span class="author-name" :title="author.user">{{ author.user }}</span>
   </div>
   <div v-else class="author author-warning">
-    <VIcon icon="fas fa-triangle-exclamation" color="warning" size="small" />
+    <VIcon icon="fas fa-triangle-exclamation" :color="bar ? 'app-bar-warning' : 'warning'" size="small" />
     <span class="author-reason" :title="author.reason ?? undefined">{{ author.reason }}</span>
-    <VBtn variant="tonal" color="primary" size="small" @click="emit('settings')">Set user</VBtn>
+    <VBtn variant="tonal" :color="bar ? undefined : 'primary'" size="small" @click="emit('settings')">Set user</VBtn>
   </div>
 </template>
 
