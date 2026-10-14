@@ -29,13 +29,13 @@ test("a table shows its class of information: its kind, its header row and its c
   expectColor((await pixelStats(cell)).dominant, over("#1d5fb8", 0.06));
 });
 
-test("the data of a figure are violet", async ({ app, page }) => {
+test("the data of a figure are grey", async ({ app, page }) => {
   await app.open("#/studies/caffeine/Demo2020/data?file=timecourses_Fig1.tsv");
   await expect(page.getByRole("region", { name: "Table timecourses_Fig1.tsv" }).locator(".pane-head-kind")).toHaveText("Timecourses");
   const rows = page.getByRole("region", { name: "Rows of timecourses_Fig1.tsv" });
   const header = rows.getByRole("columnheader", { name: "label", exact: true });
   await expect(header).toBeVisible();
-  expectColor((await pixelStats(header)).dominant, over("#6a3fb5", 0.16));
+  expectColor((await pixelStats(header)).dominant, over("#616161", 0.22));
 });
 
 test("the header row fades out to its own tint where more columns follow", async ({ app, page }) => {
@@ -46,7 +46,7 @@ test("the header row fades out to its own tint where more columns follow", async
   const { width } = (await rows.boundingBox())!;
   // Ten pixels at the end of the header row, below the top of the fade and above the line of the row.
   const end = await pixelStats(rows, { x: width - 12, y: 8, width: 10, height: 12 });
-  expectColor(end.dominant, over("#6a3fb5", 0.16));
+  expectColor(end.dominant, over("#616161", 0.22));
 });
 
 test("the selected row has a frame of 1 px, and a problem in it keeps its outline inside the frame", async ({ app, page }) => {

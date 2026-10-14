@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import type { TableResponse, ValidationIssue } from "../api/types";
+import type { ColumnClass, TableResponse, ValidationIssue } from "../api/types";
 import { useCellTip } from "../composables/useCellTip";
 import {
+  columnClass,
   columnName,
   HEADER_LINE,
   keptColumns,
@@ -42,8 +43,10 @@ const STEP = 10;
  * selectable grid are one Tab stop: the arrow keys move the focus to the row above or below,
  * Home and End to the first and the last row.
  *
- * A tinted grid shows the class of information of its table: its header row and its cells in the
- * color `--info` of its pane.
+ * A tinted grid shows what each column of its table names (`classes` of the table): the
+ * subjects, the interventions and the data in their colors, the header cells in a stronger tint
+ * than the cells, and `study` and `source` muted, in italics and without a tint. A raw table
+ * and a table without classes have no tint.
  */
 const props = withDefaults(
   defineProps<{
@@ -71,7 +74,7 @@ const props = withDefaults(
     selectable?: boolean;
     /** The lines of the rows to show; null shows every row. */
     visibleLines?: ReadonlySet<number> | null;
-    /** Whether the rows show the class of information of their table in the color `--info` of an ancestor. */
+    /** Whether the columns show the class of information that the table gives each of them. */
     tinted?: boolean;
   }>(),
   {
@@ -118,9 +121,14 @@ const headers = computed(() =>
   (props.columns ?? visibleColumns(props.table, props.hideEmpty, kept.value)).map((index) => ({
     index,
     name: columnName(props.table, index),
+    info: props.tinted ? columnClass(props.table, index) : null,
   })),
 );
-const span = computed(() => headers.value.length + (lines.value ? 1 : 0));
+
+/** The class of a cell of a column of the class `info`, which gives it its tint or its italics. */
+function infoClass(info: ColumnClass | null): string | undefined {
+  return info ? `grid-info--${info}` : undefined;
+}
 
 // The rows near the view
 
@@ -149,6 +157,24 @@ const fade = computed(() => ({
   "--grid-scrollbar-y": `${scrollbars.value.y}px`,
   "--grid-head-height": `${headerHeight.value}px`,
 }));
+
+/**
+ * The class of the column that the end of the view cuts while more columns follow, whose head
+ * tint the fade of the header row takes; null for an untinted grid or no cut column.
+ */
+const edge = ref<ColumnClass | null>(null);
+/** The class on the grid for the fade: only a tinted column has a head tint to fade to. */
+const edgeTint = computed(() => (edge.value === "meta" ? null : edge.value));
+
+/** The class of the last header cell that starts inside the view of `element`. */
+function edgeClass(element: HTMLElement): ColumnClass | null {
+  if (!props.tinted) return null;
+  const end = element.getBoundingClientRect().left + element.clientLeft + element.clientWidth;
+  let found: ColumnClass | null = null;
+  for (const cell of element.querySelectorAll<HTMLElement>("thead th[data-info]"))
+    if (cell.getBoundingClientRect().left < end - 1) found = cell.dataset.info as ColumnClass;
+  return found;
+}
 
 function windowEnd(first: number): number {
   return Math.min(shownRows.value.length, first + viewRows.value + 2 * OVERSCAN + STEP);
@@ -189,6 +215,7 @@ function update(): void {
       y: element.offsetWidth - element.clientWidth - parseFloat(borderLeftWidth) - parseFloat(borderRightWidth),
     };
   }
+  edge.value = more.value ? edgeClass(element) : null;
   if (!virtual.value) return;
   const next = windowStart(element.scrollTop);
   if (next === start.value) return;
@@ -280,7 +307,7 @@ function isFocus(line: number, name: string | null): boolean {
   return line === focusLine.value && (name === null ? focusColumn.value === null : name === focusColumn.value);
 }
 
-function cellClass(line: number, index: number, name: string): Record<string, boolean> {
+function cellClass(line: number, index: number, name: string, info: ColumnClass | null): Record<string, boolean> {
   const note = notes.value.get(`${line}:${index}`);
   return {
     "grid-cell--error": note?.severity === "error",
@@ -288,6 +315,7 @@ function cellClass(line: number, index: number, name: string): Record<string, bo
     "grid-cell--marked": marked.value.has(name),
     "grid-cell--focus": isFocus(line, name),
     "grid-raw": raw.value,
+    ...(info ? { [`grid-info--${info}`]: true } : {}),
   };
 }
 
@@ -306,13 +334,14 @@ function headerNote(index: number): Note | undefined {
 }
 
 /** The classes of a header cell; the index -1 is the header of the line column. */
-function headerClass(index: number, name: string | null): Record<string, boolean> {
+function headerClass(index: number, name: string | null, info: ColumnClass | null = null): Record<string, boolean> {
   const note = headerNote(index);
   return {
     "grid-cell--error": note?.severity === "error",
     "grid-cell--warning": note?.severity === "warning",
     "grid-cell--marked": name !== null && marked.value.has(name),
     "grid-letter": raw.value && index >= 0,
+    ...(info ? { [`grid-info--${info}`]: true } : {}),
   };
 }
 
@@ -516,7 +545,10 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 <template>
   <div
     class="table-grid"
-    :class="{ 'table-grid--more': more, 'table-grid--selectable': selectable, 'table-grid--tinted': tinted }"
+    :class="[
+      { 'table-grid--more': more, 'table-grid--selectable': selectable, 'table-grid--tinted': tinted },
+      infoClass(edgeTint),
+    ]"
     :style="fade"
   >
     <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
@@ -553,7 +585,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               v-for="column in headers"
               :key="column.index"
               scope="col"
-              :class="headerClass(column.index, column.name)"
+              :class="headerClass(column.index, column.name, column.info)"
+              :data-info="column.info ?? undefined"
               :data-tip="headerTip(column.index)"
               :aria-describedby="described(headerNote(column.index)?.id)"
             >
@@ -563,8 +596,9 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
           </tr>
         </thead>
         <tbody>
-          <tr v-if="before" aria-hidden="true" class="grid-spacer">
-            <td :colspan="span" :style="{ height: `${before}px` }"></td>
+          <tr v-if="before" aria-hidden="true" class="grid-spacer" :style="{ height: `${before}px` }">
+            <th v-if="lines" class="rows-line"></th>
+            <td v-for="column in headers" :key="column.index" :class="infoClass(column.info)"></td>
           </tr>
           <tr
             v-for="{ row, index } in rendered"
@@ -603,7 +637,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
             <td
               v-for="column in headers"
               :key="column.index"
-              :class="cellClass(row.line, column.index, column.name)"
+              :class="cellClass(row.line, column.index, column.name, column.info)"
               :tabindex="isFocus(row.line, column.name) ? -1 : undefined"
               :data-tip="tipOf(row.line, column.index)"
               :aria-describedby="described(notes.get(`${row.line}:${column.index}`)?.id)"
@@ -611,8 +645,9 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
               {{ row.cells[column.index] ?? "" }}
             </td>
           </tr>
-          <tr v-if="after" aria-hidden="true" class="grid-spacer">
-            <td :colspan="span" :style="{ height: `${after}px` }"></td>
+          <tr v-if="after" aria-hidden="true" class="grid-spacer" :style="{ height: `${after}px` }">
+            <th v-if="lines" class="rows-line"></th>
+            <td v-for="column in headers" :key="column.index" :class="infoClass(column.info)"></td>
           </tr>
         </tbody>
       </table>
@@ -654,29 +689,48 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   background: linear-gradient(to left, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0));
   pointer-events: none;
 }
-/* A tinted grid, such as the rows of the Data section, shows the class of information of its
-   table in the color `--info` (the RGB of a theme color): the header row over the surface at
-   `--v-info-head-tint`, the cells at `--v-info-cell-tint`, opaque on the line column, which
-   covers the rows that scroll below it, and a hovered row at the tint of the header. The amber
-   rows of open review items and the selected row keep their own tints. Where more columns
-   follow, the header row fades out to its own tint and the rows to the surface. */
-.table-grid--tinted {
-  --grid-head: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+/* A tinted grid, such as the rows of the Data section, shows what each column names in the color
+   `--info` of its class (the RGB of a theme color, info.ts): the header cell over the surface at
+   `--info-head-tint`, the cells at `--info-cell-tint`, a hovered row at the tint of the header.
+   The data have their own, stronger tints, so that their grey differs from the grey page.
+   `study` and `source` are muted, in italics and without a tint, and the line column has no tint.
+   The cell tint has the specificity of one class: the amber rows of open review items and the
+   selected row keep their own tints. Where more columns follow, the header row fades out to the
+   head tint of the column at the end of the view (its class on the grid, `edge`), and the rows to
+   the surface. */
+.grid-info--subjects {
+  --info: var(--v-theme-info-subjects);
+  --info-head-tint: var(--v-info-head-tint);
+  --info-cell-tint: var(--v-info-cell-tint);
 }
-.table-grid--tinted .rows-table thead th {
-  background-color: var(--grid-head);
+.grid-info--interventions {
+  --info: var(--v-theme-info-interventions);
+  --info-head-tint: var(--v-info-head-tint);
+  --info-cell-tint: var(--v-info-cell-tint);
 }
-.table-grid--tinted.table-grid--more::after {
+.grid-info--data {
+  --info: var(--v-theme-info-data);
+  --info-head-tint: var(--v-info-data-head-tint);
+  --info-cell-tint: var(--v-info-data-cell-tint);
+}
+.table-grid--tinted .rows-table thead th:is(.grid-info--subjects, .grid-info--interventions, .grid-info--data) {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--info-head-tint), rgb(var(--v-theme-surface)));
+}
+.table-grid--tinted :where(td.grid-info--subjects, td.grid-info--interventions, td.grid-info--data) {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--info-cell-tint), transparent);
+}
+.table-grid--tinted .rows-table :is(th, td).grid-info--meta {
+  font-style: italic;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.table-grid--more:is(.grid-info--subjects, .grid-info--interventions, .grid-info--data) {
+  --grid-head: color-mix(in srgb, rgb(var(--info)) var(--info-head-tint), rgb(var(--v-theme-surface)));
+}
+.table-grid--more:is(.grid-info--subjects, .grid-info--interventions, .grid-info--data)::after {
   background:
     linear-gradient(to left, var(--grid-head), transparent) top / 100% var(--grid-head-height) no-repeat,
     linear-gradient(to left, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0)) bottom / 100%
       calc(100% - var(--grid-head-height)) no-repeat;
-}
-.table-grid--tinted td {
-  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-cell-tint), transparent);
-}
-.table-grid--tinted tbody .rows-line {
-  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-cell-tint), rgb(var(--v-theme-surface)));
 }
 /* Rows that open review items target: a tint that lets the shadows of the sides show through,
    and an opaque tint on the line column, which covers the rows that scroll below it. The line
@@ -714,16 +768,12 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .table-grid--selectable .rows-scroll .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
   background-color: color-mix(in srgb, rgb(var(--v-theme-on-surface)) 5%, rgb(var(--v-theme-surface)));
 }
-.table-grid--tinted.table-grid--selectable .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > td {
-  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), transparent);
-}
-.table-grid--tinted.table-grid--selectable
-  .rows-scroll
+.table-grid--selectable
   .rows-table
   tbody
   tr:not(.grid-row--target, .grid-row--focus):hover
-  > .rows-line {
-  background-color: color-mix(in srgb, rgb(var(--info)) var(--v-info-head-tint), rgb(var(--v-theme-surface)));
+  > td:is(.grid-info--subjects, .grid-info--interventions, .grid-info--data) {
+  background-color: color-mix(in srgb, rgb(var(--info)) var(--info-head-tint), transparent);
 }
 /* Its line is a button that looks like the line. */
 .grid-line-button {
@@ -748,7 +798,7 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
   --grid-outline: inset 0 0 0 2px var(--grid-amber);
 }
 /* The selected row: a frame of 1 px in the primary color around its tint, which keeps it apart
-   on the green and violet tints of the tables. Every cell draws its top and bottom, the first cell
+   on the tints of the columns. Every cell draws its top and bottom, the first cell
    the start and the last cell the end; a cell that is both draws both. */
 .rows-table .grid-row--focus > * {
   --grid-frame:
@@ -786,9 +836,9 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .grid-raw {
   white-space: pre;
 }
-/* The rows that do not render keep their height. */
-.rows-table .grid-spacer > td {
+/* The rows that do not render keep their height; their cells keep the tint of their column. */
+.rows-table .grid-spacer > * {
   padding: 0;
-  border: 0;
+  border-bottom: 0;
 }
 </style>
