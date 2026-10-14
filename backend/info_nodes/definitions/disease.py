@@ -136,9 +136,8 @@ DISEASE_NODES: list[InfoNode] = [
         description="A disease is a disposition (i) to undergo pathological processes "
         "that (ii) exists in an organism because of one or more disorders in that organism. "
         "Disease of individual or subjects with disease encoded by 'choice' "
-        "field. Disease duration of individual "
-        "or subjects (duration should be provided via the min/mean numerical "
-        "fields in combination with unit). To encode the family history for "
+        "field. A choice row holds no numbers: encode the duration of the "
+        "disease with 'disease duration'. To encode the family history for "
         "disease use 'family history disease'.",
         parents=["health status"],
         dtype=DType.NUMERIC_CATEGORICAL,
@@ -148,6 +147,16 @@ DISEASE_NODES: list[InfoNode] = [
             (BQB.IS_VERSION_OF, "NCIT:C2991"),
             (BQB.IS, "efo/0000408"),
         ],
+    ),
+    MeasurementType(
+        sid="disease-duration",
+        name="disease duration",
+        description="Time since the diagnosis or the onset of the disease of the subjects, "
+        "such as the duration of diabetes mellitus. The disease is encoded by a 'disease' "
+        "characteristic of the same subjects.",
+        parents=["health status"],
+        dtype=DType.NUMERIC,
+        units=["year"],
     ),
     Choice(
         sid="genetic-disease",

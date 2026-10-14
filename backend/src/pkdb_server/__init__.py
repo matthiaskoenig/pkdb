@@ -1,3 +1,3 @@
 """PK-DB: validated pharmacokinetic data."""
 
-__version__ = "0.12.7"
+__version__ = "0.12.8"
