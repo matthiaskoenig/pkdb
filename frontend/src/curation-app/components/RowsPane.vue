@@ -2,6 +2,7 @@
 import { computed, useId } from "vue";
 import { VBtn, VChip, VProgressLinear } from "vuetify/components";
 import type { StudyDetail, TableResponse } from "../../study-views/types";
+import { useStudyViews } from "../../study-views/context";
 import {
   ALL_ROWS,
   filterChoices,
@@ -19,6 +20,7 @@ import {
   keptColumns,
   targetLines,
   visibleColumns,
+  type IssueCells,
 } from "../../study-views/grid";
 import { infoColor, infoOutlined } from "../../study-views/info";
 import { plural } from "../../study-views/overview";
@@ -88,11 +90,19 @@ function choose(event: Event): void {
   emit("update:filter", filterOf((event.target as HTMLSelectElement).value));
 }
 
+const capabilities = useStudyViews().capabilities;
+
 const reviewItems = computed(() => props.rowsDetail?.review.value?.items ?? []);
+/** The rows that open review items target, marked only for a reader of the curation. */
 const highlight = computed(() =>
-  props.table ? targetLines(props.table.file, reviewItems.value, props.rowsDetail?.targets ?? {}) : new Set<number>(),
+  props.table && capabilities.value.curation
+    ? targetLines(props.table.file, reviewItems.value, props.rowsDetail?.targets ?? {})
+    : new Set<number>(),
 );
-const issues = computed(() => issueCells(props.detail.problems, props.file));
+/** The cells with problems, outlined only for a reader of the curation. */
+const issues = computed<IssueCells>(() =>
+  capabilities.value.curation ? issueCells(props.detail.problems, props.file) : new Map(),
+);
 
 const without = computed(() =>
   props.table
@@ -113,7 +123,7 @@ const hiddenText = computed(() =>
 /** The open review items and the outlined problems, in sentences. */
 const notes = computed(() => {
   const shown = props.table;
-  if (!shown) return [];
+  if (!shown || !capabilities.value.curation) return [];
   const parts: string[] = [];
   if (highlight.value.size) parts.push(`Open review items target ${plural(highlight.value.size, "row")}.`);
   const { whole, unmatched } = without.value;

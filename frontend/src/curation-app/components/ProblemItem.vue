@@ -50,6 +50,7 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ acknowledge: []; validate: []; "open-tables": [] }>();
 const views = useStudyViews();
+const capabilities = views.capabilities;
 
 const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
@@ -108,7 +109,12 @@ const describedBy = computed(() =>
       }}</span>
     </p>
     <div
-      v-if="showable || opensTables || notesRoute || (acknowledgeable && (!pending || !automatic))"
+      v-if="
+        showable ||
+        (capabilities.edit && opensTables) ||
+        notesRoute ||
+        (capabilities.edit && acknowledgeable && (!pending || !automatic))
+      "
       class="problem-actions"
     >
       <VBtn
@@ -122,7 +128,7 @@ const describedBy = computed(() =>
         Show in table
       </VBtn>
       <VBtn
-        v-if="opensTables"
+        v-if="capabilities.edit && opensTables"
         variant="text"
         color="primary"
         prepend-icon="fas fa-table"
@@ -145,7 +151,7 @@ const describedBy = computed(() =>
         Show notes
       </VBtn>
       <VBtn
-        v-if="acknowledgeable && !pending"
+        v-if="capabilities.edit && acknowledgeable && !pending"
         variant="text"
         color="primary"
         prepend-icon="fas fa-check"
@@ -157,7 +163,7 @@ const describedBy = computed(() =>
         Acknowledge
       </VBtn>
       <VBtn
-        v-else-if="acknowledgeable && !automatic"
+        v-else-if="capabilities.edit && acknowledgeable && !automatic"
         variant="text"
         color="primary"
         prepend-icon="fas fa-circle-check"

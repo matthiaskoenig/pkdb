@@ -37,7 +37,7 @@ import {
 import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
 import type { NameLink } from "../../study-views/links";
 import { paperLine, type PaperPlace } from "../../study-views/paper";
-import { beyondLimits, tableFiles } from "../../study-views/study";
+import { beyondLimits, tableFiles, withoutFiles } from "../../study-views/study";
 import { noteKinds } from "../../study-views/tableKinds";
 
 /**
@@ -88,7 +88,11 @@ defineSlots<{
   dialogs?: () => unknown;
 }>();
 
-const detail = views.data.detail;
+/** The study as the reader may see it: without its files when the page does not show them. */
+const detail = computed(() => {
+  const loaded = views.data.detail.value;
+  return loaded && !views.capabilities.value.files ? withoutFiles(loaded) : loaded;
+});
 const identity = computed(() => detail.value?.id ?? "");
 /** Beyond the upload limits the local server lists no sources and tables, which the study may well have. */
 const limited = computed(() => (detail.value ? beyondLimits(detail.value) : false));
@@ -235,14 +239,19 @@ function keepPlace(place: PaperPlace | null): void {
   paperPlace.value = place;
 }
 
-/** The items of the Source select below 1100 px: Paper first, disabled without a PDF, then the sources. */
+/**
+ * The items of the Source select below 1100 px: Paper first, disabled without a PDF, then the
+ * sources; no Paper for a reader without the files.
+ */
 const sourceItems = computed(() => {
   const value = detail.value;
   if (!value) return [];
+  const sources = value.sources.map((entry) => ({ title: entry.source, value: entry.source }));
+  if (!views.capabilities.value.files) return sources;
   const paper = value.papers.length
     ? { title: "Paper", value: PAPER }
     : { title: paperLine(value), value: PAPER, props: { disabled: true } };
-  return [paper, ...value.sources.map((entry) => ({ title: entry.source, value: entry.source }))];
+  return [paper, ...sources];
 });
 /** Whether the Source select has a source to choose: the paper or a source of the study. */
 const sourceChoices = computed(() => Boolean(detail.value && (detail.value.papers.length || detail.value.sources.length)));
@@ -460,14 +469,17 @@ defineExpose({ file });
           inset
           class="data-switch"
         />
-        <slot name="toolbar" :file="file" />
+        <slot v-if="views.capabilities.value.edit" name="toolbar" :file="file" />
       </div>
 
-      <slot name="status" :rows="rowsPane !== null" />
+      <slot v-if="views.capabilities.value.edit" name="status" :rows="rowsPane !== null" />
 
       <p v-if="limited" class="data-empty">
-        This study is beyond the upload limits, so the app cannot show its sources and tables. See
-        <RouterLink :to="views.routes.section(identity, 'problems')">Problems</RouterLink>.
+        This study is beyond the upload limits, so the app cannot show its sources and tables.<template
+          v-if="views.capabilities.value.curation"
+        >
+          See <RouterLink :to="views.routes.section(identity, 'problems')">Problems</RouterLink>.</template
+        >
       </p>
       <div v-else class="data-panes">
         <DataNavigator
@@ -519,10 +531,18 @@ defineExpose({ file });
               @retry="reloadRows"
               @update:filter="setFilter"
             >
-              <slot name="rows" :kind="notesKind" :linked="linkedNotes === notesKind" :unlink="unlink" />
+              <slot
+                v-if="views.capabilities.value.edit"
+                name="rows"
+                :kind="notesKind"
+                :linked="linkedNotes === notesKind"
+                :unlink="unlink"
+              />
             </RowsPane>
             <p v-else class="data-empty data-pane-note">
-              The study has no tables yet. Add table adds a sheet to the workbook.
+              The study has no tables yet.<template v-if="views.capabilities.value.edit">
+                Add table adds a sheet to the workbook.</template
+              >
             </p>
           </template>
         </SplitPane>
@@ -557,15 +577,23 @@ defineExpose({ file });
             @retry="reloadRows"
             @update:filter="setFilter"
           >
-            <slot name="rows" :kind="notesKind" :linked="linkedNotes === notesKind" :unlink="unlink" />
+            <slot
+              v-if="views.capabilities.value.edit"
+              name="rows"
+              :kind="notesKind"
+              :linked="linkedNotes === notesKind"
+              :unlink="unlink"
+            />
           </RowsPane>
           <p v-else class="data-empty data-pane-note">
-            The study has no tables yet. Add table adds a sheet to the workbook.
+            The study has no tables yet.<template v-if="views.capabilities.value.edit">
+              Add table adds a sheet to the workbook.</template
+            >
           </p>
         </div>
       </div>
 
-      <slot name="dialogs" />
+      <slot v-if="views.capabilities.value.edit" name="dialogs" />
     </template>
   </div>
 </template>

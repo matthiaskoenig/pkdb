@@ -35,6 +35,7 @@ const curator = defineModel<string>("curator", { required: true });
 const chip = defineModel<StatusChip>("chip", { required: true });
 
 const views = useStudyViews();
+const capabilities = views.capabilities;
 const rows = views.data.rows;
 const profiles = views.data.profiles;
 
@@ -101,6 +102,7 @@ defineExpose({ flushSearch });
       <VSelect v-model="substance" :items="substanceItems" label="Substance" hide-details class="overview-substance" />
       <VSelect v-model="curator" :items="curatorItems" label="Curator" hide-details class="overview-curator" />
       <VChipGroup
+        v-if="capabilities.curation"
         v-model="chip"
         mandatory
         column

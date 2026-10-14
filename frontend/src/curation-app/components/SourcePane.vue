@@ -8,7 +8,7 @@ import { rawTable } from "../../study-views/grid";
 import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../../study-views/overlay";
 import { groupByFile, groupCounts, locationKey } from "../../study-views/problems";
 import { SOURCE_ICONS, sourceProblems } from "../../study-views/sources";
-import { tableFiles, type ActionFailure } from "../../study-views/study";
+import { tableFiles, viewWithoutFiles, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import MoreBelow from "./MoreBelow.vue";
 import PlotScales from "./PlotScales.vue";
@@ -23,6 +23,8 @@ import TableGrid from "./TableGrid.vue";
  * digitization. Above a plot of mapped rows, the curator switches each axis between linear and log.
  * Missing files are named in one line each; the problems of the files of the source
  * follow in a disclosure. A click on a mapped point emits its row, which the section selects.
+ * A reader without the files of the study sees no image and no raw extraction (a figure is
+ * plotted), a reader without the curation no problems, and only `edit` names what to add.
  */
 const props = defineProps<{
   summary: SourceSummary;
@@ -37,6 +39,7 @@ const props = defineProps<{
 const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>]; retry: [] }>();
 
 const views = useStudyViews();
+const capabilities = views.capabilities;
 const id = useId();
 
 type Zoom = "fit" | "full";
@@ -61,40 +64,50 @@ function setZoom(value: Zoom): void {
   }
 }
 
+/**
+ * The view of the source as the reader may see it: without its image and raw extraction when the
+ * page does not show the files, so that a digitized figure is plotted rather than drawn on an image.
+ */
+const sourceView = computed(() =>
+  props.view && !capabilities.value.files ? viewWithoutFiles(props.view) : props.view,
+);
 const detail = views.data.detail;
 /** The warnings acknowledged on this page that no later validation checked yet. */
 const acknowledged = views.data.acknowledgedKeys;
 const identity = computed(() => detail.value?.id ?? "");
 /** The scales of the plots of the source: the curator's choice for the figure, else the digitization's, else linear. */
-const { scales, choose } = views.data.plotScales(identity, () => props.view);
+const { scales, choose } = views.data.plotScales(identity, () => sourceView.value);
 /** The points of the plot that its log axes leave out. */
-const offScale = computed(() => (props.view ? pointsOffScale(props.view, scales.value) : 0));
+const offScale = computed(() => (sourceView.value ? pointsOffScale(sourceView.value, scales.value) : 0));
 const kind = computed(() => props.summary.kind);
 /** The raw extraction of a paper table with the lines of its rows. */
 const raw = computed(() =>
-  props.view?.raw_grid && props.summary.raw ? rawTable(props.summary.raw, props.view.raw_grid) : null,
+  sourceView.value?.raw_grid && props.summary.raw ? rawTable(props.summary.raw, sourceView.value.raw_grid) : null,
 );
-const calibrated = computed(() => (props.view ? drawsOnImage(props.view) : false));
-const plotted = computed(() => (props.view ? plottedSeries(props.view) : []));
+/** Whether the overlay draws on the image; never for a reader without the files, whose view has no image. */
+const calibrated = computed(() => (sourceView.value ? drawsOnImage(sourceView.value) : false));
+const plotted = computed(() => (sourceView.value ? plottedSeries(sourceView.value) : []));
 /** Whether the image block shows: the overlay of a calibrated figure replaces it, a text has none. */
-const showsImage = computed(() => props.view !== null && !calibrated.value && kind.value !== "text");
+const showsImage = computed(() => sourceView.value !== null && !calibrated.value && kind.value !== "text");
 /** The width of the image of a digitized figure, which the plot beside the overlay does not exceed. */
 const figureWidth = computed(() =>
-  props.view?.image_size ? { "--figure-width": `${props.view.image_size[0]}px` } : {},
+  sourceView.value?.image_size ? { "--figure-width": `${sourceView.value.image_size[0]}px` } : {},
 );
 /** Why the series without a dataset are plotted on their own. */
 const unmatchedNote = computed(() => {
-  const one = props.view?.unmatched.length === 1;
-  return `${props.view?.digitization} has no dataset for ${one ? "this series" : "these series"}, so ${one ? "its" : "their"} mapped rows are plotted here.`;
+  const one = sourceView.value?.unmatched.length === 1;
+  return `${sourceView.value?.digitization} has no dataset for ${one ? "this series" : "these series"}, so ${one ? "its" : "their"} mapped rows are plotted here.`;
 });
 /** The series without a dataset that the heading lists, at most the limit of the legend. */
-const unmatched = computed(() => capped(props.view?.unmatched ?? []));
+const unmatched = computed(() => capped(sourceView.value?.unmatched ?? []));
 const alt = computed(() => `${props.summary.source} of ${identity.value}`);
 
 const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
 /** The problems of the files of the source, in the order of the Problems section; the plot rings their rows. */
 const sourceIssues = computed(() =>
-  props.view && detail.value ? sourceProblems(detail.value.problems, props.summary, props.view) : [],
+  sourceView.value && detail.value && capabilities.value.curation
+    ? sourceProblems(detail.value.problems, props.summary, sourceView.value)
+    : [],
 );
 /** The problems of the files of the source by file. */
 const problemGroups = computed(() => groupByFile(sourceIssues.value));
@@ -117,7 +130,12 @@ const { more, scrollbar } = useMoreBelow(body, content);
       <!-- The source and its kind keep their room in a narrow pane; the image file name shortens first. -->
       <span class="pane-head-part pane-head-part--fixed">{{ summary.kind }}</span>
       <span v-if="summary.image" class="pane-head-part">{{ summary.image }}</span>
-      <div v-if="showsImage && view?.image_url" class="zoom switch-group" role="group" aria-label="Image size">
+      <div
+        v-if="capabilities.files && showsImage && sourceView?.image_url"
+        class="zoom switch-group"
+        role="group"
+        aria-label="Image size"
+      >
         <button type="button" :aria-pressed="zoom === 'fit'" @click="setZoom('fit')">Fit</button>
         <button type="button" :aria-pressed="zoom === 'full'" @click="setZoom('full')">100 %</button>
       </div>
@@ -136,14 +154,19 @@ const { more, scrollbar } = useMoreBelow(body, content);
             </template>
           </ActionFailureAlert>
 
-          <template v-else-if="view">
+          <template v-else-if="sourceView">
             <!-- The overlay draws the raw extraction of a figure on its image. -->
             <section v-if="calibrated" class="pane-block" :aria-labelledby="`${id}-overlay`">
               <h4 :id="`${id}-overlay`" class="pane-heading">Digitization on the image</h4>
-              <SourceOverlay :view="view" mode="overlay" :selected="selected" @select-row="emit('select-row', $event)" />
+              <SourceOverlay
+                :view="sourceView"
+                mode="overlay"
+                :selected="selected"
+                @select-row="emit('select-row', $event)"
+              />
             </section>
             <section
-              v-if="calibrated && view.unmatched.length"
+              v-if="calibrated && sourceView.unmatched.length"
               class="pane-block source-unmatched"
               :aria-labelledby="`${id}-unmatched`"
             >
@@ -157,7 +180,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
               <template v-if="plotted.length">
                 <PlotScales :scales="scales" :hidden="offScale" @choose="choose" />
                 <SourceOverlay
-                  :view="view"
+                  :view="sourceView"
                   mode="plot"
                   :scales="scales"
                   :selected="selected"
@@ -168,45 +191,54 @@ const { more, scrollbar } = useMoreBelow(body, content);
             </section>
 
             <template v-if="showsImage">
-              <section class="pane-block" :aria-labelledby="`${id}-image`">
+              <section v-if="capabilities.files" class="pane-block" :aria-labelledby="`${id}-image`">
                 <h4 :id="`${id}-image`" class="pane-heading">Image</h4>
-                <div v-if="view.image_url" class="image-scroll">
+                <div v-if="sourceView.image_url" class="image-scroll">
                   <img
-                    :src="view.image_url"
+                    :src="sourceView.image_url"
                     :alt="alt"
-                    :width="view.image_size?.[0]"
-                    :height="view.image_size?.[1]"
+                    :width="sourceView.image_size?.[0]"
+                    :height="sourceView.image_size?.[1]"
                     class="source-image"
                     :class="{ 'source-image--figure': kind === 'figure', 'source-image--full': zoom === 'full' }"
                   />
                 </div>
                 <p v-else class="pane-missing">
                   <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-                  <span class="pane-missing-text"
+                  <span v-if="capabilities.edit" class="pane-missing-text"
                     ><b>No image:</b> add {{ summary.missing_image }}.
                     <span class="pane-missing-hint">Save it from the paper as a PNG image.</span></span
                   >
+                  <span v-else class="pane-missing-text">No image.</span>
                 </p>
               </section>
 
-              <section v-if="kind === 'table'" class="pane-block" :aria-labelledby="`${id}-raw`">
+              <section
+                v-if="kind === 'table' && capabilities.files"
+                class="pane-block"
+                :aria-labelledby="`${id}-raw`"
+              >
                 <h4 :id="`${id}-raw`" class="pane-heading">Raw extraction</h4>
                 <TableGrid v-if="raw" :table="raw" :label="`Raw extraction ${raw.file}`" class="source-raw" />
                 <p v-else class="pane-missing">
                   <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
-                  <span class="pane-missing-text"
+                  <span v-if="capabilities.edit" class="pane-missing-text"
                     ><b>No raw extraction:</b> add {{ summary.missing_raw }}
                     <span class="pane-missing-hint">with Add table.</span></span
                   >
+                  <span v-else class="pane-missing-text">No raw extraction.</span>
                 </p>
               </section>
+              <p v-else-if="kind === 'table'" class="pane-note source-files-note">
+                The image and the raw extraction of this table are not public.
+              </p>
 
               <section v-else class="pane-block" :aria-labelledby="`${id}-plot`">
                 <h4 :id="`${id}-plot`" class="pane-heading">Plot of the mapped rows</h4>
                 <template v-if="plotted.length">
                   <PlotScales :scales="scales" :hidden="offScale" @choose="choose" />
                   <SourceOverlay
-                    :view="view"
+                    :view="sourceView"
                     mode="plot"
                     :scales="scales"
                     :selected="selected"
@@ -220,7 +252,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
 
             <p v-if="kind === 'text'" class="pane-note">The rows of this source cite the text of the paper.</p>
 
-            <p v-if="kind === 'figure' && summary.missing_raw" class="pane-missing">
+            <p v-if="capabilities.edit && kind === 'figure' && summary.missing_raw" class="pane-missing">
               <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
               <span class="pane-missing-text"
                 ><b>No digitization:</b> add {{ summary.missing_raw }}.
@@ -231,7 +263,12 @@ const { more, scrollbar } = useMoreBelow(body, content);
             </p>
 
             <!-- Open for each source, also after the curator closed them for the last one. -->
-            <details v-if="problemGroups.length" :key="summary.source" open class="source-problems">
+            <details
+              v-if="capabilities.curation && problemGroups.length"
+              :key="summary.source"
+              open
+              class="source-problems"
+            >
               <summary>Problems ({{ problemCount }})</summary>
               <!-- As in the Problems section: by file, the files with errors first. -->
               <section

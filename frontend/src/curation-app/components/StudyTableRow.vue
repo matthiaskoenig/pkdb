@@ -16,6 +16,8 @@ const props = defineProps<{
    * null for a hidden row that only sizes the columns (StudyTable.vue).
    */
   rowIndex: number | null;
+  /** The cell classes of the shown columns; every column when left out. */
+  cells?: ReadonlySet<string>;
 }>();
 const emit = defineEmits<{ toggle: []; retry: [] }>();
 
@@ -26,6 +28,12 @@ const identity = computed(() => `${props.item.row.substance}/${props.item.row.na
 
 const router = useRouter();
 const views = useStudyViews();
+const capabilities = views.capabilities;
+
+/** Whether the column of the cell class `cell` shows. */
+function shows(cell: string): boolean {
+  return props.cells?.has(cell) ?? true;
+}
 
 /**
  * A click on a row opens its study, unless it hits a control of the row or the cell of its
@@ -50,7 +58,7 @@ function open(event: MouseEvent): void {
     "
     @click="sizer || open($event)"
   >
-    <td class="cell-select">
+    <td v-if="capabilities.edit" class="cell-select">
       <VCheckboxBtn
         v-if="!sizer"
         :model-value="selected"
@@ -90,13 +98,13 @@ function open(event: MouseEvent): void {
         <span v-else class="study-row-title study-row-title--missing">No reference title yet</span>
       </div>
     </td>
-    <td class="cell-release">
+    <td v-if="shows('cell-release')" class="cell-release">
       <span v-if="item.row.summary.release" :title="`Released on ${item.row.summary.release.date}`">
         {{ item.row.summary.release.pkdb_id }}
       </span>
       <span v-else class="cell-empty">-</span>
     </td>
-    <td class="cell-issue">
+    <td v-if="shows('cell-issue')" class="cell-issue">
       <a
         v-if="item.issue"
         :href="item.issue.url"
@@ -108,7 +116,7 @@ function open(event: MouseEvent): void {
       </a>
       <span v-else class="cell-empty">-</span>
     </td>
-    <td class="cell-curators">
+    <td v-if="shows('cell-curators')" class="cell-curators">
       <div v-if="item.curators.length" class="curators">
         <VAvatar
           v-for="(person, index) in item.curators"
@@ -128,7 +136,7 @@ function open(event: MouseEvent): void {
       </div>
       <span v-else class="cell-empty">-</span>
     </td>
-    <td class="cell-review">
+    <td v-if="shows('cell-review')" class="cell-review">
       <div class="cell-chips">
         <VChip
           v-if="item.row.summary.review_status"
@@ -145,42 +153,48 @@ function open(event: MouseEvent): void {
         </VChip>
       </div>
     </td>
-    <td class="cell-open">{{ item.row.summary.open_items ?? 0 }}</td>
-    <td v-if="item.row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
-    <td v-else class="cell-problems">
-      <div class="cell-chips">
-        <VChip
-          v-for="problem in item.problems"
-          :key="problem.label"
-          size="small"
-          variant="tonal"
-          :color="problem.tone"
-          class="status-chip"
-        >
-          {{ problem.label }}
-        </VChip>
-        <span v-if="item.activity" class="cell-note" :title="item.activity">{{ item.activity }}</span>
-        <span v-if="item.row.message" class="cell-message" :title="item.row.message">{{ item.row.message }}</span>
-        <VBtn
-          v-if="item.row.status === 'unknown'"
-          size="x-small"
-          variant="tonal"
-          color="primary"
-          prepend-icon="fas fa-triangle-exclamation"
-          class="retry-button"
-          :aria-label="`Review uncertain upload of ${item.row.id}`"
-          @click="emit('retry')"
-        >
-          Review
-        </VBtn>
-      </div>
-    </td>
-    <td class="cell-sync">
+    <td v-if="shows('cell-open')" class="cell-open">{{ item.row.summary.open_items ?? 0 }}</td>
+    <template v-if="shows('cell-problems')">
+      <td v-if="item.row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
+      <td v-else class="cell-problems">
+        <div class="cell-chips">
+          <VChip
+            v-for="problem in item.problems"
+            :key="problem.label"
+            size="small"
+            variant="tonal"
+            :color="problem.tone"
+            class="status-chip"
+          >
+            {{ problem.label }}
+          </VChip>
+          <span v-if="capabilities.jobs && item.activity" class="cell-note" :title="item.activity">{{
+            item.activity
+          }}</span>
+          <span v-if="capabilities.jobs && item.row.message" class="cell-message" :title="item.row.message">{{
+            item.row.message
+          }}</span>
+          <VBtn
+            v-if="capabilities.edit && item.row.status === 'unknown'"
+            size="x-small"
+            variant="tonal"
+            color="primary"
+            prepend-icon="fas fa-triangle-exclamation"
+            class="retry-button"
+            :aria-label="`Review uncertain upload of ${item.row.id}`"
+            @click="emit('retry')"
+          >
+            Review
+          </VBtn>
+        </div>
+      </td>
+    </template>
+    <td v-if="shows('cell-sync')" class="cell-sync">
       <VChip size="small" variant="tonal" :color="SYNC_TONES[item.row.sync.status]" class="status-chip">
         {{ SYNC_LABELS[item.row.sync.status] }}
       </VChip>
     </td>
-    <td class="cell-upload">
+    <td v-if="shows('cell-upload')" class="cell-upload">
       <a
         v-if="item.upload && item.row.last_upload"
         :href="item.upload"

@@ -8,7 +8,7 @@ import { useLoaded } from "../../study-views/composables/useLoaded";
 import { targetMatch } from "../../study-views/grid";
 import { plural } from "../../study-views/overview";
 import { matchText, rowsAt, shownColumns, targetText } from "../../study-views/review";
-import { beyondLimits, tableFiles } from "../../study-views/study";
+import { beyondLimits, tableFiles, viewWithoutFiles, withoutFiles } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import SourceOverlay from "./SourceOverlay.vue";
 import TableGrid from "./TableGrid.vue";
@@ -29,10 +29,13 @@ const detail = views.data.detail;
 
 const target = computed(() => props.item.target);
 const file = computed(() => target.value?.file ?? null);
-/** A data table or a raw table of the study, whose rows the local API serves. */
-const tableFile = computed(() =>
-  file.value !== null && detail.value !== null && tableFiles(detail.value).includes(file.value) ? file.value : null,
-);
+/** A data table or a raw table of the study, whose rows the local API serves; no raw table without the files. */
+const tableFile = computed(() => {
+  const value = detail.value;
+  if (file.value === null || value === null) return null;
+  const shown = views.capabilities.value.files ? value : withoutFiles(value);
+  return tableFiles(shown).includes(file.value) ? file.value : null;
+});
 /** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
 const series = computed(() => targetMatch(detail.value?.targets ?? {}, props.item).series);
 
@@ -71,6 +74,12 @@ const {
   () => detail.value,
   (name) => `Figure ${name} could not be loaded.`,
 );
+
+/** The figure as the reader may see it: plotted rather than drawn on its image without the files. */
+const figureView = computed(() => {
+  const loaded = figure.value?.content ?? null;
+  return loaded && !views.capabilities.value.files ? viewWithoutFiles(loaded) : loaded;
+});
 
 /** A clicked mapped point of the figure opens its row in the Data section. */
 function showRow(row: { file: string; line: number }): void {
@@ -189,8 +198,8 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
           :closable="false"
         />
         <SourceOverlay
-          v-else-if="figure"
-          :view="figure.content"
+          v-else-if="figureView"
+          :view="figureView"
           :highlight="series.series"
           @select-row="showRow"
         />

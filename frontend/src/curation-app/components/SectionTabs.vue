@@ -5,7 +5,7 @@ import { useDisplay } from "vuetify";
 import { VSelect } from "vuetify/components";
 import { useStudyViews } from "../../study-views/context";
 import { plural } from "../../study-views/overview";
-import { SECTION_LABELS, SECTIONS, type Section } from "../../study-views/study";
+import { SECTION_LABELS, visibleSections, type Section } from "../../study-views/study";
 
 const props = defineProps<{
   substance: string;
@@ -32,7 +32,7 @@ const COUNT_NOUNS: Partial<Record<Section, [string, string]>> = {
 };
 
 const items = computed(() =>
-  SECTIONS.map((section) => {
+  visibleSections(views.capabilities.value).map((section) => {
     const count = props.counts[section];
     const nouns = COUNT_NOUNS[section];
     return {

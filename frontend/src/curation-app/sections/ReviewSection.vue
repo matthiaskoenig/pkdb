@@ -42,6 +42,7 @@ defineSlots<{
 const route = useRoute();
 const router = useRouter();
 const views = useStudyViews();
+const capabilities = views.capabilities;
 const detail = views.data.detail;
 
 const review = computed(() => detail.value?.review ?? null);
@@ -193,7 +194,9 @@ defineExpose({ selected, select, clearDraft });
           <li v-for="(problem, index) in review.issues" :key="index">{{ problem.message }}</li>
         </ul>
       </VAlert>
-      <p class="review-text">Fix review.json in your editor. The items show again when it is valid.</p>
+      <p v-if="capabilities.edit" class="review-text">
+        Fix review.json in your editor. The items show again when it is valid.
+      </p>
     </section>
 
     <template v-else>
@@ -221,10 +224,10 @@ defineExpose({ selected, select, clearDraft });
         </VChipGroup>
         <div class="review-tools">
           <VSelect v-model="kind" :items="KIND_FILTERS" label="Kind" hide-details class="review-kind" />
-          <slot name="tools" />
+          <slot v-if="capabilities.edit" name="tools" />
         </div>
       </div>
-      <p v-if="approved" class="review-approved">
+      <p v-if="capabilities.edit && approved" class="review-approved">
         The study is approved. Set the review status to In review to add or reopen items.
       </p>
 
@@ -255,13 +258,13 @@ defineExpose({ selected, select, clearDraft });
             :can-reopen="!approved"
             @act="act"
           />
-          <slot name="detail" :item="selected" />
+          <slot v-if="capabilities.edit" name="detail" :item="selected" />
           <TargetView v-if="selected" :item="selected" />
         </div>
       </div>
     </template>
 
-    <slot name="dialogs" />
+    <slot v-if="capabilities.edit" name="dialogs" />
   </div>
 </template>
 

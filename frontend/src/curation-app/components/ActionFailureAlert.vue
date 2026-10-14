@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { VAlert } from "vuetify/components";
 import { useStudyViews } from "../../study-views/context";
-import { type ActionFailure } from "../../study-views/study";
+import { visibleSections, type ActionFailure } from "../../study-views/study";
 
 /**
  * A failed action: what could not be done, in bold, and why below it; some of its issues with a
@@ -25,6 +26,8 @@ withDefaults(
 );
 const emit = defineEmits<{ close: [] }>();
 const views = useStudyViews();
+/** The sections that the reader sees, the only ones a failure links to. */
+const sections = computed(() => visibleSections(views.capabilities.value));
 </script>
 
 <template>
@@ -47,7 +50,7 @@ const views = useStudyViews();
       <li v-if="failure.more">and {{ failure.more }} more</li>
     </ul>
     <RouterLink
-      v-if="failure.link && study"
+      v-if="failure.link && study && sections.includes(failure.link.section)"
       :to="views.routes.section(study, failure.link.section)"
       class="action-failure-link"
     >
@@ -60,7 +63,7 @@ const views = useStudyViews();
       :details="failure.details"
     >
       <RouterLink
-        v-if="study && failure.details.activityId"
+        v-if="study && failure.details.activityId && views.capabilities.value.jobs"
         :to="views.routes.section(study, 'activity', { entry: failure.details.activityId })"
         class="action-failure-activity"
       >

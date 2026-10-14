@@ -2,6 +2,7 @@
 import { computed, useId } from "vue";
 import { VBtn, VCard, VCardText, VChip, VTextarea } from "vuetify/components";
 import type { Profile, ReviewItem } from "../../study-views/types";
+import { useStudyViews } from "../../study-views/context";
 import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { formatTime } from "../../study-views/overview";
 import {
@@ -37,6 +38,7 @@ const props = defineProps<{
 const emit = defineEmits<{ act: [action: ItemAction] }>();
 
 const headingId = useId();
+const capabilities = useStudyViews().capabilities;
 const threadId = useId();
 const autoGrow = !sizesFieldsByContent();
 
@@ -126,7 +128,7 @@ const acknowledgement = computed(() => {
         <p v-else class="field-empty">No replies yet.</p>
       </section>
 
-      <div v-if="replyable" class="review-reply">
+      <div v-if="capabilities.edit && replyable" class="review-reply">
         <VTextarea
           v-model="draft"
           label="Reply"
@@ -185,7 +187,7 @@ const acknowledgement = computed(() => {
           </VBtn>
         </div>
       </div>
-      <div v-else class="review-actions">
+      <div v-else-if="capabilities.edit" class="review-actions">
         <VBtn
           variant="tonal"
           color="primary"

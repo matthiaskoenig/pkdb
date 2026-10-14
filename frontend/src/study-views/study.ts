@@ -8,6 +8,7 @@ import type {
   People,
   Profile,
   Release,
+  SourceView,
   StudyDetail,
   StudySummary,
   ValidationIssue,
@@ -28,6 +29,15 @@ export const SECTION_LABELS: Record<Section, string> = {
   review: "Review",
   activity: "Activity",
 };
+
+/** The sections that a reader sees: Problems and Review with the curation, Activity with the jobs. */
+export function visibleSections(capabilities: { curation: boolean; jobs: boolean }): Section[] {
+  return SECTIONS.filter((section) => {
+    if (section === "problems" || section === "review") return capabilities.curation;
+    if (section === "activity") return capabilities.jobs;
+    return true;
+  });
+}
 
 export function isSection(value: unknown): value is Section {
   return typeof value === "string" && (SECTIONS as readonly string[]).includes(value);
@@ -64,6 +74,24 @@ export function rawTableFiles(detail: Pick<StudyDetail, "tables">): Set<string> 
 /** Whether a table file of the study is a raw table, the paper table as printed. */
 export function isRawTable(detail: Pick<StudyDetail, "tables">, file: string): boolean {
   return rawTableFiles(detail).has(file);
+}
+
+/** The study as a reader without its files sees it: no PDFs, no raw tables, no images of its sources. */
+export function withoutFiles(detail: StudyDetail): StudyDetail {
+  return {
+    ...detail,
+    papers: [],
+    tables: detail.tables.filter((table) => table.kind !== "raw"),
+    sources: detail.sources.map((source) => ({ ...source, image_url: null })),
+  };
+}
+
+/**
+ * The view of a source as a reader without the files of its study sees it: no image and no raw
+ * extraction. A digitized figure then has nothing to draw on, so its mapped rows are plotted.
+ */
+export function viewWithoutFiles(view: SourceView): SourceView {
+  return { ...view, image_url: null, image_size: null, raw_grid: null };
 }
 
 /** The issues of the upload limits, which the library reports before reading the whole study. */

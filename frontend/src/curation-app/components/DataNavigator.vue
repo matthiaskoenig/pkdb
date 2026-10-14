@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
+import { useStudyViews } from "../../study-views/context";
 import type { StudyDetail, TableEntry } from "../../study-views/types";
 import { fileCounts, PAPER, sourceCounts, tablesByInfo } from "../../study-views/data";
 import { INFO_HEADINGS, infoOutlined, infoStyle } from "../../study-views/info";
@@ -29,6 +30,7 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ "select-source": [source: string]; "select-file": [file: string] }>();
 
+const capabilities = useStudyViews().capabilities;
 const tablesId = useId();
 const sourcesId = useId();
 
@@ -50,14 +52,19 @@ function entryOf(table: TableEntry) {
   };
 }
 
-/** The tables by class of information, without the classes that the study has no tables of. */
+/**
+ * The tables by class of information, without the classes that the study has no tables of, and
+ * without the raw extractions for a reader without the files.
+ */
 const groups = computed(() =>
-  tablesByInfo(props.detail).map(({ info, tables }) => ({
-    info,
-    id: `${tablesId}-${info}`,
-    heading: INFO_HEADINGS[info],
-    entries: tables.map(entryOf),
-  })),
+  tablesByInfo(props.detail)
+    .filter(({ info }) => info !== "raw" || capabilities.value.files)
+    .map(({ info, tables }) => ({
+      info,
+      id: `${tablesId}-${info}`,
+      heading: INFO_HEADINGS[info],
+      entries: tables.map(entryOf),
+    })),
 );
 
 const sources = computed(() =>
@@ -95,7 +102,12 @@ const paper = computed(() => {
             <!-- The name without .tsv, cut at its end; screen readers read the file name in full. -->
             <span class="nav-name" :title="entry.file" aria-hidden="true">{{ entry.name }}</span>
             <span class="nav-file-name d-sr-only">{{ entry.file }}</span>
-            <NavigatorCounts :errors="entry.errors" :warnings="entry.warnings" :items="entry.items" />
+            <NavigatorCounts
+              v-if="capabilities.curation"
+              :errors="entry.errors"
+              :warnings="entry.warnings"
+              :items="entry.items"
+            />
             <span v-if="entry.rows" class="nav-rows" :title="entry.rows.text">
               <span class="d-sr-only">{{ entry.rows.text }}</span>
               <span aria-hidden="true">{{ entry.rows.count }}</span>
@@ -106,7 +118,7 @@ const paper = computed(() => {
     </div>
     <h3 :id="sourcesId" class="nav-heading">Sources</h3>
     <ul :aria-labelledby="sourcesId" class="nav-list">
-      <li>
+      <li v-if="capabilities.files">
         <button
           type="button"
           class="nav-paper"
@@ -137,14 +149,25 @@ const paper = computed(() => {
                large image with decoding="async" painted its thumbnail white until it was decoded, and
                in some loads some stayed white (Walther1983_Tab1 to _Tab3). Not documented Chromium
                behaviour, so the cause is unconfirmed; synchronous decoding avoided it. -->
-          <img v-if="summary.image_url" :src="summary.image_url" alt="" loading="lazy" class="nav-thumb" />
+          <img
+            v-if="capabilities.files && summary.image_url"
+            :src="summary.image_url"
+            alt=""
+            loading="lazy"
+            class="nav-thumb"
+          />
           <span v-else class="nav-thumb nav-thumb--icon" aria-hidden="true"><i :class="SOURCE_ICONS[summary.kind]"></i></span>
           <span class="nav-text">
             <span class="nav-name" :title="summary.source">{{ summary.source }}</span>
             <span class="nav-kind">{{ summary.kind }}</span>
           </span>
           <span class="nav-badges">
-            <NavigatorCounts :errors="count.errors" :warnings="count.warnings" :items="count.items" />
+            <NavigatorCounts
+              v-if="capabilities.curation"
+              :errors="count.errors"
+              :warnings="count.warnings"
+              :items="count.items"
+            />
           </span>
         </button>
       </li>

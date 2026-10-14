@@ -31,6 +31,7 @@ defineSlots<{ actions?: (props: { file: string }) => unknown; status?: () => unk
 const fileId = useId();
 const router = useRouter();
 const views = useStudyViews();
+const capabilities = views.capabilities;
 
 const paper = computed(() => shownPaper(props.papers, props.file)!);
 /** The address of the PDF in a tab of its own; null when the page has no such page. */
@@ -74,10 +75,10 @@ function choose(event: Event): void {
           <i class="fas fa-up-right-from-square" aria-hidden="true"></i>
           <span class="paper-action-label">New tab</span>
         </a>
-        <slot name="actions" :file="paper.file" />
+        <slot v-if="capabilities.edit" name="actions" :file="paper.file" />
       </span>
     </div>
-    <slot name="status" />
+    <slot v-if="capabilities.edit" name="status" />
     <PaperViewer
       v-model:place="place"
       :url="paper.url"

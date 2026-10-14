@@ -3,12 +3,23 @@
  * The header of a study: its identity, release, issue and provenance, its title with what it is
  * doing, its PMID, sync state and problems, in one line. The page puts its actions into the slot
  * `actions`, at the end of the line, and what belongs to them below the line into the slot `after`.
+ * Without the curation it shows no issue, sync state or problems, and without the jobs not what the
+ * study is doing; a reader of the curation who may not write sees the review status in place of
+ * the actions, which show only with `edit`.
  */
 import { computed } from "vue";
 import { VChip } from "vuetify/components";
 import type { StudyDetail } from "../../study-views/types";
 import { useStudyViews } from "../../study-views/context";
-import { activityLabel, issueUrl, problemLabels, SYNC_LABELS, SYNC_TONES } from "../../study-views/overview";
+import {
+  activityLabel,
+  issueUrl,
+  problemLabels,
+  REVIEW_LABELS,
+  REVIEW_TONES,
+  SYNC_LABELS,
+  SYNC_TONES,
+} from "../../study-views/overview";
 import { issueLabel, provenanceLabel, releaseLabel, studyName } from "../../study-views/study";
 
 const props = defineProps<{
@@ -17,12 +28,14 @@ const props = defineProps<{
 defineSlots<{ actions?: () => unknown; after?: () => unknown }>();
 
 const views = useStudyViews();
+const capabilities = views.capabilities;
 
 const substance = computed(() => props.detail.id.slice(0, props.detail.id.indexOf("/")));
 const name = computed(() => studyName(props.detail));
 const summary = computed(() => props.detail.summary);
 const release = computed(() => (summary.value.release ? releaseLabel(summary.value.release) : null));
 const issue = computed(() => {
+  if (!capabilities.value.curation) return null;
   const label = issueLabel(props.detail.issue, summary.value.issue);
   if (label === null) return null;
   return { label, url: issueUrl(props.detail, views.data.repository.value) };
@@ -33,8 +46,9 @@ const pmid = computed(() => {
   const fromReference = reference && "pmid" in reference ? reference.pmid : null;
   return props.detail.metadata.value?.reference?.pmid ?? fromReference ?? null;
 });
-const problems = computed(() => problemLabels(props.detail));
-const activity = computed(() => activityLabel(props.detail));
+const problems = computed(() => (capabilities.value.curation ? problemLabels(props.detail) : []));
+const activity = computed(() => (capabilities.value.jobs ? activityLabel(props.detail) : null));
+const reviewStatus = computed(() => props.detail.review.value?.status ?? summary.value.review_status ?? null);
 </script>
 
 <template>
@@ -106,7 +120,22 @@ const activity = computed(() => activityLabel(props.detail));
         <span class="fact-name">PMID</span>
         <a :href="`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`" target="_blank" rel="noopener noreferrer">{{ pmid }}</a>
       </span>
-      <VChip size="x-small" variant="tonal" :color="SYNC_TONES[detail.sync.status]" class="status-chip fact-sync">
+      <VChip
+        v-if="capabilities.curation && !capabilities.edit && reviewStatus"
+        size="x-small"
+        variant="tonal"
+        :color="REVIEW_TONES[reviewStatus]"
+        class="status-chip fact-review"
+      >
+        {{ REVIEW_LABELS[reviewStatus] }}
+      </VChip>
+      <VChip
+        v-if="capabilities.curation"
+        size="x-small"
+        variant="tonal"
+        :color="SYNC_TONES[detail.sync.status]"
+        class="status-chip fact-sync"
+      >
         {{ SYNC_LABELS[detail.sync.status] }}
       </VChip>
       <span v-if="problems.length" class="fact-problems">
@@ -121,9 +150,9 @@ const activity = computed(() => activityLabel(props.detail));
           {{ problem.label }}
         </VChip>
       </span>
-      <slot name="actions" />
+      <slot v-if="capabilities.edit" name="actions" />
     </div>
-    <slot name="after" />
+    <slot v-if="capabilities.edit" name="after" />
   </header>
 </template>
 

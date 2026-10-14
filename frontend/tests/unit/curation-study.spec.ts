@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/study-views/errors";
 import type { TablesResult } from "../../src/curation-app/api/types";
-import type { ConflictData, Problem, ReviewItem, StudyDetail, TableEntry } from "../../src/study-views/types";
+import { drawsOnImage, plottedSeries } from "../../src/study-views/overlay";
+import type { ConflictData, Problem, ReviewItem, SourceView, StudyDetail, TableEntry } from "../../src/study-views/types";
 import {
   actionFailure,
   beyondLimits,
@@ -24,6 +25,9 @@ import {
   SECTION_LABELS,
   SECTIONS,
   tableFiles,
+  viewWithoutFiles,
+  visibleSections,
+  withoutFiles,
 } from "../../src/study-views/study";
 import {
   approvalRefusal,
@@ -34,7 +38,8 @@ import {
   tablesOutcome,
   userHint,
 } from "../../src/curation-app/local";
-import { beyondLimitsDetail, profile, roster, studyDetail, tableEntry } from "./curation-fixtures";
+import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
+import { beyondLimitsDetail, paperFile, profile, roster, studyDetail, tableEntry } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {
   return {
@@ -337,5 +342,31 @@ describe("lastUploadUrl", () => {
   it("is null without an upload and for a URL that is not a web page", () => {
     expect(lastUploadUrl(studyDetail())).toBeNull();
     expect(lastUploadUrl(studyDetail({ last_upload: { ...upload, url: "javascript:alert(1)" } } as Partial<StudyDetail>))).toBeNull();
+  });
+});
+
+describe("what a reader sees of a study", () => {
+  it("shows Problems and Review only with the curation, and Activity only with the jobs", () => {
+    expect(visibleSections({ curation: false, jobs: false })).toEqual(["metadata", "data"]);
+    expect(visibleSections({ curation: true, jobs: false })).toEqual(["metadata", "data", "problems", "review"]);
+    expect(visibleSections({ curation: true, jobs: true })).toEqual(["metadata", "data", "problems", "review", "activity"]);
+  });
+
+  it("leaves out the PDFs, the raw tables and the images of the sources without the files", () => {
+    const shown = withoutFiles(studyDetail({ papers: [paperFile("Example.pdf")] }));
+    expect(shown.papers).toEqual([]);
+    expect(shown.tables.map((table) => table.file)).not.toContain("Example_Tab2.tsv");
+    expect(shown.sources.map((source) => source.image_url)).toEqual([null, null]);
+    expect(shown.sources.map((source) => source.image)).toEqual(["Example_Fig1.png", "Example_Tab2.png"]);
+  });
+
+  it("plots every series of a digitized figure without the files, as it has no image to draw them on", () => {
+    const figure = sourceFixture as unknown as SourceView;
+    expect(plottedSeries(figure)).toEqual([]);
+    const shown = viewWithoutFiles({ ...figure, raw_grid: [["x", "y"]] });
+    expect([shown.image_url, shown.image_size, shown.raw_grid]).toEqual([null, null, null]);
+    expect(shown.image).toBe("Demo2020_Fig1.png");
+    expect(drawsOnImage(shown)).toBe(false);
+    expect(plottedSeries(shown)).toEqual(["caf_plasma_100mg", "caf_plasma_200mg"]);
   });
 });

@@ -42,6 +42,7 @@ defineSlots<{
 }>();
 
 const views = useStudyViews();
+const capabilities = views.capabilities;
 const id = useId();
 
 const detail = views.data.detail;
@@ -205,13 +206,13 @@ function acknowledge(issue: Problem): void {
             {{ chip.label }}<span class="chip-count">{{ counts[chip.value] }}</span>
           </VChip>
         </VChipGroup>
-        <slot name="toolbar" />
+        <slot v-if="capabilities.edit" name="toolbar" />
       </div>
       <p v-if="omitted" class="problems-note problems-omitted">{{ omitted }}</p>
-      <p v-if="blocked && acknowledgeable" class="problems-note problems-blocked">{{ blocked }}</p>
+      <p v-if="capabilities.edit && blocked && acknowledgeable" class="problems-note problems-blocked">{{ blocked }}</p>
     </template>
 
-    <slot name="status" />
+    <slot v-if="capabilities.edit" name="status" />
 
     <div v-if="groups.length" class="problems-groups">
       <section
@@ -226,7 +227,7 @@ function acknowledge(issue: Problem): void {
             <h3 :id="`${id}-${groupIndex}`" tabindex="-1" class="problem-file">{{ group.file ?? "Whole study" }}</h3>
             <span class="problem-group-counts">{{ groupCounts(group.all) }}</span>
           </div>
-          <slot name="group-actions" :file="group.file" />
+          <slot v-if="capabilities.edit" name="group-actions" :file="group.file" />
         </div>
         <ul class="problem-list">
           <ProblemItem
@@ -294,7 +295,7 @@ function acknowledge(issue: Problem): void {
       </ul>
     </section>
 
-    <slot name="dialogs" />
+    <slot v-if="capabilities.edit" name="dialogs" />
   </div>
 </template>
 

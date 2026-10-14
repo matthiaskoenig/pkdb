@@ -35,19 +35,27 @@ const views = useStudyViews();
 
 /**
  * The columns after the checkbox, in their order. The cells of StudyTableRow.vue and the sized
- * columns of studyTable.ts (SIZED_CELLS) follow the same order.
+ * columns of studyTable.ts (SIZED_CELLS) follow the same order. A column with `needs` shows only
+ * with that capability; the checkbox only with `edit`.
  */
-const columns: { key: SortKey | null; label: string; cell: string }[] = [
-  { key: "study", label: "Study", cell: "cell-study" },
-  { key: "release", label: "Release", cell: "cell-release" },
-  { key: "issue", label: "Issue", cell: "cell-issue" },
-  { key: null, label: "Curators", cell: "cell-curators" },
-  { key: "review", label: "Review", cell: "cell-review" },
-  { key: "open_items", label: "Open items", cell: "cell-open" },
-  { key: "problems", label: "Problems", cell: "cell-problems" },
-  { key: "sync", label: "Sync", cell: "cell-sync" },
-  { key: "upload", label: "Last upload", cell: "cell-upload" },
+const columns: { key: SortKey | null; label: string; cell: string; needs: "curation" | "jobs" | null }[] = [
+  { key: "study", label: "Study", cell: "cell-study", needs: null },
+  { key: "release", label: "Release", cell: "cell-release", needs: null },
+  { key: "issue", label: "Issue", cell: "cell-issue", needs: "curation" },
+  { key: null, label: "Curators", cell: "cell-curators", needs: null },
+  { key: "review", label: "Review", cell: "cell-review", needs: "curation" },
+  { key: "open_items", label: "Open items", cell: "cell-open", needs: "curation" },
+  { key: "problems", label: "Problems", cell: "cell-problems", needs: "curation" },
+  { key: "sync", label: "Sync", cell: "cell-sync", needs: "curation" },
+  { key: "upload", label: "Last upload", cell: "cell-upload", needs: "jobs" },
 ];
+const capabilities = views.capabilities;
+/** The columns that the reader sees: those of the curation and of the jobs only with them. */
+const shownColumns = computed(() =>
+  columns.filter((column) => column.needs === null || capabilities.value[column.needs]),
+);
+/** The cell classes of the shown columns, which the rows render. */
+const cells = computed<ReadonlySet<string>>(() => new Set(shownColumns.value.map((column) => column.cell)));
 
 /** Rows with a duplicate identity cannot be selected: every action of the server refuses them. */
 const selectable = computed(() => props.rows.filter((row) => !row.duplicate));
@@ -203,7 +211,7 @@ function focusOut(event: FocusEvent): void {
           </caption>
           <thead>
             <tr aria-rowindex="1">
-              <th ref="select-all" scope="col" class="cell-select">
+              <th v-if="capabilities.edit" ref="select-all" scope="col" class="cell-select">
                 <VCheckboxBtn
                   :model-value="allSelected"
                   :indeterminate="someSelected"
@@ -214,7 +222,7 @@ function focusOut(event: FocusEvent): void {
                 />
               </th>
               <th
-                v-for="column in columns"
+                v-for="column in shownColumns"
                 :key="column.cell"
                 scope="col"
                 :class="column.cell"
@@ -240,16 +248,27 @@ function focusOut(event: FocusEvent): void {
             @mouseover="tip.over"
             @mouseout="tip.out"
           >
-            <StudyTableRow v-for="row in sizers" :key="row.path" :item="itemOf(row)" :selected="false" :row-index="null" />
+            <StudyTableRow
+              v-for="row in sizers"
+              :key="row.path"
+              :item="itemOf(row)"
+              :selected="false"
+              :row-index="null"
+              :cells="cells"
+            />
             <template v-for="part in parts" :key="part.kind === 'row' ? rows[part.index]!.path : part.key">
               <tr v-if="part.kind === 'space'" class="study-space" aria-hidden="true">
-                <td :colspan="columns.length + 1" :style="{ height: `${part.rows * rowHeight}px` }" />
+                <td
+                  :colspan="shownColumns.length + (capabilities.edit ? 1 : 0)"
+                  :style="{ height: `${part.rows * rowHeight}px` }"
+                />
               </tr>
               <StudyTableRow
                 v-else
                 :item="itemOf(rows[part.index]!)"
                 :selected="isSelected(rows[part.index]!)"
                 :row-index="part.index + 2"
+                :cells="cells"
                 @toggle="toggle(rows[part.index]!)"
                 @retry="emit('retry', rows[part.index]!)"
               />
