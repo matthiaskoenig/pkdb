@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "4f0384246bd60dd92d0de939d4578ee2048192382e52af915db4ffc2a3db5430",
+    "version": "43e9509446f1a23ea696d7be355e49e4500104595d11174f62f23868fd8bd04e",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -241,7 +241,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -1608,6 +1608,18 @@
         "deprecated": false
       },
       {
+        "name": "csf/plasma ratio",
+        "sid": "csf-plasma-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "CT measurement",
         "sid": "ct-measurement",
         "dtype": "abstract",
@@ -2199,6 +2211,7 @@
           "polycystic kidney disease",
           "cystic kidney disease",
           "glomerulosclerosis",
+          "IgA nephropathy",
           "chronic glomerulonephritis",
           "acute glomerulonephritis",
           "focal glomerulonephritis",
@@ -4656,7 +4669,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4967,6 +4980,19 @@
         "sid": "renal-measurement",
         "dtype": "abstract",
         "units": [],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "renal plasma flow",
+        "sid": "renal-plasma-flow",
+        "dtype": "numeric",
+        "units": [
+          "ml/min/(1.73*m^2)",
+          "ml/min"
+        ],
         "choices": [],
         "can_negative": false,
         "time_required": false,
@@ -5900,7 +5926,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5912,7 +5938,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       }
@@ -7683,6 +7709,13 @@
         "charge": 0
       },
       {
+        "name": "clonidine",
+        "sid": "clonidine",
+        "mass": 230.094,
+        "formula": "C9H9Cl2N3",
+        "charge": 0
+      },
+      {
         "name": "clopidogrel",
         "sid": "clopidogrel",
         "mass": 321.829,
@@ -8058,6 +8091,13 @@
         "sid": "digoxin",
         "mass": 780.949,
         "formula": "C41H64O14",
+        "charge": 0
+      },
+      {
+        "name": "dihydralazine",
+        "sid": "dihydralazine",
+        "mass": 190.21,
+        "formula": "C8H10N6",
         "charge": 0
       },
       {
@@ -9818,6 +9858,13 @@
         "charge": 0
       },
       {
+        "name": "methyldopa",
+        "sid": "methyldopa",
+        "mass": 211.217,
+        "formula": "C10H13NO4",
+        "charge": 0
+      },
+      {
         "name": "metoclopramide",
         "sid": "metoclopramide",
         "mass": 299.802,
@@ -10063,6 +10110,20 @@
         "charge": null
       },
       {
+        "name": "mycophenolic acid",
+        "sid": "mycophenolic-acid",
+        "mass": 320.341,
+        "formula": "C17H20O6",
+        "charge": 0
+      },
+      {
+        "name": "mycophenolic acid glucuronide",
+        "sid": "mycophenolic-acid-glucuronide",
+        "mass": 496.465,
+        "formula": "C23H28O12",
+        "charge": 0
+      },
+      {
         "name": "n-desalkyl-itraconazole",
         "sid": "n-desalkyl-itraconazole",
         "mass": 649.5,
@@ -10165,6 +10226,13 @@
         "sid": "nifedipine",
         "mass": 346.339,
         "formula": "C17H18N2O6",
+        "charge": 0
+      },
+      {
+        "name": "nitrendipine",
+        "sid": "nitrendipine",
+        "mass": 360.366,
+        "formula": "C18H20N2O6",
         "charge": 0
       },
       {
@@ -10621,6 +10689,13 @@
         "mass": null,
         "formula": null,
         "charge": null
+      },
+      {
+        "name": "prazosin",
+        "sid": "prazosin",
+        "mass": 383.408,
+        "formula": "C19H21N5O4",
+        "charge": 0
       },
       {
         "name": "pregabalin",
@@ -11160,6 +11235,20 @@
         "mass": 239.315,
         "formula": "C13H21NO3",
         "charge": 0
+      },
+      {
+        "name": "salbutamol 4-O-sulphate",
+        "sid": "salbutamol-4-o-sulphate",
+        "mass": 319.379,
+        "formula": "C13H21NO6S",
+        "charge": 0
+      },
+      {
+        "name": "salbutamol-metabolites",
+        "sid": "salbutamol-metabolites",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "salbutamol sulphate",
@@ -12286,5 +12375,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "1c1270d6b72131d1d1c4004c4a60764ec2176ffdadf29f7ea0fa81f4bd645baf"
+  "vocabulary_hash": "82398d3378f62c7e1fccc05ced066ed526fea1238db6499ae863e147bac14542"
 }

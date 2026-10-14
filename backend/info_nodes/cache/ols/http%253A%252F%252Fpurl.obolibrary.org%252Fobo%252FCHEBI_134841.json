@@ -1,0 +1,380 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_134841",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Dihydralazine",
+    "NSC-526654",
+    "dihidralazina",
+    "dihydralazin",
+    "dihydralazine sulfate",
+    "dihydrallazine",
+    "dihydrazinophthalazine",
+    "hypopresol",
+    "nepresol",
+    "nepresolin",
+    "nepressol",
+    "ophthazin",
+    "tonolysin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:484-23-1",
+      "drugcentral:884",
+      "pubmed:15646539",
+      "pubmed:16248836",
+      "pubmed:20014752",
+      "pubmed:20020916",
+      "pubmed:21965623",
+      "pubmed:22961681",
+      "pubmed:2795599",
+      "pubmed:35597097",
+      "pubmed:35820623",
+      "pubmed:37468498",
+      "pubmed:3783580",
+      "pubmed:6492077",
+      "pubmed:6854582",
+      "pubmed:7205877"
+    ],
+    "generalized_empirical_formula": [
+      "C8H10N6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:134841"
+    ],
+    "inchi_key_string": [
+      "VQKLRVZQQYVIJW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H10N6/c9-11-7-5-3-1-2-4-6(5)8(12-10)14-13-7/h1-4H,9-10H2,(H,11,13)(H,12,14)"
+    ],
+    "mass": [
+      "190.21"
+    ],
+    "monoisotopic_mass": [
+      "190.09669"
+    ],
+    "smiles_string": [
+      "N/N=c1nn/c(=NN)c2ccccc12"
+    ]
+  },
+  "label": "dihydralazine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_134841",
+  "obo_id": "CHEBI:134841",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "484-23-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=484-23-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "884",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/884"
+    },
+    {
+      "database": "pubmed",
+      "id": "15646539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15646539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16248836",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16248836/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20020916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20020916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21965623",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21965623/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22961681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22961681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2795599",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2795599/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35597097",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35597097/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35820623",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35820623/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3783580",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3783580/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6492077",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6492077/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6854582",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6854582/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7205877",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7205877/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Dihydralazine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-526654",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihidralazina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihydralazin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihydralazine sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihydrallazine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihydrazinophthalazine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hypopresol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nepresol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nepresolin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nepressol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ophthazin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tonolysin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134841/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

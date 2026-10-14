@@ -1,0 +1,291 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8364",
+  "lang": "en",
+  "description": [
+    "A member of the class of  piperazines that is piperazine substituted by a furan-2-ylcarbonyl group and a 4-amino-6,7-dimethoxyquinazolin-2-yl group at positions 1 and 4 respectively."
+  ],
+  "synonyms": [
+    "1-(4-Amino-6,7-dimethoxy-2-quinazolinyl)-4-(2-furanylcarbonyl)piperazine",
+    "2-(4-(2-Furoyl)piperazin-1-yl)-4-amino-6,7-dimethoxyquinazoline",
+    "2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine",
+    "2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine",
+    "prazosin",
+    "prazosina",
+    "prazosine",
+    "prazosinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:19216-56-9",
+      "drugbank:DB00457",
+      "drugcentral:4209",
+      "hmdb:HMDB0014600",
+      "kegg.compound:C07368",
+      "kegg.drug:D08411",
+      "lincs.smallmolecule:LSM-3079",
+      "patent:GB1156973",
+      "patent:NL7206067",
+      "patent:US3511836",
+      "pubmed:20825390",
+      "reaxys:768345",
+      "wikipedia.en:Prazosin"
+    ],
+    "generalized_empirical_formula": [
+      "C19H21N5O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8364"
+    ],
+    "inchi_key_string": [
+      "IENZQIKPVFGBNW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H21N5O4/c1-26-15-10-12-13(11-16(15)27-2)21-19(22-17(12)20)24-7-5-23(6-8-24)18(25)14-4-3-9-28-14/h3-4,9-11H,5-8H2,1-2H3,(H2,20,21,22)"
+    ],
+    "mass": [
+      "383.408"
+    ],
+    "monoisotopic_mass": [
+      "383.15935"
+    ],
+    "smiles_string": [
+      "COc1cc2nc(N3CCN(C(=O)c4ccco4)CC3)nc(N)c2cc1OC"
+    ]
+  },
+  "label": "prazosin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8364",
+  "obo_id": "CHEBI:8364",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "19216-56-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=19216-56-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00457",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00457"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4209",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4209"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014600",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014600"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07368",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08411",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3079",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "GB1156973",
+      "description": "patent",
+      "url": "https://www.google.com/patents/GB1156973"
+    },
+    {
+      "database": "patent",
+      "id": "NL7206067",
+      "description": "patent",
+      "url": "https://www.google.com/patents/NL7206067"
+    },
+    {
+      "database": "patent",
+      "id": "US3511836",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3511836"
+    },
+    {
+      "database": "pubmed",
+      "id": "20825390",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20825390/"
+    },
+    {
+      "database": "reaxys",
+      "id": "768345",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Prazosin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(4-Amino-6,7-dimethoxy-2-quinazolinyl)-4-(2-furanylcarbonyl)piperazine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(4-(2-Furoyl)piperazin-1-yl)-4-amino-6,7-dimethoxyquinazoline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prazosin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prazosina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prazosine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prazosinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8364/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

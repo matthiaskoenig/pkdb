@@ -1,0 +1,363 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_168396",
+  "lang": "en",
+  "description": [
+    "A member of the class of 2-benzofurans that is 2-benzofuran-1(3<em>H</em>)-one which is substituted at positions 4, 5, 6, and 7 by methyl, methoxy, (2<i>E</i>)-5-carboxy-3-methylpent-2-en-1-yl, and hydroxy groups, respectively. It is an antibiotic produced by <em>Penicillium brevi-compactum, P. stoloniferum, P. echinulatum</em> and related species. An immunosuppressant, it is widely used (partiularly as its sodium salt and as the 2-(morpholin-4-yl)ethyl ester prodrug, mycophenolate mofetil) to prevent tissue rejection following organ transplants and for the treatment of certain autoimmune diseases."
+  ],
+  "synonyms": [
+    "(4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoic acid",
+    "(4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoic acid",
+    "(E)-6-(4-Hydroxy-6-methoxy-7-methyl-3-oxo-5-phthalanyl)-4-methyl-4-hexenoic acid",
+    "Micofenolico acido",
+    "Mycophenolate",
+    "Mycophenolsaeure",
+    "acide mycophenolique",
+    "acido micofenolico",
+    "acidum mycophenolicum",
+    "mycophenolic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:24280-93-1",
+      "drugbank:DB01024",
+      "drugcentral:1860",
+      "kegg.drug:D05096",
+      "patent:US4753935",
+      "pdb-ccd:MOA",
+      "pubmed:11272311",
+      "pubmed:15470161",
+      "pubmed:16629948",
+      "pubmed:16640327",
+      "pubmed:17482154",
+      "pubmed:17498396",
+      "pubmed:18194117",
+      "pubmed:18611107",
+      "pubmed:18996104",
+      "pubmed:19689217",
+      "reaxys:318158",
+      "wikipedia.en:Mycophenolic_acid"
+    ],
+    "generalized_empirical_formula": [
+      "C17H20O6"
+    ],
+    "has_alternative_id": [
+      "CHEBI:43973"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:168396"
+    ],
+    "inchi_key_string": [
+      "HPNSFSBZBAHARI-RUDMXATFSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H20O6/c1-9(5-7-13(18)19)4-6-11-15(20)14-12(8-23-17(14)21)10(2)16(11)22-3/h4,20H,5-8H2,1-3H3,(H,18,19)/b9-4+"
+    ],
+    "mass": [
+      "320.341"
+    ],
+    "monoisotopic_mass": [
+      "320.12599"
+    ],
+    "smiles_string": [
+      "COc1c(C)c2c(c(O)c1C/C=C(C)CCC(=O)O)C(=O)OC2"
+    ]
+  },
+  "label": "mycophenolic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_168396",
+  "obo_id": "CHEBI:168396",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "24280-93-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=24280-93-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01024",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01024"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1860",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1860"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D05096",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US4753935",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4753935"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "MOA",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11272311",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11272311/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15470161",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15470161/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16629948",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16629948/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16640327",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16640327/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17482154",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17482154/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17498396",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17498396/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18194117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18194117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18611107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18611107/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18996104",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18996104/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19689217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19689217/"
+    },
+    {
+      "database": "reaxys",
+      "id": "318158",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Mycophenolic_acid",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(E)-6-(4-Hydroxy-6-methoxy-7-methyl-3-oxo-5-phthalanyl)-4-methyl-4-hexenoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Micofenolico acido",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mycophenolate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mycophenolsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide mycophenolique",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acido micofenolico",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum mycophenolicum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mycophenolic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_168396/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

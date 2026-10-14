@@ -1,0 +1,389 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7582",
+  "lang": "en",
+  "description": [
+    "A  dihydropyridine that is 1,4-dihydropyridine substituted by methyl groups at positions 2 and 6, a 3-nitrophenyl group at position 4, a ethoxycarbonyl group at position 3 and a methoxycarbonyl group at position 5. It is a calcium-channel blocker used in the treatment of hypertension."
+  ],
+  "synonyms": [
+    "1,4-dihydro-2,6-dimethyl-4-(3-nitrophenyl)-3,5-pyridinedicarboxylic acid ethyl methyl ester",
+    "BAY e 5009",
+    "Bayotensin",
+    "Baypress",
+    "Bylotensin",
+    "Deiten",
+    "Nidrel",
+    "ethyl methyl 2,6-dimethyl-4-(3-nitrophenyl)-1,4-dihydropyridine-3,5-dicarboxylate",
+    "ethyl methyl 2,6-dimethyl-4-(3-nitrophenyl)-1,4-dihydropyridine-3,5-dicarboxylate",
+    "nitrendipine",
+    "nitrendipino",
+    "nitrendipinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:39562-70-4",
+      "drugbank:DB01054",
+      "drugcentral:1947",
+      "hmdb:HMDB0015187",
+      "kegg.compound:C07713",
+      "kegg.drug:D00629",
+      "lincs.smallmolecule:LSM-1246",
+      "patent:CN101416954",
+      "patent:DE2117571",
+      "patent:US3799934",
+      "pubmed:1725797",
+      "pubmed:1790544",
+      "pubmed:20398559",
+      "pubmed:21811924",
+      "pubmed:23648675",
+      "pubmed:24134630",
+      "pubmed:6085389",
+      "reaxys:498823",
+      "wikipedia.en:Nitrendipine"
+    ],
+    "generalized_empirical_formula": [
+      "C18H20N2O6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7582"
+    ],
+    "inchi_key_string": [
+      "PVHUJELLJLJGLN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H20N2O6/c1-5-26-18(22)15-11(3)19-10(2)14(17(21)25-4)16(15)12-7-6-8-13(9-12)20(23)24/h6-9,16,19H,5H2,1-4H3"
+    ],
+    "mass": [
+      "360.366"
+    ],
+    "monoisotopic_mass": [
+      "360.13214"
+    ],
+    "smiles_string": [
+      "CCOC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1cccc([N+](=O)[O-])c1"
+    ]
+  },
+  "label": "nitrendipine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7582",
+  "obo_id": "CHEBI:7582",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "39562-70-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=39562-70-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01054",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01054"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1947",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1947"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015187",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015187"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07713",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00629",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1246",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN101416954",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN101416954"
+    },
+    {
+      "database": "patent",
+      "id": "DE2117571",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2117571"
+    },
+    {
+      "database": "patent",
+      "id": "US3799934",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3799934"
+    },
+    {
+      "database": "pubmed",
+      "id": "1725797",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1725797/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1790544",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1790544/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20398559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20398559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21811924",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21811924/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23648675",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23648675/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24134630",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24134630/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6085389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6085389/"
+    },
+    {
+      "database": "reaxys",
+      "id": "498823",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Nitrendipine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "ethyl methyl 2,6-dimethyl-4-(3-nitrophenyl)-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-dihydro-2,6-dimethyl-4-(3-nitrophenyl)-3,5-pyridinedicarboxylic acid ethyl methyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAY e 5009",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bayotensin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Baypress",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bylotensin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Deiten",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nidrel",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethyl methyl 2,6-dimethyl-4-(3-nitrophenyl)-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nitrendipine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nitrendipino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nitrendipinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7582/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
