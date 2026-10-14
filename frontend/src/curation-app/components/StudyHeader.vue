@@ -42,51 +42,51 @@ const activity = computed(() => activityLabel(props.detail));
     <div class="study-header-line">
       <!-- A long identity wraps after the slash rather than inside a name. -->
       <h1 class="study-identity">{{ substance }}/<wbr />{{ name }}</h1>
-    <template v-if="release || issue || provenance">
-      <VChip
-        v-if="release"
-        size="x-small"
-        variant="tonal"
-        color="success"
-        prepend-icon="fas fa-tag"
-        class="status-chip release-chip"
-      >
-        {{ release }}
-      </VChip>
-      <template v-if="issue">
+      <template v-if="release || issue || provenance">
         <VChip
-          v-if="issue.url"
-          :href="issue.url"
-          target="_blank"
-          rel="noopener noreferrer"
+          v-if="release"
           size="x-small"
-          variant="outlined"
-          prepend-icon="fas fa-circle-dot"
-          class="header-chip issue-chip"
-          :aria-label="`GitHub issue ${issue.label}`"
+          variant="tonal"
+          color="success"
+          prepend-icon="fas fa-tag"
+          class="status-chip release-chip"
         >
-          {{ issue.label }}
+          {{ release }}
         </VChip>
+        <template v-if="issue">
+          <VChip
+            v-if="issue.url"
+            :href="issue.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            size="x-small"
+            variant="outlined"
+            prepend-icon="fas fa-circle-dot"
+            class="header-chip issue-chip"
+            :aria-label="`GitHub issue ${issue.label}`"
+          >
+            {{ issue.label }}
+          </VChip>
+          <VChip
+            v-else
+            size="x-small"
+            variant="outlined"
+            prepend-icon="fas fa-circle-dot"
+            class="header-chip issue-chip"
+          >
+            {{ issue.label }}
+          </VChip>
+        </template>
         <VChip
-          v-else
+          v-if="provenance"
           size="x-small"
           variant="outlined"
-          prepend-icon="fas fa-circle-dot"
-          class="header-chip issue-chip"
+          prepend-icon="fas fa-robot"
+          class="header-chip provenance-chip"
         >
-          {{ issue.label }}
+          {{ provenance }}
         </VChip>
       </template>
-      <VChip
-        v-if="provenance"
-        size="x-small"
-        variant="outlined"
-        prepend-icon="fas fa-robot"
-        class="header-chip provenance-chip"
-      >
-        {{ provenance }}
-      </VChip>
-    </template>
       <!-- What the study is doing, such as Validating for a moment after every save, takes its
            room from the title, so that the line never wraps for it. -->
       <div class="study-title-box">
