@@ -490,6 +490,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
         ],
     ),
     Substance(
+        sid="protein",
+        description="Protein as a macronutrient, e.g. a protein drink or protein meal given as an "
+        "intervention. For the protein content of a sample (laboratory measurement) use 'total protein'.",
+        annotations=[
+            (BQB.IS, "CHEBI:36080"),
+            (BQB.IS, "NCIT:C17021"),
+        ],
+        synonyms=["dietary protein"],
+    ),
+    Substance(
+        sid="dna",
+        name="DNA",
+        description="Deoxyribonucleic acid (DNA). Used for the DNA content of tissues, e.g. as a measure "
+        "of the cell number in liver regeneration.",
+        annotations=[(BQB.IS, "CHEBI:16991")],
+        synonyms=["deoxyribonucleic acid"],
+    ),
+    Substance(
         sid="triglyceride",
         description="Total triglyceride. Fats composed of three fatty acid chains linked to a "
         "glycerol molecule.",
@@ -1145,6 +1163,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["K", "K+"],
     ),
     Substance(
+        sid="magnesium",
+        description="Magnesium. An element with atomic symbol Mg, atomic number 12, and atomic weight 24.305.",
+        annotations=[
+            (BQB.IS, "CHEBI:25107"),
+            (BQB.IS, "NCIT:C29239"),
+        ],
+        synonyms=["Mg", "Mg2+"],
+    ),
+    Substance(
         sid="potassium-dihydrogen-phosphate",
         name="potassium dihydrogen phosphate",
         description="A potassium salt in which dihydrogen phosphate(1−) is the counterion.",
@@ -1338,6 +1365,33 @@ SUBSTANCE_NODES: list[InfoNode] = [
             (BQB.IS, "CHEBI:31696"),
             (BQB.IS, "NCIT:C65913"),
         ],
+    ),
+    Substance(
+        sid="tc99m-gsa",
+        name="99mTc-GSA",
+        label="technetium Tc 99m galactosyl human serum albumin (99mTc-GSA)",
+        description="Technetium Tc 99m galactosyl human serum albumin (99mTc-GSA), a radiotracer of "
+        "galactosyl human serum albumin conjugated to diethylenetriamine pentaacetic acid (DTPA). It binds "
+        "the asialoglycoprotein receptor of hepatocytes and is used for the scintigraphic assessment of "
+        "the functional liver mass.",
+        annotations=[(BQB.IS, "NCIT:C97036")],
+        synonyms=[
+            "GSA",
+            "Tc-99m-GSA",
+            "technetium Tc 99m galactosyl human serum albumin",
+        ],
+    ),
+    Substance(
+        sid="mebrofenin",
+        description="An iminodiacetic acid derivative that is administered as its technetium-99m complex "
+        "(99mTc-mebrofenin) for hepatobiliary scintigraphy. It is taken up by hepatocytes (OATP1B1 and "
+        "OATP1B3) and excreted unchanged into bile.",
+        annotations=[
+            (BQB.IS, "CHEBI:135608"),
+            (BQB.IS, "pubchem.compound/54158"),
+            (BQB.IS, "NCIT:C66061"),
+        ],
+        synonyms=["99mTc-mebrofenin", "technetium Tc 99m mebrofenin", "Choletec"],
     ),
     Substance(
         sid="glycocholic acid",
@@ -1657,9 +1711,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="diethyldithiocarbamic acid",
-        description="diethyldithiocarbamic acid",
+        description="Diethyldithiocarbamic acid. A dithiocarbamic acid that is diethylcarbamic acid in "
+        "which both oxygens are replaced by sulfur; the main metabolite of disulfiram and an inhibitor "
+        "of CYP2E1.",
         annotations=[
-            (BQB.IS, "CHEBI:8987"),
+            (BQB.IS, "CHEBI:144353"),
+            (BQB.IS, "pubchem.compound/8987"),
         ],
         synonyms=["Ditiocarb"],
     ),
@@ -2766,6 +2823,22 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="morphine/morphine-3-glucuronide",
         description="Morphine/morphine-3-glucuronide ratio. Used in phenotyping.",
         parents=["mor", "m3g"],
+    ),
+    Substance(
+        sid="m3g/mor",
+        label="morphine-3-glucuronide/morphine",
+        description="Morphine-3-glucuronide/morphine ratio. Ratio of the metabolite morphine-3-glucuronide "
+        "to morphine, used for metabolite-to-parent concentration and AUC ratios. The inverse ratio is "
+        "'mor/m3g'.",
+        parents=["m3g", "mor"],
+    ),
+    Substance(
+        sid="m6g/mor",
+        label="morphine-6-glucuronide/morphine",
+        description="Morphine-6-glucuronide/morphine ratio. Ratio of the metabolite morphine-6-glucuronide "
+        "to morphine, used for metabolite-to-parent concentration and AUC ratios. The inverse ratio is "
+        "'mor/m6g'.",
+        parents=["m6g", "mor"],
     ),
     Substance(
         sid="cod/mor",
@@ -4725,6 +4798,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["MK 521", "MK-521"],
     ),
     # ----------------------
+    # fosinopril
+    # ----------------------
+    Substance(
+        sid="fosinopril",
+        description="A phosphinic acid-containing ester prodrug of the angiotensin converting enzyme (ACE) "
+        "inhibitor fosinoprilat, used for the treatment of hypertension and heart failure.",
+        annotations=[
+            (BQB.IS, "CHEBI:5163"),
+            (BQB.IS, "NCIT:C65761"),
+        ],
+        synonyms=["Monopril"],
+    ),
+    # ----------------------
     # ramipril
     # ----------------------
     Substance(
@@ -6006,7 +6092,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "with anticoagulant activity. Upon oral administration, edoxaban selectively binds to both "
         "free factor Xa and factor Xa bound in the prothrombinase complex. This interferes with the "
         "conversion of prothrombin (factor II) to thrombin and eventually prevents the formation of "
-        "cross-linked fibrin clots. Rivaroxaban does not affect existing thrombin levels.",
+        "cross-linked fibrin clots. Edoxaban does not affect existing thrombin levels.",
         annotations=[
             (BQB.IS, "CHEBI:85973"),
             (BQB.IS, "pubchem.compound/10280735"),
@@ -6074,6 +6160,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="edoxaban+metabolites",
         label="edoxaban+metabolites",
         description="All edoxaban substances.",
+    ),
+    Substance(
+        sid="prothrombin-complex-concentrate",
+        name="prothrombin complex concentrate",
+        label="prothrombin complex concentrate (PCC)",
+        description="Prothrombin complex concentrate (PCC), a plasma-derived concentrate of the vitamin "
+        "K-dependent coagulation factors II, VII, IX and X (four-factor PCC), dosed in international units "
+        "of factor IX and used to reverse anticoagulation.",
+        annotations=[
+            (BQB.IS, "CHEBI:760520"),
+            (BQB.IS_VERSION_OF, "NCIT:C208347"),
+        ],
+        synonyms=["PCC", "4F-PCC", "Kcentra", "Beriplex"],
     ),
     Substance(
         sid="edoxaban_edoxaban_m4",
@@ -6713,16 +6812,82 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="sorafenib-m2-glucuronide/sorafenib",
         label="sorafenib-m2-glucuronide/sorafenib",
-        description="Sorafenib-m2-glucuronide/sorafenib ratio.",
+        description="Sorafenib-m2-glucuronide/sorafenib ratio. For the ratio of sorafenib glucuronide "
+        "(SG) to sorafenib use 'sorafenib-glucuronide/sorafenib'.",
         parents=["sorafenib-m2-glucuronide", "sorafenib"],
-        synonyms=["SG/sorafenib)"],
     ),
     Substance(
         sid="sorafenib-m2/sorafenib",
         label="sorafenib-m2/sorafenib",
         description="Sorafenib-m2/sorafenib ratio.",
         parents=["sorafenib-m2", "sorafenib"],
-        synonyms=["M2/sorafenib)"],
+        synonyms=["M2/sorafenib"],
+    ),
+    Substance(
+        sid="sorafenib-glucuronide",
+        description="Sorafenib beta-D-glucuronide (SG), the glucuronide of sorafenib formed by UGT1A9. It "
+        "is secreted into bile by ABCC2 and taken up into hepatocytes by OATP1B1 and OATP1B3 (hepatocyte "
+        "hopping). It differs from 'sorafenib-M2-glucuronide', the glucuronide of the N-oxide metabolite M2.",
+        annotations=[
+            (BQB.IS, "CHEBI:169915"),
+            (BQB.IS, "pubchem.compound/71752221"),
+        ],
+        synonyms=["SG", "sorafenib glucuronide", "sorafenib beta-D-glucuronide"],
+    ),
+    Substance(
+        sid="sorafenib-glucuronide/sorafenib",
+        label="sorafenib-glucuronide/sorafenib",
+        description="Sorafenib-glucuronide/sorafenib ratio.",
+        parents=["sorafenib-glucuronide", "sorafenib"],
+        synonyms=["SG/sorafenib"],
+    ),
+    # sorafenib co-medications
+    Substance(
+        sid="erlotinib",
+        description="A quinazoline derivative that inhibits the tyrosine kinase of the epidermal growth "
+        "factor receptor (EGFR). Erlotinib is used to treat non-small cell lung cancer and pancreatic "
+        "cancer and is metabolized mainly by CYP3A4, among others to the active O-desmethyl metabolite "
+        "OSI-420.",
+        annotations=[
+            (BQB.IS, "CHEBI:114785"),
+            (BQB.IS, "pubchem.compound/176870"),
+        ],
+        synonyms=["Tarceva", "OSI-774"],
+    ),
+    Substance(
+        sid="osi-420",
+        name="OSI-420",
+        description="O-desmethyl erlotinib (OSI-420), the active metabolite of erlotinib formed mainly by "
+        "CYP3A4, in which the methoxy group of the 6-(2-methoxyethoxy) side chain is demethylated.",
+        mass=379.41,
+        formula="C21H21N3O4",
+        charge=0,
+        annotations=[
+            (BQB.IS, "pubchem.compound/10317566"),
+            (BQB.IS, "inchikey/KOQIAZNBAWFSQM-UHFFFAOYSA-N"),
+        ],
+        synonyms=["desmethyl erlotinib", "O-desmethyl erlotinib", "CP-373420"],
+    ),
+    Substance(
+        sid="vinorelbine",
+        description="A semisynthetic vinca alkaloid that inhibits the polymerization of tubulin into "
+        "microtubules and thereby mitosis. Vinorelbine is used to treat non-small cell lung cancer and "
+        "breast cancer.",
+        annotations=[
+            (BQB.IS, "CHEBI:480999"),
+            (BQB.IS, "pubchem.compound/5311497"),
+        ],
+        synonyms=["Navelbine"],
+    ),
+    Substance(
+        sid="levothyroxine",
+        description="L-thyroxine (T4), the main thyroid hormone, given as a synthetic drug for thyroid "
+        "hormone replacement and for the suppression of thyrotropin (TSH).",
+        annotations=[
+            (BQB.IS, "CHEBI:18332"),
+            (BQB.IS, "pubchem.compound/5819"),
+        ],
+        synonyms=["L-thyroxine", "thyroxine", "T4"],
     ),
     # Gd-EOB-DTPA
     Substance(
@@ -6757,6 +6922,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
             (BQB.IS, "NCIT:C152328"),
             (BQB.IS, "inchikey/DLSWIYLPEUIQAV-CCUURXOWSA-N"),
         ],
+    ),
+    Substance(
+        sid="semaglutide+metabolites",
+        label="semaglutide+metabolites",
+        description="Sum of semaglutide and all its metabolites, i.e. the total radioactivity of "
+        "[3H]-semaglutide-related material in radioactive tracing studies.",
     ),
     Substance(
         sid="snac",
@@ -7270,6 +7441,17 @@ SUBSTANCE_NODES: list[InfoNode] = [
             (BQB.IS, "pubchem.compound/118984454"),
             (BQB.IS, "inchikey/COCFEDIXXNGUNL-RFKWWTKHSA-N"),
         ],
+    ),
+    Substance(
+        sid="insulin-icodec",
+        name="insulin icodec",
+        description="Insulin icodec, a once-weekly basal insulin analogue that binds reversibly to albumin, "
+        "which gives it a half-life of about one week.",
+        annotations=[
+            (BQB.IS, "CHEBI:758054"),
+            (BQB.IS, "NCIT:C175800"),
+        ],
+        synonyms=["icodec", "Awiqli"],
     ),
     Substance(
         sid="ace",

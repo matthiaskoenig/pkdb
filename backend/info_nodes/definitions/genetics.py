@@ -19,6 +19,18 @@ GENETICS_NODES: list[InfoNode] = [
         dtype=DType.ABSTRACT,
     ),
     MeasurementType(
+        sid="mrna-expression-relative",
+        name="mRNA expression (relative)",
+        description="Relative mRNA expression of a gene in a tissue (e.g. by quantitative RT-PCR, "
+        "normalized to a housekeeping gene) as ratio to a reference condition (e.g. pre-operative or "
+        "control tissue), e.g. 1.0 (100%) for no difference. State the gene in the label or comment; "
+        "the tissue is encoded by the tissue field.",
+        parents=["gene-measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        synonyms=["relative gene expression", "relative mRNA level"],
+    ),
+    MeasurementType(
         sid="gene-phenotype",
         name="gene phenotype",
         description="Gene phenotype.",
@@ -423,6 +435,21 @@ GENETICS_NODES: list[InfoNode] = [
         dtype=DType.CATEGORICAL,
     ),
     MeasurementType(
+        sid="slco1b3-genotype",
+        name="SLCO1B3 genotype",
+        label="SLCO1B3 genotype",
+        description="SLCO1B3 genotype (gene of the OATP1B3 transporter). The choices give the variant "
+        "and the diplotype in the notation of 'SLCO1B1 genotype', e.g. 'c.334 T/G'.",
+        synonyms=[
+            "OATP1B3 genotype",
+            "OATP8 genotype",
+            "SLC21A8 genotype",
+            "LST-2 genotype",
+        ],
+        parents=["genotype"],
+        dtype=DType.CATEGORICAL,
+    ),
+    MeasurementType(
         sid="slco2b1-genotype",
         name="SLCO2B1 genotype",
         label="SLCO2B1 genotype",
@@ -479,6 +506,9 @@ ABCB1_GENOTYPES = [
     "TTT",  # C3435T T/? & G2677T/A T/? & T1236C T/?   # e.g., C3435T T/C & G2677T/A G/T & T1236C T/T => 2 * 3 * 2 = 12 combinations
     "CGC",  # 2 * 3 * 2 = 12 combinations
     "Non-TTT",  # 1 * 3 * 1 = 3 combinations
+    # Homozygous diplotypes of the haplotypes 1236-2677-3435 (Jiang2017)
+    "CGC/CGC",  # 1236C-2677G-3435C on both alleles (reference haplotype)
+    "TTT/TTT",  # 1236T-2677T-3435T on both alleles (variant haplotype)
 ]
 for key in ABCB1_GENOTYPES:
     GENETICS_NODES.append(
@@ -1029,6 +1059,36 @@ for key in SLCO1B1_GENOTYPES:
                 f"SLC21A6 {key} genotype",
                 f"LST-1 {key} genotype",
                 f"OATP-C {key} genotype",
+            ],
+        ),
+    )
+
+# OATP1B3 (e.g. gadoxetate)
+SLCO1B3_GENOTYPES = [
+    # c.334T>G (rs4149117)
+    "c.334 T/T",
+    "c.334 T/G",
+    "c.334 G/G",
+    # c.699G>A (rs7311358)
+    "c.699 G/G",
+    "c.699 G/A",
+    "c.699 A/A",
+    # *4: haplotype of c.334G and c.699A (Nassif2012)
+    "*4/*4",
+]
+for key in SLCO1B3_GENOTYPES:
+    GENETICS_NODES.append(
+        Choice(
+            sid=f"slco1b3-{key}",
+            name=key,
+            label=f"SLCO1B3 {key}",
+            description=f"SLCO1B3 {key} genotype.",
+            parents=["slco1b3-genotype"],
+            synonyms=[
+                f"OATP1B3 {key} genotype",
+                f"OATP8 {key} genotype",
+                f"SLC21A8 {key} genotype",
+                f"LST-2 {key} genotype",
             ],
         ),
     )

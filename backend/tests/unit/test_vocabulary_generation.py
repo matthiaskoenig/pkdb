@@ -95,7 +95,7 @@ def test_chmo_annotations_resolve_from_offline_cache(generated_vocabulary):
     chmo = [
         annotation for annotation in annotations if annotation["collection"] == "chmo"
     ]
-    assert len(chmo) == 23
+    assert len(chmo) == 24
     for annotation in chmo:
         assert annotation["term"].startswith("CHMO:")
         assert annotation["url"] == f"https://bioregistry.io/{annotation['term']}"
