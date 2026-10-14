@@ -85,6 +85,12 @@ export type TableFileKind = TableKind | "raw";
 export type InfoClass = "subjects" | "interventions" | "data" | "raw";
 
 /**
+ * What a column of a table names, by which the Data section tints it: the subjects, the
+ * interventions, the data, or `meta` for `study` and `source`, which say where a row comes from.
+ */
+export type ColumnClass = "subjects" | "interventions" | "data" | "meta";
+
+/**
  * A table file of the study; the study detail lists them in the order of the workbook sheets.
  * `source` is the source it belongs to, such as Tab2 of `outputs_Tab2.tsv` or of the raw table
  * `<name>_Tab2.tsv`, and null for a table shared by several sources, which names the source of
@@ -704,7 +710,17 @@ export interface TableRow {
 }
 
 export type TableResponse =
-  | { file: string; kind: "table"; header: string[]; rows: TableRow[] }
+  | {
+      file: string;
+      kind: "table";
+      header: string[];
+      /**
+       * The class of each column in header order, as the local server serves a table file; a table
+       * that the app builds, such as the versions of a conflict, has none.
+       */
+      classes?: ColumnClass[];
+      rows: TableRow[];
+    }
   | { file: string; kind: "raw"; rows: TableRow[] };
 
 export interface MappedTable {

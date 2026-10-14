@@ -151,6 +151,35 @@ def test_table_preview_contract(workspace, engine_on):
     )
 
 
+TABLE_FILES = (
+    "subjects.tsv",
+    "characteristica.tsv",
+    "interventions.tsv",
+    "outputs_Tab2.tsv",
+    "Demo2020_Tab2.tsv",
+)
+
+
+def test_table_content_contract(workspace, engine_on):
+    """The rows of the tables of Demo2020 with the class of each column, and of its raw
+    table, which has none."""
+    engine = engine_on(workspace)
+    tables = {file: engine.study_table(DEMO, file) for file in TABLE_FILES}
+    outputs = tables["outputs_Tab2.tsv"]
+    classes = dict(zip(outputs["header"], outputs["classes"], strict=True))
+    names = ("study", "source", "subjects", "interventions", "measurement", "comment")
+    assert [classes[name] for name in names] == [
+        "meta",
+        "meta",
+        "subjects",
+        "interventions",
+        "data",
+        "data",
+    ]
+    assert "classes" not in tables["Demo2020_Tab2.tsv"]
+    check_contract("table-content", tables)
+
+
 TARGET_DRAFTS = [
     {
         "file": "timecourses_Fig1.tsv",

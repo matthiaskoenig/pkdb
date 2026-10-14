@@ -74,6 +74,7 @@ from pkdb.studyformat.tables import (
     REVIEW_JSON,
     STUDY_JSON,
     TABLES,
+    column_classes,
     parse_table_file,
 )
 from pkdb.studyformat.targets import match_target
@@ -722,6 +723,8 @@ class StudiesMixin(EngineState):
                 "file": file,
                 "kind": "table",
                 "header": list(header),
+                # What each column names, by which the app tints it; a raw table has none.
+                "classes": list(column_classes(table.spec)),
                 "rows": [
                     {
                         "line": row.line,
