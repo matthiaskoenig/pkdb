@@ -3,13 +3,10 @@ import { computed, ref, useId } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../../study-views/types";
 import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
-import { usePlotScales } from "../composables/usePlotScales";
-import { useOverviewStore } from "../stores/overview";
-import { useStudyStore } from "../stores/study";
+import { useStudyViews } from "../../study-views/context";
 import { rawTable } from "../../study-views/grid";
 import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../../study-views/overlay";
 import { groupByFile, groupCounts, locationKey } from "../../study-views/problems";
-import { validatesAfterWrite } from "../acknowledging";
 import { SOURCE_ICONS, sourceProblems } from "../../study-views/sources";
 import { tableFiles, type ActionFailure } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
@@ -39,8 +36,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ "select-row": [row: NonNullable<SelectedRow>]; retry: [] }>();
 
-const study = useStudyStore();
-const overview = useOverviewStore();
+const views = useStudyViews();
 const id = useId();
 
 type Zoom = "fit" | "full";
@@ -65,10 +61,12 @@ function setZoom(value: Zoom): void {
   }
 }
 
-const detail = computed(() => study.detail);
+const detail = views.data.detail;
+/** The warnings acknowledged on this page that no later validation checked yet. */
+const acknowledged = views.data.acknowledgedKeys;
 const identity = computed(() => detail.value?.id ?? "");
 /** The scales of the plots of the source: the curator's choice for the figure, else the digitization's, else linear. */
-const { scales, choose } = usePlotScales(identity, () => props.view);
+const { scales, choose } = views.data.plotScales(identity, () => props.view);
 /** The points of the plot that its log axes leave out. */
 const offScale = computed(() => (props.view ? pointsOffScale(props.view, scales.value) : 0));
 const kind = computed(() => props.summary.kind);
@@ -101,8 +99,8 @@ const sourceIssues = computed(() =>
 /** The problems of the files of the source by file. */
 const problemGroups = computed(() => groupByFile(sourceIssues.value));
 const problemCount = computed(() => problemGroups.value.reduce((sum, group) => sum + group.issues.length, 0));
-/** Whether the local server validates the study after a write, for the mark of an acknowledged warning. */
-const automatic = computed(() => validatesAfterWrite(overview.snapshot ?? null));
+/** Whether the server validates the study after a write, for the mark of an acknowledged warning. */
+const automatic = views.data.validatesAfterWrite;
 
 // More of the pane below its view: a fade at its bottom shows it, inside its scroll bar. The body
 // changes with the window and the separator, the content with a loaded view or image.
@@ -132,7 +130,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
         <div ref="content" class="pane-content">
           <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${summary.source}`" />
           <!-- It goes when the view loads again, after Retry or a change of the study: no close button. -->
-          <ActionFailureAlert v-else-if="error" :failure="error" :study="study.detail?.id ?? null" :closable="false">
+          <ActionFailureAlert v-else-if="error" :failure="error" :study="detail?.id ?? null" :closable="false">
             <template #append>
               <VBtn variant="text" size="small" @click="emit('retry')">Retry</VBtn>
             </template>
@@ -256,7 +254,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
                     :study="identity"
                     :id-base="`${id}-problem-${groupIndex}-${index}`"
                     :showable="tables.has(group.file ?? '')"
-                    :pending="study.acknowledgedKeys.includes(locationKey(issue))"
+                    :pending="acknowledged.includes(locationKey(issue))"
                     :automatic="automatic"
                     :disabled="false"
                     :validating="false"

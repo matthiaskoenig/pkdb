@@ -77,7 +77,7 @@ const router = useRouter();
 const views = useStudyViews();
 const { notice, announce } = useNotice();
 
-const detail = computed(() => study.detail);
+const detail = views.data.detail;
 const identity = computed(() => detail.value?.id ?? "");
 /** Beyond the upload limits the local server lists no sources and tables, which the study may well have. */
 const limited = computed(() => (detail.value ? beyondLimits(detail.value) : false));
@@ -146,8 +146,8 @@ const {
   reload: reloadRows,
 } = useLoaded<TableResponse, StudyDetail | null>(
   () => file.value,
-  (name) => study.table(name),
-  () => study.detail,
+  (name) => views.data.table(name),
+  () => detail.value,
   (name) => `${name} could not be loaded.`,
 );
 /** The rows of the selected file; null while another one is shown or it loads. */
@@ -233,8 +233,8 @@ const {
   reload: reloadView,
 } = useLoaded<SourceView>(
   () => source.value?.source ?? null,
-  (name) => study.source(name),
-  () => study.detail,
+  (name) => views.data.source(name),
+  () => detail.value,
   (name) => `${name} could not be loaded.`,
 );
 /** The view of the selected source; null while another one is shown or it loads. */
@@ -341,10 +341,10 @@ watch(
 // Most tables leave many of their fixed columns empty, so they are hidden until the curator shows them.
 const hideEmpty = ref(true);
 /** The filter of the rows of the selected shared table, which the study keeps per table while it is open. */
-const filter = computed(() => (file.value ? study.rowFilter(file.value) : ALL_ROWS));
+const filter = computed(() => (file.value ? views.data.rowFilter(file.value) : ALL_ROWS));
 
 function setFilter(next: RowFilter): void {
-  if (file.value) study.setRowFilter(file.value, next);
+  if (file.value) views.data.setRowFilter(file.value, next);
 }
 
 // Sync status and actions

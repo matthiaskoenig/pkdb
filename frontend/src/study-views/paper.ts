@@ -4,7 +4,6 @@
  * the first paper as a chunk of its own, as Plotly does.
  */
 import { reactive } from "vue";
-import { checkFile } from "../curation-app/api/client";
 import { ApiError, NO_SESSION, SessionMissing } from "./errors";
 import type { PaperFile, StudyDetail } from "./types";
 import { actionFailure, studyName, type ActionFailure, type FailureDetails } from "./study";
@@ -81,7 +80,7 @@ export interface PaperSession {
  * `div.pdfViewer` inside. Aborting `signal` stops the loading, with its worker and its requests,
  * and rejects with its reason: an aborted PDF never comes into the container. A PDF that opened
  * is closed with `close` of its session; aborting then ends the listeners of PDF.js on the
- * container.
+ * container. `assets` is the URL of the folder of the files of PDF.js, ending with `/`.
  */
 export type OpenPaper = (
   container: HTMLDivElement,
@@ -89,6 +88,7 @@ export type OpenPaper = (
   events: PaperEvents,
   start: PaperStart,
   signal: AbortSignal,
+  assets: string,
 ) => Promise<PaperSession>;
 
 /**
@@ -179,14 +179,18 @@ export function findText(result: FindResult | null, query: string): string {
 export type PaperAnswer = ApiError | SessionMissing;
 
 /**
- * Why the local server did not serve the PDF at `url`, which PDF.js reports by the status alone:
- * the error of the server when it is asked again, for one byte of the PDF, or SessionMissing. Null
+ * Why the server did not serve the PDF at `url`, which PDF.js reports by the status alone: the
+ * error of the server when `check` asks it again for one byte of the PDF, or SessionMissing. Null
  * for another failure of PDF.js, and when the server serves the PDF now or cannot be reached.
  */
-export async function paperAnswer(caught: unknown, url: string): Promise<PaperAnswer | null> {
+export async function paperAnswer(
+  caught: unknown,
+  url: string,
+  check: (url: string) => Promise<void>,
+): Promise<PaperAnswer | null> {
   if (!(caught instanceof Error) || caught.name !== "ResponseException") return null;
   try {
-    await checkFile(url);
+    await check(url);
   } catch (error) {
     if (error instanceof SessionMissing) return error;
     // ServerStopped is an ApiError of status 0, which says nothing about the PDF.

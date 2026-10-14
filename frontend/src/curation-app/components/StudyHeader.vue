@@ -3,6 +3,7 @@ import { computed, ref, useId } from "vue";
 import { VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
 import { isRevisionConflict, isValidationError } from "../api/client";
 import type { ReviewStatus, StudyDetail } from "../../study-views/types";
+import { useStudyViews } from "../../study-views/context";
 import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import {
@@ -41,6 +42,7 @@ const props = defineProps<{
 
 const study = useStudyStore();
 const overview = useOverviewStore();
+const views = useStudyViews();
 const reasonId = useId();
 const statusId = useId();
 
@@ -64,7 +66,7 @@ const release = computed(() => (summary.value.release ? releaseLabel(summary.val
 const issue = computed(() => {
   const label = issueLabel(props.detail.issue, summary.value.issue);
   if (label === null) return null;
-  return { label, url: issueUrl(props.detail, overview.snapshot?.github.repository ?? "") };
+  return { label, url: issueUrl(props.detail, views.data.repository.value) };
 });
 const provenance = computed(() => provenanceLabel(summary.value));
 const pmid = computed(() => {

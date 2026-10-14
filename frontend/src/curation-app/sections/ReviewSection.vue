@@ -39,8 +39,9 @@ const route = useRoute();
 const router = useRouter();
 const views = useStudyViews();
 const { notice, announce } = useNotice();
+const detail = views.data.detail;
 
-const review = computed(() => study.detail?.review ?? null);
+const review = computed(() => detail.value?.review ?? null);
 const items = computed<ReviewItem[]>(() => review.value?.value?.items ?? []);
 const approved = computed(() => review.value?.value?.status === "approved");
 const writable = computed(() => review.value?.revision != null && review.value.value !== null);
@@ -48,13 +49,13 @@ const writable = computed(() => review.value?.revision != null && review.value.v
 // Profiles: the roster, and the people of the study who are not in it.
 const roster = ref<Profile[]>([]);
 onMounted(() => {
-  study.curators().then(
+  views.data.curators().then(
     (profiles) => (roster.value = profiles),
     // Without the roster the items show user names.
     () => undefined,
   );
 });
-const profiles = computed(() => knownProfiles(roster.value, study.detail?.people));
+const profiles = computed(() => knownProfiles(roster.value, detail.value?.people));
 
 // Filters and selection
 
@@ -128,18 +129,18 @@ async function choose(id: string): Promise<void> {
   select(id);
   await nextTick();
   const list = listColumn.value;
-  const detail = detailColumn.value;
-  if (!list || !detail) return;
-  const below = detail.getBoundingClientRect().left === list.getBoundingClientRect().left;
+  const column = detailColumn.value;
+  if (!list || !column) return;
+  const below = column.getBoundingClientRect().left === list.getBoundingClientRect().left;
   if (!below) {
-    detail.scrollTop = 0;
+    column.scrollTop = 0;
     return;
   }
   // Below the app bar, and with the start of the item in view.
-  const top = detail.getBoundingClientRect().top;
+  const top = column.getBoundingClientRect().top;
   if (top < 64 || top > window.innerHeight - 160) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    detail.scrollIntoView?.({ block: "start", behavior: reduced ? "auto" : "smooth" });
+    column.scrollIntoView?.({ block: "start", behavior: reduced ? "auto" : "smooth" });
   }
 }
 
@@ -321,7 +322,7 @@ function added(item: ReviewItem | null): void {
             {{ failure.text }}
           </VAlert>
           <UserHint v-else-if="failure?.kind === 'user'" :text="failure.text" />
-          <ActionFailureAlert v-else-if="failure" :failure="failure" :study="study.detail?.id ?? null" class="review-failure" @close="failure = null" />
+          <ActionFailureAlert v-else-if="failure" :failure="failure" :study="detail?.id ?? null" class="review-failure" @close="failure = null" />
           <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
           <span role="status" aria-live="polite" class="review-notice">{{ notice }}</span>
           <TargetView v-if="selected" :item="selected" />

@@ -8,7 +8,6 @@ import { useLoaded } from "../../study-views/composables/useLoaded";
 import { targetMatch } from "../../study-views/grid";
 import { plural } from "../../study-views/overview";
 import { matchText, rowsAt, shownColumns, targetText } from "../../study-views/review";
-import { useStudyStore } from "../stores/study";
 import { beyondLimits, tableFiles } from "../../study-views/study";
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import SourceOverlay from "./SourceOverlay.vue";
@@ -23,19 +22,19 @@ import TableGrid from "./TableGrid.vue";
  */
 const props = defineProps<{ item: ReviewItem }>();
 
-const study = useStudyStore();
 const router = useRouter();
 const headingId = useId();
 const views = useStudyViews();
+const detail = views.data.detail;
 
 const target = computed(() => props.item.target);
 const file = computed(() => target.value?.file ?? null);
 /** A data table or a raw table of the study, whose rows the local API serves. */
 const tableFile = computed(() =>
-  file.value !== null && study.detail !== null && tableFiles(study.detail).includes(file.value) ? file.value : null,
+  file.value !== null && detail.value !== null && tableFiles(detail.value).includes(file.value) ? file.value : null,
 );
 /** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
-const series = computed(() => targetMatch(study.detail?.targets ?? {}, props.item).series);
+const series = computed(() => targetMatch(detail.value?.targets ?? {}, props.item).series);
 
 const {
   data: table,
@@ -43,8 +42,8 @@ const {
   loading: tableLoading,
 } = useLoaded<TableResponse, StudyDetail | null>(
   () => tableFile.value,
-  (name) => study.table(name),
-  () => study.detail,
+  (name) => views.data.table(name),
+  () => detail.value,
   (name) => `The rows of ${name} could not be loaded.`,
 );
 /**
@@ -60,7 +59,7 @@ const pending = computed(
   () =>
     tableError.value === null &&
     !(props.item.id in rowsTargets.value) &&
-    props.item.id in (study.detail?.targets ?? {}),
+    props.item.id in (detail.value?.targets ?? {}),
 );
 const {
   data: figure,
@@ -68,15 +67,15 @@ const {
   loading: figureLoading,
 } = useLoaded<SourceView>(
   () => series.value?.source ?? null,
-  (name) => study.source(name),
-  () => study.detail,
+  (name) => views.data.source(name),
+  () => detail.value,
   (name) => `Figure ${name} could not be loaded.`,
 );
 
 /** A clicked mapped point of the figure opens its row in the Data section. */
 function showRow(row: { file: string; line: number }): void {
-  if (study.detail)
-    void router.push(views.routes.section(study.detail.id, "data", { file: row.file, line: String(row.line) }));
+  if (detail.value)
+    void router.push(views.routes.section(detail.value.id, "data", { file: row.file, line: String(row.line) }));
 }
 
 const rows = computed(() => {
@@ -102,7 +101,7 @@ const rows = computed(() => {
 /** The Data section at the target, or at its row `line`, with the column of the item. */
 function tableRoute(line?: number) {
   const column = rows.value?.column;
-  return views.routes.section(study.detail?.id ?? "", "data", {
+  return views.routes.section(detail.value?.id ?? "", "data", {
     file: tableFile.value ?? "",
     ...(line === undefined ? {} : { line: String(line) }),
     ...(column ? { column } : {}),
@@ -113,7 +112,7 @@ const rawTable = computed(() => table.value?.content.kind === "raw");
  * Beyond the upload limits the local server lists no tables and matches no target: a target of a
  * file, which may be a table, says why its rows do not show.
  */
-const limited = computed(() => file.value !== null && study.detail !== null && beyondLimits(study.detail));
+const limited = computed(() => file.value !== null && detail.value !== null && beyondLimits(detail.value));
 const shown = computed(() => tableFile.value !== null || series.value !== null || limited.value);
 </script>
 
@@ -127,7 +126,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
 
       <p v-if="limited" class="field-note target-limits">
         This study is beyond the upload limits, so the app cannot show the rows of its tables. See
-        <RouterLink :to="views.routes.section(study.detail?.id ?? '', 'problems')">Problems</RouterLink>.
+        <RouterLink :to="views.routes.section(detail?.id ?? '', 'problems')">Problems</RouterLink>.
       </p>
 
       <div v-if="tableFile" class="target-block">
@@ -141,7 +140,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
         <ActionFailureAlert
           v-else-if="tableError"
           :failure="tableError"
-          :study="study.detail?.id ?? null"
+          :study="detail?.id ?? null"
           :closable="false"
         />
         <p v-else-if="rawTable" class="field-note">
@@ -186,7 +185,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
         <ActionFailureAlert
           v-else-if="figureError"
           :failure="figureError"
-          :study="study.detail?.id ?? null"
+          :study="detail?.id ?? null"
           :closable="false"
         />
         <SourceOverlay

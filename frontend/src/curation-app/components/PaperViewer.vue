@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
+import { useStudyViews } from "../../study-views/context";
 import {
   FIT_LABELS,
   FITS,
@@ -47,6 +48,8 @@ const props = withDefaults(
  * back on its page and zoom when the viewer mounts again, as after a change on disk.
  */
 const place = defineModel<PaperPlace | null>("place", { default: null });
+
+const views = useStudyViews();
 
 /** The fields have ids, which a browser expects of a form field, and labels that only screen readers show. */
 const id = useId();
@@ -142,6 +145,7 @@ async function open(): Promise<void> {
       },
       start,
       signal,
+      views.data.pdfjsAssets(),
     );
     if (signal.aborted) {
       void close(opened);
@@ -152,7 +156,7 @@ async function open(): Promise<void> {
   } catch (caught) {
     if (signal.aborted) return;
     // PDF.js reports an error status of the local server without its answer, which says why.
-    const answer = await paperAnswer(caught, props.url);
+    const answer = await paperAnswer(caught, props.url, views.data.checkFile);
     if (signal.aborted) return;
     importFailed.value = caught instanceof PaperImportFailed;
     failure.value = paperFailure(caught, props.file, props.url, answer);

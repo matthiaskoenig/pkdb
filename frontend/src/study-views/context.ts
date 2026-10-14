@@ -2,8 +2,8 @@
  * What a page that shows a study with the shared study views gives them (#963): what the reader
  * may see and do (`capabilities`), where their links and the changes of their query go
  * (`routes`), where they read the study and the study list (`data`), and the parts that only one
- * app has (`parts`). The curation app provides it once for the app (`curation-app/studyViews.ts`);
- * a page of the website provides it for the study it shows. A component of the views reads it
+ * app has (`parts`). The curation app provides it once for the app (its `studyViews.ts`); a page
+ * of the website provides it for the study it shows. A component of the views reads it
  * with `useStudyViews()`: it never reads a store or names a route of either app.
  */
 import {

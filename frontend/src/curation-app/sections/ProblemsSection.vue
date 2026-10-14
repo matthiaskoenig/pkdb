@@ -25,7 +25,6 @@ import {
   severityCounts,
   type SeverityFilter,
 } from "../../study-views/problems";
-import { validatesAfterWrite } from "../acknowledging";
 import { targetParts } from "../../study-views/review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
@@ -44,7 +43,7 @@ const { notice, announce } = useNotice();
 const id = useId();
 const section = ref<HTMLElement | null>(null);
 
-const detail = computed(() => study.detail);
+const detail = views.data.detail;
 const identity = computed(() => detail.value?.id ?? "");
 const problems = computed<Problem[]>(() => detail.value?.problems ?? []);
 /** The issues of the upload limits, shown above the others. */
@@ -125,7 +124,7 @@ function openable(file: string | null): file is string {
 // Profiles: the roster, and the people of the study who are not in it.
 const roster = ref<Profile[]>([]);
 onMounted(() => {
-  study.curators().then(
+  views.data.curators().then(
     (profiles) => (roster.value = profiles),
     // Without the roster the acknowledgements show user names.
     () => undefined,
@@ -157,14 +156,14 @@ const acknowledgeable = computed(() => listed.value.some((issue) => acknowledgem
 
 /**
  * Whether a warning was acknowledged in the app and the report of the study still lists it: the
- * study store keeps it until the next report, which leaves it out.
+ * page keeps it until the next report, which leaves it out.
  */
 function isPending(issue: ValidationIssue): boolean {
-  return study.acknowledgedKeys.includes(locationKey(issue));
+  return views.data.acknowledgedKeys.value.includes(locationKey(issue));
 }
 
-/** Whether the local server validates the study after the acknowledgement, or the curator does. */
-const automatic = computed(() => validatesAfterWrite(overview.snapshot ?? null));
+/** Whether the server validates the study after the acknowledgement, or the curator does. */
+const automatic = views.data.validatesAfterWrite;
 
 const chosen = shallowRef<Problem | null>(null);
 const dialog = ref(false);

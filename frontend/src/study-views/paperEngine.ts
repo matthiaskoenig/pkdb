@@ -10,8 +10,9 @@
  *   scripting manager, which the viewer does not get.
  * - The PDF loads in ranges of 64 kB as its pages need them: `disableAutoFetch` with
  *   `disableStream`, without which PDF.js would read the whole file in the background.
- * - The worker, the character maps, the standard fonts and the decoders come from `pdfjs/`
- *   beside the app, which the build copies (vite.curation.config.ts).
+ * - The worker, the character maps, the standard fonts and the decoders come from the folder
+ *   `assets` that the page names when it opens a PDF: in the curation app `pdfjs/` beside the
+ *   app, which the build copies (vite.curation.config.ts).
  * - Aborting the opening stops the loading with its worker and its range requests, and the viewer
  *   of PDF.js stops watching the pane: a PDF that is no longer wanted never draws into it.
  *
@@ -31,12 +32,10 @@ import "./paper.css";
 import { isAbort } from "./errors";
 import { FITS, type Fit, type FindResult, type OpenPaper, type PaperSession } from "./paper";
 
-/** The URL of a file of PDF.js in `pdfjs/` beside index.html. */
-export function pdfjsAsset(path: string): string {
-  return new URL(`pdfjs/${path}`, document.baseURI).href;
+/** The URL of a file of PDF.js in the folder `assets`, which ends with `/`. */
+export function pdfjsAsset(path: string, assets: string): string {
+  return new URL(path, assets).href;
 }
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsAsset("pdf.worker.min.mjs");
 
 /**
  * PDF.js 6.4.299 cancels the request of a range twice when a PDF closes while the range loads:
@@ -139,7 +138,7 @@ function unlessAborted<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> 
   });
 }
 
-export const openPaper: OpenPaper = async (container, url, events, start, signal) => {
+export const openPaper: OpenPaper = async (container, url, events, start, signal, assets) => {
   signal.throwIfAborted();
   const eventBus = new EventBus();
   const linkService = new PDFLinkService({ eventBus, externalLinkTarget: LinkTarget.BLANK });
@@ -234,14 +233,15 @@ export const openPaper: OpenPaper = async (container, url, events, start, signal
   }
 
   // A worker of its own, which goes with the PDF also when PDF.js does not finish destroying it.
+  pdfjs.GlobalWorkerOptions.workerSrc = pdfjsAsset("pdf.worker.min.mjs", assets);
   const worker = new pdfjs.PDFWorker();
   const task = pdfjs.getDocument({
     url,
     worker,
-    cMapUrl: pdfjsAsset("cmaps/"),
+    cMapUrl: pdfjsAsset("cmaps/", assets),
     cMapPacked: true,
-    standardFontDataUrl: pdfjsAsset("standard_fonts/"),
-    wasmUrl: pdfjsAsset("wasm/"),
+    standardFontDataUrl: pdfjsAsset("standard_fonts/", assets),
+    wasmUrl: pdfjsAsset("wasm/", assets),
     useWasm: false,
     disableAutoFetch: true,
     disableStream: true,
