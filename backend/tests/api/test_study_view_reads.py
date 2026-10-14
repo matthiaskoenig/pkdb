@@ -122,6 +122,7 @@ def test_files_only_for_curators(client, creator_headers, uploaded, session_fact
     assert response.headers["content-type"] == "application/pdf"
     assert response.headers["content-disposition"].startswith("inline")
     assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["cache-control"] == "no-store"
     ranged = client.get(
         VIEW + "/files/Example.pdf", headers={**creator_headers, "Range": "bytes=0-3"}
     )
@@ -143,12 +144,13 @@ def test_etag_differs_by_audience(client, creator_headers, uploaded, session_fac
     set_access(session_factory, "public")
     curator = client.get(VIEW, headers=creator_headers)
     etag = curator.headers["etag"]
-    assert curator.headers["cache-control"] == "private, no-cache"
+    assert curator.headers["cache-control"] == "no-store"
     again = client.get(VIEW, headers={**creator_headers, "If-None-Match": etag})
     assert again.status_code == 304
     public = client.get(VIEW, headers={"If-None-Match": etag})
     assert public.status_code == 200
     assert public.headers["etag"] != etag
+    assert public.headers["cache-control"] == "private, no-cache"
 
 
 def test_study_rows(client, creator_headers, uploaded, session_factory):

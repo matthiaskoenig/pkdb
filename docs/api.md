@@ -58,7 +58,7 @@ The website shows a study with the same views as the local curation app (`pkdb c
 
 There are two audiences. The curator view goes to administrators, to reviewers for every public study and to curators assigned to the study, by the rule of the write permission; a read-only API key of such a user also gets it, because no key scope is needed. Everybody else who may read the study gets the public view. The public view leaves out the review, the GitHub issue, the curator ratings, the problems, the paper files and the source images (`null` or empty). The files route answers 404 for the public view and serves only the images and PDFs that the study stores.
 
-JSON answers carry an `ETag` of the body, which includes the audience, `Cache-Control: private, no-cache` and `Vary: Cookie, Authorization`. A request with a matching `If-None-Match` gets 304. Files support `Range` requests.
+JSON answers carry an `ETag` of the body, which includes the audience, `Vary: Cookie, Authorization`. Anonymous answers have `Cache-Control: private, no-cache` and may be cached privately and revalidated by ETag. Authenticated answers (session cookie or Authorization header) are never stored (`Cache-Control: no-store`) but still answer 304 to a matching `If-None-Match`. Files support `Range` requests.
 
 `GET /api/v2/studies/{substance}/{name}`, `GET /api/v2/studies` and the v1 study reads leave out the review, the issue and the curator ratings (`null`) for readers who may not write the study.
 
