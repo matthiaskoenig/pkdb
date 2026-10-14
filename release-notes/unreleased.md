@@ -1,1 +1,3 @@
 # Unreleased
+
+- The local curation app calls itself Curation in its app bar and its browser tab, and its app bar is teal with white text: a warning or an error in the badges of File watching and Connection shows in amber or red with dark text, and every text and badge of the bar keeps the contrast of WCAG AA in the light and the dark theme, also when hovered or focused. The header and the tabs of a study stand on a light teal band, which sets them apart from the white cards of the section below (#967, #962).
