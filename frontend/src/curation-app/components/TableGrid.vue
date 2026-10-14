@@ -762,16 +762,16 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .table-grid--selectable tbody tr[data-index] {
   cursor: pointer;
 }
-.table-grid--selectable .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > td {
+.table-grid--selectable .rows-table tbody tr[data-index]:not(.grid-row--target, .grid-row--focus):hover > td {
   background-color: rgba(var(--v-theme-on-surface), 0.05);
 }
-.table-grid--selectable .rows-scroll .rows-table tbody tr:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
+.table-grid--selectable .rows-scroll .rows-table tbody tr[data-index]:not(.grid-row--target, .grid-row--focus):hover > .rows-line {
   background-color: color-mix(in srgb, rgb(var(--v-theme-on-surface)) 5%, rgb(var(--v-theme-surface)));
 }
 .table-grid--selectable
   .rows-table
   tbody
-  tr:not(.grid-row--target, .grid-row--focus):hover
+  tr[data-index]:not(.grid-row--target, .grid-row--focus):hover
   > td:is(.grid-info--subjects, .grid-info--interventions, .grid-info--data) {
   background-color: color-mix(in srgb, rgb(var(--info)) var(--info-head-tint), transparent);
 }
@@ -836,7 +836,8 @@ async function moveFocus(event: KeyboardEvent, index: number): Promise<void> {
 .grid-raw {
   white-space: pre;
 }
-/* The rows that do not render keep their height; their cells keep the tint of their column. */
+/* The rows that do not render keep their height; their cells keep the tint of their
+   column. No border: it would add height to the rows that the spacer stands for. */
 .rows-table .grid-spacer > * {
   padding: 0;
   border-bottom: 0;

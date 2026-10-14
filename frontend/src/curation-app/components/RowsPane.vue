@@ -29,9 +29,9 @@ import TableGrid from "./TableGrid.vue";
  * and the grid, where the section puts the notes of the table kind and its conflict panel.
  *
  * The pane shows the kind of its table in the color of its class of information, outlined for a
- * raw table, and its grid tints the columns by what they name. Its head
- * wraps rather than cut what it shows in a narrow pane, and the notes about the rows stand right
- * above the grid as sentences that wrap.
+ * raw table, and its grid tints the columns by what they name. Its head wraps rather than
+ * cut what it shows in a narrow pane, and the notes about the rows stand right above the grid
+ * as sentences that wrap.
  */
 const props = defineProps<{
   detail: StudyDetail;

@@ -11,10 +11,11 @@ import NavigatorCounts from "./NavigatorCounts.vue";
 /**
  * The tables of a study first, under the headings of their class of information (Subjects,
  * Interventions, Data, Raw extractions) in the order of the workbook sheets, each with a bar in
- * the color of its class (an outline for a raw extraction, whose table has no tint), its problems, its open review items and its rows; then the sources of
- * the study, with a thumbnail of their image. The paper comes first among the sources: the PDFs of
- * the folder, the one that the paper shows by name with a count of the others, or a disabled entry
- * that names `<name>.pdf` when the folder has none.
+ * the color of its class (an outline for a raw extraction, whose table has no tint), its
+ * problems, its open review items and its rows; then the sources of the study, with a
+ * thumbnail of their image. The paper comes first among the sources: the PDFs of the folder,
+ * the one that the paper shows by name with a count of the others, or a disabled entry that
+ * names `<name>.pdf` when the folder has none.
  */
 const props = withDefaults(
   defineProps<{

@@ -190,9 +190,10 @@ KIND_ORDER = {
     )
 }
 InfoClass = Literal["subjects", "interventions", "data", "raw"]
-# The class of information of each table kind and of a raw table, by which the curation app
-# groups and colors the tables (it tints the columns by `column_class`): the subjects with their characteristica, the interventions, the
-# data of the paper, and the paper tables as printed.
+# The class of information of each table kind and of a raw table, by which the curation
+# app groups and colors the tables (it tints the columns by `column_class`): the subjects
+# with their characteristica, the interventions, the data of the paper, and the paper
+# tables as printed.
 INFO_CLASSES: dict[str, InfoClass] = {
     "subjects": "subjects",
     "characteristica": "subjects",
