@@ -322,13 +322,18 @@ def overlay_point(low, high):
 
 
 def test_overlay_draws_the_error_bar_of_a_mapped_row_from_its_low_to_its_high_end():
-    assert _error_segment(overlay_point((10.0, 60.0), (10.0, 40.0))) == (
+    assert _error_segment(overlay_point((10.0, 60.0), (10.0, 40.0)), 100) == (
         [10.0, 10.0],
         [60.0, 40.0],
     )
-    # An end without a pixel, off a log axis, is the cross of the row.
-    assert _error_segment(overlay_point(None, (10.0, 40.0))) == (
+    # A low end without a pixel, off a log axis, reaches the bottom of the image (here 100).
+    assert _error_segment(overlay_point(None, (10.0, 40.0)), 100) == (
         [10.0, 10.0],
-        [50.0, 40.0],
+        [100.0, 40.0],
     )
-    assert _error_segment(overlay_point(None, None)) is None
+    # A high end without a pixel is the cross of the row.
+    assert _error_segment(overlay_point((10.0, 60.0), None), 100) == (
+        [10.0, 10.0],
+        [60.0, 50.0],
+    )
+    assert _error_segment(overlay_point(None, None), 100) is None

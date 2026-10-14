@@ -371,9 +371,9 @@ const MARKS: readonly (readonly [role: OverlayPoint["role"], errorBarEnd: boolea
  * The overlay of a digitized figure in the pixels of its image: the image below, a trace per
  * series and kind of mark (small dots for digitized points, short bars for digitized error bar
  * ends, thin crosses for mapped rows), and the error bars of mapped rows as segments from their
- * low to their high end. With `highlight`, the other series fade. `scale` is the size at which the image
- * is shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not hide the
- * printed symbols of a small image.
+ * low to their high end. With `highlight`, the other series fade. `scale` is the size at which
+ * the image is shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not
+ * hide the printed symbols of a small image.
  */
 export function overlayTraces(
   view: SourceView,
@@ -392,8 +392,12 @@ export function overlayTraces(
   const color = (name: string) => colorOf(styles, name, false);
   const traces: OverlayTrace[] = [];
 
-  // An end of an error bar without a pixel, off a log axis of the digitization, is the cross of the row.
-  const end = (pixel: [number, number] | null, point: OverlayPoint): [number, number] => pixel ?? [point.px, point.py];
+  // The ends of an error bar. An end without a pixel is at or below 0 on a log axis of the digitization: a
+  // low end then reaches the bottom of the image, as the data plot cuts the bar at its axis, and a high end
+  // (with the low end, so the whole bar) is the cross of the row.
+  const low = (point: OverlayPoint): [number, number] =>
+    point.error_low_px ?? (point.error_high_px === null ? [point.px, point.py] : [point.px, height]);
+  const high = (point: OverlayPoint): [number, number] => point.error_high_px ?? [point.px, point.py];
   for (const name of series) {
     const bars = view.overlay.filter(
       (point) =>
@@ -405,8 +409,8 @@ export function overlayTraces(
       meta: `error ${name}`,
       name,
       mode: "lines",
-      x: bars.flatMap((point) => [end(point.error_low_px, point)[0], end(point.error_high_px, point)[0], null]),
-      y: bars.flatMap((point) => [end(point.error_low_px, point)[1], end(point.error_high_px, point)[1], null]),
+      x: bars.flatMap((point) => [low(point)[0], high(point)[0], null]),
+      y: bars.flatMap((point) => [low(point)[1], high(point)[1], null]),
       opacity: opacity(name),
       showlegend: false,
       line: { color: color(name), width: stroke },
@@ -637,8 +641,8 @@ export interface PlotOptions {
 
 /**
  * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
- * as lines with error bars from the low to the high end of each row (`error_low`, `error_high`), scatters as points. With `highlight`, the other
- * series fade. `scales` sets the type of each axis; a log axis leaves out the points at 0 or
+ * as lines with error bars from the low to the high end of each row (`error_low`, `error_high`),
+ * scatters as points. With `highlight`, the other series fade. `scales` sets the type of each axis; a log axis leaves out the points at 0 or
  * below, which `pointsOffScale` counts, and keeps their series in the legend. Drawn points of rows
  * with `rowProblems` (`plottedProblems`) get a ring in the color of their worst problem, and their
  * hover text lists the problems. A log axis keeps a point whose error bar reaches 0 or below;

@@ -64,8 +64,20 @@ def ends(column: str, **values: object) -> tuple[float, float] | None:
         pytest.param(
             "mean",
             {"mean": 3.0, "gmean": 4.0, "error_bar": 6.0, "error_type": "gsd"},
-            (0.0, 6.0),
-            id="digitized_gsd_around_a_mean_is_mirrored",
+            None,
+            id="digitized_gsd_around_a_mean_gives_no_bar",
+        ),
+        pytest.param(
+            "gmean",
+            {"gmean": 4.0, "error_bar": -1.0, "error_type": "gsd"},
+            None,
+            id="digitized_gsd_below_0_gives_no_bar",
+        ),
+        pytest.param(
+            "gmean",
+            {"gmean": 4.0, "gsd": 0.5, "error_bar": 8.0, "error_type": "gsd"},
+            None,
+            id="invalid_reported_gsd_is_not_mirrored",
         ),
         pytest.param(
             "median", {"median": 4.0, "sd": 1.0}, (3.0, 5.0), id="median_with_sd"

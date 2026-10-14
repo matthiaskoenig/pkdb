@@ -106,8 +106,11 @@ class SourcePoint:
     """A mapped row of a timecourse or scatter table in the units of its table.
 
     `error_low` and `error_high` are the ends of the error bar of a timecourse row around `y`
-    (`digitize.error_ends`): the statistic that `error_type` names, else `sd`, else `se`, else
-    the digitized `error_bar` mirrored; None without one. `x_text` and `y_text` are the cells
+    (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
+    first (as reported or as the digitized `error_bar` gives it), then around a `gmean` `gsd`,
+    `sd`, `se`, and around a `mean` or `median` `sd`, `se`; a negative `sd` or `se` or a `gsd`
+    below 1 gives no bar, and an `error_bar` without `error_type` is mirrored. None without
+    a bar. `x_text` and `y_text` are the cells
     as printed.
     """
 

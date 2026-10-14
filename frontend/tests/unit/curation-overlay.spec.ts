@@ -214,8 +214,15 @@ describe("overlayTraces", () => {
       ],
     });
     const { traces } = overlayTraces(view);
-    expect(trace(traces, "error drug_plasma")).toEqual(expect.objectContaining({ x: [20, 20, null], y: [50, 40, null] }));
+    expect(trace(traces, "error drug_plasma")).toEqual(expect.objectContaining({ x: [20, 20, null], y: [100, 40, null] }));
     expect(trace(traces, "error drug_urine")).toEqual(expect.objectContaining({ x: [60, 60, null], y: [45, 30, null] }));
+  });
+
+  it("draws no bar when both ends are off a log axis of the digitization", () => {
+    const view = figure({
+      overlay: [point({ series: "drug_plasma", role: "mapped", px: 20, py: 50, x: 1, y: 5, file: TIMECOURSES, line: 2 })],
+    });
+    expect(overlayTraces(view).traces.some((t) => t.meta === "error drug_plasma")).toBe(false);
   });
 
   it("colors a series and its error bars alike, in the colors of the source view", () => {

@@ -749,8 +749,11 @@ export interface SourcePoint {
   x: number;
   y: number;
   /**
-   * The low and the high end of the error bar of a timecourse row around `y`: the statistic that
-   * `error_type` names, else `sd`, else `se`, else the digitized `error_bar` mirrored; null without one.
+   * The low and the high end of the error bar of a timecourse row around `y`: the first statistic that
+   * fits, the one that `error_type` names first (as reported or as the digitized `error_bar` gives it),
+   * then around a `gmean` `gsd`, `sd`, `se`, and around a `mean` or `median` `sd`, `se`. A negative `sd`
+   * or `se` or a `gsd` below 1 gives no bar, and an `error_bar` without `error_type` is mirrored. Null
+   * without a bar.
    */
   error_low: number | null;
   error_high: number | null;

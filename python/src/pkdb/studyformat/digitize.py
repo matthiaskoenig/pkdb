@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING
 
 from pkdb.cache import atomic_bytes, atomic_text
 from pkdb.schemas.validation import ValidationIssue
+from pkdb.studyformat.columns import ERROR_TYPE
 from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.jsonio import JsonFileError, dump_json, load_json
 from pkdb.studyformat.tables import STUDY_JSON, image_file
@@ -389,10 +390,6 @@ def central_column(row: Row) -> str | None:
     )
 
 
-# The statistics that `error_type` can name, which a digitized `error_bar` completes.
-ERROR_TYPES = ("sd", "se", "gsd")
-
-
 def _ends(low: float, high: float) -> tuple[float, float] | None:
     """Two ends of an error bar in order; None when one of them is not finite."""
     low, high = sorted((low, high))
@@ -432,7 +429,8 @@ def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float]
 
     The statistic that `error_type` names, as reported or as its digitized `error_bar` gives
     it, else around a `gmean` a reported `gsd`, else `sd`, else `se`, else the digitized
-    `error_bar` mirrored around the value. `sd` and `se` give the value ± the statistic,
+    `error_bar` mirrored around the value (not when `error_type` is `gsd`, whose invalid
+    data draws no bar). `sd` and `se` give the value ± the statistic,
     `gsd` the value ÷ gsd to the value × gsd around a `gmean` only. A statistic that does
     not fit the value (a negative `sd` or `se`, a `gsd` below 1, a `gsd` around a value at
     or below 0), or whose ends are not finite, falls through to the next one. None without
@@ -441,7 +439,7 @@ def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float]
     value = values[column]
     assert isinstance(value, float)
     kind = values.get("error_type")
-    named = kind if isinstance(kind, str) and kind in ERROR_TYPES else None
+    named = kind if isinstance(kind, str) and kind in ERROR_TYPE.choices else None
     bar = values.get("error_bar")
     order = ("gsd", "sd", "se") if column == "gmean" else ("sd", "se")
     for name in dict.fromkeys(name for name in (named, *order) if name):
@@ -454,7 +452,9 @@ def error_ends(values: Mapping[str, object], column: str) -> tuple[float, float]
             ends = None
         if ends is not None:
             return ends
-    return _ends(bar, 2 * value - bar) if isinstance(bar, float) else None
+    if named == "gsd" or not isinstance(bar, float):
+        return None
+    return _ends(bar, 2 * value - bar)
 
 
 # The column that names the series of a timecourse or scatter row, as its dataset is named.

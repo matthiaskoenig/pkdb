@@ -118,15 +118,22 @@ def _legend_strip(figure, renderer, width: int, height: int, rows: list[list]) -
         top -= legend_height + STRIP_PAD
 
 
-def _error_segment(point: OverlayPoint) -> tuple[list[float], list[float]] | None:
+def _error_segment(
+    point: OverlayPoint, height: float
+) -> tuple[list[float], list[float]] | None:
     """The x and the y pixels of the error bar of a mapped point, from its low to its high end.
 
-    An end without a pixel, off a log axis, is the point itself; None without an error bar.
+    An end without a pixel is at or below 0 on a log axis of the digitization. A low end then
+    reaches the bottom of the image (`height`), as the data plot cuts the bar at its axis. A
+    high end, and so the whole bar, is the point itself; None without an error bar.
     """
     if point.error_low_px is None and point.error_high_px is None:
         return None
-    low = point.error_low_px or (point.px, point.py)
-    high = point.error_high_px or (point.px, point.py)
+    cross = (point.px, point.py)
+    low = point.error_low_px or (
+        cross if point.error_high_px is None else (point.px, height)
+    )
+    high = point.error_high_px or cross
     return [low[0], high[0]], [low[1], high[1]]
 
 
@@ -183,7 +190,7 @@ def _overlay(study, view, path: Path) -> PlotResult:
             linewidths=2,
             color=base[point.series],
         )
-        if (segment := _error_segment(point)) is not None:
+        if (segment := _error_segment(point, height)) is not None:
             axes.plot(*segment, color=base[point.series])
     handles = [
         Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
