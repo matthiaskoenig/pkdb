@@ -75,14 +75,16 @@ The overview renders only the rows in view, so the browser's own find (Ctrl+F, C
 | Column | Shows |
 | --- | --- |
 | Study | The identity and the title. Two folders with the same identity are marked **Duplicate identity**. The tooltip of the identity shows it whole, and when the tables of the study name other substance folders, it lists them below it, such as **+ enalapril**. |
+| Release | The PKDB identifier of the release in `study.json`. |
+| Issue | The GitHub issue of the study, from `issue` in `study.json`. GitHub is read with `GH_TOKEN` or `GITHUB_TOKEN`, see the [environment table](python-client.md#environment-variables). |
+| Curators | The curators, with names and pictures from the curator roster that comes with `pkdb`, also offline. |
 | Review | The status of `review.json` (Draft, In review or Approved), and **AI** for an automatic curation. |
 | Open items | The number of open review items. |
 | Problems | The errors and warnings of the last validation, or **valid**, and what the study is doing, such as **Validating**. |
 | Sync | The sync status of the workbook and the tables, see [Data](#data). |
-| Release | The PKDB identifier of the release in `study.json`. |
-| Issue | The GitHub issue of the study, from `issue` in `study.json`. GitHub is read with `GH_TOKEN` or `GITHUB_TOKEN`, see the [environment table](python-client.md#environment-variables). |
-| Curators | The curators, with names and pictures from the curator roster that comes with `pkdb`, also offline. |
 | Last upload | The time of the last upload, with a link to the study on PK-DB. |
+
+The search, the filters **Substance** and **Curator** and the status chips stand on one line with the heading **Studies** and the number of studies. In a narrower window the status chips move to a second line first.
 
 **Search studies** matches the identity and the title, and the table follows it when you pause typing. **Substance** shows the studies of one substance: those in its folder and those whose interventions or data name it, such as aliskiren/Nussberger2002 under enalapril. It uses the rule of the substance labels of the study issues, see [GitHub issues of studies](python-client.md#github-issues-of-studies). The app serves the substances it saved in the state directory and reads only the tables that changed; the first start in a workspace takes a few seconds before the filter is complete. **Curator** shows the studies of one curator of `study.json`, with the number of their studies. **Me**, the first curator, is the PK-DB user of the app, so it shows your own studies. The status chips **All**, **Needs attention**, **Draft**, **In review** and **Approved** count their studies. **Needs attention** lists the studies with errors, with a sync conflict, or with open items while they are in review. Click a column header to sort by it; every column except Curators sorts. The filters and the sort order stay while the app runs, also when you open a study and return, and start again in another workspace. Click a row to open the study.
 
