@@ -1,6 +1,7 @@
 # Unreleased
 
 - The plot of mapped rows in the Data section of the local curation app, the overlay on the image and `pkdb plot` draw the error bar of each timecourse row that has a statistic: the first one that fits, the statistic that `error_type` names first, then around a `gmean` the `gsd`, `sd` and `se`, and around a `mean` or `median` the `sd` and `se`, as the value minus and plus it or divided and multiplied by a `gsd`; a digitized `error_bar` gives the named statistic when its column is empty, a negative `sd` or `se` or a `gsd` below 1 is skipped and the next statistic is tried, a row with no valid statistic has no bar, and a log axis cuts a bar that reaches 0 or below at the axis (#958).
+
 - The descriptions and comments of a study and of the notes of its tables in the local curation app no longer show a label such as Description 1 or Comment 1 by curator: each description and comment starts one line high, as high as the other fields, and grows with its text, and a comment shows its author once above its text, and screen readers still hear the name of each field (#954).
 
 - On Windows, `pkdb upload --report` and `--resume` no longer stop a batch when another program has the report open for a moment while it is rewritten, such as a reader of the report, a virus scanner or a search indexer: Windows refuses to replace an open file, so the report write now retries for up to 5 seconds before the batch stops with a report error.
