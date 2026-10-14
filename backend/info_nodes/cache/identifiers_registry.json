@@ -33132,7 +33132,7 @@
         "id": 1776,
         "providerCode": "",
         "name": "VMH reaction",
-        "urlPattern": "https://www.vmh.life/#reaction/{$id}",
+        "urlPattern": "https://www.vmh.life/reaction/{$id}",
         "mirId": "MIR:00100845",
         "description": "VMH reaction",
         "official": false,
@@ -37372,7 +37372,7 @@
         "id": 2498,
         "providerCode": "NUI",
         "name": "VMH Gene",
-        "urlPattern": "https://www.vmh.life/#gene/{$id}",
+        "urlPattern": "https://www.vmh.life/gene/{$id}",
         "mirId": "MIR:00000794",
         "description": "VMH Gene, provided by Thiele Group, NUI Galway. \nThe VMH database captures information on human and gut microbial metabolism and links this information to hundreds of diseases and nutritional data.",
         "official": true,
@@ -44319,6 +44319,54 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "metabobank": {
+    "id": 5003,
+    "prefix": "metabobank",
+    "name": "MetaboBank",
+    "pattern": "^MTB[KL]S\\d+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "MetaboBank is a public repository of metabolomics data.",
+    "mirId": "MIR:00001145",
+    "resources": [
+      {
+        "id": 5254,
+        "providerCode": "metabobank",
+        "name": "MetaboBank",
+        "urlPattern": "https://mb2.ddbj.nig.ac.jp/study/{$id}.html",
+        "mirId": "MIR:00001144",
+        "description": "MetaboBank is a public repository of metabolomics data at DDBJ, NIG",
+        "official": true,
+        "sampleId": "MTBKS1",
+        "resourceHomeUrl": "https://mb2.ddbj.nig.ac.jp/",
+        "institution": {
+          "id": 4608,
+          "name": "DNA Data Bank of Japan, National Institute of Genetics, Mishima, Shizuoka",
+          "homeUrl": "http://www.nig.ac.jp/",
+          "description": "National Institute of Genetics conducts top-level research in life sciences leveraging on approaches and resources in Genetics. NIG also develops new research fields within the broader concept of Genetics. The DNA Data Bank of Japan (DDBJ) is a part of the International Nucleotide Sequence Database Collaboration (INSDC), dedicated to biological big data and online services. ",
+          "rorId": null,
+          "location": {
+            "countryCode": "JP",
+            "countryName": "Japan"
+          }
+        },
+        "location": {
+          "countryCode": "JP",
+          "countryName": "Japan"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2026-10-09T08:35:16.302+00:00",
+    "modified": "2026-10-09T08:35:16.302+00:00",
+    "sampleId": "MTBKS1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "signaling-gateway": {
     "id": 169,
     "prefix": "signaling-gateway",
@@ -45996,7 +46044,7 @@
         "id": 1767,
         "providerCode": "NUI",
         "name": "VMH metabolite",
-        "urlPattern": "https://www.vmh.life/#metabolite/{$id}",
+        "urlPattern": "https://www.vmh.life/metabolite/{$id}",
         "mirId": "MIR:00100841",
         "description": "VMH metabolite",
         "official": false,

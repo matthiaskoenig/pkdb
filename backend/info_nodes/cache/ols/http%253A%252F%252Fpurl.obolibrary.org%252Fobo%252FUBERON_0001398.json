@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001398",
+  "lang": "en",
+  "description": [
+    "The brachial artery is the major blood vessel of the (upper) arm. It is the continuation of the axillary artery beyond the lower margin of teres major muscle. It continues down the ventral surface of the arm until it reaches the cubital fossa at the elbow. It then divides into the radial and ulnar arteries which run down the forearm. In some individuals, the bifurcation occurs much earlier and the ulnar and radial arteries extend through the upper arm. The pulse of the brachial artery is palpable on the anterior aspect of the elbow, medial to the tendon of the biceps, and, with the use of a stethoscope and sphygmomanometer (blood pressure cuff) often used to measure the blood pressure. The brachial artery is closely related to the median nerve; in proximal regions, the median nerve is immediately lateral to the brachial artery. Distally, the median nerve crosses the medial side of the brachial artery and lies anterior to the elbow joint. [WP,unvetted]."
+  ],
+  "synonyms": [
+    "brachial part of trunk of subclavian artery",
+    "arteria brachialis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "AAO:0010504",
+      "EFO:0004231",
+      "FMA:22689",
+      "GAID:475",
+      "MA:0001921",
+      "MESH:D001916",
+      "NCIT:C12681",
+      "SCTID:181322008",
+      "Wikipedia:Brachial_artery",
+      "galen:BrachialArtery",
+      "UMLS:C0006087"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/7/7d/Gray525.png"
+    ],
+    "external_definition": [
+      "Part of the subclavian artery which supplies blood to the forelimb.[AAO]"
+    ],
+    "id": [
+      "UBERON:0001398"
+    ]
+  },
+  "label": "brachial artery",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "UBERON_0001398",
+  "obo_id": "UBERON:0001398",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The brachial artery is the major blood vessel of the (upper) arm. It is the continuation of the axillary artery beyond the lower margin of teres major muscle. It continues down the ventral surface of the arm until it reaches the cubital fossa at the elbow. It then divides into the radial and ulnar arteries which run down the forearm. In some individuals, the bifurcation occurs much earlier and the ulnar and radial arteries extend through the upper arm. The pulse of the brachial artery is palpable on the anterior aspect of the elbow, medial to the tendon of the biceps, and, with the use of a stethoscope and sphygmomanometer (blood pressure cuff) often used to measure the blood pressure. The brachial artery is closely related to the median nerve; in proximal regions, the median nerve is immediately lateral to the brachial artery. Distally, the median nerve crosses the medial side of the brachial artery and lies anterior to the elbow joint. [WP,unvetted].",
+      "oboXrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Brachial_artery",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Brachial_artery"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010504",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010504"
+    },
+    {
+      "database": "EFO",
+      "id": "0004231",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004231"
+    },
+    {
+      "database": "FMA",
+      "id": "22689",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/22689"
+    },
+    {
+      "database": "GAID",
+      "id": "475",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0001921",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001921"
+    },
+    {
+      "database": "MESH",
+      "id": "D001916",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001916"
+    },
+    {
+      "database": "NCIT",
+      "id": "C12681",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12681"
+    },
+    {
+      "database": "SCTID",
+      "id": "181322008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/181322008"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Brachial_artery",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Brachial_artery"
+    },
+    {
+      "database": "galen",
+      "id": "BrachialArtery",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0006087",
+      "description": "ncithesaurus:Brachial_Artery",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0006087"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "arteria brachialis",
+      "scope": "hasRelatedSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Brachial_artery",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Brachial_artery"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "connected_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001398/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002170"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C97036",
+  "lang": "en",
+  "description": [
+    "A colloid formulation of human galactosyl serum albumin (GSA) conjugated to the chelating agent diethylene-triaminepentaacetic acid (DTPA) and complexed to the gamma-emitting isotope technetium-99m (99mTc-GSA) with potential diagnostic imaging activity. Upon intravenous administration, the galactosyl moiety of 99mTc-GSA binds to asialoglycoprotein receptors (ASGPR) located on hepatic cells. Upon SPECT (Single Photon Emission Computed Tomography) imaging, liver function can be assessed. The expression of asialoglycoprotein receptors (ASGPR), which are solely found on the plasma membrane of mammalian hepatocytes, is associated with hepatic function."
+  ],
+  "synonyms": [
+    "99mTc-GSA",
+    "Tc-99m GSA",
+    "Technetium Tc 99m Galactosyl Human Serum Albumin"
+  ],
+  "annotation": {
+    "NCI_Drug_Dictionary_ID": [
+      "700541"
+    ],
+    "NCI_META_CUI": [
+      "CL429643"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "700541"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "700541"
+    ],
+    "Preferred_Name": [
+      "Technetium Tc 99m Galactosyl Human Serum Albumin"
+    ],
+    "Semantic_Type": [
+      "Indicator, Reagent, or Diagnostic Aid",
+      "Pharmacologic Substance"
+    ],
+    "code": [
+      "C97036"
+    ]
+  },
+  "label": "Technetium Tc 99m Galactosyl Human Serum Albumin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C97036",
+  "obo_id": "NCIT:C97036",
+  "in_subset": [
+    "NCIT_C176424"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "99mTc-GSA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tc-99m GSA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Technetium Tc 99m Galactosyl Human Serum Albumin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C97036/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
