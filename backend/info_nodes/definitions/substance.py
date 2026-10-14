@@ -3482,6 +3482,22 @@ SUBSTANCE_NODES: list[InfoNode] = [
         parents=["r-salbutamol", "s-salbutamol"],
     ),
     Substance(
+        sid="salbutamol-4-o-sulphate",
+        name="salbutamol 4-O-sulphate",
+        description="Salbutamol 4-O-sulphate, the sulphate conjugate of 'salbutamol' and its "
+        "main metabolite, formed in the intestine and the liver. Not the salt "
+        "'salbutamol sulphate'.",
+        annotations=[
+            (BQB.IS, "CHEBI:186295"),
+        ],
+        synonyms=["salbutamol 4-O-sulfate", "albuterol 4-O-sulfate"],
+    ),
+    Substance(
+        sid="salbutamol-metabolites",
+        description="salbutamol and salbutamol 4-O-sulphate (total salbutamol). Used for "
+        "measurements of the sum of the drug and its sulphate conjugate.",
+    ),
+    Substance(
         sid="ambroxol-hydrochloride",
         name="ambroxol hydrochloride",
         description="Ambroxol hydrochloride is a drug that breaks up phlegm, used in the treatment of respiratory diseases associated with viscid or excessive mucus. Ambroxol is often administered as an active ingredient in cough syrup.",
@@ -8757,6 +8773,67 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "CHEBI:7565"),
         ],
+    ),
+    Substance(
+        sid="nitrendipine",
+        description="Nitrendipine is a dihydropyridine calcium channel blocker used to treat "
+        "hypertension.",
+        annotations=[
+            (BQB.IS, "CHEBI:7582"),
+        ],
+    ),
+    Substance(
+        sid="dihydralazine",
+        description="Dihydralazine is a hydrazinophthalazine vasodilator used to treat "
+        "hypertension, usually given as dihydralazine sulfate.",
+        annotations=[
+            (BQB.IS, "CHEBI:134841"),
+        ],
+    ),
+    Substance(
+        sid="clonidine",
+        description="Clonidine is a centrally acting alpha-2 adrenergic agonist used to treat "
+        "hypertension, usually given as clonidine hydrochloride.",
+        annotations=[
+            (BQB.IS, "CHEBI:46631"),
+        ],
+    ),
+    Substance(
+        sid="prazosin",
+        description="Prazosin is an alpha-1 adrenergic receptor antagonist used to treat "
+        "hypertension, usually given as prazosin hydrochloride.",
+        annotations=[
+            (BQB.IS, "CHEBI:8364"),
+        ],
+    ),
+    Substance(
+        sid="methyldopa",
+        description="Methyldopa (alpha-methyl-L-dopa) is a centrally acting antihypertensive, "
+        "an alpha-2 adrenergic agonist after its conversion to alpha-methylnorepinephrine.",
+        annotations=[
+            (BQB.IS, "CHEBI:61058"),
+        ],
+    ),
+    Substance(
+        sid="mycophenolic-acid",
+        name="mycophenolic acid",
+        description="Mycophenolic acid (MPA) is an immunosuppressant, an inhibitor of inosine "
+        "monophosphate dehydrogenase, given as mycophenolate mofetil or mycophenolate sodium. "
+        "Its main metabolite is 'mycophenolic acid glucuronide'.",
+        annotations=[
+            (BQB.IS, "CHEBI:168396"),
+        ],
+        synonyms=["MPA"],
+    ),
+    Substance(
+        sid="mycophenolic-acid-glucuronide",
+        name="mycophenolic acid glucuronide",
+        description="Mycophenolic acid glucuronide (MPAG), the inactive phenolic glucuronide "
+        "of 'mycophenolic acid' and its main metabolite.",
+        annotations=[
+            (BQB.IS, "CHEBI:232439"),
+        ],
+        synonyms=["MPAG"],
     ),
     Substance(
         sid="aluminium-hydroxide",

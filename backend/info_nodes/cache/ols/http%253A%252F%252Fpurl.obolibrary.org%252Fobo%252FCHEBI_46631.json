@@ -1,0 +1,259 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_46631",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Catapres-TTS",
+    "Catarpres-TTS",
+    "Clonidin",
+    "clonidina",
+    "clonidine",
+    "clonidinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:4205-90-7",
+      "drugbank:DB00575",
+      "patent:US3202660",
+      "pubmed:11682401",
+      "pubmed:15883756",
+      "pubmed:16863391",
+      "pubmed:18986614",
+      "pubmed:19328116",
+      "pubmed:21399902",
+      "pubmed:21525113"
+    ],
+    "generalized_empirical_formula": [
+      "C9H9Cl2N3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:46631"
+    ],
+    "mass": [
+      "230.094"
+    ],
+    "monoisotopic_mass": [
+      "229.01735"
+    ]
+  },
+  "label": "clonidine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_46631",
+  "obo_id": "CHEBI:46631",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "4205-90-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=4205-90-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00575",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00575"
+    },
+    {
+      "database": "patent",
+      "id": "US3202660",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3202660"
+    },
+    {
+      "database": "pubmed",
+      "id": "11682401",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11682401/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15883756",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15883756/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16863391",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16863391/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18986614",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18986614/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19328116",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19328116/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21399902",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21399902/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21525113",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21525113/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Catapres-TTS",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iuphar",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Catarpres-TTS",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iuphar",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clonidin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clonidina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clonidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clonidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clonidinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46631/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

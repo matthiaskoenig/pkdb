@@ -1037,6 +1037,17 @@ DISEASE_NODES: list[InfoNode] = [
         ],
     ),
     Choice(
+        sid="iga-nephropathy",
+        name="IgA nephropathy",
+        description="A glomerulonephritis with deposits of immunoglobulin A in the "
+        "glomerular mesangium (Berger disease).",
+        parents=["glomerulonephritis"],
+        annotations=[
+            (BQB.IS, "DOID:2986"),
+        ],
+        synonyms=["IgA glomerulonephritis", "Berger disease"],
+    ),
+    Choice(
         sid="glomerulonephritis",
         description="Glomerulonephritis. A renal disorder characterized by "
         "damage in the glomeruli. It may be acute or chronic, "

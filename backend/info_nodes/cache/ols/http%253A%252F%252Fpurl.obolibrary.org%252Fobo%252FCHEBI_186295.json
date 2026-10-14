@@ -1,0 +1,132 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_186295",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "[4-[2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenyl] hydrogen sulate",
+    "[4-[2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenyl] hydrogen sulate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:63908-03-2",
+      "chemspider:22568547",
+      "hmdb:HMDB0060604"
+    ],
+    "generalized_empirical_formula": [
+      "C13H21NO6S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:186295"
+    ],
+    "inchi_key_string": [
+      "FPMLHYFHLRTRMB-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C13H21NO6S/c1-13(2,3)14-7-11(16)9-4-5-12(10(6-9)8-15)20-21(17,18)19/h4-6,11,14-16H,7-8H2,1-3H3,(H,17,18,19)"
+    ],
+    "mass": [
+      "319.379"
+    ],
+    "monoisotopic_mass": [
+      "319.10896"
+    ],
+    "smiles_string": [
+      "CC(C)(C)NCC(O)c1ccc(OS(=O)(=O)O)c(CO)c1"
+    ]
+  },
+  "label": "Salbutamol 4-O-sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_186295",
+  "obo_id": "CHEBI:186295",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "63908-03-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=63908-03-2"
+    },
+    {
+      "database": "chemspider",
+      "id": "22568547",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.22568547.html"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060604",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060604"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "[4-[2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenyl] hydrogen sulate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[4-[2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenyl] hydrogen sulate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_186295/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
