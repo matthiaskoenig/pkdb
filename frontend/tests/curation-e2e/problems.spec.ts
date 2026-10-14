@@ -101,7 +101,7 @@ test("Open in tables of an open workbook names the sheet to go to", async ({ app
   const original = readFileSync(raw, "utf8");
   try {
     writeFileSync(raw, `<<<<<<< HEAD\n${original}`);
-    await page.getByRole("button", { name: "Validate" }).click();
+    await page.getByRole("button", { name: "Validate", exact: true }).click();
     const conflict = problem(page, "merge_conflict");
     await expect(conflict).toBeVisible();
     const before = readFileSync(workbook);
@@ -127,7 +127,7 @@ test("Open in tables of a problem of a raw table opens the workbook at the sheet
   const original = readFileSync(raw, "utf8");
   try {
     writeFileSync(raw, `<<<<<<< HEAD\n${original}`);
-    await page.getByRole("button", { name: "Validate" }).click();
+    await page.getByRole("button", { name: "Validate", exact: true }).click();
     const conflict = problem(page, "merge_conflict");
     await expect(conflict).toBeVisible();
     await conflict.getByRole("button", { name: "Open in tables" }).click();
