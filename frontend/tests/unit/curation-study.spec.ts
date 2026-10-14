@@ -33,6 +33,7 @@ import {
   releaseLabel,
   sectionCounts,
   sectionRoute,
+  SECTION_LABELS,
   SECTIONS,
   tableFiles,
   tablesOutcome,
@@ -62,8 +63,15 @@ function detail(items: ReviewItem[], counts = { errors: 0, warnings: 0 }, change
 }
 
 describe("sections", () => {
-  it("lists the five sections of the study page in their order", () => {
-    expect(SECTIONS).toEqual(["metadata", "review", "problems", "data", "activity"]);
+  it("lists the five sections of the study page in the order of the work on a study", () => {
+    expect(SECTIONS).toEqual(["metadata", "data", "problems", "review", "activity"]);
+    expect(SECTIONS.map((section) => SECTION_LABELS[section])).toEqual([
+      "Metadata",
+      "Data",
+      "Problems",
+      "Review",
+      "Activity",
+    ]);
     expect(isSection("data")).toBe(true);
     expect(isSection("tables")).toBe(false);
     expect(isSection("review")).toBe(true);

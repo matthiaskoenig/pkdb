@@ -742,6 +742,7 @@ class WorkspaceMixin(EngineState):
         return action
 
     def schedule_changes(self):
+        queued = False
         with self.lock.reading():
             if self.paused:
                 return
@@ -759,7 +760,12 @@ class WorkspaceMixin(EngineState):
                 self.lock.changed()
                 row["_pending"] = False
                 row["_initial"] = False
-                self._enqueue_one(row, action, automatic=True)
+                self._queue_job(row, action, automatic=True)
+                queued = True
+            if queued:
+                self._save()
+        if queued:
+            self.wakeup.set()
 
     def resolve_file(self, study_id, file=None):
         with self.lock.reading():

@@ -315,33 +315,49 @@ describe("StudyPage", () => {
     await mountPage("/studies/caffeine/Harder1988/problems");
     const nav = page().get('nav[aria-label="Study sections"]');
     const links = nav.findAll("a");
+    // The order of the work on a study: the metadata and the tables first, then their problems and the review.
     expect(links.map((link) => link.get(".section-tab-label").element.firstChild?.textContent)).toEqual([
       "Metadata",
-      "Review",
-      "Problems",
       "Data",
+      "Problems",
+      "Review",
       "Activity",
     ]);
+    // Each tab links to its own section.
+    expect(links.map((link) => link.attributes("href"))).toEqual(
+      ["metadata", "data", "problems", "review", "activity"].map(
+        (section) => `#/studies/caffeine/Harder1988/${section}`,
+      ),
+    );
     expect(links.map((link) => link.find(".section-tab-count").exists() && link.get(".section-tab-count").text())).toEqual([
       false,
-      "1",
-      "3",
       false,
+      "3",
+      "1",
       false,
     ]);
-    // The counts have their meaning for screen readers.
-    expect(links[1]!.get(".section-tab-label").text()).toBe("Review, 1 open item");
-    expect(links[2]!.get(".section-tab-label").text()).toBe("Problems, 3 problems");
+    // The counts keep their meaning for screen readers at their new places.
     expect(links[0]!.get(".section-tab-label").text()).toBe("Metadata");
-    expect(links[1]!.attributes("href")).toBe("#/studies/caffeine/Harder1988/review");
+    expect(links[2]!.get(".section-tab-label").text()).toBe("Problems, 3 problems");
+    expect(links[3]!.get(".section-tab-label").text()).toBe("Review, 1 open item");
     expect(links.map((link) => link.attributes("aria-current") ?? null)).toEqual([null, null, "page", null, null]);
     expect(page().get(".study-section h2").text()).toBe("Problems");
     expect(page().get(".study-section h2").classes()).toContain("d-sr-only");
 
-    await links[3]!.trigger("click");
+    await links[1]!.trigger("click");
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
     await flushPromises();
     expect(page().get(".study-section h2").text()).toBe("Data");
+  });
+
+  it("marks the tab of the section with unsaved changes at its place", async () => {
+    await mountPage("/studies/caffeine/Example/review");
+    useStudyStore().draft.form!.provenance.source_key = "pkdb.edited";
+    await flushPromises();
+    const links = page().findAll('nav[aria-label="Study sections"] a');
+    expect(links.map((link) => link.find(".section-tab-unsaved").exists())).toEqual([true, false, false, false, false]);
+    expect(links[0]!.get(".section-tab-label").text()).toBe("Metadata, unsaved changes");
+    expect(links[1]!.get(".section-tab-label").text()).toBe("Data");
   });
 
   it("shows the sections as one line of tabs with the facts of the study at its end", async () => {
@@ -350,9 +366,9 @@ describe("StudyPage", () => {
     expect(nav.classes()).toContain("section-tabs");
     expect(nav.findAll("a").map((link) => link.text().replace(/\s+/g, " ").trim())).toEqual([
       "Metadata",
-      expect.stringMatching(/^Review/),
-      expect.stringMatching(/^Problems/),
       "Data",
+      expect.stringMatching(/^Problems/),
+      expect.stringMatching(/^Review/),
       "Activity",
     ]);
     expect(page().get(".section-tabs-facts").text()).toContain("On save");
@@ -380,7 +396,14 @@ describe("StudyPage", () => {
     expect(order & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const sections = select(wrapper, "Section");
     expect(sections.props("modelValue")).toBe("review");
-    expect(sections.props("items")).toContainEqual({ title: "Problems (3)", value: "problems" });
+    // The select lists the sections in the order of the tabs, with their counts.
+    expect(sections.props("items")).toEqual([
+      { title: "Metadata", value: "metadata" },
+      { title: "Data", value: "data" },
+      { title: "Problems (3)", value: "problems" },
+      { title: "Review (1)", value: "review" },
+      { title: "Activity", value: "activity" },
+    ]);
     await sections.setValue("data");
     await vi.waitFor(() => expect(router.currentRoute.value.params.section).toBe("data"));
   });
