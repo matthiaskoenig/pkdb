@@ -1,0 +1,91 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C172583",
+  "lang": "en",
+  "description": [
+    "Half-life calculated from the distributional phase."
+  ],
+  "synonyms": [
+    "DISTHL",
+    "Half-Life Distribution"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Half-life calculated from the distributional phase."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "NCI_META_CUI": [
+      "CL1406680"
+    ],
+    "Preferred_Name": [
+      "Half-Life Distribution"
+    ],
+    "Semantic_Type": [
+      "Quantitative Concept"
+    ],
+    "code": [
+      "C172583"
+    ]
+  },
+  "label": "Half-Life Distribution",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C172583",
+  "obo_id": "NCIT:C172583",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C85493",
+    "NCIT_C85839"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DISTHL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Half-Life Distribution",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C172583/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,350 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_114785",
+  "lang": "en",
+  "description": [
+    "A quinazoline compound having a (3-ethynylphenyl)amino group at the 4-position and two 2-methoxyethoxy groups at the 6- and 7-positions."
+  ],
+  "synonyms": [
+    "N-(3-ethynylphenyl)-6,7-bis(2-methoxyethoxy)quinazolin-4-amine",
+    "N-(3-ethynylphenyl)-6,7-bis(2-methoxyethoxy)quinazolin-4-amine",
+    "[6,7-bis(2-methoxy-ethoxy)quinazoline-4-yl]-(3-ethynylphenyl)amine",
+    "[6,7-bis-(2-methoxy-ethoxy)-quinazolin-4-yl]-(3-ethynyl-phenyl)-amine",
+    "erlotinib",
+    "erlotinibum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:183321-74-6",
+      "drugbank:DB00530",
+      "drugcentral:1045",
+      "hmdb:HMDB0014671",
+      "kegg.drug:D07907",
+      "lincs.smallmolecule:LSM-1097",
+      "patent:US2010094004",
+      "pdb-ccd:AQ4",
+      "pubmed:12270171",
+      "pubmed:14684309",
+      "pubmed:15711537",
+      "pubmed:16014882",
+      "pubmed:16014883",
+      "pubmed:16480284",
+      "pubmed:17889528",
+      "pubmed:17983745",
+      "pubmed:29448920",
+      "pubmed:29579331",
+      "pubmed:29687154",
+      "pubmed:30039303",
+      "pubmed:30071517",
+      "pubmed:30150014",
+      "pubmed:30158288",
+      "reaxys:8798958",
+      "wikipedia.en:Erlotinib"
+    ],
+    "generalized_empirical_formula": [
+      "C22H23N3O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:40877"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:114785"
+    ],
+    "inchi_key_string": [
+      "AAKJLRGGTJKAMG-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H23N3O4/c1-4-16-6-5-7-17(12-16)25-22-18-13-20(28-10-8-26-2)21(29-11-9-27-3)14-19(18)23-15-24-22/h1,5-7,12-15H,8-11H2,2-3H3,(H,23,24,25)"
+    ],
+    "mass": [
+      "393.443"
+    ],
+    "monoisotopic_mass": [
+      "393.16886"
+    ],
+    "smiles_string": [
+      "C#Cc1cccc(Nc2ncnc3cc(OCCOC)c(OCCOC)cc23)c1"
+    ]
+  },
+  "label": "erlotinib",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_114785",
+  "obo_id": "CHEBI:114785",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "183321-74-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=183321-74-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00530",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00530"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1045",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1045"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014671",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014671"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07907",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1097",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2010094004",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2010094004"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "AQ4",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12270171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12270171/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14684309",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14684309/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15711537",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15711537/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16014882",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16014882/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16014883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16014883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16480284",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16480284/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17889528",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17889528/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17983745",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17983745/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29448920",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29448920/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29579331",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29579331/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29687154",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29687154/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30039303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30039303/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30071517",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30071517/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30150014",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30150014/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30158288",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30158288/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8798958",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Erlotinib",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(3-ethynylphenyl)-6,7-bis(2-methoxyethoxy)quinazolin-4-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(3-ethynylphenyl)-6,7-bis(2-methoxyethoxy)quinazolin-4-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[6,7-bis(2-methoxy-ethoxy)quinazoline-4-yl]-(3-ethynylphenyl)amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[6,7-bis-(2-methoxy-ethoxy)-quinazolin-4-yl]-(3-ethynyl-phenyl)-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "erlotinib",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "erlotinibum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_114785/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

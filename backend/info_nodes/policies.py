@@ -7,6 +7,8 @@ TIME_REQUIRED_MEASUREMENT_TYPES = [
     "cumulative metabolic ratio",
     "recovery",
     "auc_end",
+    "auc_incremental",
+    "cumulative amount (ratio)",
     "ptf",
 ]
 
@@ -39,6 +41,7 @@ CAN_NEGATIVE = [
     "weight (change relative)",
     "hba1c (change)",
     "inr (change)",
+    "inr (change relative)",
     "prothrombin time (change)",
     "prothrombin time (change relative)",
     "prothrombin time (change relative) maximum",
@@ -47,8 +50,13 @@ CAN_NEGATIVE = [
     "aPTT (change)",
     "aPTT (change relative)",
     "ETP (change relative)",
+    "TGP (change relative)",
+    "TGLT (change relative)",
+    "TPTG (change relative)",
     "HepTest (change relative)",
     "thrombin activity (change relative)",
     "antithrombin activity (change relative)",
+    "platelet aggregation (change relative)",
+    "bleeding time (change relative)",
     "urinary volume (change)",
 ]
