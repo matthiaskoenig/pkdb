@@ -38,7 +38,7 @@ function row(label: string, time: string, statistics: Record<string, string>): s
 /**
  * Fig2 as a converted study without a digitization has it, in the order of pkdb format: a
  * digitized error bar of type sd, a gmean with its gsd, sd and se, and an sd at 2 h that reaches
- * below 0.
+ * below 0, and points with a mean only, which have no bar.
  */
 const ROWS = [
   row("bar_series", "0.5", { mean: "1", error_bar: "1.4", error_type: "sd" }),
@@ -49,6 +49,9 @@ const ROWS = [
   row("sd_series", "2", { mean: "1", sd: "1.5" }),
   row("se_series", "0.5", { mean: "1.5", se: "0.2" }),
   row("se_series", "1", { mean: "2.5", se: "0.3" }),
+  row("mixed_series", "0.5", { mean: "5", sd: "1" }),
+  row("mixed_series", "1", { mean: "6" }),
+  row("plain_series", "2", { mean: "4" }),
 ];
 
 /** Add Fig2 with its table and an image to Draft2021, which has no workbook; the function removes them again. */
@@ -101,7 +104,10 @@ test("the overlay of Fig1 draws the error bar of each mapped row from its low to
   const rows = view.overlay.filter((point) => point.role === "mapped" && point.series === "caf_plasma_100mg");
   expect(rows).toHaveLength(9);
   // The digitized error bar ends of Fig1 are of type sd: each bar reaches as far below its cross as above it.
-  for (const point of rows) expect(point.error_low_px![1] - point.py).toBeCloseTo(point.py - point.error_high_px![1], 2);
+  for (const point of rows) {
+    if (point.error_low_px === null || point.error_high_px === null) throw new Error(`a mapped row of Fig1 at y ${point.py} has no error bar`);
+    expect(point.error_low_px[1] - point.py).toBeCloseTo(point.py - point.error_high_px[1], 2);
+  }
   await expect
     .poll(() =>
       figure.evaluate(
@@ -111,7 +117,7 @@ test("the overlay of Fig1 draws the error bar of each mapped row from its low to
           )?.y,
       ),
     )
-    .toEqual(rows.flatMap((point) => [point.error_low_px![1], point.error_high_px![1], null]));
+    .toEqual(rows.flatMap((point) => [point.error_low_px?.[1], point.error_high_px?.[1], null]));
 });
 
 test("the plot of a figure without a digitization draws the error bars of sd, se, gsd and a digitized error bar", async ({
@@ -122,7 +128,7 @@ test("the plot of a figure without a digitization draws the error bars of sd, se
   try {
     await app.open(FIG2);
     const pane = page.getByRole("region", { name: "Source Fig2" });
-    const plot = pane.getByRole("img", { name: /^Plot of 8 mapped rows of Fig2/ });
+    const plot = pane.getByRole("img", { name: /^Plot of 11 mapped rows of Fig2/ });
     await expect(plot).toBeVisible();
     await expect
       .poll(() => drawnBars(plot))
@@ -132,6 +138,8 @@ test("the plot of a figure without a digitization draws the error bars of sd, se
           [2, 8],
           [4, 9],
         ],
+        mixed_series: [[4, 6], null],
+        plain_series: [null],
         sd_series: [
           [1.5, 2.5],
           [2.4, 3.6],
@@ -142,6 +150,8 @@ test("the plot of a figure without a digitization draws the error bars of sd, se
           [2.2, 2.8],
         ],
       });
+    // The two points without a statistic draw no bar and no cap: 9 bars of 11 points, 2 caps each.
+    expect(await caps(plot)).toEqual(Array(9).fill(2));
     // The linear axis reaches down to the end of the bar below 0.
     expect((await yRange(plot))[0]).toBeLessThan(-0.5);
 
@@ -150,15 +160,18 @@ test("the plot of a figure without a digitization draws the error bars of sd, se
     // which reaches -0.5, at its bottom, without the cap there.
     await expect(pane.locator(".plot-scales-note")).toHaveText("");
     await expect.poll(async () => (await caps(plot)).filter((count) => count === 1)).toHaveLength(1);
-    expect(await caps(plot)).toHaveLength(8);
+    expect(await caps(plot)).toHaveLength(9);
     expect(await plot.locator("path.yerror").evaluateAll((paths) => paths.every((path) => !path.getAttribute("d")?.includes("NaN")))).toBe(
       true,
     );
     // The log axis spans the ends of the bars above 0, up to the 9 of gsd_series.
     expect(10 ** (await yRange(plot))[1]).toBeGreaterThanOrEqual(9);
 
+    // No legend entry is faded while nothing is highlighted.
+    expect(await pane.locator(".overlay-legend-item--faded").count()).toBe(0);
+
     for (const width of [1280, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
+      await page.setViewportSize({ width, height: 1150 });
       for (const theme of ["light", "dark"] as const) {
         await page.emulateMedia({ colorScheme: theme });
         await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
