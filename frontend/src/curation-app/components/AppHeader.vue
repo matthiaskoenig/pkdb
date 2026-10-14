@@ -46,7 +46,7 @@ function fromPanel(open: () => void): void {
 </script>
 
 <template>
-  <VAppBar elevation="0" :height="36" class="app-header">
+  <VAppBar elevation="0" :height="36" color="app-bar" class="app-header">
     <RouterLink to="/" class="brand">
       <img class="brand-logo" :src="logo" alt="PK-DB" width="24" height="24" />
       <span>Curation</span>
@@ -55,9 +55,9 @@ function fromPanel(open: () => void): void {
     <div v-if="wide" class="header-controls">
       <template v-if="snapshot">
         <WorkspaceMenu :snapshot="snapshot" @choose="dialogs.openWorkspace" />
-        <WatchingMenu :snapshot="snapshot" />
-        <ConnectionMenu :snapshot="snapshot" @settings="dialogs.openSettings" />
-        <AuthorStatus :author="snapshot.author" @settings="dialogs.openSettings" />
+        <WatchingMenu :snapshot="snapshot" bar />
+        <ConnectionMenu :snapshot="snapshot" bar @settings="dialogs.openSettings" />
+        <AuthorStatus :author="snapshot.author" bar @settings="dialogs.openSettings" />
       </template>
       <VBtn
         icon="fas fa-gear"
