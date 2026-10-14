@@ -518,6 +518,145 @@ def test_the_gate_refuses_a_converter_rule_that_drops_data(
     assert [d.b for d in result.differences] == ["dropped record with data"]
 
 
+UNMAPPED_TAB2 = [
+    ["group", "mean", "sd", "Value", "min", "max", "count"],
+    ["all", 2.5, 0.5, "NA", "NA", "NA", 2],
+    ["all", "NA", "NA", 3, "NA", "NA", 2],
+    ["all", "NA", "NA", "NA", 1, 4, 2],
+]
+
+
+@pytest.mark.parametrize(
+    ("workbook", "place"),
+    [(True, "Example.xlsx Tab2 row"), (False, ".Example_Tab2.tsv row")],
+    ids=["workbook", "hidden tables"],
+)
+def test_a_dropped_row_with_numbers_in_unmapped_columns_is_a_mismatch(
+    tmp_path, sf_vocabulary, workbook, place
+):
+    # The template maps mean and sd, so the numbers of the value, min and max
+    # columns would be lost with the rows that hold no other value.
+    study = with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE)
+    sheets = {**SHEETS, "Tab2": UNMAPPED_TAB2}
+    v1 = v1_study(tmp_path / "v1", study, sheets, IMAGES, workbook=workbook)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.issues == ["unmapped_value"]
+    first = 3 if workbook else 2
+    rest = "subject all, cmax, substance drug, tissue plasma"
+    assert [(d.path, d.a, d.b) for d in result.differences] == [
+        (
+            f"unmapped_value outputs_Tab2.tsv: {place} {first + 1}, {rest}",
+            "Value 3",
+            "The format 1 row holds a number in column Value, which study.json "
+            "does not map, so the row has no value and would be dropped. Map the "
+            "column in study.json, or remove the number if it is no value of the "
+            "row.",
+        ),
+        (
+            f"unmapped_value outputs_Tab2.tsv: {place} {first + 2}, {rest}",
+            "min 1, max 4",
+            "The format 1 row holds numbers in columns min, max, which study.json "
+            "does not map, so the row has no value and would be dropped. Map the "
+            "columns in study.json, or remove the numbers if they are no values "
+            "of the row.",
+        ),
+    ]
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
+
+
+def test_mapping_the_columns_converts_the_rows(tmp_path, sf_vocabulary):
+    output = {**OUTPUT, "group": "col==group", "min": "col==min", "max": "col==max"}
+    tab2 = [[*row[:3], *row[4:]] for row in UNMAPPED_TAB2]
+    tab2 = [row for row in tab2 if row[1:5] != ["NA"] * 4]
+    study = with_outputs(output, TIMECOURSE)
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES)
+    v2 = converted(tmp_path, v1)
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "identical", result.differences
+    assert sorted(column(v2 / "outputs_Tab2.tsv", "max")) == ["", "4"]
+
+
+def test_numbers_that_no_value_column_holds_are_no_values(tmp_path, sf_vocabulary):
+    # A count, a number after a `#` comment, text in a statistic column and a
+    # number in a column that another record of the row maps are no values of
+    # the dropped row: tmax maps only the median.
+    tmax = {
+        **OUTPUT,
+        "group": "col==group",
+        "measurement_type": "tmax",
+        "median": "col==median",
+        "unit": "h",
+    }
+    tmax = {key: value for key, value in tmax.items() if key not in ("mean", "sd")}
+    study = with_outputs({**OUTPUT, "group": "col==group"}, tmax, TIMECOURSE)
+    tab2 = [
+        ["group", "mean", "sd", "median", "count", "note", "max"],
+        ["all", 2.5, 0.5, "NA", 2, "NA", "NA"],
+        ["all", "NA", "NA", "NA", 2, "# see text", 4],
+        ["all", "NA", "NA", "NA", 2, "NA", "NR"],
+    ]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 5)]
+
+
+def test_a_characteristic_with_unmapped_numbers_names_its_own_row(
+    tmp_path, sf_vocabulary
+):
+    # Each row of the sheet adds a characteristic to the group all, which the
+    # format 1 parser located at the first row of the group before.
+    group = {
+        "source": "Tab1",
+        "image": "Tab1",
+        "name": "col==group",
+        "count": "col==count",
+        "characteristica": [
+            {
+                "measurement_type": "col==measurement",
+                "choice": "col==choice",
+                "mean": "col==mean",
+                "unit": "col==unit",
+                "image": "Tab1",
+            }
+        ],
+    }
+    tab1 = [
+        ["group", "count", "measurement", "choice", "mean", "median", "unit"],
+        ["all", 2, "species", "Homo sapiens", "NA", "NA", "NA"],
+        ["all", 2, "healthy", "Y", "NA", "NA", "NA"],
+        ["all", 2, "sex", "M", "NA", "NA", "NA"],
+        ["all", 2, "age", "NA", "NA", 70, "yr"],
+        ["all", 2, "age", "NA", 35, "NA", "yr"],
+    ]
+    study = {**STUDY, "groupset": {"groups": [group]}}
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab1": tab1}, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.issues == ["unmapped_value"]
+    assert [(d.path, d.a) for d in result.differences] == [
+        (
+            "unmapped_value characteristica.tsv: Example.xlsx Tab1 row 6, "
+            "subject all, age",
+            "median 70",
+        )
+    ]
+
+
+def test_unmapped_numbers_are_listed_with_the_format_2_issues(tmp_path, sf_vocabulary):
+    # A study that format 2 refuses lists the unmapped numbers too, so that a
+    # curator fixes both at once.
+    study = with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE)
+    tab2 = [*UNMAPPED_TAB2[:3], ["all", "NA", 0.5, "NA", "NA", "NA", 2]]
+    v1 = v1_study(tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.issues == ["missing_value", "unmapped_value"]
+    assert result.differences[0].path.startswith("unmapped_value outputs_Tab2.tsv")
+    assert result.differences[1].path.startswith("validation outputs_Tab2.tsv")
+
+
 def test_whitespace_of_text_cells_is_an_intended_change(tmp_path, sf_vocabulary):
     # The converter writes text cells on one line; a blank cell is no value.
     output = {**OUTPUT, "unit": "col==unit", "method": "col==method"}
