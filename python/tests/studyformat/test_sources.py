@@ -6,6 +6,7 @@ from digitize_fixtures import GOOD, png, project
 from pkdb.studyformat.colors import SERIES_COLORS, SERIES_DARK_COLORS
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.load import load_study
+from pkdb.studyformat.plot import _error_ranges
 from pkdb.studyformat.sources import source_view, study_sources
 
 
@@ -441,34 +442,20 @@ def test_outputs_with_a_time_are_plotted_as_series_by_time(
     )
 
 
-def test_an_outputs_series_split_over_two_tables_is_sorted_by_time(
-    make_study, valid_files, tsv
-):
-    first = tsv(
-        "outputs",
-        {**OUTPUT, "time": "1", "mean": "2"},
-        {**OUTPUT, "time": "4", "mean": "4"},
-    )
-    second = tsv(
-        "outputs",
-        {**OUTPUT, "time": "2", "mean": "3"},
-        {**OUTPUT, "time": "3", "mean": "3.5"},
-    )
+def test_an_outputs_row_with_an_sd_has_an_error_bar(make_study, valid_files, tsv):
     folder = make_study(
-        {**valid_files, "outputs_Fig1.tsv": first, "outputs_Fig1_b.tsv": second}
+        {
+            **valid_files,
+            "outputs_Fig1.tsv": tsv(
+                "outputs", {**OUTPUT, "time": "1", "mean": "2", "sd": "0.5"}
+            ),
+        }
     )
-    study = load_study(folder)
-    for table in study.tables:
-        if table.file == "outputs_Fig1_b.tsv":
-            table.source = "Fig1"
-    view = source_view(study, "Fig1")
-    outputs = [p for p in view.points if p.kind == "outputs"]
-    assert [(p.file, p.x) for p in outputs] == [
-        ("outputs_Fig1.tsv", 1.0),
-        ("outputs_Fig1_b.tsv", 2.0),
-        ("outputs_Fig1_b.tsv", 3.0),
-        ("outputs_Fig1.tsv", 4.0),
-    ]
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    (point,) = [p for p in view.points if p.kind == "outputs"]
+    assert (point.error_low, point.error_high) == (1.5, 2.5)
+    assert _error_ranges([point]) == [[0.5], [0.5]]
 
 
 def test_an_outputs_series_with_a_dataset_is_drawn_on_the_image(

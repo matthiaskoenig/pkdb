@@ -2,9 +2,9 @@
 
 A digitized figure also gets overlay points in image pixels: the digitized points
 and the mapped rows drawn at their pixel, so a curator can see where they differ.
-The mapped rows of timecourse and scatter tables, and the outputs rows with a time, are
-also points in the units of their tables, for a plot beside the image. The series of a figure have one order
-and one color each, which `pkdb plot` and the curation app share.
+The mapped rows of timecourse and scatter tables, and the outputs rows with a time, are also
+points in the units of their tables, for a plot beside the image. The series of a figure have
+one order and one color each, which `pkdb plot` and the curation app share.
 """
 
 from dataclasses import dataclass
@@ -276,28 +276,13 @@ def _value_text(value: float) -> str:
 def _figure_points(
     study: LoadedStudy, source: str
 ) -> list[tuple[PointKind, MappedPoint]]:
-    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points.
-
-    The points of one outputs series are sorted by time across all outputs tables of the source,
-    so that a series split over two tables draws one line; the series keep the order of their
-    first row.
-    """
-    points: list[tuple[PointKind, MappedPoint]] = []
-    for table in study.tables:
-        kind = _PLOTTED_KINDS.get(table.kind)
-        if table.source == source and kind is not None:
-            points += [(kind, point) for point in mapped_points(table)]
-    slots = [i for i, (kind, _) in enumerate(points) if kind == "outputs"]
-    order = {
-        name: index
-        for index, name in enumerate(dict.fromkeys(points[i][1].dataset for i in slots))
-    }
-    by_time = sorted(
-        (points[i] for i in slots), key=lambda e: (order[e[1].dataset], e[1].x)
-    )
-    for i, entry in zip(slots, by_time):
-        points[i] = entry
-    return points
+    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points."""
+    return [
+        (kind, point)
+        for table in study.tables
+        if table.source == source and (kind := _PLOTTED_KINDS.get(table.kind))
+        for point in mapped_points(table)
+    ]
 
 
 def _overlay(
