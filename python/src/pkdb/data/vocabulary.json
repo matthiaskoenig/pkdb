@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "508fc640008aaf3a3b32e81daca73849ac70865d445ae8bcd6b2086b3b5995f2",
+    "version": "4f0384246bd60dd92d0de939d4578ee2048192382e52af915db4ffc2a3db5430",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -2242,6 +2242,18 @@
           "respiratory system disease",
           "NR"
         ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "disease duration",
+        "sid": "disease-duration",
+        "dtype": "numeric",
+        "units": [
+          "year"
+        ],
+        "choices": [],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -12274,5 +12286,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "d2bfc8dd011f879d6a1cdc0ae31b7e3fee80e9558cd60e28229230ccb1ae03ff"
+  "vocabulary_hash": "1c1270d6b72131d1d1c4004c4a60764ec2176ffdadf29f7ea0fa81f4bd645baf"
 }
