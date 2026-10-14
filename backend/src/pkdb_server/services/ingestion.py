@@ -482,6 +482,17 @@ class IngestionService:
         prepared = self.validate(source, principal)
         timings["validation"] = time.monotonic() - started
         started = time.monotonic()
+        views = None
+        if isinstance(source, Path):
+            # The documents of the study page of the website, from the validated folder.
+            views = build_views(
+                source,
+                warnings=len(prepared.report.issues),
+                max_rows=self.settings.upload_max_rows,
+                max_files=self.settings.upload_max_files,
+            )
+        timings["views"] = time.monotonic() - started
+        started = time.monotonic()
         staged = []
         expected = {
             attachment.name: attachment for attachment in prepared.study.attachments
@@ -499,17 +510,6 @@ class IngestionService:
                 fail("source_changed", "Source file changed after validation")
             staged.append(file)
         timings["staging"] = time.monotonic() - started
-        started = time.monotonic()
-        views = None
-        if isinstance(source, Path):
-            # The documents of the study page of the website, from the validated folder.
-            views = build_views(
-                source,
-                warnings=len(prepared.report.issues),
-                max_rows=self.settings.upload_max_rows,
-                max_files=self.settings.upload_max_files,
-            )
-        timings["views"] = time.monotonic() - started
         started = time.monotonic()
         result = self._publish(
             prepared,

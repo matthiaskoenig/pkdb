@@ -1,5 +1,7 @@
 """The study pages of the website: stored at upload, served by audience (#963)."""
 
+import json
+
 import pytest
 from sqlalchemy import select
 
@@ -92,4 +94,22 @@ def test_clear_children_deletes_the_views(
     with session_factory.begin() as session:
         replace.clear_children(session, study.id)
     _, stored = views(session_factory)
+    assert stored == {}
+
+
+def test_format_1_upload_keeps_no_texts_and_no_views(
+    client, creator_headers, valid_bundle, session_factory
+):
+    files = {
+        name: (None, json.dumps(getattr(valid_bundle, name)), "application/json")
+        for name in ("study", "reference")
+    }
+    sid = valid_bundle.study["sid"]
+    response = client.put(
+        f"/api/v2/studies/{sid}", headers=creator_headers, files=files
+    )
+    assert response.status_code == 201, response.text
+    study, stored = views(session_factory, sid)
+    assert study.study_json is None
+    assert study.reference_json is None
     assert stored == {}
