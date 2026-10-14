@@ -210,7 +210,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
                     @select-row="emit('select-row', $event)"
                   />
                 </template>
-                <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
+                <p v-else class="pane-note">No rows with a time or scatter rows to plot.</p>
               </section>
             </template>
 

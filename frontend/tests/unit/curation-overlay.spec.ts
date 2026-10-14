@@ -359,6 +359,35 @@ describe("plotTraces", () => {
     expect(layout.yaxis.title).toEqual({ text: "cmax (mg/l)", font: { size: 11 } });
   });
 
+  it("draws outputs series as lines and markers by time, rings their problems and selects their rows", () => {
+    const name = "all · D150 · concentration · caffeine · plasma";
+    const OUTPUTS = "outputs_Fig2.tsv";
+    const view = figure({
+      source: "Fig2",
+      digitization: null,
+      overlay: [],
+      layout: "side_by_side",
+      unmatched: [name],
+      points: [
+        mapped({ series: name, kind: "outputs", file: OUTPUTS, line: 2, x: 0.5, y: 2.1 }),
+        mapped({ series: name, kind: "outputs", file: OUTPUTS, line: 3, x: 1, y: 3 }),
+      ],
+      series: [{ name, color: "#123456", dark_color: "#654321", x_label: "time (hr)", y_label: "concentration (mg/l)" }],
+    });
+    const problem: ValidationIssue = {
+      code: "negative_value",
+      severity: "warning",
+      message: "m",
+      source: { file: OUTPUTS, row: 3, header: "mean" },
+    };
+    const { traces, layout } = plotTraces(view, null, undefined, null, { rowProblems: plottedProblems(view, [problem]) });
+    const outputs = trace(traces, `plot ${name}`);
+    expect(outputs).toEqual(expect.objectContaining({ mode: "lines+markers", x: [0.5, 1], y: [2.1, 3] }));
+    expect(layout.xaxis.title).toEqual({ text: "time (hr)", font: { size: 11 } });
+    expect(trace(traces, "problem warning")).toEqual(expect.objectContaining({ x: [1], y: [3] }));
+    expect(rowAt(view, { customdata: outputs.customdata![1] })).toEqual({ file: OUTPUTS, line: 3 });
+  });
+
   it("draws asymmetric error bars, and none at a point without an error bar", () => {
     const view = figure({
       digitization: null,

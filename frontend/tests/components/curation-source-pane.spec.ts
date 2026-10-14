@@ -392,4 +392,13 @@ describe("scales of the plot", () => {
     expect(wrapper.find('[role="group"][aria-label^="Scale of the"]').exists()).toBe(false);
     study.close();
   });
+
+  it("says that a figure without rows with a time or scatter rows has nothing to plot", () => {
+    const wrapper = mountPane({
+      summary: sourceSummary({ source: "Fig3", kind: "figure", image: "Example_Fig3.png" }),
+      view: { ...view, source: "Fig3", image: "Example_Fig3.png", image_url: `${EXAMPLE}/files/Example_Fig3.png`, raw_grid: null },
+    });
+    expect(wrapper.text()).toContain("No rows with a time or scatter rows to plot.");
+    expect(wrapper.find(".plot-scales").exists()).toBe(false);
+  });
 });

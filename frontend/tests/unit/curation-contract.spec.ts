@@ -26,7 +26,7 @@ import { filterStudies, problemLabels } from "../../src/curation-app/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
 import { issueMessage } from "../../src/curation-app/metadata";
-import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
+import { legendEntries, overlayTraces, plotTraces } from "../../src/curation-app/overlay";
 import { ApiError } from "../../src/curation-app/api/client";
 import { detailsOfBody } from "../../src/curation-app/failures";
 import {
@@ -52,6 +52,7 @@ import acknowledgementsFixture from "../fixtures/curation-contract/acknowledgeme
 import messagesFixture from "../fixtures/curation-contract/messages.json";
 import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
+import outputsSourceFixture from "../fixtures/curation-contract/source-outputs-fig2.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
@@ -403,5 +404,31 @@ describe("open tables contract", () => {
   it("opens a problem of the validation at the place that the local server takes", () => {
     const mismatch = contract<Problem[]>(problemsFixture.validated).find((issue) => issue.code === "digitized_mismatch");
     expect(openPlace(mismatch!)).toEqual({ file: openTablesFixture.request.file, cell: openTablesFixture.request.cell });
+  });
+});
+
+describe("outputs source contract", () => {
+  const view = contract<SourceView>(outputsSourceFixture);
+  const PLASMA = "all · D150 · concentration · caffeine · plasma";
+  const URINE = "all · D150 · concentration · caffeine · urine";
+
+  it("accepts the answer", () => {
+    expect(isSourceView(outputsSourceFixture)).toBe(true);
+  });
+
+  it("plots each series of the outputs with a time as lines and markers by time, beside the image", () => {
+    const { traces, layout } = plotTraces(view);
+    expect(traces.map((entry) => entry.meta)).toEqual([`plot ${PLASMA}`, `plot ${URINE}`]);
+    const plasma = traces[0]!;
+    expect(plasma).toEqual(expect.objectContaining({ mode: "lines+markers", x: [0.5, 1, 2, 4], y: [2.1, 3, 2.4, 1.2] }));
+    expect(plasma.customdata?.map(([file, line]) => [file, line])).toEqual([
+      ["outputs_Fig2.tsv", 2],
+      ["outputs_Fig2.tsv", 3],
+      ["outputs_Fig2.tsv", 4],
+      ["outputs_Fig2.tsv", 5],
+    ]);
+    expect(layout.xaxis.title).toEqual({ text: "time (hr)", font: { size: 11 } });
+    expect(layout.yaxis.title).toEqual({ text: "concentration (mg/l)", font: { size: 11 } });
+    expect(legendEntries(view, "plot", false).map((entry) => entry.series)).toEqual([PLASMA, URINE]);
   });
 });

@@ -718,7 +718,7 @@ export interface MappedTable {
 }
 
 export interface OverlayPoint {
-  /** The series of the point: the label of a timecourse row or the name of a scatter row. */
+  /** The series of the point: the label of a timecourse row, the name of a scatter row, or the series of an outputs row with a time. */
   series: string;
   role: "raw" | "mapped";
   px: number;
@@ -740,10 +740,14 @@ export interface OverlayPoint {
   error_bar_end: boolean;
 }
 
-/** A mapped row of a timecourse or scatter table in the units of its table. */
+/** A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table. */
 export interface SourcePoint {
+  /**
+   * The series of the point: the `label` of a timecourse row, the `name` of a scatter row, or the
+   * subjects, interventions, measurement, substance and tissue of an outputs row joined with " · ".
+   */
   series: string;
-  kind: "timecourses" | "scatters";
+  kind: "timecourses" | "scatters" | "outputs";
   file: string;
   line: number;
   x: number;
