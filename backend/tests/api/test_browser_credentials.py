@@ -116,3 +116,59 @@ def test_administrator_api_key_cannot_change_study_access_control(
     valid_bundle.study[field] = value
     body["study"] = json.dumps(valid_bundle.study)
     assert client.put(endpoint, headers=headers, data=body).status_code == 403
+
+
+def assert_deletes_session_cookie(result, client):
+    cookie = result.headers["set-cookie"]
+    assert cookie.startswith(f'{client.app.state.session_cookie_name}="";')
+    assert "Max-Age=0" in cookie
+    assert "Path=/" in cookie
+    assert "HttpOnly" in cookie
+    assert "SameSite=lax" in cookie
+    assert ("Secure" in cookie) == client.app.state.secure_cookies
+
+
+@pytest.mark.parametrize("path", ["/api/v2/study-rows", "/api/v1/me/sessions"])
+def test_stale_session_cookie_is_deleted_by_its_401(browser, path):
+    client, _ = browser
+    # The domain of the cookies that the test client keeps from answers.
+    client.cookies.set(
+        client.app.state.session_cookie_name,
+        "pkdb_session_stale",
+        domain="testserver.local",
+    )
+    result = client.get(path)
+    assert result.status_code == 401
+    assert_deletes_session_cookie(result, client)
+    assert client.app.state.session_cookie_name not in client.cookies
+    assert client.get("/api/v2/study-rows").status_code == 200
+
+
+def test_revoked_session_cookie_is_deleted_by_its_401(browser):
+    client, headers = browser
+    assert login(client, headers).status_code == 200
+    name = client.app.state.session_cookie_name
+    revoked = client.cookies[name]
+    assert client.post("/api/v1/auth/logout", headers=headers).status_code == 204
+    client.cookies.set(name, revoked, domain="testserver.local")
+    result = client.get("/api/v2/study-rows")
+    assert result.status_code == 401
+    assert_deletes_session_cookie(result, client)
+
+
+def test_other_authentication_failures_keep_the_session_cookie(browser):
+    client, headers = browser
+    assert login(client, headers).status_code == 200
+    result = client.get(
+        "/api/v1/me/sessions", headers={"Authorization": "Bearer invalid"}
+    )
+    assert result.status_code == 401
+    assert "set-cookie" not in result.headers
+    result = client.post(
+        "/api/v1/auth/login",
+        json={"username": "browser-user", "password": "Wrong-password-42"},
+        headers=headers,
+    )
+    assert result.status_code == 401
+    assert "set-cookie" not in result.headers
+    assert client.get("/api/v1/me/sessions").status_code == 200

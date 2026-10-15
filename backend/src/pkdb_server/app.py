@@ -44,7 +44,11 @@ from pkdb_server.api import (
 from pkdb_server.api import (
     study_views as study_view_routes,
 )
-from pkdb_server.api.credentials import install_browser_security
+from pkdb_server.api.credentials import (
+    SessionCookieRejected,
+    delete_session_cookie,
+    install_browser_security,
+)
 from pkdb_server.api.errors import account_validation_error
 from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.limits import UploadLimits
@@ -199,11 +203,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.exception_handler(AuthenticationFailed)
     async def authentication_error(request, error):
-        return JSONResponse(
+        response = JSONResponse(
             {"detail": "Invalid or missing credentials"},
             status_code=401,
             headers={"WWW-Authenticate": "Bearer"},
         )
+        # The browser would otherwise send the ended session with every read
+        # and get 401 again, even for reads that need no login.
+        if isinstance(error, SessionCookieRejected):
+            delete_session_cookie(response, request)
+        return response
+
+    # Handlers are also looked up by the exact type of an exception.
+    app.add_exception_handler(SessionCookieRejected, authentication_error)
 
     @app.exception_handler(AuthorizationDenied)
     async def authorization_error(request, error):
@@ -231,8 +243,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not header:
             cookie = request.cookies.get(app.state.session_cookie_name)
             if cookie:
-                with session_factory.begin() as session:
-                    return authenticate_session(cookie, session)
+                try:
+                    with session_factory.begin() as session:
+                        return authenticate_session(cookie, session)
+                except AuthenticationFailed as error:
+                    raise SessionCookieRejected() from error
             if not required:
                 return Principal()
             raise AuthenticationFailed()
