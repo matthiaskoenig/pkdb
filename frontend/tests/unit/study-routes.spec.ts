@@ -41,6 +41,13 @@ describe("study routes", () => {
   it("serves the Studies page", () => {
     expect(router.resolve("/studies").name).toBe("Studies");
   });
+  it("serves the sections of a study format 2 study and nothing else below it", () => {
+    const route = router.resolve("/data/caffeine/Harder1988/review");
+    expect(route.name).toBe("StudyByName");
+    expect(route.params).toEqual({ substance: "caffeine", name: "Harder1988", section: "review" });
+    expect(studyProps("/data/caffeine/Harder1988/data")).toEqual({ sid: "caffeine/Harder1988" });
+    expect(router.resolve("/data/caffeine/Harder1988/extra").name).toBe("NotFound");
+  });
 });
 
 describe("study links", () => {

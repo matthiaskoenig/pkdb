@@ -10,7 +10,7 @@ import StudyFilters from "../../src/study-views/components/StudyFilters.vue";
 import rowsCurator from "../fixtures/website-views/study-rows-curator.json";
 import rowsPublic from "../fixtures/website-views/study-rows-public.json";
 import { setViewport } from "./curation-dom";
-import { httpError, serve as serveWith } from "./website-api";
+import { httpError, navigated, serve as serveWith } from "./website-api";
 
 const mocks = vi.hoisted(() => ({ get: vi.fn() }));
 vi.mock("../../src/api/client", () => ({
@@ -36,12 +36,6 @@ beforeEach(() => {
   mocks.get.mockReset();
   setViewport(1280);
 });
-
-/** Lets a navigation that the page started finish: a navigation guard of Vuetify waits for a timer. */
-async function navigated(): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve));
-  await flushPromises();
-}
 
 async function open(path: string) {
   const router = createRouter({ history: createMemoryHistory(), routes });

@@ -1,3 +1,4 @@
+import { flushPromises } from "@vue/test-utils";
 import { AxiosError, AxiosHeaders, type AxiosResponse } from "axios";
 import type { Mock } from "vitest";
 
@@ -20,4 +21,10 @@ export function serve(get: Mock, answers: Record<string, unknown>): void {
     if (answer instanceof Error) throw answer;
     return { data: answer };
   });
+}
+
+/** Lets a navigation that the page started finish: a navigation guard of Vuetify waits for a timer. */
+export async function navigated(): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve));
+  await flushPromises();
 }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { SECTIONS } from "../study-views/study";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -17,14 +18,14 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("../features/search/components/SearchPage.vue"),
   },
   {
-    // A study format 2 study: its sid is `<substance>/<name>`.
-    path: "/data/:substance/:name",
+    // A study format 2 study: its sid is `<substance>/<name>`, with a section of its page (#963).
+    // Without a stored view the page shows the record of the study, as for study format 1.
+    path: `/data/:substance/:name/:section(${SECTIONS.join("|")})?`,
     name: "StudyByName",
     props: (route) => ({
       sid: `${String(route.params.substance)}/${String(route.params.name)}`,
     }),
-    component: () =>
-      import("../features/details/components/StudyDetailPage.vue"),
+    component: () => import("../features/studies/components/StudyViewPage.vue"),
   },
   {
     // A study format 1 sid, or the PKDB identifier of a released study,
