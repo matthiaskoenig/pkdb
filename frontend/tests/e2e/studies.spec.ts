@@ -347,6 +347,50 @@ test.describe("the curation view of the assigned curator", () => {
     await backToSearch(page, before, sid);
   });
 
+  test("gives the study views the sizes of the curation app", async () => {
+    // The computed sizes of the curation app at 1280 px (tests/curation-e2e, caffeine/Demo2020), in px.
+    const sizes = async (expected: [Locator, number][]) => {
+      for (const [element, size] of expected) {
+        await expect(element).toBeVisible();
+        const actual = await element.evaluate((node) => Number.parseFloat(getComputedStyle(node).fontSize));
+        expect(actual, `${element}`).toBeCloseTo(size, 2);
+      }
+    };
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${address}/review`);
+    const chips = page.locator(".review-chips");
+    await sizes([
+      [page.locator("h1.study-identity"), 15],
+      [page.locator(".section-tab-label").first(), 12.5],
+      [chips.locator(".v-chip").first(), 10.5],
+      [chips.locator(".chip-count").first(), 10.5],
+      [page.locator(".review-tools .v-select__selection-text"), 13],
+      [page.locator(".review-card-text").first(), 13.125],
+      [page.locator(".review-detail-text"), 14],
+    ]);
+    const kind = page.getByRole("combobox", { name: "Kind", exact: true });
+    await kind.focus();
+    await kind.press("ArrowDown");
+    await sizes([[page.locator(".v-overlay--active .v-list-item-title").first(), 14]]);
+    await page.keyboard.press("Escape");
+    await page.goto(`${address}/data?file=outputs_Tab2.tsv`);
+    await sizes([
+      [page.getByText("Hide empty columns", { exact: true }), 13],
+      [page.locator(".rows-pane td").first(), 12],
+      [page.locator(".nav-name").first(), 12],
+      [page.locator(".pane-head-name").first(), 12],
+    ]);
+    await page.goto("/studies");
+    await sizes([
+      [page.getByRole("heading", { name: "Studies", level: 1 }), 22.4],
+      [studyTable(page).locator("a.study-identity").first(), 12.25],
+      [page.locator(".filter-chips .v-chip").first(), 10.5],
+      [page.getByRole("textbox", { name: "Search studies" }), 13],
+    ]);
+    await studyTable(page).locator("[data-tip]").first().hover();
+    await sizes([[page.locator(".v-overlay--active .study-tooltip"), 12.25]]);
+  });
+
   test("keeps a chosen review item below the app bar on a phone", async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${address}/review`);
