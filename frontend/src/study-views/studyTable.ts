@@ -45,7 +45,7 @@ function curatorOf(user: string, profiles: ReadonlyMap<string, Profile>): Curato
   return { name, avatar: profile?.avatar_url ?? null, initials };
 }
 
-/** The item of `row`; the study table builds it once per row object, so once per snapshot. */
+/** The item of `row`; the study table builds it once per row object, so again only for a row that changed. */
 export function rowItem(row: StudyRow, profiles: ReadonlyMap<string, Profile>, repository: string): RowItem {
   const people = (row.summary.curators ?? []).map((user) => curatorOf(user, profiles));
   // Beyond the slots, the last slot counts the curators that it hides.
@@ -231,6 +231,18 @@ function withCell(target: StudyRow, source: StudyRow, column: SizedColumn): Stud
 }
 
 /**
+ * The texts of the sized columns of each row object. A poll keeps the objects of the rows that did
+ * not change (`keepUnchanged`), so only the rows that changed get their texts again.
+ */
+const sizedTexts = new WeakMap<StudyRow, readonly string[]>();
+
+function textsOf(row: StudyRow): readonly string[] {
+  let texts = sizedTexts.get(row);
+  if (!texts) sizedTexts.set(row, (texts = SIZED_COLUMNS.map((column) => column.text(row))));
+  return texts;
+}
+
+/**
  * Rows that together show every distinct cell of each column of `rows`, the longest first beyond
  * `limit`: hidden in the table, they give the columns the widths of all rows while only some
  * rows render. They have no identity, as they stand for no study.
@@ -238,12 +250,13 @@ function withCell(target: StudyRow, source: StudyRow, column: SizedColumn): Stud
 export function sizerRows(rows: readonly StudyRow[], limit = SIZER_LIMIT): StudyRow[] {
   const first = rows[0];
   if (!first) return [];
-  const choices = SIZED_COLUMNS.map((column) => {
+  const texts = rows.map(textsOf);
+  const choices = SIZED_COLUMNS.map((_, at) => {
     const byText = new Map<string, StudyRow>();
-    for (const row of rows) {
-      const text = column.text(row);
+    rows.forEach((row, place) => {
+      const text = texts[place]![at]!;
       if (!byText.has(text)) byText.set(text, row);
-    }
+    });
     return [...byText.entries()]
       .sort(([a], [b]) => b.length - a.length)
       .slice(0, limit)

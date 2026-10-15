@@ -104,8 +104,9 @@ function activeHalf(key: SortKey): string | null {
 }
 
 /**
- * The item of each row object, built once per snapshot (the rows of a snapshot keep their
- * objects through filters and sorting) and again when the profiles or the repository change.
+ * The item of each row object, built once (the rows keep their objects through filters, sorting
+ * and the polls that leave them as they are, see `keepUnchanged`) and again when the profiles or
+ * the repository change.
  */
 const cache = computed(() => ({
   profiles: views.data.profiles.value,
