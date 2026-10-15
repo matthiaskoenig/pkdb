@@ -1,11 +1,13 @@
-"""Error bars that format 1 workbooks compute as ABS(X - mean)."""
+"""Formulas of format 1 workbooks, such as error bars computed as ABS(X - mean)."""
 
 import re
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 import openpyxl
-from openpyxl.utils import get_column_letter
+from openpyxl.formula.tokenizer import Token, Tokenizer, TokenizerError
+from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.utils.cell import coordinate_to_tuple
 
 from pkdb.schemas.study import CanonicalStudy, Observation
@@ -92,3 +94,75 @@ def error_bars(workbook: Path, study: CanonicalStudy) -> dict[str, tuple[float, 
         if isinstance(bar, (int, float)) and not isinstance(bar, bool) and bar >= 0:
             found[key] = (float(bar), kind)
     return found
+
+
+@dataclass(frozen=True)
+class References:
+    """The cells that a formula of a row reads.
+
+    `columns` are the column letters of the cells of the same row and sheet;
+    `outside` says whether it also reads cells of other rows or sheets, whole
+    columns or rows, or names, or cannot be parsed.
+    """
+
+    columns: frozenset[str]
+    outside: bool
+
+
+def row_formulas(
+    workbook: Path, rows: dict[str, set[int]]
+) -> dict[tuple[str, int], dict[str, str]]:
+    """The formulas of the wanted rows of each sheet, by column letter."""
+    book = openpyxl.load_workbook(workbook, read_only=True, data_only=False)
+    found: dict[tuple[str, int], dict[str, str]] = {}
+    try:
+        for name, numbers in rows.items():
+            if name not in book.sheetnames or not numbers:
+                continue
+            sheet = book[name]
+            # Some writers save wrong sheet dimensions, which would cut rows short.
+            sheet.reset_dimensions()
+            cells = sheet.iter_rows(
+                min_row=min(numbers), max_row=max(numbers), values_only=True
+            )
+            for number, values in enumerate(cells, min(numbers)):
+                if number not in numbers:
+                    continue
+                found[name, number] = {
+                    get_column_letter(column): value
+                    for column, value in enumerate(values, 1)
+                    if isinstance(value, str) and value.startswith("=")
+                }
+    finally:
+        book.close()
+    return found
+
+
+def references(formula: str, sheet: str, row: int) -> References:
+    """The cells that a formula of `row` of `sheet` reads."""
+    try:
+        tokens = Tokenizer(formula).items
+    except TokenizerError:
+        return References(frozenset(), outside=True)
+    columns: set[str] = set()
+    outside = False
+    for token in tokens:
+        if token.type != Token.OPERAND or token.subtype != Token.RANGE:
+            continue
+        place, _, cells = token.value.rpartition("!")
+        if place and place.strip("'").replace("''", "'") != sheet:
+            outside = True
+            continue
+        corners = [re.fullmatch(CELL, corner) for corner in cells.split(":")]
+        indexes = [
+            column_index_from_string(corner[1])
+            for corner in corners
+            if corner is not None and int(corner[2]) == row
+        ]
+        if len(indexes) != len(corners) or len(indexes) > 2:
+            outside = True
+            continue
+        columns.update(
+            get_column_letter(index) for index in range(min(indexes), max(indexes) + 1)
+        )
+    return References(frozenset(columns), outside)

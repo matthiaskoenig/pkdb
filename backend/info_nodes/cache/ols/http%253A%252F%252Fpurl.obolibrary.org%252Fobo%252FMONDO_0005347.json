@@ -1,0 +1,165 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MONDO_0005347",
+  "lang": "en",
+  "description": [
+    "A laboratory test result indicating elevated triglyceride concentration in the blood."
+  ],
+  "synonyms": [
+    "hypertriglyceridemia (disease)",
+    "hypertriglyceridemia"
+  ],
+  "annotation": {
+    "OBO foundry unique label": [
+      "hypertriglyceridemia (disease)"
+    ],
+    "database_cross_reference": [
+      "EFO:0004211",
+      "HP:0002155",
+      "MEDGEN:167238",
+      "MESH:D015228",
+      "SCTID:302870006",
+      "UMLS:C0813230"
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/167238",
+      "http://identifiers.org/mesh/D015228",
+      "http://identifiers.org/snomedct/302870006",
+      "http://linkedlifedata.com/resource/umls/id/C0813230",
+      "http://www.ebi.ac.uk/efo/EFO_0004211"
+    ],
+    "id": [
+      "MONDO:0005347"
+    ]
+  },
+  "label": "hypertriglyceridemia",
+  "ontology_name": "mondo",
+  "ontology_prefix": "MONDO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mondo/mondo-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MONDO_0005347",
+  "obo_id": "MONDO:0005347",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A laboratory test result indicating elevated triglyceride concentration in the blood.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "P378",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_P378"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004211",
+      "description": "MONDO:equivalentTo",
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004211"
+    },
+    {
+      "database": "HP",
+      "id": "0002155",
+      "description": "MONDO:otherHierarchy",
+      "url": "http://purl.obolibrary.org/obo/HP_0002155"
+    },
+    {
+      "database": "MEDGEN",
+      "id": "167238",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/167238"
+    },
+    {
+      "database": "MESH",
+      "id": "D015228",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D015228"
+    },
+    {
+      "database": "SCTID",
+      "id": "302870006",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/302870006"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0813230",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0813230"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "hypertriglyceridemia (disease)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-6601-2165",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-6601-2165"
+        }
+      ]
+    },
+    {
+      "name": "hypertriglyceridemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "ambiguous",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0005347/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

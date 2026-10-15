@@ -1,0 +1,287 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001155",
+  "lang": "en",
+  "description": [
+    "A portion of the large intestine before it becomes the rectum. In mammals, the colon is the most part of the large intestine, excluding the vermiform appendix, the rectum and the anal canal."
+  ],
+  "synonyms": [
+    "hindgut",
+    "large bowel",
+    "posterior intestine"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "AAO:0010400",
+      "BTO:0000269",
+      "CALOHA:TS-0158",
+      "EFO:0000361",
+      "EMAPA:18939",
+      "EV:0100079",
+      "FMA:14543",
+      "GAID:309",
+      "MA:0000335",
+      "MAP:0000001",
+      "MAT:0000526",
+      "MESH:D003106",
+      "NCIT:C12382",
+      "SCTID:302508007",
+      "TAO:0000706",
+      "VHOG:0000648",
+      "Wikipedia:Colon_(anatomy)",
+      "XAO:0000243",
+      "ZFA:0000706",
+      "galen:Colon",
+      "UMLS:C0009368"
+    ],
+    "editor note": [
+      "TODO - abstract this such that it legitimately covers all vertebrates",
+      "Some references do not consider the caecum to be part of the colon."
+    ],
+    "external_definition": [
+      "The last portion of the digestive system, it extracts water and salt from solid wastes before they are eliminated from the body.[AAO]",
+      "The posterior intestine has short longitudinally arranged epithelial folds which are similar to the colon of higher vertebrates. Wallace et al, 2005.[TAO]"
+    ],
+    "function_notes": [
+      "it extracts water and salt from solid wastes before they are eliminated from the body[WP]"
+    ],
+    "has_relational_adjective": [
+      "colonic"
+    ],
+    "homology_notes": [
+      "Although all vertebrates have a digestive tract and accessory glands, various parts of this system are not necessarily homologous, analogous, or even present in all species. Therefore, broad comparisons can be best made under the listings of headgut, foregut, midgut, pancreas and biliary system, hindgut.[uncertain][VHOG]"
+    ],
+    "id": [
+      "UBERON:0001155"
+    ],
+    "taxon_notes": [
+      "In mammals, the colon consists of four sections: the ascending colon, the transverse colon, the descending colon, and the sigmoid colon[WP]",
+      "In zebrafish, the posterior intestine has short longitudinally arranged epithelial folds which are similar to the colon of higher vertebrates[ZFIN]"
+    ]
+  },
+  "label": "colon",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0001155",
+  "obo_id": "UBERON:0001155",
+  "in_subset": [
+    "efo_slim",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "uberon_slim",
+    "vertebrate_core"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A portion of the large intestine before it becomes the rectum. In mammals, the colon is the most part of the large intestine, excluding the vermiform appendix, the rectum and the anal canal.",
+      "oboXrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Colon_(anatomy)",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ZFIN",
+          "id": "curator",
+          "description": null,
+          "url": "https://zfin.org/curator"
+        },
+        {
+          "database": null,
+          "id": "http://orcid.org/0000-0002-2825-0621",
+          "description": null,
+          "url": "http://orcid.org/0000-0002-2825-0621"
+        },
+        {
+          "database": null,
+          "id": "http://orcid.org/0000-0002-6601-2165",
+          "description": null,
+          "url": "http://orcid.org/0000-0002-6601-2165"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010400",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010400"
+    },
+    {
+      "database": "BTO",
+      "id": "0000269",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000269"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0158",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-0158"
+    },
+    {
+      "database": "EFO",
+      "id": "0000361",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000361"
+    },
+    {
+      "database": "EMAPA",
+      "id": "18939",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:18939"
+    },
+    {
+      "database": "EV",
+      "id": "0100079",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/EV_0100079"
+    },
+    {
+      "database": "FMA",
+      "id": "14543",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/14543"
+    },
+    {
+      "database": "GAID",
+      "id": "309",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0000335",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0000335"
+    },
+    {
+      "database": "MAP",
+      "id": "0000001",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MAT",
+      "id": "0000526",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000526"
+    },
+    {
+      "database": "MESH",
+      "id": "D003106",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D003106"
+    },
+    {
+      "database": "NCIT",
+      "id": "C12382",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12382"
+    },
+    {
+      "database": "SCTID",
+      "id": "302508007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/302508007"
+    },
+    {
+      "database": "TAO",
+      "id": "0000706",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/TAO_0000706"
+    },
+    {
+      "database": "VHOG",
+      "id": "0000648",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0000648"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Colon_(anatomy)",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "XAO",
+      "id": "0000243",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/XAO_0000243"
+    },
+    {
+      "database": "ZFA",
+      "id": "0000706",
+      "description": null,
+      "url": "https://zfin.org/action/ontology/term/ZFA:0000706"
+    },
+    {
+      "database": "galen",
+      "id": "Colon",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0009368",
+      "description": "ncithesaurus:Colon",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0009368"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "in_taxon": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002162"
+    },
+    "contributes_to_morphology_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001155/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002433"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

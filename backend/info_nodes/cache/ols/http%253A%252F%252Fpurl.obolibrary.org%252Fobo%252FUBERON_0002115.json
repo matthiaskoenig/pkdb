@@ -1,0 +1,283 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0002115",
+  "lang": "en",
+  "description": [
+    "The portion of the small intestine that extends from the duodenum to the ileum."
+  ],
+  "synonyms": [
+    "intestinum jejunum",
+    "mid-intestine",
+    "middle intestine"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "BTO:0000657",
+      "CALOHA:TS-0496",
+      "EFO:0001333",
+      "EMAPA:18666",
+      "EV:0100074",
+      "FMA:7207",
+      "GAID:318",
+      "MA:0000340",
+      "MAT:0000045",
+      "MESH:D007583",
+      "MIAA:0000045",
+      "NCIT:C12388",
+      "SCTID:181248002",
+      "VHOG:0000053",
+      "Wikipedia:Jejunum",
+      "galen:Jejunum",
+      "UMLS:C0022378"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/3/3d/Illu_small_intestine.jpg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-female/v1.2/assets/3d-vh-f-small-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-male/v1.2/assets/3d-vh-m-small-intestine.glb"
+    ],
+    "editor note": [
+      "TODO consider ZFA:0001323 mid intestine, see also small intestine"
+    ],
+    "external_definition": [
+      "The first two fifth of the small intestine beyond the duodenum. It extends from the end of the duodenum to the ileum. [Dorian_AF, Elsevier's_encyclopaedic_dictionary_of_medicine, Part_B:_Anatomy_(1988)_Amsterdam_etc.:_Elsevier][VHOG]"
+    ],
+    "has_relational_adjective": [
+      "jejunal"
+    ],
+    "id": [
+      "UBERON:0002115"
+    ],
+    "taxon_notes": [
+      "The jejunum is the middle section of the small intestine in most higher vertebrates, including mammals, reptiles, and birds. In fish, the divisions of the small intestine are not as clear and the terms middle intestine or mid-gut may be used instead of jejunum.[Wikipedia:Jejunum]"
+    ]
+  },
+  "label": "jejunum",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0002115",
+  "obo_id": "UBERON:0002115",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The portion of the small intestine that extends from the duodenum to the ileum.",
+      "oboXrefs": [
+        {
+          "database": "MGI",
+          "id": "monikat",
+          "description": null,
+          "url": "http://www.informatics.jax.org/accession/monikat"
+        },
+        {
+          "database": "MP",
+          "id": "0004002",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MP_0004002"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "BTO",
+      "id": "0000657",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000657"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0496",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-0496"
+    },
+    {
+      "database": "EFO",
+      "id": "0001333",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0001333"
+    },
+    {
+      "database": "EMAPA",
+      "id": "18666",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:18666"
+    },
+    {
+      "database": "EV",
+      "id": "0100074",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/EV_0100074"
+    },
+    {
+      "database": "FMA",
+      "id": "7207",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/7207"
+    },
+    {
+      "database": "GAID",
+      "id": "318",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0000340",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0000340"
+    },
+    {
+      "database": "MAT",
+      "id": "0000045",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000045"
+    },
+    {
+      "database": "MESH",
+      "id": "D007583",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D007583"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000045",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12388",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12388"
+    },
+    {
+      "database": "SCTID",
+      "id": "181248002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/181248002"
+    },
+    {
+      "database": "VHOG",
+      "id": "0000053",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0000053"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Jejunum",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Jejunum"
+    },
+    {
+      "database": "galen",
+      "id": "Jejunum",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0022378",
+      "description": "ncithesaurus:Jejunum",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0022378"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "intestinum jejunum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000657",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000657"
+        }
+      ]
+    },
+    {
+      "name": "mid-intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Jejunum",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Jejunum"
+        }
+      ]
+    },
+    {
+      "name": "middle intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000657",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000657"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002202"
+    },
+    "contributes_to_morphology_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002115/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002433"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

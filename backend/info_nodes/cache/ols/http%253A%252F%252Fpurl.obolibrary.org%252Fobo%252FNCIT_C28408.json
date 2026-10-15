@@ -1,0 +1,133 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28408",
+  "lang": "en",
+  "description": [
+    "Quantitative PCR: a method to measure very small amounts of RNA transcripts as cDNA targets. There are two strategies currently used, one is called Competitive RTPCR and the other is called Real-Time PCR."
+  ],
+  "synonyms": [
+    "QUANTITATIVE REVERSE TRANSCRIPTASE POLYMERASE CHAIN REACTION",
+    "Quantitative RTPCR",
+    "Quantitative Reverse Transcriptase PCR",
+    "Real-Time Reverse Transcriptase PCR",
+    "qRT-PCR",
+    "qRTPCR",
+    "rRT-PCR"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A modified polymerase chain reaction (PCR) technique in which RNA sequences are reverse transcribed into complementary DNA (cDNA) transcripts by the enzyme reverse transcriptase. The cDNA is then amplified by a real time PCR reaction. The level of expression of a target gene is calculated using the crossing thresholds (CTs) or crossing points (CPs) which correspond to the numbers of cycles required for a target gene and the housekeeping, internal control gene, to reach a defined fluorescence intensity."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Quantitative Reverse Transcriptase PCR"
+    ],
+    "Legacy Concept Name": [
+      "Quantitative_Reverse_Transcriptase_PCR"
+    ],
+    "Preferred_Name": [
+      "Quantitative Reverse Transcriptase PCR"
+    ],
+    "Semantic_Type": [
+      "Molecular Biology Research Technique"
+    ],
+    "UMLS_CUI": [
+      "C1514628"
+    ],
+    "code": [
+      "C28408"
+    ]
+  },
+  "label": "Quantitative Reverse Transcriptase PCR",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28408",
+  "obo_id": "NCIT:C28408",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "QUANTITATIVE REVERSE TRANSCRIPTASE POLYMERASE CHAIN REACTION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Quantitative RTPCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Quantitative Reverse Transcriptase PCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Real-Time Reverse Transcriptase PCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "qRT-PCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "qRTPCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "rRT-PCR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28408/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

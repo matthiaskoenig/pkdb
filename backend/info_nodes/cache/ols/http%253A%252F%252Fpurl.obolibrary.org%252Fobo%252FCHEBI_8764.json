@@ -1,0 +1,371 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8764",
+  "lang": "en",
+  "description": [
+    "A carboxylic ester resulting from the formal condensation between the carboxylic acid group of mycophenolic acid and the hydroxy group of 2-(morpholin-4-yl)ethanol. In the liver, it is metabolised to mycophenolic acid, an immunosuppressant for which it is a prodrug. It is widely used to prevent tissue rejection following organ transplants as well as for the treatment of certain autoimmune diseases."
+  ],
+  "synonyms": [
+    "2-(morpholin-4-yl)ethyl (4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoate",
+    "2-(morpholin-4-yl)ethyl (4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoate",
+    "2-morpholinoethyl (E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-5-phthalanyl)-4-methyl-4-hexenoate",
+    "Cellcept",
+    "MMF",
+    "RS 61443",
+    "mycophenolate mofetil",
+    "mycophenolic acid morpholinoethyl ester"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:128794-94-5",
+      "drugbank:DB00688",
+      "drugcentral:1859",
+      "hmdb:HMDB0014826",
+      "kegg.compound:C07908",
+      "kegg.drug:D00752",
+      "pubmed:11099793",
+      "pubmed:11490743",
+      "pubmed:15572389",
+      "pubmed:15992049",
+      "pubmed:16979992",
+      "pubmed:19858585",
+      "pubmed:21180633",
+      "pubmed:21710356",
+      "pubmed:22081165",
+      "pubmed:22294686",
+      "pubmed:22310598",
+      "pubmed:22417996",
+      "pubmed:22460418",
+      "pubmed:22560143",
+      "pubmed:8826401",
+      "pubmed:9274835",
+      "reaxys:7500599",
+      "wikipedia.en:Mycophenolate_mofetil"
+    ],
+    "generalized_empirical_formula": [
+      "C23H31NO7"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8764"
+    ],
+    "inchi_key_string": [
+      "RTGDFNSFWBGLEC-SYZQJQIISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H31NO7/c1-15(5-7-19(25)30-13-10-24-8-11-29-12-9-24)4-6-17-21(26)20-18(14-31-23(20)27)16(2)22(17)28-3/h4,26H,5-14H2,1-3H3/b15-4+"
+    ],
+    "mass": [
+      "433.501"
+    ],
+    "monoisotopic_mass": [
+      "433.21005"
+    ],
+    "smiles_string": [
+      "COc1c(C)c2c(c(O)c1C/C=C(C)CCC(=O)OCCN1CCOCC1)C(=O)OC2"
+    ]
+  },
+  "label": "mycophenolate mofetil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8764",
+  "obo_id": "CHEBI:8764",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "128794-94-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=128794-94-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00688",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00688"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1859",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1859"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014826",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014826"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07908",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00752",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11099793",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11099793/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11490743",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11490743/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15572389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15572389/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15992049",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15992049/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16979992",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16979992/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19858585",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19858585/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21180633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21180633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21710356",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21710356/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22081165",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22081165/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22294686",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22294686/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22310598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22310598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22417996",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22417996/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22460418",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22460418/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22560143",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22560143/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8826401",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8826401/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9274835",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9274835/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7500599",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Mycophenolate_mofetil",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(morpholin-4-yl)ethyl (4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(morpholin-4-yl)ethyl (4E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-1,3-dihydro-2-benzofuran-5-yl)-4-methylhex-4-enoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-morpholinoethyl (E)-6-(4-hydroxy-6-methoxy-7-methyl-3-oxo-5-phthalanyl)-4-methyl-4-hexenoate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cellcept",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MMF",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RS 61443",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mycophenolate mofetil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mycophenolic acid morpholinoethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8764/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

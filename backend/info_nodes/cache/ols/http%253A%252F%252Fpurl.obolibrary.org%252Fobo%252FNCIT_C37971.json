@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C37971",
+  "lang": "en",
+  "description": [
+    "A laboratory test result indicating elevated triglyceride concentration in the blood."
+  ],
+  "synonyms": [
+    "High Triglycerides",
+    "Hypertriglyceridemia"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A disorder characterized by laboratory test results that indicate an elevation in the concentration of triglyceride concentration in the blood.",
+      "Abnormally high level of triglycerides in the blood."
+    ],
+    "Contributing_Source": [
+      "MedDRA",
+      "NICHD"
+    ],
+    "Legacy Concept Name": [
+      "Hypertriglyceridemia"
+    ],
+    "Maps_To": [
+      "Hypertriglyceridemia"
+    ],
+    "Preferred_Name": [
+      "Hypertriglyceridemia"
+    ],
+    "Semantic_Type": [
+      "Laboratory or Test Result"
+    ],
+    "UMLS_CUI": [
+      "C4015590"
+    ],
+    "code": [
+      "C37971"
+    ]
+  },
+  "label": "Hypertriglyceridemia",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C37971",
+  "obo_id": "NCIT:C37971",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C189762",
+    "NCIT_C208333",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "High Triglycerides",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hypertriglyceridemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37971/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

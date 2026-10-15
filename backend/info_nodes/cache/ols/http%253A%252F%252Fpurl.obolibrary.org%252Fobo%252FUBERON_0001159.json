@@ -1,0 +1,222 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001159",
+  "lang": "en",
+  "description": [
+    "The part of the large intestine that is closest to the rectum and anus. It forms a loop that averages about 40 cm. in length, and normally lies within the pelvis, but on account of its freedom of movement it is liable to be displaced into the abdominal cavity."
+  ],
+  "synonyms": [
+    "pelvic colon",
+    "sigmoid colon",
+    "sigmoid flexure",
+    "colon sigmoideum"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "BTO:0000645",
+      "CALOHA:TS-2044",
+      "EFO:0000846",
+      "EMAPA:36391",
+      "FMA:14548",
+      "MAT:0000314",
+      "MESH:D012809",
+      "MIAA:0000314",
+      "NCIT:C12384",
+      "NCIT:C33550",
+      "SCTID:362166007",
+      "Wikipedia:Sigmoid_colon",
+      "galen:SigmoidColon",
+      "UMLS:C0227391",
+      "UMLS:C0682612"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/3/3b/Dickdarm-Schema.svg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-female/v1.3/assets/3d-sbu-f-large-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-male/v1.3/assets/3d-sbu-m-large-intestine.glb"
+    ],
+    "id": [
+      "UBERON:0001159"
+    ]
+  },
+  "label": "sigmoid colon",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0001159",
+  "obo_id": "UBERON:0001159",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The part of the large intestine that is closest to the rectum and anus. It forms a loop that averages about 40 cm. in length, and normally lies within the pelvis, but on account of its freedom of movement it is liable to be displaced into the abdominal cavity.",
+      "oboXrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Sigmoid_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Sigmoid_colon"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "BTO",
+      "id": "0000645",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000645"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-2044",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-2044"
+    },
+    {
+      "database": "EFO",
+      "id": "0000846",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000846"
+    },
+    {
+      "database": "EMAPA",
+      "id": "36391",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:36391"
+    },
+    {
+      "database": "FMA",
+      "id": "14548",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/14548"
+    },
+    {
+      "database": "MAT",
+      "id": "0000314",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000314"
+    },
+    {
+      "database": "MESH",
+      "id": "D012809",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D012809"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000314",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12384",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12384"
+    },
+    {
+      "database": "NCIT",
+      "id": "C33550",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C33550"
+    },
+    {
+      "database": "SCTID",
+      "id": "362166007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/362166007"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Sigmoid_colon",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Sigmoid_colon"
+    },
+    {
+      "database": "galen",
+      "id": "SigmoidColon",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0227391",
+      "description": "ncithesaurus:Sigmoid_Colon",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0227391"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0682612",
+      "description": "ncithesaurus:Sigmoid_Flexure",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0682612"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "colon sigmoideum",
+      "scope": "hasRelatedSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Sigmoid_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Sigmoid_colon"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/graph"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002150"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001159/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002202"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
