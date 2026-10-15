@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "43e9509446f1a23ea696d7be355e49e4500104595d11174f62f23868fd8bd04e",
+    "version": "07faa27991eaac27f21b0325f4aa9cd5de13379852f26d3d1e21c523d91a71c0",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -445,6 +445,21 @@
         "deprecated": false
       },
       {
+        "name": "arteriovenous concentration difference",
+        "sid": "arteriovenous-concentration-difference",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l",
+          "cpm/ml"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "artery blood flow",
         "sid": "artery-blood-flow",
         "dtype": "numeric",
@@ -574,6 +589,21 @@
         "choices": [],
         "can_negative": false,
         "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "auc_net_incremental",
+        "sid": "auc-net-incremental",
+        "dtype": "numeric",
+        "units": [
+          "g/l*hr",
+          "g/l/kg*hr",
+          "mol/l*hr",
+          "IU/l*hr"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": true,
         "deprecated": false
       },
       {
@@ -1527,6 +1557,34 @@
       {
         "name": "concentration change absolute",
         "sid": "concentration-change-absolute",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "concentration change absolute maximum",
+        "sid": "concentration-change-absolute-maximum",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "concentration change absolute minimum",
+        "sid": "concentration-change-absolute-minimum",
         "dtype": "numeric",
         "units": [
           "g/l",
@@ -2592,6 +2650,24 @@
         "deprecated": false
       },
       {
+        "name": "excretion rate (change)",
+        "sid": "excretion-rate-change",
+        "dtype": "numeric",
+        "units": [
+          "1/min",
+          "mg/min",
+          "mg/min/m^2",
+          "µmol/min/kg",
+          "µmol/min",
+          "µIU/min",
+          "µIU/min/kg"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "excretion rate (ratio)",
         "sid": "excretion-rate-ratio",
         "dtype": "numeric",
@@ -2758,6 +2834,19 @@
           "time restricted",
           "NR"
         ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "filtered load",
+        "sid": "filtered-load",
+        "dtype": "numeric",
+        "units": [
+          "g/hr",
+          "mol/hr"
+        ],
+        "choices": [],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -4153,6 +4242,18 @@
         "deprecated": false
       },
       {
+        "name": "mRNA expression",
+        "sid": "mrna-expression",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "mRNA expression (relative)",
         "sid": "mrna-expression-relative",
         "dtype": "numeric",
@@ -4391,6 +4492,18 @@
         ],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "osmolarity (change)",
+        "sid": "osmolarity-change",
+        "dtype": "numeric",
+        "units": [
+          "mole/l"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4698,6 +4811,19 @@
         "deprecated": false
       },
       {
+        "name": "protein amount",
+        "sid": "protein-amount",
+        "dtype": "numeric",
+        "units": [
+          "arbitrary_unit/mg",
+          "mol/g"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "prothrombin time",
         "sid": "prothrombin-time",
         "dtype": "numeric",
@@ -4851,6 +4977,19 @@
           "µmol/min",
           "µIU/min",
           "µIU/min/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "radioactivity concentration",
+        "sid": "radioactivity-concentration",
+        "dtype": "numeric",
+        "units": [
+          "Bq/l",
+          "cpm/ml"
         ],
         "choices": [],
         "can_negative": false,
@@ -5673,6 +5812,20 @@
         ],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "urinary volume rate (change)",
+        "sid": "urinary-volume-rate-change",
+        "dtype": "numeric",
+        "units": [
+          "l/min",
+          "l/min/kg",
+          "ml/hr/(1.73*m^2)"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -12375,5 +12528,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "82398d3378f62c7e1fccc05ced066ed526fea1238db6499ae863e147bac14542"
+  "vocabulary_hash": "53ade6b6eda61e72e882622f5f9893f787b39f0d6a6934f97a7e6c4ee5775737"
 }

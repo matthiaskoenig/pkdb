@@ -1,5 +1,5 @@
 {
-  "version": "e3f65f06ad800dbb4d8e1582c4c6df95a56bfbddc5a15ecbfcbcc9665bbac93b",
+  "version": "30c0fc5a7f8df4f5b69c090dcbd33b84ae78709a37dfd1fc7424877386f22e1c",
   "nodes": [
     {
       "sid": "root",
@@ -558,6 +558,184 @@
       }
     },
     {
+      "sid": "concentration-change-absolute-maximum",
+      "name": "concentration change absolute maximum",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [
+          "maximum concentration increase",
+          "maximum increase from baseline"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"The quantity of a substance per unit volume or weight; a measure of the amount of substance present in a unit amount of mixture, particularly, the amount of solute dissolved in a solvent. The amounts can be expressed as moles, masses, volumes, or parts.\", \"label\": \"Concentration\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C41185\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C41185\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"concentration change absolute maximum\""
+        ],
+        "description": [
+          "\"Maximum absolute concentration change of substance from baseline over a given period, i.e. the maximum increase, e.g. the peak rise of blood glucose above its baseline value. A negative value means that the concentration stayed below the baseline. State the period in the comment. See also 'concentration change absolute minimum' and 'concentration change absolute'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "concentration-change-absolute-minimum",
+      "name": "concentration change absolute minimum",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [
+          "maximum concentration decrease",
+          "maximum decrease from baseline"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"The quantity of a substance per unit volume or weight; a measure of the amount of substance present in a unit amount of mixture, particularly, the amount of solute dissolved in a solvent. The amounts can be expressed as moles, masses, volumes, or parts.\", \"label\": \"Concentration\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C41185\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C41185\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"concentration change absolute minimum\""
+        ],
+        "description": [
+          "\"Minimum absolute concentration change of substance from baseline over a given period, i.e. the maximum decrease, e.g. the nadir of blood glucose below its baseline value. A decrease is negative: a reported maximum decrease of 0.8 mmol/l is encoded as -0.8 mmol/l. State the period in the comment. See also 'concentration change absolute maximum' and 'concentration change absolute'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "arteriovenous-concentration-difference",
+      "name": "arteriovenous concentration difference",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l",
+          "cpm/ml"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [
+          "A-V difference",
+          "AV difference",
+          "arterio-venous concentration difference"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"arteriovenous (A-V) concentration difference\""
+        ],
+        "description": [
+          "\"The arterial minus the venous concentration of a substance across an organ or a vascular bed (e.g. the forearm), from arterial and venous samples taken at the same time or with the venous sample delayed by the transit time. A positive value is an uptake into the tissue, a negative value a release from it. Name the vascular bed and the sample sites in the comment. See also 'extraction_ratio'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "radioactivity-concentration",
+      "name": "radioactivity concentration",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "Bq/l",
+          "cpm/ml"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [
+          "activity concentration",
+          "count rate",
+          "counts per minute"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"radioactivity concentration\""
+        ],
+        "description": [
+          "\"The radioactivity of a radioactive tracer (e.g. 99mTc-DTPA) per volume of a sample such as plasma: the activity (Bq/l), or the count rate of a well or scintillation counter (counts per minute, cpm/ml) when the counting efficiency is not known. A count rate does not convert to an activity. The tracer is the substance; state corrections for physical decay or background in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "multiple-dosing-cmin",
       "name": "muliple_dosing_cmin",
       "kind": "measurement",
@@ -976,6 +1154,52 @@
         ],
         "description": [
           "\"Excretion rate of substance. The speed relative to time that an exogenous compound is removed from a body system. Rate of removal of substance from body for instance via urinary excretion, excretion via the fecal route or via sweat. Use with the respective tissue to encode the route of excretion, e.g. with the tissue urine. For secretion within the body use 'secretion rate'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "excretion-rate-change",
+      "name": "excretion rate (change)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "1/min",
+          "mg/min",
+          "mg/min/m^2",
+          "\u00b5mol/min/kg",
+          "\u00b5mol/min",
+          "\u00b5IU/min",
+          "\u00b5IU/min/kg"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "chemistry-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"The speed relative to time that an exogenous compound is removed from a body system.\", \"label\": \"Excretion Rate\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C85534\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C85534\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"excretion rate (change)\""
+        ],
+        "description": [
+          "\"Absolute change of the excretion rate of substance from baseline, e.g. the change of the urinary sodium excretion rate per collection interval from the same interval before treatment. A negative value is a decrease. Use with the respective tissue, e.g. urine. See also 'excretion rate'.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -3645,6 +3869,90 @@
       }
     },
     {
+      "sid": "osmolarity-change",
+      "name": "osmolarity (change)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "mole/l"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "kidney-function-test"
+      ],
+      "terms": {
+        "synonyms": [
+          "osmolality (change)"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"The osmoles of solute per liter of solution.\", \"label\": \"Osmolarity\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C179805\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C179805\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"osmolarity (change)\""
+        ],
+        "description": [
+          "\"Absolute change of the osmolarity from baseline, e.g. of the urine osmolarity per collection interval; mOsm/l is encoded as mmol/l. A negative value is a decrease. See also 'osmolarity'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "filtered-load",
+      "name": "filtered load",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/hr",
+          "mol/hr"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "renal-measurement"
+      ],
+      "terms": {
+        "synonyms": [
+          "filtered glucose",
+          "filtered glucose load"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"filtered load\""
+        ],
+        "description": [
+          "\"Filtered load. The amount of a substance filtered by the kidney glomeruli into the tubules per unit time, calculated as the glomerular filtration rate (or eGFR) times the plasma concentration of the substance, e.g. the filtered glucose. Name the filtration marker and the concentration used in the comment. See also 'gfr' and 'renal threshold'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "ecog",
       "name": "ecog",
       "kind": "measurement",
@@ -4726,6 +5034,53 @@
         ],
         "description": [
           "\"Incremental area under the curve (iAUC). The area under the concentration-time curve above the baseline (pre-stimulus) concentration over a given period, e.g. the first-phase (0-10 min) or second-phase insulin response of an intravenous glucose tolerance test. The time period is required; state its start in the comment if it does not begin at the stimulus. See also 'auc_end'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "auc-net-incremental",
+      "name": "auc_net_incremental",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l*hr",
+          "g/l/kg*hr",
+          "mol/l*hr",
+          "IU/l*hr"
+        ],
+        "choices": [],
+        "time_required": true,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "auc-measurement"
+      ],
+      "terms": {
+        "synonyms": [
+          "baseline-corrected AUC",
+          "decremental AUC",
+          "net area below baseline",
+          "net iAUC",
+          "net incremental AUC"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"net incremental area under curve (net iAUC)\""
+        ],
+        "description": [
+          "\"Net incremental area under the curve. The area of the concentration-time curve above the baseline (pre-dose) concentration minus the area below it over a given period. A negative value is a net area below the baseline, e.g. the decremental AUC of blood glucose after a glucose-lowering drug. The time period is required. See also 'auc_incremental' for the area above the baseline only.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -8242,6 +8597,48 @@
         ],
         "description": [
           "\"The rate of urine excretion. Quantification of the amount of urine voided per time. Should be used with substance 'h2o'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "urinary-volume-rate-change",
+      "name": "urinary volume rate (change)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "l/min",
+          "l/min/kg",
+          "ml/hr/(1.73*m^2)"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "renal-measurement"
+      ],
+      "terms": {
+        "synonyms": [
+          "urinary flow rate (change)"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"urinary volume rate (change)\""
+        ],
+        "description": [
+          "\"The absolute change of the rate of urine excretion from baseline, e.g. of the hourly urine volume per collection interval. A negative value is a decrease. Should be used with substance 'h2o'. See also 'urinary volume rate'.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -12023,6 +12420,49 @@
         ],
         "dtype": [
           "\"numeric_categorical\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "protein-amount",
+      "name": "protein amount",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "arbitrary_unit/mg",
+          "mol/g"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "chemistry-measurement"
+      ],
+      "terms": {
+        "synonyms": [
+          "protein abundance",
+          "protein content",
+          "protein expression"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"protein amount\""
+        ],
+        "description": [
+          "\"The amount of a specific protein (e.g. an enzyme or a transporter, given as the substance) in a tissue sample, normalized to the total protein of the sample or of its isolated (e.g. microsomal or membrane) fraction: the absolute abundance by LC-MS/MS based targeted proteomics (pmol/mg protein, encoded as mol/g), or the relative amount by the band densitometry of a western blot (arbitrary units per mg protein). Use the 'tissue' field for the origin of the sample and the method field for the assay; name the fraction in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
         ],
         "ntype": [
           "\"measurement_type\""
@@ -26159,6 +26599,47 @@
         ],
         "description": [
           "\"Relative mRNA expression of a gene in a tissue (e.g. by quantitative RT-PCR, normalized to a housekeeping gene) as ratio to a reference condition (e.g. pre-operative or control tissue), e.g. 1.0 (100%) for no difference. State the gene in the label or comment; the tissue is encoded by the tissue field.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "mrna-expression",
+      "name": "mRNA expression",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "gene-measurement"
+      ],
+      "terms": {
+        "synonyms": [
+          "gene expression",
+          "mRNA level"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"mRNA expression\""
+        ],
+        "description": [
+          "\"mRNA expression of a gene in a tissue relative to a reference (housekeeping) gene of the same sample, e.g. the 2^-dCt value of quantitative RT-PCR normalized to 18S rRNA or GAPDH. Give the gene product (e.g. the transporter) as the substance and the reference gene in the comment. For the ratio to a reference condition use 'mRNA expression (relative)'.\""
         ],
         "dtype": [
           "\"numeric\""
