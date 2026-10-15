@@ -179,6 +179,8 @@ function sortValue(row: StudyRow, key: SortKey): string | number | null {
     case "open_items":
       return row.summary.open_items ?? null;
     case "problems":
+      // A duplicate and a row without its curation show "-", so they sort last as rows without a value.
+      if (row.duplicate || row.curator === false) return null;
       // Errors weigh more than any number of warnings.
       return row.counts.errors * 1_000_000 + row.counts.warnings;
     case "sync":

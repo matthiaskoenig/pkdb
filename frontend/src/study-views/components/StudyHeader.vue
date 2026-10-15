@@ -4,8 +4,8 @@
  * doing, its PMID, sync state and problems, in one line. The page puts its actions into the slot
  * `actions`, at the end of the line, and what belongs to them below the line into the slot `after`.
  * Without the curation it shows no issue or problems, and without the jobs no sync state and not
- * what the study is doing; a reader of the curation who may not write sees the review status in place of
- * the actions, which show only with `edit`.
+ * what the study is doing; a reader of the curation who may not write sees the review status in
+ * place of the actions, which show only with `edit`.
  */
 import { computed } from "vue";
 import { VChip } from "vuetify/components";

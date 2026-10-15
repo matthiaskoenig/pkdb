@@ -150,7 +150,13 @@ function open(event: MouseEvent): void {
           {{ REVIEW_LABELS[item.row.summary.review_status] }}
         </VChip>
         <span v-else class="cell-empty">-</span>
-        <VChip v-if="item.row.summary.ai" size="small" variant="outlined" class="ai-marker" :title="aiTitle(item.row)">
+        <VChip
+          v-if="item.row.summary.ai && !uncurated"
+          size="small"
+          variant="outlined"
+          class="ai-marker"
+          :title="aiTitle(item.row)"
+        >
           AI
         </VChip>
       </div>

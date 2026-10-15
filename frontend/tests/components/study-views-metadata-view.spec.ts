@@ -103,9 +103,9 @@ describe("the metadata of a study as text", () => {
     expect(facts(wrapper, "Access and provenance")).toEqual({ Licence: "Closed", Access: "Public", Provenance: "Automatic curation" });
   });
 
-  it("shows a curator the issue, the ratings and whether reference.json matches", () => {
+  it("shows a curator the issue, the ratings and whether the reference matches", () => {
     const wrapper = view(detail([3, 4.5]), CURATOR);
-    expect(wrapper.get(".reference-match").text()).toBe("reference.json matches");
+    expect(wrapper.get(".reference-match").text()).toBe("The reference matches");
     expect(facts(wrapper, "People").Curators).toBe("Matthias König (rating 3 of 5), Jan Grzegorzewski (rating 4.5 of 5)");
     expect(facts(wrapper, "Issue and release")).toEqual({ Issue: "#2158", Release: "PKDB00198 · released 2026-09-28" });
     expect(wrapper.get('a[href="https://github.com/matthiaskoenig/pkdb_data/issues/2158"]').text()).toBe("#2158");
@@ -187,5 +187,16 @@ describe("the metadata of a study as text", () => {
     const broken = detail([null, null], { reference: { error: "reference.json is not valid JSON" } });
     expect(view(broken, EVERYTHING).get(".reference-line").text()).toBe("reference.json is not valid JSON");
     expect(view(broken, PUBLIC).get(".reference-line").text()).toBe("The reference cannot show.");
+  });
+
+  it("says whether reference.json matches study.json, naming the files only to a reader who may edit them", () => {
+    const chip = (match: boolean, capabilities: typeof CURATOR) =>
+      view(detail([null, null], { reference_match: match }), capabilities).get(".reference-match").text();
+    expect(chip(false, EVERYTHING)).toBe("reference.json does not match study.json");
+    expect(chip(true, EVERYTHING)).toBe("reference.json matches");
+    expect(chip(false, CURATOR)).toBe("The reference does not match the study");
+    expect(chip(true, CURATOR)).toBe("The reference matches");
+    const unmatched = detail([null, null], { reference_match: false });
+    expect(view(unmatched, PUBLIC).find(".reference-match").exists()).toBe(false);
   });
 });

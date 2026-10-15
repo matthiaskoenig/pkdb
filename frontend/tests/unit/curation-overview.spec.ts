@@ -173,6 +173,7 @@ describe("needsAttention", () => {
     expect(needsAttention(row("a/b", {}, { review_status: "in_review", open_items: 0 }), LOCAL)).toBe(false);
     expect(needsAttention(row("a/b", { sync: { status: "changed", changes: 2, conflicts: 0 } }), LOCAL)).toBe(false);
   });
+
   it("leaves the sync state out without the jobs, which show it, and for a row of the website without one", () => {
     const conflicted = row("a/c", { sync: { status: "conflict", changes: 0, conflicts: 1 } });
     expect(needsAttention(conflicted, { jobs: false })).toBe(false);
@@ -240,6 +241,27 @@ describe("sortStudies", () => {
       { key: "problems", descending: true },
     );
     expect(ids(sorted)).toEqual(["a/error", "a/warnings", "a/clean"]);
+  });
+
+  it("puts duplicates and rows without their curation last by problems, as they show -", () => {
+    const mixed = [
+      row("a/duplicate", { duplicate: true }),
+      row("a/website", { curator: false }),
+      row("a/clean"),
+      row("a/warnings", { counts: { errors: 0, warnings: 2 } }),
+    ];
+    expect(ids(sortStudies(mixed, { key: "problems", descending: false }))).toEqual([
+      "a/clean",
+      "a/warnings",
+      "a/duplicate",
+      "a/website",
+    ]);
+    expect(ids(sortStudies(mixed, { key: "problems", descending: true }))).toEqual([
+      "a/warnings",
+      "a/clean",
+      "a/duplicate",
+      "a/website",
+    ]);
   });
 
   it("puts rows without a value last in both directions", () => {

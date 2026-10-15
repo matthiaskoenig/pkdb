@@ -511,11 +511,17 @@ describe("the study list", () => {
       path: "studies/caffeine/Written",
       curator: true,
       counts: { errors: 1, warnings: 0 },
-      summary: { ...studyRow().summary, review_status: "in_review", open_items: 2, issue: 2158 },
+      summary: { ...studyRow().summary, review_status: "in_review", open_items: 2, issue: 2158, ai: true },
     });
     // A row of the website that the reader may not write: its curation is left out, and so is the
-    // sync state of a local server.
-    const other = studyRow({ id: "caffeine/Other", name: "Other", path: "studies/caffeine/Other", curator: false });
+    // sync state of a local server. Its review shows "-" without the AI marker of an AI curated study.
+    const other = studyRow({
+      id: "caffeine/Other",
+      name: "Other",
+      path: "studies/caffeine/Other",
+      curator: false,
+      summary: { ...studyRow().summary, ai: true },
+    });
     delete other.summary.review_status;
     delete other.summary.open_items;
     delete other.summary.issue;
@@ -530,7 +536,7 @@ describe("the study list", () => {
       [".cell-issue", ".cell-review", ".cell-open", ".cell-problems"].map((cell) =>
         wrapper.get(`tr[data-study="${id}"] ${cell}`).text(),
       );
-    expect(cells("caffeine/Written")).toEqual(["#2158", "In review", "2", "1 error"]);
+    expect(cells("caffeine/Written")).toEqual(["#2158", "In review AI", "2", "1 error"]);
     expect(cells("caffeine/Other")).toEqual(["-", "-", "-", "-"]);
   });
 
@@ -594,12 +600,14 @@ describe("a review.json that cannot be read", () => {
     expect(shown).not.toContain("Fix review.json");
   });
 
-  it("says that it is not valid to every reader, and how to fix it only with edit", async () => {
+  it("says that it is not valid to every reader, naming the file and how to fix it only with edit", async () => {
     const broken = { revision: "review-1", value: null, issues: [] };
-    expect(await invalid(broken, EVERYTHING)).toContain("Fix review.json in your editor.");
+    const edited = await invalid(broken, EVERYTHING);
+    expect(edited).toContain("review.json is not valid, so the items cannot be shown.");
+    expect(edited).toContain("Fix review.json in your editor.");
     const shown = await invalid(broken, CURATOR);
-    expect(shown).toContain("review.json is not valid, so the items cannot be shown.");
-    expect(shown).not.toContain("Fix review.json");
+    expect(shown).toContain("The review is not valid, so the items cannot be shown.");
+    expect(shown).not.toContain("review.json");
   });
 });
 

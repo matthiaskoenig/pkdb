@@ -51,7 +51,7 @@ const untitled = computed(() => (capabilities.value.edit ? "No title in referenc
 const referenceError = computed(() =>
   reference.value.kind === "error" && capabilities.value.edit ? reference.value.text : "The reference cannot show.",
 );
-const match = computed(() => referenceMatch(detail.value?.reference_match ?? null));
+const match = computed(() => referenceMatch(detail.value?.reference_match ?? null, capabilities.value.edit));
 const identifiers = computed(() => identifierFacts(metadata.value?.reference));
 
 const people = computed<Fact[]>(() => {

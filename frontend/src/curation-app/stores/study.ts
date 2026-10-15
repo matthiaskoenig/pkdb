@@ -152,15 +152,16 @@ export const useStudyStore = defineStore("curation-study", () => {
     accept: Guard<T>,
     caller?: AbortSignal,
   ): Promise<T> {
-    const signal = caller ? AbortSignal.any([requests.signal, caller]) : requests.signal;
+    const own = requests.signal;
+    const signal = caller ? AbortSignal.any([own, caller]) : own;
     const cached = cache.get(path);
     const result = await getJson(path, accept, { etag: cached?.etag ?? null, signal });
-    // An answer that arrives after the study closed or its caller left is neither cached nor returned.
-    if (signal.aborted) throw new DOMException("The read was aborted", "AbortError");
-    if (result.status === 200) {
-      cache.set(path, { etag: result.etag, data: result.data });
-      return result.data;
-    }
+    // An answer that arrives after the study closed is neither cached nor returned; one that
+    // arrives after its caller left is cached for the next read, but not returned.
+    if (own.aborted) throw new DOMException("The read was aborted", "AbortError");
+    if (result.status === 200) cache.set(path, { etag: result.etag, data: result.data });
+    if (caller?.aborted) throw new DOMException("The read was aborted", "AbortError");
+    if (result.status === 200) return result.data;
     if (!cached) throw new Error(`Unexpected 304 for ${path}`);
     return cached.data;
   }

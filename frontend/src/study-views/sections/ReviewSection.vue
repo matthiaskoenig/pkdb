@@ -48,11 +48,15 @@ const detail = views.data.detail;
 const review = computed(() => detail.value?.review ?? null);
 /**
  * Why the items do not show: review.json cannot be written from the app, which only a reader who
- * may edit hears of, or it is not valid.
+ * may edit hears of, or it is not valid. Only a reader who may edit hears the name of the file.
  */
 const invalidText = computed(() => {
-  if (review.value?.revision !== null) return "review.json is not valid, so the items cannot be shown.";
-  return capabilities.value.edit ? "review.json cannot be written from the app." : "The review items cannot be shown.";
+  const edit = capabilities.value.edit;
+  if (review.value?.revision !== null) {
+    const name = edit ? "review.json" : "The review";
+    return `${name} is not valid, so the items cannot be shown.`;
+  }
+  return edit ? "review.json cannot be written from the app." : "The review items cannot be shown.";
 });
 const items = computed<ReviewItem[]>(() => review.value?.value?.items ?? []);
 const approved = computed(() => review.value?.value?.status === "approved");

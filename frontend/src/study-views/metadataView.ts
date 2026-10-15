@@ -64,10 +64,16 @@ export function referenceView(value: ReferenceSummary | null): ReferenceView {
   };
 }
 
-/** Whether reference.json has the identifiers of study.json, as its chip says it. */
-export function referenceMatch(value: boolean | null): { label: string; tone: Tone } {
-  if (value === true) return { label: "reference.json matches", tone: "success" };
-  if (value === false) return { label: "reference.json does not match study.json", tone: "warning" };
+/**
+ * Whether reference.json has the identifiers of study.json, as its chip says it: naming the files
+ * only to a reader who may `edit` them.
+ */
+export function referenceMatch(value: boolean | null, edit: boolean): { label: string; tone: Tone } {
+  if (value === true) return { label: edit ? "reference.json matches" : "The reference matches", tone: "success" };
+  if (value === false) {
+    const label = edit ? "reference.json does not match study.json" : "The reference does not match the study";
+    return { label, tone: "warning" };
+  }
   return { label: "No identifiers", tone: undefined };
 }
 

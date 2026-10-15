@@ -97,7 +97,7 @@ const identifiersChanged = computed(
     (form.value.reference.pmid.trim() !== (savedIdentifiers.value.pmid ?? "") ||
       form.value.reference.doi.trim() !== (savedIdentifiers.value.doi ?? "")),
 );
-const match = computed(() => referenceMatch(detail.value?.reference_match ?? null));
+const match = computed(() => referenceMatch(detail.value?.reference_match ?? null, true));
 const reference = computed(() => referenceView(detail.value?.reference ?? null));
 
 function useDoi(doi: string): void {
