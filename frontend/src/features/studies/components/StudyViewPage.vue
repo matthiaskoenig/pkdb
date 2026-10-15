@@ -186,9 +186,9 @@ function backToSearch(): void {
   padding-top: 4px;
   isolation: isolate;
 }
-/* The cards of Metadata take at most 100rem, as in the curation app; the other sections the whole width. */
+/* The cards of Metadata take at most 100rem of the curation app (1400 px); the other sections the whole width. */
 .website-study--metadata > .website-study-section {
-  max-width: 100rem;
+  max-width: calc(100 * var(--study-rem));
 }
 .website-study-loading {
   max-width: 24rem;
