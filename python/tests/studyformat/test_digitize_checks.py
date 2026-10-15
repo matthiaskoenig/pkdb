@@ -1,6 +1,7 @@
 import io
 import json
 import tarfile
+from pathlib import Path
 
 from digitize_fixtures import GOOD, png, project
 
@@ -123,6 +124,20 @@ def test_import_tar_project_writes_canonical_file_and_image(
     assert (folder / "Example_Fig1.png").read_bytes() == png(100, 100)
     written = json.loads((folder / "Example_Fig1.wpd.json").read_text())
     assert written["datasetColl"][0]["data"][1]["value"] == [1, 2]
+
+
+def test_import_names_the_files_after_the_current_folder(
+    make_study, valid_files, tmp_path, monkeypatch
+):
+    # `pkdb digitize import . Fig1 ...` in the study folder.
+    files = {k: v for k, v in valid_files.items() if k != "Example_Fig1.png"}
+    folder = make_study(files)
+    archive = _archive(tmp_path / "project.tar", png(100, 100))
+    monkeypatch.chdir(folder)
+    result = import_project(Path("."), "Fig1", archive)
+    assert result.issues == [] and result.file == "Example_Fig1.wpd.json"
+    assert (folder / "Example_Fig1.wpd.json").is_file()
+    assert (folder / "Example_Fig1.png").is_file()
 
 
 def test_import_rejects_points_outside_the_existing_image(

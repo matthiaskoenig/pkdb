@@ -719,7 +719,7 @@ def import_project(folder: Path, source: str, path: Path) -> ImportResult:
         raise ValueError(f"{source!r} is not a figure source such as Fig1")
     if not (folder / STUDY_JSON).is_file():
         raise ValueError(f"{folder} is not a study folder: it has no {STUDY_JSON}")
-    study = folder.name
+    study = folder.resolve().name
     file = digitization_file(study, source)
     image_name = image_file(study, source)
     if path.suffix == ".tar":

@@ -507,6 +507,9 @@ def _review_add(args, folder: Path, author) -> int:
         key, separator, value = pair.partition("=")
         if not separator or not key:
             raise ReviewError(f"--rows needs COL=VALUE, not {pair!r}")
+        if key in rows:
+            # An item targets the rows with one value per column.
+            raise ReviewError(f"--rows names the column {key} twice")
         rows[key] = value
     if args.key == "":
         raise ReviewError("--key needs a value")
