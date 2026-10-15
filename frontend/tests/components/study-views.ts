@@ -6,6 +6,7 @@
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { computed, defineComponent, h, shallowRef, type Component, type Plugin } from "vue";
 import { createMemoryHistory, createRouter, type Router } from "vue-router";
+import { SEARCH_QUERY_KEYS } from "../../src/features/search/codec";
 import {
   provideStudyViews,
   type StudyCapabilities,
@@ -25,8 +26,8 @@ export const PUBLIC: StudyCapabilities = { edit: false, curation: false, files: 
 /** What a reader of the website who may write the study sees. */
 export const CURATOR: StudyCapabilities = { edit: false, curation: true, files: true, jobs: false };
 
-/** The keys of the search of the website, which its study page keeps in its query (features/search/codec.ts). */
-export const SEARCH_KEYS = ["v", "q", "scope", "tab", "page", "pageSize", "order", "tableSearch"];
+/** The keys of the search of the website, which its study page keeps in its query. */
+const SEARCH_KEYS: ReadonlySet<string> = new Set(SEARCH_QUERY_KEYS);
 
 /** Routes as the website has them: a study at `/data/<substance>/<name>/<section>` and no page of its own for a PDF. */
 export function websiteRoutes(): StudyViewRoutes {
@@ -42,7 +43,7 @@ export function websiteRoutes(): StudyViewRoutes {
       return { id: `${String(substance)}/${String(name)}`, section: isSection(section) ? section : null };
     },
     query: (current, own) => ({
-      ...Object.fromEntries(Object.entries(current).filter(([key]) => SEARCH_KEYS.includes(key))),
+      ...Object.fromEntries(Object.entries(current).filter(([key]) => SEARCH_KEYS.has(key))),
       ...own,
     }),
   };

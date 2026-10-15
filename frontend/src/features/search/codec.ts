@@ -51,6 +51,8 @@ export function canonicalCriteria(criteria: Criteria): Criteria {
 export function criteriaKey(criteria: Criteria): string {
   return JSON.stringify(canonicalCriteria(criteria));
 }
+/** The keys of the address of a search (`encodeLocation`), which a study page opened from it keeps (#963). */
+export const SEARCH_QUERY_KEYS = ["v", "q", "scope", "tab", "page", "pageSize", "order", "tableSearch"] as const;
 export function encodeLocation(
   location: SearchLocation,
 ): Record<string, string> {
@@ -71,16 +73,7 @@ export function encodeLocation(
 export function decodeLocation(query: Record<string, unknown>): SearchLocation {
   if (!Object.keys(query).length)
     return { criteria: defaultCriteria(), view: defaultView() };
-  const allowed = new Set([
-    "v",
-    "q",
-    "scope",
-    "tab",
-    "page",
-    "pageSize",
-    "order",
-    "tableSearch",
-  ]);
+  const allowed = new Set<string>(SEARCH_QUERY_KEYS);
   if (
     Object.keys(query).some(
       (k) => !allowed.has(k) || typeof query[k] !== "string",
