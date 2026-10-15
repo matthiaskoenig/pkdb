@@ -98,6 +98,8 @@ The header of a study is one line where its parts fit: its identity, its release
 
 Tabs under the header switch between the sections Metadata, Data, Problems, Review and Activity, in the order of the work on a study. The tabs of Problems and Review count the problems and the open review items. At the end of the tab line is **Last upload**, the time of the last upload with a link to the study on PK-DB. A narrow window turns the tabs into a select, with the last upload below it. A study beyond the upload limits shows no sources and tables, because the app cannot read them; its Data section and the targets of its review items say so, and Problems names the limit. A study opens on Review when it has open items, on Problems when it has errors, and on Metadata otherwise.
 
+The PK-DB website shows an uploaded study with the same views, read-only, on its study page, which the link of **Last upload** opens. Everyone sees Metadata and Data there; the curators of the study, the reviewers of a public study and administrators also see Problems and Review, the issue, the paper, the images of the sources and the raw extractions. The website shows the problems of the last upload. See [The study page](web-interface.md#the-study-page) of the web interface guide.
+
 The old addresses `#/studies/<substance>/<name>/sources` and `.../tables` open the Data section, with their query.
 
 ### Metadata

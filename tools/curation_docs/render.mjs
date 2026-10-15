@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "../../frontend/node_modules/playwright/index.mjs";
 // Node strips the types of this module, which imports nothing.
 import { columnLetters } from "../../frontend/src/study-views/columns.ts";
+import { alignColumns, alignTabs, cutColumns, fitPanes, settled } from "./capture.mjs";
 
 const repository = fileURLToPath(new URL("../../", import.meta.url));
 const launchUrl = process.env.PKDB_CURATION_URL;
@@ -59,7 +60,9 @@ function redact(text) {
 /** Capture the eight images; the paths of the files. */
 async function render() {
   const written = [];
-  const browser = await chromium.launch();
+  // A partial raster of a changed area can differ from a whole one by a level in a pixel, so that
+  // two runs gave different images.
+  const browser = await chromium.launch({ args: ["--disable-partial-raster"] });
   try {
     const context = await browser.newContext({
       viewport: { width: WIDTH, height: HEIGHT },
@@ -89,7 +92,9 @@ async function render() {
     });
     await studies.getByRole("cell", { name: "2 warnings" }).waitFor();
     await studies.getByRole("checkbox", { name: `Select ${STUDY}` }).check();
-    await capture("overview.png", [studies.getByRole("cell", { name: "1 error" }), page.getByText("1 study selected")]);
+    await capture("overview.png", [studies.getByRole("cell", { name: "1 error" }), page.getByText("1 study selected")], {
+      crop: true,
+    });
 
     // Review: the study opens on its open items; the item of an AI agent with its target rows.
     await study.click();
@@ -102,6 +107,7 @@ async function render() {
     await page.setViewportSize({ width: WIDTH, height: REVIEW_HEIGHT });
     await capture("review.png", [page.getByRole("article", { name: "Uncertainty" }), target.getByRole("table")], {
       whole: target,
+      crop: true,
     });
 
     // Data: the digitization of the figure with the selected mapped point, and the rows of its table.
@@ -112,6 +118,8 @@ async function render() {
     await legend.waitFor();
     const rowsOfTable = page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true });
     await rowsOfTable.waitFor();
+    // The separator stands where the rows show only whole columns, before the pointer finds the point.
+    await alignColumns(page, [rowsOfTable]);
     await hoverMappedRow(page, "Fig1", MISPLACED_LINE);
     // A click on the point selects its row, which the rows pane marks; the pointer keeps its hover label.
     await page.mouse.down();
@@ -127,6 +135,8 @@ async function render() {
     // so that the next images show their first columns.
     const outlined = rowsOfTable.locator("td.grid-cell--warning").first();
     await showWhole(outlined);
+    await alignColumns(page, [rowsOfTable]);
+    await showsWhole(outlined, rowsOfTable);
     const cell = await outlined.boundingBox();
     await page.mouse.move(cell.x + cell.width / 2, cell.y + cell.height / 2);
     const tooltip = page.locator(".problem-tooltip");
@@ -142,6 +152,7 @@ async function render() {
     const paper = page.getByRole("region", { name: `Paper ${STUDY.split("/")[1]}.pdf` });
     await paper.locator('.page[data-page-number="1"][data-loaded="true"]').waitFor();
     await paper.getByRole("searchbox", { name: "Find in the paper" }).fill("the");
+    await alignColumns(page, [rowsOfTable]);
     await capture("data-paper.png", [paper.locator(".paper-count").filter({ hasText: "1 of 3" })]);
 
     // Metadata: the forms of study.json with an unsaved change, named by the banner under the tabs, which is
@@ -165,10 +176,15 @@ async function render() {
     await subjects.getByRole("button", { name: /^Notes of the subjects/ }).click();
     const description = subjects.getByRole("textbox", { name: "Description 1" });
     await description.fill(`${await description.inputValue()} Smokers were excluded.`);
-    await capture("data-notes.png", [
-      subjects.getByRole("region", { name: "Rows of subjects.tsv", exact: true }),
-      page.getByText("Unsaved changes to study.json: Notes of the subjects"),
-    ]);
+    await capture(
+      "data-notes.png",
+      [
+        subjects.getByRole("region", { name: "Rows of subjects.tsv", exact: true }),
+        page.getByText("Unsaved changes to study.json: Notes of the subjects"),
+      ],
+      { panes: true },
+    );
+    await page.setViewportSize({ width: WIDTH, height: HEIGHT });
     await discardDraft(page);
 
     // Data in a conflict: the panel of the conflict between the workbook and the TSV file at the top of the rows.
@@ -180,11 +196,12 @@ async function render() {
     await page.getByRole("status").filter({ hasText: `Conflict in ${TABLE}` }).waitFor();
     await navigator.getByRole("button", { name: new RegExp(`^${TABLE.replace(".", "\\.")}`) }).click();
     // The job of the conflict has ended once its report, the conflict as an error, is the study's.
-    await capture("data-conflict.png", [
-      page.getByRole("region", { name: `Conflicting rows of ${TABLE}` }),
-      page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true }),
-      page.getByText("1 error", { exact: true }),
-    ]);
+    const conflicting = page.getByRole("region", { name: `Conflicting rows of ${TABLE}` });
+    await capture(
+      "data-conflict.png",
+      [conflicting, page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true }), page.getByText("1 error", { exact: true })],
+      { align: [conflicting, page.getByRole("region", { name: `Rows of ${TABLE}`, exact: true })] },
+    );
   } finally {
     await browser.close();
   }
@@ -197,9 +214,17 @@ async function render() {
  * the tab bars stand still. The pointer moves to the empty middle of the app bar, so that nothing
  * shows a hover, unless `pointer` keeps it where it is. `whole` must fit into the window, and with
  * `fit` the whole page, so that nothing scrolls under a sticky bar. With `tooltip`, the tooltip
- * under the pointer stays open; any other overlay must be closed.
+ * under the pointer stays open; any other overlay must be closed. With `panes`, the window gets
+ * the height at which the panes of the Data section end below their content; `align` moves the
+ * separator of the Data section so that these rows tables show only whole columns, and no rows
+ * table may cut a column. With `crop`, the image ends below the content of the page.
  */
-async function screenshot(page, name, ready, { pointer = false, whole = null, fit = false, tooltip = false } = {}) {
+async function screenshot(
+  page,
+  name,
+  ready,
+  { pointer = false, whole = null, fit = false, tooltip = false, panes = false, align = [], crop = false } = {},
+) {
   await page.evaluate(() => window.scrollTo(0, 0));
   if (!pointer) await page.mouse.move(600, 32);
   // A control that a click or a key focused shows no focus ring in the picture.
@@ -213,8 +238,12 @@ async function screenshot(page, name, ready, { pointer = false, whole = null, fi
     tooltip,
   );
   await settled(page);
+  if (panes) await fitPanes(page);
+  if (align.length) await alignColumns(page, align);
   for (const tabs of await page.getByRole("tablist").all()) await alignTabs(tabs);
   await settled(page);
+  const cut = await cutColumns(page);
+  if (cut.length) throw new Error(`${name} cuts a column of ${cut.join(", ")}.`);
   if (whole) {
     const box = await whole.boundingBox();
     const height = page.viewportSize().height;
@@ -224,71 +253,19 @@ async function screenshot(page, name, ready, { pointer = false, whole = null, fi
     throw new Error(`${name} does not fit the page into the window: raise its height.`);
   }
   const path = join(destination, name);
+  // The end of the content: the lowest element of the page below the app bar, and a margin.
+  const height = crop
+    ? await page.evaluate(() => {
+        const main = document.querySelector("main");
+        const bottoms = [...main.querySelectorAll("*")]
+          .filter((element) => element.checkVisibility() && element.getBoundingClientRect().height < main.clientHeight - 1)
+          .map((element) => element.getBoundingClientRect().bottom);
+        return Math.min(Math.ceil(Math.max(...bottoms)) + 16, window.innerHeight);
+      })
+    : page.viewportSize().height;
   // Not `animations: "disabled"`: it plays the paused animations of hidden loaders afterwards.
-  await page.screenshot({ path, caret: "hide" });
+  await page.screenshot({ path, caret: "hide", clip: { x: 0, y: 0, width: WIDTH, height } });
   return path;
-}
-
-/**
- * Wait until nothing animates and the tab bars have kept their scroll position for two
- * animation frames: a chosen tab scrolls into view, and a ripple of a click fades.
- */
-async function settled(page) {
-  await page.evaluate(() => {
-    window.__renderFrames = { position: null, stable: 0 };
-  });
-  await page.waitForFunction(
-    () => {
-      const position = [...document.querySelectorAll(".v-slide-group__container")]
-        .map((container) => container.scrollLeft)
-        .join(",");
-      const frames = window.__renderFrames;
-      frames.stable = position === frames.position ? frames.stable + 1 : 0;
-      frames.position = position;
-      // Hidden loaders keep paused animations, so only running ones count.
-      return frames.stable >= 2 && document.getAnimations().every((animation) => animation.playState !== "running");
-    },
-    undefined,
-    { polling: "raf" },
-  ).catch(async (error) => {
-    const state = await page.evaluate(() => ({
-      tabs: window.__renderFrames,
-      running: document
-        .getAnimations()
-        .filter((animation) => animation.playState === "running")
-        .map((animation) => {
-          const target = animation.effect?.target;
-          const chain = [];
-          for (let node = target; node && chain.length < 8; node = node.parentElement) chain.push(`${node.tagName}.${node.getAttribute("class") ?? ""}[${node.getAttribute("aria-label") ?? ""}]`);
-          return `${animation.animationName ?? animation.transitionProperty ?? "script"} ${JSON.stringify(target?.getBoundingClientRect())} ${chain.join(" < ")}`;
-        }),
-    }));
-    throw new Error(`The page did not settle: ${JSON.stringify(state)}`, { cause: error });
-  });
-}
-
-/**
- * Scroll a tab bar so that a whole tab starts at its left edge, while the chosen tab stays in
- * view: a tab bar that centers the chosen tab can cut the first visible one.
- */
-async function alignTabs(tabs) {
-  await tabs.evaluate((list) => {
-    const container = list.querySelector(".v-slide-group__container");
-    const items = [...list.querySelectorAll('[role="tab"]')];
-    const chosen = items.find((item) => item.getAttribute("aria-selected") === "true");
-    if (!container || !chosen) return;
-    const origin = container.getBoundingClientRect().left - container.scrollLeft;
-    const start = (item) => item.getBoundingClientRect().left - origin;
-    const end = (item) => item.getBoundingClientRect().right - origin;
-    const widest = container.scrollWidth - container.clientWidth;
-    // The start of a tab that the bar can scroll to, with the chosen tab in view.
-    const possible = items
-      .map(start)
-      .filter((left) => left <= widest + 0.5 && start(chosen) >= left && end(chosen) <= left + container.clientWidth);
-    const current = container.scrollLeft;
-    const nearest = possible.sort((a, b) => Math.abs(a - current) - Math.abs(b - current))[0];
-    if (nearest !== undefined) container.scrollLeft = nearest;
-  });
 }
 
 /**
@@ -314,6 +291,14 @@ async function showWhole(cell) {
     const nearest = possible.sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle))[0];
     region.scrollLeft = Math.max(0, Math.round(nearest));
   });
+}
+
+/** Fail unless the region of rows shows `cell` whole. */
+async function showsWhole(cell, region) {
+  const [box, frame] = await Promise.all([cell.boundingBox(), region.boundingBox()]);
+  if (box.x < frame.x || box.x + box.width > frame.x + frame.width) {
+    throw new Error("The rows do not show the outlined cell whole after the separator moved.");
+  }
 }
 
 /** Run a script of the repository with the Python environment of python/, which `uv run` prepares. */
