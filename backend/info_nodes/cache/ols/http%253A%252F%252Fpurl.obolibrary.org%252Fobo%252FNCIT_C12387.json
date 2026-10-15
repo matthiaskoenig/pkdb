@@ -1,0 +1,159 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12387",
+  "lang": "en",
+  "description": [
+    "The final section of the small intestine."
+  ],
+  "synonyms": [
+    "ILEUM",
+    "Ileal structure (body structure)",
+    "Ileum",
+    "SMALL INTESTINE, ILEUM",
+    "ileum"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The portion of the small intestine between the jejunum and large intestine.",
+      "The portion of the small intestine that extends from the jejunum to the colon.",
+      "excludes ileocecal valve C18.0"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Ileum"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C188396",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Ileum"
+    ],
+    "Maps_To": [
+      "Ileum",
+      "Iliac"
+    ],
+    "Preferred_Name": [
+      "Ileum"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0020885"
+    ],
+    "code": [
+      "C12387"
+    ],
+    "database_cross_reference": [
+      "UBERON:0002116"
+    ]
+  },
+  "label": "Ileum",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12387",
+  "obo_id": "NCIT:C12387",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0002116",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0002116"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "ILEUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ileal structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ileum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SMALL INTESTINE, ILEUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ileum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12387/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

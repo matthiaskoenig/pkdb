@@ -286,6 +286,66 @@ TISSUE_NODES: list[InfoNode] = [
         synonyms=[],
     ),
     Tissue(
+        sid="duodenum",
+        description="Duodenum. The first part of the small intestine, about 25-30 cm long, "
+        "between the pylorus of the stomach and the jejunum.",
+        parents=["small intestine"],
+        annotations=[(BQB.IS, "NCIT:C12263"), (BQB.IS, "UBERON:0002114")],
+    ),
+    Tissue(
+        sid="jejunum",
+        description="Jejunum. The middle part of the small intestine, between the duodenum "
+        "and the ileum. State the site (e.g. upper or lower jejunum) in the comment.",
+        parents=["small intestine"],
+        annotations=[(BQB.IS, "NCIT:C12388"), (BQB.IS, "UBERON:0002115")],
+    ),
+    Tissue(
+        sid="ileum",
+        description="Ileum. The last part of the small intestine, between the jejunum and the "
+        "cecum. State the site (e.g. upper or lower ileum) in the comment.",
+        parents=["small intestine"],
+        annotations=[(BQB.IS, "NCIT:C12387"), (BQB.IS, "UBERON:0002116")],
+    ),
+    Tissue(
+        sid="colon",
+        description="Colon. The main part of the large intestine from the cecum to the rectum, "
+        "consisting of the ascending, transverse, descending and sigmoid colon.",
+        parents=["large intestine"],
+        annotations=[(BQB.IS, "NCIT:C12382"), (BQB.IS, "UBERON:0001155")],
+    ),
+    Tissue(
+        sid="ascending-colon",
+        name="ascending colon",
+        description="Ascending colon. The part of the colon from the cecum up to the right "
+        "colic (hepatic) flexure.",
+        parents=["colon"],
+        annotations=[(BQB.IS, "NCIT:C12265"), (BQB.IS, "UBERON:0001156")],
+    ),
+    Tissue(
+        sid="transverse-colon",
+        name="transverse colon",
+        description="Transverse colon. The part of the colon between the right colic (hepatic) "
+        "and the left colic (splenic) flexure.",
+        parents=["colon"],
+        annotations=[(BQB.IS, "NCIT:C12385"), (BQB.IS, "UBERON:0001157")],
+    ),
+    Tissue(
+        sid="descending-colon",
+        name="descending colon",
+        description="Descending colon. The part of the colon from the left colic (splenic) "
+        "flexure down to the sigmoid colon.",
+        parents=["colon"],
+        annotations=[(BQB.IS, "NCIT:C12268"), (BQB.IS, "UBERON:0001158")],
+    ),
+    Tissue(
+        sid="sigmoid-colon",
+        name="sigmoid colon",
+        description="Sigmoid colon. The S-shaped last part of the colon between the descending "
+        "colon and the rectum.",
+        parents=["colon"],
+        annotations=[(BQB.IS, "NCIT:C12384"), (BQB.IS, "UBERON:0001159")],
+    ),
+    Tissue(
         sid="cecum",
         description="Cecum. A blind pouch-like commencement of the colon in the right "
         "lower quadrant of the abdomen at the end of the small intestine "

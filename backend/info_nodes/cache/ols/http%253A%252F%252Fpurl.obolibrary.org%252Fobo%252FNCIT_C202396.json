@@ -1,0 +1,89 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C202396",
+  "lang": "en",
+  "description": [
+    "A method for blood pressure measurement in which the motion of flow within a cannulated peripheral artery is transmitted to a transducer that converts the information into electrical signals."
+  ],
+  "synonyms": [
+    "INTRA-ARTERIAL DIFFERENTIAL PRESSURE TRANDUCTION",
+    "Intra-Arterial Differential Pressure Transduction"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A method for blood pressure measurement in which the motion of flow within a cannulated peripheral artery is transmitted to a transducer that converts the information into electrical signals."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "NCI_META_CUI": [
+      "CL1921736"
+    ],
+    "Preferred_Name": [
+      "Intra-Arterial Differential Pressure Transduction"
+    ],
+    "Semantic_Type": [
+      "Diagnostic Procedure"
+    ],
+    "code": [
+      "C202396"
+    ]
+  },
+  "label": "Intra-Arterial Differential Pressure Transduction",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C202396",
+  "obo_id": "NCIT:C202396",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "INTRA-ARTERIAL DIFFERENTIAL PRESSURE TRANDUCTION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intra-Arterial Differential Pressure Transduction",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C202396/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

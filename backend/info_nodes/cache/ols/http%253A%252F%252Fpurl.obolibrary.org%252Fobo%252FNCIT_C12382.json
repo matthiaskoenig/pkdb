@@ -1,0 +1,185 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12382",
+  "lang": "en",
+  "description": [
+    "The part of the large intestine measured from the cecum to the rectum consisting of ascending, transverse, descending and sigmoid portions. The purpose of the colon is to remove water from digested food prior to excretion."
+  ],
+  "synonyms": [
+    "COLON",
+    "Colon structure (body structure)",
+    "Colon",
+    "Colon, NOS",
+    "LARGE INTESTINE, COLON",
+    "colon",
+    "large bowel"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The longest part of the large intestine, which is a tube-like organ connected to the small intestine at one end and the anus at the other. The colon removes water and some nutrients and electrolytes from partially digested food. The remaining material, solid waste called stool, moves through the colon to the rectum and leaves the body through the anus.",
+      "The portion of the large intestine which extends from the cecum (or small intestine in animals that don't have a cecum) to the rectum."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "GDC",
+      "PCDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Colon"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C158874",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C188396",
+      "http://purl.obolibrary.org/obo/NCIT_C200442",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Colon"
+    ],
+    "Maps_To": [
+      "COLON",
+      "Colon",
+      "Colon, NOS"
+    ],
+    "Preferred_Name": [
+      "Colon"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0009368"
+    ],
+    "code": [
+      "C12382"
+    ],
+    "database_cross_reference": [
+      "UBERON:0001155"
+    ]
+  },
+  "label": "Colon",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12382",
+  "obo_id": "NCIT:C12382",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C157711",
+    "NCIT_C159328",
+    "NCIT_C159336",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179481",
+    "NCIT_C179482",
+    "NCIT_C179483",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001155",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001155"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "COLON",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Colon structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Colon, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LARGE INTESTINE, COLON",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "large bowel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12382/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

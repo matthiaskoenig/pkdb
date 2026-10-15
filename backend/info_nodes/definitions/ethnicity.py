@@ -150,6 +150,17 @@ ETHNICITY_NODES: list[InfoNode] = [
         synonyms=[],
     ),
     Choice(
+        sid="ethnicity-other",
+        name="other",
+        label="Other ethnicity",
+        description="An ethnicity other than the categories that the study reports, e.g. "
+        "'Other' in a table of race or ethnicity. Prefer a specific ethnicity when the study "
+        "names it.",
+        parents=["ethnicity"],
+        annotations=[(BQB.IS, "NCIT:C104495")],
+        synonyms=["other race"],
+    ),
+    Choice(
         sid="white-new-zealanders",
         name="white new zealanders",
         label="White New Zealanders",

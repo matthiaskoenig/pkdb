@@ -1,0 +1,89 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C150870",
+  "lang": "en",
+  "description": [
+    "A technique for calculating cardiac output using a Swan-Ganz catheter that is inserted into the pulmonary artery through a peripheral vein to measure the change in right ventricular outflow blood temperature after a cold saline solution is injected into the right atrium from a proximal catheter port."
+  ],
+  "synonyms": [
+    "CARDIAC THERMODILUTION",
+    "Cardiac Output Thermodilution Method"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A technique for calculating cardiac output in which a catheter (e.g., Swan-Ganz) is inserted into the pulmonary artery through a peripheral vein to measure the change in right ventricular outflow blood temperature after a cold saline solution is injected into the right atrium from a proximal catheter port."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "NCI_META_CUI": [
+      "CL552617"
+    ],
+    "Preferred_Name": [
+      "Cardiac Output Thermodilution Method"
+    ],
+    "Semantic_Type": [
+      "Diagnostic Procedure"
+    ],
+    "code": [
+      "C150870"
+    ]
+  },
+  "label": "Cardiac Output Thermodilution Method",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C150870",
+  "obo_id": "NCIT:C150870",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CARDIAC THERMODILUTION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiac Output Thermodilution Method",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C150870/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

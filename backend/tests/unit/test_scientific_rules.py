@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+from pint import DimensionalityError
 
 from pkdb.domain.normalization import normalize_record
 from pkdb.domain.statistics import calculate_cv, calculate_sd, calculate_se
@@ -47,6 +48,13 @@ def test_custom_count_units(unit):
 def test_percent_and_distinct_activity_dimension():
     assert convert_value(50, "percent", "count") == pytest.approx(0.5)
     assert not ureg.Quantity(1, "IU").dimensionless
+
+
+def test_count_rate_converts_only_to_count_rates():
+    # A count rate depends on the counting efficiency, so it is not an activity.
+    assert convert_value(600, "cpm/ml", "cpm/l") == pytest.approx(600_000)
+    with pytest.raises(DimensionalityError):
+        convert_value(1, "cpm/ml", "Bq/l")
 
 
 def test_normalization_preserves_raw_values_and_dimensionless_cv():

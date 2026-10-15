@@ -33,6 +33,8 @@ DECISION_HEADINGS = {
     "registry_date": "Dates that differ from the registry",
     "image_converted": "Converted images",
     "removed_file": "Removed data files",
+    "removed_digitization": "Removed WebPlotDigitizer projects",
+    "digitization_warning": "WebPlotDigitizer projects that differ from the converted rows",
     "scatter_label": "Renamed scatter outputs",
     "output_label": "Dropped output labels",
     "valueless_row": "Dropped rows without any value",
