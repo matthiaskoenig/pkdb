@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { STUDY_ROUTE } from "./routeNames";
 import { SECTIONS } from "../study-views/study";
 
 export const routes: RouteRecordRaw[] = [
@@ -21,7 +22,7 @@ export const routes: RouteRecordRaw[] = [
     // A study format 2 study: its sid is `<substance>/<name>`, with a section of its page (#963).
     // Without a stored view the page shows the record of the study, as for study format 1.
     path: `/data/:substance/:name/:section(${SECTIONS.join("|")})?`,
-    name: "StudyByName",
+    name: STUDY_ROUTE,
     props: (route) => ({
       sid: `${String(route.params.substance)}/${String(route.params.name)}`,
     }),

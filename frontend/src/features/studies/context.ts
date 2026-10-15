@@ -12,11 +12,11 @@ import { COMPACT_DEFAULTS } from "../../study-views/density";
 import { usePlotScaleChoice } from "../../study-views/plotScales";
 import { isSection, profileMap, studyName } from "../../study-views/study";
 import type { Profile, StudyDetail, StudyRow, TableKind } from "../../study-views/types";
+import { STUDY_ROUTE } from "../../router/routeNames";
 import { hasSearch, SEARCH_QUERY_KEYS } from "../search/codec";
 import { studyViewsApi, type Audience } from "./api";
 
-/** The route of a study format 2 study, `/data/:substance/:name/:section?` (router/index.ts). */
-export const STUDY_ROUTE = "StudyByName";
+export { STUDY_ROUTE };
 /** The route of the Studies page, `/studies`. */
 export const STUDIES_ROUTE = "Studies";
 /** The prefix of what the views keep in the storage of the browser on the website. */

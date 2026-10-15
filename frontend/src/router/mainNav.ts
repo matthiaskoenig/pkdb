@@ -1,5 +1,6 @@
 import type { LocationQuery, RouteRecordNameGeneric } from "vue-router";
 import { hasSearch } from "../features/search/codec";
+import { STUDY_ROUTE } from "./routeNames";
 
 /** An entry of the main navigation (App.vue) that a study page can belong to. */
 export type MainNavEntry = "studies" | "data";
@@ -11,6 +12,6 @@ export type MainNavEntry = "studies" | "data";
  * vue-router marks itself.
  */
 export function studyNavEntry(route: { name?: RouteRecordNameGeneric | null; query: LocationQuery }): MainNavEntry | null {
-  if (route.name !== "StudyByName") return null;
+  if (route.name !== STUDY_ROUTE) return null;
   return hasSearch(route.query) ? "data" : "studies";
 }
