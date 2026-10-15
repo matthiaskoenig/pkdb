@@ -43,7 +43,7 @@ from pkdb.studyformat.validation import acknowledgement_scope
 
 #: The version of the documents that the backend stores. Raise it when a document changes;
 #: `pkdb-server rebuild-views` then builds the stored documents again.
-VIEW_VERSION = 1
+VIEW_VERSION = 2
 
 IMAGE_TYPES = {
     ".png": "image/png",

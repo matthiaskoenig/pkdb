@@ -638,7 +638,10 @@ export interface OverlayPoint {
   error_bar_end: boolean;
 }
 
-/** A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table. */
+/**
+ * A mapped row of a timecourse or scatter table, or an outputs row with a time of a figure whose x axis
+ * is time (it has timecourse rows or an outputs series at two or more times), in the units of its table.
+ */
 export interface SourcePoint {
   /**
    * The series of the point: the `label` of a timecourse row, the `name` of a scatter row, or the

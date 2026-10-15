@@ -2,8 +2,8 @@
 
 A digitized figure also gets overlay points in image pixels: the digitized points
 and the mapped rows drawn at their pixel, so a curator can see where they differ.
-The mapped rows of timecourse and scatter tables, and the outputs rows with a time, are also
-points in the units of their tables, for a plot beside the image. The series of a figure have
+The mapped rows of timecourse and scatter tables, and the outputs rows with a time of a figure
+whose x axis is time (`over_time`), are also points in the units of their tables, for a plot beside the image. The series of a figure have
 one order and one color each, which `pkdb plot` and the curation app share.
 """
 
@@ -111,7 +111,7 @@ class OverlayPoint:
 
 @dataclass(frozen=True)
 class SourcePoint:
-    """A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table.
+    """A mapped row of a timecourse or scatter table, or an outputs row with a time (`over_time`), in the units of its table.
 
     `error_low` and `error_high` are the ends of the error bar of a timecourse row or an outputs row around `y`
     (`digitize.error_ends`): the first statistic that fits, the one that `error_type` names
@@ -273,16 +273,38 @@ def _value_text(value: float) -> str:
     return format_number(float(f"{value:.{VALUE_DIGITS}g}"))
 
 
-def _figure_points(
+def over_time(points: list[tuple[PointKind, MappedPoint]]) -> bool:
+    """Whether the x axis of a figure is time: it has timecourse rows or an outputs series at two or more times.
+
+    Only then are its outputs rows with a time plotted at their time. An outputs series at one
+    time, such as the change of a measurement at the end of the treatment per dose or per
+    exposure quartile, is a point over an x that the outputs do not name.
+    """
+    times: dict[str, set[float]] = {}
+    for kind, point in points:
+        if kind == "timecourses":
+            return True
+        if kind == "outputs" and not point.dataset.endswith(ERROR_BAR_SUFFIX):
+            times.setdefault(point.dataset, set()).add(point.x)
+    return any(len(values) > 1 for values in times.values())
+
+
+def figure_points(
     study: LoadedStudy, source: str
 ) -> list[tuple[PointKind, MappedPoint]]:
-    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points."""
-    return [
+    """The mapped rows of the timecourse, scatter and outputs tables of a figure as dataset points.
+
+    The outputs rows with a time are points only when the x axis of the figure is time (`over_time`).
+    """
+    points = [
         (kind, point)
         for table in study.tables
         if table.source == source and (kind := _PLOTTED_KINDS.get(table.kind))
         for point in mapped_points(table)
     ]
+    if over_time(points):
+        return points
+    return [(kind, point) for kind, point in points if kind != "outputs"]
 
 
 def _overlay(
@@ -347,7 +369,7 @@ def _overlay(
 
 
 def _source_points(
-    figure_points: list[tuple[PointKind, MappedPoint]],
+    rows: list[tuple[PointKind, MappedPoint]],
 ) -> tuple[SourcePoint, ...]:
     """The mapped rows as points in table units, each with the ends of its error bar."""
     return tuple(
@@ -363,7 +385,7 @@ def _source_points(
             point.x_text,
             point.y_text,
         )
-        for kind, point in figure_points
+        for kind, point in rows
         if not point.dataset.endswith(ERROR_BAR_SUFFIX)
     )
 
@@ -466,9 +488,9 @@ def source_view(study: LoadedStudy, source: str) -> SourceView:
             image_size = png_size(stream.read(24))
     raw = study.raw(raw_file(study.name, source))
     digitization = study.digitization(source)
-    figure_points = _figure_points(study, source)
-    overlay, unmatched = _overlay(study, source, [p for _, p in figure_points])
-    points = _source_points(figure_points)
+    mapped_rows = figure_points(study, source)
+    overlay, unmatched = _overlay(study, source, [p for _, p in mapped_rows])
+    points = _source_points(mapped_rows)
     log_x, log_y = _log_scales(digitization)
     return SourceView(
         source=source,
