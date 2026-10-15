@@ -12,6 +12,7 @@ import {
   ROW_HEIGHT,
   rowItem,
   sameParts,
+  shownColumns as columnsFor,
   sizerRows,
   type BodyPart,
   type RowItem,
@@ -33,27 +34,9 @@ const emit = defineEmits<{ retry: [row: StudyRow] }>();
 /** The profiles of the curators and the repository of the issues come from the page. */
 const views = useStudyViews();
 
-/**
- * The columns after the checkbox, in their order. The cells of StudyTableRow.vue and the sized
- * columns of studyTable.ts (SIZED_CELLS) follow the same order. A column with `needs` shows only
- * with that capability; the checkbox only with `edit`.
- */
-const columns: { key: SortKey | null; label: string; cell: string; needs: "curation" | "jobs" | null }[] = [
-  { key: "study", label: "Study", cell: "cell-study", needs: null },
-  { key: "release", label: "Release", cell: "cell-release", needs: null },
-  { key: "issue", label: "Issue", cell: "cell-issue", needs: "curation" },
-  { key: null, label: "Curators", cell: "cell-curators", needs: null },
-  { key: "review", label: "Review", cell: "cell-review", needs: "curation" },
-  { key: "open_items", label: "Open items", cell: "cell-open", needs: "curation" },
-  { key: "problems", label: "Problems", cell: "cell-problems", needs: "curation" },
-  { key: "sync", label: "Sync", cell: "cell-sync", needs: "jobs" },
-  { key: "upload", label: "Last upload", cell: "cell-upload", needs: "jobs" },
-];
 const capabilities = views.capabilities;
-/** The columns that the reader sees: those of the curation and of the jobs only with them. */
-const shownColumns = computed(() =>
-  columns.filter((column) => column.needs === null || capabilities.value[column.needs]),
-);
+/** The columns that the reader sees (`shownColumns`); the checkbox shows only with `edit`. */
+const shownColumns = computed(() => columnsFor(capabilities.value));
 /** The cell classes of the shown columns, which the rows render. */
 const cells = computed<ReadonlySet<string>>(() => new Set(shownColumns.value.map((column) => column.cell)));
 

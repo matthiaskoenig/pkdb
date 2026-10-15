@@ -2,12 +2,14 @@
  * The rows of the study table of the overview: what each row shows besides the fields of its
  * study, which rows a window of the page renders, and the rows that size the columns.
  */
+import type { StudyCapabilities } from "./context";
 import type { Profile, StudyRow, StudySummary } from "./types";
 import {
   activityLabel,
   issueUrl,
   problemLabels,
   REVIEW_LABELS,
+  type SortKey,
   SYNC_LABELS,
   type Tone,
   webUrl,
@@ -70,6 +72,45 @@ export function rowItem(row: StudyRow, profiles: ReadonlyMap<string, Profile>, r
 export function aiTitle(row: StudyRow): string {
   const method = row.summary.provenance?.method;
   return method ? `AI curated with ${method}` : "AI curated";
+}
+
+// The columns
+
+/** A column of the study table after the checkbox, as StudyTable.vue and StudyTableRow.vue show it. */
+export interface StudyColumn {
+  /** The key that the column sorts by; null for a column that does not sort. */
+  key: SortKey | null;
+  label: string;
+  /** The class of the cells of the column. */
+  cell: string;
+  /** The capability without which the column does not show; null for a column that always shows. */
+  needs: "curation" | "jobs" | null;
+}
+
+/**
+ * The columns after the checkbox, in their order. The cells of StudyTableRow.vue and the sized
+ * columns below (SIZED_CELLS) follow the same order.
+ */
+export const STUDY_COLUMNS: readonly StudyColumn[] = [
+  { key: "study", label: "Study", cell: "cell-study", needs: null },
+  { key: "release", label: "Release", cell: "cell-release", needs: null },
+  { key: "issue", label: "Issue", cell: "cell-issue", needs: "curation" },
+  { key: null, label: "Curators", cell: "cell-curators", needs: null },
+  { key: "review", label: "Review", cell: "cell-review", needs: "curation" },
+  { key: "open_items", label: "Open items", cell: "cell-open", needs: "curation" },
+  { key: "problems", label: "Problems", cell: "cell-problems", needs: "curation" },
+  { key: "sync", label: "Sync", cell: "cell-sync", needs: "jobs" },
+  { key: "upload", label: "Last upload", cell: "cell-upload", needs: "jobs" },
+];
+
+/** The columns that a reader sees: those of the curation and of the jobs only with them. */
+export function shownColumns(capabilities: Pick<StudyCapabilities, "curation" | "jobs">): StudyColumn[] {
+  return STUDY_COLUMNS.filter((column) => column.needs === null || capabilities[column.needs]);
+}
+
+/** The keys that the reader can sort by: those of the shown columns that sort. */
+export function sortableKeys(capabilities: Pick<StudyCapabilities, "curation" | "jobs">): SortKey[] {
+  return shownColumns(capabilities).flatMap((column) => (column.key === null ? [] : [column.key]));
 }
 
 // The window of the body
@@ -155,7 +196,7 @@ interface SizedColumn {
 }
 
 /**
- * The columns after Study, in the order of the table (`columns` of StudyTable.vue). Study takes
+ * The columns after Study, in the order of the table (`STUDY_COLUMNS`). Study takes
  * the room that the other columns leave, so it needs no sizing.
  */
 const SIZED_COLUMNS: readonly SizedColumn[] = [
