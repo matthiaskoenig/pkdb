@@ -129,7 +129,7 @@ test.describe("a curator reads the study format 2 study", () => {
 
   test("search tables show the geometric statistics, sort by them and open the study by name", async () => {
     await page.goto("/data");
-    await expect(page.getByRole("tab", { name: /^Studies 2$/ })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /^Studies 4$/ })).toBeVisible();
     await page.getByRole("tab", { name: /^Measurements / }).click();
     // One value column replaces the statistic columns; names match exactly.
     await expect(page.getByRole("columnheader")).toHaveCount(8);
