@@ -724,3 +724,33 @@ def test_scatters_that_format_2_cannot_hold_refuse_the_study(tmp_path, changes, 
     with pytest.raises(NotConverted) as error:
         tables_of(folder)
     assert error.value.code == code
+
+
+def test_points_paired_by_row_can_share_a_subject(tmp_path):
+    # Format 1 pairs the outputs of one sheet row, so S1 has two points.
+    dataset = {"data": [scatter("age_vs_cmax", *LABELS, shared=["row"])]}
+    folder = scatter_study(tmp_path, sheets=TWICE, dataset=dataset)
+    tables, decisions = tables_of(folder)
+    rows = tables["scatters_Fig2.tsv"]
+    assert [(r["subjects"], r["x_mean"], r["y_mean"]) for r in rows] == [
+        ("S1", "30", "2"),
+        ("S1", "40", "3"),
+    ]
+    assert decisions == []
+
+
+def test_points_of_different_subjects_refuse_the_study(tmp_path):
+    # Paired by time, x of S1 meets y of S2, but a format 2 point has one subject.
+    sheets = {"Fig2": [["subject", "age", "cmax"], ["S1", 30, 2]]}
+    y = {"individual": "S2"}
+    times = {"time": 1, "time_unit": "h"}
+    folder = scatter_study(
+        tmp_path,
+        x=times,
+        y={**y, **times},
+        dataset={"data": [BY_TIME]},
+        sheets=sheets,
+    )
+    with pytest.raises(NotConverted, match="different subjects") as error:
+        tables_of(folder)
+    assert error.value.code == "scatter_pairs"

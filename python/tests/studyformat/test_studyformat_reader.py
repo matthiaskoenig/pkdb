@@ -488,12 +488,12 @@ def test_scatter_rows_become_paired_measurements_and_a_dataset(valid_study):
                 Dimension(dimension="0", output="age_vs_cmax_x"),
                 Dimension(dimension="1", output="age_vs_cmax_y"),
             ],
-            shared=["individual"],
+            shared=["row"],
         )
     ]
 
 
-def test_scatter_of_groups_pairs_by_group(valid_study, tsv):
+def test_scatter_of_groups_pairs_by_row(valid_study, tsv):
     point = {
         "name": "groups",
         "subjects": "all",
@@ -507,7 +507,7 @@ def test_scatter_of_groups_pairs_by_group(valid_study, tsv):
     }
     write(valid_study, "scatters_Fig2.tsv", tsv("scatters", point))
     study = read(valid_study)
-    assert study.scatters[0].subsets[0].shared == ["group"]
+    assert study.scatters[0].subsets[0].shared == ["row"]
     assert by_key(study.measurements)["scatters_Fig2.tsv:1:y"].group == "all"
 
 

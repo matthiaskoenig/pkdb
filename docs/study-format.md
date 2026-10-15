@@ -206,7 +206,7 @@ Timecourse points from one paper figure or table. Rows with the same label form 
 
 ## `scatters_<source>.tsv`
 
-Points of scatter plots, one row per point with an x and a y value.
+Points of scatter plots, one row per point with an x and a y value. A row is one point, so a subject can have several points of a scatter, such as the measurements of an individual at several times or the points of the subjects of a group that the paper does not tell apart.
 
 | Column | Type | Required | Description |
 |---|---|---|---|

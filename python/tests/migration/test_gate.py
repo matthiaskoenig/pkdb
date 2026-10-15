@@ -821,6 +821,20 @@ def test_array_points_of_a_scatter_are_an_intended_change(tmp_path, sf_vocabular
     assert [(c.kind, c.count) for c in result.changes] == [("array_output", 4)]
 
 
+def test_points_paired_by_row_convert_unchanged(tmp_path, sf_vocabulary):
+    # Format 1 pairs the outputs of one sheet row, so S1 has two points.
+    subset = {**DATASET["data"][0]["subsets"][0], "shared": ["row"]}
+    dataset = {"data": [{**DATASET["data"][0], "subsets": [subset]}]}
+    study = with_outputs(OUTPUT, TIMECOURSE, X_OUTPUT, Y_OUTPUT, dataset=dataset)
+    sheets = {
+        **SHEETS,
+        "Fig2": [["subject", "age", "cmax"], ["S1", 30, 2], ["S1", 40, 3]],
+    }
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "identical", result.differences
+
+
 def test_scatter_labels_are_an_intended_change(tmp_path, sf_vocabulary):
     subset = {"name": "age_vs_cmax", "dimensions": ["x_age", "y_cmax"]}
     dataset = {
