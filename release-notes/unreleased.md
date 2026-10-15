@@ -5,3 +5,4 @@
 - A browser that still holds the cookie of an ended session (expired, revoked or signed out elsewhere) no longer makes the website read again without end: the first read deletes the cookie and the reader continues as a visitor.
 
 - The website now declares the order of Vuetify's style layers before any stylesheet loads, so buttons on every page show Vuetify's size and weight instead of the size of the text around them.
+- A dismissed review item no longer warns `review_target_unmatched` when the rows it targets change or go away, such as the acknowledgement of a duplicate observation whose rows got their own subjects: it no longer applies, and no command can retarget it. Open and resolved items still warn.

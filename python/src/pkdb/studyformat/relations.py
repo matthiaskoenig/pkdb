@@ -544,7 +544,12 @@ def _review_rules(study: LoadedStudy) -> Issues:
                 key=item.id,
             )
             continue
-        if target.rows and not table.matching_lines(target.rows):
+        # A dismissed item no longer applies, so its rows may change or go away.
+        if (
+            item.state != "dismissed"
+            and target.rows
+            and not table.matching_lines(target.rows)
+        ):
             yield make_issue(
                 "review_target_unmatched",
                 f"Review item {item.id} no longer matches a row of {target.file}",
