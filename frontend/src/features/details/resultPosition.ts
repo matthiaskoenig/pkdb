@@ -1,3 +1,4 @@
+import type { RouteLocationRaw, Router } from "vue-router";
 import { isRecord } from "./types";
 
 export interface ResultPosition {
@@ -76,6 +77,24 @@ export function studyOrigin(epoch: number): ResultPosition | undefined {
     ? readPosition(state[studyOriginKey])
     : undefined;
   return value?.epoch === epoch ? value : undefined;
+}
+
+/**
+ * Go back to the data search that opened a study, where the reader left it: back in the history
+ * when the previous entry is that search, to its address otherwise, and to `fallback` when no
+ * search of this session opened the study.
+ */
+export function returnToSearch(
+  router: Router,
+  epoch: number,
+  fallback: RouteLocationRaw,
+): void {
+  const origin = studyOrigin(epoch);
+  const previous: unknown = window.history.state;
+  if (origin && isRecord(previous) && previous.back === origin.path)
+    router.back();
+  else if (origin) void router.push(origin.path);
+  else void router.push(fallback);
 }
 
 export function restoreResultPosition(position: ResultPosition): void {

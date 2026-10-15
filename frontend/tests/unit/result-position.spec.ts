@@ -1,8 +1,11 @@
 import { afterEach, expect, it, vi } from "vitest";
+import { createMemoryHistory, createRouter } from "vue-router";
 import {
   readPosition,
   rememberResultPosition,
   restoreResultPosition,
+  returnToSearch,
+  studyOriginKey,
   takeResultPosition,
 } from "../../src/features/details/resultPosition";
 afterEach(() => {
@@ -51,4 +54,27 @@ it("rejects external and malformed origin records", () => {
   expect(
     readPosition({ path: "/data", epoch: 1, x: 0, y: NaN, focusLabel: "" }),
   ).toBeUndefined();
+});
+it("returns to the search that opened a study, of this session only", () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: "/:path(.*)*", component: { render: () => null } }],
+  });
+  const back = vi.spyOn(router, "back").mockImplementation(() => {});
+  const push = vi.spyOn(router, "push").mockResolvedValue(undefined);
+  const origin = { path: "/data?page=3", epoch: 4, x: 0, y: 0, focusLabel: "" };
+  const fallback = { path: "/data", query: { v: "1" } };
+  window.history.replaceState(
+    { back: "/data?page=3", [studyOriginKey]: origin },
+    "",
+  );
+  returnToSearch(router, 4, fallback);
+  expect(back).toHaveBeenCalledTimes(1);
+  expect(push).not.toHaveBeenCalled();
+  window.history.replaceState({ back: "/", [studyOriginKey]: origin }, "");
+  returnToSearch(router, 4, fallback);
+  expect(push).toHaveBeenLastCalledWith("/data?page=3");
+  returnToSearch(router, 5, fallback);
+  expect(push).toHaveBeenLastCalledWith(fallback);
+  expect(back).toHaveBeenCalledTimes(1);
 });
