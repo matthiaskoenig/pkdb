@@ -46,6 +46,15 @@ test("API and absent assets never fall through to HTML", async ({
   }
 });
 
+test("the files of PDF.js are files: the worker JavaScript, a missing one no page", async ({ request }) => {
+  const worker = await request.get("/pdfjs/pdf.worker.min.mjs");
+  expect(worker.ok()).toBeTruthy();
+  expect(worker.headers()["content-type"]).toMatch(/javascript/);
+  const missing = await request.get("/pdfjs/missing.mjs");
+  expect(missing.status()).toBe(404);
+  expect(await missing.text()).not.toContain('<div id="app">');
+});
+
 test("same-origin session cookie and CSRF protect mutation", async ({
   request,
 }) => {

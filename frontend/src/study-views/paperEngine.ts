@@ -12,7 +12,7 @@
  *   `disableStream`, without which PDF.js would read the whole file in the background.
  * - The worker, the character maps, the standard fonts and the decoders come from the folder
  *   `assets` that the page names when it opens a PDF: in the curation app `pdfjs/` beside the
- *   app, which the build copies (vite.curation.config.ts).
+ *   app, which both builds copy (scripts/pdfjs-assets.ts).
  * - Aborting the opening stops the loading with its worker and its range requests, and the viewer
  *   of PDF.js stops watching the pane: a PDF that is no longer wanted never draws into it.
  *
