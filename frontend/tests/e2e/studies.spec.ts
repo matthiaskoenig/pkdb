@@ -207,6 +207,25 @@ test("a link that sorts or filters by the curation opens the list as a visitor s
   await expect(studyTable(page).getByRole("columnheader")).toHaveText(PUBLIC_COLUMNS);
 });
 
+test("the search and the selects of the Studies page stand on the center line of its heading", async ({ page }) => {
+  await page.goto("/studies");
+  const heading = page.getByRole("heading", { name: "Studies", level: 1, exact: true });
+  await expect(studyTable(page)).toBeVisible();
+  const center = async (element: Locator) => {
+    const box = await element.boundingBox();
+    if (!box) throw new Error("The element is not shown");
+    return box.y + box.height / 2;
+  };
+  for (const width of [1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const line = await center(heading);
+    for (const field of ["overview-search", "overview-substance", "overview-curator"]) {
+      expect(Math.abs((await center(page.locator(`.${field} .v-field`))) - line), `${field}, ${width} px`).toBeLessThanOrEqual(2);
+    }
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+});
+
 test("a signed-in reader who may not write a study sees the public view and not the private study", async ({ page, browserName }) => {
   await login(page, `reader-${browserName}`);
   await page.goto("/studies");

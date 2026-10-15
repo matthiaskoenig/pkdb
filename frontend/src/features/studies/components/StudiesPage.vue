@@ -128,6 +128,13 @@ const failure = computed(() => (list.error.value ? failureOf(list.error.value, "
   flex-direction: column;
   gap: 16px;
 }
+/* The heading of the Studies page is the website's (src/styles/app.css), higher than the 28 px line
+   on whose center StudyFilters puts its fields. The search, the selects and a first row of status
+   chips that share its line stand on its center line instead; a line of their own is not changed.
+   The count keeps the baseline of the heading. */
+.website-studies :deep(.overview-header) {
+  align-items: center;
+}
 .studies-panel {
   overflow: hidden;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
