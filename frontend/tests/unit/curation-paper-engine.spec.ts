@@ -42,8 +42,18 @@ const fake = vi.hoisted(() => {
       for (const listener of this.listeners.get(name) ?? []) listener(data);
     }
   }
+  /** The promise of the pages of a viewer with its reject, as PDF.js makes it. */
+  function capability() {
+    let reject!: (reason: unknown) => void;
+    const promise = new Promise<void>((_, fail) => {
+      reject = fail;
+    });
+    return { promise, reject };
+  }
   class PDFViewer {
     #scaleValue = "auto";
+    /** The promise of the pages, which PDF.js makes anew when a PDF leaves the viewer. */
+    _pagesCapability = capability();
     /** The scale values that the engine set, in their order. */
     readonly scaleValues: string[] = [];
     updates = 0;
@@ -57,6 +67,7 @@ const fake = vi.hoisted(() => {
       state.viewer = this;
     }
     setDocument(document: unknown): void {
+      if (this.documents.at(-1)) this._pagesCapability = capability();
       this.documents.push(document);
     }
     increaseScale(): void {
@@ -459,6 +470,21 @@ describe("the PDF.js engine of the paper viewer", () => {
       ]);
     } finally {
       logged.mockRestore();
+    }
+  });
+
+  it("handles the rejection of the pages of a viewer whose first page was loading as its PDF closed", async () => {
+    const unhandled = vi.fn();
+    process.on("unhandledRejection", unhandled);
+    try {
+      const session = await openPaper(container(), URL_A, events(), START, signal(), BASE);
+      await session.close();
+      // The first page fails with the closed PDF, and PDF.js rejects the pages that the viewer made anew without it.
+      fake.state.viewer!._pagesCapability.reject(new Error("Transport destroyed"));
+      await nextTask();
+      expect(unhandled).not.toHaveBeenCalled();
+    } finally {
+      process.off("unhandledRejection", unhandled);
     }
   });
 

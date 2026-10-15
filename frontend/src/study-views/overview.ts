@@ -58,7 +58,7 @@ interface SearchKeys {
   curators: readonly string[];
 }
 
-/** The search keys of each row object: computed once, and so once per snapshot. */
+/** The search keys of each row object: computed once, and so again only for a row that changed. */
 const searchKeys = new WeakMap<StudyRow, SearchKeys>();
 
 function keysOf(row: StudyRow): SearchKeys {

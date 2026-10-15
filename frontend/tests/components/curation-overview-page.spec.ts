@@ -774,7 +774,7 @@ describe("OverviewPage", () => {
     }
   });
 
-  it("builds the item of each row once per snapshot, not per filter or sort change", async () => {
+  it("builds the item of each row once, not per filter or sort change, and again only when a poll changes the row", async () => {
     await mountPage(snapshot({ studies: [example, harder, approved] }));
     vi.mocked(rowItem).mockClear();
     await search("smoking");
@@ -784,7 +784,12 @@ describe("OverviewPage", () => {
     serve({ "/local/state": snapshot({ studies: [example, harder, approved] }), "/local/curators": { curators: profiles } });
     await useOverviewStore().refresh();
     await flushPromises();
-    expect(studyItemCalls()).toHaveLength(3);
+    expect(studyItemCalls()).toHaveLength(0);
+    const validating = { ...harder, status: "validating" as const };
+    serve({ "/local/state": snapshot({ studies: [example, validating, approved] }), "/local/curators": { curators: profiles } });
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(studyItemCalls().map(([row]) => row.path)).toEqual([harder.path]);
   });
 
   it("renders the rows of 1,000 studies that the window shows and selects all of them", async () => {
@@ -865,17 +870,17 @@ describe("OverviewPage", () => {
     await vi.waitFor(() => expect(openTooltip().exists()).toBe(false), TOOLTIP_WAIT);
   });
 
-  it("builds the items of the rendered rows only when a poll brings 1,000 new rows", async () => {
+  it("builds the item of only the row that a poll of 1,000 rows changes", async () => {
     setViewport(1280, 400);
     await mountPage(snapshot({ studies: manyStudies() }));
     vi.mocked(rowItem).mockClear();
-    // While jobs run, every poll brings new rows; here one study validates.
+    // While jobs run, every poll brings all rows anew; here one study validates.
     const studies = manyStudies().map((row, index) => (index === 0 ? { ...row, status: "validating" as const } : row));
     serve({ "/local/state": snapshot({ studies }), "/local/curators": { curators: profiles } });
     await useOverviewStore().refresh();
     await flushPromises();
     expect(rows()[0]!.get(".cell-problems").text()).toBe("Validating");
-    expect(studyItemCalls()).toHaveLength(windowRows(400));
+    expect(studyItemCalls().map(([row]) => row.path)).toEqual([studies[0]!.path]);
   });
 
   it("follows the scrolled page and keeps the row with the keyboard focus until the focus leaves the table", async () => {

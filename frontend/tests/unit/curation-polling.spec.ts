@@ -3,13 +3,13 @@ import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type Fetched } from "../../src/curation-app/api/client";
 import { ServerStopped } from "../../src/study-views/errors";
-import { usePolling, type Polling } from "../../src/curation-app/composables/usePolling";
+import { keepUnchanged, usePolling, type Polling } from "../../src/curation-app/composables/usePolling";
 
 type Load = (etag: string | null, signal: AbortSignal) => Promise<Fetched<string>>;
 
 /** Mounts a tiny component that polls with `load`. */
-function mountPolling(load: Load) {
-  let polling: Polling<string> | undefined;
+function mountPolling<T = string>(load: (etag: string | null, signal: AbortSignal) => Promise<Fetched<T>>) {
+  let polling: Polling<T> | undefined;
   const wrapper = mount(
     defineComponent({
       setup() {
@@ -138,6 +138,68 @@ describe("usePolling", () => {
     expect(polling.data.value).toBe("after the write");
     await vi.advanceTimersByTimeAsync(1500);
     expect(load.mock.calls.at(-1)?.[0]).toBe('"v3"');
+    wrapper.unmount();
+  });
+});
+
+describe("keepUnchanged", () => {
+  /** A state of JSON as a poll answers it, parsed anew each time. */
+  function state(statuses: string[], extra: Record<string, unknown> = {}) {
+    return JSON.parse(
+      JSON.stringify({
+        studies: statuses.map((status, index) => ({ id: `s${index}`, status, files: [{ id: "a.tsv" }], summary: null })),
+        paused: false,
+        ...extra,
+      }),
+    ) as { studies: { id: string; status: string; files: unknown[] }[]; paused: boolean };
+  }
+
+  it("keeps the objects that did not change and takes those that did", () => {
+    const previous = state(["valid", "queued", "valid"]);
+    const next = state(["valid", "running", "valid"]);
+    const kept = keepUnchanged(previous, next);
+    expect(kept).toBe(next);
+    expect(kept).toEqual(state(["valid", "running", "valid"]));
+    expect(kept.studies).not.toBe(previous.studies);
+    expect(kept.studies[0]).toBe(previous.studies[0]);
+    expect(kept.studies[2]).toBe(previous.studies[2]);
+    expect(kept.studies[1]).not.toBe(previous.studies[1]);
+    // The parts of a changed object that did not change are kept too.
+    expect(kept.studies[1]!.files).toBe(previous.studies[1]!.files);
+  });
+
+  it("answers the previous state when nothing changed", () => {
+    const previous = state(["valid", "queued"]);
+    expect(keepUnchanged(previous, state(["valid", "queued"]))).toBe(previous);
+    expect(keepUnchanged(null, previous)).toBe(previous);
+    expect(keepUnchanged("text", "text")).toBe("text");
+  });
+
+  it("sees added and removed items and keys, and changed kinds of values", () => {
+    const previous = state(["valid", "queued"]);
+    expect(keepUnchanged(previous, state(["valid", "queued", "valid"]))).not.toBe(previous);
+    expect(keepUnchanged(previous, state(["valid"]))).not.toBe(previous);
+    expect(keepUnchanged(previous, state(["valid", "queued"], { error: null }))).not.toBe(previous);
+    const fewer = state(["valid", "queued"]) as Record<string, unknown>;
+    delete fewer.paused;
+    expect(keepUnchanged(previous, fewer)).toBe(fewer);
+    expect(keepUnchanged({ value: [] }, { value: {} })).toEqual({ value: {} });
+    expect(keepUnchanged({ value: {} }, { value: [] })).toEqual({ value: [] });
+    expect(keepUnchanged({ value: null }, { value: {} })).toEqual({ value: {} });
+    expect(keepUnchanged({ value: 1 }, { value: "1" })).toEqual({ value: "1" });
+  });
+
+  it("gives the polled data the objects of the data before that did not change", async () => {
+    const answers = [state(["valid", "queued"]), state(["valid", "running"]), state(["valid", "running"])];
+    const { wrapper, polling } = mountPolling(async () => ({ status: 200, etag: null, data: answers.shift()! }));
+    await vi.advanceTimersByTimeAsync(0);
+    const first = polling.data.value!;
+    await vi.advanceTimersByTimeAsync(1500);
+    const second = polling.data.value!;
+    expect(second).not.toBe(first);
+    expect(second.studies[0]).toBe(first.studies[0]);
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(polling.data.value).toBe(second);
     wrapper.unmount();
   });
 });

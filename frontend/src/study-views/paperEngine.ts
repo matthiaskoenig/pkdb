@@ -138,6 +138,18 @@ function unlessAborted<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> 
   });
 }
 
+/**
+ * Handles the promise of the pages that the viewer of PDF.js 6.4.299 makes anew when its PDF
+ * leaves it. A viewer that still loads the first page of its PDF then logs "Unable to initialize
+ * viewer" with the reason "Transport destroyed" once the PDF closes, and rejects that new promise
+ * with the reason, which nothing else waits for: the browser would report an error for a PDF that
+ * was closed on purpose. The viewer gets no other PDF, so the promise has nothing else to tell.
+ */
+function ignoreStalePages(viewer: PDFViewer): void {
+  const pages = viewer._pagesCapability as { promise: Promise<void> };
+  pages.promise.catch(() => undefined);
+}
+
 export const openPaper: OpenPaper = async (container, url, events, start, signal, assets) => {
   signal.throwIfAborted();
   const eventBus = new EventBus();
@@ -312,6 +324,7 @@ export const openPaper: OpenPaper = async (container, url, events, start, signal
     async close() {
       stop();
       viewer.setDocument(null);
+      ignoreStalePages(viewer);
       linkService.setDocument(null);
       await destroy();
     },
