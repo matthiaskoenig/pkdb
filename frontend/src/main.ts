@@ -6,5 +6,7 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import { router } from "./router/index";
 import { makeVuetify } from "./plugins/vuetify";
+import { STUDY_VIEW_THEMES } from "./study-views/themes";
 import "./styles/app.css";
-createApp(App).use(createPinia()).use(router).use(makeVuetify()).mount("#app");
+// The study pages (#963) use the info and caution colors of the study views; named colors that change nothing else of the website.
+createApp(App).use(createPinia()).use(router).use(makeVuetify({ themes: STUDY_VIEW_THEMES })).mount("#app");

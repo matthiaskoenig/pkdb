@@ -57,7 +57,8 @@ onMounted(() => {
         >Pharmacokinetics database</span
       ><v-spacer />
       <nav class="desktop-nav d-none d-md-flex" aria-label="Main navigation">
-        <RouterLink to="/data">Explore data</RouterLink
+        <RouterLink to="/studies">Studies</RouterLink
+        ><RouterLink to="/data">Explore data</RouterLink
         ><RouterLink to="/curation">Vocabulary</RouterLink
         ><a href="https://matthiaskoenig.github.io/pkdb">Documentation</a
         ><a :href="`${apiBase}/docs`">API</a
@@ -88,6 +89,7 @@ onMounted(() => {
       >
         <RouterLink
           v-for="link in [
+            { to: '/studies', text: 'Studies' },
             { to: '/data', text: 'Explore data' },
             { to: '/curation', text: 'Vocabulary' },
           ]"

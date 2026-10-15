@@ -38,6 +38,9 @@ describe("study routes", () => {
     expect(router.resolve("/data/caffeine/Name/extra").name).toBe("NotFound");
     expect(router.resolve("/data").name).toBe("Data");
   });
+  it("serves the Studies page", () => {
+    expect(router.resolve("/studies").name).toBe("Studies");
+  });
 });
 
 describe("study links", () => {
