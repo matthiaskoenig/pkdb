@@ -12,12 +12,14 @@ import {
   VDialog,
   VSpacer,
 } from "vuetify/components";
-import type { StudyRow } from "../api/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { uploadBlocker, webUrl } from "../overview";
+import type { StudyRow } from "../../study-views/types";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
+import { webUrl } from "../../study-views/overview";
+import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
-import { failureOf, type ActionFailure } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, type ActionFailure } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{

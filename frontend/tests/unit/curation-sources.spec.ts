@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { SourceSummary, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
-import { columnLetters } from "../../src/curation-app/columns";
-import { sourceProblems } from "../../src/curation-app/sources";
+import type { SourceSummary, SourceView, ValidationIssue } from "../../src/study-views/types";
+import { columnLetters } from "../../src/study-views/columns";
+import { sourceProblems } from "../../src/study-views/sources";
 
 describe("columnLetters", () => {
   it("names columns as a spreadsheet does", () => {

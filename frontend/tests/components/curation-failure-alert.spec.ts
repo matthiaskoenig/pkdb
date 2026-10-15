@@ -9,14 +9,14 @@ import {
 } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
-import { ApiError, ServerStopped } from "../../src/curation-app/api/client";
-import ActionFailureAlert from "../../src/curation-app/components/ActionFailureAlert.vue";
+import { ApiError, ServerStopped } from "../../src/study-views/errors";
+import ActionFailureAlert from "../../src/study-views/components/ActionFailureAlert.vue";
 import { makeRouter } from "../../src/curation-app/router";
 import {
   actionFailure,
   failureOf,
   type ActionFailure,
-} from "../../src/curation-app/study";
+} from "../../src/study-views/study";
 import { snapshot } from "../unit/curation-fixtures";
 import { button, click, loadSnapshot, page } from "./curation-dom";
 

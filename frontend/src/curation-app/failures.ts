@@ -2,38 +2,8 @@
  * What the local server said about a failure: the details that the alert of a failed action
  * discloses and that Copy details puts into a GitHub issue.
  */
-import { ApiError } from "./api/client";
-import type { ErrorBody } from "./api/types";
-
-export interface FailureDetails {
-  /** The HTTP status; 0 when the local server could not be reached, null for an entry of the activity. */
-  status: number | null;
-  code: string | null;
-  detail: string | null;
-  action: string | null;
-  requestId: string | null;
-  time: string | null;
-  traceback: string | null;
-  activityId: string | null;
-}
-
-/**
- * The details of a failed request; null for another error, and for an answer without the error
- * body of the local server, which has no request id.
- */
-export function detailsOf(caught: unknown): FailureDetails | null {
-  if (!(caught instanceof ApiError) || (caught.requestId === null && caught.status !== 0)) return null;
-  return {
-    status: caught.status,
-    code: caught.code,
-    detail: caught.detail,
-    action: caught.action,
-    requestId: caught.requestId,
-    time: caught.time,
-    traceback: caught.traceback,
-    activityId: caught.activityId,
-  };
-}
+import type { FailureDetails } from "../study-views/study";
+import type { ErrorBody } from "../study-views/types";
 
 /** The details of a failure that the activity of a study lists. */
 export function detailsOfBody(body: ErrorBody): FailureDetails {

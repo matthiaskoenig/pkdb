@@ -15,13 +15,15 @@ import {
   VTextField,
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
-import type { TableFileKind } from "../api/types";
+import type { TableFileKind } from "../../study-views/types";
 import { usePreview } from "../composables/usePreview";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { useStudyStore } from "../stores/study";
-import { failureOf, issuesFailure, userHint, type ActionFailure } from "../study";
-import { addableKinds } from "../tableKinds";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, issuesFailure, type ActionFailure } from "../../study-views/study";
+import { userHint } from "../local";
+import { addableKinds } from "../../study-views/tableKinds";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 const open = defineModel<boolean>({ default: false });

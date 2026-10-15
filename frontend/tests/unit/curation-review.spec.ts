@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ReviewItem, TableRow } from "../../src/curation-app/api/types";
+import type { ReviewItem, TableRow } from "../../src/study-views/types";
 import {
   emptyText,
   filterItems,
@@ -9,7 +9,7 @@ import {
   stateCounts,
   targetParts,
   targetText,
-} from "../../src/curation-app/review";
+} from "../../src/study-views/review";
 import { reviewItem } from "./curation-fixtures";
 
 function item(id: string, kind: ReviewItem["kind"], state: ReviewItem["state"]): ReviewItem {

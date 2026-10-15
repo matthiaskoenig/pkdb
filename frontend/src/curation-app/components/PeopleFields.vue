@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VAutocomplete, VBtn, VCombobox, VListItem } from "vuetify/components";
-import type { Profile } from "../api/types";
+import type { Profile } from "../../study-views/types";
 import { markMessages, messagesAt, NO_MESSAGES, type CuratorRow, type FieldMark } from "../metadata";
-import { profileOf as knownProfile } from "../study";
+import { profileOf as knownProfile } from "../../study-views/study";
 import DiskVersion from "./DiskVersion.vue";
-import PersonAvatar from "./PersonAvatar.vue";
+import PersonAvatar from "../../study-views/components/PersonAvatar.vue";
 import RatingStars from "./RatingStars.vue";
 
 /** The creator, the curators with their ratings and the collaborators of study.json. */

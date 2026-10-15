@@ -10,14 +10,8 @@
  */
 import { computed, getCurrentScope, onScopeDispose, ref, shallowRef, watch, type ComputedRef, type Ref } from "vue";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
-import type {
-  DocumentState,
-  MetadataWrite,
-  StudyDetail,
-  StudyMetadata,
-  TableKind,
-  ValidationIssue,
-} from "../api/types";
+import type { MetadataWrite } from "../api/types";
+import type { DocumentState, StudyDetail, StudyMetadata, TableKind, ValidationIssue } from "../../study-views/types";
 import {
   changedFields,
   clone,
@@ -33,9 +27,10 @@ import {
   type FieldMark,
   type MetadataForm,
 } from "../metadata";
-import { kindsWithTable, notesKindOf, notesKindsOf } from "../notes";
-import { failureOf, issuesFailure, NOTICE_MS, userHint, type ActionFailure, type Section } from "../study";
-import { noteKinds } from "../tableKinds";
+import { kindsWithTable, notesKindOf, notesKindsOf } from "../../study-views/notes";
+import { failureOf, issuesFailure, type ActionFailure, type Section } from "../../study-views/study";
+import { NOTICE_MS, userHint } from "../local";
+import { noteKinds } from "../../study-views/tableKinds";
 import { useChangedFields } from "./useChangedFields";
 import { createNotice } from "./useNotice";
 

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import type { Router } from "vue-router";
-import type { StudyDetail, TableKind, ValidationIssue } from "../../src/curation-app/api/types";
+import type { StudyDetail, TableKind, ValidationIssue } from "../../src/study-views/types";
 import TableNotes from "../../src/curation-app/components/TableNotes.vue";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";

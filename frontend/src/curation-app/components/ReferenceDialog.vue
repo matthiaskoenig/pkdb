@@ -16,13 +16,15 @@ import {
   VTextarea,
   VTextField,
 } from "vuetify/components";
-import type { Json, ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
+import type { ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
+import type { Json } from "../../study-views/types";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { failureOf, type ActionFailure } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, type ActionFailure } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 /**
  * Corrections of `reference.json` of the open study: the title, the authors, the journal and the

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { INFO_THEMES } from "../../src/curation-app/info";
+import { INFO_THEMES } from "../../src/study-views/info";
 import { CURATION_THEMES } from "../../src/curation-app/themes";
 import { makeVuetify } from "../../src/plugins/vuetify";
 

@@ -2,18 +2,18 @@ import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vite
 import { enableAutoUnmount, flushPromises, mount, type DOMWrapper, type VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { defineComponent, h, ref } from "vue";
-import PaperViewer from "../../src/curation-app/components/PaperViewer.vue";
+import PaperViewer from "../../src/study-views/components/PaperViewer.vue";
 import {
   PaperImportFailed,
   type PaperEvents,
   type PaperPlace,
   type PaperSession,
   type PaperStart,
-} from "../../src/curation-app/paper";
+} from "../../src/study-views/paper";
 
 // PDF.js does not run in jsdom: the viewer gets a fake engine, which records what it opened.
 const engine = vi.hoisted(() => ({ openPaper: vi.fn() }));
-vi.mock("../../src/curation-app/paperEngine", () => engine);
+vi.mock("../../src/study-views/paperEngine", () => engine);
 
 enableAutoUnmount(afterEach);
 

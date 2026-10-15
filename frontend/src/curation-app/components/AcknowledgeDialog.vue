@@ -12,13 +12,15 @@ import {
   VSpacer,
   VTextarea,
 } from "vuetify/components";
-import type { Problem } from "../api/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { acknowledgeFailure, acknowledgement, location, locationKey } from "../problems";
-import type { ReviewFailure } from "../review";
+import type { Problem } from "../../study-views/types";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
+import { acknowledgement, location, locationKey } from "../../study-views/problems";
+import { acknowledgeFailure } from "../acknowledging";
+import type { ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**

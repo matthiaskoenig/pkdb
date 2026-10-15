@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { ColumnClass, SourceLocation, TableResponse, TargetMatch, ValidationIssue } from "../../src/curation-app/api/types";
+import type {
+  ColumnClass,
+  SourceLocation,
+  TableResponse,
+  TargetMatch,
+  ValidationIssue,
+} from "../../src/study-views/types";
 import {
   columnClass,
   columnName,
@@ -12,7 +18,7 @@ import {
   targetLines,
   targetMatch,
   visibleColumns,
-} from "../../src/curation-app/grid";
+} from "../../src/study-views/grid";
 import { reviewItem } from "./curation-fixtures";
 
 const outputs: TableResponse = {

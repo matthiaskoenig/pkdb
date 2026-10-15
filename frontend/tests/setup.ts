@@ -1,7 +1,16 @@
-import { vi } from "vitest";
+import { beforeAll, vi } from "vitest";
 import { config } from "@vue/test-utils";
 import { makeVuetify } from "../src/plugins/vuetify";
-config.global.plugins = [makeVuetify()];
+const vuetify = makeVuetify();
+config.global.plugins = [vuetify];
+// Every mounted component gets the study views of the curation app. Their plugin imports the
+// stores of the curation app, so it is imported only once the test file is: a module that this
+// file imported would ignore the vi.mock calls of the test file, as tests of the curation app
+// mock its modules, such as curation-app/metadata.
+beforeAll(async () => {
+  const { studyViewsPlugin } = await import("../src/curation-app/studyViews");
+  config.global.plugins = [vuetify, studyViewsPlugin];
+});
 vi.stubGlobal(
   "ResizeObserver",
   class {

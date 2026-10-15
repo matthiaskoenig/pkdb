@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
-import { columnLetters } from "../../src/curation-app/columns.ts";
+import { columnLetters } from "../../src/study-views/columns.ts";
 import { expect, expectAccessible, runTool, setAutomaticActions, test } from "./fixtures.ts";
 import { pixelStats } from "./pixels.ts";
 

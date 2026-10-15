@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId, watch } from "vue";
-import type { Profile, TableKind } from "../api/types";
-import { useMoreBelow } from "../composables/useMoreBelow";
+import type { Profile, TableKind } from "../../study-views/types";
+import { useMoreBelow } from "../../study-views/composables/useMoreBelow";
 import { issueMessage } from "../metadata";
-import { notesKindOf, notesSummary } from "../notes";
+import { notesKindOf, notesSummary } from "../../study-views/notes";
 import { useOverviewStore } from "../stores/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, sectionRoute } from "../study";
-import { kindLabel, noteKinds } from "../tableKinds";
-import MoreBelow from "./MoreBelow.vue";
+import { knownProfiles } from "../../study-views/study";
+import { kindLabel, noteKinds } from "../../study-views/tableKinds";
+import MoreBelow from "../../study-views/components/MoreBelow.vue";
 import NotesFields from "./NotesFields.vue";
 
 /**
@@ -101,7 +102,7 @@ const fileIssues = computed(() => {
   const kinds = noteKinds(value);
   return value.metadata.issues.filter((issue) => notesKindOf(issue.field, kinds) === props.kind).map(issueMessage);
 });
-const metadataRoute = computed(() => sectionRoute(detail.value?.id ?? "", "metadata"));
+const metadataRoute = computed(() => curationRoutes.section(detail.value?.id ?? "", "metadata"));
 
 // Profiles: the roster, and the people of the study who are not in it.
 const roster = ref<Profile[]>([]);

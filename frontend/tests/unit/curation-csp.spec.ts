@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { beforeEach, describe, expect, it } from "vitest";
-import { cspNonce } from "../../src/curation-app/csp";
+import { cspNonce } from "../../src/study-views/csp";
 import { makeVuetify } from "../../src/plugins/vuetify";
 
 /** Installs Vuetify in an app and returns the theme stylesheet it created. */

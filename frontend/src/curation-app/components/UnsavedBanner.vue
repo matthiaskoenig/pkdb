@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn } from "vuetify/components";
-import type { TableKind } from "../api/types";
-import { sectionHeading } from "../composables/useReturnFocus";
+import type { TableKind } from "../../study-views/types";
+import { sectionHeading } from "../../study-views/focus";
 import { saveShortcut } from "../composables/useSaveShortcut";
 import { changedLabels, fieldLabel, shortList } from "../metadata";
 import { useStudyStore } from "../stores/study";
-import type { Section } from "../study";
-import { kindLabel } from "../tableKinds";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import type { Section } from "../../study-views/study";
+import { kindLabel } from "../../study-views/tableKinds";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /**

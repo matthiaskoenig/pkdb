@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { COMPACT_DEFAULTS } from "../../src/curation-app/density";
+import { COMPACT_DEFAULTS } from "../../src/study-views/density";
 import { makeVuetify } from "../../src/plugins/vuetify";
 
 describe("vuetify defaults", () => {

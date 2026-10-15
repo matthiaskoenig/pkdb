@@ -14,10 +14,11 @@ import {
   VTextField,
 } from "vuetify/components";
 import type { Directories, FolderKind } from "../api/types";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
 import { useOverviewStore } from "../stores/overview";
-import { failureOf, type ActionFailure } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, type ActionFailure } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 

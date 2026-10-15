@@ -1,5 +1,5 @@
 import { onBeforeUnmount, readonly, ref, type Ref } from "vue";
-import { NOTICE_MS } from "../study";
+import { NOTICE_MS } from "../local";
 
 /**
  * The notice of the last action that succeeded, for a polite live region: `announce` shows a

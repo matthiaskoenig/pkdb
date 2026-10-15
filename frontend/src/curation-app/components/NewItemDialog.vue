@@ -17,15 +17,17 @@ import {
   VSpacer,
   VTextarea,
 } from "vuetify/components";
-import type { ReviewItem, ReviewTarget, TableResponse } from "../api/types";
-import { useLoaded } from "../composables/useLoaded";
+import type { ReviewItem, ReviewTarget, TableResponse } from "../../study-views/types";
+import { useLoaded } from "../../study-views/composables/useLoaded";
 import { usePreview } from "../composables/usePreview";
-import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { KIND_LABELS, KINDS, matchText, reviewFailure, type ItemKind, type ReviewFailure } from "../review";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import type { FocusTarget } from "../../study-views/focus";
+import { GROW_ROWS, sizesFieldsByContent } from "../../study-views/fieldSizing";
+import { KIND_LABELS, KINDS, matchText, type ItemKind } from "../../study-views/review";
+import { reviewFailure, type ReviewFailure } from "../reviewWrites";
 import { useStudyStore } from "../stores/study";
-import { tableFiles } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { tableFiles } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import UserHint from "./UserHint.vue";
 
 /** At most this many values of a column are offered for a row filter. */
@@ -96,7 +98,7 @@ const {
     const detail = study.detail;
     return file.value !== null && detail !== null && tableFiles(detail).includes(file.value) ? file.value : null;
   },
-  (name) => study.table(name),
+  (name, signal) => study.table(name, signal),
   () => version.value,
   (name) => `The columns of ${name} could not be loaded.`,
 );

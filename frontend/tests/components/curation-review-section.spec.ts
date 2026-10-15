@@ -12,8 +12,8 @@ import type {
   StudyDetail,
   TableResponse,
   TargetMatch,
-} from "../../src/curation-app/api/types";
-import { formatTime } from "../../src/curation-app/overview";
+} from "../../src/study-views/types";
+import { formatTime } from "../../src/study-views/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";

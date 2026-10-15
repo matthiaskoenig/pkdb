@@ -1,15 +1,9 @@
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import {
-  ServerStopped,
-  SessionMissing,
-  UnexpectedResponse,
-  isAbort,
-  isRevisionConflict,
-  setCsrfToken,
-} from "../../src/curation-app/api/client";
-import type { StudyDetail } from "../../src/curation-app/api/types";
+import { isRevisionConflict, setCsrfToken } from "../../src/curation-app/api/client";
+import { ServerStopped, SessionMissing, UnexpectedResponse, isAbort } from "../../src/study-views/errors";
+import type { StudyDetail } from "../../src/study-views/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { json, snapshot, studyDetail, studyMetadata } from "./curation-fixtures";
@@ -181,6 +175,33 @@ describe("useStudyStore", () => {
     await store.open("caffeine", "A");
     await expect(store.table("outputs_Tab3.tsv")).resolves.toEqual(table);
     expect(requests.at(-1)).toMatchObject({ url: "/local/studies/caffeine/A/tables/outputs_Tab3.tsv", etag: null });
+  });
+
+  it("caches a table answer that arrives after its caller left, without returning it", async () => {
+    const table = { file: "outputs_Tab3.tsv", kind: "table", header: ["label"], rows: [{ line: 1, cells: ["a"] }] };
+    let answerLate: (response: Response) => void = () => {};
+    let tableLoads = 0;
+    const requests = server((_method, url) => {
+      if (!url.includes("/tables/")) return json(detail("r1"));
+      tableLoads += 1;
+      if (tableLoads > 1) return new Response(null, { status: 304, headers: { ETag: '"t1"' } });
+      return new Promise<Response>((resolve) => (answerLate = resolve));
+    });
+    const store = useStudyStore();
+    await store.open("caffeine", "Example");
+    const caller = new AbortController();
+    const left = store.table("outputs_Tab3.tsv", caller.signal);
+    caller.abort();
+    answerLate(json(table, { etag: '"t1"' }));
+    expect(isAbort(await rejection(left))).toBe(true);
+    // The fetch got the signal of the caller and of the store together.
+    expect(requests[1]?.signal?.aborted).toBe(true);
+
+    await expect(store.table("outputs_Tab3.tsv")).resolves.toEqual(table);
+    expect(requests.at(-1)).toMatchObject({
+      url: "/local/studies/caffeine/Example/tables/outputs_Tab3.tsv",
+      etag: '"t1"',
+    });
   });
 
   it("sends the review and tables actions of the open study", async () => {

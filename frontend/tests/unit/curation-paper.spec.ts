@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { ApiError, NO_SESSION, SessionMissing } from "../../src/curation-app/api/client";
+import { checkFile } from "../../src/curation-app/api/client";
+import { ApiError, NO_SESSION, SessionMissing } from "../../src/study-views/errors";
 import {
   findText,
   formatBytes,
@@ -9,10 +10,9 @@ import {
   PaperImportFailed,
   paperLine,
   paperName,
-  paperRoute,
   shownPaper,
   zoomText,
-} from "../../src/curation-app/paper";
+} from "../../src/study-views/paper";
 import { paperFile, studyDetail } from "./curation-fixtures";
 
 const URL_A = "/local/studies/caffeine/Example/files/Example.pdf";
@@ -65,13 +65,6 @@ describe("the paper of a study", () => {
     expect(shownPaper(papers, null)?.file).toBe("Example.pdf");
     expect(shownPaper(papers, "gone.pdf")?.file).toBe("Example.pdf");
     expect(shownPaper([], "a.pdf")).toBeNull();
-  });
-
-  it("routes a PDF to a tab of its own", () => {
-    expect(paperRoute("caffeine/Example", "Example Supp.pdf")).toEqual({
-      name: "Paper",
-      params: { substance: "caffeine", name: "Example", file: "Example Supp.pdf" },
-    });
   });
 
   it.each([
@@ -159,6 +152,15 @@ describe("the paper of a study", () => {
     });
   });
 
+  it("explains a failure without the instructions of the local app to a reader who may not edit the study", () => {
+    const password = Object.assign(new Error("No password given"), { name: "PasswordException", code: 1 });
+    expect(paperFailure(password, "Example.pdf", URL_A, null, false).text).toBe("Example.pdf is protected by a password.");
+    const gone = paperFailure(responseError(404), "Example.pdf", URL_A, answer(404, "not_found", null), false);
+    expect([gone.text, gone.details?.code]).toEqual(["Could not load Example.pdf: the server answered 404.", "not_found"]);
+    const failed = paperFailure(responseError(500), "Example.pdf", URL_A, null, false);
+    expect([failed.text, failed.details?.code]).toEqual(["Could not load Example.pdf: the server answered 500.", "pdf_unreadable"]);
+  });
+
   it("explains a lost session as the app does, without the status", () => {
     const failure = paperFailure(
       responseError(401),
@@ -172,14 +174,14 @@ describe("the paper of a study", () => {
 
   it("has the lost session as the answer of the local server to a 401", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(json({ error: "Open the launch URL printed in your terminal" }, 401));
-    await expect(paperAnswer(responseError(401), URL_A)).resolves.toBeInstanceOf(SessionMissing);
+    await expect(paperAnswer(responseError(401), URL_A, checkFile)).resolves.toBeInstanceOf(SessionMissing);
   });
 
   it("asks the local server again for its answer after an error status, for one byte of the PDF", async () => {
     const fetch = vi
       .spyOn(globalThis, "fetch")
       .mockResolvedValue(json({ error: "Could not read Example.pdf.", code: "file_error", detail: "PermissionError" }, 400));
-    const answered = await paperAnswer(responseError(400), URL_A);
+    const answered = await paperAnswer(responseError(400), URL_A, checkFile);
     expect(answered).toBeInstanceOf(ApiError);
     expect(answered instanceof ApiError && [answered.status, answered.code, answered.detail]).toEqual([
       400,
@@ -195,14 +197,14 @@ describe("the paper of a study", () => {
 
   it("has no answer of the local server for another failure, nor when it serves the PDF or cannot be reached", async () => {
     const fetch = vi.spyOn(globalThis, "fetch");
-    await expect(paperAnswer(new TypeError("Failed to fetch"), URL_A)).resolves.toBeNull();
+    await expect(paperAnswer(new TypeError("Failed to fetch"), URL_A, checkFile)).resolves.toBeNull();
     await expect(
-      paperAnswer(Object.assign(new Error("Invalid PDF structure."), { name: "InvalidPDFException" }), URL_A),
+      paperAnswer(Object.assign(new Error("Invalid PDF structure."), { name: "InvalidPDFException" }), URL_A, checkFile),
     ).resolves.toBeNull();
     expect(fetch).not.toHaveBeenCalled();
     fetch.mockResolvedValueOnce(new Response("%", { status: 206, headers: { "Content-Range": "bytes 0-0/19507" } }));
-    await expect(paperAnswer(responseError(404), URL_A)).resolves.toBeNull();
+    await expect(paperAnswer(responseError(404), URL_A, checkFile)).resolves.toBeNull();
     fetch.mockRejectedValueOnce(new TypeError("Failed to fetch"));
-    await expect(paperAnswer(responseError(404), URL_A)).resolves.toBeNull();
+    await expect(paperAnswer(responseError(404), URL_A, checkFile)).resolves.toBeNull();
   });
 });

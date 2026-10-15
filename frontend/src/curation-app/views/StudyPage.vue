@@ -13,32 +13,32 @@ import {
   VProgressLinear,
   VSpacer,
 } from "vuetify/components";
-import { ApiError, ServerStopped, SessionMissing } from "../api/client";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
-import SectionTabs from "../components/SectionTabs.vue";
-import StudyHeader from "../components/StudyHeader.vue";
+import { ApiError, ServerStopped, SessionMissing } from "../../study-views/errors";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
+import CurationStudyHeader from "../components/CurationStudyHeader.vue";
+import SectionTabs from "../../study-views/components/SectionTabs.vue";
 import UnsavedBanner from "../components/UnsavedBanner.vue";
-import { sectionHeading, useReturnFocus } from "../composables/useReturnFocus";
+import { useReturnFocus } from "../composables/useReturnFocus";
+import { sectionHeading } from "../../study-views/focus";
 import { useSaveShortcut } from "../composables/useSaveShortcut";
-import { selectedNotesKind, selectionOf } from "../data";
+import { selectedNotesKind, selectionOf } from "../../study-views/data";
 import ActivitySection from "../sections/ActivitySection.vue";
-import DataSection from "../sections/DataSection.vue";
+import CurationDataSection from "../sections/CurationDataSection.vue";
+import CurationProblemsSection from "../sections/CurationProblemsSection.vue";
+import CurationReviewSection from "../sections/CurationReviewSection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
-import ProblemsSection from "../sections/ProblemsSection.vue";
-import ReviewSection from "../sections/ReviewSection.vue";
-import { formatTime } from "../overview";
+import { formatTime } from "../../study-views/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
-  duplicateFolders,
-  duplicateHeading,
   failureOf,
   isSection,
-  lastUploadUrl,
   SECTION_LABELS,
   sectionCounts,
   type Section,
-} from "../study";
+} from "../../study-views/study";
+import { duplicateFolders, duplicateHeading, lastUploadUrl } from "../local";
 
 /**
  * The component of each section. A section gets the open study from the study store; the
@@ -47,9 +47,9 @@ import {
  */
 const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
-  data: DataSection,
-  problems: ProblemsSection,
-  review: ReviewSection,
+  data: CurationDataSection,
+  problems: CurationProblemsSection,
+  review: CurationReviewSection,
   activity: ActivitySection,
 };
 
@@ -157,11 +157,7 @@ useSaveShortcut(() => void study.draft.save());
 watch(
   [detail, section],
   ([value, current]) => {
-    if (value && current === null)
-      void router.replace({
-        name: "Study",
-        params: { substance: substance.value, name: name.value, section: defaultSection(value) },
-      });
+    if (value && current === null) void router.replace(curationRoutes.section(identity.value, defaultSection(value)));
   },
   { immediate: true },
 );
@@ -181,13 +177,13 @@ watch(
           <li v-for="path in failure.paths" :key="path">{{ path }}</li>
         </ul>
       </template>
-      <RouterLink to="/" class="study-back">Back to the studies</RouterLink>
+      <RouterLink :to="curationRoutes.overview()" class="study-back">Back to the studies</RouterLink>
     </section>
 
     <template v-else>
       <!-- The study band: the header of the study and its tabs, set apart from the section below. -->
       <div v-if="detail" class="study-band elevation-1">
-        <StudyHeader :detail="detail" :stale="study.error !== null" />
+        <CurationStudyHeader :detail="detail" :stale="study.error !== null" />
         <SectionTabs
           :substance="substance"
           :name="name"
@@ -210,8 +206,8 @@ watch(
              these two sections, and the others show it once the draft has something to say. -->
         <UnsavedBanner :section="section" :kind="notesKind" />
         <section v-if="section" class="study-section" :aria-labelledby="headingId">
-          <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone. -->
-          <h2 :id="headingId" tabindex="-1" class="d-sr-only">{{ SECTION_LABELS[section] }}</h2>
+          <!-- It names the section for screen readers, and takes the focus after a dialog of the section when the control that opened it is gone (sectionHeading of focus.ts finds it by its attribute). -->
+          <h2 :id="headingId" tabindex="-1" class="d-sr-only" data-study-section-heading>{{ SECTION_LABELS[section] }}</h2>
           <component :is="SECTION_VIEWS[section]" />
         </section>
       </template>

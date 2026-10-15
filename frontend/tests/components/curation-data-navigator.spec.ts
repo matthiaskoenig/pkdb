@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, mount } from "@vue/test-utils";
-import DataNavigator from "../../src/curation-app/components/DataNavigator.vue";
-import type { Problem, StudyDetail } from "../../src/curation-app/api/types";
-import { PAPER } from "../../src/curation-app/data";
+import DataNavigator from "../../src/study-views/components/DataNavigator.vue";
+import type { Problem, StudyDetail } from "../../src/study-views/types";
+import { PAPER } from "../../src/study-views/data";
 import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "../unit/curation-fixtures";
 
 enableAutoUnmount(afterEach);

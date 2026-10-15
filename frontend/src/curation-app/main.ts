@@ -2,6 +2,7 @@
 // any component; otherwise its reset of buttons wins over the sizes of buttons and chips.
 import "vuetify/styles";
 import { start } from "./start";
+import "../study-views/styles.css";
 import "./styles.css";
 
 void start("#app");

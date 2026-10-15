@@ -2,11 +2,11 @@
 import { computed, ref, watch } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
-import { formatTime } from "../overview";
+import { formatTime } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
-import { failureOf, type ActionFailure } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, type ActionFailure } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";
 
@@ -122,7 +122,7 @@ async function toggle(): Promise<void> {
 .watcher-error-log {
   margin: 0;
 }
-/* The lines of the detail are capped by .failure-detail in styles.css. */
+/* The lines of the detail are capped by .failure-detail in src/study-views/styles.css. */
 .watcher-error-detail {
   margin: 2px 0;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Problem, StudyDetail, TableResponse } from "../../src/curation-app/api/types";
+import type { Problem, StudyDetail, TableResponse } from "../../src/study-views/types";
 import {
   ALL_ROWS,
   defaultFile,
@@ -22,7 +22,7 @@ import {
   sourceOfFile,
   tableNotesKind,
   tablesByInfo,
-} from "../../src/curation-app/data";
+} from "../../src/study-views/data";
 import { paperFile, reviewItem, sourceSummary, studyDetail, tableEntry } from "./curation-fixtures";
 
 const fig1 = sourceSummary({

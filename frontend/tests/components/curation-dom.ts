@@ -2,7 +2,8 @@
 import { vi } from "vitest";
 import { DOMWrapper, flushPromises, type VueWrapper } from "@vue/test-utils";
 import type { VAutocomplete, VCombobox, VSelect } from "vuetify/components";
-import { isRecord, type Snapshot } from "../../src/curation-app/api/types";
+import { type Snapshot } from "../../src/curation-app/api/types";
+import { isRecord } from "../../src/study-views/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json } from "../unit/curation-fixtures";
 

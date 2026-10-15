@@ -14,29 +14,23 @@ import {
   VSelect,
   VTextField,
 } from "vuetify/components";
-import type { Profile } from "../api/types";
+import type { Profile } from "../../study-views/types";
 import DiskField from "../components/DiskField.vue";
 import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import TableNotes from "../components/TableNotes.vue";
-import { sectionHeading } from "../composables/useReturnFocus";
-import {
-  markMessages,
-  messagesAt,
-  NO_MESSAGES,
-  PROVENANCE_LABELS,
-  startForm,
-  withKind,
-  type ProvenanceKind,
-} from "../metadata";
-import { hasNotes, kindsWithTable } from "../notes";
-import { issueUrl, plural } from "../overview";
+import { sectionHeading } from "../../study-views/focus";
+import { markMessages, messagesAt, NO_MESSAGES, startForm, withKind } from "../metadata";
+import { PROVENANCE_LABELS, referenceMatch, referenceView, type ProvenanceKind } from "../../study-views/metadataView";
+import { hasNotes, kindsWithTable } from "../../study-views/notes";
+import { issueUrl, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { knownProfiles, releaseLabel, sectionRoute } from "../study";
-import { noteKinds } from "../tableKinds";
+import { knownProfiles, releaseLabel } from "../../study-views/study";
+import { noteKinds } from "../../study-views/tableKinds";
 
 /**
  * The form of study.json. It edits the draft of the study store, which the Data section edits
@@ -68,7 +62,7 @@ const disk = computed(() => draft.disk);
 const referenceOpen = ref(false);
 
 /** The Data section, which shows the notes of each table above it. */
-const dataRoute = computed(() => sectionRoute(detail.value?.id ?? "", "data"));
+const dataRoute = computed(() => curationRoutes.section(detail.value?.id ?? "", "data"));
 /**
  * The kinds with notes in study.json but no table in the study, such as after a table was
  * removed or beyond the upload limits: the Data section cannot show them, so Metadata does.
@@ -103,27 +97,8 @@ const identifiersChanged = computed(
     (form.value.reference.pmid.trim() !== (savedIdentifiers.value.pmid ?? "") ||
       form.value.reference.doi.trim() !== (savedIdentifiers.value.doi ?? "")),
 );
-const match = computed(() => {
-  const value = detail.value?.reference_match ?? null;
-  if (value === true) return { label: "reference.json matches", tone: "success" };
-  if (value === false) return { label: "reference.json does not match study.json", tone: "warning" };
-  return { label: "No identifiers", tone: undefined };
-});
-const reference = computed(() => {
-  const value = detail.value?.reference ?? null;
-  if (value === null) return { kind: "none" as const };
-  if ("error" in value) return { kind: "error" as const, text: value.error };
-  const authors = value.authors;
-  return {
-    kind: "reference" as const,
-    title: value.title,
-    authors:
-      authors.length > 6
-        ? `${authors.slice(0, 6).join(", ")}, et al. (${authors.length} authors)`
-        : authors.join(", "),
-    source: [value.journal, value.publication_date].filter(Boolean).join(" · "),
-  };
-});
+const match = computed(() => referenceMatch(detail.value?.reference_match ?? null, true));
+const reference = computed(() => referenceView(detail.value?.reference ?? null));
 
 function useDoi(doi: string): void {
   if (!form.value) return;

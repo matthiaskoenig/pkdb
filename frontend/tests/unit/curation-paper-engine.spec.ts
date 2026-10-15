@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as pdfjs from "pdfjs-dist";
-import type { PaperEvents, PaperStart } from "../../src/curation-app/paper";
-import { openPaper } from "../../src/curation-app/paperEngine";
+import type { PaperEvents, PaperStart } from "../../src/study-views/paper";
+import { openPaper } from "../../src/study-views/paperEngine";
 
 /** A fake PDF.js: it records what the engine creates, asks and dispatches. */
 const fake = vi.hoisted(() => {
@@ -217,12 +217,18 @@ beforeEach(() => {
 afterEach(() => nextTask());
 
 describe("the PDF.js engine of the paper viewer", () => {
-  it("loads the worker of PDF.js from pdfjs/ beside the app", () => {
-    expect(pdfjs.GlobalWorkerOptions.workerSrc).toBe(`${BASE}pdf.worker.min.mjs`);
+  it("loads the worker and the files of PDF.js from the assets that the page names", async () => {
+    await openPaper(container(), URL_A, events(), START, signal(), "https://pk-db.example/pdfjs/");
+    expect(pdfjs.GlobalWorkerOptions.workerSrc).toBe("https://pk-db.example/pdfjs/pdf.worker.min.mjs");
+    expect(fake.state.options).toMatchObject({
+      cMapUrl: "https://pk-db.example/pdfjs/cmaps/",
+      standardFontDataUrl: "https://pk-db.example/pdfjs/standard_fonts/",
+      wasmUrl: "https://pk-db.example/pdfjs/wasm/",
+    });
   });
 
   it("opens a PDF in ranges with the options that the Content Security Policy of the local server allows", async () => {
-    await openPaper(container(), URL_A, events(), START, signal());
+    await openPaper(container(), URL_A, events(), START, signal(), BASE);
     expect(fake.state.options).toEqual({
       url: URL_A,
       worker: fake.state.worker,
@@ -242,7 +248,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("starts on the page and the fit of the viewer and reports the page, the zoom and the finds", async () => {
     const reported = events();
-    await openPaper(container(), URL_A, reported, { page: 2, fit: "page-fit", scale: 1 }, signal());
+    await openPaper(container(), URL_A, reported, { page: 2, fit: "page-fit", scale: 1 }, signal(), BASE);
     const bus = fake.state.bus!;
     const viewer = fake.state.viewer!;
     expect(reported.opened).toHaveBeenCalledWith(3);
@@ -267,7 +273,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("refits the pages when the pane changes its size", async () => {
     const pane = container();
-    await openPaper(pane, URL_A, events(), START, signal());
+    await openPaper(pane, URL_A, events(), START, signal(), BASE);
     const viewer = fake.state.viewer!;
     fake.state.bus!.dispatch("pagesinit", {});
     resized(pane, 500, 800);
@@ -278,7 +284,7 @@ describe("the PDF.js engine of the paper viewer", () => {
   it("waits with the fit and the first page until the pane, hidden while the PDF opened, shows", async () => {
     const pane = container(0, 0);
     const reported = events();
-    await openPaper(pane, URL_A, reported, { page: 2, fit: "page-width", scale: 1 }, signal());
+    await openPaper(pane, URL_A, reported, { page: 2, fit: "page-width", scale: 1 }, signal(), BASE);
     const viewer = fake.state.viewer!;
     fake.state.bus!.dispatch("pagesinit", {});
     expect(viewer.scaleValues).toEqual([]);
@@ -292,7 +298,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("keeps the pages where they were while the pane is hidden, without fitting them to no size", async () => {
     const pane = container();
-    await openPaper(pane, URL_A, events(), START, signal());
+    await openPaper(pane, URL_A, events(), START, signal(), BASE);
     const viewer = fake.state.viewer!;
     fake.state.bus!.dispatch("pagesinit", {});
     pane.scrollTop = 1500;
@@ -310,13 +316,13 @@ describe("the PDF.js engine of the paper viewer", () => {
   });
 
   it("starts at the scale of zoom steps without a fit", async () => {
-    await openPaper(container(), URL_A, events(), { page: 1, fit: null, scale: 1.25 }, signal());
+    await openPaper(container(), URL_A, events(), { page: 1, fit: null, scale: 1.25 }, signal(), BASE);
     fake.state.bus!.dispatch("pagesinit", {});
     expect(fake.state.viewer!.currentScaleValue).toBe("1.25");
   });
 
   it("goes to pages, zooms, fits, finds, and ends a find", async () => {
-    const session = await openPaper(container(), URL_A, events(), START, signal());
+    const session = await openPaper(container(), URL_A, events(), START, signal(), BASE);
     const viewer = fake.state.viewer!;
     session.goTo(3);
     expect(viewer.currentPageNumber).toBe(3);
@@ -339,7 +345,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("reports a new find as running at once, also while PDF.js still counts the matches of the last one", async () => {
     const reported = events();
-    const session = await openPaper(container(), URL_A, reported, START, signal());
+    const session = await openPaper(container(), URL_A, reported, START, signal(), BASE);
     const bus = fake.state.bus!;
     bus.dispatch("updatefindmatchescount", { matchesCount: { current: 3, total: 12 } });
     expect(reported.found).toHaveBeenLastCalledWith({ status: "found", current: 3, total: 12 });
@@ -358,7 +364,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("gives its signal to the viewer of PDF.js, which drops its listeners of the pane when it aborts", async () => {
     const controller = new AbortController();
-    await openPaper(container(), URL_A, events(), START, controller.signal);
+    await openPaper(container(), URL_A, events(), START, controller.signal, BASE);
     expect(fake.state.viewer!.options.abortSignal).toBe(controller.signal);
   });
 
@@ -367,7 +373,7 @@ describe("the PDF.js engine of the paper viewer", () => {
     fake.state.task = { promise: load.promise, destroy: vi.fn(async () => undefined) };
     const controller = new AbortController();
     const reported = events();
-    const opening = openPaper(container(), URL_A, reported, START, controller.signal);
+    const opening = openPaper(container(), URL_A, reported, START, controller.signal, BASE);
     controller.abort();
     await expect(opening).rejects.toMatchObject({ name: "AbortError" });
     expect(fake.state.task.destroy).toHaveBeenCalledTimes(1);
@@ -380,7 +386,7 @@ describe("the PDF.js engine of the paper viewer", () => {
 
   it("leaves a PDF that opened to its session: an abort does not destroy it, its close does", async () => {
     const controller = new AbortController();
-    const session = await openPaper(container(), URL_A, events(), START, controller.signal);
+    const session = await openPaper(container(), URL_A, events(), START, controller.signal, BASE);
     controller.abort();
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(fake.state.task.destroy).not.toHaveBeenCalled();
@@ -393,7 +399,7 @@ describe("the PDF.js engine of the paper viewer", () => {
     const load = deferred<{ numPages: number }>();
     fake.state.task = { promise: load.promise, destroy: vi.fn(async () => undefined) };
     const controller = new AbortController();
-    const opening = openPaper(container(), URL_A, events(), START, controller.signal);
+    const opening = openPaper(container(), URL_A, events(), START, controller.signal, BASE);
     load.resolve({ numPages: 3 });
     controller.abort();
     await expect(opening).rejects.toMatchObject({ name: "AbortError" });
@@ -404,7 +410,7 @@ describe("the PDF.js engine of the paper viewer", () => {
   it("opens nothing for an opening that was aborted before it started", async () => {
     const controller = new AbortController();
     controller.abort();
-    await expect(openPaper(container(), URL_A, events(), START, controller.signal)).rejects.toMatchObject({
+    await expect(openPaper(container(), URL_A, events(), START, controller.signal, BASE)).rejects.toMatchObject({
       name: "AbortError",
     });
     expect(fake.state.options).toBeNull();
@@ -415,8 +421,8 @@ describe("the PDF.js engine of the paper viewer", () => {
     expect(reported(abort())).toBe(true);
     const destroying = deferred<void>();
     fake.state.task.destroy = vi.fn(() => destroying.promise);
-    const first = await openPaper(container(), URL_A, events(), START, signal());
-    const second = await openPaper(container(), URL_A, events(), START, signal());
+    const first = await openPaper(container(), URL_A, events(), START, signal(), BASE);
+    const second = await openPaper(container(), URL_A, events(), START, signal(), BASE);
     const closed = [first.close(), second.close()];
     expect(reported(abort())).toBe(false);
     expect(reported(new TypeError("Failed to fetch"))).toBe(true);
@@ -433,7 +439,7 @@ describe("the PDF.js engine of the paper viewer", () => {
     try {
       const destroying = deferred<void>();
       fake.state.task.destroy = vi.fn(() => destroying.promise);
-      const session = await openPaper(container(), URL_A, events(), START, signal());
+      const session = await openPaper(container(), URL_A, events(), START, signal(), BASE);
       const closed = session.close();
       console.error("Unable to get page for page view", new Error("Transport destroyed"));
       console.error("Unable to initialize viewer", new Error("Transport destroyed"));
@@ -459,10 +465,10 @@ describe("the PDF.js engine of the paper viewer", () => {
   it("keeps not reporting cancelled requests until the last of two closing PDFs is gone", async () => {
     const firstDestroy = deferred<void>();
     fake.state.task.destroy = vi.fn(() => firstDestroy.promise);
-    const first = await openPaper(container(), URL_A, events(), START, signal());
+    const first = await openPaper(container(), URL_A, events(), START, signal(), BASE);
     const secondDestroy = deferred<void>();
     fake.state.task = { promise: Promise.resolve({ numPages: 3 }), destroy: vi.fn(() => secondDestroy.promise) };
-    const second = await openPaper(container(), URL_A, events(), START, signal());
+    const second = await openPaper(container(), URL_A, events(), START, signal(), BASE);
     const closingFirst = first.close();
     const closingSecond = second.close();
     firstDestroy.resolve();
@@ -476,7 +482,7 @@ describe("the PDF.js engine of the paper viewer", () => {
   });
 
   it("closes the PDF and its worker, and the PDF leaves the container at once", async () => {
-    const session = await openPaper(container(), URL_A, events(), START, signal());
+    const session = await openPaper(container(), URL_A, events(), START, signal(), BASE);
     const closing = session.close();
     expect(fake.state.viewer!.documents.at(-1)).toBeNull();
     await closing;
@@ -488,7 +494,7 @@ describe("the PDF.js engine of the paper viewer", () => {
     vi.useFakeTimers();
     try {
       fake.state.task.destroy = vi.fn(() => new Promise<void>(() => undefined));
-      const session = await openPaper(container(), URL_A, events(), START, signal());
+      const session = await openPaper(container(), URL_A, events(), START, signal(), BASE);
       let closed = false;
       void session.close().then(() => (closed = true));
       await vi.advanceTimersByTimeAsync(1999);
@@ -505,7 +511,7 @@ describe("the PDF.js engine of the paper viewer", () => {
   it("ends the loading of a PDF that PDF.js cannot open, with its error", async () => {
     const error = Object.assign(new Error("Invalid PDF structure."), { name: "InvalidPDFException" });
     fake.state.task = { promise: Promise.reject(error), destroy: vi.fn(async () => undefined) };
-    await expect(openPaper(container(), URL_A, events(), START, signal())).rejects.toBe(error);
+    await expect(openPaper(container(), URL_A, events(), START, signal(), BASE)).rejects.toBe(error);
     expect(fake.state.task.destroy).toHaveBeenCalledTimes(1);
   });
 });

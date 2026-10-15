@@ -2,11 +2,11 @@
 import { computed, ref, useId, watch } from "vue";
 import { VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { SaveMode, Snapshot } from "../api/types";
-import { uploadBlocker } from "../overview";
+import { uploadBlocker } from "../uploads";
 import { useOverviewStore } from "../stores/overview";
 import { stateChip } from "../stateChip";
-import { failureOf, type ActionFailure } from "../study";
-import ActionFailureAlert from "./ActionFailureAlert.vue";
+import { failureOf, type ActionFailure } from "../../study-views/study";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 
 type Anchor = "bottom end" | "bottom";
 

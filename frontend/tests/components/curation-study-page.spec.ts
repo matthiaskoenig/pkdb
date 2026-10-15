@@ -4,14 +4,8 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h } from "vue";
 import { RouterView, type Router } from "vue-router";
 import { VSelect } from "vuetify/components";
-import type {
-  ReviewItem,
-  Snapshot,
-  StudyDetail,
-  TablePreview,
-  TablesResult,
-  ValidationIssue,
-} from "../../src/curation-app/api/types";
+import type { Snapshot, TablePreview, TablesResult } from "../../src/curation-app/api/types";
+import type { ReviewItem, StudyDetail, ValidationIssue } from "../../src/study-views/types";
 import { POLL_INTERVAL_MS } from "../../src/curation-app/composables/usePolling";
 import { toForm } from "../../src/curation-app/metadata";
 import { makeRouter } from "../../src/curation-app/router";
@@ -19,8 +13,8 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
-import { NOTICE_MS } from "../../src/curation-app/study";
-import { noteKinds } from "../../src/curation-app/tableKinds";
+import { NOTICE_MS } from "../../src/curation-app/local";
+import { noteKinds } from "../../src/study-views/tableKinds";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow, tableEntry } from "../unit/curation-fixtures";

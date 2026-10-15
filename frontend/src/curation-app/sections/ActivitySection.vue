@@ -24,9 +24,9 @@ import {
   saveFile,
   uploadUrl,
 } from "../activity";
-import { ApiError } from "../api/client";
-import type { Job } from "../api/types";
-import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import { ApiError } from "../../study-views/errors";
+import type { Job } from "../../study-views/types";
+import ActionFailureAlert from "../../study-views/components/ActionFailureAlert.vue";
 import FailureDetails from "../components/FailureDetails.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import UserHint from "../components/UserHint.vue";
@@ -34,10 +34,11 @@ import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { useReturnFocus } from "../composables/useReturnFocus";
 import { detailsOfBody } from "../failures";
-import { formatTime, plural } from "../overview";
+import { formatTime, plural } from "../../study-views/overview";
 import { useOverviewStore } from "../stores/overview";
+import { curationRoutes } from "../routes";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, failureOf, sectionRoute } from "../study";
+import { actionFailure, failureOf } from "../../study-views/study";
 
 /**
  * The jobs of the study in the current workspace, newest first: validations and uploads of the
@@ -250,7 +251,7 @@ async function retried(): Promise<void> {
               <template v-for="(part, index) in entry.parts" :key="index">
                 <RouterLink
                   v-if="part.item"
-                  :to="sectionRoute(identity, 'review', { item: part.item })"
+                  :to="curationRoutes.section(identity, 'review', { item: part.item })"
                   class="activity-item"
                 >
                   {{ part.text }}
@@ -451,7 +452,7 @@ async function retried(): Promise<void> {
 .activity-entry-linked {
   background-color: rgba(var(--v-theme-primary), 0.08);
 }
-/* The lines of the detail are capped by .failure-detail in styles.css. */
+/* The lines of the detail are capped by .failure-detail in src/study-views/styles.css. */
 .activity-detail {
   margin: 0;
 }

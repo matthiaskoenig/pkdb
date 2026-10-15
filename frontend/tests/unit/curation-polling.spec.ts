@@ -1,7 +1,8 @@
 import { defineComponent, h } from "vue";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ServerStopped, type Fetched } from "../../src/curation-app/api/client";
+import { type Fetched } from "../../src/curation-app/api/client";
+import { ServerStopped } from "../../src/study-views/errors";
 import { usePolling, type Polling } from "../../src/curation-app/composables/usePolling";
 
 type Load = (etag: string | null, signal: AbortSignal) => Promise<Fetched<string>>;

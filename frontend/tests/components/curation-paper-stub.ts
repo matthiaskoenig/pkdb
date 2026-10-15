@@ -1,5 +1,5 @@
 import { defineComponent, h, onMounted, type PropType } from "vue";
-import type { PaperPlace } from "../../src/curation-app/paper";
+import type { PaperPlace } from "../../src/study-views/paper";
 
 /** How often a test mounted the viewer of the paper; a test resets it. */
 export const paperViewer = { mounts: 0 };

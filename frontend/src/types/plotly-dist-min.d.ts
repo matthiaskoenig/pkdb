@@ -20,11 +20,11 @@ declare module "plotly.js-dist-min" {
       data:
         | import("../features/plots/types").Trace[]
         | import("../features/home/chart").OverviewTrace[]
-        | import("../curation-app/overlay").OverlayTrace[],
+        | import("../study-views/overlay").OverlayTrace[],
       layout:
         | import("../features/plots/types").PlotLayout
         | import("../features/home/chart").OverviewLayout
-        | import("../curation-app/overlay").OverlayLayout,
+        | import("../study-views/overlay").OverlayLayout,
       config: {
         responsive: boolean;
         displaylogo: boolean;

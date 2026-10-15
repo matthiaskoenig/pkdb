@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount, type VueWrapper } from "@vue/test-utils";
-import type { Comment, Profile } from "../../src/curation-app/api/types";
+import type { Comment, Profile } from "../../src/study-views/types";
 import NotesFields from "../../src/curation-app/components/NotesFields.vue";
 import type { FieldMark } from "../../src/curation-app/metadata";
 import { profile } from "../unit/curation-fixtures";

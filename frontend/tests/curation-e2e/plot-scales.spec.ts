@@ -136,14 +136,20 @@ test("a log axis over 1.3 decades labels 1, 2 and 5 of each decade apart from ea
   // labels every digit of a decade by default (0.8 0.9 1 2 3 ... 9 10 20), and the labels overlap.
   const project = join(app.server.workspace, PROJECT);
   await page.route("**/local/studies/caffeine/Demo2020/sources/Fig1", async (route) => {
+    // route.fetch() reads apart from the page, so it answers also a read that the page aborts, as
+    // a newer read of the study replaces it; such a read can no longer be fulfilled.
     const response = await route.fetch();
-    const view = (await response.json()) as { points: { y: number; y_text: string; error_low: number | null; error_high: number | null }[] };
+    // An answer 304 of the server to a revalidation has no body to change.
+    const view = (await response.json().catch(() => null)) as {
+      points: { y: number; y_text: string; error_low: number | null; error_high: number | null }[];
+    } | null;
+    if (!view) return route.fulfill({ response }).catch(() => undefined);
     const last = view.points.length - 1;
     view.points = view.points.map((point, index) => {
       const y = Number((10 ** ((1.3 * index) / last)).toPrecision(3));
       return { ...point, y, y_text: String(y), error_low: null, error_high: null };
     });
-    await route.fulfill({ response, json: view });
+    await route.fulfill({ response, json: view }).catch(() => undefined);
   });
   renameSync(project, `${project}.away`);
   try {

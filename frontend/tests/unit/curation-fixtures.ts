@@ -1,10 +1,10 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
+import type { Snapshot, TablesResult } from "../../src/curation-app/api/types";
 import type {
   ConflictData,
   PaperFile,
   Profile,
   ReviewItem,
-  Snapshot,
   SourceSummary,
   StudyDetail,
   StudyMetadata,
@@ -13,10 +13,9 @@ import type {
   TableFileKind,
   TableKind,
   TableKindEntry,
-  TablesResult,
   ValidationIssue,
-} from "../../src/curation-app/api/types";
-import { noteKinds } from "../../src/curation-app/tableKinds";
+} from "../../src/study-views/types";
+import { noteKinds } from "../../src/study-views/tableKinds";
 import limitsFixture from "../fixtures/curation-contract/limits.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 
@@ -209,7 +208,7 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     id: row.id,
     path: row.path,
     status: row.status,
-    sync: row.sync,
+    sync: row.sync!,
     counts: row.counts,
     summary: row.summary,
     issue: row.issue,

@@ -3,6 +3,7 @@
  * python/tests/test_curation_contract.py. Regenerate them there with PKDB_UPDATE_CONTRACT=1.
  */
 import { describe, expect, it } from "vitest";
+import type { TablePreview, TablesResult } from "../../src/curation-app/api/types";
 import type {
   AcknowledgedWarning,
   ConflictData,
@@ -17,37 +18,39 @@ import type {
   Suggestion,
   TableEntry,
   TableKindEntry,
-  TablePreview,
   TableResponse,
-  TablesResult,
   TargetMatch,
   ValidationIssue,
-} from "../../src/curation-app/api/types";
-import { isSourceView, isTablePreview, isTablesResult, isTargetMatch } from "../../src/curation-app/api/types";
-import { filterStudies, problemLabels } from "../../src/curation-app/overview";
+} from "../../src/study-views/types";
+import { isTablePreview, isTablesResult } from "../../src/curation-app/api/types";
+import { isSourceView, isTargetMatch } from "../../src/study-views/types";
+import { filterStudies, problemLabels } from "../../src/study-views/overview";
 import { jobText, messageParts } from "../../src/curation-app/activity";
-import { columnClass, columnCount, columnName, itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
-import { cellParts, namedKind } from "../../src/curation-app/links";
+import {
+  columnClass,
+  columnCount,
+  columnName,
+  itemsWithoutRows,
+  targetLines,
+  targetMatch,
+} from "../../src/study-views/grid";
+import { cellParts, namedKind } from "../../src/study-views/links";
 import { issueMessage } from "../../src/curation-app/metadata";
-import { legendEntries, overlayTraces, plotTraces } from "../../src/curation-app/overlay";
-import { ApiError } from "../../src/curation-app/api/client";
+import { legendEntries, overlayTraces, plotTraces } from "../../src/study-views/overlay";
+import { ApiError } from "../../src/study-views/errors";
 import { detailsOfBody } from "../../src/curation-app/failures";
+import { acknowledgement, locationKey, openPlace, scopeText, suggestionView } from "../../src/study-views/problems";
 import {
   acknowledgeFailure,
-  acknowledgement,
   AMBIGUOUS_WARNING,
-  locationKey,
   NO_EXACT_TARGET,
   NO_SUCH_WARNING,
-  openPlace,
-  scopeText,
-  suggestionView,
-} from "../../src/curation-app/problems";
-import { matchText, targetText } from "../../src/curation-app/review";
-import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/curation-app/study";
-import { addableKinds, kindLabel, noteKinds } from "../../src/curation-app/tableKinds";
+} from "../../src/curation-app/acknowledging";
+import { matchText, targetText } from "../../src/study-views/review";
+import { beyondLimits, isLimitIssue, isRawTable, sectionCounts, tableFiles } from "../../src/study-views/study";
+import { addableKinds, kindLabel, noteKinds } from "../../src/study-views/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
-import { defaultFile, fileForSource, sourceOfFile } from "../../src/curation-app/data";
+import { defaultFile, fileForSource, sourceOfFile } from "../../src/study-views/data";
 import openTablesFixture from "../fixtures/curation-contract/open-tables.json";
 import problemsFixture from "../fixtures/curation-contract/problems.json";
 import errorsFixture from "../fixtures/curation-contract/errors.json";
@@ -387,12 +390,12 @@ describe("rows contract", () => {
   });
 
   it("is what the overview filters", () => {
-    const { shown, counts } = filterStudies(rows, { search: "demo", substance: "", curator: "", chip: "all" });
+    const { shown, counts } = filterStudies(rows, { search: "demo", substance: "", curator: "", chip: "all" }, { jobs: true });
     expect(shown.map((row) => row.id)).toEqual(["caffeine/Demo2020"]);
     expect(counts.all).toBe(1);
     // Each row names its substance folders, its own first.
     expect(rows.every((row) => row.substances[0] === row.substance)).toBe(true);
-    const caffeine = filterStudies(rows, { search: "", substance: "caffeine", curator: "", chip: "all" });
+    const caffeine = filterStudies(rows, { search: "", substance: "caffeine", curator: "", chip: "all" }, { jobs: true });
     expect(caffeine.shown).toHaveLength(rows.length);
   });
 });

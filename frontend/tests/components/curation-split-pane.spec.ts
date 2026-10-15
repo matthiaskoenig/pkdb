@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
-import SplitPane from "../../src/curation-app/components/SplitPane.vue";
+import SplitPane from "../../src/study-views/components/SplitPane.vue";
 
 enableAutoUnmount(afterEach);
 

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
-import { ApiError } from "../../src/curation-app/api/client";
+import { ApiError } from "../../src/study-views/errors";
 import type { Directories } from "../../src/curation-app/api/types";
 import WorkspaceDialog from "../../src/curation-app/components/WorkspaceDialog.vue";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
