@@ -25,13 +25,14 @@ import {
 import { useSessionStore } from "../../../stores/session";
 import { useStudyListStore } from "../../../stores/studyList";
 import StudyDetailPage from "../../details/components/StudyDetailPage.vue";
-import { returnToSearch } from "../../details/resultPosition";
+import { keepStudyReturn, returnToSearch, studyReturn } from "../../details/resultPosition";
 import {
   AUDIENCE_CAPABILITIES,
   hasSearch,
   searchQuery,
   STORAGE_PREFIX,
   STUDIES_ROUTE,
+  STUDY_ROUTE,
   studyPageData,
   websiteRoutes,
 } from "../context";
@@ -107,6 +108,18 @@ watch(
 // Back to the data search that opened the study, where it was, or to the Studies page as the reader left it.
 const fromSearch = computed(() => hasSearch(route.query));
 const studies = computed(() => ({ name: STUDIES_ROUTE, query: remembered.query }));
+// An entry that the page pushes, such as one of another section, keeps the way back to the search
+// that opened the study, so that the search shows again where the reader left it.
+let way = studyReturn(session.epoch);
+watch(
+  () => route.fullPath,
+  () => {
+    if (route.name !== STUDY_ROUTE) return;
+    const own = studyReturn(session.epoch);
+    if (own) way = own;
+    else if (way) keepStudyReturn(way);
+  },
+);
 function backToSearch(): void {
   returnToSearch(router, session.epoch, { path: "/data", query: searchQuery(route.query) });
 }

@@ -2,7 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, nextTick } from "vue";
-import { createMemoryHistory, createRouter, RouterView } from "vue-router";
+import { createMemoryHistory, createRouter, createWebHistory, RouterView, type Router } from "vue-router";
+import {
+  rememberResultPosition,
+  studyOriginKey,
+  takeResultPosition,
+} from "../../src/features/details/resultPosition";
 import { routes } from "../../src/router";
 import { useSessionStore } from "../../src/stores/session";
 import { useStudyListStore } from "../../src/stores/studyList";
@@ -46,9 +51,8 @@ beforeEach(() => {
   setViewport(1280);
 });
 
-async function open(path: string) {
-  const router = createRouter({ history: createMemoryHistory(), routes });
-  await router.push(path);
+/** Shows the page of the current route of `router`. */
+async function show(router: Router) {
   await router.isReady();
   const wrapper = mount(defineComponent({ render: () => h(RouterView) }), {
     global: { plugins: [router, pinia], stubs: STUBS },
@@ -57,6 +61,12 @@ async function open(path: string) {
   await flushPromises();
   await navigated();
   return { router, wrapper };
+}
+
+async function open(path: string) {
+  const router = createRouter({ history: createMemoryHistory(), routes });
+  await router.push(path);
+  return show(router);
 }
 
 const tabs = (wrapper: Awaited<ReturnType<typeof open>>["wrapper"]) =>
@@ -135,16 +145,21 @@ describe("the study page of the website", () => {
     const data = wrapper.findAll("a.section-tab").find((tab) => tab.text().startsWith("Data"))!;
     expect(data.attributes("href")).toBe(`/data/${SID}/data?${SEARCH}`);
     const back = wrapper.findAll("button.v-btn").find((button) => button.text() === "Back to the search")!;
-    // The search page loads with the navigation, which takes longer than a timer.
-    const left = new Promise<void>((resolve) => {
-      const stop = router.afterEach(() => {
-        stop();
-        resolve();
-      });
-    });
     await back.trigger("click");
-    await left;
-    expect(router.currentRoute.value.fullPath).toBe(`/data?${SEARCH}`);
+    // The search page loads with the navigation, which takes longer than a timer.
+    await vi.waitFor(() => expect(router.currentRoute.value.fullPath).toBe(`/data?${SEARCH}`), { timeout: 4000 });
+  });
+
+  it("keeps the search on a study that a curator opens on Activity, which no one sees, and opens it on Review", async () => {
+    serve({ [VIEW]: studyCurator });
+    const { router } = await open(`/data/${SID}/activity?${SEARCH}`);
+    expect(router.currentRoute.value.fullPath).toBe(`/data/${SID}/review?${SEARCH}`);
+  });
+
+  it("keeps the search on a study that a visitor opens on Review and opens it on Metadata", async () => {
+    serve({ [VIEW]: studyPublic });
+    const { router } = await open(`/data/${SID}/review?${SEARCH}`);
+    expect(router.currentRoute.value.fullPath).toBe(`/data/${SID}/metadata?${SEARCH}`);
   });
 
   it("offers the Studies page, as the reader left it, without a search", async () => {
@@ -153,5 +168,33 @@ describe("the study page of the website", () => {
     const { wrapper } = await open(`/data/${SID}/metadata`);
     const link = wrapper.findAll("a.v-btn").find((button) => button.text() === "All studies")!;
     expect(link.attributes("href")).toBe("/studies?substance=drug");
+  });
+
+  it("goes back to the entry of the search, where the reader left it, after the reader changed the section", async () => {
+    serve({ [VIEW]: studyCurator });
+    // The history of the browser, as the search leaves it when it opens a study (SearchPage.openDetail).
+    window.history.replaceState(null, "");
+    const router = createRouter({ history: createWebHistory(), routes });
+    const search = `/data?${SEARCH}`;
+    await router.push(search);
+    const epoch = useSessionStore().epoch;
+    const origin = rememberResultPosition(search, epoch);
+    await router.push({
+      path: `/data/${SID}/metadata`,
+      query: Object.fromEntries(new URLSearchParams(SEARCH)),
+      state: { [studyOriginKey]: { ...origin } },
+    });
+    const { wrapper } = await show(router);
+    const data = wrapper.findAll("a.section-tab").find((tab) => tab.text().startsWith("Data"))!;
+    await data.trigger("click");
+    await navigated();
+    expect(router.currentRoute.value.fullPath).toBe(`/data/${SID}/data?${SEARCH}`);
+    const entries = window.history.length;
+    const back = wrapper.findAll("button.v-btn").find((button) => button.text() === "Back to the search")!;
+    await back.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.fullPath).toBe(search), { timeout: 4000 });
+    // The entry of the search itself, with the position of its results, and no new entry.
+    expect(window.history.length).toBe(entries);
+    expect(takeResultPosition(search, epoch)).toEqual(origin);
   });
 });
