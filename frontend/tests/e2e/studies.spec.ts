@@ -356,6 +356,12 @@ test.describe("the curation view of the assigned curator", () => {
         expect(actual, `${element}`).toBeCloseTo(size, 2);
       }
     };
+    /** The padding of `element`: top, right, bottom and left, in px. */
+    const padding = (element: Locator) =>
+      element.evaluate((node) => {
+        const style = getComputedStyle(node);
+        return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map((value) => Number.parseFloat(value));
+      });
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`${address}/review`);
     const chips = page.locator(".review-chips");
@@ -368,6 +374,21 @@ test.describe("the curation view of the assigned curator", () => {
       [page.locator(".review-card-text").first(), 13.125],
       [page.locator(".review-detail-text"), 14],
     ]);
+    // The text of a card has Vuetify's padding of 1rem of the curation app.
+    expect(await padding(page.locator(".review-detail-body"))).toEqual([14, 14, 14, 14]);
+    expect(await padding(page.locator(".target-body"))).toEqual([14, 14, 14, 14]);
+    // The fixture of the website has no problem in a cell: a tooltip of the problems, as TableGrid
+    // opens it with the scope of WEBSITE_VIEW_DEFAULTS, has the 13 px of the curation app.
+    const tip = await page.evaluate(() => {
+      const overlay = document.createElement("div");
+      overlay.className = "v-overlay v-tooltip website-study-views";
+      overlay.innerHTML = '<div class="v-overlay__content problem-tooltip"><div class="problem-tip-message">Message</div></div>';
+      document.body.append(overlay);
+      const size = Number.parseFloat(getComputedStyle(overlay.querySelector(".problem-tip-message")!).fontSize);
+      overlay.remove();
+      return size;
+    });
+    expect(tip).toBeCloseTo(13, 2);
     const kind = page.getByRole("combobox", { name: "Kind", exact: true });
     await kind.focus();
     await kind.press("ArrowDown");
@@ -380,9 +401,19 @@ test.describe("the curation view of the assigned curator", () => {
       [page.locator(".nav-name").first(), 12],
       [page.locator(".pane-head-name").first(), 12],
     ]);
+    // Metadata, which the curation app shows as a form: the cards in its sizes, at most 100rem of it wide.
+    await page.goto(`${address}/metadata`);
+    const title = page.locator(".metadata-view-title").first();
+    await sizes([[title, 14]]);
+    expect(await padding(page.locator(".metadata-view-head").first())).toEqual([8.75, 14, 0, 14]);
+    expect(await padding(page.locator(".metadata-view-body").first())).toEqual([0, 14, 14, 14]);
+    await expect(page.locator(".website-study-section")).toHaveCSS("max-width", "1400px");
+    // The heading of the Studies page is the website's, as on the data search.
+    await page.goto("/data");
+    const website = await page.getByRole("heading", { level: 1 }).evaluate((node) => getComputedStyle(node).fontSize);
     await page.goto("/studies");
+    await expect(page.getByRole("heading", { name: "Studies", level: 1 })).toHaveCSS("font-size", website);
     await sizes([
-      [page.getByRole("heading", { name: "Studies", level: 1 }), 22.4],
       [studyTable(page).locator("a.study-identity").first(), 12.25],
       [page.locator(".filter-chips .v-chip").first(), 10.5],
       [page.getByRole("textbox", { name: "Search studies" }), 13],
@@ -396,11 +427,14 @@ test.describe("the curation view of the assigned curator", () => {
     await page.goto(`${address}/review`);
     const card = page.getByRole("list", { name: "Review items" }).getByRole("button").first();
     await expect(card).toBeVisible();
+    // The height of the app bar, as the page reads it.
+    const bar = await card.evaluate((element) => Number.parseFloat(getComputedStyle(element).getPropertyValue("--v-layout-top")));
+    expect(bar).toBeGreaterThan(0);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await card.click();
     await expect
       .poll(() => page.locator(".review-selected").evaluate((element) => element.getBoundingClientRect().top))
-      .toBeGreaterThanOrEqual(64);
+      .toBeGreaterThanOrEqual(bar);
     await page.setViewportSize({ width: 1280, height: 900 });
   });
 
