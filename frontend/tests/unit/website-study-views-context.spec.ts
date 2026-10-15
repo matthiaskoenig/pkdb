@@ -68,7 +68,7 @@ describe("the routes of the website", () => {
   });
 
   it("show no study for another page and keep no other key of it", async () => {
-    const router = await routeAt("/studies?search=caf&sort=review");
+    const router = await routeAt("/studies?search=caf&sort=review&order=desc");
     const routes = websiteRoutes(router.currentRoute.value);
     expect(routes.current(router.currentRoute.value)).toBeNull();
     expect(router.resolve(routes.study(SID)).fullPath).toBe(`/data/${SID}`);

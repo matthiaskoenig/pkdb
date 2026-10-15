@@ -305,6 +305,8 @@ test.describe("the curation view of the assigned curator", () => {
     await studyTable(page).getByRole("button", { name: "Review", exact: true }).click();
     await expect(page).toHaveURL(/\/studies\?sort=review$/);
     await looksRight(page, "studies-curator");
+    await studyTable(page).getByRole("button", { name: "Review", exact: true }).click();
+    await expect(page).toHaveURL(/\/studies\?sort=review&order=desc$/);
     await row.getByRole("link", { name: sid, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${address}/review$`));
     await expect(sectionTabs(page)).toHaveText(CURATOR_TABS);

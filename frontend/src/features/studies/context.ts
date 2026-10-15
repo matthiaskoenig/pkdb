@@ -12,7 +12,7 @@ import { COMPACT_DEFAULTS } from "../../study-views/density";
 import { usePlotScaleChoice } from "../../study-views/plotScales";
 import { isSection, profileMap, studyName } from "../../study-views/study";
 import type { Profile, StudyDetail, StudyRow, TableKind } from "../../study-views/types";
-import { SEARCH_QUERY_KEYS } from "../search/codec";
+import { hasSearch, SEARCH_QUERY_KEYS } from "../search/codec";
 import { studyViewsApi, type Audience } from "./api";
 
 /** The route of a study format 2 study, `/data/:substance/:name/:section?` (router/index.ts). */
@@ -49,13 +49,17 @@ export function listCapabilities(rows: readonly StudyRow[]): StudyCapabilities {
 
 const SEARCH_KEYS: ReadonlySet<string> = new Set(SEARCH_QUERY_KEYS);
 
-/** The keys of the data search in `query`, which a study page opened from the search keeps. */
+/**
+ * The keys of the data search in `query`, which a study page opened from the search keeps: none
+ * unless `query` is a data search, as the Studies page writes its own `order` and no `v`.
+ */
 export function searchQuery(query: LocationQuery): LocationQuery {
+  if (!hasSearch(query)) return {};
   return Object.fromEntries(Object.entries(query).filter(([key]) => SEARCH_KEYS.has(key)));
 }
 
 /** Whether `query` holds a search, which the study page then offers to go back to. */
-export { hasSearch } from "../search/codec";
+export { hasSearch };
 
 function params(id: string): { substance: string; name: string } {
   return { substance: id.slice(0, id.indexOf("/")), name: studyName({ id }) };

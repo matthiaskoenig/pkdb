@@ -91,6 +91,25 @@ describe("the Studies page", () => {
     expect(curator.router.currentRoute.value.query).toEqual({ sort: "review", order: "desc", status: "attention" });
   });
 
+  it("writes a sort change of the table into the address, and a descending sort into no study link", async () => {
+    serve({ [ROWS]: rowsCurator });
+    const { router, wrapper } = await open("/studies");
+    const sortReview = () => wrapper.get("table thead").findAll("button").find((button) => button.text() === "Review")!.trigger("click");
+    await sortReview();
+    await navigated();
+    expect(router.currentRoute.value.query).toEqual({ sort: "review" });
+    await sortReview();
+    await navigated();
+    expect(router.currentRoute.value.query).toEqual({ sort: "review", order: "desc" });
+    expect(wrapper.get("a.study-identity").attributes("href")).toBe("/data/drug/Format2Fixture");
+  });
+
+  it("links the rows without the order of a descending sort", async () => {
+    serve({ [ROWS]: rowsCurator });
+    const { wrapper } = await open("/studies?sort=review&order=desc");
+    expect(wrapper.get("a.study-identity").attributes("href")).toBe("/data/drug/Format2Fixture");
+  });
+
   it("writes a filter into the address and remembers it for the study pages", async () => {
     serve({ [ROWS]: rowsCurator });
     const { router, wrapper } = await open("/studies");
