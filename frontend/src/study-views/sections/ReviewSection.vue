@@ -294,7 +294,7 @@ defineExpose({ selected, select, clearDraft });
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 56rem;
+  max-width: calc(56 * var(--study-rem, 1rem));
 }
 .review-toolbar {
   display: flex;
@@ -311,12 +311,12 @@ defineExpose({ selected, select, clearDraft });
   gap: 12px;
 }
 .review-kind {
-  width: 11rem;
+  width: calc(11 * var(--study-rem, 1rem));
   flex: 0 0 auto;
 }
 .review-approved {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .review-body {
@@ -330,7 +330,7 @@ defineExpose({ selected, select, clearDraft });
    than the window. */
 @container (min-width: 760px) {
   .review-body {
-    grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
+    grid-template-columns: minmax(calc(17 * var(--study-rem, 1rem)), 2fr) minmax(0, 3fr);
   }
   /* Below the app bar, and below the banner of unsaved changes of study.json while it sticks. */
   .review-selected {

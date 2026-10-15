@@ -221,7 +221,7 @@ const acknowledgement = computed(() => {
   align-items: center;
   gap: 8px;
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
   font-weight: 600;
   line-height: 1.5;
 }
@@ -230,7 +230,7 @@ const acknowledgement = computed(() => {
 }
 .review-detail-text {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
   line-height: 1.5;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -246,7 +246,7 @@ const acknowledgement = computed(() => {
   align-items: baseline;
   gap: 2px 12px;
   min-width: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
 }
 .review-detail-name {
   font-weight: 600;
@@ -257,18 +257,18 @@ const acknowledgement = computed(() => {
 }
 .review-detail-id {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
 }
 .review-detail-note {
   display: flex;
   align-items: baseline;
   gap: 8px;
   margin: -4px 0 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   line-height: 1.45;
 }
 .review-detail-note-icon {
-  width: 1rem;
+  width: var(--study-rem, 1rem);
   flex: 0 0 auto;
   text-align: center;
 }
@@ -304,7 +304,7 @@ const acknowledgement = computed(() => {
   align-items: baseline;
   gap: 0 12px;
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   /* As tall as the avatar beside it. */
   line-height: 24px;
 }
@@ -312,12 +312,12 @@ const acknowledgement = computed(() => {
   font-weight: 600;
 }
 .thread-entry-time {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .thread-entry-text {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: calc(0.9375 * var(--study-rem, 1rem));
   line-height: 1.45;
   white-space: pre-wrap;
   overflow-wrap: anywhere;

@@ -40,6 +40,15 @@ export const STATUS_CHIPS: readonly { value: StatusChip; label: string }[] = [
 ];
 
 /**
+ * The values of the status chips that a reader sees: every chip with the curation, else only All,
+ * which the filter line then does not show. An address of the website that names another one is
+ * read as All.
+ */
+export function statusChips(capabilities: Pick<StudyCapabilities, "curation">): StatusChip[] {
+  return capabilities.curation ? STATUS_CHIPS.map((chip) => chip.value) : ["all"];
+}
+
+/**
  * Errors, a sync conflict, or open review items while the study is in review. The sync state
  * counts only with the jobs of a local server, which the reader sees it with.
  */

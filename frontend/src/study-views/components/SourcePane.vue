@@ -43,7 +43,8 @@ const capabilities = views.capabilities;
 const id = useId();
 
 type Zoom = "fit" | "full";
-const ZOOM_KEY = "pkdb-curation:source-zoom";
+/** Where the zoom is kept, below the storage prefix of the page. */
+const ZOOM_KEY = `${views.storagePrefix}:source-zoom`;
 
 /** The zoom of the image of this viewer, which the page keeps without storage too. */
 function storedZoom(): Zoom {

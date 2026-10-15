@@ -125,6 +125,20 @@ def install_browser_security(app, *, origin, secure=True):
     app.include_router(router)
 
 
+class SessionCookieRejected(AuthenticationFailed):
+    """The session cookie of a request names no valid session."""
+
+
+def delete_session_cookie(response, request):
+    response.delete_cookie(
+        request.app.state.session_cookie_name,
+        path="/",
+        secure=request.app.state.secure_cookies,
+        httponly=True,
+        samesite="lax",
+    )
+
+
 def set_cookie(response, request, name, value, *, max_age):
     response.set_cookie(
         name,
@@ -198,13 +212,7 @@ def logout(request: Request):
     principal = actor(request)
     perform(request, "revoke_session", principal, principal.credential_id)
     response = Response(status_code=204)
-    response.delete_cookie(
-        request.app.state.session_cookie_name,
-        path="/",
-        secure=request.app.state.secure_cookies,
-        httponly=True,
-        samesite="lax",
-    )
+    delete_session_cookie(response, request)
     return response
 
 

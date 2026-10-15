@@ -269,7 +269,7 @@ a.study-identity:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .study-row-title {
@@ -295,7 +295,7 @@ a.study-identity:hover {
    ellipsis. */
 .cell-problems .cell-chips {
   flex-wrap: nowrap;
-  max-width: 14rem;
+  max-width: calc(14 * var(--study-rem, 1rem));
 }
 .cell-problems .cell-chips > * {
   flex: none;
@@ -306,7 +306,7 @@ a.study-identity:hover {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .cell-release,
@@ -330,7 +330,7 @@ a.study-identity:hover {
 /* Avatars overlap a little, each with a ring of the surface color. */
 .curator {
   border: 1px solid rgb(var(--v-theme-surface));
-  font-size: 0.6875rem;
+  font-size: calc(0.6875 * var(--study-rem, 1rem));
   font-weight: 700;
 }
 .curator + .curator,
@@ -352,7 +352,7 @@ a.study-identity:hover {
   border: 1px solid rgb(var(--v-theme-surface));
   border-radius: 11px;
   background: rgba(var(--v-theme-on-surface), 0.08);
-  font-size: 0.6875rem;
+  font-size: calc(0.6875 * var(--study-rem, 1rem));
   font-weight: 700;
 }
 </style>

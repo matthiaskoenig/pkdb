@@ -37,4 +37,12 @@ describe("the shared study header", () => {
     expect(wrapper.get(".study-header-line > .page-actions").text()).toBe("Actions");
     expect(wrapper.get(".study-header > .page-notice").text()).toBe("Notice");
   });
+
+  it("lets its page move the focus to the identity of the study, which is no Tab stop", () => {
+    const wrapper = mountViews(StudyHeader, {
+      context: viewsContext({ data: memoryData({ detail: DETAIL }) }),
+      props: { detail: DETAIL },
+    });
+    expect(wrapper.get("h1.study-identity").attributes("tabindex")).toBe("-1");
+  });
 });

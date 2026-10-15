@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pdfjsFiles, pdfjsNotice } from "../../vite.curation.config";
+import { pdfjsFiles, pdfjsNotice } from "../../scripts/pdfjs-assets";
 
 describe("the files of PDF.js in the build of the curation app", () => {
   it("copies the worker, the character maps, the standard fonts and the JavaScript decoders with their licenses", () => {

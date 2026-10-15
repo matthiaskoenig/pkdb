@@ -1,0 +1,261 @@
+{
+  "id": "drug/Format2Fixture",
+  "audience": "public",
+  "summary": {
+    "title": "Artificial study format 2 fixture",
+    "curators": [
+      "curator"
+    ],
+    "creator": "curator",
+    "release": {
+      "pkdb_id": "PKDB09901",
+      "date": "2026-09-28"
+    },
+    "provenance": {
+      "kind": "manual_curation"
+    },
+    "ai": false
+  },
+  "metadata": {
+    "format": 2,
+    "reference": {
+      "pmid": "99001"
+    },
+    "creator": "curator",
+    "curators": [
+      {
+        "user": "curator"
+      }
+    ],
+    "collaborators": [],
+    "licence": "open",
+    "access": "public",
+    "provenance": {
+      "kind": "manual_curation"
+    },
+    "release": {
+      "pkdb_id": "PKDB09901",
+      "date": "2026-09-28"
+    },
+    "descriptions": [
+      "Plasma levels in mg/l."
+    ],
+    "comments": [],
+    "notes": {}
+  },
+  "review": null,
+  "reference": {
+    "sid": "99001",
+    "pmid": "99001",
+    "doi": null,
+    "title": "Artificial study format 2 fixture",
+    "journal": null,
+    "abstract": null,
+    "publication_date": null,
+    "authors": []
+  },
+  "reference_match": true,
+  "acknowledged": [],
+  "sources": [
+    {
+      "source": "Fig1",
+      "kind": "figure",
+      "image": null,
+      "raw": null,
+      "raw_kind": null,
+      "tables": [
+        "timecourses_Fig1.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": null
+    },
+    {
+      "source": "Tab1",
+      "kind": "table",
+      "image": null,
+      "raw": null,
+      "raw_kind": null,
+      "tables": [
+        "subjects.tsv",
+        "characteristica.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": null
+    },
+    {
+      "source": "Tab2",
+      "kind": "table",
+      "image": null,
+      "raw": null,
+      "raw_kind": null,
+      "tables": [
+        "outputs_Tab2.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": null
+    },
+    {
+      "source": "Text",
+      "kind": "text",
+      "image": null,
+      "raw": null,
+      "raw_kind": null,
+      "tables": [
+        "interventions.tsv"
+      ],
+      "missing_image": null,
+      "missing_raw": null,
+      "image_url": null
+    }
+  ],
+  "files": [],
+  "papers": [],
+  "tables": [
+    {
+      "file": "subjects.tsv",
+      "kind": "subjects",
+      "info": "subjects",
+      "source": null,
+      "rows": 1
+    },
+    {
+      "file": "characteristica.tsv",
+      "kind": "characteristica",
+      "info": "subjects",
+      "source": null,
+      "rows": 3
+    },
+    {
+      "file": "interventions.tsv",
+      "kind": "interventions",
+      "info": "interventions",
+      "source": null,
+      "rows": 2
+    },
+    {
+      "file": "outputs_Tab2.tsv",
+      "kind": "outputs",
+      "info": "data",
+      "source": "Tab2",
+      "rows": 3
+    },
+    {
+      "file": "timecourses_Fig1.tsv",
+      "kind": "timecourses",
+      "info": "data",
+      "source": "Fig1",
+      "rows": 6
+    }
+  ],
+  "table_kinds": [
+    {
+      "kind": "subjects",
+      "label": "Subjects",
+      "info": "subjects",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "characteristica",
+      "label": "Characteristica",
+      "info": "subjects",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "interventions",
+      "label": "Interventions",
+      "info": "interventions",
+      "per_source": false,
+      "addable": false
+    },
+    {
+      "kind": "outputs",
+      "label": "Outputs",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "timecourses",
+      "label": "Timecourses",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "scatters",
+      "label": "Scatters",
+      "info": "data",
+      "per_source": true,
+      "addable": true
+    },
+    {
+      "kind": "raw",
+      "label": "Raw table",
+      "info": "raw",
+      "per_source": true,
+      "addable": true
+    }
+  ],
+  "targets": {},
+  "name_lines": {
+    "subjects": {
+      "file": "subjects.tsv",
+      "lines": {
+        "all": 1
+      }
+    },
+    "interventions": {
+      "file": "interventions.tsv",
+      "lines": {
+        "D1": 1,
+        "D2": 2
+      }
+    }
+  },
+  "substances": [
+    "drug",
+    "drug-b"
+  ],
+  "people": {
+    "creator": {
+      "username": "curator",
+      "display_name": "curator",
+      "affiliation": null,
+      "title": null,
+      "github": null,
+      "github_provenance": null,
+      "orcid": null,
+      "orcid_provenance": null,
+      "avatar_url": "/api/v1/avatars/default.svg"
+    },
+    "curators": [
+      {
+        "user": "curator",
+        "rating": null,
+        "profile": {
+          "username": "curator",
+          "display_name": "curator",
+          "affiliation": null,
+          "title": null,
+          "github": null,
+          "github_provenance": null,
+          "orcid": null,
+          "orcid_provenance": null,
+          "avatar_url": "/api/v1/avatars/default.svg"
+        }
+      }
+    ],
+    "collaborators": []
+  },
+  "issue": null,
+  "problems": [],
+  "counts": {
+    "errors": 0,
+    "warnings": 0
+  }
+}

@@ -1,8 +1,11 @@
 """Artificial studies shared by browser and API contract tests.
 
 `FRONTEND_SCOPE` is a public study format 1 study. `drug/Format2Fixture` is a
-study format 2 study that stays private to its curators, so the anonymous
-search of the browser tests sees one study only.
+study format 2 study that stays private to its curators. The browser fixture adds
+`drug/Format2Public`, a public copy with the study pages of the website (#963),
+which the anonymous search sees as a second study, and `drug/Format2Legacy`,
+which it keeps without stored views, as a study uploaded before those pages, so
+that it shows on the record page.
 """
 
 from pathlib import Path
@@ -12,6 +15,80 @@ from pkdb.schemas.source import SourceBundle
 FORMAT2_SID = "drug/Format2Fixture"
 FORMAT2_PKDB_ID = "PKDB09901"
 FORMAT2_ISSUE = 2158
+FORMAT2_PMID = "99001"
+#: A public study format 2 study with the study pages of the website (#963), which visitors read.
+FORMAT2_PUBLIC_SID = "drug/Format2Public"
+FORMAT2_PUBLIC_PKDB_ID = "PKDB09903"
+FORMAT2_PUBLIC_ISSUE = 2160
+FORMAT2_PUBLIC_PMID = "99003"
+#: A second study format 2 study, which the browser fixture keeps as uploaded before the study
+#: pages of the website (#963): without stored views, so it shows on the record page.
+FORMAT2_LEGACY_SID = "drug/Format2Legacy"
+FORMAT2_LEGACY_PKDB_ID = "PKDB09902"
+FORMAT2_LEGACY_ISSUE = 2159
+FORMAT2_LEGACY_PMID = "99002"
+#: The width and height of the image of each source of a format 2 fixture study.
+FORMAT2_IMAGES = {"Tab1": (240, 120), "Tab2": (320, 160), "Fig1": (400, 300)}
+
+
+def fixture_pdf(text: str) -> bytes:
+    """A one-page PDF that shows `text` in Helvetica, the same bytes on every call."""
+    stream = f"BT /F1 24 Tf 72 720 Td ({text}) Tj ET".encode("ascii")
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream",
+    ]
+    out = bytearray(b"%PDF-1.4\n")
+    offsets = []
+    for number, body in enumerate(objects, start=1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n" % number + body + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n" % (len(objects) + 1)
+    out += b"0000000000 65535 f \n"
+    for offset in offsets:
+        out += b"%010d 00000 n \n" % offset
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (
+        len(objects) + 1,
+        xref,
+    )
+    return bytes(out)
+
+
+def fixture_png(size: tuple[int, int]) -> bytes:
+    """A PNG image of `size` in a light teal with a darker frame, the same bytes on every call."""
+    from io import BytesIO
+
+    from PIL import Image, ImageDraw
+
+    image = Image.new("RGB", size, (236, 243, 244))
+    ImageDraw.Draw(image).rectangle(
+        (0, 0, size[0] - 1, size[1] - 1), outline=(23, 107, 112), width=2
+    )
+    buffer = BytesIO()
+    image.save(buffer, "PNG")
+    return buffer.getvalue()
+
+
+def forget_views(session, sid: str) -> None:
+    """Make `sid` a study uploaded before the study pages of the website (#963): without stored
+    views and without the texts of its JSON files."""
+    from sqlalchemy import delete, select, update
+
+    from pkdb_server.db.models.studies import Study
+    from pkdb_server.db.models.views import StudyView
+
+    study_id = session.scalar(select(Study.id).where(Study.sid == sid))
+    session.execute(delete(StudyView).where(StudyView.study_id == study_id))
+    session.execute(
+        update(Study)
+        .where(Study.id == study_id)
+        .values(study_json=None, reference_json=None)
+    )
 
 
 def frontend_search_bundle(*, related=False, sid="FRONTEND_SCOPE"):
@@ -186,13 +263,22 @@ def add_frontend_plot_context(session):
         session.flush()
 
 
-def write_frontend_format2_study(root: Path) -> Path:
-    """The study format 2 folder `drug/Format2Fixture`, formatted as curators keep it.
+def write_frontend_format2_study(
+    root: Path,
+    sid: str = FORMAT2_SID,
+    *,
+    pkdb_id: str = FORMAT2_PKDB_ID,
+    issue: int = FORMAT2_ISSUE,
+    pmid: str = FORMAT2_PMID,
+    access: str = "private",
+) -> Path:
+    """The study format 2 folder `sid`, formatted as curators keep it.
 
-    It is released as PKDB09901, under review with one open and one resolved
-    item and has an issue. Its interventions show a regular and an irregular
-    schedule, its measurements and timecourses arithmetic and geometric
-    statistics.
+    It is released as `pkdb_id`, under review with one open and one resolved item, has the
+    issue `issue` and the access `access` with an open licence. Its interventions show a regular
+    and an irregular schedule, its measurements and timecourses arithmetic and geometric
+    statistics. It has a one-page paper, an image of each source (FORMAT2_IMAGES) and the raw
+    table of Tab2.
     """
     from pkdb.studyformat.formatter import format_folder
     from pkdb.studyformat.jsonio import dump_json
@@ -205,8 +291,8 @@ def write_frontend_format2_study(root: Path) -> Path:
             names, [tuple(row.get(name, "") for name in names) for row in rows]
         )
 
-    name = FORMAT2_SID.split("/")[1]
-    folder = root / FORMAT2_SID
+    name = sid.split("/")[1]
+    folder = root / sid
     folder.mkdir(parents=True)
     item = {
         "kind": "question",
@@ -219,21 +305,21 @@ def write_frontend_format2_study(root: Path) -> Path:
         "study.json": dump_json(
             {
                 "format": 2,
-                "reference": {"pmid": "99001"},
+                "reference": {"pmid": pmid},
                 "creator": "curator",
                 "curators": [{"user": "curator", "rating": 3}],
                 "licence": "open",
-                "access": "private",
-                "issue": FORMAT2_ISSUE,
-                "release": {"pkdb_id": FORMAT2_PKDB_ID, "date": "2026-09-28"},
+                "access": access,
+                "issue": issue,
+                "release": {"pkdb_id": pkdb_id, "date": "2026-09-28"},
                 "descriptions": ["Plasma levels in mg/l."],
             }
         ),
         "reference.json": dump_json(
             {
-                "sid": "99001",
+                "sid": pmid,
                 "name": name,
-                "pmid": "99001",
+                "pmid": pmid,
                 "title": "Artificial study format 2 fixture",
             }
         ),
@@ -358,8 +444,14 @@ def write_frontend_format2_study(root: Path) -> Path:
     }
     for file, text in files.items():
         (folder / file).write_text(text, encoding="utf-8", newline="")
-    (folder / f"{name}.pdf").write_bytes(b"%PDF-1.4 fixture")
-    for source in ("Tab1", "Tab2", "Fig1"):
-        (folder / f"{name}_{source}.png").write_bytes(b"png " + source.encode())
+    # The paper table Tab2 as printed, which only curators see.
+    (folder / f"{name}_Tab2.tsv").write_text(
+        "Time (h)\tConcentration (mg/l)\n1\t2\n2\t4\n4\t3\n",
+        encoding="utf-8",
+        newline="",
+    )
+    (folder / f"{name}.pdf").write_bytes(fixture_pdf(f"{name} paper"))
+    for source, size in FORMAT2_IMAGES.items():
+        (folder / f"{name}_{source}.png").write_bytes(fixture_png(size))
     assert format_folder(folder).ok
     return folder

@@ -16,9 +16,11 @@ export const useSessionStore = defineStore("session", () => {
   let request = 0;
   cleanLegacyCredentials();
   function invalidate() {
+    // Readers read again on a new epoch; a 401 while already signed out
+    // changes nothing, so it must not make them read again without end.
+    if (profile.value !== null || !ready.value) epoch.value++;
     error.value = "";
     request++;
-    epoch.value++;
     profile.value = null;
     ready.value = true;
     loading.value = false;

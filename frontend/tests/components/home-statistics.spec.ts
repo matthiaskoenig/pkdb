@@ -6,7 +6,7 @@ import { useSessionStore } from "../../src/stores/session";
 import HomeStatistics from "../../src/features/home/HomeStatistics.vue";
 import * as statistics from "../../src/features/home/statistics";
 import { decodeLocation } from "../../src/features/search/codec";
-import { deferred } from "../unit/account-fixtures";
+import { deferred, profileFixture } from "../unit/account-fixtures";
 enableAutoUnmount(afterEach);
 let pinia = createPinia();
 const data = {
@@ -86,6 +86,7 @@ describe("permission-scoped home database statistics", () => {
     vi.mocked(statistics.fetchStatistics).mockReturnValueOnce(old.promise);
     const session = useSessionStore();
     session.ready = true;
+    session.profile = profileFixture();
     const wrapper = await mounted();
     session.invalidate();
     await flushPromises();

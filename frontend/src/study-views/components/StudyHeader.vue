@@ -54,8 +54,9 @@ const reviewStatus = computed(() => props.detail.review.value?.status ?? summary
 <template>
   <header class="study-header">
     <div class="study-header-line">
-      <!-- A long identity wraps after the slash rather than inside a name. -->
-      <h1 class="study-identity">{{ substance }}/<wbr />{{ name }}</h1>
+      <!-- A long identity wraps after the slash rather than inside a name. Its page may move the
+           focus to it, as the website does when a study shows; it is no Tab stop. -->
+      <h1 class="study-identity" tabindex="-1">{{ substance }}/<wbr />{{ name }}</h1>
       <template v-if="release || issue || provenance">
         <VChip
           v-if="release"
@@ -187,6 +188,10 @@ const reviewStatus = computed(() => props.detail.review.value?.status ?? summary
   line-height: 1.3;
   overflow-wrap: anywhere;
 }
+/* The identity takes the focus when its page shows a study; it is no control, so it has no ring. */
+.study-identity:focus {
+  outline: none;
+}
 .header-chip {
   border-color: rgba(var(--v-theme-on-surface), 0.3);
 }
@@ -195,14 +200,14 @@ const reviewStatus = computed(() => props.detail.review.value?.status ?? summary
    to 4rem. */
 .study-title-box {
   display: flex;
-  flex: 1 1 8rem;
+  flex: 1 1 calc(8 * var(--study-rem, 1rem));
   align-items: baseline;
   gap: 6px;
   min-width: 0;
 }
 .study-title {
   flex: 0 1000 auto;
-  min-width: min(4rem, 100%);
+  min-width: min(calc(4 * var(--study-rem, 1rem)), 100%);
   margin: 0;
   overflow: hidden;
   font-size: 12.5px;

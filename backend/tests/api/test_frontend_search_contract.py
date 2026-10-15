@@ -500,3 +500,140 @@ def test_value_ordering_uses_the_mean_else_the_median_else_the_geometric_mean(
     assert values("interventions", "-central_value") == sorted(
         values("interventions", "central_value"), reverse=True
     )
+
+
+def _set_format2_access(session_factory, access):
+    from sqlalchemy import update
+
+    from pkdb_server.db.models.studies import Study
+    from tests.fixtures.frontend_search import FORMAT2_SID
+
+    with session_factory.begin() as session:
+        session.execute(
+            update(Study).where(Study.sid == FORMAT2_SID).values(access=access)
+        )
+
+
+def _website_answers(client, headers=None):
+    """The answers of the study view routes for the format 2 fixture study, by name."""
+    from tests.fixtures.frontend_search import FORMAT2_SID
+
+    view = f"/api/v2/studies/{FORMAT2_SID}/view"
+    paths = {
+        "study-rows": "/api/v2/study-rows",
+        "study": view,
+        "table": f"{view}/tables/outputs_Tab2.tsv",
+        "source": f"{view}/sources/Fig1",
+    }
+    answers = {}
+    for name, path in paths.items():
+        response = client.get(path, headers=headers or {})
+        assert response.status_code == 200, (path, response.text)
+        answers[name] = response.json()
+    return answers
+
+
+def test_website_contract_of_a_curator(client, creator_headers, format2_study):
+    from tests.fixtures.website_contract import check_contract
+
+    for name, answer in _website_answers(client, creator_headers).items():
+        check_contract(f"{name}-curator", answer)
+
+
+def test_website_contract_of_the_public(client, session_factory, format2_study):
+    from tests.fixtures.website_contract import check_contract
+
+    _set_format2_access(session_factory, "public")
+    for name, answer in _website_answers(client).items():
+        check_contract(f"{name}-public", answer)
+
+
+def test_format2_fixture_has_a_paper_images_and_a_raw_table_for_curators(
+    client, creator_headers, format2_study
+):
+    from tests.fixtures.frontend_search import FORMAT2_IMAGES, FORMAT2_SID
+
+    view = f"/api/v2/studies/{FORMAT2_SID}/view"
+    page = client.get(view, headers=creator_headers).json()
+    [paper] = page["papers"]
+    assert paper["file"] == "Format2Fixture.pdf"
+    pdf = client.get(paper["url"], headers=creator_headers)
+    assert pdf.status_code == 200
+    assert pdf.content.startswith(b"%PDF-1.4\n")
+    assert pdf.content.rstrip().endswith(b"%%EOF")
+    for source, size in FORMAT2_IMAGES.items():
+        answer = client.get(f"{view}/sources/{source}", headers=creator_headers)
+        assert answer.json()["image_size"] == list(size), source
+    raw = {entry["file"] for entry in page["tables"] if entry["kind"] == "raw"}
+    assert raw == {"Format2Fixture_Tab2.tsv"}
+
+
+def test_a_format2_study_without_views_has_its_record_only(
+    client, creator_headers, ingestion_context, session_factory, tmp_path, format2_study
+):
+    from tests.fixtures.frontend_search import (
+        FORMAT2_LEGACY_ISSUE,
+        FORMAT2_LEGACY_PKDB_ID,
+        FORMAT2_LEGACY_PMID,
+        FORMAT2_LEGACY_SID,
+        FORMAT2_SID,
+        forget_views,
+        write_frontend_format2_study,
+    )
+
+    ingestion, creator = ingestion_context
+    folder = write_frontend_format2_study(
+        tmp_path / "legacy",
+        FORMAT2_LEGACY_SID,
+        pkdb_id=FORMAT2_LEGACY_PKDB_ID,
+        issue=FORMAT2_LEGACY_ISSUE,
+        pmid=FORMAT2_LEGACY_PMID,
+    )
+    ingestion.replace(folder, creator)
+    view = f"/api/v2/studies/{FORMAT2_LEGACY_SID}/view"
+    assert client.get(view, headers=creator_headers).status_code == 200
+    with session_factory.begin() as session:
+        forget_views(session, FORMAT2_LEGACY_SID)
+    assert client.get(view, headers=creator_headers).status_code == 404
+    record = client.get(
+        f"/api/v1/studies/{FORMAT2_LEGACY_SID}/", headers=creator_headers
+    )
+    assert record.status_code == 200, record.text
+    assert record.json()["pkdb_id"] == FORMAT2_LEGACY_PKDB_ID
+    rows = client.get("/api/v2/study-rows", headers=creator_headers).json()["rows"]
+    assert [row["id"] for row in rows] == [FORMAT2_SID]
+
+
+def test_a_public_format2_study_shows_its_public_view_to_visitors(
+    client, creator_headers, ingestion_context, tmp_path, format2_study
+):
+    from tests.fixtures.frontend_search import (
+        FORMAT2_PUBLIC_ISSUE,
+        FORMAT2_PUBLIC_PKDB_ID,
+        FORMAT2_PUBLIC_PMID,
+        FORMAT2_PUBLIC_SID,
+        FORMAT2_SID,
+        write_frontend_format2_study,
+    )
+
+    ingestion, creator = ingestion_context
+    folder = write_frontend_format2_study(
+        tmp_path / "public",
+        FORMAT2_PUBLIC_SID,
+        pkdb_id=FORMAT2_PUBLIC_PKDB_ID,
+        issue=FORMAT2_PUBLIC_ISSUE,
+        pmid=FORMAT2_PUBLIC_PMID,
+        access="public",
+    )
+    ingestion.replace(folder, creator)
+    visitor = client.get("/api/v2/study-rows").json()["rows"]
+    assert [(row["id"], row["curator"]) for row in visitor] == [
+        (FORMAT2_PUBLIC_SID, False)
+    ]
+    page = client.get(f"/api/v2/studies/{FORMAT2_PUBLIC_SID}/view").json()
+    assert (page["audience"], page["papers"], page["issue"]) == ("public", [], None)
+    curator = client.get("/api/v2/study-rows", headers=creator_headers).json()["rows"]
+    assert [(row["id"], row["curator"]) for row in curator] == [
+        (FORMAT2_SID, True),
+        (FORMAT2_PUBLIC_SID, True),
+    ]

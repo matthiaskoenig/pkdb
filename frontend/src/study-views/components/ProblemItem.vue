@@ -221,7 +221,7 @@ const describedBy = computed(() =>
   padding: 0 6px;
   border-radius: 4px;
   background-color: rgba(var(--v-theme-on-surface), 0.08);
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
@@ -242,7 +242,7 @@ const describedBy = computed(() =>
 }
 .problem-actions :deep(.v-btn__prepend) {
   justify-content: center;
-  width: 1rem;
+  width: var(--study-rem, 1rem);
   margin-inline: 0 8px;
 }
 </style>

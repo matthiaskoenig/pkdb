@@ -16,6 +16,8 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await expect(page.getByRole("heading", { name: "How to cite", exact: true })).toHaveCount(0);
   const desktop = page.getByRole("navigation", { name: "Main navigation", exact: true });
   await expect(desktop.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
+  // Studies comes first, before Explore data.
+  expect((await desktop.getByRole("link").allInnerTexts()).slice(0, 2)).toEqual(["Studies", "Explore data"]);
   await page.screenshot({ path: testInfo.outputPath("landing-desktop.png"), fullPage: true });
   await page.getByRole("button", { name: "Toggle color theme" }).click();
   await expect(heroLogo).toHaveCSS("background-color", "rgb(255, 255, 255)");
@@ -26,9 +28,11 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open navigation" }).click();
   const mobile = page.getByRole("navigation", { name: "Mobile navigation" });
-  for (const name of ["Explore data", "Vocabulary", "Documentation", "API", "Account"]) {
+  const names = ["Studies", "Explore data", "Vocabulary", "Documentation", "API", "Account"];
+  for (const name of names) {
     await expect(mobile.getByRole("link", { name, exact: true })).toBeVisible();
   }
+  expect((await mobile.getByRole("link").allInnerTexts()).map((text) => text.trim())).toEqual(names);
   await expect(mobile.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
   await mobile.getByRole("link", { name: "Vocabulary", exact: true }).click();
   await expect(mobile).not.toBeVisible();
@@ -72,7 +76,7 @@ test("login avatar appears in both navigation layouts and clears on logout", asy
 });
 
 test("release and copyright footer is shared by all page types", async ({ page }) => {
-  for (const path of ["/", "/data", "/data/PKDB00057", "/curation", "/account", "/invitation", "/registration", "/verification/example", "/request-password-reset", "/reset-password/example", "/not-a-page"]) {
+  for (const path of ["/", "/studies", "/data", "/data/PKDB00057", "/curation", "/account", "/invitation", "/registration", "/verification/example", "/request-password-reset", "/reset-password/example", "/not-a-page"]) {
     await page.goto(path);
     const footer = page.getByRole("contentinfo");
     await expect(footer).toHaveCount(1);
@@ -128,4 +132,22 @@ test("text, also in Vuetify's typography classes, is set in the bundled Inter", 
   const license = await page.request.get("/assets/Inter-LICENSE.txt");
   expect(license.status()).toBe(200);
   expect(await license.text()).toContain("SIL OPEN FONT LICENSE");
+});
+
+test("Vuetify's cascade layers keep Vuetify's order, so its components win against its reset", async ({ page }) => {
+  // The production build links the styles of shared chunks before the main file; the page names the order of the layers first.
+  await page.goto("/");
+  const declared = await page.evaluate(() => {
+    const first = document.styleSheets[0]?.cssRules[0];
+    return first instanceof CSSLayerStatementRule ? [...new Set(first.nameList.map((name) => name.split(".")[0]))] : [];
+  });
+  expect(declared.slice(0, 5)).toEqual(["vuetify-core", "vuetify-components", "vuetify-overrides", "vuetify-utilities", "vuetify-final"]);
+  // Vuetify's reset `button { font: inherit }` would give buttons the weight and the size of the text around them.
+  await expect(page.getByRole("button", { name: "Toggle color theme" })).toHaveCSS("font-weight", "500");
+  await page.goto("/account");
+  const signIn = page.getByRole("button", { name: "Sign in", exact: true });
+  await expect(signIn).toHaveCSS("font-weight", "500");
+  await expect(signIn).toHaveCSS("line-height", "normal");
+  const root = await page.evaluate(() => Number.parseFloat(getComputedStyle(document.documentElement).fontSize));
+  await expect(signIn).toHaveCSS("font-size", `${0.875 * root}px`);
 });

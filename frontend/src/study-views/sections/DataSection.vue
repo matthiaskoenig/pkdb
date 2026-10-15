@@ -493,7 +493,7 @@ defineExpose({ file });
           See <RouterLink :to="views.routes.section(identity, 'problems')">Problems</RouterLink>.</template
         >
       </p>
-      <div v-else class="data-panes">
+      <div v-else class="data-panes" :class="{ 'data-panes--sized': !props.fill && !stacked }">
         <DataNavigator
           v-if="wide"
           :detail="detail"
@@ -506,7 +506,7 @@ defineExpose({ file });
         />
         <SplitPane
           v-if="!stacked"
-          storage-key="pkdb-curation:data-split"
+          :storage-key="`${views.storagePrefix}:data-split`"
           label="Resize the source and the rows"
           class="data-split"
         >
@@ -718,6 +718,14 @@ defineExpose({ file });
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-radius: 6px;
   background: rgb(var(--v-theme-surface));
+}
+/* Side by side in a page that does not fill the window (the website): the panes take the height of
+   the window below the app bar, at least 480 px, and scroll on their own while the page scrolls
+   around them. The curation app fills the window instead (`fill`) and never gets this class. */
+.data-panes--sized {
+  flex: none;
+  height: calc(100dvh - var(--v-layout-top, 0px) - 16px);
+  min-height: 480px;
 }
 /* As wide as its longest name beside its badges, whatever font the machine draws it in (DejaVu Sans
    is about 14 % wider than Noto Sans), from 232 px up to 320 px; a longer name ends with an

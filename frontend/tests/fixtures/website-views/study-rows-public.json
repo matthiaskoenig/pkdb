@@ -1,0 +1,46 @@
+{
+  "rows": [
+    {
+      "id": "drug/Format2Fixture",
+      "name": "Format2Fixture",
+      "substance": "drug",
+      "substances": [
+        "drug"
+      ],
+      "summary": {
+        "title": "Artificial study format 2 fixture",
+        "curators": [
+          "curator"
+        ],
+        "creator": "curator",
+        "release": {
+          "pkdb_id": "PKDB09901",
+          "date": "2026-09-28"
+        },
+        "provenance": {
+          "kind": "manual_curation"
+        },
+        "ai": false
+      },
+      "counts": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "issue": null,
+      "curator": false
+    }
+  ],
+  "profiles": {
+    "curator": {
+      "username": "curator",
+      "display_name": "curator",
+      "affiliation": null,
+      "title": null,
+      "github": null,
+      "github_provenance": null,
+      "orcid": null,
+      "orcid_provenance": null,
+      "avatar_url": "/api/v1/avatars/default.svg"
+    }
+  }
+}

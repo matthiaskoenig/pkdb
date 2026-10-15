@@ -326,11 +326,11 @@ function acknowledge(issue: Problem): void {
 .problems-note,
 .problems-empty {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .problems-empty {
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
 }
 .problems-groups {
   display: flex;
@@ -354,7 +354,7 @@ function acknowledge(issue: Problem): void {
 }
 .problems-heading {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
   font-weight: 600;
   line-height: 1.5;
 }
@@ -363,7 +363,7 @@ function acknowledge(issue: Problem): void {
   flex-wrap: wrap;
   gap: 2px 16px;
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.45;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }

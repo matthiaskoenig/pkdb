@@ -6,6 +6,7 @@
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { computed, defineComponent, h, shallowRef, type Component, type Plugin } from "vue";
 import { createMemoryHistory, createRouter, type Router } from "vue-router";
+import { SEARCH_QUERY_KEYS } from "../../src/features/search/codec";
 import {
   provideStudyViews,
   type StudyCapabilities,
@@ -17,7 +18,7 @@ import {
 import { ALL_ROWS, type RowFilter } from "../../src/study-views/data";
 import { usePlotScaleChoice } from "../../src/study-views/plotScales";
 import { isSection, profileMap, studyName } from "../../src/study-views/study";
-import type { Profile, SourceView, StudyDetail, StudyRow, TableResponse } from "../../src/study-views/types";
+import type { Profile, SourceView, StudyDetail, StudyRow, TableKind, TableResponse } from "../../src/study-views/types";
 
 export const EVERYTHING: StudyCapabilities = { edit: true, curation: true, files: true, jobs: true };
 /** What a reader of the website sees of a study that they may not write. */
@@ -25,8 +26,8 @@ export const PUBLIC: StudyCapabilities = { edit: false, curation: false, files: 
 /** What a reader of the website who may write the study sees. */
 export const CURATOR: StudyCapabilities = { edit: false, curation: true, files: true, jobs: false };
 
-/** The keys of the search of the website, which its study page keeps in its query (features/search/codec.ts). */
-export const SEARCH_KEYS = ["v", "q", "scope", "tab", "page", "pageSize", "order", "tableSearch"];
+/** The keys of the search of the website, which its study page keeps in its query. */
+const SEARCH_KEYS: ReadonlySet<string> = new Set(SEARCH_QUERY_KEYS);
 
 /** Routes as the website has them: a study at `/data/<substance>/<name>/<section>` and no page of its own for a PDF. */
 export function websiteRoutes(): StudyViewRoutes {
@@ -42,7 +43,7 @@ export function websiteRoutes(): StudyViewRoutes {
       return { id: `${String(substance)}/${String(name)}`, section: isSection(section) ? section : null };
     },
     query: (current, own) => ({
-      ...Object.fromEntries(Object.entries(current).filter(([key]) => SEARCH_KEYS.includes(key))),
+      ...Object.fromEntries(Object.entries(current).filter(([key]) => SEARCH_KEYS.has(key))),
       ...own,
     }),
   };
@@ -74,6 +75,7 @@ export interface MemoryOptions {
 /** The reads of a page that holds everything in memory; a table or source that it lacks fails to load. */
 export function memoryData(options: MemoryOptions = {}): StudyViewData {
   const filters = shallowRef<ReadonlyMap<string, RowFilter>>(new Map());
+  const notesOpen = shallowRef<ReadonlySet<TableKind>>(new Set());
   const missing = (name: string) => Promise.reject(new Error(`${name} could not be loaded.`));
   // Loaded once, as every page answers the views that call it when they mount.
   const curators = Promise.resolve(options.profiles ?? []);
@@ -94,6 +96,13 @@ export function memoryData(options: MemoryOptions = {}): StudyViewData {
     setRowFilter(file, filter) {
       filters.value = new Map(filters.value).set(file, filter);
     },
+    notesOpen,
+    setNotesOpen(kind, open) {
+      const next = new Set(notesOpen.value);
+      if (open) next.add(kind);
+      else next.delete(kind);
+      notesOpen.value = next;
+    },
     validatesAfterWrite: shallowRef(true),
     plotScales: (study, view) => usePlotScaleChoice(study, view),
     rows: shallowRef(options.rows ?? []),
@@ -111,6 +120,7 @@ export function viewsContext(
     routes?: StudyViewRoutes;
     data?: StudyViewData;
     parts?: StudyViewParts;
+    storagePrefix?: string;
   } = {},
 ): StudyViewsContext {
   const capabilities = changes.capabilities ?? EVERYTHING;
@@ -119,6 +129,7 @@ export function viewsContext(
     routes: changes.routes ?? websiteRoutes(),
     data: changes.data ?? memoryData(),
     parts: changes.parts ?? { failureDetails: null },
+    storagePrefix: changes.storagePrefix ?? "pkdb-test",
   };
 }
 

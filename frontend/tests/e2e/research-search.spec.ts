@@ -6,7 +6,7 @@ test("draft changes, applied results and history stay separate", async ({
 }) => {
   await page.goto("/data");
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   const before = page.url();
   await page.getByLabel("Open licence", { exact: true }).uncheck();
@@ -18,7 +18,7 @@ test("draft changes, applied results and history stay separate", async ({
   ).toBeVisible();
   expect(page.url()).toBe(before);
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: /download/i })).toHaveCount(0);
   await expect(page.locator("a[download]")).toHaveCount(0);
@@ -31,12 +31,12 @@ test("draft changes, applied results and history stay separate", async ({
   ).toBeVisible();
   await page.goBack();
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   await expect(page.getByLabel("Open licence", { exact: true })).toBeChecked();
   await page.reload();
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
 });
 
@@ -45,7 +45,7 @@ test("all seven result tabs and independent table refinement", async ({
 }) => {
   await page.goto("/data");
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   for (const name of [
     "Studies",
@@ -65,10 +65,10 @@ test("all seven result tabs and independent table refinement", async ({
       "false",
     );
   }
-  await page.getByRole("tab", { name: "Studies 1", exact: true }).click();
+  await page.getByRole("tab", { name: "Studies 2", exact: true }).click();
   await expect(page).toHaveURL(/tab=studies/);
   await expect(
-    page.getByText("1 study in the applied selection"),
+    page.getByText("2 studies in the applied selection"),
   ).toBeVisible();
   const before = page.url();
   await page
@@ -82,11 +82,11 @@ test("all seven result tabs and independent table refinement", async ({
     page.getByText("0 studies in this table refinement"),
   ).toBeVisible();
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   await page.goBack();
   await expect(
-    page.getByText("1 study in the applied selection"),
+    page.getByText("2 studies in the applied selection"),
   ).toBeVisible();
 });
 
@@ -114,7 +114,7 @@ test("research page accessibility and narrow filter focus", async ({
 }) => {
   await page.goto("/data");
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".results-area")).toHaveAttribute(
     "aria-busy",
@@ -156,13 +156,13 @@ test("keyboard tabs and study detail return preserve applied result location", a
   page,
 }) => {
   await page.goto("/data");
-  const studies = page.getByRole("tab", { name: "Studies 1", exact: true });
+  const studies = page.getByRole("tab", { name: "Studies 2", exact: true });
   await studies.focus();
   await studies.press("ArrowRight");
   await expect(
-    page.getByRole("tab", { name: "Groups 1", exact: true }),
+    page.getByRole("tab", { name: "Groups 2", exact: true }),
   ).toBeFocused();
-  await page.getByRole("tab", { name: "Groups 1", exact: true }).press("Home");
+  await page.getByRole("tab", { name: "Groups 2", exact: true }).press("Home");
   await expect(studies).toBeFocused();
   await page.getByLabel('Search table', { exact: true }).fill('FRONTEND_SCOPE')
   await page.getByRole('button', { name: 'Apply table search', exact: true }).click()
@@ -247,7 +247,7 @@ test("researcher constructs a combined query using live vocabulary suggestions",
 }) => {
   await page.goto("/data");
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   const before = page.url();
   await page
@@ -260,7 +260,7 @@ test("researcher constructs a combined query using live vocabulary suggestions",
   await page.getByRole("option", { name: "drug-b", exact: true }).click();
   expect(page.url()).toBe(before);
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(
@@ -278,7 +278,7 @@ test("invalid manual identifiers remain editable and cannot broaden the applied 
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/data");
   await expect(
-    page.getByRole("tab", { name: "Studies 1", exact: true }),
+    page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
   const requests: string[] = [];
   page.on("request", (request) => {

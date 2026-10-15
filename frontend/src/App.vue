@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { apiBase } from "./api/client";
 import { useTheme } from "vuetify";
 import { useSessionStore } from "./stores/session";
 import { useSearchStore } from "./stores/search";
+import { studyNavEntry, type MainNavEntry } from "./router/mainNav";
 const session = useSessionStore(),
   search = useSearchStore(),
   theme = useTheme(),
   drawer = ref(false);
+const route = useRoute();
+const studyEntry = computed(() => studyNavEntry(route));
+/** Marks the entry of a study page, which vue-router does not mark (router/mainNav.ts). */
+function navMark(entry: MainNavEntry | null) {
+  return entry && studyEntry.value === entry
+    ? { class: "router-link-active", "aria-current": "true" as const }
+    : {};
+}
 const releaseVersion = __APP_VERSION__;
 const buildCommit = __APP_COMMIT__;
 const copyrightYear = new Date().getFullYear();
@@ -57,7 +67,8 @@ onMounted(() => {
         >Pharmacokinetics database</span
       ><v-spacer />
       <nav class="desktop-nav d-none d-md-flex" aria-label="Main navigation">
-        <RouterLink to="/data">Explore data</RouterLink
+        <RouterLink to="/studies" v-bind="navMark('studies')">Studies</RouterLink
+        ><RouterLink to="/data" v-bind="navMark('data')">Explore data</RouterLink
         ><RouterLink to="/curation">Vocabulary</RouterLink
         ><a href="https://matthiaskoenig.github.io/pkdb">Documentation</a
         ><a :href="`${apiBase}/docs`">API</a
@@ -88,11 +99,13 @@ onMounted(() => {
       >
         <RouterLink
           v-for="link in [
-            { to: '/data', text: 'Explore data' },
-            { to: '/curation', text: 'Vocabulary' },
+            { to: '/studies', text: 'Studies', entry: 'studies' as const },
+            { to: '/data', text: 'Explore data', entry: 'data' as const },
+            { to: '/curation', text: 'Vocabulary', entry: null },
           ]"
           :key="link.to"
           :to="link.to"
+          v-bind="navMark(link.entry)"
           @click="drawer = false"
         >
           {{ link.text }} </RouterLink

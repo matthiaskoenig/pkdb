@@ -73,7 +73,11 @@ for (const theme of ["light", "dark"] as const) {
     await expect(studyRows(page)).toHaveCount(3, { timeout: VALIDATED_MS });
 
     await studyRow(page, "caffeine/Draft2021").getByRole("link", { name: "caffeine/Draft2021" }).hover();
-    await expect(page.getByRole("tooltip")).toHaveText(/^\s*caffeine\/Draft2021\s*\+ midazolam\s*$/);
+    const tooltip = page.getByRole("tooltip");
+    await expect(tooltip).toHaveText(/^\s*caffeine\/Draft2021\s*\+ midazolam\s*$/);
+    // Once it faded in: the transition starts a frame after the text shows, so that an
+    // earlier check could measure the contrast of the half transparent tooltip.
+    await expect(tooltip).toHaveCSS("opacity", "1");
     await expectAccessible(page);
   });
 }

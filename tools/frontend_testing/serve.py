@@ -31,8 +31,17 @@ def main():
             "Fixture loader only accepts the isolated frontend test database"
         )
     from frontend_search import (
+        FORMAT2_LEGACY_ISSUE,
+        FORMAT2_LEGACY_PKDB_ID,
+        FORMAT2_LEGACY_PMID,
+        FORMAT2_LEGACY_SID,
+        FORMAT2_PUBLIC_ISSUE,
+        FORMAT2_PUBLIC_PKDB_ID,
+        FORMAT2_PUBLIC_PMID,
+        FORMAT2_PUBLIC_SID,
         add_frontend_plot_context,
         add_frontend_vocabulary,
+        forget_views,
         frontend_search_bundle,
         publish_frontend_fixture,
         write_frontend_format2_study,
@@ -117,15 +126,40 @@ def main():
                     .values(access="private")
                 )
             ingestion.replace(frontend_search_bundle(), principal)
-            # A study format 2 study, released and under review, which only its
-            # curators read; the anonymous search keeps seeing one study.
+            # Three study format 2 studies, released and under review, curated by
+            # `curator`: Format2Fixture is private, Format2Public public (the anonymous
+            # search sees it and FRONTEND_SCOPE), and Format2Legacy, private, loses its
+            # stored views, as a study uploaded before the study pages of the website,
+            # and shows on the record page. No test changes their access.
             with tempfile.TemporaryDirectory() as sources:
                 ingestion.replace(
                     write_frontend_format2_study(Path(sources)), principal
                 )
+                ingestion.replace(
+                    write_frontend_format2_study(
+                        Path(sources),
+                        FORMAT2_PUBLIC_SID,
+                        pkdb_id=FORMAT2_PUBLIC_PKDB_ID,
+                        issue=FORMAT2_PUBLIC_ISSUE,
+                        pmid=FORMAT2_PUBLIC_PMID,
+                        access="public",
+                    ),
+                    principal,
+                )
+                ingestion.replace(
+                    write_frontend_format2_study(
+                        Path(sources),
+                        FORMAT2_LEGACY_SID,
+                        pkdb_id=FORMAT2_LEGACY_PKDB_ID,
+                        issue=FORMAT2_LEGACY_ISSUE,
+                        pmid=FORMAT2_LEGACY_PMID,
+                    ),
+                    principal,
+                )
             with factory.begin() as session:
                 publish_frontend_fixture(session)
                 add_frontend_plot_context(session)
+                forget_views(session, FORMAT2_LEGACY_SID)
             factory.kw["bind"].dispose()
 
     asyncio.run(seed())

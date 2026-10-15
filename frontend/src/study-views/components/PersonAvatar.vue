@@ -36,7 +36,7 @@ const initials = computed(() =>
   object-fit: cover;
 }
 .person-avatar-initials {
-  font-size: 0.75rem;
+  font-size: calc(0.75 * var(--study-rem, 1rem));
   font-weight: 600;
 }
 </style>

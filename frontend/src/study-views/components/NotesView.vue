@@ -22,7 +22,11 @@ const detail = views.data.detail;
 const headingId = useId();
 const bodyId = useId();
 const toggle = ref<HTMLButtonElement | null>(null);
-const open = ref(false);
+/** Open while the page keeps the notes of the kind open (`data.notesOpen`), also when this view mounts again. */
+const open = computed(() => views.data.notesOpen.value.has(props.kind));
+function setOpen(value: boolean): void {
+  views.data.setNotesOpen(props.kind, value);
+}
 
 const notes = computed(() => detail.value?.metadata.value?.notes[props.kind] ?? null);
 const descriptions = computed(() => notes.value?.descriptions ?? []);
@@ -43,7 +47,7 @@ function authorName(user: string): string {
 async function takeFocus(): Promise<void> {
   if (!props.focused || !detail.value) return;
   if (shown.value) {
-    open.value = true;
+    setOpen(true);
     await nextTick();
     toggle.value?.focus();
   }
@@ -73,7 +77,7 @@ watch(
         class="notes-view-toggle"
         :aria-expanded="open"
         :aria-controls="bodyId"
-        @click="open = !open"
+        @click="setOpen(!open)"
       >
         <!-- The space keeps the kind and the summary apart for screen readers. -->
         <span class="notes-view-title">Notes of the {{ label }}</span> <span class="notes-view-summary">{{ summary }}</span>
@@ -146,7 +150,7 @@ watch(
 }
 /* Above a long table the notes keep at most 40 % of the window and scroll on their own. */
 .notes-view-body {
-  max-height: min(40vh, 28rem);
+  max-height: min(40vh, calc(28 * var(--study-rem, 1rem)));
   overflow-y: auto;
   padding: 8px 12px 12px;
 }

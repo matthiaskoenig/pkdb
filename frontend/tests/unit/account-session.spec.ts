@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, disposePinia, setActivePinia } from "pinia";
+import { watch } from "vue";
 import {
   AxiosError,
   AxiosHeaders,
@@ -122,6 +123,46 @@ describe("session and API ownership", () => {
     pending.complete();
     await rejected;
     expect(store.profile.username).toBe("new-account");
+  });
+  it("raises the epoch on invalidation only when the session changes", () => {
+    const store = useSessionStore();
+    store.invalidate();
+    expect([store.epoch, store.ready]).toEqual([1, true]);
+    store.invalidate();
+    expect(store.epoch).toBe(1);
+    store.profile = profileFixture();
+    store.invalidate();
+    expect([store.epoch, store.profile]).toEqual([2, null]);
+    store.invalidate();
+    expect(store.epoch).toBe(2);
+  });
+  it("reads nothing again for repeated 401s while signed out", async () => {
+    let requests = 0;
+    api.defaults.adapter = async (config) => {
+      requests++;
+      throw new AxiosError(
+        "Unauthorized",
+        "ERR_BAD_REQUEST",
+        config,
+        undefined,
+        { ...response(config, {}), status: 401 },
+      );
+    };
+    const store = useSessionStore();
+    const epochs: number[] = [];
+    watch(
+      () => store.epoch,
+      (epoch) => {
+        epochs.push(epoch);
+        // A reader that reads again on every new epoch, as the pages do;
+        // bounded, so that an endless loop fails instead of hanging.
+        if (requests < 10) void api.get("/api/v1/filter/").catch(() => {});
+      },
+      { flush: "sync" },
+    );
+    await expect(api.get("/api/v1/filter/")).rejects.toThrow("Unauthorized");
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect([requests, epochs, store.status]).toEqual([2, [1], "anonymous"]);
   });
   it("accepts nullable optional profile references but rejects an unknown privilege", () => {
     expect(
