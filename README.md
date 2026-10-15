@@ -40,7 +40,7 @@ PK-DB is developed by the [Systems Medicine of the Liver Group](https://livermet
 
 ## Browse and access data
 
-Open [beta.pk-db.com](https://beta.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](docs/web-interface.md).
+Open [beta.pk-db.com](https://beta.pk-db.com) and choose **Studies** to browse the curated studies or **Explore data** to search studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](docs/web-interface.md).
 
 ## Example study
 
