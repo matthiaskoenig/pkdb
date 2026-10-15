@@ -627,9 +627,12 @@ PLASMA = "all · D150 · concentration · caffeine · plasma"
 URINE = "all · D150 · concentration · caffeine · urine"
 
 
-def _add_outputs_figure(workspace: Path) -> None:
+def _add_outputs_figure(workspace: Path, *, one_time: bool = False) -> None:
     """Fig2 of Draft2021: an outputs table whose rows have a time, as a time profile of a paper
-    has them, with one row without a time, and an image (a copy of Fig1 of Demo2020)."""
+    has them, with one row without a time, and an image (a copy of Fig1 of Demo2020).
+
+    With `one_time`, each series has one row at one time, as a figure of outputs over another x has them.
+    """
     study = workspace / DRAFT
     header = (study / "outputs_Tab1.tsv").read_text(encoding="utf-8").splitlines()[0]
 
@@ -660,6 +663,8 @@ def _add_outputs_figure(workspace: Path) -> None:
         row("concentration", "urine", "2", "12"),
         row("concentration", "urine", "4", "20"),
     ]
+    if one_time:
+        rows = [rows[0], rows[3], rows[6]]
     (study / "outputs_Fig2.tsv").write_text(
         "\n".join([header, *rows]) + "\n", encoding="utf-8", newline=""
     )
@@ -686,3 +691,16 @@ def test_outputs_source_contract(workspace, engine_on):
     ]
     assert list(view["unmatched"]) == [PLASMA, URINE]
     check_contract("source-outputs-fig2", view)
+
+
+def test_outputs_source_at_one_time_contract(workspace, engine_on):
+    """The source view of Fig2 of Draft2021 whose outputs series have one time each: the x of
+    the figure is not time, so the plot of mapped rows draws none of them."""
+    _add_outputs_figure(workspace, one_time=True)
+    formatted = format_folder(workspace / DRAFT, check=True)
+    assert formatted.ok and not formatted.changes
+    view = engine_on(workspace).study_source(DRAFT, "Fig2")
+    assert view["layout"] == "side_by_side"
+    assert not view["points"] and not view["unmatched"]
+    assert [len(table["rows"]) for table in view["mapped"]] == [3]
+    check_contract("source-outputs-one-time", view)
