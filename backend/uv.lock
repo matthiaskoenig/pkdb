@@ -1442,7 +1442,7 @@ wheels = [
 
 [[package]]
 name = "pkdb"
-version = "0.12.10"
+version = "0.12.11"
 source = { editable = "../python" }
 dependencies = [
     { name = "fastexcel" },
@@ -1490,7 +1490,7 @@ dev = [
 
 [[package]]
 name = "pkdb-server"
-version = "0.12.10"
+version = "0.12.11"
 source = { editable = "." }
 dependencies = [
     { name = "alembic" },
