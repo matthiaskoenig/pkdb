@@ -113,8 +113,8 @@ describe("the Studies page", () => {
     serve({ [ROWS]: rowsCurator });
     const { router, wrapper } = await open("/studies");
     wrapper.findComponent(StudyFilters).vm.$emit("update:substance", "drug");
-    await navigated();
-    expect(router.currentRoute.value.query).toEqual({ substance: "drug" });
+    // The replace of the address can take more than one task on a busy runner.
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ substance: "drug" }));
     expect(useStudyListStore().query).toEqual({ substance: "drug" });
   });
 
