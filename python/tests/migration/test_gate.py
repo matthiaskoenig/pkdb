@@ -7,6 +7,9 @@ from migration_fixtures import (
     SCATTER_OUTPUTS,
     SCATTER_SHEET,
     SHEETS,
+    SPLIT_HEADER,
+    SPLIT_OUTPUT,
+    SPLIT_ROW,
     STUDY,
     Formula,
     v1_full_example,
@@ -642,6 +645,25 @@ def test_a_characteristic_with_unmapped_numbers_names_its_own_row(
             "median 70",
         )
     ]
+
+
+def test_numbers_that_a_kept_record_of_the_row_holds_are_no_unmapped_values(
+    tmp_path, sf_vocabulary
+):
+    # The cmax record of the split row has no value and is dropped; the AUC
+    # record of the row keeps auc_pm as its error bar, and auc_sd is computed
+    # from its se, so no number is lost.
+    study = with_outputs(SPLIT_OUTPUT)
+    sheets = {**SHEETS, "Tab2": [SPLIT_HEADER, SPLIT_ROW]}
+    v1 = v1_study(tmp_path / "v1", study, sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [
+        ("error_bar", 1),
+        ("valueless_row", 1),
+    ]
+    assert column(v2 / "outputs_Tab2.tsv", "error_bar") == ["3.65"]
 
 
 def test_unmapped_numbers_are_listed_with_the_format_2_issues(tmp_path, sf_vocabulary):
