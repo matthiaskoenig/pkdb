@@ -222,13 +222,13 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
 }
 .target-heading {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
   font-weight: 600;
   line-height: 1.5;
 }
 .target-text {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   overflow-wrap: anywhere;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
@@ -240,7 +240,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null |
 }
 .target-caption {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   line-height: 1.45;
 }
 .target-link {

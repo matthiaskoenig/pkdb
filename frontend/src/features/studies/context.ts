@@ -8,6 +8,7 @@ import { computed, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref }
 import type { LocationQuery, RouteLocationNormalizedLoaded } from "vue-router";
 import type { StudyCapabilities, StudyViewData, StudyViewRoutes } from "../../study-views/context";
 import { ALL_ROWS, type RowFilter } from "../../study-views/data";
+import { COMPACT_DEFAULTS } from "../../study-views/density";
 import { usePlotScaleChoice } from "../../study-views/plotScales";
 import { isSection, profileMap, studyName } from "../../study-views/study";
 import type { Profile, StudyDetail, StudyRow, TableKind } from "../../study-views/types";
@@ -20,6 +21,17 @@ export const STUDY_ROUTE = "StudyByName";
 export const STUDIES_ROUTE = "Studies";
 /** The prefix of what the views keep in the storage of the browser on the website. */
 export const STORAGE_PREFIX = "pkdb-website";
+/** The class that gives the study pages of the website the sizes of the curation app (src/study-views/styles.css). */
+export const STUDY_VIEWS_SCOPE = "website-study-views";
+/**
+ * The compact defaults of the curation app, and the scope on the menus and tooltips that the
+ * views open: Vuetify teleports them out of the page, to the end of the document.
+ */
+export const WEBSITE_VIEW_DEFAULTS = {
+  ...COMPACT_DEFAULTS,
+  VMenu: { class: STUDY_VIEWS_SCOPE },
+  VTooltip: { class: STUDY_VIEWS_SCOPE },
+} as const;
 
 /** What a reader sees of a study: the curation and its files who may write it, nothing of them everyone else. The website writes nothing and runs no jobs. */
 export const AUDIENCE_CAPABILITIES: Record<Audience, StudyCapabilities> = {

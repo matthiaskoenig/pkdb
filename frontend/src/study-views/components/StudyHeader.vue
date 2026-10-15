@@ -200,14 +200,14 @@ const reviewStatus = computed(() => props.detail.review.value?.status ?? summary
    to 4rem. */
 .study-title-box {
   display: flex;
-  flex: 1 1 8rem;
+  flex: 1 1 calc(8 * var(--study-rem, 1rem));
   align-items: baseline;
   gap: 6px;
   min-width: 0;
 }
 .study-title {
   flex: 0 1000 auto;
-  min-width: min(4rem, 100%);
+  min-width: min(calc(4 * var(--study-rem, 1rem)), 100%);
   margin: 0;
   overflow: hidden;
   font-size: 12.5px;

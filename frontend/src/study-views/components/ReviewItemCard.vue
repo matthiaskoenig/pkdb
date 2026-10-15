@@ -98,11 +98,11 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   font-weight: 600;
 }
 .review-card-icon {
-  width: 1rem;
+  width: var(--study-rem, 1rem);
   flex: 0 0 auto;
   text-align: center;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
@@ -114,7 +114,7 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   height: 26px;
   padding: 0 10px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: calc(0.75 * var(--study-rem, 1rem));
   white-space: nowrap;
 }
 .review-card-state--warning {
@@ -131,7 +131,7 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   align-items: center;
   gap: 12px;
   margin-inline-start: auto;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .review-card-thread {
@@ -147,7 +147,7 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  font-size: 0.9375rem;
+  font-size: calc(0.9375 * var(--study-rem, 1rem));
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -155,7 +155,7 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   display: flex;
   flex-wrap: wrap;
   gap: 2px 16px;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.4;
 }
 .review-card-target,
@@ -167,7 +167,7 @@ const agentLabel = computed(() => (props.item.agent ? `Written by ${props.item.a
   overflow-wrap: anywhere;
 }
 .review-card-meta {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 </style>

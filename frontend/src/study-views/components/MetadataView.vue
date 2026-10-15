@@ -188,7 +188,7 @@ const cards = computed(() => [
    from a window of about 1400px, as high as the higher one of their row. */
 .metadata-view-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 36rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(36 * var(--study-rem, 1rem))), 1fr));
   align-items: stretch;
   gap: 12px;
 }
@@ -200,7 +200,7 @@ const cards = computed(() => [
   padding-bottom: 0;
 }
 .metadata-view-title {
-  font-size: 1rem;
+  font-size: var(--study-rem, 1rem);
   font-weight: 600;
   line-height: 1.5;
 }
@@ -228,7 +228,7 @@ const cards = computed(() => [
   font-style: italic;
 }
 .reference-line {
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
 }
 .reference-source {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));

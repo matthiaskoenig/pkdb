@@ -437,7 +437,7 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 .overlay-failure-detail {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   overflow-wrap: anywhere;
 }
 /* The overlay has the proportions of the image and is at most as wide as it, plus the frame.
@@ -545,7 +545,7 @@ onBeforeUnmount(() => {
 .overlay-data summary {
   width: fit-content;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
 }
 .overlay-data .rows-scroll {
   margin-top: 8px;

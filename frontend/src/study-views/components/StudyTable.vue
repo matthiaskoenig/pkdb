@@ -277,7 +277,7 @@ function focusOut(event: FocusEvent): void {
   /* Every header has one line height, also those of the columns whose cells set their own, so
      that the labels share a baseline. */
   line-height: 24px;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   font-weight: 600;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
@@ -336,7 +336,7 @@ th[aria-sort] .sort-base {
 }
 .study-table .cell-study {
   width: 100%;
-  min-width: 12rem;
+  min-width: calc(12 * var(--study-rem, 1rem));
 }
 .study-table .cell-select {
   width: 48px;

@@ -150,7 +150,7 @@ watch(
 }
 /* Above a long table the notes keep at most 40 % of the window and scroll on their own. */
 .notes-view-body {
-  max-height: min(40vh, 28rem);
+  max-height: min(40vh, calc(28 * var(--study-rem, 1rem)));
   overflow-y: auto;
   padding: 8px 12px 12px;
 }

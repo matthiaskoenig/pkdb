@@ -7,12 +7,18 @@ import ActionFailureAlert from "../../../study-views/components/ActionFailureAle
 import StudyFilters from "../../../study-views/components/StudyFilters.vue";
 import StudyTable from "../../../study-views/components/StudyTable.vue";
 import { provideStudyViews } from "../../../study-views/context";
-import { COMPACT_DEFAULTS } from "../../../study-views/density";
 import { filterStudies, sortStudies, type StatusChip, type StudySort } from "../../../study-views/overview";
 import { failureOf } from "../../../study-views/study";
 import { useSessionStore } from "../../../stores/session";
 import { useStudyListStore } from "../../../stores/studyList";
-import { listCapabilities, STORAGE_PREFIX, studyListData, websiteRoutes } from "../context";
+import {
+  listCapabilities,
+  STORAGE_PREFIX,
+  STUDY_VIEWS_SCOPE,
+  studyListData,
+  WEBSITE_VIEW_DEFAULTS,
+  websiteRoutes,
+} from "../context";
 import { listQuery, readListQuery, sameQuery, type ListState } from "../listQuery";
 import { useWebsiteStudyRows } from "../useWebsiteStudy";
 
@@ -80,8 +86,8 @@ const failure = computed(() => (list.error.value ? failureOf(list.error.value, "
 </script>
 
 <template>
-  <div class="website-studies">
-    <VDefaultsProvider :defaults="COMPACT_DEFAULTS">
+  <div class="website-studies" :class="STUDY_VIEWS_SCOPE">
+    <VDefaultsProvider :defaults="WEBSITE_VIEW_DEFAULTS">
       <StudyFilters
         ref="filterLine"
         v-model:search="search"

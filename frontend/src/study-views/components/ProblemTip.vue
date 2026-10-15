@@ -56,7 +56,7 @@ const tip = computed(() => {
 }
 .problem-tip-hint,
 .problem-tip-more {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 </style>

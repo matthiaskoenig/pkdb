@@ -2,7 +2,8 @@
  * The global classes of the study views (#963): the alerts and chips of states, the filter chips
  * with counts, the facts of a panel, the fields of a review reply, the heads and notes of the
  * panes of the Data section, the problems, the frames of figures and the tables of rows. The
- * curation app and the website import it; the sizes of their Vuetify components stay theirs.
+ * curation app and the website import it. The website gives its study pages the sizes of the
+ * curation app in the scope .website-study-views at the end of this file.
  */
 
 /* What went wrong in a failure, such as the stderr of a command, in an alert, the Activity and the
@@ -12,7 +13,7 @@
   max-height: calc(6 * 1.45em);
   overflow: auto;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.45;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -46,7 +47,7 @@
   grid-template-columns: max-content minmax(0, 1fr);
   gap: 6px 16px;
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
 }
 .panel-facts dt {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
@@ -58,14 +59,14 @@
 
 .field-heading {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: calc(0.875 * var(--study-rem, 1rem));
   font-weight: 600;
   line-height: 1.5;
 }
 .field-note,
 .field-empty {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.4;
   color: rgba(var(--v-theme-on-surface), 0.78);
 }
@@ -131,7 +132,7 @@
 /* The native select in the head of a pane: the Source filter of the rows, the PDF of the paper. */
 .pane-head-select {
   height: 22px;
-  max-width: 12rem;
+  max-width: calc(12 * var(--study-rem, 1rem));
   padding-inline: 4px;
   border: 1px solid rgba(var(--v-theme-on-surface), 0.42);
   border-radius: 4px;
@@ -223,13 +224,13 @@
   gap: 4px 10px;
 }
 .problem-code {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   font-weight: 600;
   overflow-wrap: anywhere;
 }
 .problem-message {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: calc(0.9375 * var(--study-rem, 1rem));
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
@@ -243,7 +244,7 @@
   background: rgb(var(--v-theme-surface));
   color: rgb(var(--v-theme-on-surface));
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  font-size: 0.9286rem;
+  font-size: calc(0.9286 * var(--study-rem, 1rem));
   line-height: 1.4;
 }
 /* A fact has an icon in a 1rem column and its text 8 px after it. */
@@ -252,12 +253,12 @@
   align-items: baseline;
   gap: 8px;
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
 .problem-icon {
-  width: 1rem;
+  width: var(--study-rem, 1rem);
   flex: 0 0 auto;
   text-align: center;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
@@ -291,13 +292,13 @@
 }
 .problem-file {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: calc(0.9375 * var(--study-rem, 1rem));
   font-weight: 600;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 .problem-group-counts {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125 * var(--study-rem, 1rem));
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .problem-list {
@@ -388,7 +389,7 @@
 /* The line column stays in view while wide rows scroll. It covers the start of the region, so the
    shadow and the cover of the start move to its right edge. */
 .rows-scroll--sticky-line {
-  --line-width: var(--rows-line-width, 4rem);
+  --line-width: var(--rows-line-width, calc(4 * var(--study-rem, 1rem)));
   background:
     linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
       local,
@@ -419,4 +420,212 @@
 .rows-table tbody .rows-line {
   font-weight: 400;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+/*
+ * The sizes of the curation app on the website (#963). The curation app is compact through its
+ * root: `html { font-size: 87.5% }` makes every rem 14 px and its application text is 13 px
+ * (0.9286rem), see src/curation-app/styles.css. The website keeps the 16 px rem of the browser,
+ * so the study views write their sizes in units of --study-rem: the curation app leaves it unset
+ * (1rem, 14 px), and the scope below, which only the study pages of the website and the menus and
+ * tooltips they open carry (src/features/studies/context.ts), sets it to 14 px of the website's
+ * rem. Both follow the reader's font size setting. The rules after it repeat, in that unit and
+ * within the scope, what src/curation-app/styles.css and the 14 px rem give Vuetify's components.
+ */
+.website-study-views {
+  --study-rem: 0.875rem;
+  font-size: calc(0.9286 * var(--study-rem));
+  line-height: 1.4;
+}
+/* Fields are 30 px high with 13 px text and a 12 px floating label (curation-app/styles.css). */
+.website-study-views .v-input--density-compact {
+  --v-input-control-height: 30px;
+  --v-input-padding-top: 4px;
+}
+.website-study-views .v-input--density-compact .v-field:is(.v-field--variant-outlined, .v-field--single-line, .v-field--no-label) {
+  --v-field-padding-bottom: 4px;
+}
+.website-study-views .v-field {
+  font-size: calc(0.9286 * var(--study-rem));
+}
+.website-study-views .v-field .v-field-label {
+  font-size: 1em;
+}
+.website-study-views .v-field .v-field-label--floating {
+  --v-field-label-scale: 0.923em;
+  font-size: var(--v-field-label-scale);
+}
+.website-study-views .v-field :is(.v-field__prepend-inner, .v-field__append-inner, .v-field__clearable) > .v-icon {
+  font-size: 1.15em;
+}
+.website-study-views .v-field--variant-outlined:not(.v-field--prepended) {
+  --v-field-padding-start: 12px;
+}
+.website-study-views .v-field--variant-outlined:not(.v-field--prepended) .v-field__outline__start {
+  flex-basis: 8px;
+}
+.website-study-views .v-field--variant-outlined:not(.v-field--appended) {
+  --v-field-padding-end: 12px;
+}
+.website-study-views .v-input--indent-details .v-input__details {
+  padding-inline: 12px;
+}
+/* Switches, radios and checkboxes stand in 28 px rows with 13 px labels. */
+.website-study-views .v-input:is(.v-switch, .v-checkbox, .v-radio-group).v-input--density-compact {
+  --v-input-control-height: 28px;
+}
+.website-study-views .v-selection-control .v-label {
+  font-size: calc(0.9286 * var(--study-rem));
+}
+.website-study-views .v-selection-control__input > .v-icon {
+  font-size: calc(1.1429 * var(--study-rem));
+}
+.website-study-views .v-selection-control-group--inline > .v-selection-control:not(:last-child) {
+  margin-inline-end: 8px;
+}
+.website-study-views .v-radio-group > .v-input__control > .v-label {
+  margin-inline-start: 0;
+  font-size: calc(0.8571 * var(--study-rem));
+}
+.website-study-views .v-radio-group > .v-input__control > .v-label + .v-selection-control-group {
+  margin-top: 2px;
+  padding-inline-start: 0;
+}
+.website-study-views .v-radio-group .v-selection-control-group {
+  margin-inline-start: -6px;
+}
+/* An extra small chip has the 10.5 px text of a small one. */
+.website-study-views .v-chip.v-chip--size-x-small {
+  font-size: calc(0.75 * var(--study-rem));
+}
+.website-study-views .v-expansion-panel-title {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: calc(0.9286 * var(--study-rem));
+}
+.website-study-views .v-expansion-panel--active > .v-expansion-panel-title:not(.v-expansion-panel-title--static) {
+  min-height: 32px;
+}
+.website-study-views .v-expansion-panel-title__icon > .v-icon {
+  font-size: var(--study-rem);
+}
+.website-study-views .v-expansion-panel-text__wrapper {
+  padding: 4px 12px 12px;
+}
+.website-study-views .v-alert {
+  flex: 0 0 auto;
+}
+/* Menus and tooltips stand outside the application, where the curation app has the 14 px of its root. */
+.v-overlay.website-study-views {
+  font-size: var(--study-rem);
+  line-height: 1.5;
+}
+/* The browser's own margins and sizes of text, as in the curation app, instead of those of the
+   pages of the website (src/styles/app.css); the curation app sizes only h1. These selectors weigh
+   two elements: more than the elements of app.css, less than any class of the views. */
+html :where(.website-study-views) :is(p, h2, h3) {
+  margin: revert-layer;
+  line-height: revert-layer;
+}
+html :where(.website-study-views) h2 {
+  font-size: revert-layer;
+}
+html :where(.website-study-views) table {
+  font-variant-numeric: revert-layer;
+}
+html :where(.website-study-views) h1 {
+  font-size: calc(1.6 * var(--study-rem));
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 calc(0.5 * var(--study-rem));
+}
+/* What Vuetify sizes in rem: in the curation app's 14 px. */
+.website-study-views .v-input {
+  font-size: var(--study-rem);
+}
+.website-study-views .v-input__details {
+  font-size: calc(0.75 * var(--study-rem));
+}
+.website-study-views .v-label {
+  font-size: var(--study-rem);
+}
+.website-study-views .v-field__input {
+  min-height: max(
+    var(--v-input-control-height, 56px),
+    calc(1.5 * var(--study-rem)) + var(--v-field-input-padding-top) + var(--v-field-input-padding-bottom)
+  );
+}
+.website-study-views .v-chip.v-chip--size-small {
+  --v-chip-size: calc(0.75 * var(--study-rem));
+  font-size: calc(0.75 * var(--study-rem));
+}
+.website-study-views .v-chip.v-chip--size-default {
+  --v-chip-size: calc(0.875 * var(--study-rem));
+  font-size: calc(0.875 * var(--study-rem));
+}
+.website-study-views .v-btn {
+  letter-spacing: 0.0071428571em;
+}
+.website-study-views .v-btn--size-x-small {
+  --v-btn-size: calc(0.625 * var(--study-rem));
+}
+.website-study-views .v-btn--size-small {
+  --v-btn-size: calc(0.75 * var(--study-rem));
+}
+.website-study-views .v-btn--size-default {
+  --v-btn-size: calc(0.875 * var(--study-rem));
+}
+.website-study-views .v-switch__track {
+  font-size: calc(0.5 * var(--study-rem));
+}
+.website-study-views :is(.v-switch--inset .v-switch__track, .v-switch__thumb) {
+  font-size: calc(0.75 * var(--study-rem));
+}
+.website-study-views .v-list-item-title {
+  font-size: var(--study-rem);
+}
+.website-study-views .v-list-item-subtitle {
+  font-size: calc(0.875 * var(--study-rem));
+  line-height: var(--study-rem);
+}
+.website-study-views .v-table {
+  font-size: calc(0.875 * var(--study-rem));
+}
+.v-tooltip.website-study-views > .v-overlay__content {
+  font-size: calc(0.875 * var(--study-rem));
+}
+.website-study-views .v-card-item {
+  padding: calc(0.625 * var(--study-rem)) var(--study-rem);
+}
+.website-study-views .v-card-title {
+  font-size: calc(1.375 * var(--study-rem));
+  padding: calc(0.5 * var(--study-rem)) var(--study-rem);
+}
+.website-study-views .v-card-item .v-card-title {
+  padding: 0;
+}
+.website-study-views .v-card-subtitle {
+  font-size: calc(0.875 * var(--study-rem));
+  padding: 0 var(--study-rem);
+}
+.website-study-views .v-card-item .v-card-subtitle {
+  padding: 0 0 calc(0.25 * var(--study-rem));
+}
+.website-study-views .v-card-text {
+  font-size: calc(0.875 * var(--study-rem));
+}
+.website-study-views .v-alert:not(:has(.v-alert-title)) .v-alert__content {
+  padding-block: calc((1.75 * var(--study-rem) - 1.5 * var(--study-rem)) / 2);
+}
+.website-study-views .v-alert__prepend {
+  min-height: calc(1.75 * var(--study-rem));
+}
+.website-study-views .v-alert__prepend > .v-icon {
+  font-size: calc(1.75 * var(--study-rem));
+  height: calc(1.75 * var(--study-rem));
+  width: calc(1.75 * var(--study-rem));
+}
+.website-study-views .v-alert-title {
+  font-size: calc(1.5 * var(--study-rem));
+  line-height: calc(1.75 * var(--study-rem));
 }

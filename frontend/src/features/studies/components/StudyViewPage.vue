@@ -8,7 +8,6 @@ import MetadataView from "../../../study-views/components/MetadataView.vue";
 import SectionTabs from "../../../study-views/components/SectionTabs.vue";
 import StudyHeader from "../../../study-views/components/StudyHeader.vue";
 import { provideStudyViews } from "../../../study-views/context";
-import { COMPACT_DEFAULTS } from "../../../study-views/density";
 import DataSection from "../../../study-views/sections/DataSection.vue";
 import ProblemsSection from "../../../study-views/sections/ProblemsSection.vue";
 import ReviewSection from "../../../study-views/sections/ReviewSection.vue";
@@ -33,7 +32,9 @@ import {
   STORAGE_PREFIX,
   STUDIES_ROUTE,
   STUDY_ROUTE,
+  STUDY_VIEWS_SCOPE,
   studyPageData,
+  WEBSITE_VIEW_DEFAULTS,
   websiteRoutes,
 } from "../context";
 import { useWebsiteStudy } from "../useWebsiteStudy";
@@ -127,8 +128,8 @@ function backToSearch(): void {
 
 <template>
   <StudyDetailPage v-if="missing" :sid="sid" />
-  <div v-else ref="root" class="website-study" :class="section && `website-study--${section}`">
-    <VDefaultsProvider :defaults="COMPACT_DEFAULTS">
+  <div v-else ref="root" class="website-study" :class="[STUDY_VIEWS_SCOPE, section && `website-study--${section}`]">
+    <VDefaultsProvider :defaults="WEBSITE_VIEW_DEFAULTS">
       <div class="website-study-back">
         <VBtn v-if="fromSearch" variant="text" prepend-icon="fas fa-arrow-left" @click="backToSearch">
           Back to the search
@@ -169,9 +170,9 @@ function backToSearch(): void {
   display: flex;
 }
 /* The arrow of the back button starts where the name of the study does: the 12 px padding of a
-   small button less the -3 px margin of its icon, plus the 2 px of space inside the glyph. */
+   small button less the -3 px margin of its icon, plus the 1 px of space inside the glyph. */
 .website-study-back > .v-btn {
-  margin-inline-start: -11px;
+  margin-inline-start: -10px;
 }
 /* The header and the tabs of the study above a rule, on the page: the study band of the curation app stays there. */
 .website-study-head {

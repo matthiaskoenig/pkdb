@@ -360,7 +360,7 @@ function reload(): void {
   gap: 4px;
 }
 .paper-find {
-  flex: 1 1 10rem;
+  flex: 1 1 calc(10 * var(--study-rem, 1rem));
   min-width: 0;
 }
 /* As high as the smallest target of the app, 24 px. */
@@ -407,8 +407,8 @@ function reload(): void {
 }
 .paper-find-field {
   flex: 1 1 auto;
-  min-width: 5rem;
-  max-width: 16rem;
+  min-width: calc(5 * var(--study-rem, 1rem));
+  max-width: calc(16 * var(--study-rem, 1rem));
 }
 .paper-of,
 .paper-count {

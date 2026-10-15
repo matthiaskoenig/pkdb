@@ -101,7 +101,7 @@ function choose(event: Event): void {
 /* A long PDF name shortens in the select before the size and the actions do. */
 .paper-file {
   flex: 0 1 auto;
-  min-width: 4rem;
+  min-width: calc(4 * var(--study-rem, 1rem));
 }
 .paper-actions {
   display: flex;

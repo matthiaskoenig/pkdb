@@ -178,15 +178,15 @@ defineExpose({ flushSearch });
 /* 14rem (196px) and the 12px gap of the header let the header of pkdb_data's 1,503 studies, with
    its four-digit counts, fit one line in a 1440px window with a scrollbar. */
 .overview-search {
-  flex: 0 1 14rem;
+  flex: 0 1 calc(14 * var(--study-rem, 1rem));
 }
 .overview-substance {
-  flex: 0 1 12rem;
-  min-width: 10rem;
+  flex: 0 1 calc(12 * var(--study-rem, 1rem));
+  min-width: calc(10 * var(--study-rem, 1rem));
 }
 .overview-curator {
-  flex: 0 1 16rem;
-  min-width: 12rem;
+  flex: 0 1 calc(16 * var(--study-rem, 1rem));
+  min-width: calc(12 * var(--study-rem, 1rem));
 }
 .overview-chips {
   flex: 1 1 auto;
