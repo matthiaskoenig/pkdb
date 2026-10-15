@@ -209,12 +209,10 @@ def derive_pk(
         return []
     values = [getattr(point.statistics, statistic) for point in points]
     numeric = np.array([np.nan if value is None else value for value in values])
+    # A curve that is all zero, such as the concentrations of a placebo or below
+    # the limit of quantification, has no PK parameters.
     if not np.any(numeric[np.isfinite(numeric)]):
-        fail(
-            "pk_zero_curve",
-            "PK parameters cannot be calculated from an all-zero concentration curve",
-            first.source,
-        )
+        return []
     calculated = nca_single(
         PKTimecourse(
             time=np.array(times, dtype=float),
