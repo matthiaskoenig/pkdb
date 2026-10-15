@@ -19,3 +19,4 @@
 
 - The overview of the local curation app spends about a third less time on each poll of the state while jobs run: a poll keeps the objects of the studies and jobs that did not change, so only the rows of the studies that changed render again and the widths of the columns are measured only for them. With 1,000 studies, a poll no longer renders every shown row and goes through every study for the column widths.
 - The frontend of the Docker development stack starts again after the Docker daemon restarts, as the backend and the database do, and a stop no longer logs npm errors.
+- `pkdb plot` draws a grayscale figure image, such as the 1-bit scan of a PDF, in gray instead of in the yellow and violet of the default colormap of matplotlib, on the overlay and beside the data plot.
