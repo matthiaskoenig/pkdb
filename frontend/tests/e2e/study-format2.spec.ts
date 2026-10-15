@@ -5,6 +5,8 @@ test.use({ screenshot: "off" });
 const password = "Frontend-test-password-42!";
 const sid = "drug/Format2Fixture";
 const address = "/data/drug/Format2Fixture";
+const legacySid = "drug/Format2Legacy";
+const legacy = "/data/drug/Format2Legacy";
 
 async function login(page: Page, username: string) {
   await page.goto("/account");
@@ -38,27 +40,27 @@ test.describe("a curator reads the study format 2 study", () => {
     await context.close();
   });
 
-  test("a study is served by substance and name with its release, issue and review", async () => {
-    await page.goto(address);
+  test("a study format 2 study without a stored view shows its release, issue and review on its record page", async () => {
+    await page.goto(legacy);
     await expect(
-      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
+      page.getByRole("heading", { name: "Format2Legacy", exact: true }),
     ).toBeVisible();
     const status = page.getByRole("region", { name: "Study status" });
-    await expect(status).toContainText(sid);
+    await expect(status).toContainText(legacySid);
     await expect(status).toContainText("PKDB identifier");
-    await expect(status).toContainText("PKDB09901");
+    await expect(status).toContainText("PKDB09902");
     await expect(status).toContainText("2026-09-28");
     await expect(status).toContainText("In review · 1 open item");
-    const issue = status.getByRole("link", { name: "#2158", exact: true });
+    const issue = status.getByRole("link", { name: "#2159", exact: true });
     await expect(issue).toHaveAttribute(
       "href",
-      "https://github.com/matthiaskoenig/pkdb_data/issues/2158",
+      "https://github.com/matthiaskoenig/pkdb_data/issues/2159",
     );
     await expect(issue).toHaveAttribute("rel", /noopener/);
     const record = page.getByRole("region", { name: "Record details" });
     // The heading takes focus without a ring across the page; the count agrees.
     await expect(
-      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
+      page.getByRole("heading", { name: "Format2Legacy", exact: true }),
     ).toHaveCSS("outline-style", "none");
     await expect(
       page.getByRole("region", { name: "Whole-study data" }),
@@ -67,7 +69,7 @@ test.describe("a curator reads the study format 2 study", () => {
       page.getByRole("region", { name: "Whole-study data" }),
     ).not.toContainText("1 records");
     await expect(
-      record.getByRole("region", { name: "Study status" }).getByText(sid),
+      record.getByRole("region", { name: "Study status" }).getByText(legacySid),
     ).toBeVisible();
     for (const raw of ["Pkdb id", "Release date", "Review status"])
       await expect(record.getByText(raw, { exact: true })).toHaveCount(0);
@@ -87,17 +89,16 @@ test.describe("a curator reads the study format 2 study", () => {
     await page.goto("/data");
     await page.goto("/data/PKDB09901");
     await redirected;
-    await expect(page).toHaveURL(new RegExp(`${address}$`));
-    await expect(
-      page.getByRole("region", { name: "Study status" }),
-    ).toContainText("PKDB09901");
+    await expect(page).toHaveURL(new RegExp(`${address}/review$`));
+    await expect(page.getByRole("heading", { name: sid, level: 1 })).toBeVisible();
+    await expect(page.getByText("PKDB09901").first()).toBeVisible();
     // The identifier is replaced, not kept as a history entry.
     await page.goBack();
     await expect(page).toHaveURL(/\/data$/);
   });
 
   test("schedules read as a person would say them and statistics keep their kind", async () => {
-    await page.goto(address);
+    await page.goto(legacy);
     await category(page, "Interventions");
     const list = page.getByRole("region", { name: "Whole-study data" });
     await expect(list).toContainText("every 24 h, 7 doses from 0 h");
@@ -255,18 +256,14 @@ test.describe("a curator reads the study format 2 study", () => {
     await page
       .getByRole("button", { name: `View ${sid}`, exact: true })
       .click();
-    await expect(page).toHaveURL(new RegExp(`${address}\\?`));
-    // The study heading, not the skip link, takes focus after the navigation.
-    await expect(
-      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
-    ).toBeFocused();
-    await expect(
-      page.getByRole("region", { name: "Study status" }),
-    ).toContainText("PKDB09901");
-    await page
-      .getByRole("button", { name: "Close details", exact: true })
-      .click();
+    await expect(page).toHaveURL(new RegExp(`${address}/review\\?`));
+    // The identity of the study, not the skip link, takes focus after the navigation.
+    await expect(page.getByRole("heading", { name: sid, level: 1 })).toBeFocused();
+    await page.getByRole("navigation", { name: "Study sections" }).getByRole("link").filter({ hasText: /^Data/ }).click();
+    await expect(page).toHaveURL(new RegExp(`${address}/data\\?.*v=1`));
+    await page.getByRole("button", { name: "Back to the search", exact: true }).click();
     await expect(page).toHaveURL(/\/data\?/);
+    await expect(page.getByRole("tab", { name: /^Studies 4$/ })).toBeVisible();
   });
 
   test("a focused text field shows a thick primary border around its label", async () => {
@@ -326,7 +323,7 @@ test.describe("a curator reads the study format 2 study", () => {
   });
 
   test("timecourse traces carry the timecourse label and the geometric SD is a multiplicative band", async () => {
-    await page.goto(address);
+    await page.goto(legacy);
     await category(page, "Timecourses");
     // Each timecourse states how many points it has; one page needs no pager.
     const list = page.getByRole("region", { name: "Whole-study data" });
@@ -487,10 +484,8 @@ test.describe("a curator reads the study format 2 study", () => {
     const link = page.getByRole("link", { name: /Format2Fixture/ });
     await expect(link).toHaveAttribute("href", address);
     await link.click();
-    await expect(page).toHaveURL(new RegExp(`${address}$`));
-    await expect(
-      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
-    ).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`${address}/review$`));
+    await expect(page.getByRole("heading", { name: sid, level: 1 })).toBeVisible();
   });
 });
 

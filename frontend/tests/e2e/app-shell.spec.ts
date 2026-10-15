@@ -16,6 +16,8 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await expect(page.getByRole("heading", { name: "How to cite", exact: true })).toHaveCount(0);
   const desktop = page.getByRole("navigation", { name: "Main navigation", exact: true });
   await expect(desktop.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
+  // Studies comes first, before Explore data.
+  expect((await desktop.getByRole("link").allInnerTexts()).slice(0, 2)).toEqual(["Studies", "Explore data"]);
   await page.screenshot({ path: testInfo.outputPath("landing-desktop.png"), fullPage: true });
   await page.getByRole("button", { name: "Toggle color theme" }).click();
   await expect(heroLogo).toHaveCSS("background-color", "rgb(255, 255, 255)");
@@ -26,9 +28,11 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open navigation" }).click();
   const mobile = page.getByRole("navigation", { name: "Mobile navigation" });
-  for (const name of ["Explore data", "Vocabulary", "Documentation", "API", "Account"]) {
+  const names = ["Studies", "Explore data", "Vocabulary", "Documentation", "API", "Account"];
+  for (const name of names) {
     await expect(mobile.getByRole("link", { name, exact: true })).toBeVisible();
   }
+  expect((await mobile.getByRole("link").allInnerTexts()).map((text) => text.trim())).toEqual(names);
   await expect(mobile.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
   await mobile.getByRole("link", { name: "Vocabulary", exact: true }).click();
   await expect(mobile).not.toBeVisible();
@@ -72,7 +76,7 @@ test("login avatar appears in both navigation layouts and clears on logout", asy
 });
 
 test("release and copyright footer is shared by all page types", async ({ page }) => {
-  for (const path of ["/", "/data", "/data/PKDB00057", "/curation", "/account", "/invitation", "/registration", "/verification/example", "/request-password-reset", "/reset-password/example", "/not-a-page"]) {
+  for (const path of ["/", "/studies", "/data", "/data/PKDB00057", "/curation", "/account", "/invitation", "/registration", "/verification/example", "/request-password-reset", "/reset-password/example", "/not-a-page"]) {
     await page.goto(path);
     const footer = page.getByRole("contentinfo");
     await expect(footer).toHaveCount(1);
