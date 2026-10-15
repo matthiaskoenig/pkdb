@@ -11,6 +11,9 @@ ureg.define("percent = 0.01*count")
 ureg.define("IU = [activity_amount]")
 ureg.define("NO_UNIT = [no_unit]")
 ureg.define("arbitrary_unit = [arbitrary_unit]")
+# Counts per minute of a radiation counter: its own dimension, because a count rate
+# depends on the counting efficiency and does not convert to an activity (Bq).
+ureg.define("cpm = [count_rate]")
 
 
 DIMENSIONLESS = "dimensionless"

@@ -46,7 +46,7 @@ def register(commands) -> None:
         "--source",
         help=(
             "Source to render (default: every Fig source with a digitization, "
-            "timecourses, scatters or outputs with a time)"
+            "timecourses, scatters or outputs over time)"
         ),
     )
     plot.add_argument(
@@ -72,10 +72,9 @@ def _plot(args) -> int:
     import tempfile
 
     from pkdb.studyformat import study_label
-    from pkdb.studyformat.digitize import mapped_points
     from pkdb.studyformat.load import load_study
     from pkdb.studyformat.plot import capped, render_source
-    from pkdb.studyformat.sources import study_sources
+    from pkdb.studyformat.sources import figure_points, study_sources
 
     human = args.format == "human" or (args.format is None and sys.stdout.isatty())
     if args.out is not None and args.out.resolve().is_relative_to(args.study.resolve()):
@@ -106,7 +105,13 @@ def _plot(args) -> int:
                         )
                         and (
                             table.kind in ("timecourses", "scatters")
-                            or (table.kind == "outputs" and bool(mapped_points(table)))
+                            or (
+                                table.kind == "outputs"
+                                and any(
+                                    kind == "outputs"
+                                    for kind, _ in figure_points(study, summary.source)
+                                )
+                            )
                         )
                         for table in study.tables
                     )

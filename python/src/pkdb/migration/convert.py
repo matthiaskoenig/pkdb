@@ -1,6 +1,7 @@
 """Convert one format 1 study folder into a format 2 work folder."""
 
 import shutil
+from collections import Counter
 from collections.abc import Collection, Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -29,8 +30,14 @@ from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.source_files import ignored_source
+from pkdb.studyformat.digitize import (
+    check_digitizations,
+    import_project,
+    parse_digitization_file,
+)
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json
+from pkdb.studyformat.load import load_study
 from pkdb.studyformat.models import canonical_review_json, canonical_study_json
 from pkdb.studyformat.tables import REFERENCE_JSON, REVIEW_JSON, STUDY_JSON, TEXT_SOURCE
 
@@ -52,10 +59,15 @@ def is_v1_file(name: str, study: str, raw: Collection[str] = ()) -> bool:
 
     These are the v1 study.json, `<study>.xlsx`, `.xls` files, the hidden
     `.<study>_<sheet>.tsv` files, other TSV and CSV files and JSON files other
-    than reference.json. The raw tables `raw` of paper tables (`raw_tables`)
-    are kept.
+    than reference.json. The raw tables `raw` of paper tables (`raw_tables`) and
+    the WebPlotDigitizer projects `<study>_<source>.wpd.json` of figures, which
+    format 2 keeps as the raw extraction of a figure, are kept.
     """
-    if name == REFERENCE_JSON or name in raw:
+    if (
+        name == REFERENCE_JSON
+        or name in raw
+        or parse_digitization_file(name, study) is not None
+    ):
         return False
     return Path(name).suffix.lower() in DATA_SUFFIXES
 
@@ -140,11 +152,59 @@ def _attachments(
             continue
         if path.stem in images and path.suffix.lower() in IMAGE_SUFFIXES:
             continue  # written by copy_images
+        if parse_digitization_file(path.name, name) is not None:
+            continue  # written by _digitizations
         if is_v1_file(path.name, name, raw):
             if not _quiet(path.name, name):
                 decisions.append(Decision(kind="removed_file", detail=path.name))
             continue
         shutil.copyfile(path, target / path.name)
+    return decisions
+
+
+def _digitizations(v1: Path, target: Path, name: str) -> list[Decision]:
+    """Import each WebPlotDigitizer project of a figure as `pkdb digitize import` does.
+
+    The project is checked against the figure image of the converted folder, so
+    every image must be written first. A project that format 2 cannot keep,
+    such as an invalid one or one whose figure has no image, is dropped with
+    a decision.
+    """
+    decisions = []
+    for path in sorted(v1.iterdir()):
+        source = parse_digitization_file(path.name, name)
+        if source is None or not path.is_file():
+            continue
+        result = import_project(target, source, path)
+        if result.issues:
+            reasons = "; ".join(issue.message for issue in result.issues)
+            decisions.append(
+                Decision(kind="removed_digitization", detail=f"{path.name}: {reasons}")
+            )
+    return decisions
+
+
+def _digitization_warnings(target: Path) -> list[Decision]:
+    """One decision per project whose datasets differ from the converted rows.
+
+    These are the warnings of `pkdb validate`, such as `digitized_mismatch` and
+    `unknown_dataset`, counted by code, with the first message.
+    """
+    study = load_study(target)
+    decisions = []
+    for digitization in list(study.digitizations):
+        study.digitizations = [digitization]
+        issues = list(check_digitizations(study))
+        if not issues:
+            continue
+        codes = Counter(issue.code for issue in issues)
+        counts = ", ".join(f"{code} {count}" for code, count in sorted(codes.items()))
+        decisions.append(
+            Decision(
+                kind="digitization_warning",
+                detail=f"{digitization.file}: {counts}; {issues[0].message}",
+            )
+        )
     return decisions
 
 
@@ -223,9 +283,11 @@ def convert_study(
     decisions += copy_images(v1, target, name, sources, set(raw))
     images = {f"{name}_{source}" for source in sources}
     decisions += _attachments(v1, target, name, images, set(raw.values()))
+    decisions += _digitizations(v1, target, name)
     for sheet in sorted(_sheets(v1, name) - _read_sheets(study, name)):
         decisions.append(Decision(kind="unreferenced_sheet", detail=sheet))
     result = format_folder(target)
     if not result.ok:
         raise NotConverted("format", _issues(result.issues))
+    decisions += _digitization_warnings(target)
     return Conversion(target, decisions)

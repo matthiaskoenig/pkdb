@@ -218,17 +218,11 @@ def test_unsupported_or_non_mean_dose_preserves_dose_independent_pk(
     }
 
 
-def test_all_zero_curve_is_a_source_located_validation_error(exponential_course):
-    from pkdb.schemas.source import SourceLocation
-
+def test_all_zero_curve_has_no_pk_parameters(exponential_course):
+    # Such as the concentrations of a placebo; the curve itself is kept.
     for point in exponential_course.points:
         point.statistics.mean = 0
-        point.source = SourceLocation(file="curve.tsv", row=2)
-    with pytest.raises(StudyValidationError) as error:
-        derive_pk(exponential_course)
-    assert error.value.report.issues[0].code == "pk_zero_curve"
-    source = error.value.report.issues[0].source
-    assert source is not None and source.file == "curve.tsv"
+    assert derive_pk(exponential_course) == []
     assert all(point.statistics.mean == 0 for point in exponential_course.points)
 
 

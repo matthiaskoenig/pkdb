@@ -196,6 +196,17 @@ DISEASE_NODES: list[InfoNode] = [
         ],
     ),
     Choice(
+        sid="hypertriglyceridemia",
+        description="Hypertriglyceridemia. An elevated concentration of triglycerides in the "
+        "blood, e.g. familial hypertriglyceridemia (type IV hyperlipoproteinemia). For elevated "
+        "LDL-C and triglycerides see 'mixed hypercholesterolemia'.",
+        parents=["disease-of-metabolism"],
+        annotations=[
+            (BQB.IS, "NCIT:C37971"),
+            (BQB.IS, "MONDO:0005347"),
+        ],
+    ),
+    Choice(
         sid="mixed-hypercholesterolemia",
         name="mixed hypercholesterolemia",
         description="A type of hypercholesterolemia with elevated LDL-C and triglyceride plasma levels.",

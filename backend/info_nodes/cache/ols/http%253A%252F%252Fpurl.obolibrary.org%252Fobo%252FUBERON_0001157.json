@@ -1,0 +1,218 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001157",
+  "lang": "en",
+  "description": [
+    "The proximal-distal subdivision of colon that runs transversely across the upper part of the abdomen, from the right to the left colic flexure. Continuous with the descending colon[BTO,modified]."
+  ],
+  "synonyms": [
+    "colon transversum"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "BTO:0000272",
+      "CALOHA:TS-2052",
+      "EFO:0000844",
+      "EMAPA:35880",
+      "FMA:14546",
+      "MA:0001543",
+      "MAT:0000312",
+      "MIAA:0000312",
+      "NCIT:C12385",
+      "SCTID:362163004",
+      "Wikipedia:Transverse_colon",
+      "galen:TransverseColon",
+      "MESH:D044684",
+      "UMLS:C0227386"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/3/3b/Dickdarm-Schema.svg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-female/v1.3/assets/3d-sbu-f-large-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-male/v1.3/assets/3d-sbu-m-large-intestine.glb"
+    ],
+    "id": [
+      "UBERON:0001157"
+    ]
+  },
+  "label": "transverse colon",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0001157",
+  "obo_id": "UBERON:0001157",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The proximal-distal subdivision of colon that runs transversely across the upper part of the abdomen, from the right to the left colic flexure. Continuous with the descending colon[BTO,modified].",
+      "oboXrefs": [
+        {
+          "database": "BTO",
+          "id": "0000272",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000272"
+        },
+        {
+          "database": "Wikipedia",
+          "id": "Transverse_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Transverse_colon"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "BTO",
+      "id": "0000272",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000272"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-2052",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-2052"
+    },
+    {
+      "database": "EFO",
+      "id": "0000844",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000844"
+    },
+    {
+      "database": "EMAPA",
+      "id": "35880",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:35880"
+    },
+    {
+      "database": "FMA",
+      "id": "14546",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/14546"
+    },
+    {
+      "database": "MA",
+      "id": "0001543",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001543"
+    },
+    {
+      "database": "MAT",
+      "id": "0000312",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000312"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000312",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12385",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12385"
+    },
+    {
+      "database": "SCTID",
+      "id": "362163004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/362163004"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Transverse_colon",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Transverse_colon"
+    },
+    {
+      "database": "galen",
+      "id": "TransverseColon",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D044684",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D044684"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0227386",
+      "description": "ncithesaurus:Transverse_Colon",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0227386"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "colon transversum",
+      "scope": "hasExactSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Transverse_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Transverse_colon"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/graph"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002150"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001157/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002202"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

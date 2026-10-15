@@ -312,6 +312,10 @@ test("the navigator shows the whole name of a table beside a warning, an open re
     expect(new Set(await lefts(".nav-file .nav-rows")).size).toBe(1);
   } finally {
     writeFileSync(file, original);
+    // The tests of this file share the server: wait until it serves the two items again, else the
+    // next test can still see the third one.
+    const review = page.getByRole("navigation", { name: "Study sections" }).getByRole("link", { name: /^Review\b/ });
+    await expect(review).toContainText("2 open items");
   }
 });
 

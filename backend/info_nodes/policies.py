@@ -8,6 +8,7 @@ TIME_REQUIRED_MEASUREMENT_TYPES = [
     "recovery",
     "auc_end",
     "auc_incremental",
+    "auc_net_incremental",
     "cumulative amount (ratio)",
     "ptf",
 ]
@@ -65,4 +66,13 @@ CAN_NEGATIVE = [
     "factor Xa inhibition",
     "factor Xa inhibition maximum",
     "pressor response inhibition",
+    "urinary volume rate (change)",
+    "excretion rate (change)",
+    "osmolarity (change)",
+    "concentration change absolute maximum",
+    "concentration change absolute minimum",
+    # A net area below the baseline or a venous concentration above the arterial
+    # one (release from the tissue) is negative.
+    "auc_net_incremental",
+    "arteriovenous concentration difference",
 ]

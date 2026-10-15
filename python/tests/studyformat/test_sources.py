@@ -462,6 +462,72 @@ def test_outputs_with_a_time_are_plotted_as_series_by_time(
     )
 
 
+def test_outputs_at_one_time_each_are_not_plotted_on_an_x_that_is_not_time(
+    make_study, valid_files, tsv
+):
+    # Ingwersen2012 Fig2: the change of a measurement at the end of the treatment per exposure
+    # quartile; every series has one time, and the x of the figure is the exposure.
+    files = {k: v for k, v in valid_files.items() if not k.startswith("timecourses_")}
+    rows = [
+        {**OUTPUT, "subjects": "S1", "time": "2", "mean": "5"},
+        {**OUTPUT, "subjects": "S2", "time": "2", "mean": "6"},
+    ]
+    series = [
+        "S1 · D1 · concentration · drug · plasma",
+        "S2 · D1 · concentration · drug · plasma",
+    ]
+    data = project([])
+    data["datasetColl"] = [
+        {"name": name, "axesName": "XY", "data": [{"x": x, "y": 50}]}
+        for name, x in zip(series, (30, 60), strict=True)
+    ]
+    folder = make_study(
+        {
+            **files,
+            "outputs_Fig1.tsv": tsv("outputs", *rows),
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(data),
+        }
+    )
+    assert format_folder(folder).ok
+    view = source_view(load_study(folder), "Fig1")
+    assert view.layout == "overlay"
+    assert not view.points
+    assert not [p for p in view.overlay if p.role == "mapped"]
+    # The digitized points of the datasets named like the outputs series stay on the image.
+    assert [p.series for p in view.overlay if p.role == "raw"] == series
+    assert view.unmatched == ()
+
+
+def test_outputs_at_one_time_are_plotted_in_a_figure_over_time(
+    make_study, valid_files, tsv
+):
+    # A figure with timecourse rows, or with an outputs series at two times, has time as x.
+    single = {**OUTPUT, "measurement": "cmax", "time": "1", "mean": "4"}
+    with_timecourse = make_study(
+        {**valid_files, "outputs_Fig1.tsv": tsv("outputs", single)}
+    )
+    assert format_folder(with_timecourse).ok
+    view = source_view(load_study(with_timecourse), "Fig1")
+    assert [p.x for p in view.points if p.kind == "outputs"] == [1.0]
+    files = {k: v for k, v in valid_files.items() if not k.startswith("timecourses_")}
+    rows = [
+        single,
+        {**OUTPUT, "time": "1", "mean": "2"},
+        {**OUTPUT, "time": "2", "mean": "3"},
+    ]
+    with_series = make_study(
+        {**files, "outputs_Fig1.tsv": tsv("outputs", *rows)}, substance="other"
+    )
+    assert format_folder(with_series).ok
+    view = source_view(load_study(with_series), "Fig1")
+    assert sorted((p.series, p.x) for p in view.points if p.kind == "outputs") == [
+        ("all · D1 · cmax · drug · plasma", 1.0),
+        (OUTPUT_SERIES, 1.0),
+        (OUTPUT_SERIES, 2.0),
+    ]
+
+
 def test_outputs_rows_of_one_series_at_the_same_time_are_ordered_by_line(
     make_study, valid_files, tsv
 ):

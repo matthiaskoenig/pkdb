@@ -1,0 +1,235 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001156",
+  "lang": "en",
+  "description": [
+    "Section of colon which is distal to the cecum and proximal to the transversecolon.[FMA,modified]."
+  ],
+  "synonyms": [
+    "colon ascendens",
+    "spiral colon"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "BTO:0000270",
+      "CALOHA:TS-0057",
+      "EFO:0000843",
+      "EMAPA:35151",
+      "FMA:14545",
+      "MA:0001541",
+      "MAT:0000311",
+      "MIAA:0000311",
+      "NCIT:C12265",
+      "SCTID:362162009",
+      "Wikipedia:Ascending_colon",
+      "galen:AscendingColon",
+      "MESH:D044682",
+      "UMLS:C0227375"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/3/3b/Dickdarm-Schema.svg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-female/v1.3/assets/3d-sbu-f-large-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-male/v1.3/assets/3d-sbu-m-large-intestine.glb"
+    ],
+    "external_ontology_notes": [
+      "in MA, this is a subclass of colon"
+    ],
+    "id": [
+      "UBERON:0001156"
+    ]
+  },
+  "label": "ascending colon",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0001156",
+  "obo_id": "UBERON:0001156",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "Section of colon which is distal to the cecum and proximal to the transversecolon.[FMA,modified].",
+      "oboXrefs": [
+        {
+          "database": "FMA",
+          "id": "14545",
+          "description": null,
+          "url": "http://purl.org/sig/ont/fma/14545"
+        },
+        {
+          "database": "Wikipedia",
+          "id": "Ascending_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Ascending_colon"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "BTO",
+      "id": "0000270",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000270"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0057",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-0057"
+    },
+    {
+      "database": "EFO",
+      "id": "0000843",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000843"
+    },
+    {
+      "database": "EMAPA",
+      "id": "35151",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:35151"
+    },
+    {
+      "database": "FMA",
+      "id": "14545",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/14545"
+    },
+    {
+      "database": "MA",
+      "id": "0001541",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001541"
+    },
+    {
+      "database": "MAT",
+      "id": "0000311",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000311"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000311",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12265",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12265"
+    },
+    {
+      "database": "SCTID",
+      "id": "362162009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/362162009"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Ascending_colon",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Ascending_colon"
+    },
+    {
+      "database": "galen",
+      "id": "AscendingColon",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D044682",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D044682"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0227375",
+      "description": "ncithesaurus:Ascending_Colon",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0227375"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "colon ascendens",
+      "scope": "hasExactSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Ascending_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Ascending_colon"
+        }
+      ]
+    },
+    {
+      "name": "spiral colon",
+      "scope": "hasRelatedSynonym",
+      "type": "taxonomic disambiguation",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Spiral_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Spiral_colon"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/graph"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002150"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001156/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002202"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

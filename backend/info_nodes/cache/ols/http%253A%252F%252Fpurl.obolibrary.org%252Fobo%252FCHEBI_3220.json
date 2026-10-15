@@ -1,0 +1,366 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3220",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Amfebutamone hydrochloride",
+    "BW 323",
+    "BW-323",
+    "BW323",
+    "Bupropion hydrochloride component of auvelity",
+    "Bupropion hydrochloride component of contrave",
+    "Bupropion hydrochloride",
+    "Forfivo xl",
+    "Mysimba",
+    "NSC-315851",
+    "Wellbutrin 100",
+    "Wellbutrin 75",
+    "Wellbutrin sr",
+    "Wellbutrin xl",
+    "Wellbutrin",
+    "Zyban"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:31677-93-7",
+      "kegg.drug:D00817",
+      "pubmed:17417631",
+      "pubmed:19734910",
+      "pubmed:20553011",
+      "pubmed:20843939",
+      "pubmed:23956101",
+      "pubmed:34112854"
+    ],
+    "generalized_empirical_formula": [
+      "C13H18ClNO.HCl"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3220"
+    ],
+    "inchi_key_string": [
+      "HEYVINCGKDONRU-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C13H18ClNO.ClH/c1-9(15-13(2,3)4)12(16)10-6-5-7-11(14)8-10;/h5-9,15H,1-4H3;1H"
+    ],
+    "mass": [
+      "276.207"
+    ],
+    "monoisotopic_mass": [
+      "275.08437"
+    ],
+    "smiles_string": [
+      "CC(NC(C)(C)C)C(=O)c1cccc(Cl)c1.Cl"
+    ]
+  },
+  "label": "Bupropion hydrochloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3220",
+  "obo_id": "CHEBI:3220",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "31677-93-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=31677-93-7"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00817",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "17417631",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17417631/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19734910",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19734910/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20553011",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20553011/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20843939",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20843939/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23956101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23956101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34112854",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34112854/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Amfebutamone hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BW 323",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BW-323",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BW323",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bupropion hydrochloride component of auvelity",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bupropion hydrochloride component of contrave",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bupropion hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Forfivo xl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mysimba",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-315851",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wellbutrin 100",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wellbutrin 75",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wellbutrin sr",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wellbutrin xl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wellbutrin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zyban",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3220/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

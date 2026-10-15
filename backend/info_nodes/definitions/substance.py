@@ -349,6 +349,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         ],
     ),
     Substance(
+        sid="black-grape-juice",
+        name="black grape juice",
+        description="Black grape juice is the juice from dark (black or purple) grapes, rich in "
+        "polyphenols such as anthocyanins and resveratrol.",
+        annotations=[
+            (BQB.IS, "NCIT:C90536"),
+        ],
+        synonyms=["purple grape juice", "red grape juice"],
+    ),
+    Substance(
         sid="citrus-juice",
         name="citrus juice",
         description="Citrus juice is the juice from citrus fruits.",
@@ -4551,6 +4561,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         ],
     ),
     Substance(
+        sid="naltrexone",
+        description="Naltrexone is a long-acting opioid receptor antagonist, the N-cyclopropylmethyl "
+        "analogue of 'naloxone', used to treat opioid and alcohol dependence and to block the "
+        "effects of opioids, usually given as naltrexone hydrochloride.",
+        annotations=[
+            (BQB.IS, "CHEBI:7465"),
+        ],
+    ),
+    Substance(
         sid="clopidogrel",
         description="A thienopyridine, with antiplatelet activity. Clopidogrel targets, irreversibly binds to and alters the platelet receptor for adenosine diphosphate (ADP), thereby blocking the binding of ADP to its receptor, inhibiting ADP-mediated activation of the glycoprotein complex GPIIb/IIIa, and inhibiting fibrinogen binding to platelets and platelet adhesion and aggregation. This results in increased bleeding time.",
         annotations=[
@@ -5256,6 +5275,135 @@ SUBSTANCE_NODES: list[InfoNode] = [
             (BQB.IS, "SNOMEDCT:112052004"),
             (BQB.IS_VERSION_OF, "uniprot/P00797"),
         ],
+    ),
+    # ----------------------
+    # proteins: enzymes and transporters
+    # ----------------------
+    Substance(
+        sid="cytochrome-p450-2e1",
+        name="CYP2E1",
+        label="cytochrome P450 2E1 (CYP2E1)",
+        description="Cytochrome P450 2E1 (CYP2E1, 493 aa, ~57 kDa) is encoded by the human "
+        "CYP2E1 gene. This enzyme of the liver metabolizes ethanol, chlorzoxazone (to "
+        "6-hydroxychlorzoxazone) and other small molecules and is induced by ethanol. Used for "
+        "measurements of the protein, e.g. its amount in liver microsomes.",
+        annotations=[
+            (BQB.IS, "uniprot/P05181"),
+        ],
+        synonyms=["cytochrome P450 2E1", "P450 2E1", "CYPIIE1"],
+    ),
+    Substance(
+        sid="abcb1",
+        name="ABCB1",
+        label="P-glycoprotein (ABCB1)",
+        description="P-glycoprotein (P-gp, MDR1, 1280 aa, ~141 kDa) is encoded by the human "
+        "ABCB1 gene. This ATP-binding cassette efflux transporter of the intestine, the liver, "
+        "the kidney and the blood-brain barrier limits the absorption and the distribution of "
+        "many drugs, e.g. talinolol and digoxin.",
+        annotations=[
+            (BQB.IS, "uniprot/P08183"),
+        ],
+        synonyms=["P-glycoprotein", "P-gp", "MDR1"],
+    ),
+    Substance(
+        sid="abcc2",
+        name="ABCC2",
+        label="multidrug resistance-associated protein 2 (ABCC2)",
+        description="Multidrug resistance-associated protein 2 (MRP2, 1545 aa, ~174 kDa) is "
+        "encoded by the human ABCC2 gene. This apical ATP-binding cassette efflux transporter "
+        "of the liver, the intestine and the kidney exports organic anions and drug "
+        "conjugates.",
+        annotations=[
+            (BQB.IS, "uniprot/Q92887"),
+        ],
+        synonyms=["MRP2", "cMOAT"],
+    ),
+    Substance(
+        sid="abcc3",
+        name="ABCC3",
+        label="multidrug resistance-associated protein 3 (ABCC3)",
+        description="Multidrug resistance-associated protein 3 (MRP3, 1527 aa, ~169 kDa) is "
+        "encoded by the human ABCC3 gene. This basolateral ATP-binding cassette efflux "
+        "transporter of the liver and the intestine exports organic anions and glucuronides "
+        "into the blood.",
+        annotations=[
+            (BQB.IS, "uniprot/O15438"),
+        ],
+        synonyms=["MRP3"],
+    ),
+    Substance(
+        sid="abcg2",
+        name="ABCG2",
+        label="breast cancer resistance protein (ABCG2)",
+        description="Breast cancer resistance protein (BCRP, 655 aa, ~72 kDa) is encoded by "
+        "the human ABCG2 gene. This ATP-binding cassette efflux transporter of the intestine, "
+        "the liver and the kidney limits the absorption of drugs such as rosuvastatin and "
+        "exports urate.",
+        annotations=[
+            (BQB.IS, "uniprot/Q9UNQ0"),
+        ],
+        synonyms=["BCRP"],
+    ),
+    Substance(
+        sid="slc10a2",
+        name="SLC10A2",
+        label="apical sodium-dependent bile acid transporter (SLC10A2)",
+        description="Apical sodium-dependent bile acid transporter (ASBT, IBAT, 348 aa, ~38 "
+        "kDa) is encoded by the human SLC10A2 gene. This uptake transporter of the terminal "
+        "ileum reabsorbs bile acids for their enterohepatic circulation.",
+        annotations=[
+            (BQB.IS, "uniprot/Q12908"),
+        ],
+        synonyms=["ASBT", "IBAT"],
+    ),
+    Substance(
+        sid="slc15a1",
+        name="SLC15A1",
+        label="peptide transporter 1 (SLC15A1)",
+        description="Peptide transporter 1 (PEPT1, 708 aa, ~79 kDa) is encoded by the human "
+        "SLC15A1 gene. This proton-coupled uptake transporter of the small intestine absorbs "
+        "di- and tripeptides and peptidomimetic drugs such as beta-lactam antibiotics and "
+        "valacyclovir.",
+        annotations=[
+            (BQB.IS, "uniprot/P46059"),
+        ],
+        synonyms=["PEPT1"],
+    ),
+    Substance(
+        sid="slc22a1",
+        name="SLC22A1",
+        label="organic cation transporter 1 (SLC22A1)",
+        description="Organic cation transporter 1 (OCT1, 554 aa, ~61 kDa) is encoded by the "
+        "human SLC22A1 gene. This uptake transporter, mainly of the liver, takes up organic "
+        "cations such as metformin.",
+        annotations=[
+            (BQB.IS, "uniprot/O15245"),
+        ],
+        synonyms=["OCT1"],
+    ),
+    Substance(
+        sid="slc22a3",
+        name="SLC22A3",
+        label="organic cation transporter 3 (SLC22A3)",
+        description="Organic cation transporter 3 (OCT3, EMT, 556 aa, ~61 kDa) is encoded by "
+        "the human SLC22A3 gene. This uptake transporter of many tissues takes up organic "
+        "cations and monoamines.",
+        annotations=[
+            (BQB.IS, "uniprot/O75751"),
+        ],
+        synonyms=["OCT3", "EMT"],
+    ),
+    Substance(
+        sid="slco2b1",
+        name="SLCO2B1",
+        label="organic anion transporting polypeptide 2B1 (SLCO2B1)",
+        description="Organic anion transporting polypeptide 2B1 (OATP2B1, OATP-B, 709 aa, ~77 "
+        "kDa) is encoded by the human SLCO2B1 gene. This uptake transporter of the intestine "
+        "and the liver takes up organic anions such as statins.",
+        annotations=[
+            (BQB.IS, "uniprot/O94956"),
+        ],
+        synonyms=["OATP2B1", "OATP-B"],
     ),
     # ----------------------
     # bicarbonate
@@ -8648,6 +8796,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["Amfebutamone", "Amfebutamon"],
     ),
     Substance(
+        sid="bupropion-hydrochloride",
+        name="bupropion hydrochloride",
+        description="Bupropion hydrochloride is the hydrochloride salt of 'bupropion', the form "
+        "in which bupropion is given in tablets.",
+        annotations=[
+            (BQB.IS, "CHEBI:3220"),
+        ],
+        synonyms=["amfebutamone hydrochloride"],
+    ),
+    Substance(
         sid="hydroxybupropion",
         description="Hydroxybupropion (code name BW 306U), or 6-hydroxybupropion, "
         "is the major active metabolite of the antidepressant and smoking "
@@ -8834,6 +8992,25 @@ SUBSTANCE_NODES: list[InfoNode] = [
             (BQB.IS, "CHEBI:232439"),
         ],
         synonyms=["MPAG"],
+    ),
+    Substance(
+        sid="mycophenolate-mofetil",
+        name="mycophenolate mofetil",
+        description="Mycophenolate mofetil (MMF) is the 2-morpholinoethyl ester prodrug of "
+        "'mycophenolic acid', an immunosuppressant given after organ transplantation; it is "
+        "hydrolysed to mycophenolic acid after absorption.",
+        annotations=[
+            (BQB.IS, "CHEBI:8764"),
+        ],
+        synonyms=["MMF"],
+    ),
+    Substance(
+        sid="prednisone",
+        description="Prednisone is a synthetic glucocorticoid used as an anti-inflammatory and "
+        "immunosuppressive drug, a prodrug that the liver converts to the active prednisolone.",
+        annotations=[
+            (BQB.IS, "CHEBI:8382"),
+        ],
     ),
     Substance(
         sid="aluminium-hydroxide",

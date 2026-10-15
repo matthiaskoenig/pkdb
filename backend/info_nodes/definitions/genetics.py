@@ -31,6 +31,19 @@ GENETICS_NODES: list[InfoNode] = [
         synonyms=["relative gene expression", "relative mRNA level"],
     ),
     MeasurementType(
+        sid="mrna-expression",
+        name="mRNA expression",
+        description="mRNA expression of a gene in a tissue relative to a reference (housekeeping) "
+        "gene of the same sample, e.g. the 2^-dCt value of quantitative RT-PCR normalized to 18S "
+        "rRNA or GAPDH. Give the gene product (e.g. the transporter) as the substance and the "
+        "reference gene in the comment. For the ratio to a reference condition use "
+        "'mRNA expression (relative)'.",
+        parents=["gene-measurement"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+        synonyms=["gene expression", "mRNA level"],
+    ),
+    MeasurementType(
         sid="gene-phenotype",
         name="gene phenotype",
         description="Gene phenotype.",

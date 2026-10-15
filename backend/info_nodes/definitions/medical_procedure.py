@@ -62,6 +62,20 @@ MEDICAL_PROCEDURE_NODES: list[InfoNode] = [
         ],
     ),
     Choice(
+        sid="lipoprotein-apheresis",
+        name="lipoprotein apheresis",
+        description="Lipoprotein apheresis. An extracorporeal procedure that removes "
+        "low-density lipoprotein (LDL) and lipoprotein(a) from the blood or plasma, e.g. by "
+        "adsorption or precipitation, in patients with severe hypercholesterolemia such as "
+        "familial hypercholesterolemia.",
+        parents=["medical procedure"],
+        annotations=[
+            (BQB.IS, "SNOMEDCT:448955002"),
+            (BQB.IS_VERSION_OF, "NCIT:C173286"),
+        ],
+        synonyms=["LDL apheresis", "low density lipoprotein apheresis"],
+    ),
+    Choice(
         sid="tubal_ligation",
         name="tubal ligation",
         label="tubal ligation (TL)",

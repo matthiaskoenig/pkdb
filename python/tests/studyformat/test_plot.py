@@ -405,13 +405,24 @@ def test_plot_default_sources_include_figures_whose_outputs_have_a_time(
     folder = make_study(
         {
             **valid_files,
-            "outputs_Fig3.tsv": tsv("outputs", {**output, "time": "1", "mean": "2"}),
+            "outputs_Fig3.tsv": tsv(
+                "outputs",
+                {**output, "time": "1", "mean": "2"},
+                {**output, "time": "2", "mean": "1"},
+            ),
             "Example_Fig3.png": png(100, 100),
             # Outputs without a time: nothing to plot.
             "outputs_Fig4.tsv": tsv(
                 "outputs", {**output, "measurement": "cmax", "mean": "2"}
             ),
             "Example_Fig4.png": png(100, 100),
+            # Each series at one time: its x is not time, nothing to plot.
+            "outputs_Fig5.tsv": tsv(
+                "outputs",
+                {**output, "subjects": "S1", "time": "1", "mean": "2"},
+                {**output, "subjects": "S2", "time": "1", "mean": "3"},
+            ),
+            "Example_Fig5.png": png(100, 100),
         }
     )
     assert format_folder(folder).ok
@@ -423,7 +434,7 @@ def test_plot_default_sources_include_figures_whose_outputs_have_a_time(
         in lines
     )
     assert "  series without dataset: all · D1 · concentration · drug · plasma" in lines
-    assert not any("Fig4" in line for line in lines)
+    assert not any("Fig4" in line or "Fig5" in line for line in lines)
 
 
 TIMECOURSE = {

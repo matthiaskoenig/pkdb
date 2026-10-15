@@ -36,7 +36,7 @@ import {
 } from "../../src/study-views/grid";
 import { cellParts, namedKind } from "../../src/study-views/links";
 import { issueMessage } from "../../src/curation-app/metadata";
-import { legendEntries, overlayTraces, plotTraces } from "../../src/study-views/overlay";
+import { legendEntries, overlayTraces, plottedSeries, plotTraces } from "../../src/study-views/overlay";
 import { ApiError } from "../../src/study-views/errors";
 import { detailsOfBody } from "../../src/curation-app/failures";
 import { acknowledgement, locationKey, openPlace, scopeText, suggestionView } from "../../src/study-views/problems";
@@ -60,6 +60,7 @@ import nameLinesFixture from "../fixtures/curation-contract/name-lines.json";
 import rowsFixture from "../fixtures/curation-contract/rows.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import outputsSourceFixture from "../fixtures/curation-contract/source-outputs-fig2.json";
+import oneTimeSourceFixture from "../fixtures/curation-contract/source-outputs-one-time.json";
 import sourcesFixture from "../fixtures/curation-contract/sources.json";
 import tableContentFixture from "../fixtures/curation-contract/table-content.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
@@ -504,5 +505,19 @@ describe("outputs source contract", () => {
     expect(layout.xaxis.title).toEqual({ text: "time (hr)", font: { size: 11 } });
     expect(layout.yaxis.title).toEqual({ text: "concentration (mg/l)", font: { size: 11 } });
     expect(legendEntries(view, "plot", false).map((entry) => entry.series)).toEqual([PLASMA, URINE]);
+  });
+});
+
+describe("outputs source at one time contract", () => {
+  const view = contract<SourceView>(oneTimeSourceFixture);
+
+  it("accepts the answer", () => {
+    expect(isSourceView(oneTimeSourceFixture)).toBe(true);
+  });
+
+  it("plots no outputs series of one time each, as the x of the figure is not time", () => {
+    expect(view.mapped.flatMap((table) => table.rows)).toHaveLength(3);
+    expect(plottedSeries(view)).toEqual([]);
+    expect(plotTraces(view).traces).toEqual([]);
   });
 });
