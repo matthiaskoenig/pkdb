@@ -133,3 +133,21 @@ test("text, also in Vuetify's typography classes, is set in the bundled Inter", 
   expect(license.status()).toBe(200);
   expect(await license.text()).toContain("SIL OPEN FONT LICENSE");
 });
+
+test("Vuetify's cascade layers keep Vuetify's order, so its components win against its reset", async ({ page }) => {
+  // The production build links the styles of shared chunks before the main file; the page names the order of the layers first.
+  await page.goto("/");
+  const declared = await page.evaluate(() => {
+    const first = document.styleSheets[0]?.cssRules[0];
+    return first instanceof CSSLayerStatementRule ? [...new Set(first.nameList.map((name) => name.split(".")[0]))] : [];
+  });
+  expect(declared.slice(0, 5)).toEqual(["vuetify-core", "vuetify-components", "vuetify-overrides", "vuetify-utilities", "vuetify-final"]);
+  // Vuetify's reset `button { font: inherit }` would give buttons the weight and the size of the text around them.
+  await expect(page.getByRole("button", { name: "Toggle color theme" })).toHaveCSS("font-weight", "500");
+  await page.goto("/account");
+  const signIn = page.getByRole("button", { name: "Sign in", exact: true });
+  await expect(signIn).toHaveCSS("font-weight", "500");
+  await expect(signIn).toHaveCSS("line-height", "normal");
+  const root = await page.evaluate(() => Number.parseFloat(getComputedStyle(document.documentElement).fontSize));
+  await expect(signIn).toHaveCSS("font-size", `${0.875 * root}px`);
+});

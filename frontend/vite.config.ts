@@ -6,6 +6,7 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { fontLicenses } from "./scripts/font-licenses.ts";
 import { pdfjsAssets, pdfjsBanner } from "./scripts/pdfjs-assets.ts";
+import { cascadeLayers } from "./scripts/cascade-layers.ts";
 // A string, not a URL object: under Vitest the URL class is the one of jsdom, which fileURLToPath and readFileSync refuse.
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -34,6 +35,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      cascadeLayers(),
       fontLicenses(),
       pdfjsAssets(),
       {

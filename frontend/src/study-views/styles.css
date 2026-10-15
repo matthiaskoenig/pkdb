@@ -548,12 +548,11 @@ html :where(.website-study-views) table {
 }
 
 /* The rem sizes of Vuetify 4.2.1 of the components that the views use, in the curation app's 14 px.
-   They stand in a layer of their own, which the website declares after Vuetify's layers, as this
-   file loads with the study pages: on the website the reset of Vuetify (vuetify-core) outranks its
-   components, as the file of VSelect declares vuetify-components before the main file declares
-   vuetify-core, so that `button { font: inherit }` would win against vuetify-overrides. The views
-   use no utility class of Vuetify, which this layer outranks too. The browser test of the sizes
-   (tests/e2e/studies.spec.ts) fails if the layer ever loses. */
+   They stand in a layer of their own, which both builds declare after Vuetify's layers
+   (scripts/cascade-layers.ts), so that they win against Vuetify's own sizes, including its
+   refinements in vuetify-overrides, and every rule of the views outside a layer wins against them.
+   The views use no utility class of Vuetify, which this layer outranks too. The browser test of the
+   sizes (tests/e2e/studies.spec.ts) fails if the layer ever loses. */
 @layer website-study-views {
   .website-study-views .v-input {
     font-size: var(--study-rem);
