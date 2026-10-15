@@ -618,16 +618,28 @@ def test_postprocessing_runs_only_without_earlier_errors(
     assert codes(validate_folder(valid_study, sf_vocabulary)) == {"unknown_measurement"}
 
 
-def test_postprocessing_failure_is_reported(valid_study, tsv, sf_vocabulary):
-    # PK parameters cannot be derived from a concentration curve that is all zero.
+def test_postprocessing_failure_is_reported(valid_study, sf_vocabulary, monkeypatch):
+    # The checks before postprocessing catch every known failure, so one is made.
+    from pkdb.schemas.validation import fail
+    from pkdb.studyformat import validation
+
+    def failing(*args, **kwargs):
+        fail("timecourse_time", "PK requires numeric time points")
+
+    monkeypatch.setattr(validation, "prepare_study", failing)
+    report = validate_folder(valid_study, sf_vocabulary)
+    assert not report.valid and not report.complete
+    assert codes(report) == {"timecourse_time"}
+
+
+def test_an_all_zero_curve_is_valid(valid_study, tsv, sf_vocabulary):
+    # Such as the concentrations of a placebo: the curve has no PK parameters.
     rows = [{**row, "mean": "0"} for row in timecourse_rows(3)]
     (valid_study / "timecourses_Fig2.tsv").write_text(
         tsv("timecourses", *rows), encoding="utf-8"
     )
     assert format_folder(valid_study).ok
-    report = validate_folder(valid_study, sf_vocabulary)
-    assert not report.valid and not report.complete
-    assert codes(report) == {"pk_zero_curve"}
+    assert validate_folder(valid_study, sf_vocabulary).valid
 
 
 def test_several_points_of_one_subject_are_a_scatter(valid_study, tsv, sf_vocabulary):
