@@ -122,8 +122,8 @@ const timecourses = {
 function points(file: string): SourcePoint[] {
   const base = { kind: "timecourses", file, x: 0.5, x_text: "0.5" } as const;
   return [
-    { ...base, series: "caf_plasma_D150", line: 2, y: 2.419, y_text: "2.419", error_bar: 3.051 },
-    { ...base, series: "caf_plasma_D75", line: 3, y: 1.2, y_text: "1.2", error_bar: null },
+    { ...base, series: "caf_plasma_D150", line: 2, y: 2.419, y_text: "2.419", error_low: 1.787, error_high: 3.051 },
+    { ...base, series: "caf_plasma_D75", line: 3, y: 1.2, y_text: "1.2", error_low: null, error_high: null },
   ];
 }
 
@@ -150,7 +150,8 @@ const digitized: SourceView = {
       y: 2.42,
       file: "Example_Fig1.wpd.json",
       line: null,
-      error_px: null,
+      error_low_px: null,
+      error_high_px: null,
       x_text: "0.5",
       y_text: "2.42",
       error_bar_end: false,
@@ -164,7 +165,8 @@ const digitized: SourceView = {
       y: 2.419,
       file: "timecourses_Fig1.tsv",
       line: 2,
-      error_px: [120, 250],
+      error_low_px: [120, 352],
+      error_high_px: [120, 250],
       x_text: "0.5",
       y_text: "2.419",
       error_bar_end: false,
@@ -223,6 +225,23 @@ const outputs: TableResponse = {
     { line: 2, cells: ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "", "h", ""] },
     { line: 3, cells: ["Example", "Tab2", "caf_vd", "vd", "0.7", "", "l/kg", ""] },
   ],
+};
+
+/** outputs_Tab2.tsv with the subjects and interventions that its rows name. */
+const dosed: TableResponse = {
+  file: "outputs_Tab2.tsv",
+  kind: "table",
+  header: ["study", "source", "subjects", "interventions", "measurement", "mean"],
+  rows: [
+    { line: 1, cells: ["Example", "Tab2", "all", "D1", "cmax", "1.2"] },
+    { line: 2, cells: ["Example", "Tab2", "all", "D1", "tmax", "4.8"] },
+  ],
+};
+
+/** The lines of the names of the study: `all` is line 1 of subjects.tsv, which names the source Tab2. */
+const NAME_LINES: StudyDetail["name_lines"] = {
+  subjects: { file: "subjects.tsv", lines: { all: 1 } },
+  interventions: { file: "interventions.tsv", lines: { D1: 1 } },
 };
 /** A shared table: its rows name their source, and line 4 one that the study does not have. */
 const subjects: TableResponse = {
@@ -631,7 +650,7 @@ describe("figure sources", () => {
     const overlays = wrapper.findAllComponents(OverlayStub);
     expect(overlays[0]?.props("view")).toEqual(digitized);
     expect(overlays[0]?.props("mode")).toBe("overlay");
-    expect(sourcePane().text()).toContain("Not digitized: caf_plasma_D75");
+    expect(sourcePane().text()).toContain("Not digitizedcaf_plasma_D75");
     // The rows without a dataset are drawn beside the figure.
     expect(overlays[1]?.props("mode")).toBe("plot");
     expect(overlays).toHaveLength(2);
@@ -945,6 +964,75 @@ describe("linked selection", () => {
   });
 });
 
+describe("links of names", () => {
+  it("follows a name to its row in a step of its own in the history, with the row of the link selected first", async () => {
+    await mountSection(detail({ name_lines: NAME_LINES }), { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed }, `${SECTION}?source=Tab2&file=outputs_Tab2.tsv`);
+    const replace = vi.spyOn(router, "replace");
+    const push = vi.spyOn(router, "push");
+    const row = rowsPane().findAll("tbody tr[data-index]")[1]!;
+    await row.findAll(".grid-link")[0]!.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" }));
+    await vi.waitFor(() => expect(rowsPane().get("tr.grid-row--focus th").text()).toBe("1"), { timeout: 5000 });
+    // Back returns to line 2 of outputs_Tab2.tsv, selected as a click on it selects it.
+    expect(replace).toHaveBeenCalledWith({ query: { source: "Tab2", file: "outputs_Tab2.tsv", line: "2" } });
+    expect(push).toHaveBeenCalledWith({ query: { file: "subjects.tsv", line: "1" } });
+    expect(replace.mock.invocationCallOrder[0]!).toBeLessThan(push.mock.invocationCallOrder[0]!);
+    expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" });
+    // The rows pane shows subjects.tsv with line 1 selected beside the source that the row names.
+    expect(rowsPane().get("tr.grid-row--focus th").text()).toBe("1");
+    expect(page().get(".nav-source[aria-current='true'] .nav-name").text()).toBe("Tab2");
+  });
+
+  it("keeps the column of a route that already selects the row of the link, so that Back returns to the marked cell", async () => {
+    await mountSection(
+      detail({ name_lines: NAME_LINES }),
+      { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed },
+      `${SECTION}?source=Tab2&file=outputs_Tab2.tsv&line=2&column=subjects`,
+    );
+    const replace = vi.spyOn(router, "replace");
+    await rowsPane().findAll("tbody tr[data-index]")[1]!.findAll(".grid-link")[0]!.trigger("click");
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ file: "subjects.tsv", line: "1" }));
+    expect(replace).not.toHaveBeenCalled();
+    router.back();
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({ source: "Tab2", file: "outputs_Tab2.tsv", line: "2", column: "subjects" }),
+    );
+  });
+
+  it("keeps the paper and its PDF when it follows a name while the paper shows", async () => {
+    const papers = [paperFile("Example.pdf"), paperFile("Example_Supp.pdf")];
+    await mountSection(
+      detail({ name_lines: NAME_LINES, papers }),
+      { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed },
+      `${SECTION}?source=paper&pdf=Example_Supp.pdf&file=outputs_Tab2.tsv`,
+    );
+    const push = vi.spyOn(router, "push");
+    await rowsPane().findAll("tbody tr[data-index]")[0]!.findAll(".grid-link")[1]!.trigger("click");
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({
+        source: "paper",
+        pdf: "Example_Supp.pdf",
+        file: "interventions.tsv",
+        line: "1",
+      }),
+    );
+    expect(push).toHaveBeenCalledWith({
+      query: { source: "paper", pdf: "Example_Supp.pdf", file: "interventions.tsv", line: "1" },
+    });
+  });
+
+  it("keeps replacing the address for the other changes of the selection", async () => {
+    await mountSection(detail({ name_lines: NAME_LINES }), { [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: dosed }, `${SECTION}?source=Tab2&file=outputs_Tab2.tsv`);
+    const push = vi.spyOn(router, "push");
+    await rowsPane().findAll("tbody tr[data-index]")[1]!.find("td").trigger("click");
+    await vi.waitFor(() =>
+      expect(router.currentRoute.value.query).toEqual({ source: "Tab2", file: "outputs_Tab2.tsv", line: "2" }),
+    );
+    await flushPromises();
+    expect(push).not.toHaveBeenCalled();
+  });
+});
+
 describe("routes", () => {
   it("redirects the old Sources and Tables addresses with their query", async () => {
     await mountSection(detail(), {}, "/studies/caffeine/Example/tables?file=outputs_Tab2.tsv&line=3");
@@ -1027,6 +1115,15 @@ describe("narrow windows", () => {
       "info-data",
       "info-data",
       "info-raw",
+    ]);
+    expect(dots.map((dot) => dot.classes().includes("data-option-dot--outlined"))).toEqual([
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
     ]);
     expect(dots.every((dot) => dot.attributes("aria-hidden") === "true")).toBe(true);
   });

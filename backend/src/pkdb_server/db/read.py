@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from pkdb.schemas.security import Principal
 from pkdb.schemas.study import CanonicalStudy
+from pkdb.studyformat.tables import REVIEW_JSON
 from pkdb_server.db.models import interventions as i
 from pkdb_server.db.models import measurements as m
 from pkdb_server.db.models import studies as s
@@ -15,7 +16,11 @@ from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import VocabularyNode
 from pkdb_server.files.store import study_access
-from pkdb_server.services.authorization import AuthorizationDenied, authorize
+from pkdb_server.services.authorization import (
+    AuthorizationDenied,
+    authorize,
+    may_write,
+)
 
 
 def released_study(
@@ -42,6 +47,23 @@ def released_study(
     return root
 
 
+def without_curation(study: CanonicalStudy) -> CanonicalStudy:
+    """The study without its review, issue and `review.json`, for readers who may not write
+    it: they are curation information (#963). The curator ratings stay, which released
+    clients require; only the website pages leave them out."""
+    metadata = study.metadata.model_copy(update={"review": None, "issue": None})
+    return study.model_copy(
+        update={
+            "metadata": metadata,
+            "attachments": [
+                attachment
+                for attachment in study.attachments
+                if attachment.name != REVIEW_JSON
+            ],
+        }
+    )
+
+
 def read_study(
     sid: str,
     principal: Principal,
@@ -57,8 +79,10 @@ def read_study(
             root = released_study(session, sid, principal)
         if root is None:
             raise LookupError("Study not found")
-        authorize(principal, "read", study_access(root, session))
-        return assemble_study(root, session)
+        access = study_access(root, session)
+        authorize(principal, "read", access)
+        study = assemble_study(root, session)
+        return study if may_write(principal, access) else without_curation(study)
 
 
 def moved_study(

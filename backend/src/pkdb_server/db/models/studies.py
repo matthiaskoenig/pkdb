@@ -92,6 +92,10 @@ class Study(Identity, Timestamped, Base):
     review_status: Mapped[str | None] = mapped_column(String(16))
     # Reviewers and review items of `review.json`; the status has its own column.
     review: Mapped[dict | None] = mapped_column(JSONB(none_as_null=True))
+    # The texts of study.json and reference.json of a study format 2 upload, by which
+    # `pkdb-server rebuild-views` puts the folder together again; None for format 1.
+    study_json: Mapped[str | None]
+    reference_json: Mapped[str | None]
     __table_args__ = (
         UniqueConstraint("publication_id", "source_key"),
         CheckConstraint("access IN ('public', 'private')", name="access"),

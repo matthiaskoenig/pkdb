@@ -186,3 +186,55 @@ def test_file_level_digitization_warnings_carry_their_dataset_as_key(
         ("unknown_dataset", "legend"),
         ("digitized_mismatch", "drug_plasma"),
     }
+
+
+OUTPUT = {
+    "subjects": "all",
+    "interventions": "D1",
+    "measurement": "concentration",
+    "substance": "drug",
+    "tissue": "plasma",
+    "time_unit": "h",
+    "unit": "mg/l",
+}
+OUTPUT_SERIES = "all · D1 · concentration · drug · plasma"
+
+
+def outputs_over_time(tsv):
+    """outputs_Fig1.tsv with two rows over time, at the data of pixels (10, 30) and (20, 10)."""
+    return tsv(
+        "outputs",
+        {**OUTPUT, "time": "1", "mean": "7"},
+        {**OUTPUT, "time": "2", "mean": "9"},
+    )
+
+
+def test_outputs_with_a_time_add_no_digitization_issue(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    files = {**valid_files, "outputs_Fig1.tsv": outputs_over_time(tsv)}
+    folder = study_with(make_study, files, project(GOOD))
+    found = codes(folder, sf_vocabulary)
+    assert not {"digitized_mismatch", "unknown_dataset"} & set(found)
+
+
+def test_a_dataset_named_like_an_outputs_series_is_known_and_not_compared_with_its_rows(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    data = project(GOOD)
+    # A point off both rows, which a comparison would report as a mismatch.
+    data["datasetColl"].append(
+        {"name": OUTPUT_SERIES, "axesName": "XY", "data": [{"x": 50, "y": 50}]}
+    )
+    files = {**valid_files, "outputs_Fig1.tsv": outputs_over_time(tsv)}
+    folder = study_with(make_study, files, data)
+    found = [
+        (
+            issue.code,
+            issue.source.file if issue.source else None,
+            issue.source.key if issue.source else None,
+        )
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.code in {"unknown_dataset", "digitized_mismatch"}
+    ]
+    assert found == []

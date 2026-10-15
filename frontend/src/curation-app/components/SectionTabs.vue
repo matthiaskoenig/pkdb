@@ -14,7 +14,7 @@ const props = defineProps<{
   counts: Partial<Record<Section, number>>;
   /** The sections with unsaved changes. */
   unsaved: readonly Section[];
-  /** The facts of the study at the end of the line, such as "On save: Validate"; a fact with `href` is a link. */
+  /** The facts of the study at the end of the line, such as the last upload; a fact with `href` is a link. */
   facts?: { text: string; href?: string }[];
 }>();
 

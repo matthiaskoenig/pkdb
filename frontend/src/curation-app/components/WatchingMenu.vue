@@ -88,7 +88,7 @@ async function toggle(): Promise<void> {
       </div>
       <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
       <p v-if="snapshot.paused">Automatic actions are paused. Saved files wait until you resume.</p>
-      <p v-else>Saving a file starts the On save action of its study.</p>
+      <p v-else>Saving a file starts the On save action.</p>
       <p v-if="snapshot.paused && unknownUploads" class="panel-note">
         Resume first checks the uploads with an unknown outcome on the server.
       </p>

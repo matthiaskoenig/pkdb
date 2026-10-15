@@ -8,6 +8,8 @@ from pkdb.studyformat.tables import (
     KIND_ORDER,
     RAW_KIND,
     TABLES,
+    column_class,
+    column_classes,
     image_file,
     parse_table_file,
     table_file,
@@ -236,3 +238,52 @@ def test_every_table_kind_and_the_raw_table_have_a_class_of_information_and_a_la
         "Raw table",
     ]
     assert set(INFO_CLASSES) == set(KIND_LABELS) == set(kinds)
+
+
+def _classes(kind: str) -> dict[str, str]:
+    spec = TABLES[kind]
+    return dict(zip(spec.names, column_classes(spec), strict=True))
+
+
+def test_the_columns_of_a_data_table_are_classed_by_what_they_name():
+    timecourses = _classes("timecourses")
+    assert (timecourses["study"], timecourses["source"]) == ("meta", "meta")
+    assert timecourses["subjects"] == "subjects"
+    assert timecourses["interventions"] == "interventions"
+    data = ("label", "measurement", "time", "mean", "sd", "error_type", "comment")
+    assert {timecourses[name] for name in data} == {"data"}
+    scatters = _classes("scatters")
+    assert scatters["subjects"] == "subjects"
+    assert (scatters["x_interventions"], scatters["y_interventions"]) == (
+        "interventions",
+        "interventions",
+    )
+    assert scatters["x_measurement"] == scatters["name"] == "data"
+    assert set(_classes("outputs").values()) == {
+        "meta",
+        "subjects",
+        "interventions",
+        "data",
+    }
+
+
+def test_the_tables_of_subjects_and_interventions_are_wholly_of_their_class():
+    for kind, info in (
+        ("subjects", "subjects"),
+        ("characteristica", "subjects"),
+        ("interventions", "interventions"),
+    ):
+        classes = _classes(kind)
+        assert (classes.pop("study"), classes.pop("source")) == ("meta", "meta")
+        assert set(classes.values()) == {info}, kind
+
+
+def test_a_column_of_a_data_table_is_classed_by_its_name():
+    assert column_class("outputs", "parent") == "subjects"
+    assert column_class("outputs", "donor_subjects") == "subjects"
+    assert column_class("scatters", "z_interventions") == "interventions"
+    # Only the ending counts, and only in the tables of the data.
+    assert column_class("outputs", "subjects_count") == "data"
+    assert column_class("interventions", "subjects") == "interventions"
+    assert column_class("characteristica", "interventions") == "subjects"
+    assert column_class("subjects", "source") == "meta"

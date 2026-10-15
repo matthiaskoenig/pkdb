@@ -24,22 +24,21 @@ from pydantic import ValidationError
 from pkdb.curation.actions import Action, action_of
 from pkdb.curation.errors import describe, new_request_id
 from pkdb.curation.launch import open_path
-from pkdb.curation.metadata import people, reference_match, reference_summary
+from pkdb.curation.metadata import profile
 from pkdb.curation.state import EngineState, JobRunning
 from pkdb.curation.tree import SourceTree
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
 from pkdb.references import ReferenceResolver
-from pkdb.schemas.review import Review, ReviewTarget
+from pkdb.schemas.review import ReviewTarget
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat import metadata as study_metadata
 from pkdb.studyformat import review_edit
-from pkdb.studyformat.jsonio import JsonFileError, load_json
-from pkdb.studyformat.layout import Layout, scan_folder, workbook_tables
+from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
-from pkdb.studyformat.raw import parse_raw_file, raw_lines
+from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.review_edit import (
     ANY,
     AmbiguousWarning,
@@ -56,9 +55,8 @@ from pkdb.studyformat.revision import (
     read_revision,
     revision_of,
 )
-from pkdb.studyformat.sources import has_source, source_view, study_sources
+from pkdb.studyformat.sources import study_sources
 from pkdb.studyformat.sync import (
-    NEW_TABLE_KINDS,
     AddTableResult,
     SyncResult,
     add_table,
@@ -67,18 +65,28 @@ from pkdb.studyformat.sync import (
     sync_study,
 )
 from pkdb.studyformat.tables import (
-    INFO_CLASSES,
-    KIND_LABELS,
-    KIND_ORDER,
     RAW_KIND,
     REVIEW_JSON,
     STUDY_JSON,
-    TABLES,
     parse_table_file,
 )
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
-from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
+from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.views import (
+    FILE_TYPES,
+    TABLE_KINDS,
+    acknowledged,
+    name_lines,
+    paper_names,
+    people,
+    reference_match,
+    reference_summary,
+    source_document,
+    study_tables,
+    table_view,
+    targets,
+)
 from pkdb.studyformat.workbook.base import open_lock, workbook_path
 from pkdb.studyformat.workbook.view import (
     HiddenSheet,
@@ -88,15 +96,6 @@ from pkdb.studyformat.workbook.view import (
     parse_cell,
     show_place,
 )
-
-IMAGE_TYPES = {
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".webp": "image/webp",
-}
-#: The media types of the files that the file route serves: the images of the sources and the PDFs.
-FILE_TYPES = {**IMAGE_TYPES, ".pdf": "application/pdf"}
 
 
 class UnsafeFile(ValueError):
@@ -124,88 +123,6 @@ class AmbiguousStudy(ValueError):
         )
         # The folders relative to the workspace, for the app to list.
         self.paths = paths
-
-
-def _read(path: Path) -> object | None:
-    try:
-        if path.is_symlink() or not path.is_file():
-            return None
-        return load_json(path.read_bytes())
-    except JsonFileError, OSError:
-        return None
-
-
-def _object(value: object) -> dict:
-    return value if isinstance(value, dict) else {}
-
-
-def _user(value: object) -> str | None:
-    return value if isinstance(value, str) and value.strip() else None
-
-
-def _curator_names(value: object) -> list[str]:
-    names = []
-    for item in value if isinstance(value, list) else []:
-        name = _user(_object(item).get("user") if isinstance(item, dict) else item)
-        if name:
-            names.append(name)
-    return names
-
-
-def _review(folder: Path) -> tuple[str | None, int]:
-    data = _read(folder / "review.json")
-    try:
-        review = Review.model_validate(data)
-    except ValidationError:
-        return None, 0
-    return review.status, sum(1 for item in review.items if item.state == "open")
-
-
-def _title(folder: Path) -> str | None:
-    title = _object(_read(folder / "reference.json")).get("title")
-    return title if isinstance(title, str) else None
-
-
-def study_summary(folder: Path) -> dict:
-    folder = Path(folder)
-    raw = _object(_read(folder / "study.json"))
-    try:
-        study = StudyMetadata.model_validate(raw)
-        creator = study.creator
-        curators = [item.user for item in study.curators]
-        issue = study.issue
-        release = study.release.model_dump(mode="json") if study.release else None
-        provenance = study.provenance.model_dump(mode="json")
-    except ValidationError:
-        creator = _user(raw.get("creator"))
-        curators = _curator_names(raw.get("curators"))
-        issue = raw.get("issue")
-        issue = (
-            issue if isinstance(issue, int) and not isinstance(issue, bool) else None
-        )
-        release = _object(raw.get("release"))
-        release = (
-            {"pkdb_id": release.get("pkdb_id"), "date": release.get("date")}
-            if release.get("pkdb_id")
-            else None
-        )
-        provenance = _object(raw.get("provenance"))
-    kind = provenance.get("kind") if isinstance(provenance.get("kind"), str) else None
-    status, open_items = _review(folder)
-    return {
-        "title": _title(folder),
-        "review_status": status,
-        "open_items": open_items,
-        "curators": curators,
-        "creator": creator,
-        "release": release,
-        "issue": issue,
-        "provenance": {"kind": kind}
-        | (
-            {"method": provenance.get("method")} if kind == "automatic_curation" else {}
-        ),
-        "ai": kind == "automatic_curation",
-    }
 
 
 def _file_url(identity: str, file: str) -> str:
@@ -273,42 +190,6 @@ def _document[D: (MetadataDocument, ReviewDocument)](
         "issues": [],
     }
     return state, document
-
-
-def _targets(study: LoadedStudy | None, document: ReviewDocument | None) -> dict:
-    """What the target of each review item with a file selects, by item id.
-
-    Nothing for a study beyond the upload limits or an invalid `review.json`.
-    """
-    if study is None or document is None:
-        return {}
-    return {
-        item.id: dataclasses.asdict(match_target(study, item.target))
-        for item in document.review.items
-        if item.target is not None and item.target.file is not None
-    }
-
-
-def _acknowledged(review: dict | None) -> list[dict]:
-    """The warnings that review items acknowledge; a dismissed item no longer acknowledges."""
-    return [
-        {
-            "id": item["id"],
-            "code": item["acknowledges"],
-            "target": item.get("target"),
-            "text": item["text"],
-            "author": item["author"],
-            "resolved_by": item.get("resolved_by"),
-            "resolved": item.get("resolved"),
-            "scope": acknowledgement_scope(
-                ReviewTarget.model_validate(item["target"])
-                if item.get("target")
-                else None
-            ),
-        }
-        for item in (review["items"] if review else [])
-        if item.get("acknowledges") and item["state"] != "dismissed"
-    ]
 
 
 def _unlinked(folder: Path, root: Path) -> Path:
@@ -462,53 +343,6 @@ def _sync_activity(done: str, sync: SyncResult) -> tuple[str, str]:
     return f"{done}; the sync found errors", "failed"
 
 
-# The kinds of tables for the app, in the order of the workbook sheets with the raw table last:
-# their label and class of information, whether a table of the kind belongs to one source (the
-# others name the source of each row), and whether Add table adds one.
-TABLE_KINDS = tuple(
-    {
-        "kind": kind,
-        "label": KIND_LABELS[kind],
-        "info": INFO_CLASSES[kind],
-        "per_source": kind == RAW_KIND or TABLES[kind].per_source,
-        "addable": kind in NEW_TABLE_KINDS,
-    }
-    for kind in (*KIND_ORDER, RAW_KIND)
-)
-
-
-def _tables(study: LoadedStudy) -> list[dict]:
-    """The table files and raw tables of a study in the order of the workbook sheets.
-
-    Each names its kind, its class of information, the source it belongs to (None for a table
-    shared by several sources, which names the source of each row) and its number of data rows:
-    the rows of a table below its header, the non-empty lines of a raw table. A file that could
-    not be read has no count.
-    """
-    layout = study.layout
-    sources = {table.name: table.source for table in layout.tables} | {
-        raw.name: raw.source for raw in layout.raw_tables
-    }
-    entries = []
-    for file, kind in workbook_tables(layout):
-        if kind == RAW_KIND:
-            raw = study.raw(file)
-            rows = None if raw is None else len(raw_lines(raw))
-        else:
-            table = study.table(file)
-            rows = None if table is None else len(table.rows)
-        entries.append(
-            {
-                "file": file,
-                "kind": kind,
-                "info": INFO_CLASSES[kind],
-                "source": sources[file],
-                "rows": rows,
-            }
-        )
-    return entries
-
-
 def _content_version(status: os.stat_result) -> str:
     """A version of the content of a file from its size and modification time, as the watcher
     compares files: it changes when the file is written, also at the same size."""
@@ -527,11 +361,8 @@ def _papers(identity: str, layout: Layout) -> list[dict]:
     refuses hidden names, so every listed PDF is served and every served PDF is listed. A file
     that went away since the scan is left out.
     """
-    files = [name for name in layout.attachments if Path(name).suffix.lower() == ".pdf"]
     papers = []
-    for name in sorted(
-        files, key=lambda name: (Path(name).stem != layout.study, natural_key(name))
-    ):
+    for name in paper_names(layout):
         try:
             status = (layout.folder / name).stat(follow_symlinks=False)
         except OSError:
@@ -598,7 +429,6 @@ class StudiesMixin(EngineState):
             key = {
                 "fingerprint": row["_fingerprint"],
                 "status": row["status"],
-                "mode": row["mode"],
                 "report_id": row["report_id"],
                 "sync": row["sync"],
                 "issue": self._issue_for(row["summary"].get("issue")),
@@ -624,7 +454,6 @@ class StudiesMixin(EngineState):
                         "id": row["id"],
                         "path": row["path"],
                         "status": row["status"],
-                        "mode": row["mode"],
                         "sync": row["sync"],
                         "counts": row["counts"],
                         "summary": row["summary"],
@@ -668,7 +497,7 @@ class StudiesMixin(EngineState):
                 for source in study_sources(study)
             ]
             files = sorted(layout.files, key=natural_key)
-            tables = _tables(study)
+            tables = study_tables(study)
         review, review_document = _document(folder, layout, REVIEW_JSON, read_review)
         metadata, _ = _document(folder, layout, STUDY_JSON, read_metadata)
         reference = reference_summary(folder)
@@ -689,9 +518,9 @@ class StudiesMixin(EngineState):
             "reference": reference,
             "reference_match": reference_match(metadata["value"], reference),
             # The study page shows the people without a second request for the roster.
-            "people": people(metadata["value"], detail["summary"]),
+            "people": people(metadata["value"], detail["summary"], profile),
             "review": review,
-            "acknowledged": _acknowledged(review["value"]),
+            "acknowledged": acknowledged(review["value"]),
             "conflicts": self._conflicts(folder) if conflicted else [],
             "sources": sources,
             "files": files,
@@ -701,7 +530,12 @@ class StudiesMixin(EngineState):
             # Also beyond the upload limits: Add table and the notes of study.json need them.
             "table_kinds": [dict(kind) for kind in TABLE_KINDS],
             # The items of `review` with their targets, matched in the tables of this answer.
-            "targets": _targets(study, review_document),
+            "targets": targets(
+                study, None if review_document is None else review_document.review
+            ),
+            # The line of each subject and intervention, by which a name in a cell links to
+            # its row; none beyond the upload limits.
+            "name_lines": name_lines(study),
         }
 
     def _conflicts(self, folder: Path) -> list[dict]:
@@ -715,40 +549,19 @@ class StudiesMixin(EngineState):
         return [conflict_data(conflict) for conflict in result.conflicts]
 
     def study_table(self, identity: str, file: str) -> dict:
-        study = _bounded(self.study_folder(identity))
-        if (table := study.table(file)) is not None:
-            header = table.spec.names
-            return {
-                "file": file,
-                "kind": "table",
-                "header": list(header),
-                "rows": [
-                    {
-                        "line": row.line,
-                        "cells": [row.cells.get(name, "") for name in header],
-                    }
-                    for row in table.rows
-                ],
-            }
-        if (raw := study.raw(file)) is not None:
-            return {
-                "file": file,
-                "kind": "raw",
-                "rows": [
-                    {"line": line, "cells": list(cells)}
-                    for line, cells in raw_lines(raw)
-                ],
-            }
-        raise LookupError(f"{file} is not a table of {identity}")
+        if (view := table_view(_bounded(self.study_folder(identity)), file)) is None:
+            raise LookupError(f"{file} is not a table of {identity}")
+        return view
 
     def study_source(self, identity: str, source: str) -> dict:
         study = _bounded(self.study_folder(identity))
-        if not has_source(study, source):
+        if (document := source_document(study, source)) is None:
             raise LookupError(f"{identity} has no source {source}")
-        # A KeyError from here on is a bug, not a missing source.
-        view = source_view(study, source)
-        image_url = None if view.image is None else _file_url(identity, view.image)
-        return {**dataclasses.asdict(view), "image_url": image_url}
+        image = document["image"]
+        return {
+            **document,
+            "image_url": None if image is None else _file_url(identity, image),
+        }
 
     def study_file(self, identity: str, file: str) -> StudyFile:
         """An image or a PDF of the study, open for reading; the caller closes its stream.

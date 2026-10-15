@@ -165,7 +165,7 @@ test.describe("sources", () => {
     await expect(navigator.getByRole("list", { name: "Sources", exact: true }).locator(".nav-name")).toHaveText(["Paper", "Fig1", "Tab2", "Text"]);
     await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-rows")).toHaveAttribute("title", "18 rows");
     await expect(navigatorButton(page, /^subjects\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(29, 95, 184)");
-    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(106, 63, 181)");
+    await expect(navigatorButton(page, /^timecourses_Fig1\.tsv/).locator(".nav-bar")).toHaveCSS("background-color", "rgb(97, 97, 97)");
   });
 
   test("below 1100 px the Table select lists the tables under the headings of their class, in a menu that the keyboard reaches", async ({

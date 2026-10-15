@@ -41,12 +41,16 @@ from pkdb_server.api import (
     profiles,
     reads,
 )
+from pkdb_server.api import (
+    study_views as study_view_routes,
+)
 from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
 from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.limits import UploadLimits
 from pkdb_server.api.quotas import RequestQuotas
 from pkdb_server.api.upload_reports import UploadReports
+from pkdb_server.commands.views import stale_view_count
 from pkdb_server.config import Settings
 from pkdb_server.db.bootstrap import load_vocabulary
 from pkdb_server.db.read import publication_state, read_study
@@ -66,9 +70,10 @@ from pkdb_server.services.mailer import SMTPMailer
 from pkdb_server.services.profiles import ProfileService
 from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
+from pkdb_server.services.study_views import StudyViews
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p007issueunique"
+SCHEMA_REVISION = "p008studyviews"
 # File names and folder names are limited by common file systems.
 NAME_BYTES = 255
 SID_LENGTH = 255
@@ -113,6 +118,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app):
         try:
+            with session_factory() as session:
+                stale = stale_view_count(session)
+        except Exception:
+            stale = 0
+        if stale:
+            log.warning(
+                "%d studies have no study page of this version; run "
+                "pkdb-server rebuild-views",
+                stale,
+            )
+        try:
             async with mcp_app.lifespan(app):
                 yield
         finally:
@@ -136,6 +152,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(management.account_router)
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
+    app.state.study_views = StudyViews(session_factory, file_store)
     app.state.ingestion = ingestion
     app.state.queries = queries
     app.state.analysis = AnalysisService(session_factory)
@@ -580,6 +597,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.state.principal = principal
     app.include_router(data.router)
+    app.include_router(study_view_routes.router)
     app.include_router(curation.router)
     app.include_router(curators.router)
     app.include_router(accounts.email_router, prefix="/api/v1/me")

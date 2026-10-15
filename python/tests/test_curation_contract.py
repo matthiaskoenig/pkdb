@@ -151,6 +151,35 @@ def test_table_preview_contract(workspace, engine_on):
     )
 
 
+TABLE_FILES = (
+    "subjects.tsv",
+    "characteristica.tsv",
+    "interventions.tsv",
+    "outputs_Tab2.tsv",
+    "Demo2020_Tab2.tsv",
+)
+
+
+def test_table_content_contract(workspace, engine_on):
+    """The rows of the tables of Demo2020 with the class of each column, and of its raw
+    table, which has none."""
+    engine = engine_on(workspace)
+    tables = {file: engine.study_table(DEMO, file) for file in TABLE_FILES}
+    outputs = tables["outputs_Tab2.tsv"]
+    classes = dict(zip(outputs["header"], outputs["classes"], strict=True))
+    names = ("study", "source", "subjects", "interventions", "measurement", "comment")
+    assert [classes[name] for name in names] == [
+        "meta",
+        "meta",
+        "subjects",
+        "interventions",
+        "data",
+        "data",
+    ]
+    assert "classes" not in tables["Demo2020_Tab2.tsv"]
+    check_contract("table-content", tables)
+
+
 TARGET_DRAFTS = [
     {
         "file": "timecourses_Fig1.tsv",
@@ -184,6 +213,27 @@ def test_targets_contract(workspace, engine_on):
     )
 
 
+def test_name_lines_contract(workspace, engine_on):
+    """The line of each subject and intervention of Demo2020 in its study page, with the rows
+    of a table whose cells name them."""
+    engine = engine_on(workspace)
+    detail = engine.study_detail(DEMO)
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1}},
+        "interventions": {
+            "file": "interventions.tsv",
+            "lines": {"D100": 1, "D200": 2, "D400": 3},
+        },
+    }
+    check_contract(
+        "name-lines",
+        {
+            "name_lines": detail["name_lines"],
+            "table": engine.study_table(DEMO, "outputs_Tab2.tsv"),
+        },
+    )
+
+
 def test_limits_contract(workspace, engine_on, monkeypatch):
     """The study page of Demo2020 beyond each upload limit: the limit first, and no tables or sources."""
     engine = engine_on(workspace)
@@ -195,13 +245,25 @@ def test_limits_contract(workspace, engine_on, monkeypatch):
         details.append(
             {
                 key: detail[key]
-                for key in ("problems", "sources", "files", "tables", "targets")
+                for key in (
+                    "problems",
+                    "sources",
+                    "files",
+                    "tables",
+                    "targets",
+                    "name_lines",
+                )
             }
         )
     assert [detail["problems"][0]["code"] for detail in details] == [
         "file_limit",
         "row_limit",
     ]
+    # Beyond the limits no table is read: no name links.
+    assert all(
+        all(not entry["lines"] for entry in detail["name_lines"].values())
+        for detail in details
+    )
     check_contract("limits", {"details": details})
 
 
@@ -212,6 +274,9 @@ def test_rows_contract(workspace, engine_on):
     rows = engine.snapshot()["studies"]
     demo = next(row for row in rows if row["id"] == DEMO)
     assert all("problems" not in row for row in rows)
+    # On save is one action of the state, not one per study.
+    assert all("mode" not in row for row in rows)
+    assert engine.snapshot()["mode"] == "validate"
     assert demo["counts"] == {"errors": 0, "warnings": 2}
     assert len(detail["problems"]) == 2
     # The id of a report is random.
@@ -276,6 +341,14 @@ def test_source_contract(workspace, engine_on):
     }
     # The project of Fig1 has linear axes.
     assert (view["log_x"], view["log_y"]) == (False, False)
+    # Every row of Fig1 has a digitized error bar end of type sd, mirrored around its mean.
+    for point in view["points"]:
+        assert point["error_high"] - point["y"] == pytest.approx(
+            point["y"] - point["error_low"]
+        )
+    mapped = [p for p in view["overlay"] if p["role"] == "mapped"]
+    assert mapped and all(p["error_low_px"] and p["error_high_px"] for p in mapped)
+    assert "error_bar" not in view["points"][0] and "error_px" not in mapped[0]
     check_contract("source-fig1", view)
 
 
@@ -547,3 +620,69 @@ def test_errors_contract(workspace, engine_on, monkeypatch):
         error={**entry["error"], "request_id": REQUEST_ID, "time": FAILED_AT},
     )
     check_contract("errors", {"open_failed": body, "activity": activity})
+
+
+DRAFT = "caffeine/Draft2021"
+PLASMA = "all · D150 · concentration · caffeine · plasma"
+URINE = "all · D150 · concentration · caffeine · urine"
+
+
+def _add_outputs_figure(workspace: Path) -> None:
+    """Fig2 of Draft2021: an outputs table whose rows have a time, as a time profile of a paper
+    has them, with one row without a time, and an image (a copy of Fig1 of Demo2020)."""
+    study = workspace / DRAFT
+    header = (study / "outputs_Tab1.tsv").read_text(encoding="utf-8").splitlines()[0]
+
+    def row(
+        measurement: str, tissue: str, time: str, mean: str, unit: str = "mg/l"
+    ) -> str:
+        cells = {
+            "study": "Draft2021",
+            "source": "Fig2",
+            "subjects": "all",
+            "interventions": "D150",
+            "measurement": measurement,
+            "substance": "caffeine",
+            "tissue": tissue,
+            "time": time,
+            "time_unit": "hr" if time else "",
+            "mean": mean,
+            "unit": unit,
+        }
+        return "\t".join(cells.get(name, "") for name in header.split("\t"))
+
+    rows = [
+        row("auc_inf", "plasma", "", "17", "mg/l*hr"),
+        row("concentration", "plasma", "0.5", "2.1"),
+        row("concentration", "plasma", "1", "3"),
+        row("concentration", "plasma", "2", "2.4"),
+        row("concentration", "plasma", "4", "1.2"),
+        row("concentration", "urine", "2", "12"),
+        row("concentration", "urine", "4", "20"),
+    ]
+    (study / "outputs_Fig2.tsv").write_text(
+        "\n".join([header, *rows]) + "\n", encoding="utf-8", newline=""
+    )
+    shutil.copyfile(
+        workspace / DEMO / "Demo2020_Fig1.png", study / "Draft2021_Fig2.png"
+    )
+
+
+def test_outputs_source_contract(workspace, engine_on):
+    """The source view of Fig2 of Draft2021, whose outputs rows with a time the plot of mapped
+    rows draws as two series by time, beside the image of a figure without a digitization."""
+    _add_outputs_figure(workspace)
+    formatted = format_folder(workspace / DRAFT, check=True)
+    assert formatted.ok and not formatted.changes
+    view = engine_on(workspace).study_source(DRAFT, "Fig2")
+    assert view["layout"] == "side_by_side"
+    assert [(p["series"], p["kind"], p["line"], p["x"]) for p in view["points"]] == [
+        (PLASMA, "outputs", 2, 0.5),
+        (PLASMA, "outputs", 3, 1.0),
+        (PLASMA, "outputs", 4, 2.0),
+        (PLASMA, "outputs", 5, 4.0),
+        (URINE, "outputs", 6, 2.0),
+        (URINE, "outputs", 7, 4.0),
+    ]
+    assert list(view["unmatched"]) == [PLASMA, URINE]
+    check_contract("source-outputs-fig2", view)

@@ -7,7 +7,7 @@ import { usePlotScales } from "../composables/usePlotScales";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { rawTable } from "../grid";
-import { drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../overlay";
+import { capped, drawsOnImage, plottedSeries, pointsOffScale, type SelectedRow } from "../overlay";
 import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
 import { SOURCE_ICONS, sourceProblems } from "../sources";
 import { tableFiles, type ActionFailure } from "../study";
@@ -88,6 +88,8 @@ const unmatchedNote = computed(() => {
   const one = props.view?.unmatched.length === 1;
   return `${props.view?.digitization} has no dataset for ${one ? "this series" : "these series"}, so ${one ? "its" : "their"} mapped rows are plotted here.`;
 });
+/** The series without a dataset that the heading lists, at most the limit of the legend. */
+const unmatched = computed(() => capped(props.view?.unmatched ?? []));
 const alt = computed(() => `${props.summary.source} of ${identity.value}`);
 
 const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
@@ -99,9 +101,7 @@ const sourceIssues = computed(() =>
 const problemGroups = computed(() => groupByFile(sourceIssues.value));
 const problemCount = computed(() => problemGroups.value.reduce((sum, group) => sum + group.issues.length, 0));
 /** Whether the local server validates the study after a write, for the mark of an acknowledged warning. */
-const automatic = computed(() =>
-  detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
-);
+const automatic = computed(() => validatesAfterWrite(overview.snapshot ?? null));
 
 // More of the pane below its view: a fade at its bottom shows it, inside its scroll bar. The body
 // changes with the window and the separator, the content with a loaded view or image.
@@ -148,7 +148,12 @@ const { more, scrollbar } = useMoreBelow(body, content);
               class="pane-block source-unmatched"
               :aria-labelledby="`${id}-unmatched`"
             >
-              <h4 :id="`${id}-unmatched`" class="pane-heading">Not digitized: {{ view.unmatched.join(", ") }}</h4>
+              <h4 :id="`${id}-unmatched`" class="pane-heading">Not digitized</h4>
+              <!-- One name per item: names can contain commas. -->
+              <ul class="source-unmatched-list" aria-label="Series without a dataset">
+                <li v-for="name in unmatched.shown" :key="name">{{ name }}</li>
+                <li v-if="unmatched.more">and {{ unmatched.more }} more series</li>
+              </ul>
               <p class="pane-note">{{ unmatchedNote }}</p>
               <template v-if="plotted.length">
                 <PlotScales :scales="scales" :hidden="offScale" @choose="choose" />
@@ -210,7 +215,7 @@ const { more, scrollbar } = useMoreBelow(body, content);
                     @select-row="emit('select-row', $event)"
                   />
                 </template>
-                <p v-else class="pane-note">No timecourse or scatter rows to plot.</p>
+                <p v-else class="pane-note">No rows with a time or scatter rows to plot.</p>
               </section>
             </template>
 
@@ -341,6 +346,11 @@ const { more, scrollbar } = useMoreBelow(body, content);
 /* The plot of the series without a dataset is as wide as the overlay above it. */
 .source-unmatched {
   max-width: calc(var(--figure-width, 100%) + 2px);
+}
+.source-unmatched-list {
+  margin: 0 0 6px;
+  padding-left: 18px;
+  font-size: 13px;
 }
 .source-problems summary {
   font-size: 13px;

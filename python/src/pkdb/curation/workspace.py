@@ -1,8 +1,8 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
-Reads and writes engine attributes: lock, scan_lock, root, studies, modes, recent_workspaces,
+Reads and writes engine attributes: lock, scan_lock, root, studies, recent_workspaces,
 reference_previews, paused, queue, stop, wakeup, state_dir, _formats, _tree,
-_saved_substances. Uses engine methods _save, _enqueue_one, snapshot, _local_vocabulary and
+_saved_substances. Uses engine methods _save, _save_mode, _enqueue_one, snapshot, _local_vocabulary and
 _sync_later.
 """
 
@@ -21,9 +21,7 @@ from pkdb import __version__
 from pkdb.cache import atomic_text
 from pkdb.curation.errors import describe, new_request_id, required
 from pkdb.curation.jobs import fingerprint
-from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState, JobRunning, state_row
-from pkdb.curation.studies import study_summary
 from pkdb.curation.tree import SourceTree
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
@@ -32,6 +30,7 @@ from pkdb.studyformat.revision import folder_lock
 from pkdb.studyformat.substances import SUBSTANCE_COLUMNS, study_substances
 from pkdb.studyformat.sync import workbook_check
 from pkdb.studyformat.tables import STUDY_JSON, parse_table_file
+from pkdb.studyformat.views import reference_summary, study_summary
 from pkdb.studyformat.workbook.base import workbook_path
 
 RECENT_LIMIT = 10
@@ -248,7 +247,6 @@ class WorkspaceMixin(EngineState):
             "path": path,
             "duplicate": False,
             "substance": folder.parent.name,
-            "mode": "validate",
             "status": "discovered",
             "stale": True,
             "files": [],
@@ -390,9 +388,6 @@ class WorkspaceMixin(EngineState):
                         ):
                             row["_blocked"] = True
                             row["status"] = "unknown"
-                    row["mode"] = self.modes.get(self._context(), {}).get(
-                        row["id"], "validate"
-                    )
             except (OSError, StudyValidationError) as error:
                 with self.lock.reading():
                     if self.root is not root:
@@ -732,9 +727,10 @@ class WorkspaceMixin(EngineState):
             return None
         action = row["_resume_action"]
         if action is None:
-            if row["mode"] == "off":
+            mode = self._save_mode()
+            if mode == "off":
                 return None
-            action = "validate" if row.get("_initial") else row["mode"]
+            action = "validate" if row.get("_initial") else mode
         if action == "upload" and (
             self.offline or not self.account or not self.can_upload
         ):

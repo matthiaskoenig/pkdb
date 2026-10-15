@@ -2,7 +2,8 @@
 
 import json
 
-from pkdb.curation.metadata import profile, reference_summary
+from pkdb.curation.metadata import profile
+from pkdb.studyformat.views import reference_summary
 
 
 def test_known_curator_resolves_bundled_profile_and_avatar():

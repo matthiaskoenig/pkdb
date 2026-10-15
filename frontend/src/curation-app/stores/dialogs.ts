@@ -8,6 +8,8 @@ import { defineStore } from "pinia";
 export const useDialogStore = defineStore("curation-dialogs", () => {
   const settings = ref(false);
   const workspace = ref(false);
+  /** The confirmation of upload on save, which the On save menu of the header opens. */
+  const uploadOnSave = ref(false);
 
   function openSettings(): void {
     settings.value = true;
@@ -17,5 +19,9 @@ export const useDialogStore = defineStore("curation-dialogs", () => {
     workspace.value = true;
   }
 
-  return { settings, workspace, openSettings, openWorkspace };
+  function openUploadOnSave(): void {
+    uploadOnSave.value = true;
+  }
+
+  return { settings, workspace, uploadOnSave, openSettings, openWorkspace, openUploadOnSave };
 });

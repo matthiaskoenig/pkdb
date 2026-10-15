@@ -661,10 +661,9 @@ def test_a_paused_initial_validation_resumes_as_a_validation(workspace, monkeypa
     prepare_mock(monkeypatch)
     client, _ = enable_upload(engine, monkeypatch, lambda _: upload_result())
     client.last_upload_report = None
-    identity = row(engine)["id"]
     settle(engine)
     assert [job["action"] for job in engine.queue.values()] == ["validate"]
-    engine.set_mode([identity], "upload")
+    engine.set_mode("upload")
     assert pause_and_resume(engine) == ["validate"]
     assert run_next(engine)["status"] == "succeeded"
     client.upload.assert_not_called()
@@ -676,7 +675,7 @@ def test_a_paused_manual_validation_resumes_as_a_validation(workspace, monkeypat
     engine, _ = workspace
     enable_upload(engine, monkeypatch, lambda _: upload_result())
     identity = row(engine)["id"]
-    engine.set_mode([identity], "upload")
+    engine.set_mode("upload")
     engine.enqueue([identity], "validate")
     assert pause_and_resume(engine) == ["validate"]
 
@@ -696,7 +695,7 @@ def test_a_paused_upload_resumes_as_an_upload(workspace, monkeypatch):
 def test_a_paused_job_of_a_study_with_save_action_off_resumes(workspace, monkeypatch):
     engine, _ = workspace
     identity = row(engine)["id"]
-    engine.set_mode([identity], "off")
+    engine.set_mode("off")
     engine.enqueue([identity], "validate")
     assert pause_and_resume(engine) == ["validate"]
 
@@ -1142,7 +1141,7 @@ def test_the_watcher_survives_an_unexpected_scan_failure(workspace, monkeypatch)
 
 def test_the_watcher_plans_the_workbook_of_a_row_without_a_job(workspace, monkeypatch):
     engine, _ = workspace
-    engine.set_mode([row(engine)["id"]], "off")
+    engine.set_mode("off")
     assert row(engine)["sync"]["status"] == "not_checked"
 
     engine.stop = Ticks()
@@ -1155,12 +1154,25 @@ def test_rows_that_scheduling_skips_get_their_workbook_planned(workspace):
     engine, _ = workspace
     item = row(engine)
     # An upload on save without an authorized account waits for the account.
-    item.update(mode="upload", _initial=False)
+    engine.save_modes[engine._context()] = "upload"
+    item["_initial"] = False
     assert item["_pending"] is True
     engine._check_workbooks()
     assert item["sync"]["status"] == "no_workbook"
     settle(engine)
     assert not engine.queue and item["message"].startswith("Upload on save suspended")
+
+
+def test_leaving_upload_clears_the_suspended_message_of_the_dropped_saves(workspace):
+    engine, _ = workspace
+    item = row(engine)
+    engine.save_modes[engine._context()] = "upload"
+    item["_initial"] = False
+    settle(engine)
+    assert item["message"].startswith("Upload on save suspended")
+    engine.set_mode("off")
+    assert item["_pending"] is False
+    assert not item.get("message")
 
 
 def test_a_paused_engine_plans_the_workbooks_of_pending_rows(workspace):
@@ -1926,7 +1938,7 @@ def _edit_study(engine, folder):
 @pytest.mark.parametrize(
     "change",
     [
-        lambda engine, folder: engine.set_mode([row(engine)["id"]], "off"),
+        lambda engine, folder: engine.set_mode("off"),
         lambda engine, folder: engine.enqueue([row(engine)["id"]], "validate"),
         lambda engine, folder: engine.set_paused(True),
         lambda engine, folder: engine.configure(theme="dark"),
@@ -1965,7 +1977,8 @@ def test_a_folder_that_stays_unreadable_keeps_the_revision(workspace, monkeypatc
 def test_a_suspended_upload_on_save_keeps_the_revision_of_an_idle_engine(workspace):
     engine, _ = workspace
     with engine.lock:
-        row(engine).update(mode="upload", _pending=True, _initial=False)
+        engine.save_modes[engine._context()] = "upload"
+        row(engine).update(_pending=True, _initial=False)
         row(engine)["_changed_at"] -= 2
     revision = engine.lock.revision
     engine.schedule_changes()
@@ -2119,11 +2132,14 @@ FIELD_CHANGES = {
     "update_required": _connected,
     "offline": _configured(offline=False),
     "paused": lambda engine, *_: partial(engine.set_paused, True),
+    "mode": lambda engine, *_: partial(engine.set_mode, "off"),
     "theme": _configured(theme="dark"),
     "plot_scales": _configured(plot_scale={"figure": FIG1, "x": "linear", "y": "log"}),
     "vocabulary": _checked_vocabulary,
     "github": _refreshed_assignments,
-    "studies": lambda engine, *_: partial(engine.set_mode, [row(engine)["id"]], "off"),
+    "studies": lambda engine, *_: partial(
+        engine.enqueue, [row(engine)["id"]], "validate"
+    ),
     "format1_folders": _format_1_folder,
     "jobs": lambda engine, *_: partial(engine.enqueue, [row(engine)["id"]], "validate"),
     "clearable_jobs": _finished_validations,
@@ -2208,3 +2224,187 @@ def test_a_resume_that_refuses_a_later_upload_counts_the_one_it_reconciled(
         engine.resume()
     assert [item["_blocked"] for item in engine.studies.values()] == [False, True]
     assert engine.state_version() != polled[0]
+
+
+def _saved(engine):
+    return json.loads((engine.state_dir / "state.json").read_text(encoding="utf-8"))
+
+
+def _restarted(engine):
+    """An engine started on the workspace and the state directory of `engine`, offline."""
+    return module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+
+
+def test_on_save_is_one_action_for_every_study_of_the_workspace(workspace, monkeypatch):
+    engine, folder = workspace
+    prepare_mock(monkeypatch)
+    shutil.copytree(folder, folder.parent / "Other")
+    engine.scan()
+    settle(engine)
+    while engine.queue:
+        run_next(engine)
+    state = engine.snapshot()
+    assert state["mode"] == "validate"
+    assert all("mode" not in study for study in state["studies"])
+
+    assert engine.set_mode("off")["mode"] == "off"
+    for name in ("Example", "Other"):
+        (folder.parent / name / "notes.txt").write_text("a save while Off")
+    engine.scan()
+    settle(engine)
+    # Off marks every study as changed and queues no job.
+    assert not engine.queue
+    assert {item["status"] for item in engine.studies.values()} == {"changed"}
+
+    engine.set_mode("validate")
+    for name in ("Example", "Other"):
+        (folder.parent / name / "notes.txt").write_text("a save while Validate")
+    engine.scan()
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate", "validate"]
+
+
+def test_on_save_is_kept_per_workspace_server_and_account(workspace, monkeypatch):
+    engine, _ = workspace
+    monkeypatch.delenv("PKDB_ENDPOINT", raising=False)
+    enable_upload(engine, monkeypatch, lambda _: upload_result())
+    engine.set_mode("upload")
+    context = engine._context()
+    assert _saved(engine)["save_modes"] == {context: "upload"}
+    # Another account has an On save of its own, which starts at Validate.
+    engine.account = "other-curator"
+    assert engine.snapshot()["mode"] == "validate"
+    engine.account = "curator"
+    assert engine.snapshot()["mode"] == "upload"
+    # The next start has it again for the same workspace, server and account.
+    replacement = _restarted(engine)
+    try:
+        # Offline is no account.
+        assert replacement.snapshot()["mode"] == "validate"
+        replacement.account = "curator"
+        assert replacement._context() == context
+        assert replacement.snapshot()["mode"] == "upload"
+    finally:
+        replacement.close()
+
+
+def test_per_study_modes_of_pkdb_0_12_start_at_validate_and_stay_for_it(workspace):
+    engine, _ = workspace
+    path = engine.state_dir / "state.json"
+    context = engine._context()
+    # pkdb 0.12 keeps an action per study under `modes` and reads every entry so.
+    old = {context: {"caffeine/Example": "upload"}}
+    damaged = {
+        context: {"caffeine/Example": "off"},
+        "elsewhere": "sometimes",
+        "other": ["off"],
+    }
+    path.write_text(
+        json.dumps({**_saved(engine), "modes": old, "save_modes": damaged}),
+        encoding="utf-8",
+    )
+    replacement = _restarted(engine)
+    try:
+        assert replacement.snapshot()["mode"] == "validate"
+        replacement.set_mode("off")
+    finally:
+        replacement.close()
+    saved = _saved(engine)
+    assert saved["modes"] == old
+    assert saved["save_modes"] == {context: "off"}
+
+
+@pytest.mark.parametrize(
+    "connection_state",
+    [
+        {"offline": True, "account": "curator", "can_upload": True},
+        {"offline": False, "account": None, "can_upload": False},
+        {"offline": False, "account": "curator", "can_upload": False},
+    ],
+    ids=["offline", "no account", "no upload permission"],
+)
+def test_upload_on_save_needs_an_account_that_may_upload(workspace, connection_state):
+    engine, _ = workspace
+    for name, value in connection_state.items():
+        setattr(engine, name, value)
+    with pytest.raises(ValueError, match="Connect an authorized PK-DB account"):
+        engine.set_mode("upload")
+    with pytest.raises(ValueError, match="Unknown save action"):
+        engine.set_mode("sometimes")
+    assert engine.snapshot()["mode"] == "validate"
+
+
+def test_a_change_of_on_save_is_not_a_save(workspace, monkeypatch):
+    engine, folder = workspace
+    prepare_mock(monkeypatch)
+    settle(engine)
+    run_next(engine)
+    # A save made while Off waits for the curator: Validate does not check it.
+    engine.set_mode("off")
+    (folder / "notes.txt").write_text("a save while Off")
+    engine.scan()
+    settle(engine)
+    engine.set_mode("validate")
+    settle(engine)
+    assert not engine.queue and row(engine)["status"] == "changed"
+    # Choosing the action that is set changes nothing: the save keeps its job.
+    (folder / "notes.txt").write_text("a save while Validate")
+    engine.scan()
+    engine.set_mode("validate")
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+
+
+def test_a_change_of_on_save_keeps_first_validations_and_paused_jobs(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    # Off holds the first validation of the study back; Validate lets it run.
+    engine.set_mode("off")
+    settle(engine)
+    assert not engine.queue and row(engine)["_pending"] is True
+    engine.set_mode("validate")
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+    # A job that a pause canceled comes back with its action, whatever On save is now.
+    engine.set_paused(True)
+    assert not engine.queue
+    engine.set_mode("off")
+    engine.set_paused(False)
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+
+
+def test_the_study_page_has_the_line_of_each_subject_and_intervention(workspace):
+    engine, _ = workspace
+    detail = engine.study_detail(row(engine)["id"])
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1, "S1": 2, "S2": 3}},
+        "interventions": {"file": "interventions.tsv", "lines": {"D1": 1}},
+    }
+
+
+def test_a_name_of_two_rows_links_to_the_first_and_a_missing_table_has_no_names(
+    workspace, tsv
+):
+    engine, folder = workspace
+    (folder / "subjects.tsv").write_text(
+        tsv(
+            "subjects",
+            {"name": "all", "count": "2", "source": "Tab1"},
+            {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+            {"name": "", "parent": "all", "count": "1", "source": "TabA"},
+            {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+        ),
+        encoding="utf-8",
+        newline="",
+    )
+    (folder / "interventions.tsv").unlink()
+    detail = engine.study_detail(row(engine)["id"])
+    assert detail["name_lines"] == {
+        "subjects": {"file": "subjects.tsv", "lines": {"all": 1, "S1": 2}},
+        "interventions": {"file": "interventions.tsv", "lines": {}},
+    }

@@ -93,7 +93,22 @@ export interface OverlayTrace {
   showlegend: false;
   marker?: { symbol: string; size: number; color: string; opacity?: number[]; line?: { width: number; color: string; dash?: string } };
   line?: { color: string; width: number };
-  error_y?: { type: "data"; array: (number | null)[]; visible: true; color: string; thickness: number; width: number };
+  /**
+   * The error bars of the data plot: the distance up to the high end of each point in `array` and
+   * down to its low end in `arrayminus`, NaN without a bar (Plotly reads null as 0 and draws a cap).
+   * On a log axis, Plotly cuts a bar that reaches 0 or below at the bottom of the plot and leaves
+   * out its cap there.
+   */
+  error_y?: {
+    type: "data";
+    symmetric: false;
+    array: number[];
+    arrayminus: number[];
+    visible: true;
+    color: string;
+    thickness: number;
+    width: number;
+  };
   customdata?: Customdata[];
   hovertemplate?: string;
   hoverinfo?: "skip";
@@ -355,10 +370,10 @@ const MARKS: readonly (readonly [role: OverlayPoint["role"], errorBarEnd: boolea
 /**
  * The overlay of a digitized figure in the pixels of its image: the image below, a trace per
  * series and kind of mark (small dots for digitized points, short bars for digitized error bar
- * ends, thin crosses for mapped rows), and the error bars of mapped rows as segments to their
- * digitized end. With `highlight`, the other series fade. `scale` is the size at which the image
- * is shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not hide the
- * printed symbols of a small image.
+ * ends, thin crosses for mapped rows), and the error bars of mapped rows as segments from their
+ * low to their high end. With `highlight`, the other series fade. `scale` is the size at which
+ * the image is shown: the marks shrink with it, down to `MIN_MARK_SCALE`, so that they do not
+ * hide the printed symbols of a small image.
  */
 export function overlayTraces(
   view: SourceView,
@@ -377,9 +392,16 @@ export function overlayTraces(
   const color = (name: string) => colorOf(styles, name, false);
   const traces: OverlayTrace[] = [];
 
+  // The ends of an error bar. An end without a pixel is at or below 0 on a log axis of the digitization: a
+  // low end then reaches the bottom of the image, as the data plot cuts the bar at its axis, and a high end
+  // (with the low end, so the whole bar) is the cross of the row.
+  const low = (point: OverlayPoint): [number, number] =>
+    point.error_low_px ?? (point.error_high_px === null ? [point.px, point.py] : [point.px, height]);
+  const high = (point: OverlayPoint): [number, number] => point.error_high_px ?? [point.px, point.py];
   for (const name of series) {
-    const bars = view.overlay.flatMap((point) =>
-      point.series === name && point.role === "mapped" && point.error_px ? [{ ...point, end: point.error_px }] : [],
+    const bars = view.overlay.filter(
+      (point) =>
+        point.series === name && point.role === "mapped" && (point.error_low_px !== null || point.error_high_px !== null),
     );
     if (!bars.length) continue;
     traces.push({
@@ -387,8 +409,8 @@ export function overlayTraces(
       meta: `error ${name}`,
       name,
       mode: "lines",
-      x: bars.flatMap((point) => [point.px, point.end[0], null]),
-      y: bars.flatMap((point) => [point.py, point.end[1], null]),
+      x: bars.flatMap((point) => [low(point)[0], high(point)[0], null]),
+      y: bars.flatMap((point) => [low(point)[1], high(point)[1], null]),
       opacity: opacity(name),
       showlegend: false,
       line: { color: color(name), width: stroke },
@@ -618,12 +640,14 @@ export interface PlotOptions {
 }
 
 /**
- * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
- * as lines with error bars to the error bar end, scatters as points. With `highlight`, the other
- * series fade. `scales` sets the type of each axis; a log axis leaves out the points at 0 or
- * below, which `pointsOffScale` counts, and keeps their series in the legend. Drawn points of rows
- * with `rowProblems` (`plottedProblems`) get a ring in the color of their worst problem, and their
- * hover text lists the problems.
+ * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses and
+ * outputs with a time as lines by time, with error bars from the low to the high end of each row
+ * (`error_low`, `error_high`), scatters as points. With `highlight`, the other series fade.
+ * `scales` sets the type of each axis;
+ * a log axis leaves out the points at 0 or below, which `pointsOffScale` counts, and keeps their
+ * series in the legend. Drawn points of rows with `rowProblems` (`plottedProblems`) get a ring in
+ * the color of their worst problem, and their hover text lists the problems. A log axis keeps a
+ * point whose error bar reaches 0 or below; Plotly cuts that bar at the axis.
  */
 export function plotTraces(
   view: SourceView,
@@ -639,7 +663,8 @@ export function plotTraces(
   const traces = series.map((name): OverlayTrace => {
     const rows = points.filter((point) => point.series === name);
     const color = colorOf(styles, name, theme.dark);
-    const errors = rows.map((point) => (point.error_bar === null ? null : Math.abs(point.error_bar - point.y)));
+    const above = rows.map((point) => (point.error_high === null ? Number.NaN : point.error_high - point.y));
+    const below = rows.map((point) => (point.error_low === null ? Number.NaN : point.y - point.error_low));
     return {
       type: "scatter",
       meta: `plot ${name}`,
@@ -651,8 +676,19 @@ export function plotTraces(
       showlegend: false,
       marker: { symbol: "circle", size: 8, color },
       line: { color, width: 2 },
-      ...(errors.some((error) => error !== null)
-        ? { error_y: { type: "data", array: errors, visible: true, color, thickness: 1.5, width: 4 } as const }
+      ...(above.some((distance) => !Number.isNaN(distance))
+        ? {
+            error_y: {
+              type: "data",
+              symmetric: false,
+              array: above,
+              arrayminus: below,
+              visible: true,
+              color,
+              thickness: 1.5,
+              width: 4,
+            } as const,
+          }
         : {}),
       customdata: rows.map((point): Customdata => [
         ...customdata(point),
@@ -663,14 +699,14 @@ export function plotTraces(
       hoverlabel: { ...hoverLabel(theme, color), align: "left" },
     };
   });
-  // The axes of the first series, as `pkdb plot` labels them.
-  const first = styles.get(series[0] ?? "");
-  const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
+  // The axes of the series, as `pkdb plot` labels them.
+  const xTitle = axisTitle(series.map((name) => styles.get(name)?.x_label ?? null), "x");
+  const yTitle = axisTitle(series.map((name) => styles.get(name)?.y_label ?? null), "y");
   // The values that each axis draws: the points, and the ends of their error bars on the y axis.
   const drawn: Record<Axis, number[]> = {
     x: points.map((point) => point.x),
     y: points.flatMap((point) =>
-      point.error_bar === null ? [point.y] : [point.y, point.error_bar, 2 * point.y - point.error_bar],
+      [point.y, point.error_low, point.error_high].filter((value): value is number => value !== null),
     ),
   };
   const axis = (name: Axis, text: string): OverlayAxis => ({
@@ -705,6 +741,28 @@ export function plotTraces(
       margin: { l: 48, r: 8, t: 8, b: 36, pad: 2 },
     },
   };
+}
+
+/** The most series that a legend or a name lists; the data table keeps every row. */
+export const LEGEND_LIMIT = 20;
+
+/** The first `limit` items and how many more there are. */
+export function capped<T>(items: readonly T[], limit = LEGEND_LIMIT): { shown: T[]; more: number } {
+  return { shown: items.slice(0, limit), more: Math.max(0, items.length - limit) };
+}
+
+/** The most distinct titles that an axis names. */
+const TITLE_LIMIT = 3;
+
+/**
+ * The title of an axis for the labels of its series: the one that all share, else the distinct
+ * ones (at most three, then "and N more"), joined with " / "; `fallback` without a label.
+ */
+export function axisTitle(labels: readonly (string | null)[], fallback: string): string {
+  const titles = unique(labels.filter((label): label is string => !!label));
+  const { shown, more } = capped(titles, TITLE_LIMIT);
+  if (!shown.length) return fallback;
+  return more ? `${shown.join(" / ")} and ${more} more` : shown.join(" / ");
 }
 
 /** The series of the legend with the colors of their marks. */
@@ -769,7 +827,8 @@ export interface EventPoint {
  * The row that a click on a point selects: the row of a mapped point; the mapped row of its
  * series under a digitized point (`CLICK_PIXELS`), as Plotly prefers the small dot of a digitized
  * point to the cross of the mapped row below it, so the dot stands for its row; and the mapped
- * row of its series whose error bar ends at a digitized error bar end. Else nothing.
+ * row of its series whose error bar ends, at its low or its high end, at a digitized error bar end.
+ * Else nothing.
  */
 export function rowAt(view: SourceView, point: EventPoint): { file: string; line: number } | null {
   if (!Array.isArray(point.customdata)) return null;
@@ -781,11 +840,14 @@ export function rowAt(view: SourceView, point: EventPoint): { file: string; line
   let best: { file: string; line: number; distance: number } | null = null;
   for (const mapped of view.overlay) {
     if (mapped.role !== "mapped" || mapped.series !== name || mapped.line === null) continue;
-    const at: [number, number] | null = errorBarEnd === true ? mapped.error_px : [mapped.px, mapped.py];
-    if (at === null) continue;
-    const distance = Math.hypot(at[0] - x, at[1] - y);
-    if (distance <= CLICK_PIXELS && (best === null || distance < best.distance))
-      best = { file: mapped.file, line: mapped.line, distance };
+    const ends: ([number, number] | null)[] =
+      errorBarEnd === true ? [mapped.error_low_px, mapped.error_high_px] : [[mapped.px, mapped.py]];
+    for (const at of ends) {
+      if (at === null) continue;
+      const distance = Math.hypot(at[0] - x, at[1] - y);
+      if (distance <= CLICK_PIXELS && (best === null || distance < best.distance))
+        best = { file: mapped.file, line: mapped.line, distance };
+    }
   }
   return best && { file: best.file, line: best.line };
 }

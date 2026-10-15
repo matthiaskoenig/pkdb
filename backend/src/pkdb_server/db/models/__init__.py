@@ -12,6 +12,7 @@ from pkdb_server.db.models import (
     studies,
     subjects,
     users,
+    views,
     vocabulary,
 )
 from pkdb_server.db.models.base import Base
@@ -29,5 +30,6 @@ __all__ = [
     "studies",
     "subjects",
     "users",
+    "views",
     "vocabulary",
 ]

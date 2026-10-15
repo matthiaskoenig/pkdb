@@ -736,7 +736,7 @@ describe("acknowledgements", () => {
   });
 
   it("asks to validate when no automatic validation will leave the warning out", async () => {
-    await mountSection(withProblems({ mode: "off" }), { "POST /local/jobs": { ok: true } });
+    await mountSection(withProblems(), { "POST /local/jobs": { ok: true } }, snapshot({ mode: "off" }));
     await acknowledgeWarning("unused_intervention");
     const pending = problem("unused_intervention");
     expect(pending.get(".problem-acknowledged").text()).toBe("Acknowledged. Validate the study to update this list.");

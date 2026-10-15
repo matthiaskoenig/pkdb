@@ -8,7 +8,6 @@ import type {
   Job,
   Json,
   Problem,
-  SaveMode,
   Snapshot,
   StudyDetail,
   Suggestion,
@@ -310,13 +309,11 @@ export function acknowledgeFailure(caught: unknown): ReviewFailure {
  * can upload. Without the state of the server, it is assumed to.
  */
 export function validatesAfterWrite(
-  mode: SaveMode,
-  snapshot: Pick<Snapshot, "paused" | "offline" | "account" | "can_upload"> | null,
+  snapshot: Pick<Snapshot, "mode" | "paused" | "offline" | "account" | "can_upload"> | null,
 ): boolean {
-  if (mode === "off") return false;
   if (!snapshot) return true;
-  if (snapshot.paused) return false;
-  return mode !== "upload" || (!snapshot.offline && snapshot.account !== null && snapshot.can_upload);
+  if (snapshot.mode === "off" || snapshot.paused) return false;
+  return snapshot.mode !== "upload" || (!snapshot.offline && snapshot.account !== null && snapshot.can_upload);
 }
 
 /** A key that the warnings of one acknowledgement share: one code at one file, line, column and key. */

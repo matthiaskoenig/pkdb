@@ -32,7 +32,7 @@ def test_initial_schema_round_trip(session_factory):
     config = alembic_config(session_factory)
     scripts = ScriptDirectory.from_config(config)
     assert scripts.get_heads() == [SCHEMA_REVISION]
-    assert len(list(scripts.walk_revisions())) == 7
+    assert len(list(scripts.walk_revisions())) == 8
     command.check(config)
     with engine.connect() as connection:
         assert (
@@ -526,3 +526,23 @@ def test_schedule_migration_matches_the_format_1_importer(
             expected.get("interval"),
             expected.get("doses"),
         ), schedule
+
+
+def test_study_views_revision_round_trip(session_factory):
+    config = alembic_config(session_factory)
+    command.downgrade(config, "p007issueunique")
+    with session_factory() as session:
+        assert not session.execute(text("SELECT to_regclass('study_views')")).scalar()
+    command.upgrade(config, "head")
+    with session_factory() as session:
+        assert session.execute(text("SELECT to_regclass('study_views')")).scalar()
+        columns = {
+            row[0]
+            for row in session.execute(
+                text(
+                    "SELECT column_name FROM information_schema.columns "
+                    "WHERE table_name = 'studies'"
+                )
+            )
+        }
+        assert {"study_json", "reference_json"} <= columns

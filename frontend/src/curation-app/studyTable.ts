@@ -7,7 +7,6 @@ import type { Profile, StudyRow, StudySummary } from "./api/types";
 import {
   activityLabel,
   issueUrl,
-  MODE_LABELS,
   problemLabels,
   REVIEW_LABELS,
   SYNC_LABELS,
@@ -150,6 +149,8 @@ const SIZER_LIMIT = 12;
 
 /** A column of the table as its sizer rows see it. */
 interface SizedColumn {
+  /** The class of the cells of the column, as in StudyTable.vue and StudyTableRow.vue. */
+  cell: string;
   /** The text that the cell of `row` shows, as far as it decides the width of the column. */
   text: (row: StudyRow) => string;
   /** The fields of the row that the cell shows. */
@@ -158,18 +159,45 @@ interface SizedColumn {
   summary?: readonly (keyof StudySummary)[];
 }
 
+/**
+ * The columns after Study, in the order of the table (`columns` of StudyTable.vue). Study takes
+ * the room that the other columns leave, so it needs no sizing.
+ */
 const SIZED_COLUMNS: readonly SizedColumn[] = [
   {
+    cell: "cell-release",
+    // Every release is `PKDB` and five tabular digits.
+    text: (row) => (row.summary.release ? "release" : "-"),
+    summary: ["release"],
+  },
+  {
+    cell: "cell-issue",
+    text: (row) => String(row.issue?.number ?? row.summary.issue ?? "-"),
+    fields: ["issue"],
+    summary: ["issue"],
+  },
+  {
+    cell: "cell-curators",
+    text: (row) => {
+      const count = row.summary.curators?.length ?? 0;
+      return count > CURATOR_SLOTS ? `${CURATOR_SLOTS - 1}+${count - CURATOR_SLOTS + 1}` : String(count);
+    },
+    summary: ["curators"],
+  },
+  {
+    cell: "cell-review",
     text: (row) =>
       `${row.summary.review_status ? REVIEW_LABELS[row.summary.review_status] : "-"}${row.summary.ai ? " AI" : ""}`,
     summary: ["review_status", "ai", "provenance"],
   },
   {
+    cell: "cell-open",
     // Tabular digits: the number of digits decides.
     text: (row) => String(row.summary.open_items ?? 0).replace(/\d/g, "0"),
     summary: ["open_items"],
   },
   {
+    cell: "cell-problems",
     text: (row) =>
       [
         ...problemLabels(row).map(({ label }) => label),
@@ -179,27 +207,17 @@ const SIZED_COLUMNS: readonly SizedColumn[] = [
       ].join(" "),
     fields: ["status", "counts", "message"],
   },
-  { text: (row) => SYNC_LABELS[row.sync.status], fields: ["sync"] },
+  { cell: "cell-sync", text: (row) => SYNC_LABELS[row.sync.status], fields: ["sync"] },
   {
-    // Every release is `PKDB` and five tabular digits.
-    text: (row) => (row.summary.release ? "release" : "-"),
-    summary: ["release"],
-  },
-  { text: (row) => String(row.issue?.number ?? row.summary.issue ?? "-"), fields: ["issue"], summary: ["issue"] },
-  {
-    text: (row) => {
-      const count = row.summary.curators?.length ?? 0;
-      return count > CURATOR_SLOTS ? `${CURATOR_SLOTS - 1}+${count - CURATOR_SLOTS + 1}` : String(count);
-    },
-    summary: ["curators"],
-  },
-  { text: (row) => MODE_LABELS[row.mode], fields: ["mode"] },
-  {
+    cell: "cell-upload",
     // Every upload shows a date and time in tabular digits.
     text: (row) => (row.last_upload ? "upload" : "-"),
     fields: ["last_upload"],
   },
 ];
+
+/** The cell classes of the sized columns, in the order of the table. */
+export const SIZED_CELLS: readonly string[] = SIZED_COLUMNS.map((column) => column.cell);
 
 /** `target` with the fields `keys` of `source`, without those that `source` leaves out. */
 function withFields<T extends object>(target: T, source: T, keys: readonly (keyof T)[] = []): T {

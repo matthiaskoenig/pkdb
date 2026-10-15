@@ -10,7 +10,7 @@ import {
   VTextField,
   VTooltip,
 } from "vuetify/components";
-import type { Profile, SaveMode, StudyRow } from "../api/types";
+import type { Profile, StudyRow } from "../api/types";
 import RetryDialog from "../components/RetryDialog.vue";
 import StudyTable from "../components/StudyTable.vue";
 import UploadDialog from "../components/UploadDialog.vue";
@@ -19,7 +19,6 @@ import {
   COLLATOR,
   curatorsOf,
   filterStudies,
-  MODE_LABELS,
   plural,
   SEARCH_DELAY_MS,
   sortStudies,
@@ -113,11 +112,18 @@ const filtered = computed(() =>
 /** The rows behind each chip, within the search, the substance and the curator. */
 const counts = computed(() => filtered.value.counts);
 const shown = computed(() => sortStudies(filtered.value.shown, sort.value));
+/** The digits of the number of studies: no chip count has more, and each keeps room for them. */
+const countDigits = computed(() => String(studies.value.length).length);
 const countText = computed(() => {
   const total = plural(studies.value.length, "study", "studies");
   if (shown.value.length === studies.value.length) return total;
   return `${shown.value.length.toLocaleString("en-US")} of ${total}`;
 });
+
+/** The longest text of the count, "N of N studies": its hidden copy keeps the width of the count. */
+const countSizer = computed(
+  () => `${studies.value.length.toLocaleString("en-US")} of ${plural(studies.value.length, "study", "studies")}`,
+);
 
 function clearFilters(): void {
   flushSearch("");
@@ -126,8 +132,8 @@ function clearFilters(): void {
 
 // Selection and batch actions
 const selected = ref<string[]>([]);
-const mode = ref<SaveMode>("validate");
-const busy = ref<"validate" | "mode" | null>(null);
+/** Whether the validation of the selected studies is being queued. */
+const busy = ref(false);
 const failure = ref<ActionFailure | null>(null);
 /** The notice of the last action that succeeded; it disappears after a few seconds. */
 const { notice, announce } = useNotice();
@@ -141,22 +147,10 @@ const chosenIds = computed(() => chosen.value.map((row) => row.id));
 const selectionText = computed(() =>
   chosen.value.length ? `${plural(chosen.value.length, "study", "studies")} selected` : "No studies selected",
 );
-const canAct = computed(() => chosen.value.length > 0 && busy.value === null && !stale.value);
-const modeItems = computed(() =>
-  (Object.keys(MODE_LABELS) as SaveMode[]).map((value) => ({
-    title: MODE_LABELS[value],
-    value,
-    props: { disabled: value === "upload" && blocker.value !== null },
-  })),
-);
+const canAct = computed(() => chosen.value.length > 0 && !busy.value && !stale.value);
 
 // The notice of an action belongs to the selection that it acted on.
 watch(selected, () => announce(""));
-
-// Upload on save needs an upload permission; without it the choice falls back to Validate.
-watch(blocker, (value) => {
-  if (value !== null && mode.value === "upload") mode.value = "validate";
-});
 
 // A study that the filters hide, or that left the workspace, leaves the selection.
 watch(shown, (rows) => {
@@ -164,8 +158,8 @@ watch(shown, (rows) => {
   if (selected.value.some((id) => !visible.has(id))) selected.value = selected.value.filter((id) => visible.has(id));
 });
 
-async function run(kind: "validate" | "mode", action: () => Promise<string>): Promise<void> {
-  busy.value = kind;
+async function run(action: () => Promise<string>): Promise<void> {
+  busy.value = true;
   failure.value = null;
   announce("");
   // Every change of the selection makes a new list.
@@ -177,51 +171,29 @@ async function run(kind: "validate" | "mode", action: () => Promise<string>): Pr
   } catch (caught) {
     failure.value = failureOf(caught);
   } finally {
-    busy.value = null;
+    busy.value = false;
   }
 }
 
 function validate(): Promise<void> {
   const ids = chosenIds.value;
-  return run("validate", async () => {
+  return run(async () => {
     await overview.enqueue(ids, "validate");
     return `Validation queued for ${plural(ids.length, "study", "studies")}.`;
   });
 }
 
-function modeNotice(value: SaveMode, count: number): string {
-  return `On save is ${MODE_LABELS[value]} for ${plural(count, "study", "studies")}.`;
-}
+// An upload is reviewed in a dialog first. On save, which the top bar sets, applies to every study.
+const upload = ref<{ open: boolean; studies: StudyRow[] }>({ open: false, studies: [] });
 
-// Upload and upload on save are reviewed in a dialog first.
-const upload = ref<{ open: boolean; studies: StudyRow[]; action: "upload" | "enable" }>({
-  open: false,
-  studies: [],
-  action: "upload",
-});
-
-function review(action: "upload" | "enable"): void {
+function review(): void {
   failure.value = null;
   announce("");
-  upload.value = { open: true, studies: chosen.value, action };
-}
-
-function applyMode(): Promise<void> | void {
-  const value = mode.value;
-  if (value === "upload") return review("enable");
-  const ids = chosenIds.value;
-  return run("mode", async () => {
-    await overview.setMode(ids, value);
-    return modeNotice(value, ids.length);
-  });
+  upload.value = { open: true, studies: chosen.value };
 }
 
 function uploaded(count: number): void {
-  announce(
-    upload.value.action === "upload"
-      ? `Upload queued for ${plural(count, "study", "studies")}.`
-      : modeNotice("upload", count),
-  );
+  announce(`Upload queued for ${plural(count, "study", "studies")}.`);
 }
 
 // Uploads with an unknown outcome
@@ -256,60 +228,68 @@ const format1Notice = computed(() =>
 
 <template>
   <VContainer fluid class="overview">
-    <div class="overview-heading">
-      <h1>Studies</h1>
-      <span v-if="snapshot && studies.length" class="overview-count">{{ countText }}</span>
+    <!-- The heading, the count and, with studies, the search, the selects and the status chips
+         share one line where they fit; the chips come last, so they move to the next line first. -->
+    <div class="overview-header">
+      <div class="overview-heading">
+        <h1>Studies</h1>
+        <span v-if="studies.length" class="overview-count-box">
+          <span class="overview-count">{{ countText }}</span>
+          <span class="overview-count-sizer" aria-hidden="true">{{ countSizer }}</span>
+        </span>
+      </div>
+      <template v-if="studies.length">
+        <VTextField
+          v-model="searchText"
+          label="Search studies"
+          placeholder="Identity or title"
+          prepend-inner-icon="fas fa-magnifying-glass"
+          clearable
+          hide-details
+          class="overview-search"
+          @click:clear="flushSearch('')"
+        />
+        <VSelect
+          v-model="substance"
+          :items="substanceItems"
+          label="Substance"
+          hide-details
+          class="overview-substance"
+        />
+        <VSelect
+          v-model="curator"
+          :items="curatorItems"
+          label="Curator"
+          hide-details
+          class="overview-curator"
+        />
+        <VChipGroup
+          v-model="chip"
+          mandatory
+          column
+          color="primary"
+          role="group"
+          aria-label="Filter by status"
+          class="filter-chips overview-chips"
+          :style="{ '--count-digits': countDigits }"
+        >
+          <VChip
+            v-for="item in STATUS_CHIPS"
+            :key="item.value"
+            :value="item.value"
+            tag="button"
+            type="button"
+            filter
+            :aria-pressed="chip === item.value ? 'true' : 'false'"
+          >
+            {{ item.label }}<span class="chip-count">{{ counts[item.value] }}</span>
+          </VChip>
+        </VChipGroup>
+      </template>
     </div>
 
     <template v-if="snapshot">
       <template v-if="studies.length">
-        <div class="overview-filters">
-          <VTextField
-            v-model="searchText"
-            label="Search studies"
-            placeholder="Identity or title"
-            prepend-inner-icon="fas fa-magnifying-glass"
-            clearable
-            hide-details
-            class="overview-search"
-            @click:clear="flushSearch('')"
-          />
-          <VSelect
-            v-model="substance"
-            :items="substanceItems"
-            label="Substance"
-            hide-details
-            class="overview-substance"
-          />
-          <VSelect
-            v-model="curator"
-            :items="curatorItems"
-            label="Curator"
-            hide-details
-            class="overview-curator"
-          />
-          <VChipGroup
-            v-model="chip"
-            mandatory
-            column
-            color="primary"
-            role="group"
-            aria-label="Filter by status"
-            class="filter-chips overview-chips"
-          >
-            <VChip
-              v-for="item in STATUS_CHIPS"
-              :key="item.value"
-              :value="item.value"
-              tag="button"
-              type="button"
-              filter
-              :aria-pressed="chip === item.value ? 'true' : 'false'"
-            >
-              {{ item.label }}<span class="chip-count">{{ counts[item.value] }}</span>
-            </VChip>
-          </VChipGroup>
-        </div>
 
         <ActionFailureAlert v-if="failure" :failure="failure" class="overview-error" @close="failure = null" />
 
@@ -322,7 +302,7 @@ const format1Notice = computed(() =>
                 color="primary"
                 prepend-icon="fas fa-circle-check"
                 :disabled="!canAct"
-                :loading="busy === 'validate'"
+                :loading="busy"
                 @click="validate"
               >
                 Validate
@@ -337,7 +317,7 @@ const format1Notice = computed(() =>
                       prepend-icon="fas fa-cloud-arrow-up"
                       :disabled="!canAct || blocker !== null"
                       :aria-describedby="blocker ? blockerId : undefined"
-                      @click="review('upload')"
+                      @click="review"
                     >
                       Upload
                     </VBtn>
@@ -345,12 +325,6 @@ const format1Notice = computed(() =>
                 </template>
               </VTooltip>
               <span v-if="blocker" :id="blockerId" class="d-sr-only">{{ blocker }}</span>
-            </div>
-            <div class="batch-mode">
-              <VSelect v-model="mode" :items="modeItems" label="On save" hide-details class="batch-mode-select" />
-              <VBtn variant="text" color="primary" :disabled="!canAct" :loading="busy === 'mode'" @click="applyMode">
-                Apply
-              </VBtn>
             </div>
             <span role="status" class="batch-status">{{ notice }}</span>
           </div>
@@ -388,7 +362,7 @@ const format1Notice = computed(() =>
     <UploadDialog
       v-model="upload.open"
       :studies="upload.studies"
-      :action="upload.action"
+      action="upload"
       :fallback-focus="selectAll"
       @done="uploaded"
     />
@@ -408,37 +382,56 @@ const format1Notice = computed(() =>
   gap: 16px;
   padding: 24px 16px;
 }
+/*
+ * The heading, the count, the search, the two selects and the status chips share one line where
+ * they fit. The chips come last, so a narrower window moves them to the next line first, then the
+ * selects. The counts of the chips change with the filters, and the chips may wrap. So that they
+ * never move the fields, the fields do not grow and keep to the top of the line. Their 6px margin
+ * puts them on the center line of the first row of chips: a field is 30px high, and a chip of
+ * 26px stands 8px below the top of its group. The line of the heading is 28px high (1.6rem at a
+ * line height of 1.25): 7px above it put it on the same center line.
+ */
+.overview-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 12px;
+}
 .overview-heading {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 12px;
+  margin-block: 7px;
 }
 .overview-heading h1 {
   margin: 0;
 }
-.overview-count {
+/* The count keeps the width of its longest text, "N of N studies": a hidden copy of it in the same
+   grid cell sets the width, so that the fields after it stay in place while a search changes the
+   number of shown studies. Tabular digits make no shown count wider than that copy. */
+.overview-count-box {
+  display: inline-grid;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/*
- * The counts of the chips change with the filters, and the chips may wrap. So that they never
- * move the fields, the fields do not grow and keep to the top of the row. Their 6px margin puts
- * them on the center line of the first row of chips: a field is 30px high, and a chip of 26px
- * stands 8px below the top of its group.
- */
-.overview-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 4px 16px;
+.overview-count,
+.overview-count-sizer {
+  grid-area: 1 / 1;
+}
+.overview-count-sizer {
+  visibility: hidden;
 }
 .overview-search,
 .overview-substance,
 .overview-curator {
   margin-block: 6px;
 }
+/* 14rem (196px) and the 12px gap of the header let the header of pkdb_data's 1,503 studies, with
+   its four-digit counts, fit one line in a 1440px window with a scrollbar. */
 .overview-search {
-  flex: 0 1 20rem;
+  flex: 0 1 14rem;
 }
 .overview-substance {
   flex: 0 1 12rem;
@@ -450,6 +443,14 @@ const format1Notice = computed(() =>
 }
 .overview-chips {
   flex: 1 1 auto;
+}
+/* Each chip count keeps the room of the digits of the total, so that the chips keep their width
+   (and do not jump between lines) while a search or a filter lowers the counts. */
+.overview-chips .chip-count {
+  display: inline-block;
+  min-width: calc(var(--count-digits) * 1ch);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
 }
 /* On a phone the search, the substance and the curator take the whole width, one above the other. */
 @media (max-width: 599.98px) {
@@ -479,17 +480,13 @@ const format1Notice = computed(() =>
   min-width: 10.5rem;
   font-weight: 600;
 }
-.batch-actions,
-.batch-mode {
+.batch-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .upload-action {
   display: inline-flex;
-}
-.batch-mode-select {
-  width: 9.5rem;
 }
 /* A live region stays in the page while it is empty, so that screen readers announce its text. */
 .batch-status {

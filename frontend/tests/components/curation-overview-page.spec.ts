@@ -11,7 +11,7 @@ import { SEARCH_DELAY_MS } from "../../src/curation-app/overview";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useOverviewFilters } from "../../src/curation-app/stores/overviewFilters";
 import StudyTable from "../../src/curation-app/components/StudyTable.vue";
-import { OVERSCAN, ROW_HEIGHT, rowItem, studyRoute } from "../../src/curation-app/studyTable";
+import { OVERSCAN, ROW_HEIGHT, rowItem, SIZED_CELLS, studyRoute } from "../../src/curation-app/studyTable";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
@@ -39,7 +39,6 @@ const harder = studyRow({
   id: "caffeine/Harder1988",
   name: "Harder1988",
   path: "studies/caffeine/Harder1988",
-  mode: "upload",
   status: "invalid",
   summary: {
     title: "Effect of smoking on caffeine",
@@ -259,7 +258,6 @@ describe("OverviewPage", () => {
     const issue = row.get(".cell-issue a");
     expect(issue.text()).toBe("#2158");
     expect(issue.attributes("href")).toBe(ISSUE_URL);
-    expect(row.get(".cell-mode").text()).toBe("Upload");
     const upload = row.get(".cell-upload a");
     expect(upload.text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
     expect(upload.attributes("href")).toBe(UPLOAD_URL);
@@ -271,12 +269,53 @@ describe("OverviewPage", () => {
     expect(draft.get(".cell-problems").text()).toBe("valid");
     expect(draft.get(".cell-release").text()).toBe("-");
     expect(draft.get(".cell-issue").text()).toBe("-");
-    expect(draft.get(".cell-mode").text()).toBe("Validate");
     expect(draft.get(".cell-upload").text()).toBe("-");
 
     const other = rowOf("codeine/Kirchheiner2007");
     expect(other.get(".cell-review").text()).toBe("Approved");
     expect(other.get(".cell-problems").text()).toBe("1 warning");
+  });
+
+  it("lists the columns in one order in the header, in the rows and in the sizer rows", async () => {
+    await mountPage(snapshot({ studies: [harder, approved, example] }));
+    const order = [
+      "cell-select",
+      "cell-study",
+      "cell-release",
+      "cell-issue",
+      "cell-curators",
+      "cell-review",
+      "cell-open",
+      "cell-problems",
+      "cell-sync",
+      "cell-upload",
+    ];
+    /** The column class of each cell of a row of the table. */
+    const cells = (row: Pick<DOMWrapper<Element>, "findAll">) =>
+      row.findAll("th, td").map((cell) => cell.classes().find((name) => name.startsWith("cell-")));
+    const header = page().get(".study-table thead tr");
+    expect(header.findAll("th").map((cell) => cell.text().trim())).toEqual([
+      "",
+      "Study",
+      "Release",
+      "Issue",
+      "Curators",
+      "Review",
+      "Open items",
+      "Problems",
+      "Sync",
+      "Last upload",
+    ]);
+    expect(cells(header)).toEqual(order);
+    // The hidden sizer rows give the columns their widths while only some rows render (#953).
+    const sizers = page().findAll(".study-table tbody tr.study-sizer");
+    expect(sizers.length).toBeGreaterThan(0);
+    for (const row of [...rows(), ...sizers]) expect(cells(row)).toEqual(order);
+    expect(["cell-select", "cell-study", ...SIZED_CELLS]).toEqual(order);
+    // The Study cell keeps the identity and the title after it (Q3).
+    const study = rowOf("caffeine/Harder1988").get(".cell-study");
+    expect(study.get(".study-identity").text()).toBe("caffeine/Harder1988");
+    expect(study.get(".study-row-title").text()).toBe("Effect of smoking on caffeine");
   });
 
   it("links the last upload only to a web page", async () => {
@@ -576,37 +615,14 @@ describe("OverviewPage", () => {
     );
   });
 
-  it("applies an On save action to the selected studies", async () => {
-    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot());
-    const wrapper = await mountPage(snapshot({ studies: [example, harder] }));
-    expect(button("Apply").attributes("disabled")).toBeDefined();
+  it("offers Validate and Upload of the selected studies, and On save neither in the toolbar nor as a column", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
     await check("Select caffeine/Harder1988");
-    await choose(wrapper, "On save", "off");
-    await click("Apply");
-    expect(setMode).toHaveBeenCalledWith(["caffeine/Harder1988"], "off");
-    expect(page().get('[role="status"]').text()).toBe("On save is Off for 1 study.");
-  });
-
-  it("asks before it turns on upload on save", async () => {
-    const setMode = vi.spyOn(useOverviewStore(), "setMode").mockResolvedValue(snapshot());
-    const wrapper = await mountPage(snapshot({ can_upload: true, endpoint: "https://beta.pk-db.com" }));
-    await check("Select caffeine/Example");
-    await choose(wrapper, "On save", "upload");
-    await click("Apply");
-    expect(setMode).not.toHaveBeenCalled();
-    expect(dialog().get("h2").text()).toBe("Turn on upload on save");
-    await click("Turn on upload on save");
-    expect(setMode).toHaveBeenCalledWith(["caffeine/Example"], "upload");
-  });
-
-  it("falls back to Validate on save when the upload permission ends", async () => {
-    const wrapper = await mountPage(snapshot({ can_upload: true }));
-    await choose(wrapper, "On save", "upload");
-    serve({ "/local/state": snapshot({ can_upload: false }), "/local/curators": { curators: profiles } });
-    await useOverviewStore().refresh();
-    await flushPromises();
-    const select = wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === "On save");
-    expect(select?.props("modelValue")).toBe("validate");
+    const toolbar = page().get(".batch-toolbar");
+    expect(toolbar.findAll("button").map((item) => item.text())).toEqual(["Validate", "Upload"]);
+    expect(toolbar.text()).not.toContain("On save");
+    expect(page().findAll("thead th").map((cell) => cell.text())).not.toContain("On save");
+    expect(page().find(".cell-mode").exists()).toBe(false);
   });
 
   it("shows the refusal of a batch action", async () => {
@@ -1035,6 +1051,41 @@ describe("OverviewPage", () => {
     expect(field("Search studies").element.value).toBe("");
   });
 
+  it("puts the heading, the count, the search, the selects and the status chips into one header", async () => {
+    await mountPage(snapshot({ studies: [example, harder, approved] }));
+    const header = page().get(".overview-header");
+    const parts = ["overview-heading", "overview-search", "overview-substance", "overview-curator", "overview-chips"];
+    expect(
+      [...header.element.children].map((child) => parts.find((name) => child.classList.contains(name)) ?? child.className),
+    ).toEqual(parts);
+    expect(header.get(".overview-heading h1").text()).toBe("Studies");
+    expect(header.get(".overview-count").text()).toBe("3 studies");
+    expect(page().find(".overview-filters").exists()).toBe(false);
+    // A hidden copy of the longest count keeps its width, so that the fields stay in place.
+    const sizer = header.get(".overview-count-sizer");
+    expect(sizer.text()).toBe("3 of 3 studies");
+    expect(sizer.attributes("aria-hidden")).toBe("true");
+
+    await search("smoking");
+    expect(header.get(".overview-count").text()).toBe("1 of 3 studies");
+    expect(header.get(".overview-count-sizer").text()).toBe("3 of 3 studies");
+  });
+
+  it("names one study in the count and its longest text", async () => {
+    await mountPage(snapshot({ studies: [example] }));
+    expect(page().get(".overview-count").text()).toBe("1 study");
+    expect(page().get(".overview-count-sizer").text()).toBe("1 of 1 study");
+  });
+
+  it("shows the heading alone without studies", async () => {
+    await mountPage(snapshot({ studies: [] }));
+    const header = page().get(".overview-header");
+    expect(header.get("h1").text()).toBe("Studies");
+    for (const part of [".overview-count-box", ".overview-search", ".overview-substance", ".overview-curator", ".overview-chips"]) {
+      expect(header.find(part).exists(), part).toBe(false);
+    }
+  });
+
   it("finds a study under every substance folder that its tables name and names them at its identity", async () => {
     const pair = studyRow({
       id: "codeine/Pair2002",
@@ -1140,6 +1191,58 @@ describe("OverviewPage", () => {
     expect(page().findAll("th").find((cell) => cell.text().startsWith("Study"))!.attributes("aria-sort")).toBe(
       "ascending",
     );
+  });
+
+  it("sorts by Release and Issue from their headers at their new places", async () => {
+    const issued = studyRow({
+      id: "caffeine/Issued2020",
+      name: "Issued2020",
+      path: "studies/caffeine/Issued2020",
+      summary: { ...example.summary, issue: 12 },
+    });
+    await mountPage(snapshot({ studies: [example, harder, issued] }));
+    const header = (cell: string) => page().get(`.study-table thead th.${cell}`);
+
+    await click("Release");
+    expect(header("cell-release").attributes("aria-sort")).toBe("ascending");
+    expect(header("cell-study").attributes("aria-sort")).toBeUndefined();
+    // Rows without a value come last, by identity.
+    expect(identities()).toEqual(["caffeine/Harder1988", "caffeine/Example", "caffeine/Issued2020"]);
+
+    await click("Issue");
+    expect(header("cell-issue").attributes("aria-sort")).toBe("ascending");
+    expect(header("cell-release").attributes("aria-sort")).toBeUndefined();
+    expect(identities()).toEqual(["caffeine/Issued2020", "caffeine/Harder1988", "caffeine/Example"]);
+    await click("Issue");
+    expect(header("cell-issue").attributes("aria-sort")).toBe("descending");
+    expect(identities()).toEqual(["caffeine/Harder1988", "caffeine/Issued2020", "caffeine/Example"]);
+
+    // Curators is a label without sorting.
+    expect(header("cell-curators").find("button").exists()).toBe(false);
+    expect(header("cell-curators").text()).toBe("Curators");
+  });
+
+  it("draws the sort glyph of the active column in two layers and the others as the base glyph", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
+    const icon = (cell: string) => page().get(`.study-table thead th.${cell} .sort-icon`);
+    expect(icon("cell-study").findAll("i")).toHaveLength(2);
+    expect(icon("cell-study").get(".sort-base").classes()).toContain("fa-sort");
+    expect(icon("cell-study").get(".sort-active").classes()).toContain("fa-sort-up");
+    expect(icon("cell-release").findAll("i")).toHaveLength(1);
+    expect(icon("cell-release").get("i").classes()).toContain("fa-sort");
+    await click("Study");
+    expect(icon("cell-study").get(".sort-active").classes()).toContain("fa-sort-down");
+  });
+
+  it("gives every chip count the digits of the number of studies", async () => {
+    await mountPage(snapshot({ studies: [example, harder] }));
+    const chips = () => page().get(".overview-chips");
+    expect(chips().attributes("style")).toContain("--count-digits: 1");
+    const studies = Array.from({ length: 120 }, (_, index) =>
+      studyRow({ id: `caffeine/S${index}`, name: `S${index}`, path: `studies/caffeine/S${index}` }),
+    );
+    await mountPage(snapshot({ studies }));
+    expect(chips().attributes("style")).toContain("--count-digits: 3");
   });
 
   it("sorts by a column header", async () => {

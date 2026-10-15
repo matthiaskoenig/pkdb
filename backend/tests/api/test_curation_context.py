@@ -60,7 +60,7 @@ def test_local_engine_validates_uploads_and_observes_saves(
             identity,
         )
         assert client.get(url, headers=creator_headers).status_code == 404
-        engine.set_mode([identity], "upload")
+        engine.set_mode("upload")
         job = engine.enqueue([identity], "upload")[0]
         engine.queue.clear()
         engine.run_job(job)

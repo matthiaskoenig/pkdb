@@ -84,6 +84,24 @@ export type TableFileKind = TableKind | "raw";
 /** The class of information of a table, by which the Data section groups and colors it. */
 export type InfoClass = "subjects" | "interventions" | "data" | "raw";
 
+/** The tables whose rows the cells of other tables name: subjects.tsv and interventions.tsv. */
+export type NameKind = "subjects" | "interventions";
+
+/** The rows of the names of subjects.tsv or interventions.tsv: its file, and the line of each name (of its first row). */
+export interface NameLines {
+  file: string;
+  lines: Record<string, number>;
+}
+
+/** The lines of the names of subjects.tsv and interventions.tsv, by which a name in a cell links to its row. */
+export type StudyNameLines = Record<NameKind, NameLines>;
+
+/**
+ * What a column of a table names, by which the Data section tints it: the subjects, the
+ * interventions, the data, or `meta` for `study` and `source`, which say where a row comes from.
+ */
+export type ColumnClass = "subjects" | "interventions" | "data" | "meta";
+
 /**
  * A table file of the study; the study detail lists them in the order of the workbook sheets.
  * `source` is the source it belongs to, such as Tab2 of `outputs_Tab2.tsv` or of the raw table
@@ -362,7 +380,6 @@ export interface StudyRow {
    * of the study name, as the app last read them (`pkdb issues sync` labels its issue so).
    */
   substances: string[];
-  mode: SaveMode;
   status: RowStatus;
   stale: boolean;
   files: { id: string; path: string }[];
@@ -535,6 +552,8 @@ export interface Snapshot {
   update_required: boolean;
   offline: boolean;
   paused: boolean;
+  /** On save: what a save of a file starts, for every study of the workspace with this server and account. */
+  mode: SaveMode;
   /** Kept by the local server: the browser forgets it, as the port and so the origin change with every start. */
   theme: ThemeChoice;
   /**
@@ -639,7 +658,6 @@ export interface StudyDetail {
   id: string;
   path: string;
   status: RowStatus;
-  mode: SaveMode;
   sync: SyncState;
   counts: { errors: number; warnings: number };
   summary: StudySummary;
@@ -676,6 +694,8 @@ export interface StudyDetail {
    * it; empty beyond the upload limits.
    */
   targets: Record<string, TargetMatch>;
+  /** The line of each subject and intervention by name, by which a name in a cell links to its row; no names beyond the upload limits. */
+  name_lines: StudyNameLines;
 }
 
 /** A series of a figure with a WebPlotDigitizer project: the figure and the series name. */
@@ -704,7 +724,17 @@ export interface TableRow {
 }
 
 export type TableResponse =
-  | { file: string; kind: "table"; header: string[]; rows: TableRow[] }
+  | {
+      file: string;
+      kind: "table";
+      header: string[];
+      /**
+       * The class of each column in header order, as the local server serves a table file; a table
+       * that the app builds, such as the versions of a conflict, has none.
+       */
+      classes?: ColumnClass[];
+      rows: TableRow[];
+    }
   | { file: string; kind: "raw"; rows: TableRow[] };
 
 export interface MappedTable {
@@ -718,7 +748,7 @@ export interface MappedTable {
 }
 
 export interface OverlayPoint {
-  /** The series of the point: the label of a timecourse row or the name of a scatter row. */
+  /** The series of the point: the label of a timecourse row, the name of a scatter row, or the series of an outputs row with a time. */
   series: string;
   role: "raw" | "mapped";
   px: number;
@@ -727,7 +757,12 @@ export interface OverlayPoint {
   y: number;
   file: string;
   line: number | null;
-  error_px: [number, number] | null;
+  /**
+   * The pixels of the low and the high end of the error bar of a mapped row; null without that
+   * end, and for an end at or below 0 on a log axis of the digitization.
+   */
+  error_low_px: [number, number] | null;
+  error_high_px: [number, number] | null;
   /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
   x_text: string;
   y_text: string;
@@ -735,16 +770,27 @@ export interface OverlayPoint {
   error_bar_end: boolean;
 }
 
-/** A mapped row of a timecourse or scatter table in the units of its table. */
+/** A mapped row of a timecourse or scatter table, or an outputs row with a time, in the units of its table. */
 export interface SourcePoint {
+  /**
+   * The series of the point: the `label` of a timecourse row, the `name` of a scatter row, or the
+   * subjects, interventions, measurement, substance and tissue of an outputs row joined with " · ".
+   */
   series: string;
-  kind: "timecourses" | "scatters";
+  kind: "timecourses" | "scatters" | "outputs";
   file: string;
   line: number;
   x: number;
   y: number;
-  /** The end of the error bar of a timecourse row. */
-  error_bar: number | null;
+  /**
+   * The low and the high end of the error bar of a timecourse row or an outputs row with a time around `y`: the first statistic that
+   * fits, the one that `error_type` names first (as reported or as the digitized `error_bar` gives it),
+   * then around a `gmean` `gsd`, `sd`, `se`, and around a `mean` or `median` `sd`, `se`. A negative `sd`
+   * or `se` or a `gsd` below 1 is skipped and the next statistic is tried; a row with no valid
+   * statistic has no bar, and an `error_bar` without `error_type` is mirrored. Null without a bar.
+   */
+  error_low: number | null;
+  error_high: number | null;
   /** The cells as printed. */
   x_text: string;
   y_text: string;
@@ -873,6 +919,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "update_required",
   "offline",
   "paused",
+  "mode",
   "theme",
   "plot_scales",
   "vocabulary",
@@ -890,7 +937,6 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "id",
   "path",
   "status",
-  "mode",
   "sync",
   "counts",
   "summary",
@@ -914,6 +960,7 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "tables",
   "table_kinds",
   "targets",
+  "name_lines",
 );
 
 export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");

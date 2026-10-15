@@ -34,7 +34,8 @@ import {
   type RowFilter,
   type Selection,
 } from "../data";
-import { INFO_HEADINGS, infoStyle } from "../info";
+import { INFO_HEADINGS, infoOutlined, infoStyle } from "../info";
+import type { NameLink } from "../links";
 import { paperLine, type PaperPlace } from "../paper";
 import { useStudyStore } from "../stores/study";
 import { beyondLimits, sectionRoute, tableFiles, tablesOutcome } from "../study";
@@ -62,8 +63,10 @@ import { syncAlert, syncOutcome, syncSummary, withoutConflicts, type Side } from
  *
  * The selection is the route query `source`, `file`, `line` and `column`, so that the Problems
  * and Review sections can link to a row (`data.ts` has its rules). A link may name `notes=<kind>`,
- * which opens those notes above the table and focuses them. A route without a source and
- * a file gets the default selection once: the first table with problems or open review items,
+ * which opens those notes above the table and focuses them.
+ * A link of a name in the rows opens its row in subjects.tsv or interventions.tsv as a step of its
+ * own in the history, so that Back returns; every other change of the selection replaces the
+ * address. A route without a source and a file gets the default selection once: the first table with problems or open review items,
  * else the first table, beside its source. After that only the actions of the curator change it.
  */
 const study = useStudyStore();
@@ -274,12 +277,40 @@ function selectFile(name: string): void {
 }
 
 /**
- * Select a row of the rows pane. A row of a shared table that names a source shows that source,
- * unless the paper shows: the curator reads the paper against the rows.
+ * The selection of a row of the rows pane. A row of a shared table that names a source shows
+ * that source, unless the paper shows: the curator reads the paper against the rows.
  */
-function selectLine(line: number): void {
+function lineSelection(line: number): Omit<Selection, "pdf"> {
   const named = table.value && !paperShown.value ? findSource(rowSource(table.value, line)) : null;
-  go({ source: named?.source ?? sourceName.value, file: file.value, line, column: null });
+  return { source: named?.source ?? sourceName.value, file: file.value, line, column: null };
+}
+
+/** Select a row of the rows pane. */
+function selectLine(line: number): void {
+  go(lineSelection(line));
+}
+
+/**
+ * Follow the link of a name in the row at `line` to the row of the name. The row of the link is
+ * selected first, as a click on it selects it, so that browser Back returns to it; the row of the
+ * name is a step of its own in the history. The paper keeps showing with its PDF; else the source
+ * that the row of the name names shows, as for a row that the Problems section links to.
+ */
+async function follow(link: NameLink, line: number): Promise<void> {
+  const pdf = paperShown.value ? paperFile.value : null;
+  const from = lineSelection(line);
+  // A route that selects the row already keeps its column, which Back then returns to.
+  const selected = query.value.line === line && query.value.file === from.file && query.value.source === from.source;
+  if (!selected) await router.replace({ query: selectionQuery({ ...from, pdf: from.source === PAPER ? pdf : null }) });
+  await router.push({
+    query: selectionQuery({
+      source: paperShown.value ? PAPER : null,
+      pdf,
+      file: link.file,
+      line: link.line,
+      column: null,
+    }),
+  });
 }
 
 function selectRow(row: { file: string; line: number }): void {
@@ -439,7 +470,12 @@ const conflictPanel = computed(() => {
             <template #item="{ props: itemProps, item }">
               <VListItem v-bind="itemProps">
                 <template #prepend>
-                  <span class="data-option-dot" :style="infoStyle(item.info)" aria-hidden="true"></span>
+                  <span
+                    class="data-option-dot"
+                    :class="{ 'data-option-dot--outlined': infoOutlined(item.info) }"
+                    :style="infoStyle(item.info)"
+                    aria-hidden="true"
+                  ></span>
                 </template>
               </VListItem>
             </template>
@@ -563,6 +599,7 @@ const conflictPanel = computed(() => {
               v-if="rowsPane"
               v-bind="rowsPane"
               @select-line="selectLine"
+              @follow="follow"
               @retry="reloadRows"
               @update:filter="setFilter"
             >
@@ -596,6 +633,7 @@ const conflictPanel = computed(() => {
             v-if="rowsPane"
             v-bind="rowsPane"
             @select-line="selectLine"
+            @follow="follow"
             @retry="reloadRows"
             @update:filter="setFilter"
           >
@@ -683,6 +721,12 @@ const conflictPanel = computed(() => {
   margin-inline-end: 8px;
   border-radius: 50%;
   background: rgb(var(--info));
+}
+/* A raw extraction: an outline in its color, as its bar in the navigator. */
+.data-option-dot--outlined {
+  box-sizing: border-box;
+  border: 1px solid rgb(var(--info));
+  background: none;
 }
 /* The switch keeps its label apart from the button after it. */
 .data-switch {

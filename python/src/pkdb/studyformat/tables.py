@@ -190,9 +190,10 @@ KIND_ORDER = {
     )
 }
 InfoClass = Literal["subjects", "interventions", "data", "raw"]
-# The class of information of each table kind and of a raw table, by which the curation app
-# groups and colors the tables: the subjects with their characteristica, the interventions, the
-# data of the paper, and the paper tables as printed.
+# The class of information of each table kind and of a raw table, by which the curation
+# app groups and colors the tables (it tints the columns by `column_class`): the subjects
+# with their characteristica, the interventions, the data of the paper, and the paper
+# tables as printed.
 INFO_CLASSES: dict[str, InfoClass] = {
     "subjects": "subjects",
     "characteristica": "subjects",
@@ -202,6 +203,38 @@ INFO_CLASSES: dict[str, InfoClass] = {
     "scatters": "data",
     RAW_KIND: "raw",
 }
+ColumnClass = Literal["subjects", "interventions", "data", "meta"]
+# The columns that say where a row comes from, which the curation app mutes.
+META_COLUMNS = frozenset({"study", "source"})
+
+
+def column_class(kind: str, name: str) -> ColumnClass:
+    """The class of information of the column `name` of a table of `kind`.
+
+    The curation app tints a column by it. `study` and `source` are `meta`. Every other column of
+    the subjects and characteristica tables is `subjects`, of the interventions table
+    `interventions`. In the tables of the data, `subjects`, `parent` and `*_subjects` are
+    `subjects`, `interventions` and `*_interventions` are `interventions`, and every other column
+    is `data`.
+    """
+    if name in META_COLUMNS:
+        return "meta"
+    if kind in ("subjects", "characteristica"):
+        return "subjects"
+    if kind == "interventions":
+        return "interventions"
+    if name in ("subjects", "parent") or name.endswith("_subjects"):
+        return "subjects"
+    if name == "interventions" or name.endswith("_interventions"):
+        return "interventions"
+    return "data"
+
+
+def column_classes(spec: TableSpec) -> tuple[ColumnClass, ...]:
+    """The classes of the columns of a table kind in header order; a raw table has none."""
+    return tuple(column_class(spec.kind, name) for name in spec.names)
+
+
 # The names of the table kinds and of a raw table in the curation app.
 KIND_LABELS = {
     "subjects": "Subjects",

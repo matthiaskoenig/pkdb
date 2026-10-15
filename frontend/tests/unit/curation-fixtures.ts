@@ -45,7 +45,6 @@ export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
     path: "studies/caffeine/Example",
     duplicate: false,
     substance: "caffeine",
-    mode: "validate",
     status: "valid",
     stale: false,
     files: [{ id: "study.json", path: "study.json" }],
@@ -90,6 +89,7 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     update_required: false,
     offline: true,
     paused: false,
+    mode: "validate",
     theme: "system",
     plot_scales: {},
     vocabulary: { status: "offline" },
@@ -209,7 +209,6 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     id: row.id,
     path: row.path,
     status: row.status,
-    mode: row.mode,
     sync: row.sync,
     counts: row.counts,
     summary: row.summary,
@@ -274,12 +273,17 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     ],
     table_kinds: TABLE_KIND_ENTRIES,
     targets: {},
+    // No names by default, so that no cell links; the tests of the links give them.
+    name_lines: {
+      subjects: { file: "subjects.tsv", lines: {} },
+      interventions: { file: "interventions.tsv", lines: {} },
+    },
     ...changes,
   };
 }
 
 /** The fields of a study page that the local server sends beyond the upload limits. */
-type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets">;
+type BeyondLimits = Pick<StudyDetail, "problems" | "sources" | "files" | "tables" | "targets" | "name_lines">;
 
 /**
  * What the local server sends for a study beyond the upload limits, by limit: the limit as the
