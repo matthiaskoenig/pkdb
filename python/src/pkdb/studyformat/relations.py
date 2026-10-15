@@ -44,7 +44,6 @@ _CHARACTERISTICA_KEY = (
 OBSERVATION_KEYS = {
     "characteristica": _CHARACTERISTICA_KEY,
     "outputs": (*_CHARACTERISTICA_KEY, "interventions"),
-    "scatters": ("name", "subjects"),
 }
 DATA_KINDS = frozenset({"characteristica", "outputs", "timecourses", "scatters"})
 Issues = Iterator[ValidationIssue]

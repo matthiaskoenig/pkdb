@@ -1,9 +1,11 @@
 """Resolve dataset labels into explicit, unambiguous normalized point references."""
 
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 
 from pkdb.domain.pharmacokinetics import build_timecourses
-from pkdb.schemas.study import CanonicalStudy
+from pkdb.schemas.source import SourceLocation
+from pkdb.schemas.study import CanonicalStudy, Measurement, Subset
 from pkdb.schemas.validation import fail
 
 SHARED_FIELDS = {
@@ -33,6 +35,9 @@ STATISTICS_FIELDS = {
     "gcv",
     "count",
 }
+# The table row of an output: the outputs of one row of a format 1 sheet or of a
+# format 2 scatters table are one point, so a subject can have several points.
+ROW = "row"
 
 
 def compile_datasets(study: CanonicalStudy) -> None:
@@ -107,41 +112,60 @@ def compile_datasets(study: CanonicalStudy) -> None:
                     study.timecourses.append(course)
                     existing_courses.add(identity)
                 continue
-            if (
-                not subset.shared
-                or set(subset.shared) - SHARED_FIELDS - STATISTICS_FIELDS
-            ):
+            subset.points = [
+                [record.key for record in point]
+                for point in scatter_points(subset, by_label, dataset.source)
+            ]
+
+
+def _shared(record: Measurement, field: str) -> object:
+    """The value of a shared field of an output; `row` is the table row it is read from."""
+    if field == ROW:
+        source = record.source
+        if source is None or source.row is None:
+            return None
+        return source.file, source.sheet, source.row
+    return getattr(record.statistics if field in STATISTICS_FIELDS else record, field)
+
+
+def scatter_points(
+    subset: Subset,
+    by_label: Mapping[str, Sequence[Measurement]],
+    source: SourceLocation | None = None,
+) -> list[list[Measurement]]:
+    """The points of a scatter subset, one output of each dimension per point.
+
+    The outputs of one point have the same values of the shared fields, so these
+    must select exactly one output of each dimension.
+    """
+    if not subset.shared or set(subset.shared) - SHARED_FIELDS - STATISTICS_FIELDS - {
+        ROW
+    }:
+        fail("scatter_shared", "Scatter requires recognized shared fields", source)
+    labels = [dimension.output for dimension in subset.dimensions]
+    grouped: dict[tuple, list[list[Measurement]]] = defaultdict(
+        lambda: [[] for _ in labels]
+    )
+    for dimension, label in enumerate(labels):
+        for record in by_label.get(label, ()):
+            shared = tuple(_shared(record, field) for field in subset.shared)
+            if any(value is None for value in shared):
                 fail(
                     "scatter_shared",
-                    "Scatter requires recognized shared fields",
-                    dataset.source,
+                    "Scatter shared fields cannot be missing",
+                    record.source,
                 )
-            grouped = defaultdict(lambda: [[], []])
-            for dimension, label in enumerate(labels):
-                for record in by_label[label]:
-                    shared = tuple(
-                        getattr(
-                            record.statistics if field in STATISTICS_FIELDS else record,
-                            field,
-                        )
-                        for field in subset.shared
-                    )
-                    if any(value is None for value in shared):
-                        fail(
-                            "scatter_shared",
-                            "Scatter shared fields cannot be missing",
-                            record.source,
-                        )
-                    grouped[shared][dimension].append(record.key)
-            subset.points = []
-            for values in grouped.values():
-                if any(len(items) != 1 for items in values):
-                    fail(
-                        "scatter_pairing",
-                        "Shared values must select exactly one output per dimension",
-                        dataset.source,
-                    )
-                subset.points.append([items[0] for items in values])
+            grouped[shared][dimension].append(record)
+    points = []
+    for values in grouped.values():
+        if any(len(items) != 1 for items in values):
+            fail(
+                "scatter_pairing",
+                "Shared values must select exactly one output per dimension",
+                source,
+            )
+        points.append([items[0] for items in values])
+    return points
 
 
 def add_generated_timecourses(study: CanonicalStudy) -> None:

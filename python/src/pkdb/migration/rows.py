@@ -7,7 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from pkdb.domain.datasets import STATISTICS_FIELDS
+from pkdb.domain.datasets import scatter_points
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Decision, DroppedRow, NotConverted
@@ -21,7 +21,9 @@ from pkdb.schemas.study import (
     Notes,
     Observation,
     Statistics,
+    Subset,
 )
+from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat.cells import NAME_PATTERN, NOT_REPORTED
 from pkdb.studyformat.relations import SERIES_COLUMNS
 from pkdb.studyformat.tables import TABLES, TEXT_SOURCE, table_file
@@ -393,52 +395,34 @@ def _measurement(
     }
 
 
-def _by_subject(scatter: str, records: list[Measurement]) -> dict[str, Measurement]:
-    """The points of one scatter axis by their subject, which pairs x and y."""
-    points: dict[str, Measurement] = {}
-    for record in records:
-        subject = record.group or record.individual
+def _scatter_pairs(
+    scatter: str, subset: Subset, by_label: Mapping[str, list[Measurement]]
+) -> list[tuple[str, Measurement, Measurement]]:
+    """Subject, x and y output of each point, paired by the shared fields as format 1 pairs them.
+
+    A format 2 row holds one subject, so x and y must have the same one.
+    """
+    try:
+        points = scatter_points(subset, by_label)
+    except StudyValidationError as error:
+        raise NotConverted(
+            "scatter_pairs", f"Scatter {scatter}: {error.report.issues[0].message}."
+        ) from error
+    pairs = []
+    for x, y in points:
+        subject = x.group or x.individual
         if subject is None:
             raise NotConverted(
                 "scatter_pairs", f"Scatter {scatter} has a point without a subject."
             )
-        if subject in points:
+        if (y.group or y.individual) != subject:
             raise NotConverted(
                 "scatter_pairs",
-                f"Scatter {scatter} has more than one point of subject {subject}; "
-                "format 2 pairs x and y by subject.",
+                f"Scatter {scatter} pairs outputs of different subjects; "
+                "a format 2 point has one subject.",
             )
-        points[subject] = record
-    return points
-
-
-def _shared(record: Measurement, field: str) -> object:
-    """A field by which format 1 pairs the points of a scatter."""
-    values = record.statistics if field in STATISTICS_FIELDS else record
-    return getattr(values, field, None)
-
-
-def _scatter_pairs(
-    scatter: str,
-    labels: list[str],
-    shared: list[str],
-    by_label: Mapping[str, list[Measurement]],
-) -> list[tuple[str, Measurement, Measurement]]:
-    """Subject, x and y output of each point, paired by subject as format 2 pairs them.
-
-    Format 1 pairs the outputs by the `shared` fields, so these must agree too.
-    """
-    xs, ys = (_by_subject(scatter, by_label.get(label, [])) for label in labels)
-    if set(xs) != set(ys) or any(
-        _shared(xs[subject], field) != _shared(ys[subject], field)
-        for subject in xs
-        for field in shared
-    ):
-        raise NotConverted(
-            "scatter_pairs",
-            f"Scatter {scatter}: the x and y outputs do not pair by subject.",
-        )
-    return [(subject, x, ys[subject]) for subject, x in xs.items()]
+        pairs.append((subject, x, y))
+    return pairs
 
 
 def _scatter_source(
@@ -523,7 +507,7 @@ def _scatter_rows(
                     f"Scatter {scatter} has {len(labels)} dimensions; "
                     "a format 2 scatter has x and y.",
                 )
-            pairs = _scatter_pairs(scatter, labels, subset.shared, by_label)
+            pairs = _scatter_pairs(scatter, subset, by_label)
             points = [record for _, x, y in pairs for record in (x, y)]
             source = _scatter_source(scatter, points, name, images)
             file = table_file("scatters", source)

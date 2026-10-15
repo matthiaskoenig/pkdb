@@ -102,6 +102,16 @@ def test_study_reference_failed_refresh_exits_1_after_writing(
     assert reference is not None and reference.pmid == "456"
 
 
+def test_review_add_refuses_two_values_of_one_column(valid_study, capsys, monkeypatch):
+    monkeypatch.setenv("PKDB_USER", "curator")
+    add = ["review", "add", str(valid_study), "--kind", "question", "--text", "Why?"]
+    add += ["--file", "subjects.tsv", "--rows", "name=S1", "name=S2"]
+    assert main([*add, "--offline", "--format", "json"]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["message"] == "--rows names the column name twice"
+    assert "items" not in json.loads((valid_study / "review.json").read_text())
+
+
 def test_review_commands(valid_study, sf_vocabulary, tmp_path, capsys, monkeypatch):
     lock = tmp_path / "vocabulary.json"
     sf_vocabulary.save(lock)
