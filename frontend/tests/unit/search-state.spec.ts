@@ -16,7 +16,7 @@ import { encodeLocation } from "../../src/features/search/codec";
 import { useSearchStore } from "../../src/stores/search";
 import { useSessionStore } from "../../src/stores/session";
 import { useSearchController } from "../../src/features/search/useSearchController";
-import { deferred } from "./account-fixtures";
+import { deferred, profileFixture } from "./account-fixtures";
 enableAutoUnmount(afterEach);
 let pinia = createPinia();
 const selection = (uuid = "selected"): searchApi.Selection => ({
@@ -263,6 +263,8 @@ describe("search controller navigation", () => {
     vi.mocked(searchApi.createSelection).mockReturnValueOnce(
       new Promise(() => {}),
     );
+    // The rows were read for a signed-in reader, whose session now ends.
+    session.profile = profileFixture();
     session.invalidate();
     expect(store.rows.status).not.toBe("ready");
     expect(store.selection.status).not.toBe("ready");
