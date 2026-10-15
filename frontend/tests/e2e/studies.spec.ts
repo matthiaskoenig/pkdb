@@ -22,11 +22,11 @@ async function login(page: Page, username: string): Promise<void> {
   await expect(page.getByRole("heading", { name: "Account settings", exact: true })).toBeVisible();
 }
 
-/** The requests of `page` for a file of a study or for PDF.js. */
+/** The requests of `page` for a file of a study, for PDF.js or for the lazy chunk of the paper viewer. */
 function fileRequests(page: Page): string[] {
   const urls: string[] = [];
   page.on("request", (sent) => {
-    if (/\/view\/files\/|\/pdfjs\//.test(sent.url())) urls.push(sent.url());
+    if (/\/view\/files\/|\/pdfjs\/|paperEngine/.test(sent.url())) urls.push(sent.url());
   });
   return urls;
 }
@@ -56,6 +56,45 @@ async function looksRight(page: Page, name: string): Promise<void> {
     await toggle.click();
   }
   await page.setViewportSize({ width: 1280, height: 900 });
+}
+
+/**
+ * The first column, in CSS pixels from the left of the window, in which the browser painted
+ * `element` in a color apart from the background at its top left corner: where its ink starts.
+ */
+async function inkLeft(element: Locator): Promise<number> {
+  const box = await element.boundingBox();
+  if (!box) throw new Error("The element is not shown");
+  const page = element.page();
+  const shot = await page.screenshot({
+    clip: { x: 0, y: Math.floor(box.y), width: Math.ceil(box.x + box.width), height: Math.ceil(box.height) },
+  });
+  // Decoded in a blank page of the same context, which has no Content Security Policy.
+  const probe = await page.context().newPage();
+  try {
+    return await probe.evaluate(async (data) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${data}`;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("No canvas");
+      context.drawImage(image, 0, 0);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      const background = [pixels[0]!, pixels[1]!, pixels[2]!];
+      for (let x = 0; x < canvas.width; x++)
+        for (let y = 0; y < canvas.height; y++) {
+          const at = (y * canvas.width + x) * 4;
+          const distance = [0, 1, 2].reduce((sum, channel) => sum + Math.abs(pixels[at + channel]! - background[channel]!), 0);
+          if (distance > 120) return x;
+        }
+      return -1;
+    }, shot.toString("base64"));
+  } finally {
+    await probe.close();
+  }
 }
 
 /** Whether `element` shows no focus ring. */
@@ -123,7 +162,9 @@ test("a visitor lists the public study with its public columns and reads its met
   await expect(studyTable(page).getByRole("link", { name: sid, exact: true })).toHaveCount(0);
   await expect(page.getByRole("group", { name: "Filter by status" })).toHaveCount(0);
   await looksRight(page, "studies-public");
-  await studyTable(page).getByRole("link", { name: publicSid, exact: true }).click();
+  // With the keyboard, so that a heading without its rule against a ring would show one under :focus-visible.
+  await studyTable(page).getByRole("link", { name: publicSid, exact: true }).focus();
+  await page.keyboard.press("Enter");
   await expect(page).toHaveURL(new RegExp(`${publicAddress}/metadata$`));
   const heading = page.getByRole("heading", { name: publicSid, level: 1 });
   await expect(heading).toBeFocused();
@@ -133,6 +174,13 @@ test("a visitor lists the public study with its public columns and reads its met
   await expect(sectionTabs(page)).toHaveText(["Metadata", "Data"]);
   await expect(page.getByRole("link", { name: /GitHub issue/ })).toHaveCount(0);
   await looksRight(page, "study-public-metadata");
+  // The arrow of the back button starts where the name of the study does.
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const arrow = page.getByRole("link", { name: "All studies", exact: true }).locator(".v-icon");
+    expect(await inkLeft(arrow), `${width} px`).toBe(await inkLeft(heading));
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${publicAddress}/data?file=outputs_Tab2.tsv`);
   await expect(page.getByText("The image and the raw extraction of this table are not public.")).toBeVisible();
   await expect(page.locator(".rows-pane")).toContainText("gmean");
@@ -140,7 +188,8 @@ test("a visitor lists the public study with its public columns and reads its met
   // A link to a section that the reader does not see opens the study where it starts.
   await page.goto(`${publicAddress}/review`);
   await expect(page).toHaveURL(new RegExp(`${publicAddress}/metadata$`));
-  // A visitor never asks for a file of a study nor for PDF.js.
+  // A visitor never asks for a file of a study nor for PDF.js, also not late.
+  await page.waitForLoadState("networkidle");
   expect(files).toEqual([]);
 });
 
@@ -213,7 +262,7 @@ test.describe("the curation view of the assigned curator", () => {
 
   test("shows the paper, the images and the raw table, and loads PDF.js only for the paper", async () => {
     const files = fileRequests(page);
-    const pdfjs = () => files.filter((url) => url.includes("/pdfjs/"));
+    const pdfjs = () => files.filter((url) => url.includes("/pdfjs/") || url.includes("paperEngine"));
     await page.goto(`${address}/metadata`);
     await expect(page.getByRole("heading", { name: sid, level: 1 })).toBeVisible();
     await expect(page.getByText("PKDB09901").first()).toBeVisible();
@@ -221,10 +270,13 @@ test.describe("the curation view of the assigned curator", () => {
     await sectionTabs(page).filter({ hasText: /^Data/ }).click();
     await expect(page).toHaveURL(new RegExp(`${address}/data\\?source=Tab2&file=outputs_Tab2\\.tsv$`));
     await expect(page.locator(".rows-pane")).toContainText("outputs_Tab2.tsv");
+    // A lazy request would come late: the table is shown once the page has no request left.
+    await page.waitForLoadState("networkidle");
     expect(pdfjs()).toEqual([]);
     await page.goto(`${address}/data?source=paper`);
     await expect(page.locator(".paper-pane .textLayer")).toContainText("Format2Fixture paper");
     expect(pdfjs().some((url) => url.endsWith("/pdfjs/pdf.worker.min.mjs"))).toBe(true);
+    expect(pdfjs().some((url) => url.includes("paperEngine"))).toBe(true);
     await looksRight(page, "study-curator-paper");
     await page.goto(`${address}/data?source=Tab1`);
     const image = page.locator('img[src$="/view/files/Format2Fixture_Tab1.png"]').first();
@@ -252,10 +304,10 @@ test.describe("the curation view of the assigned curator", () => {
             top: rect.top,
             bottom: rect.bottom,
             overflowY: style.overflowY,
-            scrolls: element.scrollHeight > element.clientHeight,
           };
         };
-        const top = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--v-layout-top")) || 0;
+        // The height of the app bar, as the panes read it.
+        const top = Number.parseFloat(getComputedStyle(document.querySelector(".data-panes")!).getPropertyValue("--v-layout-top"));
         return {
           top,
           viewport: window.innerHeight,
@@ -268,9 +320,10 @@ test.describe("the curation view of the assigned curator", () => {
       });
       // The window below the app bar, less 16 px, at least 480 px.
       const height = layout.panes.bottom - layout.panes.top;
-      expect(Math.abs(height - Math.max(480, layout.viewport - 64 - 16))).toBeLessThanOrEqual(1);
+      expect(layout.top).toBeGreaterThan(0);
+      expect(Math.abs(height - Math.max(480, layout.viewport - layout.top - 16))).toBeLessThanOrEqual(1);
       expect(layout.panes.bottom).toBeLessThanOrEqual(layout.viewport + 0.5);
-      expect(layout.panes.top).toBeGreaterThanOrEqual(64 - 0.5);
+      expect(layout.panes.top).toBeGreaterThanOrEqual(layout.top - 0.5);
       for (const [pane, scroller] of [
         [layout.source, layout.sourceScroll],
         [layout.rows, layout.rowsScroll],
