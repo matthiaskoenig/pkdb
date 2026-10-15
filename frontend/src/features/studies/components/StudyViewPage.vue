@@ -168,6 +168,11 @@ function backToSearch(): void {
 .website-study-back {
   display: flex;
 }
+/* The arrow of the back button starts where the name of the study does: the 12 px padding of a
+   small button less the -3 px margin of its icon, plus the 2 px of space inside the glyph. */
+.website-study-back > .v-btn {
+  margin-inline-start: -11px;
+}
 /* The header and the tabs of the study above a rule, on the page: the study band of the curation app stays there. */
 .website-study-head {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
