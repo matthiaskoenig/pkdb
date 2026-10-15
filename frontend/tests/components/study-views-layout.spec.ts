@@ -42,4 +42,14 @@ describe("the layout of the Data section", () => {
   it("fills the window while its panes stand side by side when the page asks for it", async () => {
     expect((await section({ fill: true })).classes()).toContain("data-section--fill");
   });
+
+  it("gives its side-by-side panes the height of the window below the app bar in a page that does not fill it", async () => {
+    expect((await section({})).get(".data-panes").classes()).toContain("data-panes--sized");
+    expect((await section({ fill: true })).get(".data-panes").classes()).not.toContain("data-panes--sized");
+  });
+
+  it("leaves stacked panes to their own heights", async () => {
+    setViewport(900);
+    expect((await section({})).get(".data-panes").classes()).not.toContain("data-panes--sized");
+  });
 });

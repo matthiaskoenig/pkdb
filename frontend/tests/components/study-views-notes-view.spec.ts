@@ -122,4 +122,17 @@ describe("the notes of a table kind, read only", () => {
     expect(wrapper.find(".notes-view").exists()).toBe(false);
     expect(router.currentRoute.value.query.notes).toBeUndefined();
   });
+
+  it("stay open for the study when they mount again, as the page keeps which notes are open", async () => {
+    const data = memoryData({ detail: DETAIL });
+    const context = viewsContext({ capabilities: PUBLIC, data });
+    const first = mountViews(NotesView, { context, props: { kind: "outputs" }, attachTo: document.body });
+    await first.get("button.notes-view-toggle").trigger("click");
+    expect([...data.notesOpen.value]).toEqual(["outputs"]);
+    first.unmount();
+    const again = mountViews(NotesView, { context, props: { kind: "outputs" }, attachTo: document.body });
+    expect(again.get("button.notes-view-toggle").attributes("aria-expanded")).toBe("true");
+    await again.get("button.notes-view-toggle").trigger("click");
+    expect(data.notesOpen.value.size).toBe(0);
+  });
 });

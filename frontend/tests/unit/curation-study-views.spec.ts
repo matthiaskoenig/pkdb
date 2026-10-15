@@ -61,4 +61,16 @@ describe("the study views of the curation app", () => {
     views.data.setRowFilter("subjects.tsv", { kind: "source", source: "Tab2" });
     expect(useStudyStore().rowFilter("subjects.tsv")).toEqual({ kind: "source", source: "Tab2" });
   });
+
+  it("keep their storage keys and the open notes of the draft of the open study", () => {
+    const views = curationStudyViews();
+    expect(views.storagePrefix).toBe("pkdb-curation");
+    pinia = createPinia();
+    setActivePinia(pinia);
+    views.data.setNotesOpen("outputs", true);
+    expect(useStudyStore().draft.notesOpen.has("outputs")).toBe(true);
+    expect(views.data.notesOpen.value.has("outputs")).toBe(true);
+    views.data.setNotesOpen("outputs", false);
+    expect(views.data.notesOpen.value.has("outputs")).toBe(false);
+  });
 });

@@ -33,6 +33,8 @@ export function curationStudyData(): StudyViewData {
     acknowledgedKeys: computed(() => useStudyStore().acknowledgedKeys),
     rowFilter: (file) => useStudyStore().rowFilter(file),
     setRowFilter: (file, filter) => useStudyStore().setRowFilter(file, filter),
+    notesOpen: computed(() => useStudyStore().draft.notesOpen),
+    setNotesOpen: (kind, open) => useStudyStore().draft.setNotesOpen(kind, open),
     validatesAfterWrite: computed(() => validatesAfterWrite(useOverviewStore().snapshot ?? null)),
     plotScales: (study, view) => usePlotScales(study, view),
     rows: computed(() => useOverviewStore().snapshot?.studies ?? []),
@@ -49,6 +51,7 @@ export function curationStudyViews(): StudyViewsContext {
     routes: curationRoutes,
     data: curationStudyData(),
     parts: { failureDetails: FailureDetails },
+    storagePrefix: "pkdb-curation",
   };
 }
 

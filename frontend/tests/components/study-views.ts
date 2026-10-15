@@ -17,7 +17,7 @@ import {
 import { ALL_ROWS, type RowFilter } from "../../src/study-views/data";
 import { usePlotScaleChoice } from "../../src/study-views/plotScales";
 import { isSection, profileMap, studyName } from "../../src/study-views/study";
-import type { Profile, SourceView, StudyDetail, StudyRow, TableResponse } from "../../src/study-views/types";
+import type { Profile, SourceView, StudyDetail, StudyRow, TableKind, TableResponse } from "../../src/study-views/types";
 
 export const EVERYTHING: StudyCapabilities = { edit: true, curation: true, files: true, jobs: true };
 /** What a reader of the website sees of a study that they may not write. */
@@ -74,6 +74,7 @@ export interface MemoryOptions {
 /** The reads of a page that holds everything in memory; a table or source that it lacks fails to load. */
 export function memoryData(options: MemoryOptions = {}): StudyViewData {
   const filters = shallowRef<ReadonlyMap<string, RowFilter>>(new Map());
+  const notesOpen = shallowRef<ReadonlySet<TableKind>>(new Set());
   const missing = (name: string) => Promise.reject(new Error(`${name} could not be loaded.`));
   // Loaded once, as every page answers the views that call it when they mount.
   const curators = Promise.resolve(options.profiles ?? []);
@@ -94,6 +95,13 @@ export function memoryData(options: MemoryOptions = {}): StudyViewData {
     setRowFilter(file, filter) {
       filters.value = new Map(filters.value).set(file, filter);
     },
+    notesOpen,
+    setNotesOpen(kind, open) {
+      const next = new Set(notesOpen.value);
+      if (open) next.add(kind);
+      else next.delete(kind);
+      notesOpen.value = next;
+    },
     validatesAfterWrite: shallowRef(true),
     plotScales: (study, view) => usePlotScaleChoice(study, view),
     rows: shallowRef(options.rows ?? []),
@@ -111,6 +119,7 @@ export function viewsContext(
     routes?: StudyViewRoutes;
     data?: StudyViewData;
     parts?: StudyViewParts;
+    storagePrefix?: string;
   } = {},
 ): StudyViewsContext {
   const capabilities = changes.capabilities ?? EVERYTHING;
@@ -119,6 +128,7 @@ export function viewsContext(
     routes: changes.routes ?? websiteRoutes(),
     data: changes.data ?? memoryData(),
     parts: changes.parts ?? { failureDetails: null },
+    storagePrefix: changes.storagePrefix ?? "pkdb-test",
   };
 }
 

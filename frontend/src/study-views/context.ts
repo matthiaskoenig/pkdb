@@ -20,7 +20,7 @@ import type { LocationQuery, LocationQueryRaw, RouteLocationNormalizedLoaded, Ro
 import type { RowFilter } from "./data";
 import type { PlotScales } from "./plotScales";
 import type { Section } from "./study";
-import type { Profile, SourceView, StudyDetail, StudyRow, TableResponse } from "./types";
+import type { Profile, SourceView, StudyDetail, StudyRow, TableKind, TableResponse } from "./types";
 
 /**
  * What the reader may see and do. A component hides what its reader may not, and renders no
@@ -91,6 +91,9 @@ export interface StudyViewData {
   /** The filter of the rows of a shared table, which the page keeps while the study is open. */
   rowFilter(file: string): RowFilter;
   setRowFilter(file: string, filter: RowFilter): void;
+  /** The table kinds whose notes the reader opened, which stay open while the study is open. */
+  notesOpen: Readonly<Ref<ReadonlySet<TableKind>>>;
+  setNotesOpen(kind: TableKind, open: boolean): void;
   /** Whether the server validates the study by itself after a write. */
   validatesAfterWrite: Readonly<Ref<boolean>>;
   /** The scales of the plot of a source and the choice of the reader; call it in `setup`. */
@@ -122,6 +125,11 @@ export interface StudyViewsContext {
   routes: StudyViewRoutes;
   data: StudyViewData;
   parts: StudyViewParts;
+  /**
+   * The prefix of what the views keep in the storage of the browser, such as the share of the
+   * panes of the Data section: `pkdb-curation` in the curation app, `pkdb-website` on the website.
+   */
+  storagePrefix: string;
 }
 
 export const STUDY_VIEWS: InjectionKey<StudyViewsContext> = Symbol("study-views");
