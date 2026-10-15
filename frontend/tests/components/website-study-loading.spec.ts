@@ -117,6 +117,31 @@ describe("loading the view of a study", () => {
     expect(signals.map((signal) => signal.aborted)).toEqual([true, false]);
   });
 
+  it("shows nothing of a view read in another session when the read for the new session fails", async () => {
+    mocks.study.mockResolvedValueOnce(answer(studyCurator));
+    const state = harness(() => useWebsiteStudy("drug/Format2Fixture"));
+    await flushPromises();
+    expect(state.audience.value).toBe("curator");
+    mocks.study.mockRejectedValue(new ApiError(500, { message: "Database unavailable" }, "GET view"));
+    useSessionStore().epoch += 1;
+    await flushPromises();
+    expect(state.detail.value).toBeNull();
+    expect(state.audience.value).toBeNull();
+    expect(state.error.value).toBeInstanceOf(ApiError);
+    expect(state.missing.value).toBe(false);
+  });
+
+  it("keeps the view of the same session when a retry fails", async () => {
+    mocks.study.mockResolvedValueOnce(answer(studyCurator));
+    const state = harness(() => useWebsiteStudy("drug/Format2Fixture"));
+    await flushPromises();
+    mocks.study.mockRejectedValue(new ApiError(500, { message: "Database unavailable" }, "GET view"));
+    await state.reload();
+    expect(state.audience.value).toBe("curator");
+    expect(state.detail.value?.id).toBe("drug/Format2Fixture");
+    expect(state.error.value).toBeInstanceOf(ApiError);
+  });
+
   it("shows another failure as an error, not as a study without a view", async () => {
     mocks.study.mockRejectedValue(new ApiError(500, { message: "Database unavailable" }, "GET view"));
     const state = harness(() => useWebsiteStudy("drug/Format2Fixture"));
@@ -145,5 +170,30 @@ describe("loading the rows of the Studies page", () => {
     await flushPromises();
     expect(mocks.rows).toHaveBeenCalledTimes(3);
     expect(state.status.value).toBe("ready");
+  });
+
+  it("shows no rows of another session when the read for the new session fails", async () => {
+    mocks.rows.mockResolvedValueOnce(studyRows(rowsCurator, "GET rows"));
+    const state = harness(() => useWebsiteStudyRows());
+    await flushPromises();
+    expect(state.status.value).toBe("ready");
+    mocks.rows.mockRejectedValue(new ApiError(500, { message: "Database unavailable" }, "GET rows"));
+    useSessionStore().epoch += 1;
+    await flushPromises();
+    expect(state.status.value).toBe("failed");
+    expect(state.rows.value).toEqual([]);
+    expect(state.profiles.value).toEqual([]);
+    expect(state.error.value).toBeInstanceOf(ApiError);
+  });
+
+  it("keeps the rows of the same session when a retry fails", async () => {
+    mocks.rows.mockResolvedValueOnce(studyRows(rowsCurator, "GET rows"));
+    const state = harness(() => useWebsiteStudyRows());
+    await flushPromises();
+    mocks.rows.mockRejectedValue(new ApiError(500, { message: "Database unavailable" }, "GET rows"));
+    await state.reload();
+    expect(state.status.value).toBe("ready");
+    expect(state.rows.value.map((row) => row.id)).toEqual(["drug/Format2Fixture"]);
+    expect(state.error.value).toBeInstanceOf(ApiError);
   });
 });

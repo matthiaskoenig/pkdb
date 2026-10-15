@@ -2,7 +2,9 @@
  * Loading the views of the website (#963): the view of a study and the rows of the Studies page.
  * Both read again when the session changes (`epoch` of the session store: sign-in, sign-out, a
  * role change, the first profile load, a 401 that ended the session), keeping what they show until
- * the new answer comes, since the backend decides by the session what the reader sees.
+ * the new answer comes, since the backend decides by the session what the reader sees. When that
+ * read fails, they show nothing of the answer of the old session, whose reader may have been
+ * allowed to see more; a failed retry in the same session keeps what they show.
  */
 import { computed, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from "vue";
 import { useSessionStore } from "../../stores/session";
@@ -21,16 +23,20 @@ export function useWebsiteStudy(id: MaybeRefOrGetter<string>) {
   const audience = shallowRef<Audience | null>(null);
   const error = shallowRef<unknown>(null);
   let controller: AbortController | null = null;
+  /** The session epoch that the shown view was read in. */
+  let shownEpoch: number | null = null;
 
   /** Read the view; `keep` shows the current one, or the current error, until the answer comes. */
   async function load(keep: boolean): Promise<void> {
     controller?.abort();
     const own = new AbortController();
     controller = own;
+    const epoch = session.epoch;
     if (!keep) {
       detail.value = null;
       audience.value = null;
       error.value = null;
+      shownEpoch = null;
     }
     try {
       const answer = await studyViewsApi.study(toValue(id), own.signal);
@@ -38,13 +44,15 @@ export function useWebsiteStudy(id: MaybeRefOrGetter<string>) {
       detail.value = answer.detail;
       audience.value = answer.audience;
       error.value = null;
+      shownEpoch = epoch;
     } catch (caught) {
       if (own.signal.aborted || isAbort(caught)) return;
       error.value = caught;
-      // A study without a view, or one that the reader can no longer read, shows nothing of it.
-      if (isMissing(caught)) {
+      // A study without a view, one that the reader can no longer read, or a view of another session shows nothing.
+      if (isMissing(caught) || shownEpoch !== session.epoch) {
         detail.value = null;
         audience.value = null;
+        shownEpoch = null;
       }
     }
   }
@@ -71,12 +79,18 @@ export function useWebsiteStudyRows() {
   const status = shallowRef<LoadStatus>("loading");
   const error = shallowRef<unknown>(null);
   let controller: AbortController | null = null;
+  /** The session epoch that the shown rows were read in. */
+  let shownEpoch: number | null = null;
 
-  /** Read the rows; shown rows stay until the answer comes, a failed first read shows the loading again. */
+  /**
+   * Read the rows; shown rows stay until the answer comes, a failed first read shows the loading
+   * again, and a failed read leaves no rows of another session.
+   */
   async function load(): Promise<void> {
     controller?.abort();
     const own = new AbortController();
     controller = own;
+    const epoch = session.epoch;
     if (status.value === "failed") status.value = "loading";
     try {
       const answer = await studyViewsApi.rows(own.signal);
@@ -85,10 +99,16 @@ export function useWebsiteStudyRows() {
       profiles.value = answer.profiles;
       error.value = null;
       status.value = "ready";
+      shownEpoch = epoch;
     } catch (caught) {
       if (own.signal.aborted || isAbort(caught)) return;
       error.value = caught;
-      if (status.value !== "ready") status.value = "failed";
+      if (shownEpoch !== session.epoch) {
+        rows.value = [];
+        profiles.value = [];
+        shownEpoch = null;
+        status.value = "failed";
+      }
     }
   }
 
