@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 // has the development name that the login of the backend sets.
 const sessionCookie = "pkdb_dev_session";
 
-test("a stale session cookie costs one read and leaves an anonymous visitor", async ({
+test("a stale session cookie leaves an anonymous visitor after a bounded number of reads", async ({
   page,
   context,
   baseURL,
@@ -36,7 +36,7 @@ test("a stale session cookie costs one read and leaves an anonymous visitor", as
     description: JSON.stringify(measured),
   });
   expect(measured.searches).toBeLessThanOrEqual(3);
-  expect(measured.reads).toBeLessThanOrEqual(20);
+  expect(measured.reads).toBeLessThanOrEqual(6);
   await expect(
     page.getByRole("tab", { name: "Studies 2", exact: true }),
   ).toBeVisible();
