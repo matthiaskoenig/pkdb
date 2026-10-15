@@ -55,9 +55,7 @@ export function searchQuery(query: LocationQuery): LocationQuery {
 }
 
 /** Whether `query` holds a search, which the study page then offers to go back to. */
-export function hasSearch(query: LocationQuery): boolean {
-  return typeof query.v === "string";
-}
+export { hasSearch } from "../search/codec";
 
 function params(id: string): { substance: string; name: string } {
   return { substance: id.slice(0, id.indexOf("/")), name: studyName({ id }) };

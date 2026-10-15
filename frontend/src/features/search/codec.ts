@@ -53,6 +53,10 @@ export function criteriaKey(criteria: Criteria): string {
 }
 /** The keys of the address of a search (`encodeLocation`), which a study page opened from it keeps (#963). */
 export const SEARCH_QUERY_KEYS = ["v", "q", "scope", "tab", "page", "pageSize", "order", "tableSearch"] as const;
+/** Whether `query` holds a data search: its version key `v`, which every encoded search has. */
+export function hasSearch(query: Record<string, unknown>): boolean {
+  return typeof query.v === "string";
+}
 export function encodeLocation(
   location: SearchLocation,
 ): Record<string, string> {

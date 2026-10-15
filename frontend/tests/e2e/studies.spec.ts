@@ -226,6 +226,43 @@ test("the search and the selects of the Studies page stand on the center line of
   await page.setViewportSize({ width: 1280, height: 900 });
 });
 
+test("the main navigation marks Studies on a study page and Explore data on one that the data search opened", async ({ page }) => {
+  const desktop = page.getByRole("navigation", { name: "Main navigation", exact: true });
+  const marked = async (nav: Locator, name: string, yes: boolean) => {
+    const link = nav.getByRole("link", { name, exact: true });
+    if (yes) await expect(link).toHaveClass(/(^| )router-link-active( |$)/);
+    else await expect(link).not.toHaveClass(/(^| )router-link-active( |$)/);
+  };
+  await page.goto("/studies");
+  await marked(desktop, "Studies", true);
+  await marked(desktop, "Explore data", false);
+  await studyTable(page).getByRole("link", { name: publicSid, exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${publicAddress}/metadata$`));
+  await marked(desktop, "Studies", true);
+  await marked(desktop, "Explore data", false);
+  await expect(desktop.getByRole("link", { name: "Studies", exact: true })).toHaveCSS("text-decoration-line", "underline");
+  await sectionTabs(page).filter({ hasText: /^Data/ }).click();
+  await expect(page).toHaveURL(new RegExp(`${publicAddress}/data`));
+  await marked(desktop, "Studies", true);
+  // The mobile menu marks the same entry.
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  const mobile = page.getByRole("navigation", { name: "Mobile navigation" });
+  await marked(mobile, "Studies", true);
+  await marked(mobile, "Explore data", false);
+  await expect(mobile.getByRole("link", { name: "Studies", exact: true })).toHaveCSS("font-weight", "600");
+  await expect(mobile.getByRole("link", { name: "Explore data", exact: true })).not.toHaveCSS("font-weight", "600");
+  await page.keyboard.press("Escape");
+  await openFromSearch(page, publicSid);
+  await expect(page).toHaveURL(new RegExp(`${publicAddress}/metadata\\?.*v=1`));
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await marked(desktop, "Explore data", true);
+  await marked(desktop, "Studies", false);
+  await page.goto("/data");
+  await marked(desktop, "Explore data", true);
+  await marked(desktop, "Studies", false);
+});
+
 test("a signed-in reader who may not write a study sees the public view and not the private study", async ({ page, browserName }) => {
   await login(page, `reader-${browserName}`);
   await page.goto("/studies");

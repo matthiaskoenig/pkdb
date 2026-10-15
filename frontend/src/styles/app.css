@@ -74,6 +74,11 @@ p {
   gap: 24px;
   padding: 30px;
 }
+/* The links of the menu are underlined: the page's own entry is bold with the thicker line of the desktop navigation. */
+.mobile-nav a.router-link-active {
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+}
 .main-content {
   padding: 32px;
   min-height: calc(100vh - 150px);
