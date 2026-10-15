@@ -96,11 +96,10 @@ describe("the Studies page", () => {
     const { router, wrapper } = await open("/studies");
     const sortReview = () => wrapper.get("table thead").findAll("button").find((button) => button.text() === "Review")!.trigger("click");
     await sortReview();
-    await navigated();
-    expect(router.currentRoute.value.query).toEqual({ sort: "review" });
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ sort: "review" }));
     await sortReview();
+    await vi.waitFor(() => expect(router.currentRoute.value.query).toEqual({ sort: "review", order: "desc" }));
     await navigated();
-    expect(router.currentRoute.value.query).toEqual({ sort: "review", order: "desc" });
     expect(wrapper.get("a.study-identity").attributes("href")).toBe("/data/drug/Format2Fixture");
   });
 
