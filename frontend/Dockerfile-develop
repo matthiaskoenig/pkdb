@@ -6,4 +6,5 @@ COPY scripts/patch-declarations.ts scripts/patch-declarations.ts
 RUN npm ci
 COPY . .
 EXPOSE 8080
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "8080"]
+# Vite runs as process 1, so a stop ends it with the status of SIGTERM (143) instead of npm errors.
+CMD ["node_modules/.bin/vite", "--host", "0.0.0.0", "--port", "8080"]

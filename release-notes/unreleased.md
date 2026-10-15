@@ -18,3 +18,4 @@
 - The local curation app no longer reports the error `Transport destroyed` in the browser console when a study section with a PDF closes while the PDF still loads its first page, such as on a quick switch from Data to Metadata: PDF.js rejects a promise of its viewer that nothing waits for, and the app now handles it.
 
 - The overview of the local curation app spends about a third less time on each poll of the state while jobs run: a poll keeps the objects of the studies and jobs that did not change, so only the rows of the studies that changed render again and the widths of the columns are measured only for them. With 1,000 studies, a poll no longer renders every shown row and goes through every study for the column widths.
+- The frontend of the Docker development stack starts again after the Docker daemon restarts, as the backend and the database do, and a stop no longer logs npm errors.
