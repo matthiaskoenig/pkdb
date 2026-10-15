@@ -1,0 +1,288 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0002114",
+  "lang": "en",
+  "description": [
+    "The first part of the small intestine. At the junction of the stomach and the duodenum the alimentary canal is inflected. The duodenum first goes anteriorly for a short distance, turns dorsally, and eventually caudally, thus it is a U-shaped structure with two horizontal sections (a ventral and a dorsal one)."
+  ],
+  "synonyms": [
+    "proximal intestine",
+    "upper intestine"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "AAO:0010402",
+      "BTO:0000365",
+      "CALOHA:TS-0214",
+      "EFO:0000851",
+      "EMAPA:18852",
+      "EV:0100073",
+      "FMA:7206",
+      "GAID:284",
+      "MA:0000338",
+      "MAT:0000044",
+      "MESH:D004386",
+      "MIAA:0000044",
+      "NCIT:C12263",
+      "SCTID:181247007",
+      "VHOG:0000052",
+      "Wikipedia:Duodenum",
+      "XAO:0000236",
+      "galen:Duodenum",
+      "UMLS:C0013303"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/b/b3/Tractus_intestinalis_duodenum.svg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-female/v1.2/assets/3d-vh-f-small-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-male/v1.2/assets/3d-vh-m-small-intestine.glb"
+    ],
+    "external_definition": [
+      "The fixed portion of the small intestine deeply lodged in the posterior wall of the abdomen and extending from the pylorus to the beginning of the jejunum. [Dorian_AF, Elsevier's_encyclopaedic_dictionary_of_medicine, Part_B:_Anatomy_(1988)_Amsterdam_etc.:_Elsevier][VHOG]"
+    ],
+    "has_relational_adjective": [
+      "duodenal"
+    ],
+    "id": [
+      "UBERON:0002114"
+    ],
+    "never in taxon": [
+      "http://purl.obolibrary.org/obo/NCBITaxon_7955"
+    ],
+    "taxon_notes": [
+      "In fish, the divisions of the small intestine are not as clear, and the terms anterior intestine or proximal intestine may be used instead of duodenum.",
+      "In humans, the duodenum is a hollow jointed tube about 10-15 inches (25-38 centimetres) long connecting the stomach to the jejunum. It begins with the duodenal bulb and ends at the ligament of Treitz."
+    ]
+  },
+  "label": "duodenum",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0002114",
+  "obo_id": "UBERON:0002114",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "uberon_slim",
+    "vertebrate_core"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The first part of the small intestine. At the junction of the stomach and the duodenum the alimentary canal is inflected. The duodenum first goes anteriorly for a short distance, turns dorsally, and eventually caudally, thus it is a U-shaped structure with two horizontal sections (a ventral and a dorsal one).",
+      "oboXrefs": [
+        {
+          "database": "ISBN",
+          "id": "0815318960",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A0815318960"
+        },
+        {
+          "database": "Wikipedia",
+          "id": "Duodenum",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Duodenum"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010402",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010402"
+    },
+    {
+      "database": "BTO",
+      "id": "0000365",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000365"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0214",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-0214"
+    },
+    {
+      "database": "EFO",
+      "id": "0000851",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000851"
+    },
+    {
+      "database": "EMAPA",
+      "id": "18852",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:18852"
+    },
+    {
+      "database": "EV",
+      "id": "0100073",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/EV_0100073"
+    },
+    {
+      "database": "FMA",
+      "id": "7206",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/7206"
+    },
+    {
+      "database": "GAID",
+      "id": "284",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0000338",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0000338"
+    },
+    {
+      "database": "MAT",
+      "id": "0000044",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000044"
+    },
+    {
+      "database": "MESH",
+      "id": "D004386",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004386"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000044",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12263",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12263"
+    },
+    {
+      "database": "SCTID",
+      "id": "181247007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/181247007"
+    },
+    {
+      "database": "VHOG",
+      "id": "0000052",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0000052"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Duodenum",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Duodenum"
+    },
+    {
+      "database": "XAO",
+      "id": "0000236",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/XAO_0000236"
+    },
+    {
+      "database": "galen",
+      "id": "Duodenum",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0013303",
+      "description": "ncithesaurus:Duodenum",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0013303"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "proximal intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000365",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000365"
+        }
+      ]
+    },
+    {
+      "name": "upper intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000365",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000365"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "proximalmost_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBSPO_0001106"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002150"
+    },
+    "contributes_to_morphology_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002114/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002433"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

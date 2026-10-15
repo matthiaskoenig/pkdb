@@ -1,0 +1,81 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C173286",
+  "lang": "en",
+  "description": [
+    "Withdrawal of blood from a subject and removal of any pathogenic components before returning the remainder to the subject."
+  ],
+  "synonyms": [
+    "Therapeutic Apheresis"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "PCDC"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C173057"
+    ],
+    "NCI_META_CUI": [
+      "CL1407140"
+    ],
+    "Preferred_Name": [
+      "Therapeutic Apheresis"
+    ],
+    "Semantic_Type": [
+      "Health Care Activity"
+    ],
+    "code": [
+      "C173286"
+    ]
+  },
+  "label": "Therapeutic Apheresis",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C173286",
+  "obo_id": "NCIT:C173286",
+  "in_subset": [
+    "NCIT_C173245",
+    "NCIT_C174019"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Therapeutic Apheresis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C173286/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

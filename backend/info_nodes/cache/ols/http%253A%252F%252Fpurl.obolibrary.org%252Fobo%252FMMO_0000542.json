@@ -1,0 +1,100 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000542",
+  "lang": "en",
+  "description": [
+    "A method for assaying creatinine in a sample using the Jaffe reaction, the reaction of creatinine and picric acid in an alkaline solution, followed by quantitation of the colorimetric readout using a spectrophotometer at 520 nm."
+  ],
+  "synonyms": [
+    "Jaffe reaction creatinine assay with spectrophotometric readout",
+    "alkaline picrate creatinine assay with spectrophotometric readout"
+  ],
+  "annotation": {
+    "created_by": [
+      "jsmith"
+    ],
+    "creation_date": [
+      "2014-06-10T13:41:17Z"
+    ],
+    "database_cross_reference": [
+      "PMID:13072520"
+    ],
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000542"
+    ]
+  },
+  "label": "creatinine analysis by Jaffe reaction with spectrophotometric readout",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MMO_0000542",
+  "obo_id": "MMO:0000542",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A method for assaying creatinine in a sample using the Jaffe reaction, the reaction of creatinine and picric acid in an alkaline solution, followed by quantitation of the colorimetric readout using a spectrophotometer at 520 nm.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "http://en.wikipedia.org/wiki/Jaffe_reaction",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Jaffe_reaction"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "PMID",
+      "id": "13072520",
+      "description": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13072520"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000542/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

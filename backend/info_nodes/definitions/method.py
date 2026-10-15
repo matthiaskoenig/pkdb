@@ -60,6 +60,40 @@ METHOD_NODES: list[InfoNode] = [
         ],
     ),
     Method(
+        sid="jaffe-reaction",
+        name="Jaffe reaction",
+        description="Jaffe reaction. A colorimetric assay of creatinine, which forms the red "
+        "alkaline creatinine picrate with picric acid in alkaline solution, read by "
+        "spectrophotometry; the regular (manual) method, e.g. after deproteinization (Bonsnes "
+        "and Taussky). Other chromogens of plasma also react, so it measures more than the true "
+        "creatinine. See also 'Jaffe reaction (AutoAnalyzer)' and 'Jaffe reaction (Lloyd reagent)'.",
+        parents=["colorimetric assay"],
+        annotations=[
+            (BQB.IS, "NCIT:C120694"),
+            (BQB.IS, "https://bioregistry.io/MMO:0000542"),
+        ],
+        synonyms=["Jaffe method", "alkaline picrate method", "regular creatinine"],
+    ),
+    Method(
+        sid="jaffe-reaction-autoanalyzer",
+        name="Jaffe reaction (AutoAnalyzer)",
+        description="Jaffe reaction run automated by continuous flow analysis, e.g. on the "
+        "Technicon AutoAnalyzer, with dialysis of the sample instead of deproteinization. See "
+        "also 'Jaffe reaction'.",
+        parents=["Jaffe reaction"],
+        synonyms=["AutoAnalyzer creatinine", "continuous flow Jaffe reaction"],
+    ),
+    Method(
+        sid="jaffe-reaction-lloyd-reagent",
+        name="Jaffe reaction (Lloyd reagent)",
+        description="Jaffe reaction after the adsorption of creatinine onto Lloyd's reagent "
+        "(hydrated aluminium silicate) and its elution, which removes the non-creatinine "
+        "chromogens; the method of the true creatinine (e.g. Owen et al.). See also "
+        "'Jaffe reaction'.",
+        parents=["Jaffe reaction"],
+        synonyms=["true creatinine", "Lloyd's reagent"],
+    ),
+    Method(
         sid="elisa",
         name="ELISA",
         label="enzyme-linked immunosorbent assay (ELISA)",
@@ -603,6 +637,41 @@ METHOD_NODES: list[InfoNode] = [
         synonyms=[],
     ),
     Method(
+        sid="intra-arterial-catheter",
+        name="intra-arterial catheter",
+        description="Direct (invasive) measurement of the arterial blood pressure with a catheter "
+        "or cannula in a peripheral artery (e.g. the radial or brachial artery) connected to a "
+        "pressure transducer. See also 'sphygmomanometer' for the non-invasive measurement.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C202396")],
+        synonyms=[
+            "intra-arterial blood pressure",
+            "invasive blood pressure",
+            "arterial line",
+            "radial artery cannula",
+        ],
+    ),
+    Method(
+        sid="pulmonary-artery-catheter",
+        name="pulmonary artery catheter",
+        description="A balloon-tipped, flow-directed catheter (Swan-Ganz catheter) advanced "
+        "through the right heart into the pulmonary artery to measure the right atrial, the "
+        "pulmonary artery and the pulmonary capillary wedge pressure; with a thermistor it also "
+        "measures the cardiac output by 'thermodilution'.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C122613")],
+        synonyms=["Swan-Ganz catheter", "right heart catheterization"],
+    ),
+    Method(
+        sid="thermodilution",
+        description="Thermodilution. An indicator dilution method that measures the cardiac "
+        "output from the temperature change of the blood downstream of a bolus injection of cold "
+        "fluid, usually with a thermistor-tipped 'pulmonary artery catheter'.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C150870")],
+        synonyms=["thermodilution cardiac output"],
+    ),
+    Method(
         sid="scale",
         description="An instrument or machine for weighing.",
         parents=["assay"],
@@ -752,6 +821,29 @@ METHOD_NODES: list[InfoNode] = [
             (BQB.IS, "SNOMEDCT:103800002"),  # Coagulation factor assay (procedure)
         ],
         parents=["assay"],
+    ),
+    Method(
+        sid="qrt-pcr",
+        name="qRT-PCR",
+        label="quantitative reverse transcription PCR (qRT-PCR)",
+        description="Quantitative (real-time) reverse transcription polymerase chain reaction. "
+        "Measures the amount of an mRNA after its reverse transcription to cDNA from the cycle "
+        "threshold (Ct) of the amplification, usually relative to a reference gene.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C28408")],
+        synonyms=["RT-qPCR", "real-time RT-PCR", "quantitative RT-PCR", "TaqMan"],
+    ),
+    Method(
+        sid="western-blotting",
+        name="western blot",
+        label="western blot (immunoblotting)",
+        description="Western blot. Proteins of a sample are separated by gel electrophoresis, "
+        "transferred to a membrane and detected with specific antibodies; the band intensity "
+        "(densitometry) gives the relative amount of the protein. Use with the measurement "
+        "'protein amount'.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "NCIT:C16357")],
+        synonyms=["western blotting", "immunoblotting", "immunoblot"],
     ),
     Method(
         sid="breath-test-assay",

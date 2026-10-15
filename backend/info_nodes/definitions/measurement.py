@@ -177,6 +177,69 @@ MEASUREMENT_NODES: list[InfoNode] = [
         ],
     ),
     MeasurementType(
+        sid="concentration-change-absolute-maximum",
+        name="concentration change absolute maximum",
+        description="Maximum absolute concentration change of substance from baseline over a given "
+        "period, i.e. the maximum increase, e.g. the peak rise of blood glucose above its baseline "
+        "value. A negative value means that the concentration stayed below the baseline. State the "
+        "period in the comment. See also 'concentration change absolute minimum' and "
+        "'concentration change absolute'.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=CONCENTRATION_UNITS,
+        synonyms=["maximum increase from baseline", "maximum concentration increase"],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C41185"),
+        ],
+    ),
+    MeasurementType(
+        sid="concentration-change-absolute-minimum",
+        name="concentration change absolute minimum",
+        description="Minimum absolute concentration change of substance from baseline over a given "
+        "period, i.e. the maximum decrease, e.g. the nadir of blood glucose below its baseline "
+        "value. A decrease is negative: a reported maximum decrease of 0.8 mmol/l is encoded as "
+        "-0.8 mmol/l. State the period in the comment. See also "
+        "'concentration change absolute maximum' and 'concentration change absolute'.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=CONCENTRATION_UNITS,
+        synonyms=["maximum decrease from baseline", "maximum concentration decrease"],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C41185"),
+        ],
+    ),
+    MeasurementType(
+        sid="arteriovenous-concentration-difference",
+        name="arteriovenous concentration difference",
+        label="arteriovenous (A-V) concentration difference",
+        description="The arterial minus the venous concentration of a substance across an organ or "
+        "a vascular bed (e.g. the forearm), from arterial and venous samples taken at the same time "
+        "or with the venous sample delayed by the transit time. A positive value is an uptake into "
+        "the tissue, a negative value a release from it. Name the vascular bed and the sample "
+        "sites in the comment. See also 'extraction_ratio'.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=[*CONCENTRATION_UNITS, "cpm/ml"],
+        synonyms=[
+            "A-V difference",
+            "AV difference",
+            "arterio-venous concentration difference",
+        ],
+    ),
+    MeasurementType(
+        sid="radioactivity-concentration",
+        name="radioactivity concentration",
+        description="The radioactivity of a radioactive tracer (e.g. 99mTc-DTPA) per volume of a "
+        "sample such as plasma: the activity (Bq/l), or the count rate of a well or scintillation "
+        "counter (counts per minute, cpm/ml) when the counting efficiency is not known. A count "
+        "rate does not convert to an activity. The tracer is the substance; state corrections for "
+        "physical decay or background in the comment.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=["Bq/l", "cpm/ml"],
+        synonyms=["count rate", "activity concentration", "counts per minute"],
+    ),
+    MeasurementType(
         "multiple-dosing-cmin",
         name="muliple_dosing_cmin",
         label="multiple dosing minimal concentration",
@@ -310,6 +373,20 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=RATE_UNITS,
         annotations=[
             (BQB.IS, "NCIT:C85534"),
+        ],
+    ),
+    MeasurementType(
+        sid="excretion-rate-change",
+        name="excretion rate (change)",
+        description="Absolute change of the excretion rate of substance from baseline, e.g. the "
+        "change of the urinary sodium excretion rate per collection interval from the same "
+        "interval before treatment. A negative value is a decrease. Use with the respective tissue, "
+        "e.g. urine. See also 'excretion rate'.",
+        parents=["chemistry measurement"],
+        dtype=DType.NUMERIC,
+        units=RATE_UNITS,
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C85534"),
         ],
     ),
     MeasurementType(
@@ -1078,6 +1155,31 @@ MEASUREMENT_NODES: list[InfoNode] = [
         annotations=[(BQB.IS, "SNOMEDCT:62970001"), (BQB.IS, "NCIT:C179805")],
         units=["mole/l"],
     ),
+    MeasurementType(
+        sid="osmolarity-change",
+        name="osmolarity (change)",
+        description="Absolute change of the osmolarity from baseline, e.g. of the urine "
+        "osmolarity per collection interval; mOsm/l is encoded as mmol/l. A negative value is a "
+        "decrease. See also 'osmolarity'.",
+        parents=["kidney function test"],
+        dtype=DType.NUMERIC,
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C179805")],
+        units=["mole/l"],
+        synonyms=["osmolality (change)"],
+    ),
+    MeasurementType(
+        sid="filtered-load",
+        name="filtered load",
+        description="Filtered load. The amount of a substance filtered by the kidney glomeruli "
+        "into the tubules per unit time, calculated as the glomerular filtration rate (or eGFR) "
+        "times the plasma concentration of the substance, e.g. the filtered glucose. Name the "
+        "filtration marker and the concentration used in the comment. See also 'gfr' and "
+        "'renal threshold'.",
+        parents=["renal measurement"],
+        dtype=DType.NUMERIC,
+        units=["g/hr", "mol/hr"],
+        synonyms=["filtered glucose", "filtered glucose load"],
+    ),
     # cancer classification
     MeasurementType(
         sid="ecog",
@@ -1364,6 +1466,25 @@ MEASUREMENT_NODES.extend(
             dtype=DType.NUMERIC,
             units=AUC_UNITS,
             synonyms=["iAUC", "incremental AUC"],
+        ),
+        MeasurementType(
+            sid="auc_net_incremental",
+            label="net incremental area under curve (net iAUC)",
+            description="Net incremental area under the curve. The area of the concentration-time "
+            "curve above the baseline (pre-dose) concentration minus the area below it over a given "
+            "period. A negative value is a net area below the baseline, e.g. the decremental AUC of "
+            "blood glucose after a glucose-lowering drug. The time period is required. See also "
+            "'auc_incremental' for the area above the baseline only.",
+            parents=["auc measurement"],
+            dtype=DType.NUMERIC,
+            units=AUC_UNITS,
+            synonyms=[
+                "net iAUC",
+                "net incremental AUC",
+                "decremental AUC",
+                "net area below baseline",
+                "baseline-corrected AUC",
+            ],
         ),
         MeasurementType(
             sid="auc_extrapolated",
@@ -2219,6 +2340,17 @@ MEASUREMENT_NODES.extend(
             dtype=DType.NUMERIC,
             units=["l/min", "l/min/kg", "ml/hr/(1.73*m^2)"],
             synonyms=["urinary flow rate"],
+        ),
+        MeasurementType(
+            sid="urinary-volume-rate-change",
+            name="urinary volume rate (change)",
+            description="The absolute change of the rate of urine excretion from baseline, e.g. of "
+            "the hourly urine volume per collection interval. A negative value is a decrease. "
+            "Should be used with substance 'h2o'. See also 'urinary volume rate'.",
+            parents=["renal measurement"],
+            dtype=DType.NUMERIC,
+            units=["l/min", "l/min/kg", "ml/hr/(1.73*m^2)"],
+            synonyms=["urinary flow rate (change)"],
         ),
         MeasurementType(
             "gastric measurement",
@@ -3274,6 +3406,21 @@ MEASUREMENT_NODES.extend(
                 # (BQB.IS, "bao/0002424"),
                 (BQB.IS, "NCIT:C16357"),
             ],
+        ),
+        MeasurementType(
+            sid="protein-amount",
+            name="protein amount",
+            description="The amount of a specific protein (e.g. an enzyme or a transporter, given "
+            "as the substance) in a tissue sample, normalized to the total protein of the sample or "
+            "of its isolated (e.g. microsomal or membrane) fraction: the absolute abundance by "
+            "LC-MS/MS based targeted proteomics (pmol/mg protein, encoded as mol/g), or the "
+            "relative amount by the band densitometry of a western blot (arbitrary units per mg "
+            "protein). Use the 'tissue' field for the origin of the sample and the method field "
+            "for the assay; name the fraction in the comment.",
+            parents=["chemistry measurement"],
+            dtype=DType.NUMERIC,
+            units=["arbitrary_unit/mg", "mol/g"],
+            synonyms=["protein expression", "protein abundance", "protein content"],
         ),
         MeasurementType(
             "relative-peak-area",

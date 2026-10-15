@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "43e9509446f1a23ea696d7be355e49e4500104595d11174f62f23868fd8bd04e",
+    "version": "fa3edc64fd0fa5aaccbc04d2f7773d1a004a712f72eb8464918afeb299b3cac2",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -445,6 +445,21 @@
         "deprecated": false
       },
       {
+        "name": "arteriovenous concentration difference",
+        "sid": "arteriovenous-concentration-difference",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l",
+          "cpm/ml"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "artery blood flow",
         "sid": "artery-blood-flow",
         "dtype": "numeric",
@@ -574,6 +589,21 @@
         "choices": [],
         "can_negative": false,
         "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "auc_net_incremental",
+        "sid": "auc-net-incremental",
+        "dtype": "numeric",
+        "units": [
+          "g/l*hr",
+          "g/l/kg*hr",
+          "mol/l*hr",
+          "IU/l*hr"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": true,
         "deprecated": false
       },
       {
@@ -1539,6 +1569,34 @@
         "deprecated": false
       },
       {
+        "name": "concentration change absolute maximum",
+        "sid": "concentration-change-absolute-maximum",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "concentration change absolute minimum",
+        "sid": "concentration-change-absolute-minimum",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "concentration per dose",
         "sid": "concentration-per-dose",
         "dtype": "numeric",
@@ -2119,6 +2177,7 @@
           "heterozygous FH",
           "FH",
           "hypercholesterolemia",
+          "hypertriglyceridemia",
           "impaired glucose tolerance",
           "t1dm",
           "t2dm",
@@ -2515,6 +2574,7 @@
           "hispanic",
           "non-hispanic",
           "mixed race",
+          "other",
           "white new zealanders",
           "asian indian",
           "egyptian",
@@ -2588,6 +2648,24 @@
         ],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "excretion rate (change)",
+        "sid": "excretion-rate-change",
+        "dtype": "numeric",
+        "units": [
+          "1/min",
+          "mg/min",
+          "mg/min/m^2",
+          "µmol/min/kg",
+          "µmol/min",
+          "µIU/min",
+          "µIU/min/kg"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2758,6 +2836,19 @@
           "time restricted",
           "NR"
         ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "filtered load",
+        "sid": "filtered-load",
+        "dtype": "numeric",
+        "units": [
+          "g/hr",
+          "mol/hr"
+        ],
+        "choices": [],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -3869,6 +3960,7 @@
           "cholecystectomy",
           "spinal anaesthesia",
           "hemodialysis",
+          "lipoprotein apheresis",
           "tubal ligation",
           "NR"
         ],
@@ -4153,6 +4245,18 @@
         "deprecated": false
       },
       {
+        "name": "mRNA expression",
+        "sid": "mrna-expression",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "mRNA expression (relative)",
         "sid": "mrna-expression-relative",
         "dtype": "numeric",
@@ -4391,6 +4495,18 @@
         ],
         "choices": [],
         "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "osmolarity (change)",
+        "sid": "osmolarity-change",
+        "dtype": "numeric",
+        "units": [
+          "mole/l"
+        ],
+        "choices": [],
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4698,6 +4814,19 @@
         "deprecated": false
       },
       {
+        "name": "protein amount",
+        "sid": "protein-amount",
+        "dtype": "numeric",
+        "units": [
+          "arbitrary_unit/mg",
+          "mol/g"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "prothrombin time",
         "sid": "prothrombin-time",
         "dtype": "numeric",
@@ -4851,6 +4980,19 @@
           "µmol/min",
           "µIU/min",
           "µIU/min/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "radioactivity concentration",
+        "sid": "radioactivity-concentration",
+        "dtype": "numeric",
+        "units": [
+          "Bq/l",
+          "cpm/ml"
         ],
         "choices": [],
         "can_negative": false,
@@ -5677,6 +5819,20 @@
         "deprecated": false
       },
       {
+        "name": "urinary volume rate (change)",
+        "sid": "urinary-volume-rate-change",
+        "dtype": "numeric",
+        "units": [
+          "l/min",
+          "l/min/kg",
+          "ml/hr/(1.73*m^2)"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "vascular resistance",
         "sid": "vascular-resistance",
         "dtype": "numeric",
@@ -6463,6 +6619,34 @@
         "charge": null
       },
       {
+        "name": "ABCB1",
+        "sid": "abcb1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCC2",
+        "sid": "abcc2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCC3",
+        "sid": "abcc3",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCG2",
+        "sid": "abcg2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "angiotensin converting enzyme",
         "sid": "ace",
         "mass": null,
@@ -7212,6 +7396,13 @@
         "charge": null
       },
       {
+        "name": "black grape juice",
+        "sid": "black-grape-juice",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "bradykinin",
         "sid": "bradykinin",
         "mass": 1060.228,
@@ -7265,6 +7456,13 @@
         "sid": "bupropion",
         "mass": 239.746,
         "formula": "C13H18ClNO",
+        "charge": 0
+      },
+      {
+        "name": "bupropion hydrochloride",
+        "sid": "bupropion-hydrochloride",
+        "mass": 276.207,
+        "formula": "C13H18ClNO.HCl",
         "charge": 0
       },
       {
@@ -7917,6 +8115,13 @@
         "mass": 1202.635,
         "formula": "C62H111N11O12",
         "charge": 0
+      },
+      {
+        "name": "CYP2E1",
+        "sid": "cytochrome-p450-2e1",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "czx6oh+czxoglu",
@@ -10110,6 +10315,13 @@
         "charge": null
       },
       {
+        "name": "mycophenolate mofetil",
+        "sid": "mycophenolate-mofetil",
+        "mass": 433.501,
+        "formula": "C23H31NO7",
+        "charge": 0
+      },
+      {
         "name": "mycophenolic acid",
         "sid": "mycophenolic-acid",
         "mass": 320.341,
@@ -10149,6 +10361,13 @@
         "sid": "naloxone",
         "mass": 327.38,
         "formula": "C19H21NO4",
+        "charge": 0
+      },
+      {
+        "name": "naltrexone",
+        "sid": "naltrexone",
+        "mass": 341.407,
+        "formula": "C20H23NO4",
         "charge": 0
       },
       {
@@ -10695,6 +10914,13 @@
         "sid": "prazosin",
         "mass": 383.408,
         "formula": "C19H21N5O4",
+        "charge": 0
+      },
+      {
+        "name": "prednisone",
+        "sid": "prednisone",
+        "mass": 358.434,
+        "formula": "C21H26O5",
         "charge": 0
       },
       {
@@ -11375,6 +11601,41 @@
         "mass": 414.718,
         "formula": "C29H50O",
         "charge": 0
+      },
+      {
+        "name": "SLC10A2",
+        "sid": "slc10a2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC15A1",
+        "sid": "slc15a1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC22A1",
+        "sid": "slc22a1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC22A3",
+        "sid": "slc22a3",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLCO2B1",
+        "sid": "slco2b1",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "small-buoyant-ldl",
@@ -12208,6 +12469,7 @@
       "aorta",
       "arterial blood",
       "arterial plasma",
+      "ascending colon",
       "bile duct",
       "bile",
       "blood",
@@ -12216,15 +12478,20 @@
       "carotid artery",
       "cecum",
       "cerebrospinal fluid",
+      "colon",
+      "descending colon",
       "dried blood spot",
+      "duodenum",
       "erythrocyte",
       "feces",
       "feces_urine",
       "feces_urine_bile",
       "gallbladder",
       "heart",
+      "ileum",
       "inferior vena cava",
       "intestine",
+      "jejunum",
       "kidney",
       "large intestine",
       "liver",
@@ -12236,11 +12503,13 @@
       "saliva",
       "saliva/plasma",
       "serum",
+      "sigmoid colon",
       "small intestine",
       "spinal fluid",
       "spleen",
       "stomach",
       "tissue",
+      "transverse colon",
       "urine"
     ],
     "methods": [
@@ -12282,7 +12551,11 @@
       "HPLC/UV",
       "ICP-AES",
       "immunofluorescence",
+      "intra-arterial catheter",
       "IRMA",
+      "Jaffe reaction",
+      "Jaffe reaction (AutoAnalyzer)",
+      "Jaffe reaction (Lloyd reagent)",
       "LC ESI MS",
       "LC/MS",
       "LC MS/MS",
@@ -12296,6 +12569,8 @@
       "photoplethysmography",
       "plasma binding measurement",
       "potentiometry",
+      "pulmonary artery catheter",
+      "qRT-PCR",
       "radiochromatography/MS/MS",
       "radioenzymatic assay",
       "RIA",
@@ -12305,12 +12580,14 @@
       "scintillation counting",
       "Spectrophotometry",
       "sphygmomanometer",
+      "thermodilution",
       "TLC",
       "ultra-filtration",
       "ultrasound imaging",
       "UPLC MS",
       "UPLC MS/MS",
-      "UV spectrophotometry"
+      "UV spectrophotometry",
+      "western blot"
     ],
     "routes": [
       "administration route",
@@ -12375,5 +12652,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "82398d3378f62c7e1fccc05ced066ed526fea1238db6499ae863e147bac14542"
+  "vocabulary_hash": "cdefe148f2f8e1b23c6126f468675527e5fb5dbc41b7bb28a89f102047e5c728"
 }

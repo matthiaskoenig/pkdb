@@ -1,0 +1,91 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C90536",
+  "lang": "en",
+  "description": [
+    "Juice made form dark, purple grapes that contain polyphenols with antioxidant and potential cardiovascular protecting activities. Purple grape juice contains high amounts of flavonoids that may increase antioxidant activity and reduce oxidative stress, reduce low-density lipoprotein (LDL), and improve nitric oxide formation, endothelial function and vasodilation."
+  ],
+  "synonyms": [
+    "Purple Grape Juice"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Purple Grape Juice"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "663681"
+    ],
+    "NCI_META_CUI": [
+      "CL413618"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "663681"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "663681"
+    ],
+    "Preferred_Name": [
+      "Purple Grape Juice"
+    ],
+    "Semantic_Type": [
+      "Food"
+    ],
+    "code": [
+      "C90536"
+    ]
+  },
+  "label": "Purple Grape Juice",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C90536",
+  "obo_id": "NCIT:C90536",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Purple Grape Juice",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C90536/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

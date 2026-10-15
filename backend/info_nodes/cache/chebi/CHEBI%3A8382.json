@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:8382",
+  "name": "prednisone",
+  "definition": "A synthetic glucocorticoid drug that is particularly effective as an immunosuppressant, and affects virtually all of the immune system. Prednisone is a prodrug that is converted by the liver into prednisolone (a \u03b2-hydroxy group instead of the oxo group at position 11), which is the active drug and also a steroid.",
+  "formula": "C21H26O5",
+  "charge": 0,
+  "mass": "358.434",
+  "inchikey": "XOFYZVNMUHMLCC-ZPOLXVRWSA-N"
+}

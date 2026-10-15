@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:8764",
+  "name": "mycophenolate mofetil",
+  "definition": "A carboxylic ester resulting from the formal condensation between the carboxylic acid group of mycophenolic acid and the hydroxy group of 2-(morpholin-4-yl)ethanol. In the liver, it is metabolised to mycophenolic acid, an immunosuppressant for which it is a prodrug. It is widely used to prevent tissue rejection following organ transplants as well as for the treatment of certain autoimmune diseases.",
+  "formula": "C23H31NO7",
+  "charge": 0,
+  "mass": "433.501",
+  "inchikey": "RTGDFNSFWBGLEC-SYZQJQIISA-N"
+}
