@@ -83,6 +83,37 @@ def test_overlay_draws_the_image_at_its_pixels_with_the_view_pixels(
     assert expected and result.points == expected
 
 
+def gray_png(width: int, height: int, value: int) -> bytes:
+    """A grayscale PNG image of one gray value."""
+    import zlib
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        body = kind + data
+        return len(data).to_bytes(4) + body + zlib.crc32(body).to_bytes(4)
+
+    rows = b"".join(b"\x00" + bytes([value]) * width for _ in range(height))
+    header = width.to_bytes(4) + height.to_bytes(4) + b"\x08\x00\x00\x00\x00"
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", header)
+        + chunk(b"IDAT", zlib.compress(rows))
+        + chunk(b"IEND", b"")
+    )
+
+
+@pytest.mark.parametrize("digitize", [True, False])
+def test_a_grayscale_image_keeps_its_gray(make_study, valid_files, tmp_path, digitize):
+    files = {**valid_files, "Example_Fig1.png": gray_png(600, 100, 128)}
+    if digitize:
+        files["Example_Fig1.wpd.json"] = json.dumps(project(GOOD))
+    folder = make_study(files)
+    assert format_folder(folder).ok
+    result = render_source(load_study(folder), "Fig1", tmp_path / "out.png")
+    # Without a colormap: matplotlib draws a single channel in viridis otherwise.
+    gray = np.count_nonzero(is_color(pixels(result.path), (128, 128, 128), 2))
+    assert gray > (50_000 if digitize else 2_000)
+
+
 def test_overlay_puts_the_series_and_the_mark_key_below_the_image(
     make_study, valid_files, tmp_path
 ):

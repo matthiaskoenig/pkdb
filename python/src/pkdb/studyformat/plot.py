@@ -152,17 +152,25 @@ def _error_ranges(rows: list[SourcePoint]) -> list[list[float]] | None:
     return [below, above]
 
 
+def _image(path: Path):
+    """The pixels of an image as RGB(A): matplotlib would color a grayscale image with a colormap."""
+    import numpy as np
+    from matplotlib.image import imread
+
+    pixels = imread(path)
+    return np.dstack([pixels] * 3) if pixels.ndim == 2 else pixels
+
+
 def _overlay(study, view, path: Path) -> PlotResult:
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     from matplotlib.figure import Figure
-    from matplotlib.image import imread
     from matplotlib.lines import Line2D
 
     width, height = view.image_size
     figure = Figure(figsize=(width / DPI, height / DPI), dpi=DPI)
     canvas = FigureCanvasAgg(figure)
     axes = figure.add_axes((0, 0, 1, 1))
-    axes.imshow(imread(study.folder / view.image), extent=(0, width, height, 0))
+    axes.imshow(_image(study.folder / view.image), extent=(0, width, height, 0))
     axes.set_xlim(0, width)
     axes.set_ylim(height, 0)
     axes.axis("off")
@@ -249,9 +257,7 @@ def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResul
     figure = Figure(figsize=(12, 5))
     left, right = figure.subplots(1, 2)
     if view.image and view.image_size:
-        from matplotlib.image import imread
-
-        left.imshow(imread(study.folder / view.image))
+        left.imshow(_image(study.folder / view.image))
     left.axis("off")
     # A series of one point is no line: all of them are drawn by two calls, so that a figure with a
     # series per individual stays fast.
