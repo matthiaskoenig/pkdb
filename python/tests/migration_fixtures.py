@@ -162,6 +162,46 @@ class Formula(NamedTuple):
     value: float
 
 
+# One row of Tab2 holds the cmax and the AUC of the group: the `||` template
+# splits it into two records. The cmax is not reported, so its record has no
+# value and is dropped. The AUC keeps its se, an error bar ABS(X - mean) that
+# reads the `mean + se` column auc_pm, and the sd is computed from that se and
+# the count.
+SPLIT_OUTPUT = {
+    "source": "Tab2",
+    "image": "Tab2",
+    "output_type": "output",
+    "group": "col==group",
+    "interventions": ["D1"],
+    "measurement_type": "cmax || auc_end",
+    "substance": "drug",
+    "tissue": "plasma",
+    "mean": "col==cmax || col==auc",
+    "se": "col==cmax_se || col==auc_se",
+    "unit": "mg/l || g/l*hr",
+}
+SPLIT_HEADER = [
+    "group",
+    "count",
+    "cmax",
+    "cmax_se",
+    "auc",
+    "auc_pm",
+    "auc_se",
+    "auc_sd",
+]
+SPLIT_ROW = [
+    "all",
+    2,
+    "NA",
+    "NA",
+    3.5,
+    3.65,
+    Formula("=ABS($E3-$F3)", 0.15),
+    Formula("=G3*SQRT(B3)", 0.2121),
+]
+
+
 def _save_formula_values(path: Path, values: dict[int, dict[str, float]]) -> None:
     """Write the saved values of formula cells, which openpyxl leaves empty.
 
