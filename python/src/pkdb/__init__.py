@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-__version__ = "0.12.9"
+__version__ = "0.12.10"
 
 if TYPE_CHECKING:
     from pkdb.batch import upload_many
