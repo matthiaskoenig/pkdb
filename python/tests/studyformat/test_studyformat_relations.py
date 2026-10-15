@@ -351,6 +351,20 @@ def test_an_unmatched_review_target_carries_its_item_as_key(make_study, valid_fi
     assert issue.source is not None and issue.source.key == ITEM["id"]
 
 
+def test_a_dismissed_item_whose_rows_went_away_is_no_problem(make_study, valid_files):
+    # Such as the acknowledgement of a duplicate whose rows got their own subjects.
+    item = {
+        **ITEM,
+        "target": {"file": "timecourses_Fig1.tsv", "rows": {"time": "9"}},
+        "state": "dismissed",
+        "resolved_by": "curator",
+        "resolved": "2026-10-06T10:00:00Z",
+    }
+    review = dump_json({"status": "draft", "items": [item]})
+    study = load_study(make_study({**valid_files, "review.json": review}))
+    assert check_relations(study) == []
+
+
 def test_a_key_of_a_table_is_an_unknown_review_target(make_study, valid_files):
     messages = review_messages(
         make_study, valid_files, {"file": "timecourses_Fig1.tsv", "key": "x"}
