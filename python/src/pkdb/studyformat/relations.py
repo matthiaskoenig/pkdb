@@ -12,12 +12,12 @@ from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.digitize import check_digitizations
 from pkdb.studyformat.issues import LISTED, IssueCap, make_issue, row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
+from pkdb.studyformat.raw import missing_source
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
     ROOT,
     STUDY_JSON,
-    TEXT_SOURCE,
     image_file,
 )
 
@@ -396,6 +396,7 @@ def _unused(study: LoadedStudy) -> Issues:
 
 
 def _images(study: LoadedStudy) -> Issues:
+    """A source needs its image, or a paper table its raw table; a figure project its image."""
     reported: set[str] = set()
     for table in study.tables:
         entries: list[tuple[str | None, Row | None]] = []
@@ -407,16 +408,16 @@ def _images(study: LoadedStudy) -> Issues:
                 if isinstance(source, str):
                     entries.append((source, row))
         for source, row in entries:
-            if not source or source == TEXT_SOURCE or source in reported:
+            if not source or source in reported:
                 continue
-            image = image_file(study.name, source)
-            if image in study.layout.files:
+            missing = missing_source(study.name, source, study.layout.files)
+            if missing is None:
                 continue
             reported.add(source)
             if row is None:
                 yield make_issue(
                     "missing_image",
-                    f"{image} is missing for {table.file}",
+                    f"{missing} is missing for {table.file}",
                     file=table.file,
                 )
             else:
@@ -424,16 +425,9 @@ def _images(study: LoadedStudy) -> Issues:
                     table,
                     row,
                     "missing_image",
-                    f"{image} is missing for source {source}",
+                    f"{missing} is missing for source {source}",
                     "source",
                 )
-    for raw in study.raw_tables:
-        image = image_file(study.name, raw.source)
-        if raw.source not in reported and image not in study.layout.files:
-            reported.add(raw.source)
-            yield make_issue(
-                "missing_image", f"{image} is missing for {raw.file}", file=raw.file
-            )
     for digitization in study.digitizations:
         image = image_file(study.name, digitization.source)
         if digitization.source not in reported and image not in study.layout.files:

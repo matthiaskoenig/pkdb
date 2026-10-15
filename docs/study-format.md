@@ -6,7 +6,7 @@
 
     This page describes study format 2. The studies in pkdb_data are still in study format 1 until the migration; `pkdb format`, `pkdb validate`, `pkdb prepare` and `pkdb upload` all support study format 2 folders.
 
-A study folder in study format 2 contains `study.json`, `reference.json`, `review.json`, the tab-separated tables below, the publication PDF and an image `<study>_<source>.png` for every paper table or figure the data come from. `pkdb format` writes all files in canonical form, `pkdb validate` checks them, `pkdb tables` edits the tables in a [workbook](workbooks.md), and `pkdb schema export` writes the same definitions as JSON Schema.
+A study folder in study format 2 contains `study.json`, `reference.json`, `review.json`, the tab-separated tables below, the publication PDF and an image `<study>_<source>.png` for every paper table or figure the data come from; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` as its source instead. `pkdb format` writes all files in canonical form, `pkdb validate` checks them, `pkdb tables` edits the tables in a [workbook](workbooks.md), and `pkdb schema export` writes the same definitions as JSON Schema.
 
 ## Identity and upload
 
@@ -37,6 +37,8 @@ There is no `value` column. `mean` is the arithmetic mean, the value of a single
 
 Every paper table and figure can keep its raw extraction beside the rows mapped into the tables. `<study>_<source>.tsv` is a paper table as printed: a grid of text cells in their printed positions without a header line, `study` or `source` columns. `pkdb format` strips the cells, pads the rows to the widest row and removes trailing empty cells and empty rows, and never sorts the rows or parses numbers. In the workbook it is the sheet `<study>_<source>` after the data sheets, written as text cells; `pkdb tables add <study> --raw Tab2` adds it.
 
+The raw table is the source of data that no image shows: unpublished data, raw data provided elsewhere, such as a data workbook of the authors, or a supplement that is not available. Name the source as a paper table, such as `TabS4` or `TabRawData`, and transcribe the data into `<study>_<source>.tsv`; then the source needs no image `<study>_<source>.png`, its rows have no image in PK-DB, and the source views show the raw table without an image. A figure always needs its image.
+
 `<study>_<source>.wpd.json` is a WebPlotDigitizer 4 project digitized on the figure image `<study>_<source>.png`, imported with `pkdb digitize import <study> <source> <file>` from a `wpd.json` or a saved `.tar` project. Only XY axes are supported. A dataset named like a timecourse `label` holds the central values of that series (time on x; `mean`, else `median`, else `gmean` on y), a dataset `<label>;error_bar` the ends of its error bars, and a dataset named like a scatter `name` its points. Digitize and map in the units printed on the axes. `pkdb validate` warns about datasets without rows (`unknown_dataset`) and rows more than 2 pixels from their dataset (`digitized_mismatch`), and `pkdb plot` draws both on the image.
 
 ## TSV encoding
@@ -59,7 +61,7 @@ Groups and individuals. A subject with count 1 is an individual; every subject e
 | `name` | name | yes | Unique subject name. The root group is `all`. |
 | `parent` | name | no | Name of the parent group. Empty only for `all`. |
 | `count` | whole number | no | Number of subjects. A count of 1 makes the row an individual; any other count, or an empty cell, makes it a group. |
-| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
+| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead. |
 | `comment` | text | no | Free-text comment. |
 
 ## `interventions.tsv`
@@ -69,7 +71,7 @@ Interventions such as doses, fasting or smoking, referenced by name from the oth
 | Column | Type | Required | Description |
 |---|---|---|---|
 | `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
+| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead. |
 | `name` | name | yes | Unique intervention name, referenced from the `interventions` columns of other tables. |
 | `subjects` | name | no | Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty. |
 | `measurement` | vocabulary: measurements | yes | Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `fasting`. |
@@ -109,7 +111,7 @@ Baseline values of subjects, such as age, weight, sex or creatinine clearance.
 | Column | Type | Required | Description |
 |---|---|---|---|
 | `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source | yes | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
+| `source` | source | yes | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead. |
 | `subjects` | name | yes | Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1. |
 | `measurement` | vocabulary: measurements | yes | Baseline quantity from the vocabulary, such as `age`, `weight` or `sex`. |
 | `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |

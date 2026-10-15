@@ -877,6 +877,7 @@ class StudiesMixin(EngineState):
             "file": preview.file,
             "image": preview.image,
             "image_found": preview.image_found,
+            "raw": preview.raw,
             "issues": _issues(list(preview.issues)),
         }
 

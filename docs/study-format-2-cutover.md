@@ -102,7 +102,7 @@ What to do for each `not_converted` reason:
 
 | Reason | Fix |
 | --- | --- |
-| `missing_image` | A table or figure source of outputs, timecourses or scatters needs `<study>_<source>.png`. |
+| `missing_image` | A figure source of outputs, timecourses or scatters needs `<study>_<source>.png`, and a table source its image or its raw table `<study>_<source>.tsv`. For data that no image shows, such as unpublished data, raw data provided elsewhere or a supplement that is not available, put the raw table beside the workbook, name the sheet as a paper table such as `TabS4`, and remove the `image` of its outputs from `study.json`; the converted study keeps the raw table as the source of the table. A hidden format 1 table `.<study>_<sheet>.tsv` and a TSV file that `study.json` reads as a table are no raw tables. |
 | `image_type` | The image of a source is neither PNG nor JPG. Convert it to `<study>_<source>.png`. |
 | `image_unreadable` | A PNG or JPG image cannot be read or is corrupt; every image is decoded completely before it is copied. Replace it with a readable PNG or JPG. |
 | `image_write` | An image could not be written to the work folder, such as on a full disk. The source image is fine; fix the disk and run again. |

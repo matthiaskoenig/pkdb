@@ -219,9 +219,11 @@ class _Reader:
             return None
 
     def image(self, source: object) -> str | None:
+        """The image of a source; None for the text and for a paper table whose raw table is its source."""
         if not isinstance(source, str) or source == TEXT_SOURCE:
             return None
-        return image_file(self.study.name, source)
+        image = image_file(self.study.name, source)
+        return image if image in self.study.layout.files else None
 
     def subject(self, name: object) -> dict:
         """The `group` or `individual` field of a record about a subject."""

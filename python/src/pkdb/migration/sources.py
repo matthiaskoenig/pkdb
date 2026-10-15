@@ -1,13 +1,15 @@
 """The source of each converted row, and the images of the sources."""
 
 import shutil
-from collections.abc import Callable
+from collections.abc import Callable, Collection
 from pathlib import Path
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.schemas.source import SourceLocation
+from pkdb.schemas.study import CanonicalStudy, DataRecord, Observation, Subject
+from pkdb.studyformat.raw import missing_source, parse_raw_file
 from pkdb.studyformat.tables import (
     SOURCE_PATTERN,
     STUDY_JSON,
@@ -51,7 +53,8 @@ def observation_source(
 
     Format 2 names the paper table or figure that a row comes from, so the
     source of the row's image comes first when the v1 folder holds that image
-    (`images`); otherwise the sheet, else `Text` for an entity of study.json.
+    (`images`, the `documented_sources`); otherwise the sheet, else `Text` for
+    an entity of study.json.
     """
     source = image_source(image, study)
     if source is not None and source in images and SOURCE_PATTERN.fullmatch(source):
@@ -80,15 +83,54 @@ def curator_source(
 ) -> str:
     """The `source` column of subjects, interventions and characteristica: curator data.
 
-    Format 2 needs `<study>_<source>.png` for every source but `Text`, so the
-    sheet, else the source of the row's image, is the source only when the v1
-    folder holds its image (`images`); otherwise the source is `Text`.
+    Format 2 needs `<study>_<source>.png` for every source but `Text`, or the
+    raw table `<study>_<source>.tsv` of a paper table, so the sheet, else the
+    source of the row's image, is the source only when the v1 folder holds its
+    image or raw table (`images`, the `documented_sources`); otherwise the
+    source is `Text`.
     """
     sheet = sheet_of(location, study)
     for source in (sheet, image_source(image, study)):
         if source is not None and source in images and SOURCE_PATTERN.fullmatch(source):
             return source
     return TEXT_SOURCE
+
+
+def all_records(study: CanonicalStudy) -> list[Observation | Subject | DataRecord]:
+    """Every entity of the study that comes from a row of a sheet or of study.json."""
+    records: list[Observation | Subject | DataRecord] = []
+    for subject in [*study.groups, *study.individuals]:
+        records.append(subject)
+        records.extend(subject.characteristica)
+    records.extend(study.interventions)
+    records.extend(study.measurements)
+    records.extend(study.scatters)
+    return records
+
+
+def read_files(study: CanonicalStudy) -> frozenset[str]:
+    """The files that the entities of the parsed format 1 study were read from."""
+    return frozenset(
+        record.source.file for record in all_records(study) if record.source is not None
+    )
+
+
+def raw_tables(v1: Path, study: str, read: Collection[str]) -> dict[str, str]:
+    """The raw tables of the v1 folder by source: `<study>_<source>.tsv` of a paper table.
+
+    A curator puts the raw table beside the format 1 workbook for data that no
+    image shows, such as unpublished data; format 2 keeps it as the raw
+    extraction, which is the source of a paper table without an image. A hidden
+    format 1 table `.<study>_<sheet>.tsv` is none, and neither is a TSV file that
+    study.json reads as a format 1 table (`read`, see `read_files`).
+    """
+    return {
+        source: path.name
+        for path in v1.iterdir()
+        if path.is_file()
+        and path.name not in read
+        and (source := parse_raw_file(path.name, study)) is not None
+    }
 
 
 def image_sources(v1: Path, study: str) -> frozenset[str]:
@@ -102,8 +144,19 @@ def image_sources(v1: Path, study: str) -> frozenset[str]:
     )
 
 
-def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Decision]:
-    """Write `<study>_<source>.png` for each used source; JPG images are converted."""
+def documented_sources(v1: Path, study: str, read: Collection[str]) -> frozenset[str]:
+    """The sources that format 2 can name: with an image, or a paper table with its raw table."""
+    return image_sources(v1, study) | set(raw_tables(v1, study, read))
+
+
+def copy_images(
+    v1: Path, target: Path, study: str, used: set[str], raw: Collection[str] = ()
+) -> list[Decision]:
+    """Write `<study>_<source>.png` for each used source; JPG images are converted.
+
+    A paper table without an image whose raw table is in `raw`, the sources of
+    `raw_tables`, has its raw table as its source and needs no image.
+    """
     decisions = []
     for source in sorted(used - {TEXT_SOURCE, ""}):
         name = image_file(study, source)
@@ -111,9 +164,14 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
         candidates = sorted(
             path
             for path in v1.iterdir()
-            if path.stem == f"{study}_{source}" and path.suffix and path.is_file()
+            if path.stem == f"{study}_{source}"
+            and path.suffix
+            and path.is_file()
+            and parse_raw_file(path.name, study) is None
         )
         images = [path for path in candidates if path.suffix.lower() in IMAGE_SUFFIXES]
+        if not images and not candidates and source in raw:
+            continue
         if len(images) > 1:
             # Neither image may silently replace the other.
             found = ", ".join(path.name for path in images)
@@ -127,7 +185,8 @@ def copy_images(v1: Path, target: Path, study: str, used: set[str]) -> list[Deci
                 raise NotConverted(
                     "image_type", f"The image of {source} is {found}; convert it to PNG"
                 )
-            raise NotConverted("missing_image", f"No image {name} for source {source}")
+            missing = missing_source(study, source, ())
+            raise NotConverted("missing_image", f"No {missing} for source {source}")
         [image] = images
         decision = _copy(image, target / name, name)
         if decision is not None:

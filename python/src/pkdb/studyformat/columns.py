@@ -58,7 +58,7 @@ STUDY = Column(
 SOURCE = Column(
     "source",
     T.SOURCE,
-    "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.",
+    "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead.",
     "Tab1",
 )
 OWNED_SOURCE = SOURCE.but(

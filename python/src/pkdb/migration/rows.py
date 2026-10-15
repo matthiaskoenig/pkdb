@@ -685,7 +685,8 @@ def study_tables(
 ) -> tuple[Tables, list[Decision]]:
     """The format 2 tables of a parsed format 1 study and the decisions to check.
 
-    `images` are the sources that have an image in the v1 folder (`image_sources`).
+    `images` are the sources that have an image or a raw table in the v1 folder
+    (`documented_sources`).
     The `vocabulary` names the measurements that need a value or a time.
     `counts` are those of the `count` columns of the format 1 tables
     (`table_counts`).
@@ -784,7 +785,7 @@ def render(tables: Tables) -> dict[str, str]:
 
 
 def used_sources(tables: Tables) -> set[str]:
-    """The sources that the rows name, whose images the converted study needs."""
+    """The sources that the rows name, whose images or raw tables the converted study needs."""
     return {
         row["source"] for rows in tables.values() for row in rows if row.get("source")
     }

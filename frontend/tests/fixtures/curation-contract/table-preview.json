@@ -16,6 +16,7 @@
         "file": "outputs_Tab3.tsv",
         "image": "Demo2020_Tab3.png",
         "image_found": false,
+        "raw": null,
         "issues": []
       }
     },
@@ -29,6 +30,7 @@
         "file": "timecourses_Text.tsv",
         "image": null,
         "image_found": false,
+        "raw": null,
         "issues": []
       }
     },
@@ -42,6 +44,7 @@
         "file": "Demo2020_Tab2.tsv",
         "image": "Demo2020_Tab2.png",
         "image_found": true,
+        "raw": "Demo2020_Tab2.tsv",
         "issues": [
           {
             "code": "table_exists",
@@ -76,6 +79,7 @@
         "file": "Demo2020_Fig2.tsv",
         "image": null,
         "image_found": false,
+        "raw": null,
         "issues": [
           {
             "code": "invalid_table_name",
@@ -104,6 +108,7 @@
         "file": "outputs_Tab 3.tsv",
         "image": null,
         "image_found": false,
+        "raw": null,
         "issues": [
           {
             "code": "invalid_table_name",
@@ -132,6 +137,7 @@
         "file": "outputs_Tab2.tsv",
         "image": "Demo2020_Tab2.png",
         "image_found": true,
+        "raw": "Demo2020_Tab2.tsv",
         "issues": [
           {
             "code": "table_exists",

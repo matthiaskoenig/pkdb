@@ -73,7 +73,9 @@ const ready = computed(() => {
   const value = table.value;
   if (!value || value.issues.length) return "";
   if (value.image === null) return `${value.table} can be added.`;
-  return `${value.table} can be added. ${value.image_found ? "The image is in the folder." : "The image is missing."}`;
+  if (value.image_found) return `${value.table} can be added. The image is in the folder.`;
+  if (value.raw !== null) return `${value.table} can be added. The raw table is the source without an image.`;
+  return `${value.table} can be added. The image is missing.`;
 });
 const hint = computed(() =>
   kind.value === "raw"
@@ -170,14 +172,18 @@ async function add(): Promise<void> {
               <VChip
                 size="small"
                 variant="tonal"
-                :color="table.image_found ? 'success' : 'warning'"
+                :color="table.image_found ? 'success' : table.raw ? undefined : 'warning'"
                 class="status-chip image-state"
               >
-                {{ table.image_found ? "In the folder" : "Missing" }}
+                {{ table.image_found ? "In the folder" : table.raw ? "Not needed" : "Missing" }}
               </VChip>
             </span>
-            <span v-if="!table.image_found" class="table-image-note">
-              Add {{ table.image }} to the folder. Validation needs the image of every paper table and figure.
+            <span v-if="!table.image_found && table.raw" class="table-image-note">
+              The raw table {{ table.raw }} is the source of this paper table without an image.
+            </span>
+            <span v-else-if="!table.image_found" class="table-image-note">
+              Add {{ table.image }} to the folder. Validation needs the image of every figure, and the image or the raw
+              table of every paper table.
             </span>
           </dd>
           <dd v-else>None for the text of the paper</dd>

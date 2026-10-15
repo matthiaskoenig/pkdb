@@ -45,6 +45,7 @@ from pkdb.studyformat.merge import Conflict, Preference, merge_lines
 from pkdb.studyformat.raw import (
     RAW_SOURCE,
     load_raw,
+    missing_source,
     parse_raw_file,
     raw_file,
     render_raw,
@@ -941,8 +942,9 @@ class TablePreview:
     """A new table before it is added: its sheet, file and image, and why it cannot be added.
 
     `image` is the image of its source; None for the text of the paper and for a refused
-    kind or source. `issues` hold the refusal of the name, and are empty when `add_table`
-    would sync and add the sheet.
+    kind or source. `raw` is the raw table of a paper table, when it exists or is the
+    table to add: it is the source without an image. `issues` hold the refusal of the
+    name, and are empty when `add_table` would sync and add the sheet.
     """
 
     table: str
@@ -950,6 +952,7 @@ class TablePreview:
     image: str | None
     image_found: bool
     issues: tuple[ValidationIssue, ...] = ()
+    raw: str | None = None
 
 
 def _name_refusal(folder: Path, table: str) -> ValidationIssue | None:
@@ -1018,9 +1021,12 @@ def preview_table(folder: Path, kind: str, source: str) -> TablePreview:
     source = source.strip()
     file = new_table_file(folder.name, kind, source)
     table = file.removesuffix(".tsv")
-    image = None
+    image = raw = None
     if (issue := _source_refusal(kind, source)) is None:
         image = None if source == TEXT_SOURCE else image_file(folder.name, source)
+        if RAW_SOURCE.fullmatch(source):
+            raw = raw_file(folder.name, source)
+            raw = raw if kind == RAW_KIND or (folder / raw).is_file() else None
         issue = _name_refusal(folder, table)
         if issue is None:
             issue = _sheet_refusal(folder, table)
@@ -1030,6 +1036,7 @@ def preview_table(folder: Path, kind: str, source: str) -> TablePreview:
         image=image,
         image_found=image is not None and (folder / image).is_file(),
         issues=() if issue is None else (issue,),
+        raw=raw,
     )
 
 
@@ -1111,16 +1118,21 @@ def add_table(
         )
     issues = replaced.issues
     source = _new_table_source(table, study.name)
-    if replaced.status == "written" and source is not None:
-        image = image_file(study.name, source)
-        if source != TEXT_SOURCE and not (folder / image).exists():
-            missing = make_issue(
+    # A new raw table is the source of its paper table, once it has a row.
+    if (
+        replaced.status == "written"
+        and source is not None
+        and parse_raw_file(f"{table}.tsv", study.name) is None
+    ):
+        files = {path.name for path in folder.iterdir()}
+        if (missing := missing_source(study.name, source, files)) is not None:
+            issue = make_issue(
                 "missing_image",
-                f"{image} is missing; validation needs the image of {source} in "
+                f"{missing} is missing; validation needs it for {source} in "
                 "the study folder",
                 severity="warning",
             )
-            issues = (*issues, missing)
+            issues = (*issues, issue)
     return AddTableResult(table, synced, issues)
 
 

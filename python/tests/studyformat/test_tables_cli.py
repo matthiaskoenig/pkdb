@@ -478,7 +478,8 @@ def test_add_creates_an_empty_sheet_with_the_header(study, vocabulary, capsys):
     out = capsys.readouterr().out
     assert f"  wrote {OUTPUTS}" in out
     assert "Added the sheet outputs_Tab3 to Example.xlsx" in out
-    assert "Example_Tab3.png is missing" in out and "[missing_image]" in out
+    assert "Example_Tab3.png or the raw table Example_Tab3.tsv is missing" in out
+    assert "[missing_image]" in out
     content = read_workbook(path, "Example")
     assert content.ok, content.issues
     assert "outputs_Tab3" in content.sheets

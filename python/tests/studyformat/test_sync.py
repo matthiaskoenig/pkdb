@@ -1440,8 +1440,13 @@ def test_add_table_adds_an_empty_sheet(study, workbook, sf_vocabulary):
     assert result.ok, result.issues
     assert result.sync is not None
     assert result.sync.changes == (FileChange(OUTPUTS, "write"),)
-    assert [(issue.code, issue.severity) for issue in result.issues] == [
-        ("missing_image", "warning")
+    assert [(issue.code, issue.severity, issue.message) for issue in result.issues] == [
+        (
+            "missing_image",
+            "warning",
+            "Example_Tab3.png or the raw table Example_Tab3.tsv is missing; "
+            "validation needs it for Tab3 in the study folder",
+        )
     ]
     content = content_of(workbook)
     assert "outputs_Tab3" in content.sheets
@@ -1564,6 +1569,24 @@ def test_add_table_never_replaces_a_workbook_saved_meanwhile(
     assert row.split("\t")[names(TIMECOURSES).index("mean")] == "2.25"
 
 
+@pytest.mark.parametrize(
+    ("table", "warned"),
+    [("outputs_Tab9", False), ("Example_Tab8", False), ("outputs_Fig9", True)],
+)
+def test_add_table_needs_no_image_of_a_paper_table_with_its_raw_table(
+    study, workbook, sf_vocabulary, table, warned
+):
+    (study / "Example_Tab9.tsv").write_text("cmax\t2\n", encoding="utf-8")
+    (study / "Example_Fig9.tsv").write_text("cmax\t2\n", encoding="utf-8")
+
+    result = add_table(study, sf_vocabulary, table)
+
+    assert result.ok, result.issues
+    assert [issue.code for issue in result.issues] == (
+        ["missing_image"] if warned else []
+    )
+
+
 def test_new_table_kinds_are_the_tables_split_by_source_and_raw():
     assert NEW_TABLE_KINDS == ("outputs", "timecourses", "scatters", "raw")
 
@@ -1584,8 +1607,28 @@ def test_preview_table_names_the_sheet_file_and_image(valid_study):
         True,
         (),
     )
+    assert raw.raw == "Example_Tab2.tsv"
     text = preview_table(valid_study, "outputs", "Text")
-    assert (text.image, text.image_found, text.issues) == (None, False, ())
+    assert (text.image, text.image_found, text.issues, text.raw) == (
+        None,
+        False,
+        (),
+        None,
+    )
+
+
+def test_preview_table_names_the_raw_table_that_is_the_source_without_an_image(
+    valid_study,
+):
+    assert preview_table(valid_study, "outputs", "Tab9").raw is None
+    (valid_study / "Example_Tab9.tsv").write_text("cmax\t2\n", encoding="utf-8")
+    preview = preview_table(valid_study, "outputs", "Tab9")
+    assert (preview.image, preview.image_found, preview.raw) == (
+        "Example_Tab9.png",
+        False,
+        "Example_Tab9.tsv",
+    )
+    assert preview_table(valid_study, "outputs", "Fig9").raw is None
 
 
 @pytest.mark.parametrize(

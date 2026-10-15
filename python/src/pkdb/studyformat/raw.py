@@ -7,13 +7,13 @@ cells and empty rows. Nothing is parsed as a number.
 """
 
 import re
-from collections.abc import Iterable
+from collections.abc import Collection, Iterable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.issues import line_name, make_issue
-from pkdb.studyformat.tables import parse_table_file
+from pkdb.studyformat.tables import TEXT_SOURCE, image_file, parse_table_file
 from pkdb.studyformat.text import (
     CONFLICT_MARKERS,
     MAX_CELLS,
@@ -66,6 +66,32 @@ def parse_raw_file(name: str, study: str) -> str | None:
         return None
     source = name[len(prefix) : -len(".tsv")]
     return source if RAW_SOURCE.fullmatch(source) else None
+
+
+def source_files(study: str, source: str) -> tuple[str, ...]:
+    """The files that can be a source: its image, and the raw table of a paper table.
+
+    The raw table `<study>_<source>.tsv` is the source of a paper table without
+    an image, such as unpublished data or raw data provided elsewhere. The text
+    has neither.
+    """
+    if source == TEXT_SOURCE:
+        return ()
+    image = image_file(study, source)
+    return (
+        (image, raw_file(study, source)) if RAW_SOURCE.fullmatch(source) else (image,)
+    )
+
+
+def missing_source(study: str, source: str, files: Collection[str]) -> str | None:
+    """What a source lacks when none of its `source_files` is among `files`, else None.
+
+    Such as `Example_Tab2.png or the raw table Example_Tab2.tsv`.
+    """
+    names = source_files(study, source)
+    if not names or any(name in files for name in names):
+        return None
+    return " or the raw table ".join(names)
 
 
 def load_raw(

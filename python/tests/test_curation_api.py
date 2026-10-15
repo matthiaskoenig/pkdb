@@ -1847,6 +1847,7 @@ def test_table_preview_and_add_by_kind_and_source(api, sf_vocabulary, monkeypatc
         "file": "outputs_Tab3.tsv",
         "image": "Example_Tab3.png",
         "image_found": False,
+        "raw": None,
         "issues": [],
     }
     status, _, data = request(

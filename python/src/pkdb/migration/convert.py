@@ -2,7 +2,7 @@
 
 import shutil
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Collection, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,9 +17,17 @@ from pkdb.migration.metadata import review, study_metadata
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.migration.registry import Registry
 from pkdb.migration.rows import render, study_tables, used_sources
-from pkdb.migration.sources import IMAGE_SUFFIXES, copy_images, image_sources, sheet_of
+from pkdb.migration.sources import (
+    IMAGE_SUFFIXES,
+    all_records,
+    copy_images,
+    documented_sources,
+    raw_tables,
+    read_files,
+    sheet_of,
+)
 from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
-from pkdb.schemas.study import CanonicalStudy, DataRecord, Observation, Subject
+from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.source_files import ignored_source
 from pkdb.studyformat.digitize import (
@@ -46,15 +54,20 @@ class Conversion:
     decisions: list[Decision]
 
 
-def is_v1_file(name: str, study: str) -> bool:
+def is_v1_file(name: str, study: str, raw: Collection[str] = ()) -> bool:
     """Files that a format 2 study does not keep: v1 tables, workbooks and other data files.
 
     These are the v1 study.json, `<study>.xlsx`, `.xls` files, the hidden
     `.<study>_<sheet>.tsv` files, other TSV and CSV files and JSON files other
-    than reference.json and the WebPlotDigitizer projects `<study>_<source>.wpd.json`
-    of figures, which format 2 keeps as the raw extraction of a figure.
+    than reference.json. The raw tables `raw` of paper tables (`raw_tables`) and
+    the WebPlotDigitizer projects `<study>_<source>.wpd.json` of figures, which
+    format 2 keeps as the raw extraction of a figure, are kept.
     """
-    if name == REFERENCE_JSON or parse_digitization_file(name, study) is not None:
+    if (
+        name == REFERENCE_JSON
+        or name in raw
+        or parse_digitization_file(name, study) is not None
+    ):
         return False
     return Path(name).suffix.lower() in DATA_SUFFIXES
 
@@ -84,23 +97,11 @@ def _sheets(v1: Path, study: str) -> set[str]:
     return sheets
 
 
-def _all_records(study: CanonicalStudy) -> list[Observation | Subject | DataRecord]:
-    """Every entity of the study that comes from a row of a sheet or of study.json."""
-    records: list[Observation | Subject | DataRecord] = []
-    for subject in [*study.groups, *study.individuals]:
-        records.append(subject)
-        records.extend(subject.characteristica)
-    records.extend(study.interventions)
-    records.extend(study.measurements)
-    records.extend(study.scatters)
-    return records
-
-
 def _read_sheets(study: CanonicalStudy, name: str) -> set[str]:
     """The sheets that at least one entity of the study came from."""
     sheets = (
         sheet_of(record.source, name)
-        for record in _all_records(study)
+        for record in all_records(study)
         if record.source is not None
     )
     return {sheet for sheet in sheets if sheet is not None}
@@ -134,8 +135,13 @@ def _reference(reference: dict) -> dict:
     }
 
 
-def _attachments(v1: Path, target: Path, name: str, images: set[str]) -> list[Decision]:
-    """Copy every file and folder that format 2 keeps; list the dropped v1 files."""
+def _attachments(
+    v1: Path, target: Path, name: str, images: set[str], raw: Collection[str]
+) -> list[Decision]:
+    """Copy every file and folder that format 2 keeps; list the dropped v1 files.
+
+    `raw` are the raw tables of the paper tables, which format 2 keeps.
+    """
     decisions = []
     for path in sorted(v1.iterdir()):
         if ignored_source(Path(path.name)) or path.name in (STUDY_JSON, REFERENCE_JSON):
@@ -148,7 +154,7 @@ def _attachments(v1: Path, target: Path, name: str, images: set[str]) -> list[De
             continue  # written by copy_images
         if parse_digitization_file(path.name, name) is not None:
             continue  # written by _digitizations
-        if is_v1_file(path.name, name):
+        if is_v1_file(path.name, name, raw):
             if not _quiet(path.name, name):
                 decisions.append(Decision(kind="removed_file", detail=path.name))
             continue
@@ -228,11 +234,13 @@ def convert_study(
     workbook = v1 / f"{name}.xlsx"
     bars = error_bars(workbook, study) if workbook.exists() else {}
     counts = table_counts(bundle, study)
+    read = read_files(study)
+    raw = raw_tables(v1, name, read)
     tables, decisions = study_tables(
         study,
         name,
         bars,
-        images=image_sources(v1, name),
+        images=documented_sources(v1, name, read),
         vocabulary=vocabulary,
         counts=counts,
     )
@@ -272,9 +280,9 @@ def convert_study(
     if change is not None:
         decisions.append(Decision(kind="reference_replaced", detail=change))
     sources = used_sources(tables) - {TEXT_SOURCE}
-    decisions += copy_images(v1, target, name, sources)
+    decisions += copy_images(v1, target, name, sources, set(raw))
     images = {f"{name}_{source}" for source in sources}
-    decisions += _attachments(v1, target, name, images)
+    decisions += _attachments(v1, target, name, images, set(raw.values()))
     decisions += _digitizations(v1, target, name)
     for sheet in sorted(_sheets(v1, name) - _read_sheets(study, name)):
         decisions.append(Decision(kind="unreferenced_sheet", detail=sheet))

@@ -8,9 +8,11 @@ from pkdb.migration.model import NotConverted
 from pkdb.migration.sources import (
     copy_images,
     curator_source,
+    documented_sources,
     image_source,
     image_sources,
     observation_source,
+    raw_tables,
     sheet_of,
 )
 from pkdb.schemas.source import SourceLocation
@@ -94,6 +96,48 @@ def test_the_sources_that_have_an_image(tmp_path):
         (tmp_path / name).write_bytes(b"")
     (tmp_path / "Example_Fig6.png").mkdir()
     assert image_sources(tmp_path, "Example") == {"Tab1", "Fig2", "Fig3"}
+
+
+def test_the_raw_tables_beside_the_workbook(tmp_path):
+    names = ["Example_Tab1.tsv", "Example_TabS4.tsv", "Example_Fig2.tsv"]
+    names += [
+        ".Example_Tab3.tsv",
+        "Other_Tab5.tsv",
+        "outputs_Tab6.tsv",
+        "Example_Tab7.csv",
+    ]
+    names += ["Example_Tab8.tsv", "Example_Fig9.png"]
+    for name in names:
+        (tmp_path / name).write_bytes(b"")
+    (tmp_path / "Example_Tab10.tsv").mkdir()
+    # Example_Tab8.tsv is a format 1 table that study.json reads, no raw table.
+    assert raw_tables(tmp_path, "Example", {"Example_Tab8.tsv"}) == {
+        "Tab1": "Example_Tab1.tsv",
+        "TabS4": "Example_TabS4.tsv",
+    }
+    assert documented_sources(tmp_path, "Example", {"Example_Tab8.tsv"}) == {
+        "Tab1",
+        "TabS4",
+        "Fig9",
+    }
+
+
+def test_a_paper_table_with_its_raw_table_needs_no_image(tmp_path):
+    v1, target = tmp_path / "v1", tmp_path / "v2"
+    v1.mkdir()
+    target.mkdir()
+    (v1 / "Example_TabS4.tsv").write_text("a\n")
+    (v1 / ".Example_Tab2.tsv").write_text("a\n")
+    assert copy_images(v1, target, "Example", {"TabS4"}, {"TabS4"}) == []
+    assert list(target.iterdir()) == []
+    # A hidden format 1 table is no raw table, and a raw table is no image.
+    for used, raw in (({"Tab2"}, set()), ({"TabS4"}, set())):
+        with pytest.raises(NotConverted) as missing:
+            copy_images(v1, target, "Example", used, raw)
+        assert missing.value.code == "missing_image"
+    assert missing.value.message == (
+        "No Example_TabS4.png or the raw table Example_TabS4.tsv for source TabS4"
+    )
 
 
 def test_images_are_copied_and_jpg_becomes_png(tmp_path):

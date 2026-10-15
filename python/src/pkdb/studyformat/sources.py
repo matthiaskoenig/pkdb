@@ -25,7 +25,7 @@ from pkdb.studyformat.digitize import (
     png_size,
 )
 from pkdb.studyformat.load import LoadedStudy, LoadedTable
-from pkdb.studyformat.raw import raw_file, raw_grid
+from pkdb.studyformat.raw import missing_source, raw_file, raw_grid
 from pkdb.studyformat.tables import SOURCE_PATTERN, TEXT_SOURCE, image_file
 from pkdb.studyformat.text import format_number, natural_key
 
@@ -54,7 +54,8 @@ class SourceSummary:
 
     `missing_image` and `missing_raw` name the image and the raw extraction that the source
     lacks: `<name>_<source>.png`, and `<name>_<source>.tsv` of a paper table or the
-    WebPlotDigitizer project `<name>_<source>.wpd.json` of a figure. The text has neither.
+    WebPlotDigitizer project `<name>_<source>.wpd.json` of a figure. The text has neither, and
+    a paper table whose raw table is its source, such as unpublished data, lacks no image.
     """
 
     source: str
@@ -231,7 +232,7 @@ def study_sources(study: LoadedStudy) -> list[SourceSummary]:
                 raw_kind="table" if raw else "digitization" if digitization else None,
                 tables=tuple(table.file for table in _contributing(study, source)),
                 missing_image=None
-                if image or kind == "text"
+                if missing_source(study.name, source, study.layout.files) is None
                 else image_file(study.name, source),
                 missing_raw=None if found else _expected_raw(study, source),
             )

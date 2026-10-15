@@ -247,6 +247,43 @@ def test_missing_images(run, tsv, valid_files):
     }
 
 
+def test_the_raw_table_of_a_paper_table_is_its_source_without_an_image(
+    run, tsv, valid_files
+):
+    found = run(
+        **{
+            "outputs_Tab9.tsv": tsv("outputs", CMAX),
+            "Example_Tab9.tsv": "cmax\t2\n",
+            "characteristica.tsv": valid_files["characteristica.tsv"].replace(
+                "TabA", "Tab7"
+            ),
+            "Example_Tab7.tsv": "age\t30\n",
+        }
+    )
+    assert found == set()
+
+
+def test_a_figure_needs_its_image_and_the_messages_name_what_is_missing(
+    make_study, valid_files, tsv
+):
+    files = {
+        **valid_files,
+        "outputs_Tab9.tsv": tsv("outputs", CMAX),
+        "outputs_Fig9.tsv": tsv("outputs", CMAX),
+    }
+    issues = check_relations(load_study(make_study(files)))
+    messages = {
+        issue.source.file: issue.message
+        for issue in issues
+        if issue.code == "missing_image" and issue.source is not None
+    }
+    assert messages == {
+        "outputs_Tab9.tsv": "Example_Tab9.png or the raw table Example_Tab9.tsv "
+        "is missing for outputs_Tab9.tsv",
+        "outputs_Fig9.tsv": "Example_Fig9.png is missing for outputs_Fig9.tsv",
+    }
+
+
 def test_study_rules(run, valid_files):
     study = json.loads(valid_files["study.json"])
     found = run(
