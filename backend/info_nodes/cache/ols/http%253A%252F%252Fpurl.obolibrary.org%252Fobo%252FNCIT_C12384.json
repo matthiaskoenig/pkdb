@@ -1,0 +1,159 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12384",
+  "lang": "en",
+  "description": [
+    "The portion of the colon that connects to the descending colon above and the rectum below."
+  ],
+  "synonyms": [
+    "COLON, SIGMOID",
+    "Sigmoid Colon",
+    "Sigmoid colon structure (body structure)",
+    "Sigmoid colon",
+    "sigmoid colon"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The S-shaped section of the colon that connects to the rectum.",
+      "The part of the large intestine that is closest to the rectum and anus. It forms a loop that averages about 40 cm. in length, and normally lies within the pelvis, but on account of its freedom of movement it is liable to be displaced into the abdominal cavity.",
+      "The portion of the colon that connects to the descending colon above and the rectum below. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Sigmoid Colon"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Sigmoid_Colon"
+    ],
+    "Maps_To": [
+      "Pelvic colon",
+      "Sigmoid Colon",
+      "Sigmoid colon"
+    ],
+    "Preferred_Name": [
+      "Sigmoid Colon"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0227391"
+    ],
+    "code": [
+      "C12384"
+    ],
+    "database_cross_reference": [
+      "UBERON:0001159"
+    ]
+  },
+  "label": "Sigmoid Colon",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12384",
+  "obo_id": "NCIT:C12384",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001159",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001159"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "COLON, SIGMOID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sigmoid Colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sigmoid colon structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sigmoid colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sigmoid colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12384/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

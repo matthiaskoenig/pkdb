@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "07faa27991eaac27f21b0325f4aa9cd5de13379852f26d3d1e21c523d91a71c0",
+    "version": "fa3edc64fd0fa5aaccbc04d2f7773d1a004a712f72eb8464918afeb299b3cac2",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -2177,6 +2177,7 @@
           "heterozygous FH",
           "FH",
           "hypercholesterolemia",
+          "hypertriglyceridemia",
           "impaired glucose tolerance",
           "t1dm",
           "t2dm",
@@ -2573,6 +2574,7 @@
           "hispanic",
           "non-hispanic",
           "mixed race",
+          "other",
           "white new zealanders",
           "asian indian",
           "egyptian",
@@ -3958,6 +3960,7 @@
           "cholecystectomy",
           "spinal anaesthesia",
           "hemodialysis",
+          "lipoprotein apheresis",
           "tubal ligation",
           "NR"
         ],
@@ -6616,6 +6619,34 @@
         "charge": null
       },
       {
+        "name": "ABCB1",
+        "sid": "abcb1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCC2",
+        "sid": "abcc2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCC3",
+        "sid": "abcc3",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "ABCG2",
+        "sid": "abcg2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "angiotensin converting enzyme",
         "sid": "ace",
         "mass": null,
@@ -7365,6 +7396,13 @@
         "charge": null
       },
       {
+        "name": "black grape juice",
+        "sid": "black-grape-juice",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "bradykinin",
         "sid": "bradykinin",
         "mass": 1060.228,
@@ -7418,6 +7456,13 @@
         "sid": "bupropion",
         "mass": 239.746,
         "formula": "C13H18ClNO",
+        "charge": 0
+      },
+      {
+        "name": "bupropion hydrochloride",
+        "sid": "bupropion-hydrochloride",
+        "mass": 276.207,
+        "formula": "C13H18ClNO.HCl",
         "charge": 0
       },
       {
@@ -8070,6 +8115,13 @@
         "mass": 1202.635,
         "formula": "C62H111N11O12",
         "charge": 0
+      },
+      {
+        "name": "CYP2E1",
+        "sid": "cytochrome-p450-2e1",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "czx6oh+czxoglu",
@@ -10263,6 +10315,13 @@
         "charge": null
       },
       {
+        "name": "mycophenolate mofetil",
+        "sid": "mycophenolate-mofetil",
+        "mass": 433.501,
+        "formula": "C23H31NO7",
+        "charge": 0
+      },
+      {
         "name": "mycophenolic acid",
         "sid": "mycophenolic-acid",
         "mass": 320.341,
@@ -10302,6 +10361,13 @@
         "sid": "naloxone",
         "mass": 327.38,
         "formula": "C19H21NO4",
+        "charge": 0
+      },
+      {
+        "name": "naltrexone",
+        "sid": "naltrexone",
+        "mass": 341.407,
+        "formula": "C20H23NO4",
         "charge": 0
       },
       {
@@ -10848,6 +10914,13 @@
         "sid": "prazosin",
         "mass": 383.408,
         "formula": "C19H21N5O4",
+        "charge": 0
+      },
+      {
+        "name": "prednisone",
+        "sid": "prednisone",
+        "mass": 358.434,
+        "formula": "C21H26O5",
         "charge": 0
       },
       {
@@ -11528,6 +11601,41 @@
         "mass": 414.718,
         "formula": "C29H50O",
         "charge": 0
+      },
+      {
+        "name": "SLC10A2",
+        "sid": "slc10a2",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC15A1",
+        "sid": "slc15a1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC22A1",
+        "sid": "slc22a1",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLC22A3",
+        "sid": "slc22a3",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
+        "name": "SLCO2B1",
+        "sid": "slco2b1",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "small-buoyant-ldl",
@@ -12361,6 +12469,7 @@
       "aorta",
       "arterial blood",
       "arterial plasma",
+      "ascending colon",
       "bile duct",
       "bile",
       "blood",
@@ -12369,15 +12478,20 @@
       "carotid artery",
       "cecum",
       "cerebrospinal fluid",
+      "colon",
+      "descending colon",
       "dried blood spot",
+      "duodenum",
       "erythrocyte",
       "feces",
       "feces_urine",
       "feces_urine_bile",
       "gallbladder",
       "heart",
+      "ileum",
       "inferior vena cava",
       "intestine",
+      "jejunum",
       "kidney",
       "large intestine",
       "liver",
@@ -12389,11 +12503,13 @@
       "saliva",
       "saliva/plasma",
       "serum",
+      "sigmoid colon",
       "small intestine",
       "spinal fluid",
       "spleen",
       "stomach",
       "tissue",
+      "transverse colon",
       "urine"
     ],
     "methods": [
@@ -12435,7 +12551,11 @@
       "HPLC/UV",
       "ICP-AES",
       "immunofluorescence",
+      "intra-arterial catheter",
       "IRMA",
+      "Jaffe reaction",
+      "Jaffe reaction (AutoAnalyzer)",
+      "Jaffe reaction (Lloyd reagent)",
       "LC ESI MS",
       "LC/MS",
       "LC MS/MS",
@@ -12449,6 +12569,8 @@
       "photoplethysmography",
       "plasma binding measurement",
       "potentiometry",
+      "pulmonary artery catheter",
+      "qRT-PCR",
       "radiochromatography/MS/MS",
       "radioenzymatic assay",
       "RIA",
@@ -12458,12 +12580,14 @@
       "scintillation counting",
       "Spectrophotometry",
       "sphygmomanometer",
+      "thermodilution",
       "TLC",
       "ultra-filtration",
       "ultrasound imaging",
       "UPLC MS",
       "UPLC MS/MS",
-      "UV spectrophotometry"
+      "UV spectrophotometry",
+      "western blot"
     ],
     "routes": [
       "administration route",
@@ -12528,5 +12652,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "53ade6b6eda61e72e882622f5f9893f787b39f0d6a6934f97a7e6c4ee5775737"
+  "vocabulary_hash": "cdefe148f2f8e1b23c6126f468675527e5fb5dbc41b7bb28a89f102047e5c728"
 }

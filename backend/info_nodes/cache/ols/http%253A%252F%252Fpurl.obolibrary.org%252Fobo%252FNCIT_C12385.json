@@ -1,0 +1,167 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12385",
+  "lang": "en",
+  "description": [
+    "The third division of the colon (large intestine). It communicates with the ascending colon in the upper right-hand quadrant of the abdomen and the descending colon in the upper left-hand quadrant."
+  ],
+  "synonyms": [
+    "COLON, TRANSVERSE",
+    "Transverse Colon",
+    "Transverse colon structure (body structure)",
+    "Transverse colon",
+    "colon transversum",
+    "transverse colon"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The proximal-distal subdivision of colon that runs transversely across the upper part of the abdomen, from the right to the left colic flexure. Continuous with the descending colon.",
+      "The third division of the colon (large intestine). It communicates with the ascending colon in the upper right-hand quadrant of the abdomen and the descending colon in the upper left-hand quadrant. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Transverse Colon"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Transverse_Colon"
+    ],
+    "Maps_To": [
+      "Transverse Colon",
+      "Transverse colon"
+    ],
+    "Preferred_Name": [
+      "Transverse Colon"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0227386"
+    ],
+    "code": [
+      "C12385"
+    ],
+    "database_cross_reference": [
+      "UBERON:0001157"
+    ]
+  },
+  "label": "Transverse Colon",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12385",
+  "obo_id": "NCIT:C12385",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001157",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001157"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "COLON, TRANSVERSE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Transverse Colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Transverse colon structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Transverse colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "colon transversum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "transverse colon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/graph"
+    },
+    "Anatomic_Structure_Has_Location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R81"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12385/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

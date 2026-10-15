@@ -1,0 +1,441 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7465",
+  "lang": "en",
+  "description": [
+    "An  organic heteropentacyclic compound that is naloxone substituted in which the allyl group attached to the nitrogen is replaced by a cyclopropylmethyl group. A \u03bc-opioid receptor antagonist, it is used to treat alcohol dependence."
+  ],
+  "synonyms": [
+    "17-(Cyclopropylmethyl)-4,5-epoxy-3,14-dihydroxymorphinan-6-one",
+    "17-(Cyclopropylmethyl)-4,5alpha-epoxy-3,14-dihydroxymorphinan-6-one",
+    "3,14-dihydroxy-17-(cyclopropylmethyl)-4,5alpha-epoxymorphinan-6-one",
+    "3,14-dihydroxy-17-(cyclopropylmethyl)-4,5alpha-epoxymorphinan-6-one",
+    "N-Cyclopropylmethyl-14-hydroxydihydromorphinone",
+    "N-Cyclopropylmethylnoroxymorphone",
+    "Naltrexone",
+    "naltrexone"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:16590-41-3",
+      "drugbank:DB00704",
+      "drugcentral:1765",
+      "hmdb:HMDB0014842",
+      "kegg.compound:C07253",
+      "kegg.drug:D05113",
+      "lincs.smallmolecule:LSM-3962",
+      "patent:US3332950",
+      "pubmed:17023477",
+      "pubmed:24107112",
+      "pubmed:24659754",
+      "pubmed:27690505",
+      "pubmed:27700187",
+      "pubmed:27787292",
+      "pubmed:27813192",
+      "pubmed:27875802",
+      "pubmed:27922226",
+      "pubmed:27936293",
+      "pubmed:27987236",
+      "pubmed:28011389",
+      "pubmed:28029718",
+      "pubmed:28044452",
+      "pubmed:28061017",
+      "pubmed:28068780",
+      "pubmed:28106937",
+      "pubmed:28118565",
+      "pubmed:28130024",
+      "pubmed:28144772",
+      "pubmed:28153651",
+      "pubmed:28161142",
+      "pubmed:28168894",
+      "pubmed:28184294",
+      "reaxys:3596648",
+      "wikipedia.en:Naltrexone"
+    ],
+    "generalized_empirical_formula": [
+      "C20H23NO4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7465"
+    ],
+    "inchi_key_string": [
+      "DQCKKXVULJGBQN-XFWGSAIBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H23NO4/c22-13-4-3-12-9-15-20(24)6-5-14(23)18-19(20,16(12)17(13)25-18)7-8-21(15)10-11-1-2-11/h3-4,11,15,18,22,24H,1-2,5-10H2/t15-,18+,19+,20-/m1/s1"
+    ],
+    "mass": [
+      "341.407"
+    ],
+    "monoisotopic_mass": [
+      "341.16271"
+    ],
+    "smiles_string": [
+      "O=C1CC[C@@]2(O)[C@H]3Cc4ccc(O)c5c4[C@@]2(CCN3CC2CC2)[C@H]1O5"
+    ]
+  },
+  "label": "naltrexone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7465",
+  "obo_id": "CHEBI:7465",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "16590-41-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=16590-41-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00704",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00704"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1765",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1765"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014842",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014842"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07253",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D05113",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3962",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US3332950",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3332950"
+    },
+    {
+      "database": "pubmed",
+      "id": "17023477",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17023477/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24107112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24107112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24659754",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24659754/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27690505",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27690505/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27700187",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27700187/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27787292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27787292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27813192",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27813192/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27875802",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27875802/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27922226",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27922226/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27936293",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27936293/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27987236",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27987236/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28011389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28011389/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28029718",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28029718/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28044452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28044452/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28061017",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28061017/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28068780",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28068780/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28106937",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28106937/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28118565",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28118565/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28130024",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28130024/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28144772",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28144772/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28153651",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28153651/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28161142",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28161142/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28168894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28168894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28184294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28184294/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3596648",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Naltrexone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,14-dihydroxy-17-(cyclopropylmethyl)-4,5alpha-epoxymorphinan-6-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-(Cyclopropylmethyl)-4,5-epoxy-3,14-dihydroxymorphinan-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-(Cyclopropylmethyl)-4,5alpha-epoxy-3,14-dihydroxymorphinan-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,14-dihydroxy-17-(cyclopropylmethyl)-4,5alpha-epoxymorphinan-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Cyclopropylmethyl-14-hydroxydihydromorphinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Cyclopropylmethylnoroxymorphone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Naltrexone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naltrexone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7465/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

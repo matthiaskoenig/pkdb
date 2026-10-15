@@ -1,0 +1,314 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0002116",
+  "lang": "en",
+  "description": [
+    "The portion of the small intestine that extends from the jejunum to the colon."
+  ],
+  "synonyms": [
+    "distal intestine",
+    "intestinum ileum",
+    "lower intestine",
+    "posterior intestine"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "AAO:0010403",
+      "BTO:0000620",
+      "CALOHA:TS-0472",
+      "EFO:0001334",
+      "EMAPA:32764",
+      "EV:0100075",
+      "FMA:7208",
+      "GAID:315",
+      "MA:0000339",
+      "MAT:0000282",
+      "MESH:D007082",
+      "MIAA:0000282",
+      "NCIT:C12387",
+      "SCTID:181249005",
+      "VHOG:0000647",
+      "Wikipedia:Ileum",
+      "XAO:0000237",
+      "galen:Ileum",
+      "UMLS:C0020885"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/3/3d/Illu_small_intestine.jpg",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-female/v1.2/assets/3d-vh-f-small-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/small-intestine-male/v1.2/assets/3d-vh-m-small-intestine.glb"
+    ],
+    "editor note": [
+      "TODO consider ZFA:0000706 posterior intestine, see also colon"
+    ],
+    "has_relational_adjective": [
+      "ileal"
+    ],
+    "homology_notes": [
+      "Although all vertebrates have a digestive tract and accessory glands, various parts of this system are not necessarily homologous, analogous, or even present in all species. Therefore, broad comparisons can be best made under the listings of headgut, foregut, midgut, pancreas and biliary system, hindgut.[uncertain][VHOG]"
+    ],
+    "id": [
+      "UBERON:0002116"
+    ],
+    "taxon_notes": [
+      "The ileum is the final section of the small intestine in most higher vertebrates, including mammals, reptiles, and birds. In fish, the divisions of the small intestine are not as clear and the terms posterior intestine or distal intestine may be used instead of ileum.[Wikipedia:Ileum]"
+    ]
+  },
+  "label": "ileum",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0002116",
+  "obo_id": "UBERON:0002116",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The portion of the small intestine that extends from the jejunum to the colon.",
+      "oboXrefs": [
+        {
+          "database": "ISBN",
+          "id": "0-683-40008-8",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A0-683-40008-8"
+        },
+        {
+          "database": "MGI",
+          "id": "csmith",
+          "description": null,
+          "url": "http://www.informatics.jax.org/accession/csmith"
+        },
+        {
+          "database": "MP",
+          "id": "0002581",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MP_0002581"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010403",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010403"
+    },
+    {
+      "database": "BTO",
+      "id": "0000620",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000620"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0472",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-0472"
+    },
+    {
+      "database": "EFO",
+      "id": "0001334",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0001334"
+    },
+    {
+      "database": "EMAPA",
+      "id": "32764",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:32764"
+    },
+    {
+      "database": "EV",
+      "id": "0100075",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/EV_0100075"
+    },
+    {
+      "database": "FMA",
+      "id": "7208",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/7208"
+    },
+    {
+      "database": "GAID",
+      "id": "315",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0000339",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0000339"
+    },
+    {
+      "database": "MAT",
+      "id": "0000282",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000282"
+    },
+    {
+      "database": "MESH",
+      "id": "D007082",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D007082"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000282",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12387",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12387"
+    },
+    {
+      "database": "SCTID",
+      "id": "181249005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/181249005"
+    },
+    {
+      "database": "VHOG",
+      "id": "0000647",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0000647"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Ileum",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Ileum"
+    },
+    {
+      "database": "XAO",
+      "id": "0000237",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/XAO_0000237"
+    },
+    {
+      "database": "galen",
+      "id": "Ileum",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS",
+      "id": "C0020885",
+      "description": "ncithesaurus:Ileum",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0020885"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "distal intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000620",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000620"
+        }
+      ]
+    },
+    {
+      "name": "intestinum ileum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000620",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000620"
+        }
+      ]
+    },
+    {
+      "name": "lower intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "BTO",
+          "id": "0000620",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000620"
+        }
+      ]
+    },
+    {
+      "name": "posterior intestine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Ileum",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Ileum"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "contributes_to_morphology_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0002116/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002433"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

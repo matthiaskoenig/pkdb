@@ -1,0 +1,212 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0001158",
+  "lang": "en",
+  "description": [
+    "The portion of the colon between the left colic flexure and the sigmoid colon at the pelvic brim; the portion of the descending colon lying in the left iliac fossa is sometimes called the iliac colon."
+  ],
+  "synonyms": [
+    "colon descendens"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "BTO:0000641",
+      "CALOHA:TS-2010",
+      "EFO:0000845",
+      "EMAPA:35285",
+      "FMA:14547",
+      "MA:0001542",
+      "MAT:0000313",
+      "MIAA:0000313",
+      "NCIT:C12268",
+      "SCTID:362165006",
+      "Wikipedia:Descending_colon",
+      "galen:DescendingColon",
+      "MESH:D044683",
+      "UMLS:C0227389"
+    ],
+    "depiction": [
+      "http://upload.wikimedia.org/wikipedia/commons/c/ca/Gray1223.png",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-female/v1.3/assets/3d-sbu-f-large-intestine.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/large-intestine-male/v1.3/assets/3d-sbu-m-large-intestine.glb"
+    ],
+    "id": [
+      "UBERON:0001158"
+    ]
+  },
+  "label": "descending colon",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0001158",
+  "obo_id": "UBERON:0001158",
+  "in_subset": [
+    "efo_slim",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The portion of the colon between the left colic flexure and the sigmoid colon at the pelvic brim; the portion of the descending colon lying in the left iliac fossa is sometimes called the iliac colon.",
+      "oboXrefs": [
+        {
+          "database": "BTO",
+          "id": "0000641",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/BTO_0000641"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "BTO",
+      "id": "0000641",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000641"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-2010",
+      "description": null,
+      "url": "https://www.nextprot.org/term/TS-2010"
+    },
+    {
+      "database": "EFO",
+      "id": "0000845",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000845"
+    },
+    {
+      "database": "EMAPA",
+      "id": "35285",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:35285"
+    },
+    {
+      "database": "FMA",
+      "id": "14547",
+      "description": null,
+      "url": "http://purl.org/sig/ont/fma/14547"
+    },
+    {
+      "database": "MA",
+      "id": "0001542",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001542"
+    },
+    {
+      "database": "MAT",
+      "id": "0000313",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000313"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000313",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12268",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12268"
+    },
+    {
+      "database": "SCTID",
+      "id": "362165006",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/362165006"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Descending_colon",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Descending_colon"
+    },
+    {
+      "database": "galen",
+      "id": "DescendingColon",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D044683",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D044683"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0227389",
+      "description": "ncithesaurus:Descending_Colon",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0227389"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "colon descendens",
+      "scope": "hasExactSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Descending_colon",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Descending_colon"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/graph"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002150"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0001158/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002202"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
