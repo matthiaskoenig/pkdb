@@ -1,5 +1,11 @@
 # Unreleased
 
+- The website lists the study format 2 studies on a new Studies page, with the search and the Substance and Curator filters of the local curation app under the website's own heading, and shows a study at `/data/<substance>/<name>` with the views of the curation app, in its compact sizes: Metadata and Data for everyone, and for who may write the study also Problems, Review, the issue, the review status, the PDF and the figure images and raw tables. The page follows the session, keeps the data search that opened it in its address, and studies without a stored view, such as study format 1 studies and study format 2 studies uploaded before this release, keep the record page (#963).
+
+- A browser that still holds the cookie of an ended session (expired, revoked or signed out elsewhere) no longer makes the website read again without end: the first read deletes the cookie and the reader continues as a visitor.
+
+- The website now declares the order of Vuetify's style layers before any stylesheet loads, so buttons on every page show Vuetify's size and weight instead of the size of the text around them.
+
 - The views of a study in the local curation app, its study list, header, section tabs and its Data, Problems and Review sections, live in `frontend/src/study-views/` for the website to use too, behind one context of what the reader may see and do, the routes of the page and its reads; the curation app looks and works as before, except that its duplicate studies, which show - for their problems, now sort last by Problems (#963).
 - On save of the local curation app is one setting for the workspace, the server and the PK-DB account, in a menu of the top bar beside File watching, instead of an action per study (#966). The menu lists Validate, Upload and Off with what a save then does; Upload asks to confirm first, and offline or without an account that may upload it is disabled and says why. The overview loses the On save column and the On save select of its batch toolbar, and the tab line of a study loses On save. `GET /local/state` has `mode` once instead of in every study row, and `POST /local/mode` takes only `mode`. The actions per study that pkdb 0.12 saved are not taken over: On save starts at Validate, and pkdb 0.12 keeps reading its own.
 
