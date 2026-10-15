@@ -5,7 +5,14 @@ import pytest
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.layout import scan_folder
 from pkdb.studyformat.load import load_study
-from pkdb.studyformat.raw import load_raw, parse_raw_file, raw_file, render_raw
+from pkdb.studyformat.raw import (
+    load_raw,
+    missing_source,
+    parse_raw_file,
+    raw_file,
+    render_raw,
+    source_files,
+)
 
 
 @pytest.mark.parametrize(
@@ -18,6 +25,7 @@ from pkdb.studyformat.raw import load_raw, parse_raw_file, raw_file, render_raw
         ("Other_Tab2.tsv", "Example", None),
         ("outputs_Tab2.tsv", "outputs", None),
         ("Example_Tab2.csv", "Example", None),
+        (".Example_Tab2.tsv", "Example", None),
     ],
 )
 def test_parse_raw_file(name, study, source):
@@ -75,19 +83,42 @@ def test_formatter_writes_canonical_raw_table(make_study, valid_files):
     assert raw.source == "Tab2"
 
 
-def test_raw_table_needs_its_image(make_study, valid_files, sf_vocabulary):
+def test_a_raw_table_needs_no_image(make_study, valid_files, sf_vocabulary):
+    """The raw table is the source of a paper table without an image, such as unpublished data."""
     from pkdb.studyformat.validation import validate_folder
 
     files = {**valid_files, "Example_Tab9.tsv": "a\n"}
     folder = make_study(files)
     format_folder(folder)
     issues = validate_folder(folder, sf_vocabulary).issues
-    assert any(
-        issue.code == "missing_image"
-        and issue.source is not None
-        and issue.source.file == "Example_Tab9.tsv"
-        for issue in issues
-    )
+    assert not [issue for issue in issues if issue.code == "missing_image"]
+
+
+@pytest.mark.parametrize(
+    ("source", "files"),
+    [
+        ("Tab2", ("Example_Tab2.png", "Example_Tab2.tsv")),
+        ("Tab_S4", ("Example_Tab_S4.png", "Example_Tab_S4.tsv")),
+        ("Fig2A", ("Example_Fig2A.png",)),
+        ("Text", ()),
+    ],
+)
+def test_source_files(source, files):
+    assert source_files("Example", source) == files
+
+
+@pytest.mark.parametrize(
+    ("files", "missing"),
+    [
+        ((), "Example_Tab2.png or the raw table Example_Tab2.tsv"),
+        (("Example_Tab2.png",), None),
+        (("Example_Tab2.tsv",), None),
+        # A hidden table of study format 1 is no raw table.
+        ((".Example_Tab2.tsv",), "Example_Tab2.png or the raw table Example_Tab2.tsv"),
+    ],
+)
+def test_missing_source(files, missing):
+    assert missing_source("Example", "Tab2", files) == missing
 
 
 def test_raw_sheet_name_length_is_checked(make_study, valid_files):

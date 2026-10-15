@@ -438,6 +438,14 @@ def test_outputs_carry_subjects_interventions_and_all_statistics(valid_study, ts
     assert individual.statistics == Statistics(mean=2.0, error_bar=2.6, error_type="sd")
 
 
+def test_a_paper_table_whose_raw_table_is_its_source_has_no_image(valid_study, tsv):
+    write(valid_study, "Example_Tab9.tsv", "cmax\t2.5\n")
+    write(valid_study, "outputs_Tab9.tsv", tsv("outputs", CMAX))
+    outputs = by_key(read(valid_study).measurements)
+    assert outputs["outputs_Tab9.tsv:1"].image is None
+    assert outputs["outputs_Tab2.tsv:1"].image == "Example_Tab2.png"
+
+
 def test_timecourse_points_keep_their_label(valid_study):
     points = [
         m for m in read(valid_study).measurements if m.output_type == "timecourse"

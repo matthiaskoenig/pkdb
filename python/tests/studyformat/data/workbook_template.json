@@ -33,7 +33,7 @@
         },
         "source": {
           "format": "@",
-          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead.\nExample: Tab1",
           "dropdown": null
         },
         "comment": {
@@ -87,7 +87,7 @@
         },
         "source": {
           "format": "@",
-          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead.\nExample: Tab1",
           "dropdown": null
         },
         "name": {
@@ -284,7 +284,7 @@
         },
         "source": {
           "format": "@",
-          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1\nRequired",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist; a paper table without an image, such as unpublished data, has its raw table `<study>_<source>.tsv` instead.\nExample: Tab1\nRequired",
           "dropdown": null
         },
         "subjects": {

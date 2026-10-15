@@ -28,7 +28,7 @@ from pkdb.migration.rows import (
     timed_measurements,
     valueless,
 )
-from pkdb.migration.sources import image_sources, observation_source
+from pkdb.migration.sources import documented_sources, observation_source, read_files
 from pkdb.migration.unmapped import unmapped_values
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.source import SourceBundle
@@ -896,7 +896,7 @@ def _conversion(v1: Path, vocabulary: Vocabulary) -> _Conversion:
     for subject in [*parsed.groups, *parsed.individuals]:
         records += subject.characteristica
     dropped = {record.key: record for record in records if record.key in keys}
-    images = image_sources(v1, v1.name)
+    images = documented_sources(v1, v1.name, read_files(parsed))
     arrays: frozenset[str] = frozenset()
     if any(r.output_type == "array" and r.label for r in parsed.measurements):
         arrays = series_arrays(parsed, v1.name, images, keys)

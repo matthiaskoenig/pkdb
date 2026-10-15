@@ -198,6 +198,7 @@ const HARDER_PREVIEWS: Record<string, TablePreview> = {
     image: "Harder1988_Tab3.png",
     image_found: true,
     issues: [],
+    raw: null,
   },
   "raw Tab4": {
     table: "Harder1988_Tab4",
@@ -205,6 +206,7 @@ const HARDER_PREVIEWS: Record<string, TablePreview> = {
     image: "Harder1988_Tab4.png",
     image_found: false,
     issues: [],
+    raw: "Harder1988_Tab4.tsv",
   },
 };
 
@@ -819,8 +821,12 @@ describe("StudyPage", () => {
     await flushPromises();
     const preview = dialog().get(".table-preview");
     expect(preview.text()).toContain("Harder1988_Tab4.tsv");
-    expect(preview.get(".image-state").text()).toBe("Missing");
-    expect(preview.text()).toContain("Add Harder1988_Tab4.png to the folder");
+    // The raw table to add is the source of the paper table without an image.
+    expect(preview.get(".image-state").text()).toBe("Not needed");
+    expect(preview.text()).toContain(
+      "The raw table Harder1988_Tab4.tsv is the source of this paper table without an image.",
+    );
+    expect(preview.text()).not.toContain("Add Harder1988_Tab4.png to the folder");
 
     await click("Add");
     expect(posted("/local/studies/tables")).toEqual([
@@ -959,7 +965,7 @@ describe("StudyPage", () => {
     await flushPromises();
     await field("Source").setValue("Tab4");
     await flushPromises();
-    expect(dialog().get(".image-state").text()).toBe("Missing");
+    expect(dialog().get(".image-state").text()).toBe("Not needed");
 
     files = [...files, "Harder1988_Tab4.png"];
     await useStudyStore().refresh();

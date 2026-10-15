@@ -209,6 +209,10 @@ const { more, scrollbar } = useMoreBelow(body, content);
                     :class="{ 'source-image--figure': kind === 'figure', 'source-image--full': zoom === 'full' }"
                   />
                 </div>
+                <!-- A paper table without an image, such as unpublished data, has its raw table as its source. -->
+                <p v-else-if="kind === 'table' && summary.raw && !summary.missing_image" class="pane-note source-raw-note">
+                  No image: the raw extraction {{ summary.raw }} is the source of this table.
+                </p>
                 <p v-else class="pane-missing">
                   <i class="fas fa-file-circle-plus" aria-hidden="true"></i>
                   <span v-if="capabilities.edit" class="pane-missing-text"

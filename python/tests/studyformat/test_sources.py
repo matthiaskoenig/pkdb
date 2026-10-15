@@ -237,6 +237,26 @@ def test_summaries_name_the_kind_and_the_missing_files(valid_study):
     assert fig1.missing_image == "Example_Fig1.png"
 
 
+def test_a_paper_table_whose_raw_table_is_its_source_lacks_no_image(valid_study):
+    (valid_study / "Example_Tab2.png").unlink()
+    tab2 = next(s for s in study_sources(load_study(valid_study)) if s.source == "Tab2")
+    assert (tab2.image, tab2.missing_image) == (None, "Example_Tab2.png")
+    (valid_study / "Example_Tab2.tsv").write_text("cmax\t2.5\n", encoding="utf-8")
+    tab2 = next(s for s in study_sources(load_study(valid_study)) if s.source == "Tab2")
+    assert (tab2.image, tab2.raw, tab2.missing_image, tab2.missing_raw) == (
+        None,
+        "Example_Tab2.tsv",
+        None,
+        None,
+    )
+    view = source_view(load_study(valid_study), "Tab2")
+    assert (view.image, view.image_size, view.raw_grid) == (
+        None,
+        None,
+        (("cmax", "2.5"),),
+    )
+
+
 def test_mapped_tables_say_whether_other_sources_share_them(valid_study):
     view = source_view(load_study(valid_study), "Tab1")
     assert {table.file: table.shared for table in view.mapped} == {

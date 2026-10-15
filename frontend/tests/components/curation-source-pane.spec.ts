@@ -70,6 +70,19 @@ describe("source pane", () => {
     expect(wrapper.get(".pane-missing").text()).toContain("No image: add Example_Tab2.png");
   });
 
+  it("says that the raw extraction is the source of a paper table without an image", () => {
+    const wrapper = mountPane({
+      summary: sourceSummary({ source: "TabS4", raw: "Example_TabS4.tsv", raw_kind: "table" }),
+      view: { ...view, source: "TabS4", image: null, image_url: null, image_size: null },
+    });
+    expect(wrapper.find("img").exists()).toBe(false);
+    expect(wrapper.find(".pane-missing").exists()).toBe(false);
+    expect(wrapper.get(".source-raw-note").text()).toBe(
+      "No image: the raw extraction Example_TabS4.tsv is the source of this table.",
+    );
+    expect(wrapper.get('[role="region"]').attributes("aria-label")).toBe("Raw extraction Example_TabS4.tsv");
+  });
+
   it("names each missing file and what to do about it in one text beside its icon", () => {
     /** The text of each note, which wraps as one paragraph in a narrow pane. */
     const notes = (wrapper: ReturnType<typeof mountPane>) =>

@@ -96,6 +96,22 @@ def test_a_conversion_from_hidden_tables_is_identical(tmp_path, sf_vocabulary):
     assert judge(v1, converted(tmp_path, v1), sf_vocabulary).outcome == "identical"
 
 
+def test_a_paper_table_with_its_raw_table_and_no_image_is_identical(
+    tmp_path, sf_vocabulary
+):
+    """Unpublished data: the raw table beside the workbook is the source of Tab2."""
+    output = {key: value for key, value in OUTPUT.items() if key != "image"}
+    v1 = v1_study(
+        tmp_path / "v1",
+        with_outputs(output, TIMECOURSE),
+        SHEETS,
+        tuple(image for image in IMAGES if image != "Tab2"),
+    )
+    (v1 / "Example_Tab2.tsv").write_text("cmax\t2.5 (0.5)\n", encoding="utf-8")
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert (result.outcome, result.differences) == ("identical", [])
+
+
 def test_the_gate_changes_neither_folder(tmp_path, sf_vocabulary):
     v1 = v1_full_example(tmp_path / "v1")
     v2 = converted(tmp_path, v1)

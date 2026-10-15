@@ -213,6 +213,8 @@ export interface TablePreview {
   image_found: boolean;
   /** Why the table cannot be added; empty when it can. */
   issues: ValidationIssue[];
+  /** The raw table of a paper table when it exists or is the table to add: the source without an image. */
+  raw: string | null;
 }
 
 // Error bodies
@@ -280,7 +282,7 @@ export const isReviewWrite = hasKeys<ReviewWrite>("revision");
 
 export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "changes", "conflicts", "issues");
 
-export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues");
+export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues", "raw");
 
 export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
 

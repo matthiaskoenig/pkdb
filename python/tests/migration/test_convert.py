@@ -150,6 +150,45 @@ def test_other_tables_and_json_files_are_removed_and_listed(tmp_path):
     ]
 
 
+def without_image(v1, source):
+    """The format 1 study without the image of a source: its outputs name no image."""
+    study = json.loads((v1 / "study.json").read_text())
+    for output in study["outputset"]["outputs"]:
+        if output.get("image") == source:
+            del output["image"]
+    (v1 / "study.json").write_text(json.dumps(study))
+    (v1 / f"{v1.name}_{source}.png").unlink()
+
+
+@pytest.mark.parametrize("workbook", [True, False])
+def test_a_raw_table_beside_the_workbook_is_the_source_without_an_image(
+    tmp_path, workbook
+):
+    v1 = v1_full_example(tmp_path / "v1", workbook=workbook)
+    without_image(v1, "Tab2")
+    (v1 / "Example_Tab2.tsv").write_text("  cmax \t2.5 (0.5)\t\n\n", encoding="utf-8")
+    conversion = convert(v1, tmp_path)
+    assert {row["source"] for row in rows(conversion.folder / "outputs_Tab2.tsv")} == {
+        "Tab2"
+    }
+    # Kept in canonical form, and no image of Tab2.
+    assert (conversion.folder / "Example_Tab2.tsv").read_text() == "cmax\t2.5 (0.5)\n"
+    assert not (conversion.folder / "Example_Tab2.png").exists()
+    assert not list(conversion.folder.glob(".*.tsv"))
+    assert conversion.decisions == []
+
+
+def test_without_an_image_or_raw_table_a_source_is_not_converted(tmp_path):
+    v1 = v1_full_example(tmp_path / "v1", workbook=False)
+    without_image(v1, "Tab2")
+    with pytest.raises(NotConverted) as error:
+        convert(v1, tmp_path)
+    assert (error.value.code, error.value.message) == (
+        "missing_image",
+        "No Example_Tab2.png or the raw table Example_Tab2.tsv for source Tab2",
+    )
+
+
 def test_files_that_both_formats_ignore_are_neither_copied_nor_listed(tmp_path):
     v1 = v1_full_example(tmp_path / "v1")
     (v1 / ".DS_Store").write_bytes(b"finder")
@@ -172,10 +211,15 @@ def test_hidden_folders_are_kept(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("images", "source"), [((), "Text"), (("TabGroups",), "TabGroups")]
+    ("images", "raw", "source"),
+    [
+        ((), False, "Text"),
+        (("TabGroups",), False, "TabGroups"),
+        ((), True, "TabGroups"),
+    ],
 )
-def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image(
-    tmp_path, images, source
+def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image_or_raw_table(
+    tmp_path, images, raw, source
 ):
     group = {
         "source": "TabGroups",
@@ -189,6 +233,8 @@ def test_groups_from_a_sheet_take_the_sheet_as_source_only_with_its_image(
         {**SHEETS, "TabGroups": [["name", "count"], ["all", 2]]},
         ("TabA", "Tab2", "Fig1", *images),
     )
+    if raw:
+        (v1 / "Example_TabGroups.tsv").write_text("all\t2\n", encoding="utf-8")
     conversion = convert(v1, tmp_path)
     subjects = rows(conversion.folder / "subjects.tsv")
     characteristica = rows(conversion.folder / "characteristica.tsv")
@@ -264,6 +310,9 @@ def test_v1_files_are_tables_workbooks_and_json_files_but_reference_json():
     kept = ["reference.json", "Example.pdf", "Example_Tab2.png", "Example.docx"]
     assert all(is_v1_file(name, "Example") for name in dropped)
     assert not any(is_v1_file(name, "Example") for name in kept)
+    raw = {"Example_Tab2.tsv"}
+    assert not is_v1_file("Example_Tab2.tsv", "Example", raw)
+    assert is_v1_file(".Example_Tab2.tsv", "Example", raw)
 
 
 def test_a_study_without_subjects_is_not_converted(tmp_path):
