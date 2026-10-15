@@ -795,7 +795,7 @@
         },
         "subjects": {
           "format": "@",
-          "comment": "Subject of the point, usually an individual with count 1. The points of one scatter are all individuals or all groups.\nExample: all\nRequired",
+          "comment": "Subject of the point, usually an individual with count 1. The points of one scatter are all individuals or all groups. Each row is one point, so a subject can have several, such as an individual at several times or the subjects of a group that the paper does not tell apart.\nExample: all\nRequired",
           "dropdown": "subjects!name"
         },
         "x_interventions": {

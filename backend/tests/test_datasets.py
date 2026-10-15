@@ -2,6 +2,7 @@ import pytest
 
 from pkdb.domain.validation import prepare_study
 from pkdb.importers.folder import parse_bundle
+from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.study import DataRecord, Dimension, Statistics, Subset
 from pkdb.schemas.validation import StudyValidationError
 
@@ -68,6 +69,22 @@ def test_scatter_pairs_on_shared_geometric_statistics(valid_study, vocabulary, f
     records = {r.key: r for r in prepared.study.measurements}
     for x_key, y_key in subset.points:
         assert records[x_key].time == records[y_key].time
+
+
+def test_scatter_pairs_the_outputs_of_one_row(valid_study, vocabulary):
+    # Both points have time 0, so only their table rows tell them apart.
+    study = scatter_study(valid_study)
+    for record in study.measurements:
+        row = int(record.time) + 1
+        record.source = SourceLocation(file="Example.xlsx", sheet="Fig2", row=row)
+        record.time = 0.0
+    study.scatters[0].subsets[0].shared = ["row"]
+    prepared = prepare_study(study, vocabulary)
+    subset = prepared.study.scatters[0].subsets[0]
+    records = {r.key: r for r in prepared.study.measurements}
+    assert sorted(
+        (records[x].derived_from, records[y].derived_from) for x, y in subset.points
+    ) == [("x-0", "y-0"), ("x-1", "y-1")]
 
 
 @pytest.mark.parametrize("mode", ["ambiguous", "missing", "unknown_shared"])

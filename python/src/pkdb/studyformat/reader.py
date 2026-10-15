@@ -11,6 +11,7 @@ from collections.abc import Callable, Mapping
 
 from pydantic import BaseModel, ValidationError
 
+from pkdb.domain.datasets import ROW
 from pkdb.references import publication_identifier
 from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.study import (
@@ -348,14 +349,12 @@ class _Reader:
         points, datasets = [], []
         for table, locate in self.tables("scatters"):
             image = self.image(table.source)
-            # The first row and the subjects of every scatter dataset.
+            # The first row of every scatter dataset.
             first: dict[str, Row] = {}
-            subjects: dict[str, set[object]] = defaultdict(set)
             for row in table.rows:
                 values = row.values
                 name = row.cells["name"]
                 first.setdefault(name, row)
-                subjects[name].add(values["subjects"])
                 for prefix in ("x", "y"):
                     axis = f"{prefix}_"
                     point = self.build(
@@ -378,8 +377,6 @@ class _Reader:
                     if point is not None:
                         points.append(point)
             for name, row in first.items():
-                individual = subjects[name] <= self.individuals
-                shared = "individual" if individual else "group"
                 dataset = self.build(
                     DataRecord,
                     locate(row, HEADERS["scatters"]),
@@ -394,7 +391,8 @@ class _Reader:
                                 Dimension(dimension="0", output=f"{name}_x"),
                                 Dimension(dimension="1", output=f"{name}_y"),
                             ],
-                            shared=[shared],
+                            # Each row is a point, so a subject can have several.
+                            shared=[ROW],
                         )
                     ],
                 )

@@ -618,10 +618,20 @@ def test_postprocessing_runs_only_without_earlier_errors(
     assert codes(validate_folder(valid_study, sf_vocabulary)) == {"unknown_measurement"}
 
 
-def test_postprocessing_failure_of_a_dataset_is_reported(
-    valid_study, tsv, sf_vocabulary
-):
-    # Two points of one subject cannot be paired into a scatter.
+def test_postprocessing_failure_is_reported(valid_study, tsv, sf_vocabulary):
+    # PK parameters cannot be derived from a concentration curve that is all zero.
+    rows = [{**row, "mean": "0"} for row in timecourse_rows(3)]
+    (valid_study / "timecourses_Fig2.tsv").write_text(
+        tsv("timecourses", *rows), encoding="utf-8"
+    )
+    assert format_folder(valid_study).ok
+    report = validate_folder(valid_study, sf_vocabulary)
+    assert not report.valid and not report.complete
+    assert codes(report) == {"pk_zero_curve"}
+
+
+def test_several_points_of_one_subject_are_a_scatter(valid_study, tsv, sf_vocabulary):
+    # Each row is a point, such as the measurements of a subject at several times.
     point = {
         "name": "age_vs_cmax",
         "subjects": "S1",
@@ -641,8 +651,8 @@ def test_postprocessing_failure_of_a_dataset_is_reported(
     )
     assert format_folder(valid_study).ok
     report = validate_folder(valid_study, sf_vocabulary)
-    assert not report.valid and not report.complete
-    assert codes(report) == {"duplicate_observation", "scatter_pairing"}
+    assert report.valid and report.complete
+    assert codes(report) <= {"unused_subject"}
 
 
 def test_scatter_of_groups_and_individuals_is_reported_before_postprocessing(
