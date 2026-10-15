@@ -3,6 +3,7 @@ from datetime import date
 
 import openpyxl
 import pytest
+from digitize_fixtures import GOOD, png, project
 from migration_fixtures import (
     IMAGES,
     SHEETS,
@@ -150,6 +151,57 @@ def test_other_tables_and_json_files_are_removed_and_listed(tmp_path):
     ]
 
 
+def digitized(tmp_path, points=GOOD, *, source="Fig1"):
+    """The full example with a WebPlotDigitizer project of a figure on a 100 x 100 image."""
+    v1 = v1_full_example(tmp_path / "v1")
+    (v1 / "Example_Fig1.png").write_bytes(png(100, 100))
+    (v1 / f"Example_{source}.wpd.json").write_text(json.dumps(project(points)))
+    return v1
+
+
+def test_a_webplotdigitizer_project_of_a_figure_is_kept_in_canonical_form(tmp_path):
+    conversion = convert(digitized(tmp_path), tmp_path)
+    kept = json.loads((conversion.folder / "Example_Fig1.wpd.json").read_text())
+    assert [point["value"] for point in kept["datasetColl"][0]["data"]] == [
+        [0, 0],
+        [1, 2],
+        [2, 1],
+    ]
+    assert conversion.decisions == []
+
+
+def test_a_project_that_differs_from_the_converted_rows_is_kept_and_listed(tmp_path):
+    v1 = digitized(tmp_path, [(0, 100), (10, 80), (20, 50)])
+    conversion = convert(v1, tmp_path)
+    assert (conversion.folder / "Example_Fig1.wpd.json").exists()
+    [decision] = conversion.decisions
+    assert decision.kind == "digitization_warning"
+    assert decision.detail.startswith("Example_Fig1.wpd.json: digitized_mismatch 2; ")
+
+
+@pytest.mark.parametrize(
+    ("source", "content", "reason"),
+    [
+        ("Fig1", "{", "Example_Fig1.wpd.json: "),
+        ("Fig1", json.dumps({"version": [4, 2]}), "Example_Fig1.wpd.json: "),
+        ("Fig1", json.dumps(project([(0, 100), (150, 80)])), "outside"),
+        ("Fig3", json.dumps(project(GOOD)), "Example_Fig3.png is missing"),
+    ],
+    ids=["unreadable", "no_axes", "outside_image", "no_image"],
+)
+def test_a_project_that_format_2_cannot_keep_is_removed_and_listed(
+    tmp_path, source, content, reason
+):
+    v1 = digitized(tmp_path, source=source)
+    (v1 / f"Example_{source}.wpd.json").write_text(content)
+    conversion = convert(v1, tmp_path)
+    assert not (conversion.folder / f"Example_{source}.wpd.json").exists()
+    [decision] = conversion.decisions
+    assert decision.kind == "removed_digitization"
+    assert decision.detail.startswith(f"Example_{source}.wpd.json: ")
+    assert reason in decision.detail
+
+
 def test_files_that_both_formats_ignore_are_neither_copied_nor_listed(tmp_path):
     v1 = v1_full_example(tmp_path / "v1")
     (v1 / ".DS_Store").write_bytes(b"finder")
@@ -260,8 +312,10 @@ def test_counts_that_are_no_whole_number_are_listed(tmp_path, workbook):
 
 def test_v1_files_are_tables_workbooks_and_json_files_but_reference_json():
     dropped = ["study.json", "Example.xlsx", "Example.xls", ".Example_Tab2.tsv"]
-    dropped += ["data.tsv", "notes.CSV", "Example_Fig1.json"]
+    dropped += ["data.tsv", "notes.CSV", "Example_Fig1.json", "Example_Tab2.wpd.json"]
+    dropped += ["Other_Fig1.wpd.json"]
     kept = ["reference.json", "Example.pdf", "Example_Tab2.png", "Example.docx"]
+    kept += ["Example_Fig1.wpd.json", "Example_Fig2A.wpd.json"]
     assert all(is_v1_file(name, "Example") for name in dropped)
     assert not any(is_v1_file(name, "Example") for name in kept)
 
