@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pkdb"
-version = "0.12.14"
+version = "0.12.15"
 description = "Prepare, validate, query, and upload PK-DB studies"
 readme = "README.md"
 license = "MIT"
