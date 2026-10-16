@@ -5,9 +5,14 @@ import re
 from datetime import datetime
 from http.client import HTTPConnection
 
+#: Seconds a request may take before the test fails. Only a hang should reach it: Open
+#: tables writes the workbook before it answers, which took more than 3 seconds on a busy
+#: Windows runner (test_errors_contract, CI-CD run 38940333089).
+TIMEOUT = 30
+
 
 def request(server, method, path, body=None, headers=None):
-    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
+    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=TIMEOUT)
     defaults = {"Origin": server.origin, "Content-Type": "application/json"}
     defaults.update(headers or {})
     connection.request(
