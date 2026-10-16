@@ -1,0 +1,137 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47449",
+  "lang": "en",
+  "description": [
+    "A long acting thiazide-like diuretic of the sulfamoylbenzamide class that is devoid of the benzothiadiazine structure. Chlorthalidone directly inhibits sodium and chloride reabsorption on the luminal membrane of the early segment in the distal convoluted tubule (DCT) in the kidney. This leads to an increase in sodium, chloride, bicarbonate, and potassium secretion resulting in the excretion of water. In addition, this agent, like other thiazide diuretics, decreases calcium and uric acid secretion. In addition, this agent inhibits many carbonic anhydrase (CA) isoenzymes. Chlorthalidone is used in the treatment of high blood pressure, edema and congestive heart failure. The elimination half-life is about 40 to 50 hours."
+  ],
+  "synonyms": [
+    "Benzenesulfonamide, 2-Chloro-5-(2,3-dihydro-1-hydroxy-3-oxo-1H-isoindol-1-yl)-",
+    "Benzenesulfonamide, 2-chloro-5-(1-hydroxy-3-oxo-1-isoindolinyl)-",
+    "CHLORTHALIDONE",
+    "Chlorphthalidolone",
+    "Chlorthalidone",
+    "Hygroton",
+    "Thalitone"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "77-36-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3654"
+    ],
+    "Chemical_Formula": [
+      "C14H11ClN2O4S"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "Q0MQD1073Q"
+    ],
+    "Legacy Concept Name": [
+      "Chlorthalidone"
+    ],
+    "NSC Number": [
+      "69200"
+    ],
+    "Preferred_Name": [
+      "Chlorthalidone"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0008294"
+    ],
+    "code": [
+      "C47449"
+    ]
+  },
+  "label": "Chlorthalidone",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47449",
+  "obo_id": "NCIT:C47449",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Benzenesulfonamide, 2-Chloro-5-(2,3-dihydro-1-hydroxy-3-oxo-1H-isoindol-1-yl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Benzenesulfonamide, 2-chloro-5-(1-hydroxy-3-oxo-1-isoindolinyl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CHLORTHALIDONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chlorphthalidolone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chlorthalidone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hygroton",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Thalitone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47449/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

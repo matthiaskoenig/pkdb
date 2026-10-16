@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2276,
-  "version": "a045c14d36eed6df78251f96f5654043ee124d4e639b6911ffacc49537e343fb",
-  "inputs_sha256": "24c7a5b8b0e3bb61e58e1ab9d20c5e06477fa6e8c47cba162756d9b4b892323b",
+  "nodes": 2278,
+  "version": "561c901c8f6cf5d594c8bdbfed26919440893cadbd0cca6a2137cb09edde5a31",
+  "inputs_sha256": "a3777f2b43ad5c7af4cf7239db2cd8407a87b7f35a9762809fb6eda347bcce1c",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -19,9 +19,9 @@
     "backend/info_nodes/definitions/lifestyle.py": "3b89e9ffd5d3e6275d01a83ded51fb68e7a027f1e8180df0f2a92d0ac1f30c83",
     "backend/info_nodes/definitions/measurement.py": "39a0d5894e930b9cd31700a2d0535c79bfd3c95f848dd7dea646bdab4588457f",
     "backend/info_nodes/definitions/medical_procedure.py": "68580f15cd53a65557a3f131d0da1c3c7010ee6a7badab747a604b791afdc41b",
-    "backend/info_nodes/definitions/method.py": "2e8cd119433890f0fbf44f9930fd2841a712da0cd8d2b681b8736e69d16fc879",
+    "backend/info_nodes/definitions/method.py": "27be3c1fad97552632ae6cb0c16eb51f44f851c535f0bdd3aa6645c6e6e008aa",
     "backend/info_nodes/definitions/specie.py": "72a4eb98c98cbcfd4671c01ded5f0b6dee249f1cfc6ae357559f5ee144720591",
-    "backend/info_nodes/definitions/substance.py": "1b8fe4fb11cb80a00ece91b76ff820223160e580d735d9e2671d76ffa70d7aec",
+    "backend/info_nodes/definitions/substance.py": "606f9550c9534417af3e194baa7ab84194827f8183e208bb9f92ed8d0da567b6",
     "backend/info_nodes/definitions/tissue.py": "2836e20dcc318b630835fa71d49a623ab1b448473e3d5f64ee55428850a6ffb7",
     "backend/info_nodes/graph.py": "a0c9c8dcfd7b589541fe77b93768d9af660d16e677d069011e17bba8c0cdea33",
     "backend/info_nodes/metadata_cache.py": "3d6851aff868656131f05f65dc3ff18c1f336891fb94098c0f852c5d04192f60",

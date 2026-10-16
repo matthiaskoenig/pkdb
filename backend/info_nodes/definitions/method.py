@@ -637,6 +637,18 @@ METHOD_NODES: list[InfoNode] = [
         synonyms=[],
     ),
     Method(
+        sid="ambulatory-blood-pressure-monitoring",
+        name="ambulatory blood pressure monitoring",
+        description="Non-invasive measurement of the arterial blood pressure with a portable automatic "
+        "cuff device that records repeated readings, typically every 15 to 30 minutes over 24 hours, "
+        "while the subject follows normal daily activities (ABPM). Studies report the 24-hour, "
+        "daytime, nighttime or hourly means of the readings. See also 'sphygmomanometer' for the "
+        "office measurement.",
+        parents=["assay"],
+        annotations=[(BQB.IS, "SNOMEDCT:164783007")],
+        synonyms=["ABPM", "24-hour ambulatory blood pressure"],
+    ),
+    Method(
         sid="intra-arterial-catheter",
         name="intra-arterial catheter",
         description="Direct (invasive) measurement of the arterial blood pressure with a catheter "
