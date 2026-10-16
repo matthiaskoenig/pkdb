@@ -61,6 +61,15 @@ def test_count_rate_converts_only_to_count_rates():
         convert_value(1, "cpm/min", "Bq/min")
 
 
+def test_effect_areas_convert_only_within_their_dimension():
+    # The area under a renin activity increase, printed per litre and minute.
+    assert convert_value(1200, "ng/l/min*hr", "ng/ml/min*hr") == pytest.approx(1.2)
+    assert convert_value(600, "percent*hr", "hr") == pytest.approx(6)
+    # An area in arbitrary units has no physical dimension to convert to.
+    with pytest.raises(DimensionalityError):
+        convert_value(1, "arbitrary_unit", "ng/ml/min*hr")
+
+
 def test_normalization_preserves_raw_values_and_dimensionless_cv():
     raw = Measurement(
         key="m",

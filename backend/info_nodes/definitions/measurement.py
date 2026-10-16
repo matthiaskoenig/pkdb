@@ -1014,6 +1014,39 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=["nmol/ml/min", "ng/ml/min", "ng/100/ml"],
     ),
     MeasurementType(
+        sid="renin-activity-change-absolute-maximum",
+        name="renin activity (change absolute) maximum",
+        description="Maximal absolute increase of the renin activity over its baseline after an "
+        "administration, read from the renin activity-time curve (the maximal effect, Emax). "
+        "See also 'renin activity (change absolute) tmax' and 'renin activity (change absolute) AUEC'.",
+        parents=["renin activity (change absolute)"],
+        synonyms=["maximal renin activity increase", "maximal PRA increase"],
+        dtype=DType.NUMERIC,
+        units=["nmol/ml/min", "ng/ml/min"],
+    ),
+    MeasurementType(
+        sid="renin-activity-change-absolute-tmax",
+        name="renin activity (change absolute) tmax",
+        description="Time from an administration to the maximal absolute increase of the renin "
+        "activity ('renin activity (change absolute) maximum').",
+        parents=["renin activity (change absolute)"],
+        synonyms=["time to maximal renin activity increase"],
+        dtype=DType.NUMERIC,
+        units=TIME_UNITS,
+    ),
+    MeasurementType(
+        sid="renin-activity-change-absolute-auec",
+        name="renin activity (change absolute) AUEC",
+        label="Area under the effect curve (AUEC) of the renin activity increase",
+        description="Area under the curve of the absolute renin activity increase over time (area "
+        "under the effect curve, AUEC). Use arbitrary_unit when the publication reports the area in "
+        "arbitrary units.",
+        parents=["renin activity (change absolute)"],
+        synonyms=["AUEC"],
+        dtype=DType.NUMERIC,
+        units=["ng/ml/min*hr", "arbitrary_unit"],
+    ),
+    MeasurementType(
         sid="renin_activity_change_relative",
         name="renin activity (change relative)",
         label="renin activity (change relative)",
@@ -1044,6 +1077,38 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
+    ),
+    MeasurementType(
+        sid="ace-inhibition-maximum",
+        name="ACE inhibition maximum",
+        description="Maximal inhibition of angiotensin converting enzyme (ACE) after an "
+        "administration, read from the inhibition-time curve (the maximal effect, Emax). See also "
+        "'ACE inhibition', 'ACE inhibition tmax' and 'ACE inhibition AUEC'.",
+        parents=["ACE inhibition"],
+        synonyms=["maximal ACE inhibition"],
+        dtype=DType.NUMERIC,
+        units=[DIMENSIONLESS],
+    ),
+    MeasurementType(
+        sid="ace-inhibition-tmax",
+        name="ACE inhibition tmax",
+        description="Time from an administration to the maximal inhibition of angiotensin "
+        "converting enzyme ('ACE inhibition maximum').",
+        parents=["ACE inhibition"],
+        synonyms=["time to maximal ACE inhibition"],
+        dtype=DType.NUMERIC,
+        units=TIME_UNITS,
+    ),
+    MeasurementType(
+        sid="ace-inhibition-auec",
+        name="ACE inhibition AUEC",
+        label="Area under the effect curve (AUEC) of the ACE inhibition",
+        description="Area under the ACE inhibition-time curve (area under the effect curve, AUEC). "
+        "Use arbitrary_unit when the publication reports the area in arbitrary units.",
+        parents=["ACE inhibition"],
+        synonyms=["AUEC"],
+        dtype=DType.NUMERIC,
+        units=["percent*hr", "arbitrary_unit"],
     ),
     # FIXME: this must be handled via formulas
     MeasurementType(
@@ -1159,6 +1224,18 @@ MEASUREMENT_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC,
         synonyms=["effective renal plasma flow", "ERPF", "RPF"],
         units=["ml/min/(1.73*m^2)", "ml/min"],
+    ),
+    MeasurementType(
+        sid="filtration-fraction",
+        name="filtration fraction",
+        label="Filtration fraction (FF)",
+        description="Filtration fraction (FF). The fraction of the renal plasma flow that is "
+        "filtered by the glomeruli: the glomerular filtration rate divided by the renal plasma flow "
+        "('gfr' / 'renal plasma flow'), a fraction or a percentage.",
+        parents=["kidney function test"],
+        dtype=DType.NUMERIC,
+        synonyms=["FF", "GFR/RPF"],
+        units=[DIMENSIONLESS],
     ),
     MeasurementType(
         sid="osmolarity",

@@ -1,5 +1,5 @@
 {
-  "version": "561c901c8f6cf5d594c8bdbfed26919440893cadbd0cca6a2137cb09edde5a31",
+  "version": "3d9b5a2fecf940046b94ff1d01cb6067f733b227570dfc4ca3d2dbf1acbb5019",
   "nodes": [
     {
       "sid": "root",
@@ -3406,6 +3406,129 @@
       }
     },
     {
+      "sid": "renin-activity-change-absolute-maximum",
+      "name": "renin activity (change absolute) maximum",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "nmol/ml/min",
+          "ng/ml/min"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "renin-activity-change-absolute"
+      ],
+      "terms": {
+        "synonyms": [
+          "maximal PRA increase",
+          "maximal renin activity increase"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"renin activity (change absolute) maximum\""
+        ],
+        "description": [
+          "\"Maximal absolute increase of the renin activity over its baseline after an administration, read from the renin activity-time curve (the maximal effect, Emax). See also 'renin activity (change absolute) tmax' and 'renin activity (change absolute) AUEC'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "renin-activity-change-absolute-tmax",
+      "name": "renin activity (change absolute) tmax",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "hr"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "renin-activity-change-absolute"
+      ],
+      "terms": {
+        "synonyms": [
+          "time to maximal renin activity increase"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"renin activity (change absolute) tmax\""
+        ],
+        "description": [
+          "\"Time from an administration to the maximal absolute increase of the renin activity ('renin activity (change absolute) maximum').\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "renin-activity-change-absolute-auec",
+      "name": "renin activity (change absolute) AUEC",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "ng/ml/min*hr",
+          "arbitrary_unit"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": true,
+        "deprecated": false
+      },
+      "parents": [
+        "renin-activity-change-absolute"
+      ],
+      "terms": {
+        "synonyms": [
+          "AUEC"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Area under the effect curve (AUEC) of the renin activity increase\""
+        ],
+        "description": [
+          "\"Area under the curve of the absolute renin activity increase over time (area under the effect curve, AUEC). Use arbitrary_unit when the publication reports the area in arbitrary units.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "renin-activity-change-relative",
       "name": "renin activity (change relative)",
       "kind": "measurement",
@@ -3507,6 +3630,127 @@
         ],
         "description": [
           "\"Inhibition of angiotensin converting enzyme (ACE). For absolute ACE activity see 'ACE activity'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "ace-inhibition-maximum",
+      "name": "ACE inhibition maximum",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "ace-inhibition"
+      ],
+      "terms": {
+        "synonyms": [
+          "maximal ACE inhibition"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"ACE inhibition maximum\""
+        ],
+        "description": [
+          "\"Maximal inhibition of angiotensin converting enzyme (ACE) after an administration, read from the inhibition-time curve (the maximal effect, Emax). See also 'ACE inhibition', 'ACE inhibition tmax' and 'ACE inhibition AUEC'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "ace-inhibition-tmax",
+      "name": "ACE inhibition tmax",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "hr"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "ace-inhibition"
+      ],
+      "terms": {
+        "synonyms": [
+          "time to maximal ACE inhibition"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"ACE inhibition tmax\""
+        ],
+        "description": [
+          "\"Time from an administration to the maximal inhibition of angiotensin converting enzyme ('ACE inhibition maximum').\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "ace-inhibition-auec",
+      "name": "ACE inhibition AUEC",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "percent*hr",
+          "arbitrary_unit"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "ace-inhibition"
+      ],
+      "terms": {
+        "synonyms": [
+          "AUEC"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Area under the effect curve (AUEC) of the ACE inhibition\""
+        ],
+        "description": [
+          "\"Area under the ACE inhibition-time curve (area under the effect curve, AUEC). Use arbitrary_unit when the publication reports the area in arbitrary units.\""
         ],
         "dtype": [
           "\"numeric\""
@@ -3853,6 +4097,47 @@
         ],
         "description": [
           "\"Renal plasma flow (RPF). The volume of plasma that flows through the kidneys per unit time, usually measured as the clearance of p-aminohippurate or hippuran (effective renal plasma flow, ERPF). Name the marker in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "filtration-fraction",
+      "name": "filtration fraction",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "kidney-function-test"
+      ],
+      "terms": {
+        "synonyms": [
+          "FF",
+          "GFR/RPF"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Filtration fraction (FF)\""
+        ],
+        "description": [
+          "\"Filtration fraction (FF). The fraction of the renal plasma flow that is filtered by the glomeruli: the glomerular filtration rate divided by the renal plasma flow ('gfr' / 'renal plasma flow'), a fraction or a percentage.\""
         ],
         "dtype": [
           "\"numeric\""
