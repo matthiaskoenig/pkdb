@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2275,
-  "version": "78e179c64197af2d35c670feda2906a3f2b54cf274877a7878f24a11a70cb66e",
-  "inputs_sha256": "a02ad7642e91ad8e43a8915d6335e4dc9e1e58b95a7797e0d45ef7a184ba4dc6",
+  "nodes": 2276,
+  "version": "a045c14d36eed6df78251f96f5654043ee124d4e639b6911ffacc49537e343fb",
+  "inputs_sha256": "24c7a5b8b0e3bb61e58e1ab9d20c5e06477fa6e8c47cba162756d9b4b892323b",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -17,7 +17,7 @@
     "backend/info_nodes/definitions/genetics.py": "e6ad99e128a497fca6efc5ff672a998f1a215ab23e4a7add86ffd385658258f9",
     "backend/info_nodes/definitions/imaging.py": "1919fefb09229a3ca56c799b11e87343eaacf42acb03a11a9fe45d989897c6e7",
     "backend/info_nodes/definitions/lifestyle.py": "3b89e9ffd5d3e6275d01a83ded51fb68e7a027f1e8180df0f2a92d0ac1f30c83",
-    "backend/info_nodes/definitions/measurement.py": "71ea56da6bc801cbbaee1f9a9484cf4318f24c63471f606e2e3fbd390163dc96",
+    "backend/info_nodes/definitions/measurement.py": "39a0d5894e930b9cd31700a2d0535c79bfd3c95f848dd7dea646bdab4588457f",
     "backend/info_nodes/definitions/medical_procedure.py": "68580f15cd53a65557a3f131d0da1c3c7010ee6a7badab747a604b791afdc41b",
     "backend/info_nodes/definitions/method.py": "2e8cd119433890f0fbf44f9930fd2841a712da0cd8d2b681b8736e69d16fc879",
     "backend/info_nodes/definitions/specie.py": "72a4eb98c98cbcfd4671c01ded5f0b6dee249f1cfc6ae357559f5ee144720591",

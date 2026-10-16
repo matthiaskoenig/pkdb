@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "fa3edc64fd0fa5aaccbc04d2f7773d1a004a712f72eb8464918afeb299b3cac2",
+    "version": "9f645b376e6bd87d14bd730c09b14221013392b6bb8676579b6dd503ca0fe51a",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -4993,6 +4993,19 @@
         "units": [
           "Bq/l",
           "cpm/ml"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "radioactivity excretion rate",
+        "sid": "radioactivity-excretion-rate",
+        "dtype": "numeric",
+        "units": [
+          "Bq/min",
+          "cpm/min"
         ],
         "choices": [],
         "can_negative": false,
@@ -12652,5 +12665,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "cdefe148f2f8e1b23c6126f468675527e5fb5dbc41b7bb28a89f102047e5c728"
+  "vocabulary_hash": "cbbc67305a9aaa9eec88f701744accfb1617a1239578fdf9889724f92ebabb2c"
 }
