@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "9f645b376e6bd87d14bd730c09b14221013392b6bb8676579b6dd503ca0fe51a",
+    "version": "a5555e84d6781e0a33a9d080d1b35eb0ac6920a9d809ca76b2ec5a80185d6b58",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -7794,6 +7794,13 @@
         "charge": 0
       },
       {
+        "name": "chlorthalidone",
+        "sid": "chlorthalidone",
+        "mass": 338.772,
+        "formula": "C14H11ClN2O4S",
+        "charge": 0
+      },
+      {
         "name": "chlorzoxazone",
         "sid": "chlorzoxazone",
         "mass": 169.567,
@@ -12526,6 +12533,7 @@
       "urine"
     ],
     "methods": [
+      "ambulatory blood pressure monitoring",
       "assay",
       "breath test assay",
       "calculated",
@@ -12665,5 +12673,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "cbbc67305a9aaa9eec88f701744accfb1617a1239578fdf9889724f92ebabb2c"
+  "vocabulary_hash": "e68843b76f06d5337e7bfb5c41ff3f16591b0d9101985e669a2fea0b1d491206"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "a045c14d36eed6df78251f96f5654043ee124d4e639b6911ffacc49537e343fb",
+  "version": "561c901c8f6cf5d594c8bdbfed26919440893cadbd0cca6a2137cb09edde5a31",
   "nodes": [
     {
       "sid": "root",
@@ -44560,6 +44560,40 @@
       }
     },
     {
+      "sid": "ambulatory-blood-pressure-monitoring",
+      "name": "ambulatory blood pressure monitoring",
+      "kind": "method",
+      "definition": {},
+      "parents": [
+        "assay"
+      ],
+      "terms": {
+        "synonyms": [
+          "24-hour ambulatory blood pressure",
+          "ABPM"
+        ],
+        "annotations": [
+          "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"164783007\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=164783007\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"ambulatory blood pressure monitoring\""
+        ],
+        "description": [
+          "\"Non-invasive measurement of the arterial blood pressure with a portable automatic cuff device that records repeated readings, typically every 15 to 30 minutes over 24 hours, while the subject follows normal daily activities (ABPM). Studies report the 24-hour, daytime, nighttime or hourly means of the readings. See also 'sphygmomanometer' for the office measurement.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"method\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "intra-arterial-catheter",
       "name": "intra-arterial catheter",
       "kind": "method",
@@ -55442,6 +55476,149 @@
         ],
         "description": [
           "\"Hydrochlorothiazide (HCTZ or HCT) is a diuretic medication often used to treat high blood pressure and swelling due to fluid build up.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "chlorthalidone",
+      "name": "chlorthalidone",
+      "kind": "substance",
+      "definition": {
+        "mass": 338.772,
+        "charge": 0,
+        "formula": "C14H11ClN2O4S"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "1-keto-3-(3'-sulfamyl-4'-chlorophenyl)-3-hydroxyisoindoline",
+          "1-oxo-3-(3-sulfamyl-4-chlorophenyl)-3-hydroxyisoindoline",
+          "2-chloro-5-(1-hydroxy-3-oxo-1-isoindolinyl)benzenesulfonamide",
+          "2-chloro-5-(1-hydroxy-3-oxo-2,3-dihydro-1H-isoindol-1-yl)benzenesulfonamide",
+          "2-chloro-5-(2,3-dihydro-1-hydroxy-3-oxo-1H-isoindol-1-yl)benzenesulfonamide",
+          "3-(4'-chloro-3'-sulfamoylphenyl)-3-hydroxyphthalimidine",
+          "3-hydroxy-3-(4-chloro-3-sulfamylphenyl)phthalimidine",
+          "Benzenesulfonamide, 2-Chloro-5-(2,3-dihydro-1-hydroxy-3-oxo-1H-isoindol-1-yl)-",
+          "Benzenesulfonamide, 2-chloro-5-(1-hydroxy-3-oxo-1-isoindolinyl)-",
+          "CHLORTHALIDONE",
+          "Chlorphthalidolone",
+          "Chlortalidone",
+          "Chlorthalidone",
+          "Hygroton",
+          "Thalitone",
+          "chlorphthalidolone",
+          "chlortalidone",
+          "chlorthalidone",
+          "phthalamodine",
+          "phthalamudine"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"A long acting thiazide-like diuretic of the sulfamoylbenzamide class that is devoid of the benzothiadiazine structure. Chlorthalidone directly inhibits sodium and chloride reabsorption on the luminal membrane of the early segment in the distal convoluted tubule (DCT) in the kidney. This leads to an increase in sodium, chloride, bicarbonate, and potassium secretion resulting in the excretion of water. In addition, this agent, like other thiazide diuretics, decreases calcium and uric acid secretion. In addition, this agent inhibits many carbonic anhydrase (CA) isoenzymes. Chlorthalidone is used in the treatment of high blood pressure, edema and congestive heart failure. The elimination half-life is about 40 to 50 hours.\", \"label\": \"Chlorthalidone\", \"relation\": \"BQB_IS\", \"term\": \"C47449\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C47449\"}",
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"chlorthalidone\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:3654\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:3654\"}",
+          "{\"collection\": \"pubchem.compound\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"2732\", \"url\": \"https://pubchem.ncbi.nlm.nih.gov/compound/2732\"}",
+          "{\"collection\": \"inchikey\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"JIVPVXMEBJLZRO-UHFFFAOYSA-N\", \"url\": \"https://www.chemspider.com/search?params=JIVPVXMEBJLZRO-UHFFFAOYSA-N\"}",
+          "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"387324004\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=387324004\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"DB00310\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB00310\"}",
+          "{\"accession\": \"CHEBI:3654\", \"name\": \"chebi\", \"url\": \"https://www.ebi.ac.uk/chebi/CHEBI:3654\"}",
+          "{\"accession\": \"CHEMBL1055\", \"name\": \"chembl\", \"url\": \"https://www.ebi.ac.uk/chembldb/compound/inspect/CHEMBL1055\"}",
+          "{\"accession\": \"26234\", \"name\": \"surechembl\", \"url\": \"https://www.surechembl.org/chemical/26234\"}",
+          "{\"accession\": \"29687442\", \"name\": \"surechembl\", \"url\": \"https://www.surechembl.org/chemical/29687442\"}",
+          "{\"accession\": \"2732\", \"name\": \"pubchem\", \"url\": \"https://pubchem.ncbi.nlm.nih.gov/compound/2732\"}",
+          "{\"accession\": \"Q0MQD1073Q\", \"name\": \"fdasrs\", \"url\": \"https://d20b1koi85gdl2.cloudfront.net/uniisearch/srs/unii/Q0MQD1073Q\"}",
+          "{\"accession\": \"7147\", \"name\": \"gtopdb\", \"url\": \"https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=7147\"}",
+          "{\"accession\": \"PD002421\", \"name\": \"probes_and_drugs\", \"url\": \"https://www.probes-drugs.org/compounds/PD002421\"}",
+          "{\"accession\": \"5949\", \"name\": \"brenda\", \"url\": \"https://www.brenda-enzymes.org/ligand.php?brenda_ligand_id=5949\"}",
+          "{\"accession\": \"HMDB0014455\", \"name\": \"hmdb\", \"url\": \"https://www.hmdb.ca/metabolites/HMDB0014455\"}",
+          "{\"accession\": \"DTXSID4022812\", \"name\": \"comptox\", \"url\": \"https://comptox.epa.gov/dashboard/chemical/details/DTXSID4022812\"}",
+          "{\"accession\": \"NCT00000499\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000499%22\"}",
+          "{\"accession\": \"NCT00000513\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000513%22\"}",
+          "{\"accession\": \"NCT00000514\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000514%22\"}",
+          "{\"accession\": \"NCT00000522\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000522%22\"}",
+          "{\"accession\": \"NCT00000525\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000525%22\"}",
+          "{\"accession\": \"NCT00000542\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000542%22\"}",
+          "{\"accession\": \"NCT00000620\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00000620%22\"}",
+          "{\"accession\": \"NCT00241839\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00241839%22\"}",
+          "{\"accession\": \"NCT00353652\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00353652%22\"}",
+          "{\"accession\": \"NCT00591773\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00591773%22\"}",
+          "{\"accession\": \"NCT00695955\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00695955%22\"}",
+          "{\"accession\": \"NCT00696384\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00696384%22\"}",
+          "{\"accession\": \"NCT00818883\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00818883%22\"}",
+          "{\"accession\": \"NCT00846365\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00846365%22\"}",
+          "{\"accession\": \"NCT00847626\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00847626%22\"}",
+          "{\"accession\": \"NCT00970931\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00970931%22\"}",
+          "{\"accession\": \"NCT00971165\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00971165%22\"}",
+          "{\"accession\": \"NCT00996281\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00996281%22\"}",
+          "{\"accession\": \"NCT01033071\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01033071%22\"}",
+          "{\"accession\": \"NCT01191450\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01191450%22\"}",
+          "{\"accession\": \"NCT01203852\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01203852%22\"}",
+          "{\"accession\": \"NCT01309828\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01309828%22\"}",
+          "{\"accession\": \"NCT01368536\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01368536%22\"}",
+          "{\"accession\": \"NCT01456169\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01456169%22\"}",
+          "{\"accession\": \"NCT01748123\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01748123%22\"}",
+          "{\"accession\": \"NCT01750294\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01750294%22\"}",
+          "{\"accession\": \"NCT01806363\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01806363%22\"}",
+          "{\"accession\": \"NCT01822860\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01822860%22\"}",
+          "{\"accession\": \"NCT01850160\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01850160%22\"}",
+          "{\"accession\": \"NCT02030314\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02030314%22\"}",
+          "{\"accession\": \"NCT02100462\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02100462%22\"}",
+          "{\"accession\": \"NCT02152969\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02152969%22\"}",
+          "{\"accession\": \"NCT02236520\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02236520%22\"}",
+          "{\"accession\": \"NCT02387554\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02387554%22\"}",
+          "{\"accession\": \"NCT02483936\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02483936%22\"}",
+          "{\"accession\": \"NCT02493322\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02493322%22\"}",
+          "{\"accession\": \"NCT02496910\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02496910%22\"}",
+          "{\"accession\": \"NCT02502981\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02502981%22\"}",
+          "{\"accession\": \"NCT02521233\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02521233%22\"}",
+          "{\"accession\": \"NCT02521246\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02521246%22\"}",
+          "{\"accession\": \"NCT02644395\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02644395%22\"}",
+          "{\"accession\": \"NCT02841280\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02841280%22\"}",
+          "{\"accession\": \"NCT02847338\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02847338%22\"}",
+          "{\"accession\": \"NCT02896621\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02896621%22\"}",
+          "{\"accession\": \"NCT03226340\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03226340%22\"}",
+          "{\"accession\": \"NCT03325114\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03325114%22\"}",
+          "{\"accession\": \"NCT03662620\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03662620%22\"}",
+          "{\"accession\": \"NCT03666351\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03666351%22\"}",
+          "{\"accession\": \"NCT03923933\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03923933%22\"}",
+          "{\"accession\": \"NCT03928145\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03928145%22\"}",
+          "{\"accession\": \"NCT04252872\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04252872%22\"}",
+          "{\"accession\": \"NCT04393493\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04393493%22\"}",
+          "{\"accession\": \"NCT04519164\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04519164%22\"}",
+          "{\"accession\": \"NCT04757532\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04757532%22\"}",
+          "{\"accession\": \"NCT04927299\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04927299%22\"}",
+          "{\"accession\": \"NCT05090449\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05090449%22\"}",
+          "{\"accession\": \"NCT05171686\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05171686%22\"}",
+          "{\"accession\": \"NCT05222191\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05222191%22\"}",
+          "{\"accession\": \"NCT05275907\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05275907%22\"}",
+          "{\"accession\": \"NCT05370599\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05370599%22\"}",
+          "{\"accession\": \"NCT05411991\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05411991%22\"}",
+          "{\"accession\": \"NCT05593055\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05593055%22\"}",
+          "{\"accession\": \"NCT05915286\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05915286%22\"}",
+          "{\"accession\": \"NCT05920005\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05920005%22\"}",
+          "{\"accession\": \"NCT06111885\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT06111885%22\"}",
+          "{\"accession\": \"NCT06287580\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT06287580%22\"}",
+          "{\"accession\": \"Chlortalidone\", \"name\": \"wikipedia\", \"url\": \"https://en.wikipedia.org/wiki/Chlortalidone\"}",
+          "{\"accession\": \"Molport-002-736-049\", \"name\": \"molport\", \"url\": \"https://www.molport.com/shop/compound/Molport-002-736-049\"}",
+          "{\"accession\": \"625\", \"name\": \"drugcentral\", \"url\": \"https://drugcentral.org/drugcard/625\"}",
+          "{\"accession\": \"25900\", \"name\": \"bindingdb\", \"url\": \"https://www.bindingdb.org/rwd/bind/chemsearch/marvin/SDFdownload.jsp?download_file=/rwd/bind/downloads/BindingDB_All_202601_tsv.zip25900\"}",
+          "{\"accession\": \"77-36-1\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=77-36-1\"}",
+          "{\"accession\": \"625\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/625\"}"
+        ],
+        "label": [
+          "\"chlorthalidone\""
+        ],
+        "description": [
+          "\"Chlorthalidone (chlortalidone) is a long-acting thiazide-like diuretic of the sulfamoylbenzamide class used to treat high blood pressure and edema.\""
         ],
         "dtype": [
           "\"undefined\""

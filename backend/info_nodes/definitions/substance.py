@@ -1358,6 +1358,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         ],
     ),
     Substance(
+        sid="chlorthalidone",
+        description="Chlorthalidone (chlortalidone) is a long-acting thiazide-like diuretic of the "
+        "sulfamoylbenzamide class used to treat high blood pressure and edema.",
+        annotations=[
+            (BQB.IS, "NCIT:C47449"),
+            (BQB.IS, "CHEBI:3654"),
+            (BQB.IS, "pubchem.compound/2732"),
+            (BQB.IS, "inchikey/JIVPVXMEBJLZRO-UHFFFAOYSA-N"),
+            (BQB.IS, "SNOMEDCT:387324004"),
+        ],
+        synonyms=["chlortalidone"],
+    ),
+    Substance(
         sid="C14-hydrochlorothiazide",
         description="C14 labeled hydrochlorothiazide (HCTZ or HCT).",
         annotations=[
