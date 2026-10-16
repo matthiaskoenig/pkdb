@@ -240,6 +240,20 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=["count rate", "activity concentration", "counts per minute"],
     ),
     MeasurementType(
+        sid="radioactivity-excretion-rate",
+        name="radioactivity excretion rate",
+        description="The radioactivity of a radioactive tracer (e.g. a 14C-labelled drug) that is "
+        "excreted per time, e.g. in the urine: the activity per time (Bq/min), or the count rate of "
+        "a scintillation counter per time of collection (cpm/min, counts per minute of the excreted "
+        "amount per minute) when the counting efficiency is not known. A count rate does not convert "
+        "to an activity. The tracer is the substance; use with the tissue of the route, e.g. urine. "
+        "See also 'radioactivity concentration' and 'excretion rate'.",
+        parents=["excretion rate"],
+        dtype=DType.NUMERIC,
+        units=["Bq/min", "cpm/min"],
+        synonyms=["urinary excretion of label", "excretion of radioactivity"],
+    ),
+    MeasurementType(
         "multiple-dosing-cmin",
         name="muliple_dosing_cmin",
         label="multiple dosing minimal concentration",

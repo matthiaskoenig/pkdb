@@ -55,6 +55,10 @@ def test_count_rate_converts_only_to_count_rates():
     assert convert_value(600, "cpm/ml", "cpm/l") == pytest.approx(600_000)
     with pytest.raises(DimensionalityError):
         convert_value(1, "cpm/ml", "Bq/l")
+    # The urinary excretion of a label, counts per minute excreted per minute.
+    assert convert_value(120, "cpm/min", "cpm/hr") == pytest.approx(7200)
+    with pytest.raises(DimensionalityError):
+        convert_value(1, "cpm/min", "Bq/min")
 
 
 def test_normalization_preserves_raw_values_and_dimensionless_cv():

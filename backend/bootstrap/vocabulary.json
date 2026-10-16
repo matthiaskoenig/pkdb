@@ -1,5 +1,5 @@
 {
-  "version": "78e179c64197af2d35c670feda2906a3f2b54cf274877a7878f24a11a70cb66e",
+  "version": "a045c14d36eed6df78251f96f5654043ee124d4e639b6911ffacc49537e343fb",
   "nodes": [
     {
       "sid": "root",
@@ -723,6 +723,48 @@
         ],
         "description": [
           "\"The radioactivity of a radioactive tracer (e.g. 99mTc-DTPA) per volume of a sample such as plasma: the activity (Bq/l), or the count rate of a well or scintillation counter (counts per minute, cpm/ml) when the counting efficiency is not known. A count rate does not convert to an activity. The tracer is the substance; state corrections for physical decay or background in the comment.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "radioactivity-excretion-rate",
+      "name": "radioactivity excretion rate",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "Bq/min",
+          "cpm/min"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "excretion-rate"
+      ],
+      "terms": {
+        "synonyms": [
+          "excretion of radioactivity",
+          "urinary excretion of label"
+        ],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"radioactivity excretion rate\""
+        ],
+        "description": [
+          "\"The radioactivity of a radioactive tracer (e.g. a 14C-labelled drug) that is excreted per time, e.g. in the urine: the activity per time (Bq/min), or the count rate of a scintillation counter per time of collection (cpm/min, counts per minute of the excreted amount per minute) when the counting efficiency is not known. A count rate does not convert to an activity. The tracer is the substance; use with the tissue of the route, e.g. urine. See also 'radioactivity concentration' and 'excretion rate'.\""
         ],
         "dtype": [
           "\"numeric\""
