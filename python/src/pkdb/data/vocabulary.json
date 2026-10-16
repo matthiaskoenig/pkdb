@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "a5555e84d6781e0a33a9d080d1b35eb0ac6920a9d809ca76b2ec5a80185d6b58",
+    "version": "ebe9ec579c3493d666663a92f4a571f2f6ded518954855db690425c99886faf9",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -242,6 +242,43 @@
         ],
         "choices": [],
         "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "ACE inhibition AUEC",
+        "sid": "ace-inhibition-auec",
+        "dtype": "numeric",
+        "units": [
+          "percent*hr",
+          "arbitrary_unit"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "ACE inhibition maximum",
+        "sid": "ace-inhibition-maximum",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "ACE inhibition tmax",
+        "sid": "ace-inhibition-tmax",
+        "dtype": "numeric",
+        "units": [
+          "hr"
+        ],
+        "choices": [],
+        "can_negative": false,
         "time_required": false,
         "deprecated": false
       },
@@ -2854,6 +2891,18 @@
         "deprecated": false
       },
       {
+        "name": "filtration fraction",
+        "sid": "filtration-fraction",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "fraction_absorbed",
         "sid": "fraction-absorbed",
         "dtype": "numeric",
@@ -5188,6 +5237,44 @@
           "nmol/ml/min",
           "ng/ml/min",
           "ng/100/ml"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "renin activity (change absolute) AUEC",
+        "sid": "renin-activity-change-absolute-auec",
+        "dtype": "numeric",
+        "units": [
+          "ng/ml/min*hr",
+          "arbitrary_unit"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "renin activity (change absolute) maximum",
+        "sid": "renin-activity-change-absolute-maximum",
+        "dtype": "numeric",
+        "units": [
+          "nmol/ml/min",
+          "ng/ml/min"
+        ],
+        "choices": [],
+        "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "renin activity (change absolute) tmax",
+        "sid": "renin-activity-change-absolute-tmax",
+        "dtype": "numeric",
+        "units": [
+          "hr"
         ],
         "choices": [],
         "can_negative": true,
@@ -12673,5 +12760,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "e68843b76f06d5337e7bfb5c41ff3f16591b0d9101985e669a2fea0b1d491206"
+  "vocabulary_hash": "21b3f27ce09109b3408335748cd75923afd66b4f944e67b0fb332c20c9e4e72c"
 }
