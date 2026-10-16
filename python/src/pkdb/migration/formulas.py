@@ -106,14 +106,18 @@ MAX_RANGE = 10_000
 class References:
     """The cells of its sheet that a formula reads.
 
-    `cells` are the cells of the same sheet, as (row, column letter);
-    `outside` says whether it also reads cells of other sheets, whole columns
-    or rows, ranges of more than `MAX_RANGE` cells, or names, or cannot be
-    parsed.
+    `cells` are the cells of the same sheet, as (row, column letter), and
+    `ranged` those of them that it reads through a range such as `B3:C4`;
+    `functions` are the names of the functions that it calls, in capitals,
+    such as `ABS`; `outside` says whether it also reads cells of other sheets,
+    whole columns or rows, ranges of more than `MAX_RANGE` cells, or names, or
+    cannot be parsed.
     """
 
     cells: frozenset[tuple[int, str]]
     outside: bool
+    ranged: frozenset[tuple[int, str]] = frozenset()
+    functions: frozenset[str] = frozenset()
 
 
 def sheet_formulas(
@@ -147,8 +151,12 @@ def references(formula: str, sheet: str) -> References:
     except TokenizerError:
         return References(frozenset(), outside=True)
     cells: set[tuple[int, str]] = set()
+    ranged: set[tuple[int, str]] = set()
+    functions: set[str] = set()
     outside = False
     for token in tokens:
+        if token.type == Token.FUNC and token.subtype == Token.OPEN:
+            functions.add(token.value.rstrip("(").upper().removeprefix("_XLFN."))
         if token.type != Token.OPERAND or token.subtype != Token.RANGE:
             continue
         place, _, value = token.value.rpartition("!")
@@ -166,9 +174,14 @@ def references(formula: str, sheet: str) -> References:
         if width * height > MAX_RANGE:
             outside = True
             continue
-        cells.update(
+        read = {
             (row, get_column_letter(column))
             for row in range(min(rows), max(rows) + 1)
             for column in range(min(columns), max(columns) + 1)
-        )
-    return References(frozenset(cells), outside)
+        }
+        cells |= read
+        if len(corners) == 2:
+            ranged |= read
+    return References(
+        frozenset(cells), outside, frozenset(ranged), frozenset(functions)
+    )

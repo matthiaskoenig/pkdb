@@ -209,20 +209,63 @@ def test_counts_and_times_are_no_unmapped_values(tmp_path):
     assert _converted(tmp_path, header, *rows) == {}
 
 
-def test_numbers_that_a_formula_of_a_kept_cell_reads_are_held(tmp_path):
-    # The name of the group is made of the index, and the sd is computed from
-    # the cv, which the sd and the mean determine: the record holds both.
-    header = ["idx", "group", "mean", "sd", "cv"]
+def test_numbers_that_a_formula_of_a_kept_cell_determines_are_held(tmp_path):
+    # The label is made of the index, the sd is computed from the cv and the
+    # mean, and the se is the distance of the digitized end from the mean: each
+    # formula reads one number besides kept cells, so the record holds it.
+    output = {**CMAX, "label": "col==label", "se": "col==se"}
+    header = ["idx", "group", "label", "mean", "sd", "cv", "se", "mean_pm"]
     rows = [
         [
-            1,
-            Formula('="all"&IF(A3>1,A3,"")', "all"),
+            7,
+            "all",
+            Formula('="cmax_"&A3', "cmax_7"),
             2.5,
-            Formula("=E3/100*C3", 0.5),
+            Formula("=F3/100*D3", 0.5),
             20,
+            Formula("=ABS(H3-D3)", 0.25),
+            2.75,
         ]
     ]
-    assert _converted(tmp_path, header, *rows) == {}
+    assert _converted(tmp_path, header, *rows, output=output) == {}
+
+
+@pytest.mark.parametrize(
+    ("header", "row", "lost"),
+    [
+        # A mean of the individual values of the row determines none of them.
+        (
+            ["group", "mean", "sd", "s1", "s2", "s3"],
+            ["all", Formula("=AVERAGE(D3:F3)", 2.5), 0.8, 1.5, 2, 4],
+            [("s1", "1.5"), ("s2", "2"), ("s3", "4")],
+        ),
+        # An sd computed from a confidence interval determines neither limit.
+        (
+            ["group", "count", "mean", "sd", "ci_low", "ci_high"],
+            ["all", 16, 2.5, Formula("=(F3-E3)/3.92*SQRT(B3)", 2.0408), 2, 3],
+            [("ci_low", "2"), ("ci_high", "3")],
+        ),
+        # A sum over a range determines no cell, not even the only unknown one.
+        (
+            ["group", "mean", "sd", "cv"],
+            ["all", 2.5, Formula("=SUM(D3:D3)/100*B3", 0.5), 20],
+            [("cv", "20")],
+        ),
+        # A maximum does not tell its other argument.
+        (
+            ["group", "mean", "sd", "max"],
+            ["all", Formula("=MAX(D3,2.5)", 2.5), 0.4, 2],
+            [("max", "2")],
+        ),
+    ],
+    ids=["average", "confidence interval", "range", "maximum"],
+)
+def test_numbers_that_an_aggregate_of_a_kept_cell_reads_are_found(
+    tmp_path, header, row, lost
+):
+    count = {"count": "col==count"} if "count" in header else {}
+    output = {**CMAX, **count}
+    assert _converted(tmp_path, header, row, output=output) == {("Tab2", 3): lost}
 
 
 def test_numbers_computed_from_kept_cells_of_other_rows_are_held(tmp_path):

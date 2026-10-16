@@ -11,11 +11,14 @@ gate refuses both, a dropped and a converted row with such a number
 (`unmapped_value`).
 
 A number that a kept record of the row holds is not lost: a column that its
-template maps, a column that the workbook formula of such a mapped cell reads,
-such as the `mean + se` column of an error bar `ABS(X - mean)`, a column that a
-formula computes from these alone, such as an sd computed from that se and the
-count, and a copy of a statistic of the record, such as a `value` column that
-repeats the mapped `mean` or a `mean_pm` column that is the mean plus the sd.
+template maps, a column whose number the workbook formula of a held cell
+determines, such as the `mean + se` column of an error bar `ABS(X - mean)`, a
+column that a formula computes from held cells alone, such as an sd computed
+from that se and the count, and a copy of a statistic of the record, such as a
+`value` column that repeats the mapped `mean` or a `mean_pm` column that is the
+mean plus the sd. An aggregate determines none of its inputs: the individual
+values that a mapped mean averages or the confidence limits that an sd is
+computed from are lost (see `_held`).
 """
 
 import math
@@ -24,6 +27,7 @@ from collections.abc import Collection
 from pathlib import Path
 from typing import NamedTuple
 
+from pkdb.importers.expressions import clean
 from pkdb.importers.workbook import table_reader
 from pkdb.migration.formulas import references, sheet_formulas
 from pkdb.schemas.source import SourceBundle, SourceLocation
@@ -107,48 +111,100 @@ def _row(source: SourceLocation | None) -> Row | None:
 Cell = tuple[int, str]
 
 
+# The functions whose result determines their argument, up to the sign that
+# ABS drops: a formula of a held cell that reads one unknown number through
+# these, arithmetic and text joins alone determines that number. Every other
+# function, such as SUM, AVERAGE, STDEV, MIN, MAX, ROUND or IF, determines none
+# of its inputs.
+INVERTIBLE = frozenset({"ABS", "SQRT", "EXP", "LN", "LOG", "LOG10"})
+
+
 def _held(
-    formulas: dict[Cell, str], seeds: set[Cell], plain: set[str], sheet: str
+    formulas: dict[Cell, str],
+    seeds: set[Cell],
+    values: dict[Cell, object],
+    plain: set[str],
+    sheet: str,
 ) -> set[Cell]:
     """The cells of a sheet whose numbers the records that are kept hold.
 
-    `seeds` are the cells that the templates of the kept records map and
-    `plain` the letters of the columns that hold no value, such as the count.
-    The kept records hold the seeds; the cells of the same row that the
-    workbook formulas of held cells read, at any depth, such as the
-    `mean + se` column of an error bar `ABS(X - mean)` or an index that a
-    name is made of; and the cells whose formulas compute a number only from
-    held cells and plain cells of any rows of the sheet, such as an sd
-    computed from that se and the count, or a change computed from the mean
-    and the mean of the baseline row. A cell of another row that a formula
-    reads is held only by the records of that row, as the sum of the cvs of
-    three rows holds none of them. A formula that reads other sheets, whole
-    columns or names computes no number of the sheet alone.
+    `seeds` are the cells that the templates of the kept records map,
+    `values` the cells of the sheet by row and column letter and `plain` the
+    letters of the columns that hold no value, such as the count. The kept
+    records hold the seeds and every cell that held cells determine through
+    workbook formulas:
+
+    - a cell whose formula computes its number only from held cells and
+      plain cells of any rows of the sheet, such as an sd computed from a held
+      se and the count, a change computed from the mean and the mean of the
+      baseline row, or hours computed from a clock time; a constant such as
+      `=0.5` reads no cell and is a number of its own;
+    - the input that the formula of a held cell with a value determines: the
+      only number of the formula that is neither held nor plain, in the row of
+      the formula, read as a single cell, not through a range, by a formula
+      of arithmetic and the functions `INVERTIBLE` alone. So `=X3`, `=X3*2`,
+      `=ABS(X3-M3)` with M3 held, `=X3/100*M3` and a name `="S_"&X3` determine
+      X3. An aggregate does not: `=AVERAGE(P3:U3)` determines none of the
+      individual values it averages, `=(Q3-P3)/3.92*SQRT(C3)` neither of the
+      confidence limits, `=MAX(X3,M3)` not X3, and a formula of another row,
+      such as the error bar `=ABS(N99-M100)` of row 100, no cell of row 99.
+
+    A formula that reads other sheets, whole columns or names determines no
+    cell.
     """
     read = {cell: references(formula, sheet) for cell, formula in formulas.items()}
+    readers: dict[Cell, list[Cell]] = defaultdict(list)
+    for cell, cells in read.items():
+        for other in cells.cells:
+            readers[other].append(cell)
     held = set(seeds)
-    pending = list(seeds)
+
+    def unknown(cells: frozenset[Cell]) -> set[Cell]:
+        return {
+            cell
+            for cell in cells - held
+            if cell[1] not in plain and _number(values.get(cell)) is not None
+        }
+
+    def determined(cell: Cell) -> Cell | None:
+        cells = read[cell]
+        if (
+            cells.outside
+            or not cells.functions <= INVERTIBLE
+            or not _filled(values.get(cell))
+            or len(missing := unknown(cells.cells)) != 1
+        ):
+            return None
+        [other] = missing
+        return other if other[0] == cell[0] and other not in cells.ranged else None
+
+    pending = list(read)
     while pending:
-        number, _ = cell = pending.pop()
-        if (cells := read.get(cell)) is None:
-            continue
-        for other in cells.cells - held:
-            if other[0] == number:
-                held.add(other)
-                pending.append(other)
-    computed = True
-    while computed:
-        computed = False
-        for cell, cells in read.items():
-            if (
-                cell not in held
-                and not cells.outside
-                and cells.cells & held
-                and all(other in held or other[1] in plain for other in cells.cells)
-            ):
-                held.add(cell)
-                computed = True
+        cell = pending.pop()
+        cells = read[cell]
+        if cell in held:
+            new = determined(cell)
+        elif (
+            not cells.outside
+            and cells.cells
+            and all(other in held or other[1] in plain for other in cells.cells)
+        ):
+            new = cell
+        else:
+            new = None
+        if new is not None and new not in held:
+            held.add(new)
+            pending += readers[new]
+            if new in read:
+                pending.append(new)
     return held
+
+
+def _filled(cell: object) -> bool:
+    """Whether a cell holds a number or text, not nothing or `NA`."""
+    if isinstance(cell, str):
+        return clean(cell) not in (None, "")
+    return _number(cell) is not None
 
 
 class RowNumbers(NamedTuple):
@@ -308,7 +364,13 @@ def _held_headers(
                 for letter, header in headers.items()
                 if not _value_column(header)
             }
-            for number, letter in _held(formulas, seeds, plain, sheet):
+            values = {
+                (number, columns[header]): cell
+                for number, (cells, _) in table.items()
+                for header, cell in cells.items()
+                if header in columns
+            }
+            for number, letter in _held(formulas, seeds, values, plain, sheet):
                 if (row := (file, sheet, number)) in rows and letter in headers:
                     found.setdefault(row, set()).add(headers[letter])
     return found

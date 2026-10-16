@@ -93,3 +93,11 @@ def test_references_are_the_cells_of_the_sheet_that_a_formula_reads(
 ):
     read = references(formula, "Tab2")
     assert (set(read.cells), read.outside) == (cells, outside)
+
+
+def test_references_tell_ranges_and_functions():
+    # A cell read through a range is aggregated; a single reference is not.
+    read = references("=ABS(E3-F3)+_xlfn.STDEV.S(G3:H3)", "Tab2")
+    assert read.ranged == {(3, "G"), (3, "H")}
+    assert read.functions == {"ABS", "STDEV.S"}
+    assert set(read.cells) == {(3, "E"), (3, "F"), (3, "G"), (3, "H")}
