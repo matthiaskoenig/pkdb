@@ -159,7 +159,7 @@ class Formula(NamedTuple):
     """A formula cell and the value that a spreadsheet application saved with it."""
 
     text: str
-    value: float
+    value: float | str
 
 
 # One row of Tab2 holds the cmax and the AUC of the group: the `||` template
@@ -202,7 +202,7 @@ SPLIT_ROW = [
 ]
 
 
-def _save_formula_values(path: Path, values: dict[int, dict[str, float]]) -> None:
+def _save_formula_values(path: Path, values: dict[int, dict[str, float | str]]) -> None:
     """Write the saved values of formula cells, which openpyxl leaves empty.
 
     `values` maps the index of a sheet (1 for the first) to cell values by
@@ -214,9 +214,13 @@ def _save_formula_values(path: Path, values: dict[int, dict[str, float]]) -> Non
         for info, data in files.items():
             index = re.fullmatch(r"xl/worksheets/sheet([0-9]+)\.xml", info.filename)
             for cell, value in values.get(int(index[1]) if index else 0, {}).items():
+                # A formula with text, such as a name, saves its value as a string.
+                kind, saved = (
+                    ("str", value) if isinstance(value, str) else ("n", repr(value))
+                )
                 data, count = re.subn(
                     rf'<c r="{cell}"><f>(.*?)</f><v ?/></c>'.encode(),
-                    rf'<c r="{cell}" t="n"><f>\1</f><v>{value!r}</v></c>'.encode(),
+                    rf'<c r="{cell}" t="{kind}"><f>\1</f><v>{saved}</v></c>'.encode(),
                     data,
                 )
                 assert count == 1, f"no formula cell {cell} in {info.filename}"
@@ -235,7 +239,7 @@ def write_sheets(folder: Path, name: str, sheets: dict, *, workbook: bool) -> No
     if workbook:
         book = openpyxl.Workbook()
         book.remove(book.active)
-        values: dict[int, dict[str, float]] = {}
+        values: dict[int, dict[str, float | str]] = {}
         for index, (title, rows) in enumerate(sheets.items(), 1):
             sheet = book.create_sheet(title)
             sheet.append(["Curator notes"])

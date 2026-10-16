@@ -29,6 +29,9 @@ from pkdb.references import ReferenceResolver
 
 OUTPUT, TIMECOURSE = STUDY["outputset"]["outputs"]
 X_OUTPUT, Y_OUTPUT = SCATTER_OUTPUTS
+# The Tab2 of an output whose template maps the mean only: a number in an
+# unmapped sd column would be lost (`unmapped_value`).
+MEAN_ONLY = {**SHEETS, "Tab2": [["mean"], [2.5]]}
 
 
 def converted(tmp_path, v1):
@@ -134,7 +137,7 @@ def test_a_group_with_count_one_is_an_intended_change(tmp_path, sf_vocabulary):
     study = with_outputs(
         output, TIMECOURSE, groupset={"groups": [group]}, individualset={}
     )
-    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    v1 = v1_study(tmp_path / "v1", study, MEAN_ONLY, IMAGES)
     result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
     assert result.outcome == "intended", result.differences
     assert [(c.kind, c.count, c.examples) for c in result.changes] == [
@@ -584,6 +587,36 @@ def test_a_dropped_row_with_numbers_in_unmapped_columns_is_a_mismatch(
     assert [(c.kind, c.count) for c in result.changes] == [("valueless_row", 2)]
 
 
+@pytest.mark.parametrize(
+    ("workbook", "place"),
+    [(True, "Example.xlsx Tab2 row 3"), (False, ".Example_Tab2.tsv row 2")],
+    ids=["workbook", "hidden tables"],
+)
+def test_a_converted_row_with_numbers_in_unmapped_columns_is_a_mismatch(
+    tmp_path, sf_vocabulary, workbook, place
+):
+    # The cmax converts with its mean and sd, but the cv and the range of the
+    # row would be lost, as the template does not map them.
+    study = with_outputs({**OUTPUT, "group": "col==group"}, TIMECOURSE)
+    tab2 = [["group", "mean", "sd", "cv", "min", "max"], ["all", 2.5, 0.5, 20, 1, 4]]
+    v1 = v1_study(
+        tmp_path / "v1", study, {**SHEETS, "Tab2": tab2}, IMAGES, workbook=workbook
+    )
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.issues == ["unmapped_value"]
+    assert [(d.path, d.a, d.b) for d in result.differences] == [
+        (
+            f"unmapped_value {place}, subject all, cmax",
+            "cv 20, min 1, max 4",
+            "The format 1 row holds numbers in columns cv, min, max, which "
+            "study.json does not map, so the converted row would lose them. Map "
+            "the columns in study.json, or remove the numbers if they are no "
+            "values of the row.",
+        )
+    ]
+
+
 def test_mapping_the_columns_converts_the_rows(tmp_path, sf_vocabulary):
     output = {**OUTPUT, "group": "col==group", "min": "col==min", "max": "col==max"}
     tab2 = [[*row[:3], *row[4:]] for row in UNMAPPED_TAB2]
@@ -923,9 +956,10 @@ def test_a_geometric_mean_moved_to_gmean_is_an_intended_change(
     tmp_path, sf_vocabulary, spread
 ):
     output = {**OUTPUT, "calculation_type": "geometric mean"}
+    sheets = SHEETS if spread else MEAN_ONLY
     if not spread:
         del output["sd"]
-    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), sheets, IMAGES)
     result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
     assert result.outcome == "intended", result.differences
     assert [(c.kind, c.count) for c in result.changes] == [("gmean", 1)]
@@ -1014,7 +1048,7 @@ def test_a_retired_calculation_is_an_intended_change(tmp_path, sf_vocabulary):
     # A geometric mean reported as a median: only the calculation is retired.
     median = {key: v for key, v in OUTPUT.items() if key not in ("mean", "sd")}
     output = {**median, "median": "col==mean", "calculation_type": "geometric mean"}
-    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), MEAN_ONLY, IMAGES)
     result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
     assert result.outcome == "intended", result.differences
     assert [(c.kind, c.count) for c in result.changes] == [("retired_calculation", 1)]

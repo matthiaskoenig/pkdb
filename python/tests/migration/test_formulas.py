@@ -2,7 +2,7 @@ import pytest
 from migration_fixtures import Formula, v1_study
 
 from pkdb.importers.folder import load_folder, parse_bundle
-from pkdb.migration.formulas import error_bars
+from pkdb.migration.formulas import error_bars, references
 
 
 def study_with(root, spread, *, column="sd", upper=3.25):
@@ -73,3 +73,31 @@ def test_an_error_bar_below_zero_keeps_the_spread(tmp_path):
 def test_a_spread_without_a_formula_is_no_error_bar(tmp_path):
     workbook, study = study_with(tmp_path, 0.75)
     assert error_bars(workbook, study) == {}
+
+
+@pytest.mark.parametrize(
+    ("formula", "cells", "outside"),
+    [
+        ("=ABS($E3-F$4)", {(3, "E"), (4, "F")}, False),
+        ("=AVERAGE(B3:C4)", {(3, "B"), (3, "C"), (4, "B"), (4, "C")}, False),
+        ("='Tab2'!B3*2", {(3, "B")}, False),
+        ("=Fig1!B3+B3", {(3, "B")}, True),
+        ("=SUM(B:B)", set(), True),
+        ("=SUM(B1:B20000)", set(), True),
+        ("=dose*B3", {(3, "B")}, True),
+    ],
+    ids=["cells", "range", "own sheet", "other sheet", "column", "large", "name"],
+)
+def test_references_are_the_cells_of_the_sheet_that_a_formula_reads(
+    formula, cells, outside
+):
+    read = references(formula, "Tab2")
+    assert (set(read.cells), read.outside) == (cells, outside)
+
+
+def test_references_tell_ranges_and_functions():
+    # A cell read through a range is aggregated; a single reference is not.
+    read = references("=ABS(E3-F3)+_xlfn.STDEV.S(G3:H3)", "Tab2")
+    assert read.ranged == {(3, "G"), (3, "H")}
+    assert read.functions == {"ABS", "STDEV.S"}
+    assert set(read.cells) == {(3, "E"), (3, "F"), (3, "G"), (3, "H")}

@@ -29,10 +29,16 @@ from pkdb.migration.rows import (
     valueless,
 )
 from pkdb.migration.sources import documented_sources, observation_source, read_files
-from pkdb.migration.unmapped import unmapped_values
+from pkdb.migration.unmapped import RowNumbers, unmapped_values
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.source import SourceBundle
-from pkdb.schemas.study import CanonicalStudy, Measurement, Observation, Statistics
+from pkdb.schemas.study import (
+    CanonicalStudy,
+    Measurement,
+    Observation,
+    Statistics,
+    Subject,
+)
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.tables import has_header, table_file
@@ -456,8 +462,8 @@ class _Conversion(NamedTuple):
     the parsed format 1 records that it dropped as rows without any value, by
     key, `timed` the measurements whose characteristica got time NR,
     `counts` the counts of the format 1 tables that it wrote, by key, and
-    `unmapped` the dropped rows whose format 1 row holds numbers in columns
-    that study.json does not map (`unmapped_value`).
+    `unmapped` the format 1 rows, dropped or converted, that hold numbers in
+    columns that study.json does not map (`unmapped_value`).
     """
 
     arrays: Collection[str] = frozenset()
@@ -468,8 +474,8 @@ class _Conversion(NamedTuple):
 
 
 DROPPED_WITH_DATA = "dropped record with data"
-# The issue code of a dropped row whose format 1 row holds numbers in columns
-# that study.json does not map.
+# The issue code of a format 1 row, dropped or converted, that holds numbers in
+# columns that study.json does not map.
 UNMAPPED = "unmapped_value"
 
 
@@ -914,14 +920,17 @@ def _unmapped(
     images: frozenset[str],
     arrays: frozenset[str],
 ) -> list[Difference]:
-    """The dropped rows whose format 1 row holds numbers that study.json does not map.
+    """The format 1 rows that hold numbers that study.json does not map.
 
-    Each names the table that the row would be in, its format 1 place and
-    the columns with their numbers, like the dropped rows of migration.md.
+    A dropped row names the table that the row would be in, its format 1
+    place and the columns with their numbers, like the dropped rows of
+    migration.md. A row that converts names its format 1 place and what its
+    records are about.
     """
-    numbers = unmapped_values(bundle, parsed, dropped)
-    if not numbers:
+    found = unmapped_values(bundle, parsed, dropped)
+    if not found:
         return []
+    numbers = {key: row.numbers for row in found for key in row.dropped}
     name = parsed.metadata.name
     places: list[tuple[str, str]] = []
     for subject in [*parsed.groups, *parsed.individuals]:
@@ -939,36 +948,86 @@ def _unmapped(
             subject = record.group or record.individual
             row = dropped_row(table, record, subject, record.label)
             places.append((record.key, row.detail))
-    return [
+    differences = [
         Difference(
             path=f"{UNMAPPED} {place}",
-            a=", ".join(f"{column} {value}" for column, value in numbers[key]),
+            a=_numbers(numbers[key]),
             b=_unmapped_message([column for column, _ in numbers[key]]),
         )
         for key, place in places
     ]
-
-
-def _unmapped_message(columns: list[str]) -> str:
-    named = ", ".join(columns)
-    if len(columns) == 1:
-        return (
-            f"The format 1 row holds a number in column {named}, which study.json "
-            "does not map, so the row has no value and would be dropped. Map the "
-            "column in study.json, or remove the number if it is no value of the row."
+    differences += [
+        Difference(
+            path=f"{UNMAPPED} {_converted_place(parsed, row)}",
+            a=_numbers(row.numbers),
+            b=_unmapped_message([column for column, _ in row.numbers], kept=True),
         )
+        for row in found
+        if not row.dropped
+    ]
+    return differences
+
+
+def _numbers(numbers: list[tuple[str, str]]) -> str:
+    return ", ".join(f"{column} {value}" for column, value in numbers)
+
+
+def _converted_place(parsed: CanonicalStudy, row: RowNumbers) -> str:
+    """Such as `Example.xlsx Tab2 row 3, subject all, tmax, cmax`.
+
+    The format 1 place of a row that converts, the subjects of its records
+    and their measurements, each named once.
+    """
+    file, sheet, number = row.row
+    owners = {
+        record.key: subject.name
+        for subject in [*parsed.groups, *parsed.individuals]
+        for record in subject.characteristica
+    }
+    subjects: list[str] = []
+    measurements: list[str] = []
+    for record in row.kept:
+        subject = (
+            getattr(record, "group", None)
+            or getattr(record, "individual", None)
+            or owners.get(record.key)
+            or (record.name if isinstance(record, Subject) else None)
+        )
+        if subject and subject not in subjects:
+            subjects.append(subject)
+        measurement = getattr(record, "measurement_type", None)
+        if measurement and measurement not in measurements:
+            measurements.append(measurement)
+    parts = [" ".join(part for part in (file, sheet, f"row {number}") if part)]
+    parts += [f"subject {', '.join(subjects)}"] if subjects else []
+    return ", ".join([*parts, *measurements])
+
+
+def _unmapped_message(columns: list[str], *, kept: bool = False) -> str:
+    named = ", ".join(columns)
+    one = len(columns) == 1
+    holds = f"a number in column {named}" if one else f"numbers in columns {named}"
+    lost = (
+        f"so the converted row would lose {'it' if one else 'them'}"
+        if kept
+        else "so the row has no value and would be dropped"
+    )
+    fix = (
+        "Map the column in study.json, or remove the number if it is no value "
+        "of the row."
+        if one
+        else "Map the columns in study.json, or remove the numbers if they are "
+        "no values of the row."
+    )
     return (
-        f"The format 1 row holds numbers in columns {named}, which study.json "
-        "does not map, so the row has no value and would be dropped. Map the "
-        "columns in study.json, or remove the numbers if they are no values of "
-        "the row."
+        f"The format 1 row holds {holds}, which study.json does not map, {lost}. {fix}"
     )
 
 
 def _refuse_unmapped(
     result: StudyResult, unmapped: Sequence[Difference]
 ) -> StudyResult:
-    """A mismatch when dropped rows would lose numbers that study.json does not map."""
+    """A mismatch when format 1 rows would lose numbers that study.json does not map."""
     if not unmapped:
         return result
     return result.model_copy(

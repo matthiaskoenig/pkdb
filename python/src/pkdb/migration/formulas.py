@@ -2,6 +2,7 @@
 
 import re
 from collections import defaultdict
+from collections.abc import Collection
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -96,73 +97,91 @@ def error_bars(workbook: Path, study: CanonicalStudy) -> dict[str, tuple[float, 
     return found
 
 
+# A range of more cells than this, such as a whole column, reads no cells that
+# a record could hold one by one.
+MAX_RANGE = 10_000
+
+
 @dataclass(frozen=True)
 class References:
-    """The cells that a formula of a row reads.
+    """The cells of its sheet that a formula reads.
 
-    `columns` are the column letters of the cells of the same row and sheet;
-    `outside` says whether it also reads cells of other rows or sheets, whole
-    columns or rows, or names, or cannot be parsed.
+    `cells` are the cells of the same sheet, as (row, column letter), and
+    `ranged` those of them that it reads through a range such as `B3:C4`;
+    `functions` are the names of the functions that it calls, in capitals,
+    such as `ABS`; `outside` says whether it also reads cells of other sheets,
+    whole columns or rows, ranges of more than `MAX_RANGE` cells, or names, or
+    cannot be parsed.
     """
 
-    columns: frozenset[str]
+    cells: frozenset[tuple[int, str]]
     outside: bool
+    ranged: frozenset[tuple[int, str]] = frozenset()
+    functions: frozenset[str] = frozenset()
 
 
-def row_formulas(
-    workbook: Path, rows: dict[str, set[int]]
-) -> dict[tuple[str, int], dict[str, str]]:
-    """The formulas of the wanted rows of each sheet, by column letter."""
+def sheet_formulas(
+    workbook: Path, sheets: Collection[str]
+) -> dict[str, dict[tuple[int, str], str]]:
+    """The formulas of each wanted sheet, by row and column letter."""
     book = openpyxl.load_workbook(workbook, read_only=True, data_only=False)
-    found: dict[tuple[str, int], dict[str, str]] = {}
+    found: dict[str, dict[tuple[int, str], str]] = {}
     try:
-        for name, numbers in rows.items():
-            if name not in book.sheetnames or not numbers:
+        for name in sheets:
+            if name not in book.sheetnames:
                 continue
             sheet = book[name]
             # Some writers save wrong sheet dimensions, which would cut rows short.
             sheet.reset_dimensions()
-            cells = sheet.iter_rows(
-                min_row=min(numbers), max_row=max(numbers), values_only=True
-            )
-            for number, values in enumerate(cells, min(numbers)):
-                if number not in numbers:
-                    continue
-                found[name, number] = {
-                    get_column_letter(column): value
-                    for column, value in enumerate(values, 1)
-                    if isinstance(value, str) and value.startswith("=")
-                }
+            found[name] = {
+                (number, get_column_letter(column)): value
+                for number, values in enumerate(sheet.iter_rows(values_only=True), 1)
+                for column, value in enumerate(values, 1)
+                if isinstance(value, str) and value.startswith("=")
+            }
     finally:
         book.close()
     return found
 
 
-def references(formula: str, sheet: str, row: int) -> References:
-    """The cells that a formula of `row` of `sheet` reads."""
+def references(formula: str, sheet: str) -> References:
+    """The cells of `sheet` that a formula of that sheet reads."""
     try:
         tokens = Tokenizer(formula).items
     except TokenizerError:
         return References(frozenset(), outside=True)
-    columns: set[str] = set()
+    cells: set[tuple[int, str]] = set()
+    ranged: set[tuple[int, str]] = set()
+    functions: set[str] = set()
     outside = False
     for token in tokens:
+        if token.type == Token.FUNC and token.subtype == Token.OPEN:
+            functions.add(token.value.rstrip("(").upper().removeprefix("_XLFN."))
         if token.type != Token.OPERAND or token.subtype != Token.RANGE:
             continue
-        place, _, cells = token.value.rpartition("!")
+        place, _, value = token.value.rpartition("!")
         if place and place.strip("'").replace("''", "'") != sheet:
             outside = True
             continue
-        corners = [re.fullmatch(CELL, corner) for corner in cells.split(":")]
-        indexes = [
-            column_index_from_string(corner[1])
-            for corner in corners
-            if corner is not None and int(corner[2]) == row
-        ]
-        if len(indexes) != len(corners) or len(indexes) > 2:
+        corners = [re.fullmatch(CELL, corner) for corner in value.split(":")]
+        if not corners or len(corners) > 2 or None in corners:
             outside = True
             continue
-        columns.update(
-            get_column_letter(index) for index in range(min(indexes), max(indexes) + 1)
-        )
-    return References(frozenset(columns), outside)
+        columns = [column_index_from_string(corner[1]) for corner in corners if corner]
+        rows = [int(corner[2]) for corner in corners if corner]
+        width = max(columns) - min(columns) + 1
+        height = max(rows) - min(rows) + 1
+        if width * height > MAX_RANGE:
+            outside = True
+            continue
+        read = {
+            (row, get_column_letter(column))
+            for row in range(min(rows), max(rows) + 1)
+            for column in range(min(columns), max(columns) + 1)
+        }
+        cells |= read
+        if len(corners) == 2:
+            ranged |= read
+    return References(
+        frozenset(cells), outside, frozenset(ranged), frozenset(functions)
+    )
