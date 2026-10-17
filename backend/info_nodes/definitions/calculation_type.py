@@ -22,6 +22,18 @@ CALCULATION_NODES: list[InfoNode] = [
         ],
     ),
     CalculationType(
+        "harmonic mean",
+        description="The harmonic mean is the reciprocal of the arithmetic mean of the "
+        "reciprocals of n numbers. It is reported for half-lives, as the reciprocal of the "
+        "mean elimination rate constant. It is stored in mean; a jackknife pseudo-standard "
+        "deviation belongs in the comment, not in sd.",
+        parents=["calculation"],
+        dtype=DType.CATEGORICAL,
+        annotations=[
+            (BQB.IS, "STATO:0000397"),
+        ],
+    ),
+    CalculationType(
         "unspecified summary",
         description="A reported central value whose summary statistic the "
         "publication does not state. It is stored in mean and never completed "

@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C15265",
+  "lang": "en",
+  "description": [
+    "The transfer of a healthy kidney from a donor to a patient for the purpose of replacing one of the failing kidneys of the patient."
+  ],
+  "synonyms": [
+    "Kidney Grafting",
+    "Kidney Transplant",
+    "Kidney Transplantation",
+    "Renal Transplantation"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Kidney Transplantation"
+    ],
+    "Legacy Concept Name": [
+      "Kidney_Transplantation"
+    ],
+    "Preferred_Name": [
+      "Kidney Transplantation"
+    ],
+    "Semantic_Type": [
+      "Therapeutic or Preventive Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0022671"
+    ],
+    "code": [
+      "C15265"
+    ]
+  },
+  "label": "Kidney Transplantation",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C15265",
+  "obo_id": "NCIT:C15265",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C156952",
+    "NCIT_C158037",
+    "NCIT_C158520"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Kidney Grafting",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kidney Transplant",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kidney Transplantation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Renal Transplantation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/graph"
+    },
+    "Procedure_Has_Target_Anatomy": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C15265/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R163"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

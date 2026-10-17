@@ -1,0 +1,67 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/STATO_0000397",
+  "lang": "en",
+  "description": [
+    "The harmonic mean is a kind of mean which is calculated by dividing the total number of observations by the reciprocal of each number in a series.\n\nHarmonic Mean = N/(1/a1+1/a2+1/a3+1/a4+.......+1/aN)  \nwhere a(i)= Individual score and  N = Sample size (Number of scores)"
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Python command": [
+      "http://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.stats.mstats.hmean.html"
+    ],
+    "R command": [
+      "http://personality-project.org/r/html/harmonic.mean.html\n\nUsage: > harmonic.mean(x,na.rm=TRUE)\n\nArguments: \nx, a vector, matrix, or data.frame\nna.rm, na.rm=TRUE remove NA values before processing."
+    ],
+    "definition source": [
+      "adapted from wikipedia and\nhttps://www.easycalculation.com/statistics/learn-harmonic-mean.php\n\nlast accessed: 2015-11-04",
+      "https://en.wikipedia.org/wiki/Harmonic_mean",
+      "https://en.wikipedia.org/wiki/Mean#Harmonic_mean_.28HM.29"
+    ],
+    "term editor": [
+      "Alejandra Gonzalez-Beltran",
+      "Orlaith Burke",
+      "Philippe Rocca-Serra"
+    ]
+  },
+  "label": "harmonic mean",
+  "ontology_name": "stato",
+  "ontology_prefix": "STATO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/stato/stato.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "STATO_0000397",
+  "obo_id": "STATO:0000397",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000397/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

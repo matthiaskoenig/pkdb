@@ -431,6 +431,13 @@ LIFESTYLE_NODES: list[InfoNode] = [
         annotations=[(BQB.IS, "FOODON:03400139")],
     ),
     Choice(
+        "high-fat meal",
+        description="High-fat, high-calorie meal, e.g. the standard meal of food effect studies "
+        "(about 800 to 1000 kcal, about 50% of the calories from fat).",
+        parents=["mixed meal"],
+        synonyms=["high-fat breakfast", "high-fat high-calorie meal"],
+    ),
+    Choice(
         "single component meal",
         description="Single component meal. A meal consisting of a single meal component, "
         "i.e., either carbohydrates, lipids or proteins.",

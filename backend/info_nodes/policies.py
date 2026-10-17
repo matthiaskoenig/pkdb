@@ -7,6 +7,7 @@ TIME_REQUIRED_MEASUREMENT_TYPES = [
     "cumulative metabolic ratio",
     "recovery",
     "auc_end",
+    "auc_end (ratio)",
     "auc_incremental",
     "auc_net_incremental",
     "cumulative amount (ratio)",

@@ -1423,6 +1423,38 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=["hct", "HCT"],
     ),
     MeasurementType(
+        sid="white-blood-cell-count",
+        name="white blood cell count",
+        description="Number of white blood cells (leukocytes) per volume of blood, e.g. in 10^9/l. "
+        "See also 'neutrophil fraction'.",
+        parents=["blood cell measurement"],
+        dtype=DType.NUMERIC,
+        units=["1/l"],
+        annotations=[(BQB.IS, "NCIT:C51948")],
+        synonyms=["WBC", "leukocyte count", "white cell count"],
+    ),
+    MeasurementType(
+        sid="neutrophil-fraction",
+        name="neutrophil fraction",
+        description="Neutrophils as percentage of the white blood cells of the differential count. "
+        "See also 'white blood cell count'.",
+        parents=["blood cell measurement"],
+        dtype=DType.NUMERIC,
+        units=["percent"],
+        annotations=[(BQB.IS, "NCIT:C64827")],
+        synonyms=["neutrophils (%)", "neutrophil to leukocyte ratio"],
+    ),
+    MeasurementType(
+        sid="platelet-count",
+        name="platelet count",
+        description="Number of platelets (thrombocytes) per volume of blood, e.g. in 10^9/l.",
+        parents=["blood cell measurement"],
+        dtype=DType.NUMERIC,
+        units=["1/l"],
+        annotations=[(BQB.IS, "NCIT:C51951")],
+        synonyms=["PLT", "thrombocyte count"],
+    ),
+    MeasurementType(
         sid="blood_cell_count_categorial",
         name="blood cell count (categorial)",
         description="Blood cell count. The determination of the number of red blood "
@@ -2056,6 +2088,47 @@ MEASUREMENT_NODES.extend(
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
             units=[DIMENSIONLESS],
+        ),
+        MeasurementType(
+            sid="cmax_per_dose",
+            label="maximum concentration (Cmax) per dose",
+            description="Maximum concentration divided by dose. Dose-normalized Cmax. See also 'cmax' "
+            "and 'concentration_per_dose'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=CONCENTRATION_PER_DOSE_UNITS,
+            synonyms=["dose-normalized Cmax", "Cmax/D"],
+        ),
+        MeasurementType(
+            sid="cthrough_per_dose",
+            label="through concentration per dose",
+            description="Through concentration divided by dose. Dose-normalized trough concentration "
+            "in multiple dosing. See also 'cthrough' and 'dose_per_cthrough'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=CONCENTRATION_PER_DOSE_UNITS,
+            synonyms=["dose-normalized trough concentration", "C0/D", "Cmin/D"],
+        ),
+        MeasurementType(
+            sid="dose_per_cthrough",
+            label="dose per through concentration",
+            description="Dose divided by the through concentration in multiple dosing, the inverse of "
+            "'cthrough_per_dose'. Reported as dose requirement of immunosuppressants, e.g. in x10^3 l. "
+            "See also 'cthrough'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["l", "l/kg"],
+            synonyms=["dose/trough concentration ratio", "D/C0"],
+        ),
+        MeasurementType(
+            sid="cmax_per_auc",
+            label="maximum concentration per AUC (Cmax/AUC)",
+            description="Maximum concentration divided by the area under the curve to infinity, a "
+            "measure of the rate of absorption. See also 'cmax' and 'auc_inf'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=["1/hr"],
+            synonyms=["Cmax/AUC"],
         ),
         MeasurementType(
             sid="kdist",
@@ -3535,3 +3608,36 @@ for protein in PROTEINS:
         parents=["western-blot"],
     )
     MEASUREMENT_NODES.append(choice_protein)
+
+# Ratios of pharmacokinetic parameters between two treatments or conditions of the
+# same subjects, such as the geometric mean ratios test/reference of interaction,
+# food effect and bioequivalence studies.
+PK_RATIO_PARAMETERS = [
+    ("cmax", "maximum concentration (Cmax)"),
+    ("tmax", "time of maximum concentration (tmax)"),
+    ("thalf", "elimination half-life"),
+    ("auc_inf", "area under curve (AUC) to infinity"),
+    ("auc_end", "area under curve (AUC) to the end time"),
+    ("oral clearance", "oral clearance (CL/F)"),
+    ("vd_ss", "volume of distribution steady state"),
+    ("mrt", "mean residence time (MRT)"),
+    ("bp_ratio", "blood/plasma ratio (BP)"),
+    ("cmax_per_auc", "maximum concentration per AUC (Cmax/AUC)"),
+]
+
+for parameter, label in PK_RATIO_PARAMETERS:
+    MEASUREMENT_NODES.append(
+        MeasurementType(
+            sid=f"{parameter.replace(' ', '-')}-ratio",
+            name=f"{parameter} (ratio)",
+            label=f"{label} (ratio)",
+            description=f"'{parameter}' of a treatment or condition as ratio to a reference value "
+            "of the same subjects or group (e.g. the drug alone, the fasted state or the reference "
+            "formulation), e.g. 1.0 (100%) for no difference. Geometric mean ratios use gmean; a "
+            "confidence interval belongs in the comment. The reference is named in the comment. "
+            f"See also '{parameter}'.",
+            parents=["pharmacokinetic measurement"],
+            dtype=DType.NUMERIC,
+            units=[DIMENSIONLESS],
+        )
+    )

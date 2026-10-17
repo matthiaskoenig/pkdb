@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "ebe9ec579c3493d666663a92f4a571f2f6ded518954855db690425c99886faf9",
+    "version": "9cad626704b7d33b5b3facb84d80d613b79291b9e256906fdff4809381a63a92",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -81,6 +81,9 @@
           "-24 C/C",
           "-24 C/T",
           "-24 T/T",
+          "C3972T C/C",
+          "C3972T C/T",
+          "C3972T T/T",
           "NR"
         ],
         "can_negative": false,
@@ -572,6 +575,18 @@
         "deprecated": false
       },
       {
+        "name": "auc_end (ratio)",
+        "sid": "auc-end-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": true,
+        "deprecated": false
+      },
+      {
         "name": "auc_extrapolated",
         "sid": "auc-extrapolated",
         "dtype": "numeric",
@@ -607,6 +622,18 @@
           "g/l/kg*hr",
           "mol/l*hr",
           "IU/l*hr"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "auc_inf (ratio)",
+        "sid": "auc-inf-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -1079,6 +1106,18 @@
         "deprecated": false
       },
       {
+        "name": "bp_ratio (ratio)",
+        "sid": "bp-ratio-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "breastfeeding",
         "sid": "breastfeeding",
         "dtype": "boolean",
@@ -1539,6 +1578,56 @@
         "deprecated": false
       },
       {
+        "name": "cmax_per_auc",
+        "sid": "cmax-per-auc",
+        "dtype": "numeric",
+        "units": [
+          "1/hr"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "cmax_per_auc (ratio)",
+        "sid": "cmax-per-auc-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "cmax_per_dose",
+        "sid": "cmax-per-dose",
+        "dtype": "numeric",
+        "units": [
+          "1/l",
+          "mol/l/g",
+          "IU/l/g"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "cmax (ratio)",
+        "sid": "cmax-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "cmin",
         "sid": "cmin",
         "dtype": "numeric",
@@ -1732,6 +1821,20 @@
           "g/l",
           "mol/l",
           "IU/l"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "cthrough_per_dose",
+        "sid": "cthrough-per-dose",
+        "dtype": "numeric",
+        "units": [
+          "1/l",
+          "mol/l/g",
+          "IU/l/g"
         ],
         "choices": [],
         "can_negative": false,
@@ -2392,6 +2495,19 @@
         "deprecated": false
       },
       {
+        "name": "dose_per_cthrough",
+        "sid": "dose-per-cthrough",
+        "dtype": "numeric",
+        "units": [
+          "l",
+          "l/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "dosing",
         "sid": "dosing",
         "dtype": "numeric",
@@ -2610,6 +2726,7 @@
           "caucasian",
           "hispanic",
           "non-hispanic",
+          "non-black",
           "mixed race",
           "other",
           "white new zealanders",
@@ -4011,6 +4128,9 @@
           "hemodialysis",
           "lipoprotein apheresis",
           "tubal ligation",
+          "kidney transplantation",
+          "roux-en-y gastric bypass",
+          "liver biopsy",
           "NR"
         ],
         "can_negative": false,
@@ -4098,6 +4218,7 @@
         "dtype": "categorical",
         "units": [],
         "choices": [
+          "high-fat meal",
           "lipid-glucose-protein challenge",
           "mixed meal",
           "protein solution",
@@ -4330,6 +4451,18 @@
         "deprecated": false
       },
       {
+        "name": "mrt (ratio)",
+        "sid": "mrt-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "muliple_dosing_cmax",
         "sid": "multiple-dosing-cmax",
         "dtype": "numeric",
@@ -4424,6 +4557,18 @@
         "deprecated": false
       },
       {
+        "name": "neutrophil fraction",
+        "sid": "neutrophil-fraction",
+        "dtype": "numeric",
+        "units": [
+          "percent"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "obesity index",
         "sid": "obesity-index",
         "dtype": "numeric",
@@ -4448,6 +4593,18 @@
           "ml*µg/µmol/hr",
           "ml/µmol/hr",
           "ml*g/IU/hr/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "oral clearance (ratio)",
+        "sid": "oral-clearance-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -4755,6 +4912,18 @@
         ],
         "choices": [],
         "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "platelet count",
+        "sid": "platelet-count",
+        "dtype": "numeric",
+        "units": [
+          "1/l"
+        ],
+        "choices": [],
+        "can_negative": false,
         "time_required": false,
         "deprecated": false
       },
@@ -5793,6 +5962,18 @@
         "deprecated": false
       },
       {
+        "name": "thalf (ratio)",
+        "sid": "thalf-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "thrombin activity (change relative)",
         "sid": "thrombin-activity-change-relative",
         "dtype": "numeric",
@@ -5805,6 +5986,18 @@
         "deprecated": false
       },
       {
+        "name": "time since medical procedure",
+        "sid": "time-since-medical-procedure",
+        "dtype": "numeric",
+        "units": [
+          "year"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "tmax",
         "sid": "tmax",
         "dtype": "numeric",
@@ -5813,6 +6006,18 @@
         ],
         "choices": [],
         "can_negative": true,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "tmax (ratio)",
+        "sid": "tmax-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
         "time_required": false,
         "deprecated": false
       },
@@ -5860,6 +6065,20 @@
           "dimensionless"
         ],
         "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "transplant donor",
+        "sid": "transplant-donor",
+        "dtype": "categorical",
+        "units": [],
+        "choices": [
+          "deceased donor",
+          "living donor",
+          "NR"
+        ],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -5999,6 +6218,18 @@
         "deprecated": false
       },
       {
+        "name": "vd_ss (ratio)",
+        "sid": "vd-ss-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "vd_unbound",
         "sid": "vd-unbound",
         "dtype": "numeric",
@@ -6131,6 +6362,18 @@
           "CYP2E1",
           "NR"
         ],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "white blood cell count",
+        "sid": "white-blood-cell-count",
+        "dtype": "numeric",
+        "units": [
+          "1/l"
+        ],
+        "choices": [],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -7419,6 +7662,13 @@
         "charge": 0
       },
       {
+        "name": "azathioprine",
+        "sid": "azathioprine",
+        "mass": 277.269,
+        "formula": "C9H7N7O2S",
+        "charge": 0
+      },
+      {
         "name": "BCAA",
         "sid": "bcaa",
         "mass": null,
@@ -7731,6 +7981,13 @@
         "sid": "calcium",
         "mass": 40.078,
         "formula": "Ca",
+        "charge": 0
+      },
+      {
+        "name": "calcium dobesilate",
+        "sid": "calcium-dobesilate",
+        "mass": 418.414,
+        "formula": "Ca.C6H5O5S.C6H5O5S",
         "charge": 0
       },
       {
@@ -8161,6 +8418,13 @@
         "charge": 0
       },
       {
+        "name": "corticosteroid",
+        "sid": "corticosteroid",
+        "mass": null,
+        "formula": null,
+        "charge": null
+      },
+      {
         "name": "cortisol",
         "sid": "cortisol",
         "mass": 362.466,
@@ -8285,6 +8549,13 @@
         "mass": null,
         "formula": null,
         "charge": null
+      },
+      {
+        "name": "dasabuvir",
+        "sid": "dasabuvir",
+        "mass": 493.585,
+        "formula": "C26H27N3O5S",
+        "charge": 0
       },
       {
         "name": "debrisoquine",
@@ -8823,6 +9094,13 @@
         "sid": "evans-blue",
         "mass": 960.822,
         "formula": "C34H24N6O14S4.4Na",
+        "charge": 0
+      },
+      {
+        "name": "everolimus",
+        "sid": "everolimus",
+        "mass": 958.24,
+        "formula": "C53H83NO14",
         "charge": 0
       },
       {
@@ -10653,6 +10931,13 @@
         "charge": null
       },
       {
+        "name": "ombitasvir",
+        "sid": "ombitasvir",
+        "mass": 894.127,
+        "formula": "C50H67N7O8",
+        "charge": 0
+      },
+      {
         "name": "ome/5home",
         "sid": "ome-over-5home",
         "mass": null,
@@ -10769,6 +11054,13 @@
         "sid": "pantoprazole",
         "mass": 383.376,
         "formula": "C16H15F2N3O4S",
+        "charge": 0
+      },
+      {
+        "name": "paritaprevir",
+        "sid": "paritaprevir",
+        "mass": 765.893,
+        "formula": "C40H43N7O7S",
         "charge": 0
       },
       {
@@ -11021,6 +11313,13 @@
         "sid": "prazosin",
         "mass": 383.408,
         "formula": "C19H21N5O4",
+        "charge": 0
+      },
+      {
+        "name": "prednisolone",
+        "sid": "prednisolone",
+        "mass": 360.45,
+        "formula": "C21H28O5",
         "charge": 0
       },
       {
@@ -11358,6 +11657,13 @@
         "mass": 914.187,
         "formula": "C51H79NO13",
         "charge": 0
+      },
+      {
+        "name": "rapamycin and metabolites",
+        "sid": "rapamycin-and-metabolites",
+        "mass": null,
+        "formula": null,
+        "charge": null
       },
       {
         "name": "regorafenib",
@@ -12756,9 +13062,10 @@
     "calculation_types": [
       "calculation",
       "geometric mean",
+      "harmonic mean",
       "sample mean",
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "21b3f27ce09109b3408335748cd75923afd66b4f944e67b0fb332c20c9e4e72c"
+  "vocabulary_hash": "120c07b315a3ca317dbdd6bec0f9dd34407bb03806f55032d79c01af18f0ed98"
 }

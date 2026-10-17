@@ -1,0 +1,397 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8378",
+  "lang": "en",
+  "description": [
+    "A glucocorticoid that is prednisone in which the oxo group at position 11 has been reduced to the corresponding \u03b2-hydroxy group. It is a drug metabolite of prednisone."
+  ],
+  "synonyms": [
+    "(11beta)-11,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+    "1,4-pregnadiene-11beta,17alpha,21-triol-3,20-dione",
+    "1,4-pregnadiene-3,20-dione-11beta,17alpha,21-triol",
+    "11beta,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+    "11beta,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+    "3,20-dioxo-11beta,17alpha,21-trihydroxy-1,4-pregnadiene",
+    "Delta(1)-dehydrocortisol",
+    "Delta(1)-dehydrohydrocortisone",
+    "Delta(1)-hydrocortisone",
+    "hydroretrocortine",
+    "metacortandralone",
+    "prednisolona",
+    "prednisolone",
+    "prednisolonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:50-24-8",
+      "drugbank:DB00860",
+      "drugcentral:2245",
+      "hmdb:HMDB0014998",
+      "kegg.compound:C07369",
+      "kegg.drug:D00472",
+      "pubmed:11294518",
+      "pubmed:23625982",
+      "pubmed:24392764",
+      "reaxys:1354103",
+      "vsdb:1848",
+      "wikipedia.en:Prednisolone"
+    ],
+    "generalized_empirical_formula": [
+      "C21H28O5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8378"
+    ],
+    "inchi_key_string": [
+      "OIGNJSKKLXVSLS-VWUMJDOOSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H28O5/c1-19-7-5-13(23)9-12(19)3-4-14-15-6-8-21(26,17(25)11-22)20(15,2)10-16(24)18(14)19/h5,7,9,14-16,18,22,24,26H,3-4,6,8,10-11H2,1-2H3/t14-,15-,16-,18+,19-,20-,21-/m0/s1"
+    ],
+    "mass": [
+      "360.45"
+    ],
+    "monoisotopic_mass": [
+      "360.19367"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CC[C@](O)(C(=O)CO)[C@@]1(C)C[C@H](O)[C@@]1([H])[C@@]2([H])CCC2=CC(=O)C=C[C@@]21C"
+    ]
+  },
+  "label": "prednisolone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8378",
+  "obo_id": "CHEBI:8378",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "50-24-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-24-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00860",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00860"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2245",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2245"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014998",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014998"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07369",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00472",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11294518",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11294518/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23625982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23625982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24392764",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24392764/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1354103",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1848",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1848.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Prednisolone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "11beta,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(11beta)-11,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-pregnadiene-11beta,17alpha,21-triol-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-pregnadiene-3,20-dione-11beta,17alpha,21-triol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta,17,21-trihydroxypregna-1,4-diene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,20-dioxo-11beta,17alpha,21-trihydroxy-1,4-pregnadiene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(1)-dehydrocortisol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(1)-dehydrohydrocortisone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(1)-hydrocortisone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydroretrocortine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metacortandralone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prednisolona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prednisolone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prednisolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prednisolone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "prednisolonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8378/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

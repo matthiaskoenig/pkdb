@@ -6529,6 +6529,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["sirolimus"],
     ),
     Substance(
+        sid="rapamycin-and-metabolites",
+        name="rapamycin and metabolites",
+        description="Rapamycin (sirolimus) and all its metabolites, e.g. the total radioactivity "
+        "after a dose of [14C]sirolimus in sirolimus equivalents. Used for total radioactivity "
+        "comparison. See also 'rapamycin'.",
+        synonyms=["sirolimus and metabolites"],
+    ),
+    Substance(
+        sid="everolimus",
+        description="Everolimus is the 40-O-(2-hydroxyethyl) derivative of 'rapamycin' "
+        "(sirolimus), an mTOR inhibitor used as an immunosuppressant after organ "
+        "transplantation and as an antineoplastic agent. It is metabolized by CYP3A4.",
+        annotations=[
+            (BQB.IS, "CHEBI:68478"),
+        ],
+        synonyms=["RAD001", "SDZ RAD"],
+    ),
+    Substance(
         sid="fujimycin",
         label="fujimycin (tacrolimus)",
         description="A macrolide isolated from Streptomyces tsukubaensis. Tacrolimus binds to "
@@ -9023,6 +9041,70 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "immunosuppressive drug, a prodrug that the liver converts to the active prednisolone.",
         annotations=[
             (BQB.IS, "CHEBI:8382"),
+        ],
+    ),
+    Substance(
+        sid="prednisolone",
+        description="Prednisolone is a synthetic glucocorticoid used as an anti-inflammatory and "
+        "immunosuppressive drug, the active metabolite of 'prednisone'.",
+        annotations=[
+            (BQB.IS, "CHEBI:8378"),
+        ],
+    ),
+    Substance(
+        sid="corticosteroid",
+        description="Corticosteroid, a steroid hormone of the adrenal cortex or a synthetic "
+        "analogue such as 'prednisone' or 'prednisolone'. Use when a study does not name the "
+        "corticosteroid, prefer the specific substance otherwise.",
+        annotations=[
+            (BQB.IS, "CHEBI:50858"),
+        ],
+        synonyms=["corticosteroids", "steroids"],
+    ),
+    Substance(
+        sid="azathioprine",
+        description="Azathioprine is an immunosuppressant, an imidazolyl prodrug of "
+        "6-mercaptopurine, used after organ transplantation and in autoimmune diseases.",
+        annotations=[
+            (BQB.IS, "CHEBI:2948"),
+        ],
+    ),
+    Substance(
+        sid="ombitasvir",
+        description="Ombitasvir is an inhibitor of the hepatitis C virus NS5A protein, given in "
+        "fixed-dose combination with 'paritaprevir' and 'ritonavir', with or without "
+        "'dasabuvir', for the treatment of chronic hepatitis C.",
+        annotations=[
+            (BQB.IS, "CHEBI:85183"),
+        ],
+        synonyms=["ABT-267"],
+    ),
+    Substance(
+        sid="paritaprevir",
+        description="Paritaprevir is an inhibitor of the hepatitis C virus NS3/4A protease, given "
+        "with the pharmacokinetic enhancer 'ritonavir' in combination with 'ombitasvir'.",
+        annotations=[
+            (BQB.IS, "CHEBI:85188"),
+        ],
+        synonyms=["ABT-450", "veruprevir"],
+    ),
+    Substance(
+        sid="dasabuvir",
+        description="Dasabuvir is a non-nucleoside inhibitor of the hepatitis C virus NS5B "
+        "polymerase, given with 'ombitasvir', 'paritaprevir' and 'ritonavir' for the treatment of "
+        "chronic hepatitis C.",
+        annotations=[
+            (BQB.IS, "CHEBI:85182"),
+        ],
+        synonyms=["ABT-333"],
+    ),
+    Substance(
+        sid="calcium-dobesilate",
+        name="calcium dobesilate",
+        description="Calcium dobesilate, the calcium salt of 2,5-dihydroxybenzenesulfonic acid, a "
+        "vasoprotective drug used for diabetic retinopathy and chronic venous insufficiency.",
+        annotations=[
+            (BQB.IS, "CHEBI:751864"),
         ],
     ),
     Substance(
