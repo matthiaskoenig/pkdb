@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:2948",
+  "name": "azathioprine",
+  "definition": "A thiopurine that is 6-mercaptopurine in which the mercapto hydrogen is replaced by a 1-methyl-4-nitroimidazol-5-yl group. It is a prodrug for mercaptopurine and is used as an immunosuppressant, prescribed for the treatment of inflammatory conditions and after organ transplantation and also for treatment of Crohn's didease and MS.",
+  "formula": "C9H7N7O2S",
+  "charge": 0,
+  "mass": "277.269",
+  "inchikey": "LMEKQMALGUDUQG-UHFFFAOYSA-N"
+}

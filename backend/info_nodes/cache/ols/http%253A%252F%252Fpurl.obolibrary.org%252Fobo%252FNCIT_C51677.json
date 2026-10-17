@@ -1,0 +1,106 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C51677",
+  "lang": "en",
+  "description": [
+    "Removal of tissue from the liver for microscopic examination."
+  ],
+  "synonyms": [
+    "Biopsy of Liver",
+    "Liver Biopsy"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Liver Biopsy"
+    ],
+    "Legacy Concept Name": [
+      "Liver_Biopsy"
+    ],
+    "Preferred_Name": [
+      "Liver Biopsy"
+    ],
+    "Semantic_Type": [
+      "Therapeutic or Preventive Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0193388"
+    ],
+    "code": [
+      "C51677"
+    ]
+  },
+  "label": "Liver Biopsy",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C51677",
+  "obo_id": "NCIT:C51677",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Biopsy of Liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Biopsy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/graph"
+    },
+    "Procedure_Has_Partially_Excised_Anatomy": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51677/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R169"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

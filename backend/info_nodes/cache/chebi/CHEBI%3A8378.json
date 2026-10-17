@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:8378",
+  "name": "prednisolone",
+  "definition": "A glucocorticoid that is prednisone in which the oxo group at position 11 has been reduced to the corresponding \u03b2-hydroxy group. It is a drug metabolite of prednisone.",
+  "formula": "C21H28O5",
+  "charge": 0,
+  "mass": "360.450",
+  "inchikey": "OIGNJSKKLXVSLS-VWUMJDOOSA-N"
+}

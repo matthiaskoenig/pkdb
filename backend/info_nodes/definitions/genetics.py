@@ -569,6 +569,9 @@ ABCC2_GENOTYPES = [
     "-24 C/C",
     "-24 C/T",
     "-24 T/T",
+    "C3972T C/C",  # rs3740066 (exon 28)
+    "C3972T C/T",  # rs3740066 (exon 28)
+    "C3972T T/T",  # rs3740066 (exon 28)
 ]
 for key in ABCC2_GENOTYPES:
     GENETICS_NODES.append(

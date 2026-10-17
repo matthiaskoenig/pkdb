@@ -142,6 +142,14 @@ ETHNICITY_NODES: list[InfoNode] = [
         parents=["ethnicity"],
     ),
     Choice(
+        sid="non-black",
+        label="Non-black",
+        description="Not black, the complement of 'black' in a study that compares black and "
+        "nonblack subjects without naming the other ethnicities.",
+        parents=["ethnicity"],
+        synonyms=["nonblack"],
+    ),
+    Choice(
         sid="mixed-race",
         name="mixed race",
         label="Mixed race",

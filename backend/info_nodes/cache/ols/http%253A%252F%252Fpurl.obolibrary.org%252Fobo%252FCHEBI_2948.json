@@ -1,0 +1,382 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2948",
+  "lang": "en",
+  "description": [
+    "A thiopurine that is 6-mercaptopurine in which the mercapto hydrogen is replaced by a 1-methyl-4-nitroimidazol-5-yl group. It is a prodrug for mercaptopurine and is used as an immunosuppressant, prescribed for the treatment of inflammatory conditions and after organ transplantation and also for treatment of Crohn's didease and MS."
+  ],
+  "synonyms": [
+    "6-((1-Methyl-4-nitro-1H-imidazol-5-yl)thio)-1H-purine",
+    "6-(1'-Methyl-4'-nitro-5'-imidazolyl)-mercaptopurine",
+    "6-[(1-methyl-4-nitro-1H-imidazol-5-yl)sulfanyl]-7H-purine",
+    "6-[(1-methyl-4-nitro-1H-imidazol-5-yl)sulfanyl]-7H-purine",
+    "Imuran (TN)"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:446-86-6",
+      "drugbank:DB00993",
+      "drugcentral:269",
+      "kegg.compound:C06837",
+      "kegg.drug:D00238",
+      "pubmed:11064448",
+      "pubmed:15199672",
+      "pubmed:15476481",
+      "pubmed:15628319",
+      "pubmed:15973722",
+      "pubmed:16344342",
+      "pubmed:16397313",
+      "pubmed:16764353",
+      "pubmed:16954801",
+      "pubmed:17381669",
+      "pubmed:17970886",
+      "pubmed:18008354",
+      "pubmed:18336531",
+      "pubmed:19243907",
+      "pubmed:20080917",
+      "pubmed:25248004",
+      "pubmed:25314066",
+      "pubmed:25440430",
+      "pubmed:25443086",
+      "pubmed:25581826",
+      "pubmed:25641386",
+      "pubmed:28166217",
+      "pubmed:8738760",
+      "pubmed:9273463",
+      "pubmed:9345422",
+      "reaxys:1225351",
+      "wikipedia.en:Azathioprine"
+    ],
+    "generalized_empirical_formula": [
+      "C9H7N7O2S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2948"
+    ],
+    "inchi_key_string": [
+      "LMEKQMALGUDUQG-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C9H7N7O2S/c1-15-4-14-7(16(17)18)9(15)19-8-5-6(11-2-10-5)12-3-13-8/h2-4H,1H3,(H,10,11,12,13)"
+    ],
+    "mass": [
+      "277.269"
+    ],
+    "monoisotopic_mass": [
+      "277.03819"
+    ],
+    "smiles_string": [
+      "Cn1cnc([N+](=O)[O-])c1Sc1ncnc2ncnc12"
+    ]
+  },
+  "label": "azathioprine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2948",
+  "obo_id": "CHEBI:2948",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "446-86-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=446-86-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00993",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00993"
+    },
+    {
+      "database": "drugcentral",
+      "id": "269",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/269"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06837",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00238",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11064448",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11064448/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15199672",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15199672/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15476481",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15476481/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15628319",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15628319/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15973722",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15973722/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16344342",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16344342/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16397313",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16397313/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16764353",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16764353/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16954801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16954801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17381669",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17381669/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17970886",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17970886/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18008354",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18008354/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18336531",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18336531/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19243907",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19243907/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20080917",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20080917/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25248004",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25248004/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25314066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25314066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25440430",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25440430/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25443086",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25443086/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25581826",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25581826/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25641386",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25641386/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8738760",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8738760/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9273463",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9273463/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9345422",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9345422/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1225351",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Azathioprine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6-[(1-methyl-4-nitro-1H-imidazol-5-yl)sulfanyl]-7H-purine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-((1-Methyl-4-nitro-1H-imidazol-5-yl)thio)-1H-purine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-(1'-Methyl-4'-nitro-5'-imidazolyl)-mercaptopurine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-[(1-methyl-4-nitro-1H-imidazol-5-yl)sulfanyl]-7H-purine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Imuran (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2948/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

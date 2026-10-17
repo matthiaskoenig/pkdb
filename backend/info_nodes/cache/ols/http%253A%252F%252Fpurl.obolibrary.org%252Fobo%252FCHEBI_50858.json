@@ -1,0 +1,115 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_50858",
+  "lang": "en",
+  "description": [
+    "A natural or synthetic analogue of the hormones secreted by the adrenal gland."
+  ],
+  "synonyms": [
+    "corticoides",
+    "corticosteroides",
+    "corticosteroids"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:50858"
+    ]
+  },
+  "label": "corticosteroid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_50858",
+  "obo_id": "CHEBI:50858",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "corticoides",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "corticosteroides",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "corticosteroids",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50858/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

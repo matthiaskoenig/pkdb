@@ -1,0 +1,560 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68478",
+  "lang": "en",
+  "description": [
+    "A macrocyclic lactone that is rapamycin in which the hydroxy group attached to the cyclohexyl moiety has been converted into the corresponding 2-hydroxyethyl ether. It is an immunosuppressant and antineoplastic agent."
+  ],
+  "synonyms": [
+    "(1R,9S,12S,15R,16E,18R,19R,21R,23S,24E,26E,28E,30S,35R)-1,18-dihydroxy-12-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-19,30-dimethoxy-15,17,21,23,29,35-hexamethyl-11,36-dioxa-4-azatricyclo[30.3.1.0(4,9)]hexatriaconta-16,24,26,28-tetraene-2,3,10,14,20-pentone",
+    "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+    "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+    "40-O-(2-hydroxyethyl)-rapamycin",
+    "42-O-(2-hydroxyethyl)rapamycin",
+    "Afinitor Disperz",
+    "Afinitor",
+    "Certican",
+    "Everolimus",
+    "RAD 001",
+    "RAD001",
+    "SDZ RAD",
+    "SDZ-RAD",
+    "Votubia",
+    "Xience V",
+    "Zortress",
+    "everolimus",
+    "everolimusum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:159351-69-6",
+      "chemspider:21106307",
+      "drugbank:DB01590",
+      "drugcentral:1118",
+      "hmdb:HMDB0015529",
+      "kegg.drug:D02714",
+      "lincs.smallmolecule:LSM-43172",
+      "patent:CN102138903",
+      "patent:RU2008143550",
+      "patent:WO2012066502",
+      "pubmed:22363408",
+      "pubmed:22404500",
+      "pubmed:22461124",
+      "pubmed:22683823",
+      "pubmed:22967800",
+      "pubmed:22969095",
+      "pubmed:22983698",
+      "pubmed:22986894",
+      "pubmed:31478889",
+      "pubmed:33640871",
+      "pubmed:33986025",
+      "pubmed:33998365",
+      "pubmed:34018490",
+      "pubmed:34225066",
+      "pubmed:34242751",
+      "pubmed:34253597",
+      "pubmed:34299359",
+      "pubmed:34467233",
+      "pubmed:34491881",
+      "pubmed:34527569",
+      "wikipedia.en:Everolimus"
+    ],
+    "generalized_empirical_formula": [
+      "C53H83NO14"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68478"
+    ],
+    "inchi_key_string": [
+      "HKVAMNSJSFKALM-GKUWKFKPSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C53H83NO14/c1-32-16-12-11-13-17-33(2)44(63-8)30-40-21-19-38(7)53(62,68-40)50(59)51(60)54-23-15-14-18-41(54)52(61)67-45(35(4)28-39-20-22-43(66-25-24-55)46(29-39)64-9)31-42(56)34(3)27-37(6)48(58)49(65-10)47(57)36(5)26-32/h11-13,16-17,27,32,34-36,38-41,43-46,48-49,55,58,62H,14-15,18-26,28-31H2,1-10H3/b13-11+,16-12+,33-17+,37-27+/t32-,34-,35-,36-,38-,39+,40+,41+,43-,44+,45+,46-,48-,49+,53-/m1/s1"
+    ],
+    "mass": [
+      "958.24"
+    ],
+    "monoisotopic_mass": [
+      "957.58136"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(C[C@@H](C)[C@]2([H])CC(=O)[C@H](C)/C=C(C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C(C)[C@@H](OC)C[C@]3([H])CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@@]3([H])C(=O)O2)CC[C@@H](OCCO)[C@H](OC)C1"
+    ]
+  },
+  "label": "everolimus",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68478",
+  "obo_id": "CHEBI:68478",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "159351-69-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=159351-69-6"
+    },
+    {
+      "database": "chemspider",
+      "id": "21106307",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.21106307.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01590",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01590"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1118",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1118"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015529",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015529"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02714",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-43172",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN102138903",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN102138903"
+    },
+    {
+      "database": "patent",
+      "id": "RU2008143550",
+      "description": "patent",
+      "url": "https://www.google.com/patents/RU2008143550"
+    },
+    {
+      "database": "patent",
+      "id": "WO2012066502",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2012066502"
+    },
+    {
+      "database": "pubmed",
+      "id": "22363408",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22363408/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22404500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22404500/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22461124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22461124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22683823",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22683823/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22967800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22967800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22969095",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22969095/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22983698",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22983698/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22986894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22986894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31478889",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31478889/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33640871",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33640871/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33986025",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33986025/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33998365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33998365/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34018490",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34018490/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34225066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34225066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34242751",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34242751/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34253597",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34253597/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34299359",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34299359/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34467233",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34467233/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34491881",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34491881/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34527569",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34527569/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Everolimus",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1R,9S,12S,15R,16E,18R,19R,21R,23S,24E,26E,28E,30S,35R)-1,18-dihydroxy-12-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-19,30-dimethoxy-15,17,21,23,29,35-hexamethyl-11,36-dioxa-4-azatricyclo[30.3.1.0(4,9)]hexatriaconta-16,24,26,28-tetraene-2,3,10,14,20-pentone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-(2-hydroxyethoxy)-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "40-O-(2-hydroxyethyl)-rapamycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "42-O-(2-hydroxyethyl)rapamycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Afinitor Disperz",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Afinitor",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Certican",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Everolimus",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RAD 001",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RAD001",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SDZ RAD",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SDZ-RAD",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Votubia",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Xience V",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zortress",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "everolimus",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "everolimusum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68478/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

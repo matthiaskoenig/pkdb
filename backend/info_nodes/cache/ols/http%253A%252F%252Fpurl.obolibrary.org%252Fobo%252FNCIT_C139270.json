@@ -1,0 +1,97 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C139270",
+  "lang": "en",
+  "description": [
+    "The conditions under which an organ is harvested from a dead donor, including the condition of the donor and the environment."
+  ],
+  "synonyms": [
+    "DDDTYPE",
+    "Deceased Donor Donation Condition",
+    "Deceased Donor Donation Type"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The conditions under which an organ is harvested from a dead donor, including the condition of the donor and the environment."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "NCI_META_CUI": [
+      "CL526748"
+    ],
+    "Preferred_Name": [
+      "Deceased Donor Donation Condition"
+    ],
+    "Semantic_Type": [
+      "Conceptual Entity"
+    ],
+    "code": [
+      "C139270"
+    ]
+  },
+  "label": "Deceased Donor Donation Condition",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C139270",
+  "obo_id": "NCIT:C139270",
+  "in_subset": [
+    "NCIT_C103330",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74559"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DDDTYPE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Deceased Donor Donation Condition",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Deceased Donor Donation Type",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C139270/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

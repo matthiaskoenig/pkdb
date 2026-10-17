@@ -72,6 +72,39 @@ LIFESTYLE_NODES: list[InfoNode] = [
         synonyms=["smoking cessation"],
     ),
     MeasurementType(
+        sid="smoking-history",
+        name="smoking history",
+        description="Smoking history of the subjects: never, former or current smoker. Use it "
+        "when a study reports former smokers; 'smoking' (Y/N) encodes the current smoking "
+        "status and 'abstinence smoking' the time since stopping.",
+        parents=["smoking status"],
+        dtype=DType.CATEGORICAL,
+        annotations=[(BQB.IS_VERSION_OF, "NCIT:C19796")],
+    ),
+    Choice(
+        sid="never-smoker",
+        name="never smoker",
+        description="The subject has never smoked or smoked fewer than 100 cigarettes in a lifetime.",
+        parents=["smoking history"],
+        annotations=[(BQB.IS, "NCIT:C65108")],
+        synonyms=["non-smoker", "never smoked"],
+    ),
+    Choice(
+        sid="former-smoker",
+        name="former smoker",
+        description="The subject smoked in the past and has stopped smoking.",
+        parents=["smoking history"],
+        annotations=[(BQB.IS, "NCIT:C67148")],
+        synonyms=["ex-smoker", "previous smoker"],
+    ),
+    Choice(
+        sid="current-smoker",
+        name="current smoker",
+        description="The subject smokes at present.",
+        parents=["smoking history"],
+        annotations=[(BQB.IS, "NCIT:C67147")],
+    ),
+    MeasurementType(
         "smoking amount (cigarettes)",
         description="How many cigarettes are smoked?",
         parents=["smoking status"],
@@ -429,6 +462,13 @@ LIFESTYLE_NODES: list[InfoNode] = [
         "either as separate items or courses or mixed as recipe components",
         parents=["meal"],
         annotations=[(BQB.IS, "FOODON:03400139")],
+    ),
+    Choice(
+        "high-fat meal",
+        description="High-fat, high-calorie meal, e.g. the standard meal of food effect studies "
+        "(about 800 to 1000 kcal, about 50% of the calories from fat).",
+        parents=["mixed meal"],
+        synonyms=["high-fat breakfast", "high-fat high-calorie meal"],
     ),
     Choice(
         "single component meal",

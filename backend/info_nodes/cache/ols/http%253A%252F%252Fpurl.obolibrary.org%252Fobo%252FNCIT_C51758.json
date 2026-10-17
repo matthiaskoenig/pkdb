@@ -1,0 +1,106 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C51758",
+  "lang": "en",
+  "description": [
+    "Surgical procedure in which the stomach is connected to the jejunum, bypassing the duodenum."
+  ],
+  "synonyms": [
+    "Bypass Gastrojejunostomy",
+    "Gastric Bypass Surgery",
+    "Gastric Bypass",
+    "Roux-en-Y Gastric Bypass"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC"
+    ],
+    "Legacy Concept Name": [
+      "Bypass_Gastrojejunostomy"
+    ],
+    "Preferred_Name": [
+      "Bypass Gastrojejunostomy"
+    ],
+    "Semantic_Type": [
+      "Therapeutic or Preventive Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0399839"
+    ],
+    "code": [
+      "C51758"
+    ]
+  },
+  "label": "Bypass Gastrojejunostomy",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C51758",
+  "obo_id": "NCIT:C51758",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C158037",
+    "NCIT_C158520"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Bypass Gastrojejunostomy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gastric Bypass Surgery",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gastric Bypass",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Roux-en-Y Gastric Bypass",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/graph"
+    },
+    "Procedure_Has_Target_Anatomy": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51758/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R163"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,126 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C19796",
+  "lang": "en",
+  "description": [
+    "An indication of a person's current tobacco and nicotine consumption as well as some indication of smoking history."
+  ],
+  "synonyms": [
+    "Current Tobacco and Nicotine Consumption Status",
+    "Smoking Status",
+    "tobacco smoking status",
+    "tobacco_smoking_status"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "GDC"
+    ],
+    "Has_GDC_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C156828",
+      "http://purl.obolibrary.org/obo/NCIT_C156829",
+      "http://purl.obolibrary.org/obo/NCIT_C156830",
+      "http://purl.obolibrary.org/obo/NCIT_C163971",
+      "http://purl.obolibrary.org/obo/NCIT_C164079",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C43234",
+      "http://purl.obolibrary.org/obo/NCIT_C65108",
+      "http://purl.obolibrary.org/obo/NCIT_C67147"
+    ],
+    "Legacy Concept Name": [
+      "Smoking_Status"
+    ],
+    "Preferred_Name": [
+      "Smoking Status"
+    ],
+    "Semantic_Type": [
+      "Organism Attribute"
+    ],
+    "UMLS_CUI": [
+      "C1519386"
+    ],
+    "code": [
+      "C19796"
+    ]
+  },
+  "label": "Smoking Status",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C19796",
+  "obo_id": "NCIT:C19796",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C177536",
+    "NCIT_C19752"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Current Tobacco and Nicotine Consumption Status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Smoking Status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "tobacco smoking status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "tobacco_smoking_status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C19796/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

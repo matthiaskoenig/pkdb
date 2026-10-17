@@ -86,4 +86,75 @@ MEDICAL_PROCEDURE_NODES: list[InfoNode] = [
             (BQB.IS, "NCIT:C92901"),
         ],
     ),
+    Choice(
+        sid="kidney-transplantation",
+        name="kidney transplantation",
+        description="Kidney transplantation. Surgical transfer of a kidney from a living or "
+        "deceased donor to a recipient with end-stage renal disease. Encodes renal transplant "
+        "recipients; see also 'time since medical procedure' and 'transplant donor'.",
+        parents=["medical procedure"],
+        annotations=[
+            (BQB.IS, "NCIT:C15265"),
+        ],
+        synonyms=["renal transplantation", "kidney transplant recipient"],
+    ),
+    MeasurementType(
+        sid="transplant-donor",
+        name="transplant donor",
+        description="Donor type of the transplanted organ of the subjects, e.g. a deceased or a "
+        "living donor. The transplantation is encoded by a 'medical procedure' characteristic of "
+        "the same subjects.",
+        parents=["medical procedure"],
+        dtype=DType.CATEGORICAL,
+    ),
+    Choice(
+        sid="deceased-donor",
+        name="deceased donor",
+        description="The transplanted organ comes from a deceased donor.",
+        parents=["transplant donor"],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C139270"),
+        ],
+        synonyms=["cadaveric donor"],
+    ),
+    Choice(
+        sid="living-donor",
+        name="living donor",
+        description="The transplanted organ comes from a living donor.",
+        parents=["transplant donor"],
+    ),
+    Choice(
+        sid="roux-en-y-gastric-bypass",
+        name="roux-en-y gastric bypass",
+        label="Roux-en-Y gastric bypass",
+        description="Roux-en-Y gastric bypass, a bariatric operation that creates a small gastric "
+        "pouch connected to a Roux limb of the jejunum, bypassing the distal stomach, the "
+        "duodenum and the proximal jejunum.",
+        parents=["medical procedure"],
+        annotations=[
+            (BQB.IS_VERSION_OF, "NCIT:C51758"),
+        ],
+        synonyms=["RYGB", "gastric bypass"],
+    ),
+    Choice(
+        sid="liver-biopsy",
+        name="liver biopsy",
+        description="Liver biopsy. Removal of a sample of liver tissue for histological "
+        "examination.",
+        parents=["medical procedure"],
+        annotations=[
+            (BQB.IS, "NCIT:C51677"),
+        ],
+    ),
+    MeasurementType(
+        sid="time-since-medical-procedure",
+        name="time since medical procedure",
+        description="Time since the medical procedure of the subjects, such as the time since "
+        "kidney transplantation or since a gastric bypass. The procedure is encoded by a "
+        "'medical procedure' characteristic of the same subjects.",
+        parents=["health status"],
+        dtype=DType.NUMERIC,
+        units=["year"],
+        synonyms=["time since transplantation", "posttransplant interval"],
+    ),
 ]

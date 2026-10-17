@@ -1,0 +1,238 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_85182",
+  "lang": "en",
+  "description": [
+    "A member of the class of pyrimidone, which is (as the monohydrate of its sodium salt) in combination with ombitasvir, paritaprevir and ritonavir (under the trade name Viekira Pak) for treatment of chronic hepatitis C virus genotype 1 infection as well as cirrhosis of the liver."
+  ],
+  "synonyms": [
+    "ABT 333",
+    "N-{6-[3-tert-butyl-5-(2,4-dioxo-3,4-dihydropyrimidin-1(2H)-yl)-2-methoxyphenyl]naphthalen-2-yl}methanesulfonamide",
+    "N-{6-[3-tert-butyl-5-(2,4-dioxo-3,4-dihydropyrimidin-1(2H)-yl)-2-methoxyphenyl]naphthalen-2-yl}methanesulfonamide",
+    "dasabuvir"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1132935-63-7",
+      "drugcentral:4914",
+      "kegg.drug:D10553",
+      "pubmed:25365973",
+      "pubmed:25534735",
+      "pubmed:25582226",
+      "pubmed:25646891",
+      "pubmed:25665437",
+      "pubmed:25674658",
+      "pubmed:25680759",
+      "pubmed:25706092",
+      "reaxys:19076087",
+      "wikipedia.en:Dasabuvir"
+    ],
+    "generalized_empirical_formula": [
+      "C26H27N3O5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:85182"
+    ],
+    "inchi_key_string": [
+      "NBRBXGKOEOGLOI-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C26H27N3O5S/c1-26(2,3)22-15-20(29-11-10-23(30)27-25(29)31)14-21(24(22)34-4)18-7-6-17-13-19(28-35(5,32)33)9-8-16(17)12-18/h6-15,28H,1-5H3,(H,27,30,31)"
+    ],
+    "mass": [
+      "493.585"
+    ],
+    "monoisotopic_mass": [
+      "493.16714"
+    ],
+    "smiles_string": [
+      "COc1c(-c2ccc3cc(NS(C)(=O)=O)ccc3c2)cc(-n2ccc(=O)nc2=O)cc1C(C)(C)C"
+    ]
+  },
+  "label": "dasabuvir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_85182",
+  "obo_id": "CHEBI:85182",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1132935-63-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1132935-63-7"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4914",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4914"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D10553",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "25365973",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25365973/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25534735",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25534735/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25582226",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25582226/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25646891",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25646891/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25665437",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25665437/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25674658",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25674658/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25680759",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25680759/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25706092",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25706092/"
+    },
+    {
+      "database": "reaxys",
+      "id": "19076087",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Dasabuvir",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{6-[3-tert-butyl-5-(2,4-dioxo-3,4-dihydropyrimidin-1(2H)-yl)-2-methoxyphenyl]naphthalen-2-yl}methanesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ABT 333",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{6-[3-tert-butyl-5-(2,4-dioxo-3,4-dihydropyrimidin-1(2H)-yl)-2-methoxyphenyl]naphthalen-2-yl}methanesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dasabuvir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85182/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

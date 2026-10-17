@@ -1,0 +1,173 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C51948",
+  "lang": "en",
+  "description": [
+    "A test to determine the number of leukocytes in a biospecimen."
+  ],
+  "synonyms": [
+    "Leukocyte Count",
+    "Leukocytes",
+    "WBC",
+    "White Blood Cell Count",
+    "White Blood Cells",
+    "White Cell Count"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A measurement of the leukocytes in a biological specimen.",
+      "Concentration of leukocytes in the peripheral blood stream, expressed as WBCs per milliliter of whole blood."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CDISC",
+      "CPTAC",
+      "GDC",
+      "PCDC"
+    ],
+    "Is_PCDC_ALL_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C117142"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C117142"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C25294"
+    ],
+    "Legacy Concept Name": [
+      "Leukocyte_Count"
+    ],
+    "Maps_To": [
+      "Leukocytes"
+    ],
+    "Preferred_Name": [
+      "Leukocyte Count"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0023508"
+    ],
+    "code": [
+      "C51948"
+    ]
+  },
+  "label": "Leukocyte Count",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C51948",
+  "obo_id": "NCIT:C51948",
+  "in_subset": [
+    "NCIT_C124299",
+    "NCIT_C124300",
+    "NCIT_C132262",
+    "NCIT_C132263",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157711",
+    "NCIT_C159339",
+    "NCIT_C159418",
+    "NCIT_C167409",
+    "NCIT_C173206",
+    "NCIT_C174019",
+    "NCIT_C177537",
+    "NCIT_C178106",
+    "NCIT_C178115",
+    "NCIT_C179478",
+    "NCIT_C179492",
+    "NCIT_C181173",
+    "NCIT_C181174",
+    "NCIT_C186323",
+    "NCIT_C186331",
+    "NCIT_C186341",
+    "NCIT_C61410",
+    "NCIT_C65047",
+    "NCIT_C66830",
+    "NCIT_C67154",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Leukocyte Count",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukocytes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "WBC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "White Blood Cell Count",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "White Blood Cells",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "White Cell Count",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C51948/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
