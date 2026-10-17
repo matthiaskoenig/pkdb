@@ -8,6 +8,8 @@ TIME_REQUIRED_MEASUREMENT_TYPES = [
     "recovery",
     "auc_end",
     "auc_end (ratio)",
+    "concentration (ratio)",
+    "concentration per dose (ratio)",
     "auc_incremental",
     "auc_net_incremental",
     "cumulative amount (ratio)",

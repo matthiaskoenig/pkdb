@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2326,
-  "version": "b83facb10845f0bfec21b90d8f95bd20447867fad6764d100bf36a4cc51619ca",
-  "inputs_sha256": "4334969e616bac8a7c69b3a5a49c9ee56300146ad29da8f21f1c5b988f3de118",
+  "nodes": 2335,
+  "version": "af1055a156afea98ea6baa066ae89363334e0ecbf1e7466f3ce19fe52707f4b6",
+  "inputs_sha256": "0de16acb6720ecb19c44bd13990cb23b5f3e8eb3653072b6dbf4744b717f35da",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -16,8 +16,8 @@
     "backend/info_nodes/definitions/ethnicity.py": "a862dcae740e9fe9ae816fec6b07a8d33b6d399d340aaefb8c2283fe99515f84",
     "backend/info_nodes/definitions/genetics.py": "14f4b974f3e34d9e05bb9ddd322f769126cf04b13b3b0b4193cf59fb71f83ebb",
     "backend/info_nodes/definitions/imaging.py": "1919fefb09229a3ca56c799b11e87343eaacf42acb03a11a9fe45d989897c6e7",
-    "backend/info_nodes/definitions/lifestyle.py": "36fa3fba28d64c1cebae875066f5f5f2ef484f458e331c01d5eb1e9b9c90862e",
-    "backend/info_nodes/definitions/measurement.py": "b653c611fe426e585ef083d1babf04646fb3ef73b27314a0f9d05b5b0a3c541a",
+    "backend/info_nodes/definitions/lifestyle.py": "22c81c3fd657a7b86fd2b0c9fdaceffc20ecf7b261fa3e8a0f7653df584e5886",
+    "backend/info_nodes/definitions/measurement.py": "570704deb847606f18ce17f531c237197dbd8a7a800f950b7c86901a9e18e714",
     "backend/info_nodes/definitions/medical_procedure.py": "b9b35efde4750ba0bb57c4779bc05eb8bd59ad2ccc156921b2c2fef959b8a8ce",
     "backend/info_nodes/definitions/method.py": "27be3c1fad97552632ae6cb0c16eb51f44f851c535f0bdd3aa6645c6e6e008aa",
     "backend/info_nodes/definitions/specie.py": "72a4eb98c98cbcfd4671c01ded5f0b6dee249f1cfc6ae357559f5ee144720591",
@@ -27,7 +27,7 @@
     "backend/info_nodes/metadata_cache.py": "3d6851aff868656131f05f65dc3ff18c1f336891fb94098c0f852c5d04192f60",
     "backend/info_nodes/node.py": "2c2c7ad6f7cf98dab648fb09ddd76e39c64b5f9ca8e3dc4ea53ed45169617b5b",
     "backend/info_nodes/nodes.py": "7470ba80613b9a03d97a3ae32c312236a3db26bdca65bbb13ab679dc054a06dc",
-    "backend/info_nodes/policies.py": "c41c44e22ebc69be3fc1b1060023645128e234dfada4cb19e51bf0c8a2841f65",
+    "backend/info_nodes/policies.py": "ec90716d13b7259d79c35feb20e25de95187ccb0d94d621df52720420b7788b9",
     "backend/info_nodes/units.py": "4036cee31a99beb758bc1087c4f53dae8ba0bf3d7a0a7e3c0652d7c0d8451b88",
     "scripts/update_vocabulary.py": "aad9e387d073af99126624c85a3aa7887cbecf7c3d83ba561018cdc0bc8a22e8"
   },

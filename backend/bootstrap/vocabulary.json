@@ -1,5 +1,5 @@
 {
-  "version": "b83facb10845f0bfec21b90d8f95bd20447867fad6764d100bf36a4cc51619ca",
+  "version": "af1055a156afea98ea6baa066ae89363334e0ecbf1e7466f3ce19fe52707f4b6",
   "nodes": [
     {
       "sid": "root",
@@ -13559,6 +13559,158 @@
       }
     },
     {
+      "sid": "cmax-per-dose-ratio",
+      "name": "cmax_per_dose (ratio)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"maximum concentration (Cmax) per dose (ratio)\""
+        ],
+        "description": [
+          "\"'cmax_per_dose' of a treatment or condition as ratio to a reference value of the same subjects or group (e.g. the drug alone, the fasted state or the reference formulation), e.g. 1.0 (100%) for no difference. Geometric mean ratios use gmean; a confidence interval belongs in the comment. The reference is named in the comment. See also 'cmax_per_dose'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "auc-per-dose-ratio",
+      "name": "auc_per_dose (ratio)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"area under curve (AUC) per dose (ratio)\""
+        ],
+        "description": [
+          "\"'auc_per_dose' of a treatment or condition as ratio to a reference value of the same subjects or group (e.g. the drug alone, the fasted state or the reference formulation), e.g. 1.0 (100%) for no difference. Geometric mean ratios use gmean; a confidence interval belongs in the comment. The reference is named in the comment. See also 'auc_per_dose'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "concentration-ratio",
+      "name": "concentration (ratio)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": true,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"concentration (ratio)\""
+        ],
+        "description": [
+          "\"'concentration' of a treatment or condition as ratio to a reference value of the same subjects or group (e.g. the drug alone, the fasted state or the reference formulation), e.g. 1.0 (100%) for no difference. Geometric mean ratios use gmean; a confidence interval belongs in the comment. The reference is named in the comment. See also 'concentration'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "concentration-per-dose-ratio",
+      "name": "concentration per dose (ratio)",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "time_required": true,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "pharmacokinetic-measurement"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"concentration per dose (ratio)\""
+        ],
+        "description": [
+          "\"'concentration per dose' of a treatment or condition as ratio to a reference value of the same subjects or group (e.g. the drug alone, the fasted state or the reference formulation), e.g. 1.0 (100%) for no difference. Geometric mean ratios use gmean; a confidence interval belongs in the comment. The reference is named in the comment. See also 'concentration per dose'.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "mri-measurement",
       "name": "MRI measurement",
       "kind": "measurement",
@@ -15643,6 +15795,158 @@
         ],
         "ntype": [
           "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "smoking-history",
+      "name": "smoking history",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "categorical",
+        "units": [],
+        "choices": [
+          "never smoker",
+          "former smoker",
+          "current smoker",
+          "NR"
+        ],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": false
+      },
+      "parents": [
+        "smoking-status"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"An indication of a person's current tobacco and nicotine consumption as well as some indication of smoking history.\", \"label\": \"Smoking Status\", \"relation\": \"BQB_IS_VERSION_OF\", \"term\": \"C19796\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C19796\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"smoking history\""
+        ],
+        "description": [
+          "\"Smoking history of the subjects: never, former or current smoker. Use it when a study reports former smokers; 'smoking' (Y/N) encodes the current smoking status and 'abstinence smoking' the time since stopping.\""
+        ],
+        "dtype": [
+          "\"categorical\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "never-smoker",
+      "name": "never smoker",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "smoking-history"
+      ],
+      "terms": {
+        "synonyms": [
+          "Lifelong Non-Smoker",
+          "Never Smoked",
+          "Never Smoker",
+          "Never smoker",
+          "never smoked",
+          "non-smoker"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"A person who has never smoked at the time of the interview or has smoked less than 100 cigarettes in their life.\", \"label\": \"Never Smoker\", \"relation\": \"BQB_IS\", \"term\": \"C65108\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C65108\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"never smoker\""
+        ],
+        "description": [
+          "\"The subject has never smoked or smoked fewer than 100 cigarettes in a lifetime.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "former-smoker",
+      "name": "former smoker",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "smoking-history"
+      ],
+      "terms": {
+        "synonyms": [
+          "Former Smoker",
+          "Former smoker",
+          "Prior Smoker",
+          "ex-smoker",
+          "previous smoker"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"A person who has quit smoking at the time of the interview but has smoked at least 100 cigarettes in their life.\", \"label\": \"Former Smoker\", \"relation\": \"BQB_IS\", \"term\": \"C67148\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C67148\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"former smoker\""
+        ],
+        "description": [
+          "\"The subject smoked in the past and has stopped smoking.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "current-smoker",
+      "name": "current smoker",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "smoking-history"
+      ],
+      "terms": {
+        "synonyms": [
+          "Current Smoker",
+          "Smoker"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": \"An adult who has smoked 100 cigarettes in his or her lifetime and who currently smokes cigarettes. Includes daily smokers and non-daily smokers (also known as occasional smokers).\", \"label\": \"Current Smoker\", \"relation\": \"BQB_IS\", \"term\": \"C67147\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C67147\"}"
+        ],
+        "xrefs": [],
+        "label": [
+          "\"current smoker\""
+        ],
+        "description": [
+          "\"The subject smokes at present.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
         ],
         "deprecated": [
           "false"
@@ -144025,6 +144329,35 @@
         ],
         "description": [
           "\"smoking: not reported.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "smoking-history-not-reported",
+      "name": "NR",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "smoking-history"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Not reported smoking history\""
+        ],
+        "description": [
+          "\"smoking history: not reported.\""
         ],
         "dtype": [
           "\"undefined\""

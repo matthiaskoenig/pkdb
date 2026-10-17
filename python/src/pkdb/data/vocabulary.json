@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "9cad626704b7d33b5b3facb84d80d613b79291b9e256906fdff4809381a63a92",
+    "version": "bcb943793a0f643a37fdafe956191c65f7b1850496b42b71f134f7c56da9ee7a",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -677,6 +677,18 @@
         "units": [
           "hr/l",
           "hr/l/kg"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "auc_per_dose (ratio)",
+        "sid": "auc-per-dose-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
         ],
         "choices": [],
         "can_negative": false,
@@ -1616,6 +1628,18 @@
         "deprecated": false
       },
       {
+        "name": "cmax_per_dose (ratio)",
+        "sid": "cmax-per-dose-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
         "name": "cmax (ratio)",
         "sid": "cmax-ratio",
         "dtype": "numeric",
@@ -1734,6 +1758,30 @@
         "choices": [],
         "can_negative": false,
         "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "concentration per dose (ratio)",
+        "sid": "concentration-per-dose-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": true,
+        "deprecated": false
+      },
+      {
+        "name": "concentration (ratio)",
+        "sid": "concentration-ratio",
+        "dtype": "numeric",
+        "units": [
+          "dimensionless"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": true,
         "deprecated": false
       },
       {
@@ -5747,6 +5795,21 @@
           "yr"
         ],
         "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": false
+      },
+      {
+        "name": "smoking history",
+        "sid": "smoking-history",
+        "dtype": "categorical",
+        "units": [],
+        "choices": [
+          "never smoker",
+          "former smoker",
+          "current smoker",
+          "NR"
+        ],
         "can_negative": false,
         "time_required": false,
         "deprecated": false
@@ -13067,5 +13130,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "120c07b315a3ca317dbdd6bec0f9dd34407bb03806f55032d79c01af18f0ed98"
+  "vocabulary_hash": "2cc1aabefd52407798fd3bc2f900af9898380a5941515c0cc9d12d430e595f5a"
 }

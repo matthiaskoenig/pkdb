@@ -3623,6 +3623,10 @@ PK_RATIO_PARAMETERS = [
     ("mrt", "mean residence time (MRT)"),
     ("bp_ratio", "blood/plasma ratio (BP)"),
     ("cmax_per_auc", "maximum concentration per AUC (Cmax/AUC)"),
+    ("cmax_per_dose", "maximum concentration (Cmax) per dose"),
+    ("auc_per_dose", "area under curve (AUC) per dose"),
+    ("concentration", "concentration"),
+    ("concentration per dose", "concentration per dose"),
 ]
 
 for parameter, label in PK_RATIO_PARAMETERS:
