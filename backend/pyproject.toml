@@ -23,6 +23,8 @@ dependencies = [
   "mcp==2.3.0",
   "httpx2>=2.13.0,<3",
   "pillow>=12.3.0,<13",
+  # CA bundle without the compromised emSign intermediates (GHSA-6q48-6c7w-9gw2).
+  "certifi>=2026.10.19",
 ]
 
 [project.scripts]
