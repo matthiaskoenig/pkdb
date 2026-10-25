@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "bcb943793a0f643a37fdafe956191c65f7b1850496b42b71f134f7c56da9ee7a",
+    "version": "6f3a2600195a8c4254f40f183c5f8e6e4eeeb91e7e5f59bb84efe5b58355b5f0",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -4512,6 +4512,34 @@
       },
       {
         "name": "muliple_dosing_cmax",
+        "sid": "muliple-dosing-cmax",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": true
+      },
+      {
+        "name": "muliple_dosing_cmin",
+        "sid": "muliple-dosing-cmin",
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "can_negative": false,
+        "time_required": false,
+        "deprecated": true
+      },
+      {
+        "name": "multiple_dosing_cmax",
         "sid": "multiple-dosing-cmax",
         "dtype": "numeric",
         "units": [
@@ -4525,7 +4553,7 @@
         "deprecated": false
       },
       {
-        "name": "muliple_dosing_cmin",
+        "name": "multiple_dosing_cmin",
         "sid": "multiple-dosing-cmin",
         "dtype": "numeric",
         "units": [
@@ -13130,5 +13158,5 @@
       "unspecified summary"
     ]
   },
-  "vocabulary_hash": "2cc1aabefd52407798fd3bc2f900af9898380a5941515c0cc9d12d430e595f5a"
+  "vocabulary_hash": "2d17c79d163020c5ea8eaf7b0447e67650652522d994f6958a5747c439e33cff"
 }

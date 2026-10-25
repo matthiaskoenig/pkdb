@@ -97,3 +97,42 @@ def test_full_offline_vocabulary_bootstraps(db_session, bootstrap_directory):
         mass = vocabulary.substance_map()["apixaban"].mass
         assert mass is not None and mass > 0
         assert "M" in vocabulary.measurement_map()["sex"].choices
+
+
+def test_renamed_term_keeps_its_sid_and_the_old_name_stays_deprecated(
+    db_session, bootstrap_directory
+):
+    """A database bootstrapped before the rename of `muliple_dosing_cmin` needs no migration."""
+    from pathlib import Path
+
+    current = json.loads(
+        (Path(__file__).parents[2] / "bootstrap/vocabulary.json").read_text()
+    )
+    renamed = {"multiple-dosing-cmin", "multiple-dosing-cmax"}
+    added = {"muliple-dosing-cmin", "muliple-dosing-cmax"}
+    previous = json.loads(json.dumps(current))
+    previous["nodes"] = [node for node in previous["nodes"] if node["sid"] not in added]
+    for node in previous["nodes"]:
+        if node["sid"] in renamed:
+            node["name"] = node["definition"]["name"] = node["name"].replace(
+                "multiple", "muliple"
+            )
+    path = bootstrap_directory / "vocabulary.json"
+    with db_session.begin():
+        path.write_text(json.dumps(previous))
+        assert not bootstrap(bootstrap_directory, db_session).errors
+        before = load_vocabulary(db_session).measurement_map()
+        assert before["muliple_dosing_cmin"].sid == "multiple-dosing-cmin"
+
+        path.write_text(json.dumps(current))
+        report = bootstrap(bootstrap_directory, db_session)
+        assert not report.errors, report.errors
+        assert report.inserted == len(added)
+        measurements = load_vocabulary(db_session).measurement_map()
+        for extreme in ("cmin", "cmax"):
+            term = measurements[f"multiple_dosing_{extreme}"]
+            assert term.sid == f"multiple-dosing-{extreme}"
+            assert not term.deprecated
+            old = measurements[f"muliple_dosing_{extreme}"]
+            assert old.sid == f"muliple-dosing-{extreme}"
+            assert old.deprecated

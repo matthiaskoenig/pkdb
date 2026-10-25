@@ -90,3 +90,11 @@ docker compose up --build --wait
 The rebuilt image contains the new JSON. Startup applies it to PostgreSQL using `pkdb-server bootstrap /app/bootstrap`. Existing accounts and studies are preserved. Repeat [validation and upload](local-upload-testing.md) to use the new allowed terms.
 
 Bootstrap inserts and updates definitions; it retains database nodes omitted from a later snapshot. Removing a definition from the source is therefore not a database deletion mechanism. Coordinate term retirement and affected studies explicitly.
+
+## Rename a term
+
+Studies and the database refer to a term in different ways: study folders and uploads use its name, stored measurements reference its SID. To correct a name, keep the SID and change only `name` (and `label` or descriptions where they repeat it). Bootstrap updates the node of that SID, so the stored data show the new name without a database migration.
+
+Study folders that still use the old name must keep validating until they are renamed. Add the old name as a separate definition with its own SID, the same parents, dtype and units, a description that names the replacement, and `deprecated=True`. Validation then accepts the old name with the warning `deprecated_measurement`, and an upload stores such rows under the deprecated SID until the study is renamed and uploaded again. `muliple_dosing_cmin` and `muliple_dosing_cmax`, the misspelled names of `multiple_dosing_cmin` and `multiple_dosing_cmax`, are kept this way.
+
+After the release is deployed, the `vocabulary` workflow of pkdb_data refreshes its `vocabulary.lock.json` from the server (or a maintainer runs `pkdb vocabulary sync --output vocabulary.lock.json`); only then can the studies of pkdb_data use the new name. Rename the rows of the affected studies there, one pull request per study. Retire the deprecated definition only when no study of pkdb_data and no stored measurement uses it any more.

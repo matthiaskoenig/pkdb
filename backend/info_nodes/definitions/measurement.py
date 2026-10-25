@@ -255,7 +255,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         "multiple-dosing-cmin",
-        name="muliple_dosing_cmin",
+        name="multiple_dosing_cmin",
         label="multiple dosing minimal concentration",
         description="Minimal concentration of substance in quasi steady state after multiple dosing interventions. "
         "This depends on the dosing scheme. See also 'multiple_dosing_cmax'.",
@@ -266,7 +266,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         "multiple-dosing-cmax",
-        name="muliple_dosing_cmax",
+        name="multiple_dosing_cmax",
         label="multiple dosing maximal concentration",
         description="Maximal concentration of substance in quasi steady state after multiple dosing interventions. "
         "This depends on the dosing scheme. See also 'multiple_dosing_cmin'.",
@@ -274,6 +274,31 @@ MEASUREMENT_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC,
         units=CONCENTRATION_UNITS,
         synonyms=["css", "Css", "steady-state maximal concentration"],
+    ),
+    # The misspelled names that 'multiple_dosing_cmin' and 'multiple_dosing_cmax' had until
+    # pkdb 0.12.17. They stay as deprecated terms, so that study folders using them still
+    # validate (with the warning 'deprecated_measurement') and upload until they are renamed.
+    MeasurementType(
+        "muliple-dosing-cmin",
+        name="muliple_dosing_cmin",
+        description="Deprecated misspelling of 'multiple_dosing_cmin', the minimal concentration of "
+        "substance in quasi steady state after multiple dosing interventions. "
+        "Use 'multiple_dosing_cmin' instead.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=CONCENTRATION_UNITS,
+        deprecated=True,
+    ),
+    MeasurementType(
+        "muliple-dosing-cmax",
+        name="muliple_dosing_cmax",
+        description="Deprecated misspelling of 'multiple_dosing_cmax', the maximal concentration of "
+        "substance in quasi steady state after multiple dosing interventions. "
+        "Use 'multiple_dosing_cmax' instead.",
+        parents=["concentration"],
+        dtype=DType.NUMERIC,
+        units=CONCENTRATION_UNITS,
+        deprecated=True,
     ),
     MeasurementType(
         "concentration-ss",
