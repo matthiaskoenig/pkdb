@@ -217,3 +217,29 @@ def test_negative_baseline_inr_remains_invalid(
 def test_unspecified_summary_is_a_calculation_type(scientific_vocabulary):
     # Validation accepts it with any vocabulary; storage needs the vocabulary node.
     assert "unspecified summary" in scientific_vocabulary.calculation_types
+
+
+@pytest.mark.parametrize("extreme", ["cmin", "cmax"])
+def test_multiple_dosing_terms_keep_their_misspelled_names_deprecated(
+    scientific_vocabulary, valid_study, vocabulary, extreme
+):
+    measurements = scientific_vocabulary.measurement_map()
+    current = measurements[f"multiple_dosing_{extreme}"]
+    misspelled = measurements[f"muliple_dosing_{extreme}"]
+    # The stored measurements reference the SID, which keeps its corrected name.
+    assert current.sid == f"multiple-dosing-{extreme}"
+    assert not current.deprecated
+    assert misspelled.sid == f"muliple-dosing-{extreme}"
+    assert misspelled.deprecated
+    assert misspelled.units == current.units
+
+    # Study folders with the misspelled name still validate, with a warning.
+    vocabulary = vocabulary.model_copy(
+        update={"measurements": (*vocabulary.measurements, misspelled)}
+    )
+    measurement = valid_study.measurements[0]
+    measurement.measurement_type = misspelled.name
+    measurement.unit = misspelled.units[0]
+    report = prepare_study(valid_study, vocabulary).report
+    assert report.valid
+    assert "deprecated_measurement" in {issue.code for issue in report.issues}

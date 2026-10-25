@@ -1,5 +1,5 @@
 {
-  "version": "af1055a156afea98ea6baa066ae89363334e0ecbf1e7466f3ce19fe52707f4b6",
+  "version": "c24caafbe9a35f90a36b0c33dd49bea61c214b62c7549548202972b94764980f",
   "nodes": [
     {
       "sid": "root",
@@ -779,7 +779,7 @@
     },
     {
       "sid": "multiple-dosing-cmin",
-      "name": "muliple_dosing_cmin",
+      "name": "multiple_dosing_cmin",
       "kind": "measurement",
       "definition": {
         "dtype": "numeric",
@@ -823,7 +823,7 @@
     },
     {
       "sid": "multiple-dosing-cmax",
-      "name": "muliple_dosing_cmax",
+      "name": "multiple_dosing_cmax",
       "kind": "measurement",
       "definition": {
         "dtype": "numeric",
@@ -862,6 +862,86 @@
         ],
         "deprecated": [
           "false"
+        ]
+      }
+    },
+    {
+      "sid": "muliple-dosing-cmin",
+      "name": "muliple_dosing_cmin",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": true
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"muliple_dosing_cmin\""
+        ],
+        "description": [
+          "\"Deprecated misspelling of 'multiple_dosing_cmin', the minimal concentration of substance in quasi steady state after multiple dosing interventions. Use 'multiple_dosing_cmin' instead.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "true"
+        ]
+      }
+    },
+    {
+      "sid": "muliple-dosing-cmax",
+      "name": "muliple_dosing_cmax",
+      "kind": "measurement",
+      "definition": {
+        "dtype": "numeric",
+        "units": [
+          "g/l",
+          "mol/l",
+          "IU/l"
+        ],
+        "choices": [],
+        "time_required": false,
+        "can_negative": false,
+        "deprecated": true
+      },
+      "parents": [
+        "concentration"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"muliple_dosing_cmax\""
+        ],
+        "description": [
+          "\"Deprecated misspelling of 'multiple_dosing_cmax', the maximal concentration of substance in quasi steady state after multiple dosing interventions. Use 'multiple_dosing_cmax' instead.\""
+        ],
+        "dtype": [
+          "\"numeric\""
+        ],
+        "ntype": [
+          "\"measurement_type\""
+        ],
+        "deprecated": [
+          "true"
         ]
       }
     },
