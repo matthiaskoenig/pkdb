@@ -289,7 +289,8 @@ class CurationServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server: CurationServer
+    # socketserver assigns the server that created the handler, always a CurationServer.
+    server: CurationServer  # ty: ignore[invalid-mutable-override]
 
     def log_message(self, format, *args):
         # Request URLs and payloads must never leak bootstrap tokens or API keys.

@@ -5,7 +5,7 @@ methods are declared for type checking only and are provided by `CurationEngine`
 """
 
 import threading
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple
@@ -88,7 +88,7 @@ class StateLock:
         self._release()
 
     @contextmanager
-    def reading(self) -> Iterator[StateLock]:
+    def reading(self) -> Generator[StateLock]:
         self._acquire()
         try:
             yield self

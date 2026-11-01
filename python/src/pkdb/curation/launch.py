@@ -97,10 +97,9 @@ def _start(
         raise _open_failed(failed, error) from error
     # Windows ignores start_new_session; a new process group keeps the Ctrl+C of the
     # terminal of pkdb away from a console command.
-    group = (
-        {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
-        if sys.platform == "win32"
-        else {}
+    # Popen refuses creation flags other than 0 outside Windows.
+    creationflags = (
+        subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
     )
     try:
         process = subprocess.Popen(
@@ -110,7 +109,7 @@ def _start(
             stderr=errors,
             close_fds=True,
             start_new_session=True,
-            **group,
+            creationflags=creationflags,
         )
     except BaseException:
         errors.close()
