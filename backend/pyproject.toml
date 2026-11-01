@@ -22,7 +22,9 @@ dependencies = [
   "beartype>=0.23.0rc1,<1; python_version >= '3.15'",
   "mcp==2.3.0",
   "httpx2>=2.13.0,<3",
-  "pillow>=12.3.0,<13",
+  # Pillow 13.0.0 fixes 41 advisories of the earlier releases, among them the critical
+  # GHSA-v9pv-5gc8-w2m6, GHSA-5x8w-8jj5-q52h, GHSA-332p-7hrc-92wf, GHSA-w889-685w-c8fh and GHSA-8g5g-8vmr-9782.
+  "pillow>=13.0.0,<14",
   # CA bundle without the compromised emSign intermediates (GHSA-6q48-6c7w-9gw2).
   "certifi>=2026.10.19",
 ]

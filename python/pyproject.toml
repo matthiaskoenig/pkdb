@@ -35,7 +35,9 @@ dependencies = [
   "polars>=1.44.2,<2",
   "fastexcel>=0.21.0,<1",
   "matplotlib>=3.11.2,<4",
-  "pillow>=12.3.0,<13",
+  # Pillow 13.0.0 fixes 41 advisories of the earlier releases, among them the critical
+  # GHSA-v9pv-5gc8-w2m6, GHSA-5x8w-8jj5-q52h, GHSA-332p-7hrc-92wf, GHSA-w889-685w-c8fh and GHSA-8g5g-8vmr-9782.
+  "pillow>=13.0.0,<14",
 ]
 
 [project.urls]
