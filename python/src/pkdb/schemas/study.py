@@ -180,8 +180,9 @@ class Individual(Subject):
 
 class Intervention(ScientificRecord):
     name: Identifier
-    # The first administration, or every administration of an irregular schedule.
-    time: Number | Annotated[list[Number], Field(min_length=2)] | None = None
+    # The first administration, or every administration of an irregular schedule; an
+    # intervention widens the single time of an observation to a list.
+    time: Number | Annotated[list[Number], Field(min_length=2)] | None = None  # ty: ignore[invalid-attribute-override]
     time_end: Number | None = None
     interval: Number | None = None
     doses: Annotated[int, Field(strict=True, ge=1)] | None = None

@@ -1,3 +1,4 @@
 # Unreleased
 
 - Security: the `pkdb` package and the backend require Pillow 13.0.0 or newer and lock it; Pillow 13.0.0 fixes 41 advisories of the earlier releases, among them the critical GHSA-v9pv-5gc8-w2m6, GHSA-5x8w-8jj5-q52h, GHSA-332p-7hrc-92wf, GHSA-w889-685w-c8fh and GHSA-8g5g-8vmr-9782. The former upper bound `<13` blocked projects which depend on `pkdb` from taking the fix.
+- Security: the backend locks opentelemetry-api 1.45.2 (CVE-2026-114603) and fastmcp 4.1.5, and the frontend tests run with vitest 5.0.5, whose `@vitest/mocker` fixes GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp. The locks of the `pkdb` package and of the backend move to the newest releases within their bounds, among them pkpdutils 1.4.0 and pydantic 2.14.2 on Python 3.15 as on 3.14; the client is type checked with ty 0.0.95.

@@ -47,7 +47,7 @@
     "vue-eslint-parser": "10.4.1",
     "typescript-eslint": "8.70.1",
     "jiti": "2.7.0",
-    "vitest": "5.0.1",
+    "vitest": "5.0.5",
     "@vue/test-utils": "2.5.1",
     "jsdom": "30.1.1",
     "@playwright/test": "1.63.0",
