@@ -1,4 +1,5 @@
 import json
+import subprocess
 import sys
 from dataclasses import replace
 
@@ -42,9 +43,10 @@ def digitized(make_study, valid_files, width=100):
 
 def pixels(path):
     """The RGB values of a PNG from 0 to 255, by row and column."""
-    from matplotlib.image import imread
+    from PIL import Image
 
-    return np.rint(imread(path)[:, :, :3] * 255).astype(int)
+    with Image.open(path) as image:
+        return np.asarray(image.convert("RGB")).astype(int)
 
 
 def is_color(values, rgb, tolerance=0):
@@ -72,11 +74,13 @@ def test_overlay_draws_the_image_at_its_pixels_with_the_view_pixels(
     study = load_study(digitized(make_study, valid_files, width=600))
     result = render_source(study, "Fig1", tmp_path / "out.png")
     width, height = image_size(result.path)
-    # The image keeps its size and its pixels at the top, without blurred edges.
-    assert color_box(result.path, RED) == (0, 0, 600, 100)
-    assert width == 600 and height > 100
+    # The image keeps its size and its pixels at the top in the middle, without blurred edges.
+    left, top, image_width, image_height = color_box(result.path, RED)
+    assert (image_width, image_height) == (600, 100)
+    assert left == (width - 600) // 2 and top <= 10 and height > top + 100
     # Only the marks cover the image, no legend.
-    assert np.count_nonzero(~is_color(pixels(result.path)[:100], RED)) < 1000
+    image = pixels(result.path)[top : top + 100, left : left + 600]
+    assert np.count_nonzero(~is_color(image, RED)) < 1000
     expected = tuple(
         (p.px, p.py) for p in source_view(study, "Fig1").overlay if p.role == "mapped"
     )
@@ -109,7 +113,7 @@ def test_a_grayscale_image_keeps_its_gray(make_study, valid_files, tmp_path, dig
     folder = make_study(files)
     assert format_folder(folder).ok
     result = render_source(load_study(folder), "Fig1", tmp_path / "out.png")
-    # Without a colormap: matplotlib draws a single channel in viridis otherwise.
+    # Gray, not colored by a colormap.
     gray = np.count_nonzero(is_color(pixels(result.path), (128, 128, 128), 2))
     assert gray > (50_000 if digitize else 2_000)
 
@@ -119,7 +123,8 @@ def test_overlay_puts_the_series_and_the_mark_key_below_the_image(
 ):
     study = load_study(digitized(make_study, valid_files, width=600))
     result = render_source(study, "Fig1", tmp_path / "out.png")
-    strip = pixels(result.path)[100:]
+    _, top, _, image_height = color_box(result.path, RED)
+    strip = pixels(result.path)[top + image_height :]
     [series] = source_view(study, "Fig1").series
     color = tuple(int(series.color[i : i + 2], 16) for i in (1, 3, 5))
     # The dot of the series and the black marks of the key.
@@ -135,17 +140,17 @@ def test_overlay_of_a_narrow_image_widens_for_the_legends(
     width, height = image_size(result.path)
     left, top, image_width, image_height = color_box(result.path, RED)
     # The image keeps its pixels in the middle of the top.
-    assert (top, image_width, image_height) == (0, 100, 100)
-    assert width > 100 and left == (width - 100) // 2 and height > 100
+    assert (image_width, image_height) == (100, 100) and top <= 10
+    assert width > 100 and left == (width - 100) // 2 and height > top + 100
     # The legends fit: the margins of the figure stay white.
     edges = pixels(result.path)[:, [0, -1]]
-    assert is_color(edges[100:], (255, 255, 255)).all()
+    assert is_color(edges, (255, 255, 255)).all()
 
 
 def test_side_by_side_without_digitization(valid_study, tmp_path):
     study = load_study(valid_study)
     for source in ("Fig1", "Fig2"):
-        result = render_source(study, source, tmp_path / f"{source}.png")
+        result = render_source(study, source, tmp_path / f"{source}.svg")
         assert result.path.exists() and result.points == ()
 
 
@@ -160,17 +165,17 @@ def test_plot_command_writes_outside_the_study(
     assert entry["plots"] == [
         {
             "source": "Fig1",
-            "file": str(out / "Example_Fig1.plot.png"),
+            "file": str(out / "Example_Fig1.plot.svg"),
             "mode": "overlay",
             "unmatched": [],
         }
     ]
-    assert not list(folder.glob("*.plot.png"))
+    assert not list(folder.glob("*.plot.svg"))
     assert main(args) == 0
     entry = json.loads(capsys.readouterr().out)
     assert [p["source"] for p in entry["plots"]] == ["Fig1", "Fig2"]
-    assert (out / "Example_Fig1.plot.png").exists()
-    assert (out / "Example_Fig2.plot.png").exists()
+    assert (out / "Example_Fig1.plot.svg").exists()
+    assert (out / "Example_Fig2.plot.svg").exists()
     assert entry["plots"][1]["mode"] == "side_by_side"
 
 
@@ -194,7 +199,7 @@ def test_error_bar_dataset_shares_the_series_color_and_legend_entry(
     )
     assert format_folder(folder).ok
     study = load_study(folder)
-    result = render_source(study, "Fig1", tmp_path / "out.png")
+    result = render_source(study, "Fig1", tmp_path / "out.svg")
     assert result.legend == ("drug_plasma",)
     # Each drawn series once, in the color of the source view, which the curation app draws alike.
     assert result.colors == (
@@ -202,23 +207,35 @@ def test_error_bar_dataset_shares_the_series_color_and_legend_entry(
     )
 
 
-def test_render_source_reports_its_mode_without_pyplot(
-    make_study, valid_files, tmp_path, monkeypatch
+def test_render_source_writes_svg_and_png_by_the_suffix(
+    make_study, valid_files, tmp_path
 ):
-    import matplotlib
-
-    def no_backend_switch(*args, **kwargs):
-        raise AssertionError("render_source must not switch the global backend")
-
-    # Importing pyplot now fails, so rendering cannot use its global state.
-    monkeypatch.setitem(sys.modules, "matplotlib.pyplot", None)
-    monkeypatch.setattr(matplotlib, "use", no_backend_switch)
     study = load_study(digitized(make_study, valid_files))
+    for source in ("Fig1", "Fig2"):
+        svg = render_source(study, source, tmp_path / f"{source}.svg").path.read_text()
+        assert svg.startswith("<svg")
+        # The figure image of the overlay is embedded in the SVG.
+        assert ("data:image/png;base64," in svg) == (source == "Fig1")
     overlay = render_source(study, "Fig1", tmp_path / "Fig1.png")
     side = render_source(study, "Fig2", tmp_path / "Fig2.png")
     assert (overlay.mode, side.mode) == ("overlay", "side_by_side")
     assert color_box(overlay.path, RED)[2:] == (100, 100)
     assert png_size(side.path.read_bytes()) == (1200, 500)
+
+
+def test_render_source_imports_no_matplotlib(make_study, valid_files, tmp_path):
+    folder = digitized(make_study, valid_files)
+    code = (
+        "import sys; from pathlib import Path\n"
+        "from pkdb.studyformat.load import load_study\n"
+        "from pkdb.studyformat.plot import render_source\n"
+        "study = load_study(Path(sys.argv[1]))\n"
+        "for source in ('Fig1', 'Fig2'):\n"
+        "    render_source(study, source, Path(sys.argv[2]) / f'{source}.svg')\n"
+        "assert not [m for m in sys.modules if m.split('.')[0] == 'matplotlib']\n"
+    )
+    run = [sys.executable, "-c", code, str(folder), str(tmp_path)]
+    subprocess.run(run, check=True)
 
 
 def test_plot_lists_series_without_dataset(make_study, valid_files, tmp_path, capsys):
@@ -239,7 +256,7 @@ def test_plot_lists_series_without_dataset(make_study, valid_files, tmp_path, ca
     assert (plot["mode"], plot["unmatched"]) == ("overlay", ["drug_plasma"])
     assert main([*args, "--format", "human"]) == 0
     assert capsys.readouterr().out == (
-        f"caffeine/Example: Fig1 (overlay) {out / 'Example_Fig1.plot.png'}\n"
+        f"caffeine/Example: Fig1 (overlay) {out / 'Example_Fig1.plot.svg'}\n"
         "  series without dataset: drug_plasma\n"
     )
 
@@ -259,11 +276,11 @@ def test_plot_default_sources_include_digitized_figures_without_rows(
     assert main(["plot", str(folder), "--out", str(out), "--format", "human"]) == 0
     lines = capsys.readouterr().out.splitlines()
     assert lines == [
-        f"caffeine/Example: Fig1 (side_by_side) {out / 'Example_Fig1.plot.png'}",
+        f"caffeine/Example: Fig1 (side_by_side) {out / 'Example_Fig1.plot.svg'}",
         "  series without dataset: drug_plasma",
-        f"caffeine/Example: Fig2 (side_by_side) {out / 'Example_Fig2.plot.png'}",
+        f"caffeine/Example: Fig2 (side_by_side) {out / 'Example_Fig2.plot.svg'}",
         "  series without dataset: age_vs_cmax",
-        f"caffeine/Example: Fig3 (overlay) {out / 'Example_Fig3.plot.png'}",
+        f"caffeine/Example: Fig3 (overlay) {out / 'Example_Fig3.plot.svg'}",
     ]
 
 
@@ -273,7 +290,7 @@ def test_plot_refuses_an_output_folder_in_the_study(valid_study, capsys, inside)
     assert main(["plot", str(valid_study), "--out", str(out)]) == 1
     assert "never into the study folder" in capsys.readouterr().err
     assert not (valid_study / "plots").exists()
-    assert not list(valid_study.glob("*.plot.png"))
+    assert not list(valid_study.glob("*.plot.svg"))
 
 
 def test_plot_takes_the_series_colors_and_order_of_the_source_view(
@@ -293,7 +310,7 @@ def test_plot_takes_the_series_colors_and_order_of_the_source_view(
     assert format_folder(folder).ok
     study = load_study(folder)
     view = source_view(study, "Fig1")
-    result = render_source(study, "Fig1", tmp_path / "out.png")
+    result = render_source(study, "Fig1", tmp_path / "out.svg")
     assert result.legend == ("parent_plasma", "drug_plasma")
     assert dict(result.colors) == {s.name: s.color for s in view.series}
     assert [s.color for s in view.series] == list(SERIES_COLORS[:2])
@@ -302,7 +319,7 @@ def test_plot_takes_the_series_colors_and_order_of_the_source_view(
 def test_side_by_side_plots_the_points_of_the_source_view(valid_study, tmp_path):
     study = load_study(valid_study)
     view = source_view(study, "Fig1")
-    result = render_source(study, "Fig1", tmp_path / "Fig1.png")
+    result = render_source(study, "Fig1", tmp_path / "Fig1.svg")
     assert result.mode == "side_by_side"
     assert result.legend == tuple(dict.fromkeys(p.series for p in view.points))
     assert dict(result.colors) == {s.name: s.color for s in view.series}
@@ -320,7 +337,7 @@ def test_side_by_side_colors_only_the_series_it_draws(
     study = load_study(folder)
     view = source_view(study, "Fig1")
     assert [s.name for s in view.series] == ["drug_plasma", "parent_plasma"]
-    result = render_source(study, "Fig1", tmp_path / "Fig1.png")
+    result = render_source(study, "Fig1", tmp_path / "Fig1.svg")
     assert result.mode == "side_by_side"
     assert dict(result.colors) == {"drug_plasma": view.series[0].color}
 
@@ -343,7 +360,7 @@ def source_point(y, low, high):
 def test_side_by_side_draws_the_error_bars_of_the_source_view():
     # Down to the low end and up to the high end; 0 at a point without an error bar.
     rows = [source_point(4.0, 2.0, 8.0), source_point(5.0, None, None)]
-    assert _error_ranges(rows) == [[2.0, 0.0], [4.0, 0.0]]
+    assert _error_ranges(rows) == ([2.0, 0.0], [4.0, 0.0])
     assert _error_ranges([source_point(5.0, None, None)]) is None
 
 
@@ -384,9 +401,9 @@ def test_overlay_draws_the_error_bar_of_a_mapped_row_from_its_low_to_its_high_en
 
 def test_side_by_side_draws_timecourses_and_outputs_as_lines_and_scatters_as_points():
     assert [_linestyle(kind) for kind in ("timecourses", "outputs", "scatters")] == [
-        "-",
-        "-",
-        "",
+        "solid",
+        "solid",
+        "none",
     ]
 
 
@@ -430,7 +447,7 @@ def test_plot_default_sources_include_figures_whose_outputs_have_a_time(
     assert main(["plot", str(folder), "--out", str(out), "--format", "human"]) == 0
     lines = capsys.readouterr().out.splitlines()
     assert (
-        f"caffeine/Example: Fig3 (side_by_side) {out / 'Example_Fig3.plot.png'}"
+        f"caffeine/Example: Fig3 (side_by_side) {out / 'Example_Fig3.plot.svg'}"
         in lines
     )
     assert "  series without dataset: all · D1 · concentration · drug · plasma" in lines
@@ -468,7 +485,7 @@ def test_side_by_side_lists_at_most_twenty_series_in_the_legend(
     make_study, valid_files, tsv, tmp_path
 ):
     study = load_study(many_series(make_study, valid_files, tsv, 45))
-    result = render_source(study, "Fig3", tmp_path / "Fig3.png")
+    result = render_source(study, "Fig3", tmp_path / "Fig3.svg")
     assert result.mode == "side_by_side"
     assert result.legend == tuple(f"CAF,CHL,{index}" for index in range(20))
     # Every series is still drawn.
@@ -501,10 +518,8 @@ def test_the_axis_title_names_the_distinct_labels_of_its_series():
 
 
 def test_side_by_side_titles_the_y_axis_with_every_measurement_of_its_series(
-    make_study, valid_files, tsv, tmp_path, monkeypatch
+    make_study, valid_files, tsv, tmp_path
 ):
-    from matplotlib.axes import Axes
-
     folder = make_study(valid_files)
     study = load_study(folder)
     view = source_view(study, "Fig1")
@@ -519,16 +534,10 @@ def test_side_by_side_titles_the_y_axis_with_every_measurement_of_its_series(
         for name in ("a", "b")
     )
     view = replace(view, series=series, points=points, unmatched=("a", "b"))
-    titles = {}
-    monkeypatch.setattr(
-        Axes, "set_ylabel", lambda self, text, *a, **k: titles.update(y=text)
-    )
-    monkeypatch.setattr(
-        Axes, "set_xlabel", lambda self, text, *a, **k: titles.update(x=text)
-    )
     from pkdb.studyformat.plot import _side_by_side
 
-    _side_by_side(study, view, tmp_path / "a.png")
+    plot = _side_by_side(study, view, tmp_path / "a.svg").chart.spec()["plots"][1]
+    titles = {axis: plot[axis]["label"] for axis in ("x", "y")}
     assert titles == {"x": "time (wk)", "y": "weight (kg) / hba1c (percent)"}
 
 
@@ -551,6 +560,6 @@ def test_a_figure_with_a_thousand_single_point_series_renders_fast(
         False,
     )  # fmt: skip
     started = time.perf_counter()
-    result = _side_by_side(load_study(valid_study), view, tmp_path / "a.png")
+    result = _side_by_side(load_study(valid_study), view, tmp_path / "a.svg")
     assert time.perf_counter() - started < 5
     assert len(result.legend) == 20 and len(result.colors) == 1300

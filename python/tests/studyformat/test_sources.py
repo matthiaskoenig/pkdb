@@ -558,7 +558,7 @@ def test_an_outputs_row_with_an_sd_has_an_error_bar(make_study, valid_files, tsv
     view = source_view(load_study(folder), "Fig1")
     (point,) = [p for p in view.points if p.kind == "outputs"]
     assert (point.error_low, point.error_high) == (1.5, 2.5)
-    assert _error_ranges([point]) == [[0.5], [0.5]]
+    assert _error_ranges([point]) == ([0.5], [0.5])
 
 
 def test_an_outputs_series_with_a_dataset_is_drawn_on_the_image(

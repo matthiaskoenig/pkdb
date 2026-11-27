@@ -6,7 +6,7 @@ image exactly as WebPlotDigitizer would on it (calibration on the axis ticks, po
 markers, with a little click noise), and draws the paper tables and placeholder PDFs, so the
 data, the images and the project agree. Run it after changing the data of a figure or table:
 
-    uv run --project python python tools/curation_testing/make_fixture.py
+    uv run --project python --with matplotlib python tools/curation_testing/make_fixture.py
 
 One point is placed wrongly on purpose: the row of the 100 mg series at 4 h says 1.24 mg/l
 while the figure shows 1.42 mg/l, and that point is not digitized, so validation reports one

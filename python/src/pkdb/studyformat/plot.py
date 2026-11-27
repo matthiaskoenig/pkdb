@@ -1,9 +1,10 @@
-"""Render a figure source with matplotlib: the digitized overlay or image and data side by side.
+"""Render a figure source as a chart of sbmlsim-core: the digitized overlay, or the image and the data side by side.
 
 The overlay uses image pixels, so its points equal those of `source_view`, which the curation app draws with Plotly.
-The image keeps its pixels at the top of the PNG, with the series and the key of the marks in a strip below it.
-Figures are drawn on their own Agg canvas without pyplot, so rendering changes no global matplotlib state and is
-safe in the threads of the curation server.
+The chart of an overlay draws the image at its pixels at the top in the middle, with the series and the key of the marks
+in legends below it; it is wider than the image by the room the renderer keeps around a panel, or by legends wider than
+the image. A chart is written by the suffix of its path, SVG or PNG (`.png`, a pixel per pixel of an overlay). The charts of `sbmlsim_core.chart` hold no global state, so rendering is safe in the
+threads of the curation server.
 """
 
 import math
@@ -12,6 +13,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from sbmlsim_core import figure_geometry
+from sbmlsim_core.chart import Chart, ChartAxis, ChartPlot
+
 from pkdb.studyformat.colors import POINT_RING
 from pkdb.studyformat.load import LoadedStudy
 from pkdb.studyformat.sources import OverlayPoint, SourcePoint, SourceView, source_view
@@ -19,15 +23,17 @@ from pkdb.studyformat.sources import OverlayPoint, SourcePoint, SourceView, sour
 
 @dataclass(frozen=True)
 class PlotResult:
-    """The written PNG and its mode, with what the plot draws.
+    """The written chart and its mode, with what the plot draws.
 
-    `points` are the mapped points drawn in overlay mode, in image pixels; the image starts at the top of the
-    PNG, centered when the legends are wider. `legend` holds the series of the legend, `colors` the color of each
-    drawn series once, and `unmatched` the series without a dataset.
+    `chart` is the drawn chart, written to `path` by its suffix. `points` are the mapped points drawn in overlay
+    mode, in image pixels; the image starts at the top of the chart, centered when the legends are wider. `legend`
+    holds the series of the legend, `colors` the color of each drawn series once, and `unmatched` the series without
+    a dataset.
     """
 
     path: Path
     mode: Literal["overlay", "side_by_side"]
+    chart: Chart
     points: tuple[tuple[float, float], ...] = ()
     legend: tuple[str, ...] = ()
     colors: tuple[tuple[str, str], ...] = ()
@@ -35,7 +41,7 @@ class PlotResult:
 
 
 def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
-    """Write the plot of a figure source to `path`; raises KeyError for an unknown source."""
+    """Write the plot of a figure source to `path`, SVG or by its suffix PNG; raises KeyError for an unknown source."""
     view = source_view(study, source)
     if view.layout == "overlay":
         return _overlay(study, view, path)
@@ -44,81 +50,56 @@ def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
 
 # The most series that a legend lists; the figure still draws every series.
 LEGEND_LIMIT = 20
-DPI = 100
-# The space in pixels around and between the legends below the image of an overlay.
+# The pixels of a point of the marks of an overlay, which is drawn in image pixels at 100 per inch.
+PT = 100 / 72
+# The edge width of the crosses of the mapped rows, 2 points: the renderer strokes an x at 1.5 times its edge width.
+CROSS_WIDTH = 2 * PT / 1.5
+# The font size of the legends below an overlay in pixels.
+STRIP_FONT = 25 / 3 * PT
+# The side by side chart in pixels, 12 x 5 inches, written as PNG at 100 per inch: 1200 x 500 pixels.
+SIDE_WIDTH, SIDE_HEIGHT, SIDE_DPI = 864, 360, 100
+# The space in pixels between a legend below an overlay and the edges of the chart.
 STRIP_PAD = 8
+# The legend groups of the key of the marks of an overlay, and of the series beyond the limit.
+KEY = ("digitized_point", "digitized_error_bar", "mapped_row", "mapped_error_bar")
+MORE = "more_series"
 
 
-def _save(figure, path: Path) -> None:
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
+def _hidden(low: float, high: float, reverse: bool = False) -> ChartAxis:
+    """An axis from `low` to `high` without line, ticks or label, as for an image."""
+    return ChartAxis(
+        min=low,
+        max=high,
+        reverse=reverse,
+        label_visible=False,
+        ticks_visible=False,
+        line_visible=False,
+    )
 
-    FigureCanvasAgg(figure)
-    figure.savefig(path, dpi=DPI)
 
-
-def _key():
+def _key(plot: ChartPlot) -> None:
     """The marks of the overlay in black, named as in the key of the curation app."""
-    from matplotlib.lines import Line2D
+    plot.curve(
+        [], [], line="none", marker="circle", size=4 * PT, color="black",
+        label="Digitized point", legend=KEY[0],
+    )  # fmt: skip
+    plot.curve(
+        [], [], xerr=[], line="none", error_width=1.5 * PT, color="black",
+        label="Digitized error bar", legend=KEY[1],
+    )  # fmt: skip
+    plot.curve(
+        [], [], line="none", marker="x", size=60**0.5 * PT, marker_edge_width=CROSS_WIDTH,
+        color="black", label="Mapped row", legend=KEY[2],
+    )  # fmt: skip
+    plot.curve(
+        [], [], yerr=[], line="none", error_width=1.5 * PT, color="black",
+        label="Error bar of a mapped row", legend=KEY[3],
+    )  # fmt: skip
 
-    def mark(label: str, **style) -> Line2D:
-        return Line2D([], [], linestyle="", color="black", label=label, **style)
 
-    # Marker sizes in points are the square roots of the areas that the overlay scatters.
-    return [
-        mark("Digitized point", marker="o", markersize=4),
-        mark(
-            "Digitized error bar", marker="_", markersize=40**0.5, markeredgewidth=1.5
-        ),
-        mark("Mapped row", marker="x", markersize=60**0.5, markeredgewidth=2),
-        mark(
-            "Error bar of a mapped row", marker="|", markersize=10, markeredgewidth=1.5
-        ),
-    ]
-
-
-def _legend_strip(figure, renderer, width: int, height: int, rows: list[list]) -> None:
-    """Size the figure to the image of `width` x `height` pixels at the top and a legend per row of handles below it.
-
-    A legend takes as many columns as fit the width of the image. A legend wider than the image in one column widens
-    the figure; the image then stays at its pixels in the middle.
-    """
-    legends = []
-    for handles in filter(None, rows):
-        for columns in range(len(handles), 0, -1):
-            legend = figure.legend(
-                handles=handles,
-                loc="upper center",
-                ncols=columns,
-                frameon=False,
-                fontsize="small",
-                borderaxespad=0,
-            )
-            box = legend.get_window_extent(renderer)
-            if box.width <= width - 2 * STRIP_PAD or columns == 1:
-                break
-            legend.remove()
-        legends.append((legend, math.ceil(box.width), math.ceil(box.height)))
-    total_width = max(
-        width, *(legend_width + 2 * STRIP_PAD for _, legend_width, _ in legends)
-    )
-    strip = STRIP_PAD + sum(
-        legend_height + STRIP_PAD for _, _, legend_height in legends
-    )
-    total_height = height + strip
-    figure.set_size_inches(total_width / DPI, total_height / DPI)
-    left = (total_width - width) // 2
-    figure.axes[0].set_position(
-        (
-            left / total_width,
-            strip / total_height,
-            width / total_width,
-            height / total_height,
-        )
-    )
-    top = strip - STRIP_PAD
-    for legend, _, legend_height in legends:
-        legend.set_bbox_to_anchor((0.5, top / total_height))
-        top -= legend_height + STRIP_PAD
+def _more_series(plot: ChartPlot, count: int) -> None:
+    """An empty legend entry that counts the series beyond the limit."""
+    plot.curve([], [], line="none", label=f"and {count} more series", legend=MORE)
 
 
 def _error_segment(
@@ -140,91 +121,132 @@ def _error_segment(
     return [low[0], high[0]], [low[1], high[1]]
 
 
-def _error_ranges(rows: list[SourcePoint]) -> list[list[float]] | None:
+def _error_ranges(rows: list[SourcePoint]) -> tuple[list[float], list[float]] | None:
     """The distances from each point down to the low and up to the high end of its error bar,
-    as matplotlib takes them: 0 without an error bar, None when no point has one."""
+    the errors of two sides of a curve: 0 without an error bar, None when no point has one."""
     if all(p.error_low is None and p.error_high is None for p in rows):
         return None
     below = [0.0 if p.error_low is None else max(0.0, p.y - p.error_low) for p in rows]
     above = [
         0.0 if p.error_high is None else max(0.0, p.error_high - p.y) for p in rows
     ]
-    return [below, above]
+    return below, above
 
 
-def _image(path: Path):
-    """The pixels of an image as RGB(A): matplotlib would color a grayscale image with a colormap."""
-    import numpy as np
-    from matplotlib.image import imread
-
-    pixels = imread(path)
-    return np.dstack([pixels] * 3) if pixels.ndim == 2 else pixels
-
-
-def _overlay(study, view, path: Path) -> PlotResult:
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
-    from matplotlib.figure import Figure
-    from matplotlib.lines import Line2D
-
+def _overlay(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
+    assert view.image is not None and view.image_size is not None
     width, height = view.image_size
-    figure = Figure(figsize=(width / DPI, height / DPI), dpi=DPI)
-    canvas = FigureCanvasAgg(figure)
-    axes = figure.add_axes((0, 0, 1, 1))
-    axes.imshow(_image(study.folder / view.image), extent=(0, width, height, 0))
-    axes.set_xlim(0, width)
-    axes.set_ylim(height, 0)
-    axes.axis("off")
     # The colors and their order of the source view, which the curation app draws alike.
     base = {series.name: series.color for series in view.series}
     drawn = {p.series for p in view.overlay}
     series = [name for name in base if name in drawn]
-    mapped = []
-    for point in view.overlay:
-        if point.role == "raw":
-            bar = point.error_bar_end
-            axes.scatter(
-                point.px,
-                point.py,
-                s=40 if bar else 16,
-                marker="_" if bar else "o",
-                color=base[point.series],
-                edgecolors=None if bar else POINT_RING,
-                linewidths=None if bar else 0.75,
-            )
-            continue
-        mapped.append((point.px, point.py))
-        axes.scatter(
-            point.px,
-            point.py,
-            s=60,
-            marker="x",
-            linewidths=2,
-            color=base[point.series],
-        )
-        if (segment := _error_segment(point, height)) is not None:
-            axes.plot(*segment, color=base[point.series])
-    names, more = capped(series)
-    handles = [
-        Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
-        for name in names
-    ]
-    if more:
-        handles.append(_more_series(more))
-    _legend_strip(figure, canvas.get_renderer(), width, height, [handles, _key()])
-    _save(figure, path)
+    names, _ = capped(series)
+    chart = _overlay_chart(study, view, base, series, (width, height), (0, width))
+    # The room of the renderer around the panel, and the widest entry of the legends below it.
+    geometry = figure_geometry(chart.to_json())
+    panel = geometry["plots"][0]["rect"]
+    left = panel["x"]
+    right = chart.width - left - panel["width"]
+    above = chart.height - panel["height"]
+    legends = max(entry["rect"]["width"] for entry in geometry["legend_entries"])
+    # The image at its pixels in the middle, the legends inside the chart; an even margin
+    # keeps the image on whole pixels.
+    total = max(width + 2 * max(left, right), legends + 2 * STRIP_PAD)
+    total = width + 2 * math.ceil((total - width) / 2)
+    low = left - (total - width) / 2
+    chart = _overlay_chart(
+        study,
+        view,
+        base,
+        series,
+        (total, height + above),
+        (low, low + total - left - right),
+    )
+    chart.save(path)
     return PlotResult(
         path,
         "overlay",
-        tuple(mapped),
+        chart,
+        tuple((p.px, p.py) for p in view.overlay if p.role != "raw"),
         tuple(names),
         tuple(sorted((name, base[name]) for name in drawn)),
         view.unmatched,
     )
 
 
-def _linestyle(kind: str) -> Literal["-", ""]:
+def _overlay_chart(
+    study: LoadedStudy,
+    view: SourceView,
+    base: dict[str, str],
+    series: list[str],
+    size: tuple[float, float],
+    x_range: tuple[float, float],
+) -> Chart:
+    """The chart of an overlay of `size` pixels whose x axis spans `x_range` image pixels."""
+    assert view.image is not None and view.image_size is not None
+    width, height = view.image_size
+    names, more = capped(series)
+    groups = [*names, *([MORE] if more else [])]
+    strip = {"position": "bottom", "frame": False, "size": STRIP_FONT}
+    # The PNG has a pixel per pixel of the chart.
+    chart = Chart(
+        *size,
+        legends=[{"groups": groups, **strip}, {"groups": list(KEY), **strip}],
+        dpi=72,
+        thinning=None,
+    )
+    plot = chart.plot(x=_hidden(*x_range), y=_hidden(0, height, reverse=True))
+    plot.image((study.folder / view.image).read_bytes(), (0, width, height, 0))
+    segments: list[tuple[str, list[float], list[float]]] = []
+    for name in series:
+        points = [p for p in view.overlay if p.series == name]
+        color = base[name]
+        dots = [p for p in points if p.role == "raw" and not p.error_bar_end]
+        ends = [p for p in points if p.role == "raw" and p.error_bar_end]
+        crosses = [p for p in points if p.role != "raw"]
+        if dots:
+            plot.curve(
+                [p.px for p in dots], [p.py for p in dots], line="none",
+                marker="circle", size=4 * PT, color=color, marker_edge=POINT_RING,
+                marker_edge_width=0.75 * PT,
+            )  # fmt: skip
+        if ends:
+            # A short horizontal bar at each end, 40**0.5 points wide.
+            plot.curve(
+                [p.px for p in ends], [p.py for p in ends],
+                xerr=[40**0.5 / 2 * PT] * len(ends), line="none",
+                error_width=1.5 * PT, color=color,
+            )  # fmt: skip
+        if crosses:
+            plot.curve(
+                [p.px for p in crosses], [p.py for p in crosses], line="none",
+                marker="x", size=60**0.5 * PT, marker_edge_width=CROSS_WIDTH, color=color,
+            )  # fmt: skip
+        xs: list[float] = []
+        ys: list[float] = []
+        for point in crosses:
+            if (segment := _error_segment(point, height)) is not None:
+                xs.extend([*segment[0], math.nan])
+                ys.extend([*segment[1], math.nan])
+        if xs:
+            segments.append((color, xs, ys))
+    # The error bars of the mapped rows over all marks, a gap after each.
+    for color, xs, ys in segments:
+        plot.curve(xs, ys, width=1.5 * PT, color=color)
+    for name in names:
+        plot.curve(
+            [], [], line="none", marker="circle", size=6 * PT, color=base[name],
+            label=name, legend=name,
+        )  # fmt: skip
+    if more:
+        _more_series(plot, more)
+    _key(plot)
+    return chart
+
+
+def _linestyle(kind: str) -> Literal["solid", "none"]:
     """Timecourse and outputs series as lines through their points by time, scatters as points."""
-    return "" if kind == "scatters" else "-"
+    return "none" if kind == "scatters" else "solid"
 
 
 def capped[T](items: Sequence[T], limit: int = LEGEND_LIMIT) -> tuple[list[T], int]:
@@ -239,77 +261,70 @@ def axis_title(labels: Iterable[str | None]) -> str:
     return " / ".join(shown) + (f" and {more} more" if more else "")
 
 
-def _more_series(count: int):
-    """An empty legend entry that counts the series beyond the limit."""
-    from matplotlib.lines import Line2D
-
-    return Line2D([], [], linestyle="", label=f"and {count} more series")
-
-
 def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
-    from matplotlib.figure import Figure
-    from matplotlib.lines import Line2D
-
-    series: dict[str, list] = {}
+    series: dict[str, list[SourcePoint]] = {}
     for point in view.points:
         series.setdefault(point.series, []).append(point)
     styles = {entry.name: entry for entry in view.series}
-    figure = Figure(figsize=(12, 5))
-    left, right = figure.subplots(1, 2)
+    names, more = capped(list(series))
+    # The PNG is 1200 x 500 pixels.
+    chart = Chart(SIDE_WIDTH, SIDE_HEIGHT, columns=2, dpi=SIDE_DPI, thinning=None)
     if view.image and view.image_size:
-        left.imshow(_image(study.folder / view.image))
-    left.axis("off")
-    # A series of one point is no line: all of them are drawn by two calls, so that a figure with a
+        width, height = view.image_size
+        figure = chart.plot(
+            0,
+            0,
+            x=_hidden(0, width),
+            y=_hidden(0, height, reverse=True),
+            aspect="equal",
+            legend=False,
+        )
+        figure.image((study.folder / view.image).read_bytes(), (0, width, height, 0))
+    else:
+        chart.plot(0, 0, x=_hidden(0, 1), y=_hidden(0, 1), legend=False)
+    x_label = axis_title(styles[name].x_label for name in series)
+    y_label = axis_title(styles[name].y_label for name in series)
+    # The default "best" place weighs every point, which is slow for many.
+    data = chart.plot(
+        0,
+        1,
+        x=ChartAxis(label=x_label or None, label_visible=bool(x_label)),
+        y=ChartAxis(label=y_label or None, label_visible=bool(y_label)),
+        legend=bool(series),
+        legend_loc="best" if not more else "upper right",
+        frame_color="black",
+        frame_width=0.8,
+    )
+    # A series of one point is no line: those of a color are drawn by one curve, so that a figure with a
     # series per individual stays fast.
-    singles = [rows[0] for rows in series.values() if len(rows) == 1]
+    singles: dict[str, list[SourcePoint]] = {}
     for name, rows in series.items():
         if len(rows) == 1:
+            singles.setdefault(styles[name].color, []).append(rows[0])
             continue
-        right.errorbar(
-            [p.x for p in rows],
-            [p.y for p in rows],
-            yerr=_error_ranges(rows),
-            marker="o",
-            linestyle=_linestyle(rows[0].kind),
-            color=styles[name].color,
-        )
-    if singles:
-        colors = [styles[p.series].color for p in singles]
-        right.scatter([p.x for p in singles], [p.y for p in singles], color=colors)
-        bars = [
-            p for p in singles if p.error_low is not None or p.error_high is not None
-        ]
-        right.vlines(
-            [p.x for p in bars],
-            [p.y if p.error_low is None else p.error_low for p in bars],
-            [p.y if p.error_high is None else p.error_high for p in bars],
-            colors=[styles[p.series].color for p in bars],
-        )
-    if series:
-        right.set_xlabel(axis_title(styles[name].x_label for name in series))
-        right.set_ylabel(axis_title(styles[name].y_label for name in series))
-        names, more = capped(list(series))
-        handles = [
-            Line2D(
-                [],
-                [],
-                marker="o",
-                color=styles[name].color,
-                linestyle=_linestyle(series[name][0].kind),
-                label=name,
-            )
-            for name in names
-        ]
-        if more:
-            handles.append(_more_series(more))
-        # The default "best" place weighs every point, which is slow for many.
-        right.legend(handles=handles, loc="best" if not more else "upper right")
-    figure.tight_layout()
-    _save(figure, path)
+        data.curve(
+            [p.x for p in rows], [p.y for p in rows], yerr=_error_ranges(rows),
+            error_width=1.5, line=_linestyle(rows[0].kind), width=1.5,
+            marker="circle", size=6, color=styles[name].color,
+        )  # fmt: skip
+    for color, rows in singles.items():
+        data.curve(
+            [p.x for p in rows], [p.y for p in rows], yerr=_error_ranges(rows),
+            error_width=1.5, line="none", marker="circle", size=6, color=color,
+        )  # fmt: skip
+    for name in names:
+        data.curve(
+            [], [], line=_linestyle(series[name][0].kind), width=1.5,
+            marker="circle", size=6, color=styles[name].color, label=name, legend=name,
+        )  # fmt: skip
+    if more:
+        _more_series(data, more)
+    chart.save(path)
     return PlotResult(
         path,
         "side_by_side",
-        legend=tuple(capped(list(series))[0]),
+        chart,
+        legend=tuple(names),
         colors=tuple(sorted((name, styles[name].color) for name in series)),
         unmatched=view.unmatched,
     )
