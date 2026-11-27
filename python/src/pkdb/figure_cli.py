@@ -34,11 +34,11 @@ def register(commands) -> None:
     )
     plot = commands.add_parser(
         "plot",
-        help="Render the figures of a study as PNG files",
+        help="Render the figures of a study as SVG files",
         description=(
-            "Render figure sources with matplotlib: the figure image with its digitized "
+            "Render figure sources as charts: the figure image with its digitized "
             "points and mapped rows, or image and data plot side by side without "
-            "digitization. Files are <out>/<study>_<source>.plot.png."
+            "digitization. Files are <out>/<study>_<source>.plot.svg."
         ),
     )
     plot.add_argument("study", type=Path, help="Study folder")
@@ -121,7 +121,7 @@ def _plot(args) -> int:
         out.mkdir(parents=True, exist_ok=True)
         plots = []
         for source in sources:
-            file = out / f"{study.name}_{source}.plot.png"
+            file = out / f"{study.name}_{source}.plot.svg"
             result = render_source(study, source, file)
             plots.append(
                 {
