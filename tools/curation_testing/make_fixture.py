@@ -176,8 +176,8 @@ def draw_figure(series: Series, path: Path) -> Frame:
             size=7,
             marker_fill=style["face"],
             marker_edge="black",
-            # the whole width of a cap, twice the `capsize` of matplotlib
-            error_cap=8,
+            # the `capsize` of matplotlib: the cap spans twice this length
+            error_cap=4,
             error_width=1,
             label=style["legend"],
         )
