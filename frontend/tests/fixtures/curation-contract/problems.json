@@ -26,7 +26,7 @@
     {
       "code": "digitized_mismatch",
       "severity": "warning",
-      "message": "mean 1.24 at 4 hr lies 61.3 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json",
+      "message": "mean 1.24 at 4 hr lies 65.1 pixels from the nearest point of dataset 'caf_plasma_100mg' in Demo2020_Fig1.wpd.json",
       "source": {
         "file": "timecourses_Fig1.tsv",
         "sheet": "timecourses_Fig1",
