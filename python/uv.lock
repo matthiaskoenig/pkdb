@@ -401,7 +401,7 @@ wheels = [
 
 [[package]]
 name = "pkdb"
-version = "0.12.19"
+version = "0.12.20"
 source = { editable = "." }
 dependencies = [
     { name = "fastexcel" },
